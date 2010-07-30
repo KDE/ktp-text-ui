@@ -97,7 +97,6 @@ void ChatView::addMessage(TelepathyChatMessageInfo & message)
     styleHtml.replace("%time%", message.time().toString());
     styleHtml.replace("%userIconPath%", "Outgoing/buddy_icon.png");// this fallback should be done in the messageinfo
 
-    qDebug() << styleHtml;
     chat.appendInside(styleHtml);
 }
 
@@ -114,6 +113,7 @@ QString ChatView::replaceHeaderKeywords(QString htmlTemplate, const TelepathyCha
     htmlTemplate.replace("%timeOpened%", info.timeOpened().toString()); //FIXME use KLocale to get format.
     //FIXME time fields - remember to do both, steal the complicated one from Kopete code.
 
+    qDebug() << htmlTemplate;
 
     return htmlTemplate;
 }

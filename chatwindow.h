@@ -42,6 +42,9 @@ protected slots:
 private:
     Ui::ChatWindow *ui;
     ChatConnection* m_chatConnection;
+
+    //mark as true when the chat window has been set up.
+    bool m_initialised;
 };
 
 #endif // CHATWINDOW_H

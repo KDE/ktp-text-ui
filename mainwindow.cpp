@@ -23,9 +23,9 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
                                        const AccountPtr & account,
                                        const ConnectionPtr & connection,
                                        const QList< ChannelPtr > & channels,
-                                       const QList< ChannelRequestPtr > & requestsSatisfied,
-                                       const QDateTime &  userActionTime,
-                                       const QVariantMap & handlerInfo
+                                       const QList< ChannelRequestPtr > & ,
+                                       const QDateTime & ,
+                                       const QVariantMap&
                                       )
 {
     ChatConnection* chatConnection = new ChatConnection(this, account, connection, channels);
