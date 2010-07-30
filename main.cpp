@@ -5,7 +5,7 @@
 
 #include <TelepathyQt4/Channel>
 #include <TelepathyQt4/ClientRegistrar>
-#include "realclienthandler.h"
+#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,18 +13,14 @@ int main(int argc, char *argv[])
 
     registerTypes();
 
-    //I'd like to move this to mainwindow.cpp but this seemed to break it. I really don't understand why.
-
     ClientRegistrarPtr registrar = ClientRegistrar::create();
-    RealClientHandler* clientHandler = new RealClientHandler();
+    MainWindow* mainWindow = new MainWindow();
 
-    AbstractClientPtr handler = AbstractClientPtr::dynamicCast(
-                                    SharedPtr<RealClientHandler>(clientHandler));
+    AbstractClientPtr handler = AbstractClientPtr::dynamicCast(SharedPtr<MainWindow>(mainWindow));
     registrar->registerClient(handler, "KDEChatHandler");
 
-    MainWindow w(clientHandler);
-    w.show();
+    mainWindow->show();
 
     return a.exec();
-    delete clientHandler;
+    delete mainWindow;
 }

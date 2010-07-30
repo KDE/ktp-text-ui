@@ -1,35 +1,41 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef REALCLIENTHANDLER_H
+#define REALCLIENTHANDLER_H
 
-#include <QMainWindow>
-#include "realclienthandler.h"
-#include "chatconnection.h"
+#include <KTabWidget>
 
+#include <TelepathyQt4/AbstractClientHandler>
+#include <TelepathyQt4/types.h>
+#include <TelepathyQt4/Channel>
+#include <TelepathyQt4/TextChannel>
+#include <TelepathyQt4/ReceivedMessage>
+#include <chatconnection.h>
 
-namespace Ui
-{
-class MainWindow;
-}
+using namespace Tp;
 
+inline ChannelClassList channelClassList();
 
-class MainWindow : public QWidget
+//In the future I want to have a (potential) list of tab widgets. Like Kopete presently. This may need a bit of a rewrite.
+
+class MainWindow : public KTabWidget, public AbstractClientHandler
 {
     Q_OBJECT
-
 public:
-    explicit MainWindow(RealClientHandler*, QWidget *parent = 0);
-    ~MainWindow();
+    MainWindow();
 
-protected:
-    void changeEvent(QEvent *e);
+    virtual void handleChannels(const MethodInvocationContextPtr<> &context,
+                                const AccountPtr & account,
+                                const ConnectionPtr & connection,
+                                const QList< ChannelPtr > & channels,
+                                const QList< ChannelRequestPtr > & requestsSatisfied,
+                                const QDateTime &  userActionTime,
+                                const QVariantMap & handlerInfo
+                               );
 
-protected slots:
-    void handleNewConnection(ChatConnection* connection);
+    bool bypassApproval() const
+    {
+        return false;
+    }
 
-
-private:
-    Ui::MainWindow *ui;
-    RealClientHandler* m_clientHandler;
 };
 
-#endif // MAINWINDOW_H
+#endif // REALCLIENTHANDLER_H

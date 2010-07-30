@@ -18,9 +18,7 @@ ChatConnection::ChatConnection(QObject *parent, const AccountPtr account, const 
                                                  );
 
 
-
         connect(op, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onChannelReady(Tp::PendingOperation*)));
-
     }
     else
     {

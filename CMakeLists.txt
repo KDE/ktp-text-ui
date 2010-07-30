@@ -27,7 +27,6 @@ include_directories (${KDE4_INCLUDES}
 set(telepathy_chat_handler_SRCS
         main.cpp
         mainwindow.cpp
-        realclienthandler.cpp
         chatconnection.cpp
         chatwindow.cpp
         chatwindowstyle.cpp
@@ -39,7 +38,6 @@ set(telepathy_chat_handler_SRCS
 
 set(telepathy_chat_handler_UI
     chatwindow.ui
-    mainwindow.ui
 )
 
 kde4_add_ui_files(telepathy_chat_handler_SRCS ${telepathy_chat_handler_UI})
