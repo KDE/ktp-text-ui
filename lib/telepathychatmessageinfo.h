@@ -27,7 +27,14 @@ public:
     QDateTime time() const {return m_time;}
     void setTime(const QDateTime time){m_time = time;}
 
+    QString service() const {return m_service;}
+    void setService(const QString service) {m_service = service;}
+
+
+
     //FIXME add the rest..
+    QString senderScreenName() const {return m_senderScreenName;}
+    void setSenderScreenName(const QString senderScreenName) {m_senderScreenName = senderScreenName;}
 
     QString messageDirection() const {return m_messageDirection;}
     void setMessageDirection(const QString messageDirection) {m_messageDirection = messageDirection;}
@@ -53,10 +60,11 @@ private:
     QString m_service;
 
     /** Will be replaced with "showIcons" if the "Show user icons" checkbox is selected, and will be replaced with "hideIcons" if the checkbox is deselected.*/
-    //FIXME do above as an enum? replace in the filter.
+    //This is pure style - do in the chat view instead?
     QString m_userIcons;
 
     /** A space separated list of type information for messages, suitable for use as a class attribute. Currently available types are listed below. */
+    //do this on my magical "messageType enum"
     QString m_messageClasses;
 
     /** A description of the status event. This is neither in the user's local language nor expected to be displayed; it may be useful to use a different div class to present different types of status messages. The following is a list of some of the more important status messages; your message style should be able to handle being shown a status message not in this list, as even at present the list is incomplete and is certain to become out of date in the future: */

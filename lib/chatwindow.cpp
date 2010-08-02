@@ -22,9 +22,6 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     connect(m_chatConnection->channel().data(), SIGNAL(messageSent(Tp::Message, Tp::MessageSendingFlags, QString)), SLOT(handleMessageSent(Tp::Message, Tp::MessageSendingFlags, QString)));
     connect(m_chatConnection->channel().data(), SIGNAL(chatStateChanged(Tp::ContactPtr, ChannelChatState)), SLOT(updateChatStatus(Tp::ContactPtr, ChannelChatState)));
     connect(ui->sendMessageButton, SIGNAL(released()), SLOT(sendMessage()));
-
-
-
 }
 
 ChatWindow::~ChatWindow()

@@ -29,5 +29,11 @@ TODO:
   Rename all the classes to something sensible. I need help with this.
 
   Split into a library of a chatwidget that any app can use - and an awesome chat program.
+  I think we need to split the code as follows:
+
+  lib/ (the chatwindow library, that can be used any program)
+  lib/kcmodule (for configuring chat window style)
+  app/ (a main chat window application)
 
   Try adding telepathy into another program to show my lib works as a lib. (maybe Geore's whiteboard program?)
+
