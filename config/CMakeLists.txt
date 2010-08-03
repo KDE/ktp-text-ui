@@ -6,6 +6,7 @@ set(telepathy_chat_config_SRCS
         main.cpp
         mainwindow.cpp
         ../lib/chatwindowstyle.cpp
+        ../lib/chatwindowstylemanager.cpp
         ../lib/chatview.cpp
         ../lib/telepathychatmessageinfo.cpp
         ../lib/telepathychatinfo.cpp

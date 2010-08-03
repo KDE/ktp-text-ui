@@ -41,6 +41,7 @@ public slots:
 
 private:
     ChatWindowStyle* m_chatStyle;
+    QString m_variantPath;
     KEmoticons m_emoticons;
     QString replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo&);
 //replaceMessageKeywords(QString htmlTemplate, const TelepathyChatMessageInfo&);

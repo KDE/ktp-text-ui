@@ -1,14 +1,21 @@
 #include "mainwindow.h"
 #include "ui_chatwindowconfig.h"
+#include "chatwindowstylemanager.h"
 
 #include "telepathychatinfo.h"
 #include "telepathychatmessageinfo.h"
+
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ChatWindowConfig)
 {
     ui->setupUi(this);
+
+    ChatWindowStyleManager* manager = ChatWindowStyleManager::self();
+    manager->loadStyles();
+    connect(manager,SIGNAL(loadStylesFinished()),SLOT(debugStyleList()));
 
     //FIXME move all the demo chat code into a different file, as it will be quite long and in the way.
 
@@ -43,6 +50,11 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::debugStyleList()
+{
+    qDebug() << ChatWindowStyleManager::self()->getAvailableStyles();
 }
 
 void MainWindow::changeEvent(QEvent *e)

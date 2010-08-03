@@ -18,6 +18,9 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
+public slots:
+    void debugStyleList();
+
 private:
     Ui::ChatWindowConfig *ui;
 };

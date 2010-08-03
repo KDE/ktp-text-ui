@@ -47,13 +47,13 @@ ChatView::ChatView(QWidget *parent) :
     {
         KMessageBox::error(this,"Failed to load a valid Kopete theme. Note this current version reads chat window settings from your Kopete config file.");
     }
+
+    m_variantPath = appearanceConfig.readEntry("styleVariant");
 }
 
 void ChatView::initialise(const TelepathyChatInfo &chatInfo)
 {
     //Stolen from Kopete code..took out some stuff we will need in future (variants and custom Kopete style)
-
-    //Remove silly variant fudge in here at the moment.
 
     QString headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(),chatInfo);
 
@@ -69,7 +69,7 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
                         "<base href=\"file://%1\">\n"
                         "<style id=\"baseStyle\" type=\"text/css\" media=\"screen,print\">\n"
                         "	@import url(\"main.css\");\n"
-                        "   @import url(\"Yellow on Blue Alternating.css\");\n"
+                        "   @import url(\"%4\");\n"
                         "	*{ word-wrap:break-word; }\n"
                         "</style>\n"
                         "</head>\n"
@@ -79,7 +79,7 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
                         "%3\n"
                         "</body>"
                         "</html>"
-                       ).arg(m_chatStyle->getStyleBaseHref()).arg(headerHtml).arg(m_chatStyle->getFooterHtml());
+                       ).arg(m_chatStyle->getStyleBaseHref()).arg(headerHtml).arg(m_chatStyle->getFooterHtml()).arg(m_variantPath);
 
     setHtml(xhtmlBase);
 
