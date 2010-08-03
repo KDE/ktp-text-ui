@@ -25,3 +25,4 @@ include_directories (${KDE4_INCLUDES}
 
 
 add_subdirectory(app)
+add_subdirectory(config)
