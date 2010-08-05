@@ -21,6 +21,7 @@
 #include "ui_chatwindow.h"
 #include "telepathychatmessageinfo.h"
 #include "telepathychatinfo.h"
+#include <QKeyEvent>
 
 
 ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
@@ -41,7 +42,12 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     connect(m_chatConnection->channel().data(), SIGNAL(messageSent(Tp::Message, Tp::MessageSendingFlags, QString)), SLOT(handleMessageSent(Tp::Message, Tp::MessageSendingFlags, QString)));
     connect(m_chatConnection->channel().data(), SIGNAL(chatStateChanged(Tp::ContactPtr, ChannelChatState)), SLOT(updateChatStatus(Tp::ContactPtr, ChannelChatState)));
     connect(ui->sendMessageButton, SIGNAL(released()), SLOT(sendMessage()));
+
+    messageBoxEventFilter = new MessageBoxEventFilter(this);
+    ui->sendMessageBox->installEventFilter(messageBoxEventFilter);
+    connect(messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
 }
+
 
 ChatWindow::~ChatWindow()
 {
@@ -154,4 +160,19 @@ void ChatWindow::updateEnabledState(bool enable)
             handleIncomingMessage(message);
         }
     }
+}
+
+bool MessageBoxEventFilter::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+            if(!keyEvent->modifiers()) {
+                Q_EMIT returnKeyPressed();
+                return true;
+            }
+        }
+    }
+    // standard event processing
+    return QObject::eventFilter(obj, event);
 }

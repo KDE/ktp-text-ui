@@ -30,6 +30,18 @@ namespace Ui
 class ChatWindow;
 }
 
+class MessageBoxEventFilter : public QObject
+{
+    Q_OBJECT
+public:
+    MessageBoxEventFilter(QObject* parent = 0) : QObject(parent) {};
+    virtual ~MessageBoxEventFilter() {}
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+Q_SIGNALS:
+    void returnKeyPressed();
+};
+
 class ChatWindow : public QWidget
 {
     Q_OBJECT
@@ -64,6 +76,7 @@ private:
 
     //mark as true when the chat window has been set up.
     bool m_initialised;
+    MessageBoxEventFilter* messageBoxEventFilter;
 };
 
 #endif // CHATWINDOW_H
