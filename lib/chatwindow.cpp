@@ -94,8 +94,10 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
 
 void ChatWindow::sendMessage()
 {
-    m_chatConnection->channel()->send(ui->sendMessageBox->toPlainText());
-    ui->sendMessageBox->clear();
+    if(!ui->sendMessageBox->toPlainText().isEmpty()) {
+        m_chatConnection->channel()->send(ui->sendMessageBox->toPlainText());
+        ui->sendMessageBox->clear();
+    }
 }
 
 void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state)
