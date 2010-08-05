@@ -61,7 +61,7 @@ private:
 
 private slots:
     void onChannelReady(Tp::PendingOperation*);
-
+    void onPendingContactsReady(Tp::PendingOperation*);
 };
 
 #endif // CHATCONNECTION_H

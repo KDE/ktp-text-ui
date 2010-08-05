@@ -19,6 +19,7 @@
 
 #include "chatconnection.h"
 #include <TelepathyQt4/PendingReady>
+#include <TelepathyQt4/PendingContacts>
 #include <TelepathyQt4/ContactManager>
 
 ChatConnection::ChatConnection(QObject *parent, const AccountPtr account, const ConnectionPtr connection,  QList<ChannelPtr> channels)
@@ -51,13 +52,19 @@ ChatConnection::ChatConnection(QObject *parent, const AccountPtr account, const 
 
 void ChatConnection::onChannelReady(Tp::PendingOperation*)
 {
-    m_connection->contactManager()->upgradeContacts(QList<ContactPtr>::fromSet(m_channel->groupContacts()), QSet<Contact::Feature>() <<
-                                                    Contact::FeatureAlias <<
-                                                    Contact::FeatureAvatarToken << Contact::FeatureCapabilities << Contact::FeatureSimplePresence
-                                                    );
-
+    PendingContacts* p = m_connection->contactManager()->upgradeContacts(QList<ContactPtr>::fromSet(m_channel->groupContacts()),
+                                                                         QSet<Contact::Feature>() << Contact::FeatureAlias
+                                                                                                  << Contact::FeatureAvatarToken
+                                                                                                  << Contact::FeatureCapabilities
+                                                                                                  << Contact::FeatureSimplePresence
+                                                                        );
+    connect(p, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onPendingContactsReady(Tp::PendingOperation*)));
     qDebug() << "channel ready";
+}
 
+void ChatConnection::onPendingContactsReady(Tp::PendingOperation*)
+{
+    qDebug() << "contacts ready";
     //m_isChannelReady = true;
     emit(channelReadyStateChanged(true));
 }
