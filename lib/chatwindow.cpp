@@ -86,6 +86,7 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     messageInfo.setMessage(message.text());
     messageInfo.setTime(message.sent());
     messageInfo.setMessageDirection("ltr");
+    messageInfo.setSenderDisplayName(m_chatConnection->account()->displayName());
 //    messageInfo.setSenderDisplayName(m_chatConnection->connection()->selfContact()->alias()); // selfConect() can return 0 watch out for that.
 
     ui->chatArea->addMessage(messageInfo);
