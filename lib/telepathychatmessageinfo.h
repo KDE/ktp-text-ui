@@ -36,10 +36,25 @@
 
 class TelepathyChatMessageInfo
 {
+
+
 public:
-    TelepathyChatMessageInfo();
+    enum MessageType
+    {
+        RemoteToLocal,
+        LocalToRemote,
+        Status
+    };
+
+    TelepathyChatMessageInfo(MessageType);
+
+
+    //FIXME HTML escape all QString returns.
 
     //bother. I've documented the private stuff. I meant to do the getters + setters. Can't be bothered to move it now. I'm too sleepy.
+
+    MessageType type() const {return m_type;}
+
     QString message() const {return m_message;}
     void setMessage(const QString message) {m_message = message;}
 
@@ -55,8 +70,17 @@ public:
     QString senderScreenName() const {return m_senderScreenName;}
     void setSenderScreenName(const QString senderScreenName) {m_senderScreenName = senderScreenName;}
 
-    QString messageDirection() const {return m_messageDirection;}
-    void setMessageDirection(const QString messageDirection) {m_messageDirection = messageDirection;}
+    /** The text direction of the message (either rtl or ltr)  */
+    QString messageDirection() const {
+        if (m_type == LocalToRemote)
+        {
+            return "ltr";
+        }
+        else
+        {
+            return "rtl";
+        }
+        }
 
     QString senderDisplayName() const {return m_senderDisplayName;}
     void setSenderDisplayName(const QString senderDisplayName) {m_senderDisplayName = senderDisplayName;}
@@ -68,6 +92,8 @@ private:
     //http://trac.adium.im/wiki/CreatingMessageStyles
 
     //both status messages and regular messages
+
+    MessageType m_type;
 
     /** The message itself of the message/status*/
     QString m_message;
@@ -101,9 +127,6 @@ private:
 
     /** The path to the status icon of the sender (available, away, etc...) */
     QUrl m_senderStatusIcon;
-
-    //FIXME enum this.
-    QString m_messageDirection;
 
     /** The serverside (remotely set) name of the sender, such as an MSN display name.*/
     QString m_senderDisplayName;

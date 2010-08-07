@@ -100,13 +100,17 @@ void ChatView::addMessage(TelepathyChatMessageInfo & message)
     //Gone with the Kopete way, but the Adium way is probably worth at least considering. (the latter allows for sexy theme animations)
     QString styleHtml;
 
-    if(message.messageDirection() == QString("rtl")) //such a hack.. put some sort of enum in the chatmessageinfoclass for type
+    switch(message.type())
     {
+    case TelepathyChatMessageInfo::RemoteToLocal:
         styleHtml= m_chatStyle->getIncomingHtml();
-    }
-    else
-    {
+        break;
+    case TelepathyChatMessageInfo::LocalToRemote:
         styleHtml = m_chatStyle->getOutgoingHtml();
+        break;
+    case TelepathyChatMessageInfo::Status:
+        styleHtml = m_chatStyle->getStatusHtml();
+        break;
     }
 
     QString messageHtml = m_emoticons.theme().parseEmoticons(message.message());

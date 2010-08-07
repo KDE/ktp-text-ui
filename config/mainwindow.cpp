@@ -34,9 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //add a fake message
     //in my head Bob Marley is quite a chatty friendly guy...
 
-    TelepathyChatMessageInfo message;
+    TelepathyChatMessageInfo message(TelepathyChatMessageInfo::RemoteToLocal);
     message.setMessage("Hello, how are things?");
-    message.setMessageDirection("rtl");
     message.setSenderDisplayName("BobMarley@yahoo.com");
     message.setSenderScreenName("Bob Marley");
     message.setService("Jabber");

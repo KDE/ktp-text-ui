@@ -28,10 +28,11 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
         QWidget(parent),
         ui(new Ui::ChatWindow),
         m_chatConnection(chat),
-        m_initialised(false)
+        m_channelInitialised(false)
 {
-    ui->setupUi(this);
-    //  //updateEnabledState(m_clientHandler->isChannelReady());
+    ui->setupUi(this);    
+    ui->statusLabel->setText("");
+
     updateEnabledState(false);
 
     //chat connection lifespan should be same as the chatwindow
@@ -71,29 +72,25 @@ void ChatWindow::changeEvent(QEvent *e)
 
 void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
-    if(m_initialised)
+    if(m_channelInitialised)
     {
-        TelepathyChatMessageInfo messageInfo;
+        TelepathyChatMessageInfo messageInfo(TelepathyChatMessageInfo::RemoteToLocal);
         messageInfo.setMessage(message.text());
-        //messageInfo.setSenderScreenName(message.sender()->id());
+        messageInfo.setSenderScreenName(message.sender()->id());
         messageInfo.setTime(message.received());
-        messageInfo.setMessageDirection("rtl");
         messageInfo.setSenderDisplayName(message.sender()->alias());
 
         ui->chatArea->addMessage(messageInfo);
-
         m_chatConnection->channel()->acknowledge(QList<Tp::ReceivedMessage>() << message);
     }
 }
 
 void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
 {
-    TelepathyChatMessageInfo messageInfo;
+    TelepathyChatMessageInfo messageInfo(TelepathyChatMessageInfo::LocalToRemote);
     messageInfo.setMessage(message.text());
     messageInfo.setTime(message.sent());
-    messageInfo.setMessageDirection("ltr");
     messageInfo.setSenderDisplayName(m_chatConnection->account()->displayName());
-//    messageInfo.setSenderDisplayName(m_chatConnection->connection()->selfContact()->alias()); // selfConect() can return 0 watch out for that.
 
     ui->chatArea->addMessage(messageInfo);
 }
@@ -108,7 +105,28 @@ void ChatWindow::sendMessage()
 
 void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state)
 {
-    qDebug() << contact->alias() << state;
+    switch (state)
+    {
+    case ChannelChatStateGone:
+        {
+            TelepathyChatMessageInfo statusMessage(TelepathyChatMessageInfo::Status);
+            statusMessage.setMessage(i18n("%1 has left the chat").arg(contact->alias()));
+            ui->chatArea->addMessage(statusMessage);
+        }
+        break;
+    case ChannelChatStateInactive:
+        //FIXME send a 'chat timed out' message to chatview
+        break;
+    case ChannelChatStateActive:
+        //This is the normal state.
+        ui->statusLabel->setText("");
+    case ChannelChatStatePaused:
+        //not sure what this means..safest to do nothing.
+        break;
+    case ChannelChatStateComposing:
+        ui->statusLabel->setText(i18n("%1 is typing a message").arg(contact->alias()));
+    }
+
 }
 
 void ChatWindow::updateEnabledState(bool enable)
@@ -138,6 +156,7 @@ void ChatWindow::updateEnabledState(bool enable)
                     info.setDestinationName(it->id());
                     info.setChatName(it->alias());
                     info.setIncomingIconPath(it->avatarToken());
+
                 }
             }
         }
@@ -152,7 +171,10 @@ void ChatWindow::updateEnabledState(bool enable)
         info.setTimeOpened(QDateTime::currentDateTime()); //FIXME how do I know when the channel opened? Using current time for now.
 
         ui->chatArea->initialise(info);
-        m_initialised = true;
+        m_channelInitialised = true;
+
+        //inform anyone using the class of the new name for this chat.
+        Q_EMIT titleChanged(info.chatName());
 
         //process any messages we've 'missed' whilst initialising.
         foreach(Tp::ReceivedMessage message, m_chatConnection->channel()->messageQueue())

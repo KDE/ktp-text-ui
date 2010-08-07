@@ -60,8 +60,6 @@ protected slots:
     /** Show the message sent in the chat window*/
     void handleMessageSent(const Tp::Message  &message, Tp::MessageSendingFlags flags, const QString &sentMessageToken);
 
-    /** If state == composing, update status bar*/
-
     /** send the text in the text area widget to the client handler*/
     void sendMessage();
 
@@ -70,12 +68,17 @@ protected slots:
 
     void updateChatStatus(Tp::ContactPtr contact, ChannelChatState state);
 
+signals:
+    void titleChanged(QString title);
+
 private:
     Ui::ChatWindow *ui;
     ChatConnection* m_chatConnection;
 
-    //mark as true when the chat window has been set up.
-    bool m_initialised;
+    /** Stores whether the channel is ready with all contacts upgraded*/
+    bool m_channelInitialised;
+
+
     MessageBoxEventFilter* messageBoxEventFilter;
 };
 

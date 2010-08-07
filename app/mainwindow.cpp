@@ -37,7 +37,6 @@ MainWindow::MainWindow() :
 {
 }
 
-
 void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
                                        const AccountPtr & account,
                                        const ConnectionPtr & connection,

@@ -21,6 +21,7 @@
 
 //can probably delete this file. I put it all in the header.
 
-TelepathyChatMessageInfo::TelepathyChatMessageInfo()
+TelepathyChatMessageInfo::TelepathyChatMessageInfo(MessageType type)
 {
+    m_type = type;
 }
