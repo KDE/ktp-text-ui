@@ -33,16 +33,13 @@ class ChatConnection : public QObject
 public:
     explicit ChatConnection(QObject *parent, const AccountPtr, const ConnectionPtr,  QList<ChannelPtr>);
 
-    const AccountPtr account()
-    {
+    const AccountPtr account() {
         return m_account;
     };
-    const ConnectionPtr connection()
-    {
+    const ConnectionPtr connection() {
         return m_connection;
     };
-    const TextChannelPtr channel()
-    {
+    const TextChannelPtr channel() {
         return m_channel;
     };
 

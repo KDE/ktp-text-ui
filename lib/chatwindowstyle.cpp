@@ -75,8 +75,7 @@ void ChatWindowStyle::init(const QString &styleName, StyleBuildMode styleBuildMo
     //FIXME stop looking in Kopete's directory!
 
     QStringList styleDirs = KGlobal::dirs()->findDirs("data", QString("kopete/styles/%1/Contents/Resources/").arg(styleName));
-    if (styleDirs.isEmpty())
-    {
+    if (styleDirs.isEmpty()) {
         kDebug(14000) << "Failed to find style" << styleName;
         return;
     }
@@ -86,8 +85,7 @@ void ChatWindowStyle::init(const QString &styleName, StyleBuildMode styleBuildMo
     d->baseHref = styleDirs.at(0);
     kDebug(14000) << "Using style:" << d->baseHref;
     readStyleFiles();
-    if (styleBuildMode & StyleBuildNormal)
-    {
+    if (styleBuildMode & StyleBuildNormal) {
         listVariants();
     }
 }
@@ -107,8 +105,7 @@ bool ChatWindowStyle::isValid() const
 ChatWindowStyle::StyleVariants ChatWindowStyle::getVariants()
 {
     // If the variantList is empty, list available variants.
-    if (d->variantsList.isEmpty())
-    {
+    if (d->variantsList.isEmpty()) {
         listVariants();
     }
     return d->variantsList;
@@ -212,23 +209,19 @@ void ChatWindowStyle::listVariants()
     QStringList variantList = variantDir.entryList(QStringList("*.css"));
     QStringList::ConstIterator it, itEnd = variantList.constEnd();
     QLatin1String compactVersionPrefix("_compact_");
-    for (it = variantList.constBegin(); it != itEnd; ++it)
-    {
+    for (it = variantList.constBegin(); it != itEnd; ++it) {
         QString variantName = *it, variantPath;
         // Retrieve only the file name.
         variantName = variantName.left(variantName.lastIndexOf("."));
-        if (variantName.startsWith(compactVersionPrefix))
-        {
-            if (variantName == compactVersionPrefix)
-            {
+        if (variantName.startsWith(compactVersionPrefix)) {
+            if (variantName == compactVersionPrefix) {
                 d->compactVariants.insert("", true);
             }
             continue;
         }
         QString compactVersionFilename = *it;
         QString compactVersionPath = variantDirPath + compactVersionFilename.prepend(compactVersionPrefix);
-        if (QFile::exists(compactVersionPath))
-        {
+        if (QFile::exists(compactVersionPath)) {
             d->compactVariants.insert(variantName, true);
         }
         // variantPath is relative to baseHref.
@@ -257,8 +250,7 @@ void ChatWindowStyle::readStyleFiles()
 
     QFile fileAccess;
     // First load header file.
-    if (QFile::exists(headerFile))
-    {
+    if (QFile::exists(headerFile)) {
         fileAccess.setFileName(headerFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -267,8 +259,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
     // Load Footer file
-    if (QFile::exists(footerFile))
-    {
+    if (QFile::exists(footerFile)) {
         fileAccess.setFileName(footerFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -277,8 +268,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
     // Load incoming file
-    if (QFile::exists(incomingFile))
-    {
+    if (QFile::exists(incomingFile)) {
         fileAccess.setFileName(incomingFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -287,8 +277,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
     // Load next Incoming file
-    if (QFile::exists(nextIncomingFile))
-    {
+    if (QFile::exists(nextIncomingFile)) {
         fileAccess.setFileName(nextIncomingFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -297,8 +286,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
     // Load outgoing file
-    if (QFile::exists(outgoingFile))
-    {
+    if (QFile::exists(outgoingFile)) {
         fileAccess.setFileName(outgoingFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -307,8 +295,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
     // Load next outgoing file
-    if (QFile::exists(nextOutgoingFile))
-    {
+    if (QFile::exists(nextOutgoingFile)) {
         fileAccess.setFileName(nextOutgoingFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -317,8 +304,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
     // Load status file
-    if (QFile::exists(statusFile))
-    {
+    if (QFile::exists(statusFile)) {
         fileAccess.setFileName(statusFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -328,8 +314,7 @@ void ChatWindowStyle::readStyleFiles()
     }
 
     // Load Action Incoming file
-    if (QFile::exists(actionIncomingFile))
-    {
+    if (QFile::exists(actionIncomingFile)) {
         fileAccess.setFileName(actionIncomingFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -338,8 +323,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
     // Load Action Outgoing file
-    if (QFile::exists(actionOutgoingFile))
-    {
+    if (QFile::exists(actionOutgoingFile)) {
         fileAccess.setFileName(actionOutgoingFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -348,8 +332,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
     // Load FileTransfer Incoming file
-    if (QFile::exists(fileTransferIncomingFile))
-    {
+    if (QFile::exists(fileTransferIncomingFile)) {
         fileAccess.setFileName(fileTransferIncomingFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -360,8 +343,7 @@ void ChatWindowStyle::readStyleFiles()
 
     if (d->fileTransferIncomingHtml.isEmpty() ||
             (!d->fileTransferIncomingHtml.contains("saveFileHandlerId") &&
-             !d->fileTransferIncomingHtml.contains("saveFileAsHandlerId")))     // Create default html
-    {
+             !d->fileTransferIncomingHtml.contains("saveFileAsHandlerId"))) {   // Create default html
         d->fileTransferIncomingHtml = d->incomingHtml;
         QString message = QString("%message%\n"
                                   "<div>\n"
@@ -381,8 +363,7 @@ void ChatWindowStyle::readStyleFiles()
     }
 
     // Load VoiceClip Incoming file
-    if (QFile::exists(voiceClipIncomingFile))
-    {
+    if (QFile::exists(voiceClipIncomingFile)) {
         fileAccess.setFileName(voiceClipIncomingFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -394,8 +375,7 @@ void ChatWindowStyle::readStyleFiles()
 
     if (d->voiceClipIncomingHtml.isEmpty() ||
             (!d->voiceClipIncomingHtml.contains("playVoiceHandlerId") &&
-             !d->voiceClipIncomingHtml.contains("saveAsVoiceHandlerId")))     // Create default html
-    {
+             !d->voiceClipIncomingHtml.contains("saveAsVoiceHandlerId"))) {   // Create default html
         d->voiceClipIncomingHtml = d->incomingHtml;
         QString message = QString("%message%\n"
                                   "<div>\n"
@@ -414,8 +394,7 @@ void ChatWindowStyle::readStyleFiles()
     }
 
     // Load outgoing file
-    if (QFile::exists(outgoingStateUnknownFile))
-    {
+    if (QFile::exists(outgoingStateUnknownFile)) {
         fileAccess.setFileName(outgoingStateUnknownFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -425,8 +404,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
 
-    if (QFile::exists(outgoingStateSendingFile))
-    {
+    if (QFile::exists(outgoingStateSendingFile)) {
         fileAccess.setFileName(outgoingStateSendingFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -436,8 +414,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
 
-    if (QFile::exists(outgoingStateSentFile))
-    {
+    if (QFile::exists(outgoingStateSentFile)) {
         fileAccess.setFileName(outgoingStateSentFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -447,8 +424,7 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
 
-    if (QFile::exists(outgoingStateErrorFile))
-    {
+    if (QFile::exists(outgoingStateErrorFile)) {
         fileAccess.setFileName(outgoingStateErrorFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -468,8 +444,7 @@ void ChatWindowStyle::reload()
 
 bool ChatWindowStyle::hasCompact(const QString & styleVariant) const
 {
-    if (d->compactVariants.contains(styleVariant))
-    {
+    if (d->compactVariants.contains(styleVariant)) {
         return d->compactVariants.value(styleVariant);
     }
     return false;
@@ -478,12 +453,9 @@ bool ChatWindowStyle::hasCompact(const QString & styleVariant) const
 QString ChatWindowStyle::compact(const QString & styleVariant) const
 {
     QString compacted = styleVariant;
-    if (styleVariant.isEmpty())
-    {
+    if (styleVariant.isEmpty()) {
         return QLatin1String("Variants/_compact_.css");
-    }
-    else
-    {
+    } else {
         return compacted.insert(compacted.lastIndexOf('/') + 1, QString("_compact_"));
     }
 }

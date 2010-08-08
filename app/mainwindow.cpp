@@ -38,18 +38,18 @@ MainWindow::MainWindow() :
 }
 
 void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
-                                       const AccountPtr & account,
-                                       const ConnectionPtr & connection,
-                                       const QList< ChannelPtr > & channels,
-                                       const QList< ChannelRequestPtr > & ,
-                                       const QDateTime & ,
-                                       const QVariantMap&
-                                      )
+                                const AccountPtr & account,
+                                const ConnectionPtr & connection,
+                                const QList< ChannelPtr > & channels,
+                                const QList< ChannelRequestPtr > & ,
+                                const QDateTime & ,
+                                const QVariantMap&
+                               )
 {
     ChatConnection* chatConnection = new ChatConnection(this, account, connection, channels);
     ChatWindow* newWindow = new ChatWindow(chatConnection, this);
 
-    addTab(newWindow,"test");
+    addTab(newWindow, "test");
     resize(newWindow->sizeHint());// FUDGE
 
     context->setFinished();

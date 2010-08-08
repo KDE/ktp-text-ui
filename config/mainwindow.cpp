@@ -8,14 +8,14 @@
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ChatWindowConfig)
+        QDialog(parent),
+        ui(new Ui::ChatWindowConfig)
 {
     ui->setupUi(this);
 
     ChatWindowStyleManager* manager = ChatWindowStyleManager::self();
     manager->loadStyles();
-    connect(manager,SIGNAL(loadStylesFinished()),SLOT(debugStyleList()));
+    connect(manager, SIGNAL(loadStylesFinished()), SLOT(debugStyleList()));
 
     //FIXME move all the demo chat code into a different file, as it will be quite long and in the way.
 
@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->chatView->initialise(info);
 
-    connect(ui->chatView,SIGNAL(loadFinished(bool)),SLOT(sendDemoMessages()));
+    connect(ui->chatView, SIGNAL(loadFinished(bool)), SLOT(sendDemoMessages()));
 }
 
 MainWindow::~MainWindow()

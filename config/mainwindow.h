@@ -3,8 +3,9 @@
 
 #include <QDialog>
 
-namespace Ui {
-    class ChatWindowConfig;
+namespace Ui
+{
+class ChatWindowConfig;
 }
 
 class MainWindow : public QDialog

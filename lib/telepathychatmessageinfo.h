@@ -39,8 +39,7 @@ class TelepathyChatMessageInfo
 
 
 public:
-    enum MessageType
-    {
+    enum MessageType {
         RemoteToLocal,
         LocalToRemote,
         Status
@@ -53,37 +52,56 @@ public:
 
     //bother. I've documented the private stuff. I meant to do the getters + setters. Can't be bothered to move it now. I'm too sleepy.
 
-    MessageType type() const {return m_type;}
+    MessageType type() const {
+        return m_type;
+    }
 
-    QString message() const {return m_message;}
-    void setMessage(const QString message) {m_message = message;}
+    QString message() const {
+        return m_message;
+    }
+    void setMessage(const QString message) {
+        m_message = message;
+    }
 
-    QDateTime time() const {return m_time;}
-    void setTime(const QDateTime time){m_time = time;}
+    QDateTime time() const {
+        return m_time;
+    }
+    void setTime(const QDateTime time) {
+        m_time = time;
+    }
 
-    QString service() const {return m_service;}
-    void setService(const QString service) {m_service = service;}
+    QString service() const {
+        return m_service;
+    }
+    void setService(const QString service) {
+        m_service = service;
+    }
 
 
 
     //FIXME add the rest..
-    QString senderScreenName() const {return m_senderScreenName;}
-    void setSenderScreenName(const QString senderScreenName) {m_senderScreenName = senderScreenName;}
+    QString senderScreenName() const {
+        return m_senderScreenName;
+    }
+    void setSenderScreenName(const QString senderScreenName) {
+        m_senderScreenName = senderScreenName;
+    }
 
     /** The text direction of the message (either rtl or ltr)  */
     QString messageDirection() const {
-        if (m_type == LocalToRemote)
-        {
+        if (m_type == LocalToRemote) {
             return "ltr";
-        }
-        else
-        {
+        } else {
             return "rtl";
         }
-        }
+    }
 
-    QString senderDisplayName() const {return m_senderDisplayName;}
-    void setSenderDisplayName(const QString senderDisplayName) {m_senderDisplayName = senderDisplayName;}
+    QString senderDisplayName() const {
+        return m_senderDisplayName;
+    }
+    void setSenderDisplayName(const QString senderDisplayName) {
+        m_senderDisplayName = senderDisplayName;
+    }
 
 
 

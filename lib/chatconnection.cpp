@@ -28,8 +28,7 @@ ChatConnection::ChatConnection(QObject *parent, const AccountPtr account, const 
         m_connection(connection)
 {
     //FIXME loop through, find text channel
-    if (channels.length() == 1)
-    {
+    if (channels.length() == 1) {
         m_channel = Tp::TextChannelPtr::dynamicCast(channels[0]);
         PendingReady* op = m_channel->becomeReady(Features() << TextChannel::FeatureMessageQueue
                            << TextChannel::FeatureMessageSentSignal
@@ -39,9 +38,7 @@ ChatConnection::ChatConnection(QObject *parent, const AccountPtr account, const 
 
 
         connect(op, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onChannelReady(Tp::PendingOperation*)));
-    }
-    else
-    {
+    } else {
         qDebug() << "more than one channel?"; // I don't understand channels yet.
     }
 
@@ -53,10 +50,10 @@ ChatConnection::ChatConnection(QObject *parent, const AccountPtr account, const 
 void ChatConnection::onChannelReady(Tp::PendingOperation*)
 {
     PendingContacts* p = m_connection->contactManager()->upgradeContacts(QList<ContactPtr>::fromSet(m_channel->groupContacts()),
-                                                                         QSet<Contact::Feature>() << Contact::FeatureAlias
-                                                                                                  << Contact::FeatureAvatarToken
-                                                                                                  << Contact::FeatureCapabilities
-                                                                                                  << Contact::FeatureSimplePresence
+                         QSet<Contact::Feature>() << Contact::FeatureAlias
+                         << Contact::FeatureAvatarToken
+                         << Contact::FeatureCapabilities
+                         << Contact::FeatureSimplePresence
                                                                         );
     connect(p, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onPendingContactsReady(Tp::PendingOperation*)));
     qDebug() << "channel ready";

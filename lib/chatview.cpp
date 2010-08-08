@@ -40,15 +40,14 @@ ChatView::ChatView(QWidget *parent) :
     //determine the chat window style to use (from the Kopete config file).
     //FIXME use our own config file. I think we probably want everything from the appearance config group in ours, so it's a simple change.
 
-    KConfig config(KGlobal::dirs()->findResource("config","kopeterc"));
+    KConfig config(KGlobal::dirs()->findResource("config", "kopeterc"));
     KConfigGroup appearanceConfig = config.group("Appearance");
 
     qDebug() << QString("Loading ") << appearanceConfig.readEntry("styleName");
 
     m_chatStyle = new ChatWindowStyle(appearanceConfig.readEntry("styleName")); //FIXME this gets leaked !!! //FIXME hardcoded style
-    if(!m_chatStyle->isValid())
-    {
-        KMessageBox::error(this,"Failed to load a valid Kopete theme. Note this current version reads chat window settings from your Kopete config file.");
+    if (!m_chatStyle->isValid()) {
+        KMessageBox::error(this, "Failed to load a valid Kopete theme. Note this current version reads chat window settings from your Kopete config file.");
     }
 
     m_variantPath = appearanceConfig.readEntry("styleVariant");
@@ -59,10 +58,9 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
     QString templateHtml;
 
 
-    QString templateFileName( KGlobal::dirs()->findResource("data","ktelepathy/template.html"));
+    QString templateFileName(KGlobal::dirs()->findResource("data", "ktelepathy/template.html"));
 
-    if (! templateFileName.isEmpty() && QFile::exists(templateFileName))
-    {
+    if (! templateFileName.isEmpty() && QFile::exists(templateFileName)) {
         QFile fileAccess;
 
         fileAccess.setFileName(templateFileName);
@@ -71,23 +69,20 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
         headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
         templateHtml = headerStream.readAll();
         fileAccess.close();
-    }
-    else
-    {
-        KMessageBox::error(this,"Missing required file Template.html - check your installation.");
+    } else {
+        KMessageBox::error(this, "Missing required file Template.html - check your installation.");
     }
 
     QString headerHtml;
-    if (m_showHeader)
-    {
-        headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(),chatInfo);
+    if (m_showHeader) {
+        headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(), chatInfo);
     } //otherwise leave as blank.
 
-    templateHtml.replace("%baseRef%",m_chatStyle->getStyleBaseHref());
-    templateHtml.replace("%extraStyleCode%",""); // FIXME once we get some font from the config file, put it here
-    templateHtml.replace("%variant%",m_variantPath);
-    templateHtml.replace("%header%",headerHtml);
-    templateHtml.replace("%footer%",m_chatStyle->getFooterHtml());
+    templateHtml.replace("%baseRef%", m_chatStyle->getStyleBaseHref());
+    templateHtml.replace("%extraStyleCode%", ""); // FIXME once we get some font from the config file, put it here
+    templateHtml.replace("%variant%", m_variantPath);
+    templateHtml.replace("%header%", headerHtml);
+    templateHtml.replace("%footer%", m_chatStyle->getFooterHtml());
 
     setHtml(templateHtml);
 }
@@ -100,35 +95,25 @@ void ChatView::addMessage(TelepathyChatMessageInfo & message)
     bool consecutiveMessage = false;
 
     //FIXME "if group consecutive messages....{
-    if (lastSender == message.senderScreenName())
-    {
+    if (lastSender == message.senderScreenName()) {
         consecutiveMessage = true;
-    }
-    else
-    {
+    } else {
         lastSender = message.senderScreenName();
     }
 
 
-    switch(message.type())
-    {
+    switch (message.type()) {
     case TelepathyChatMessageInfo::RemoteToLocal:
-        if(consecutiveMessage)
-        {
+        if (consecutiveMessage) {
             styleHtml = m_chatStyle->getNextIncomingHtml();
-        }
-        else
-        {
-            styleHtml= m_chatStyle->getIncomingHtml();
+        } else {
+            styleHtml = m_chatStyle->getIncomingHtml();
         }
         break;
     case TelepathyChatMessageInfo::LocalToRemote:
-        if(consecutiveMessage)
-        {
+        if (consecutiveMessage) {
             styleHtml = m_chatStyle->getNextOutgoingHtml();
-        }
-        else
-        {
+        } else {
             styleHtml = m_chatStyle->getOutgoingHtml();
         }
         break;
@@ -141,17 +126,14 @@ void ChatView::addMessage(TelepathyChatMessageInfo & message)
     QString messageHtml = m_emoticons.theme().parseEmoticons(Qt::escape(message.message()));
 
     styleHtml.replace("%message%", messageHtml);
-    styleHtml.replace("%messageDirection%",message.messageDirection());
+    styleHtml.replace("%messageDirection%", message.messageDirection());
     styleHtml.replace("%sender%", message.senderDisplayName()); // FIXME sender is complex: not always this
     styleHtml.replace("%time%", message.time().toString());
     styleHtml.replace("%userIconPath%", "Outgoing/buddy_icon.png");// this fallback should be done in the messageinfo
 
-    if(consecutiveMessage)
-    {
+    if (consecutiveMessage) {
         appendNextMessage(styleHtml);
-    }
-    else
-    {
+    } else {
         appendNewMessage(styleHtml);
     }
 }
@@ -175,12 +157,12 @@ void ChatView::appendNewMessage(QString html)
 {
     //by making the JS return false evaluateJavaScript is a _lot_ faster, as it has nothing to convert to QVariant.
     //escape quotes, and merge HTML onto one line.
-    QString js = QString("appendMessage(\"%1\");false;").arg(html.replace('"',"\\\"").replace('\n',""));
+    QString js = QString("appendMessage(\"%1\");false;").arg(html.replace('"', "\\\"").replace('\n', ""));
     page()->mainFrame()->evaluateJavaScript(js);
 }
 
 void ChatView::appendNextMessage(QString html)
 {
-    QString js = QString("appendNextMessage(\"%1\");false;").arg(html.replace('"',"\\\"").replace('\n',""));
+    QString js = QString("appendNextMessage(\"%1\");false;").arg(html.replace('"', "\\\"").replace('\n', ""));
     page()->mainFrame()->evaluateJavaScript(js);
 }

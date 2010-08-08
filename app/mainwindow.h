@@ -50,8 +50,7 @@ public:
                                 const QVariantMap & handlerInfo
                                );
 
-    bool bypassApproval() const
-    {
+    bool bypassApproval() const {
         return false;
     }
 

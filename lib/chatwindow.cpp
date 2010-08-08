@@ -30,7 +30,7 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
         m_chatConnection(chat),
         m_chatviewlInitialised(false)
 {
-    ui->setupUi(this);    
+    ui->setupUi(this);
     ui->statusLabel->setText("");
 
     updateEnabledState(false);
@@ -43,7 +43,7 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     connect(m_chatConnection->channel().data(), SIGNAL(messageSent(Tp::Message, Tp::MessageSendingFlags, QString)), SLOT(handleMessageSent(Tp::Message, Tp::MessageSendingFlags, QString)));
     connect(m_chatConnection->channel().data(), SIGNAL(chatStateChanged(Tp::ContactPtr, ChannelChatState)), SLOT(updateChatStatus(Tp::ContactPtr, ChannelChatState)));
     connect(ui->sendMessageButton, SIGNAL(released()), SLOT(sendMessage()));
-    connect(ui->chatArea, SIGNAL(loadFinished(bool)),SLOT(chatViewReady()));
+    connect(ui->chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()));
 
     messageBoxEventFilter = new MessageBoxEventFilter(this);
     ui->sendMessageBox->installEventFilter(messageBoxEventFilter);
@@ -59,8 +59,7 @@ ChatWindow::~ChatWindow()
 void ChatWindow::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
-    switch (e->type())
-    {
+    switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
         break;
@@ -73,8 +72,7 @@ void ChatWindow::changeEvent(QEvent *e)
 
 void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
-    if(m_chatviewlInitialised)
-    {
+    if (m_chatviewlInitialised) {
         TelepathyChatMessageInfo messageInfo(TelepathyChatMessageInfo::RemoteToLocal);
         messageInfo.setMessage(message.text());
         messageInfo.setSenderScreenName(message.sender()->id());
@@ -103,8 +101,7 @@ void ChatWindow::chatViewReady()
     m_chatviewlInitialised = true;
 
     //process any messages we've 'missed' whilst initialising.
-    foreach(Tp::ReceivedMessage message, m_chatConnection->channel()->messageQueue())
-    {
+    foreach(Tp::ReceivedMessage message, m_chatConnection->channel()->messageQueue()) {
         handleIncomingMessage(message);
     }
 }
@@ -112,7 +109,7 @@ void ChatWindow::chatViewReady()
 
 void ChatWindow::sendMessage()
 {
-    if(!ui->sendMessageBox->toPlainText().isEmpty()) {
+    if (!ui->sendMessageBox->toPlainText().isEmpty()) {
         m_chatConnection->channel()->send(ui->sendMessageBox->toPlainText());
         ui->sendMessageBox->clear();
     }
@@ -120,15 +117,13 @@ void ChatWindow::sendMessage()
 
 void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state)
 {
-    switch (state)
-    {
-    case ChannelChatStateGone:
-        {
-            TelepathyChatMessageInfo statusMessage(TelepathyChatMessageInfo::Status);
-            statusMessage.setMessage(i18n("%1 has left the chat").arg(contact->alias()));
-            ui->chatArea->addMessage(statusMessage);
-        }
-        break;
+    switch (state) {
+    case ChannelChatStateGone: {
+        TelepathyChatMessageInfo statusMessage(TelepathyChatMessageInfo::Status);
+        statusMessage.setMessage(i18n("%1 has left the chat").arg(contact->alias()));
+        ui->chatArea->addMessage(statusMessage);
+    }
+    break;
     case ChannelChatStateInactive:
         //FIXME send a 'chat timed out' message to chatview
         break;
@@ -150,23 +145,17 @@ void ChatWindow::updateEnabledState(bool enable)
     ui->sendMessageButton->setEnabled(enable);
 
     //set up the initial chat window details.
-    if(enable)
-    {
+    if (enable) {
         TelepathyChatInfo info;
         Tp::Contacts allContacts = m_chatConnection->channel()->groupContacts();
 
         //normal chat - self and one other person.
-        if(allContacts.size() == 2)
-        {
+        if (allContacts.size() == 2) {
             //find the other contact which isn't self.
-            foreach(Tp::ContactPtr it, allContacts)
-            {
-                if(it.data() == m_chatConnection->channel()->groupSelfContact().data())
-                {
+            foreach(Tp::ContactPtr it, allContacts) {
+                if (it.data() == m_chatConnection->channel()->groupSelfContact().data()) {
                     continue;
-                }
-                else
-                {
+                } else {
                     info.setDestinationDisplayName(it->alias());
                     info.setDestinationName(it->id());
                     info.setChatName(it->alias());
@@ -174,9 +163,7 @@ void ChatWindow::updateEnabledState(bool enable)
 
                 }
             }
-        }
-        else
-        {
+        } else {
             //some sort of group chat scenario.. Not sure how to create this yet.
             info.setChatName("Group Chat");
         }
@@ -198,8 +185,8 @@ bool MessageBoxEventFilter::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
-            if(!keyEvent->modifiers()) {
+        if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+            if (!keyEvent->modifiers()) {
                 Q_EMIT returnKeyPressed();
                 return true;
             }
