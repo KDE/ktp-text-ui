@@ -92,6 +92,8 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     messageInfo.setMessage(message.text());
     messageInfo.setTime(message.sent());
     messageInfo.setSenderDisplayName(m_chatConnection->account()->displayName());
+    messageInfo.setSenderScreenName(m_chatConnection->account()->nickname());
+
 
     ui->chatArea->addMessage(messageInfo);
 }

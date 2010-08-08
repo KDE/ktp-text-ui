@@ -81,7 +81,6 @@ private:
     /** Stores whether the channel is ready with all contacts upgraded*/
     bool m_chatviewlInitialised;
 
-
     MessageBoxEventFilter* messageBoxEventFilter;
 };
 
