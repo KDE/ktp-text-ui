@@ -54,6 +54,9 @@ public:
         return false;
     }
 
+private slots:
+    void updateTabText(QString newTitle);
+
 };
 
 #endif // REALCLIENTHANDLER_H

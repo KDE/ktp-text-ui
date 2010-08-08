@@ -49,9 +49,19 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
     ChatConnection* chatConnection = new ChatConnection(this, account, connection, channels);
     ChatWindow* newWindow = new ChatWindow(chatConnection, this);
 
-    addTab(newWindow, "test");
+    connect(newWindow,SIGNAL(titleChanged(QString)),SLOT(updateTabText(QString)));
+    addTab(newWindow, "");
     resize(newWindow->sizeHint());// FUDGE
 
     context->setFinished();
 }
 
+void MainWindow::updateTabText(QString newTitle)
+{
+    //find out which widget made the call, and update the correct tab.
+    QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
+    if (sender) {
+        int tabIndexToChange = indexOf(sender);
+        setTabText(tabIndexToChange, newTitle);
+    }
+}
