@@ -34,7 +34,6 @@ class ChatView : public QWebView
 public:
     explicit ChatView(QWidget *parent = 0);
     void initialise(const TelepathyChatInfo&);
-signals:
 
 public slots:
     void addMessage(TelepathyChatMessageInfo & message);
@@ -44,7 +43,14 @@ private:
     QString m_variantPath;
     KEmoticons m_emoticons;
     QString replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo&);
-//replaceMessageKeywords(QString htmlTemplate, const TelepathyChatMessageInfo&);
+    //QString replaceMessageKeywords(QString htmlTemplate, const TelepathyChatMessageInfo&);
+
+
+    QString lastSender;
+    bool m_showHeader;
+
+    void appendNewMessage(QString);
+    void appendNextMessage(QString);
 };
 
 #endif // CHATVIEW_H

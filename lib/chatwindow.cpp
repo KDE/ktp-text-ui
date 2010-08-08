@@ -28,7 +28,7 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
         QWidget(parent),
         ui(new Ui::ChatWindow),
         m_chatConnection(chat),
-        m_channelInitialised(false)
+        m_chatviewlInitialised(false)
 {
     ui->setupUi(this);    
     ui->statusLabel->setText("");
@@ -43,6 +43,7 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     connect(m_chatConnection->channel().data(), SIGNAL(messageSent(Tp::Message, Tp::MessageSendingFlags, QString)), SLOT(handleMessageSent(Tp::Message, Tp::MessageSendingFlags, QString)));
     connect(m_chatConnection->channel().data(), SIGNAL(chatStateChanged(Tp::ContactPtr, ChannelChatState)), SLOT(updateChatStatus(Tp::ContactPtr, ChannelChatState)));
     connect(ui->sendMessageButton, SIGNAL(released()), SLOT(sendMessage()));
+    connect(ui->chatArea, SIGNAL(loadFinished(bool)),SLOT(chatViewReady()));
 
     messageBoxEventFilter = new MessageBoxEventFilter(this);
     ui->sendMessageBox->installEventFilter(messageBoxEventFilter);
@@ -72,7 +73,7 @@ void ChatWindow::changeEvent(QEvent *e)
 
 void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
-    if(m_channelInitialised)
+    if(m_chatviewlInitialised)
     {
         TelepathyChatMessageInfo messageInfo(TelepathyChatMessageInfo::RemoteToLocal);
         messageInfo.setMessage(message.text());
@@ -94,6 +95,18 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
 
     ui->chatArea->addMessage(messageInfo);
 }
+
+void ChatWindow::chatViewReady()
+{
+    m_chatviewlInitialised = true;
+
+    //process any messages we've 'missed' whilst initialising.
+    foreach(Tp::ReceivedMessage message, m_chatConnection->channel()->messageQueue())
+    {
+        handleIncomingMessage(message);
+    }
+}
+
 
 void ChatWindow::sendMessage()
 {
@@ -171,16 +184,11 @@ void ChatWindow::updateEnabledState(bool enable)
         info.setTimeOpened(QDateTime::currentDateTime()); //FIXME how do I know when the channel opened? Using current time for now.
 
         ui->chatArea->initialise(info);
-        m_channelInitialised = true;
 
         //inform anyone using the class of the new name for this chat.
         Q_EMIT titleChanged(info.chatName());
 
-        //process any messages we've 'missed' whilst initialising.
-        foreach(Tp::ReceivedMessage message, m_chatConnection->channel()->messageQueue())
-        {
-            handleIncomingMessage(message);
-        }
+
     }
 }
 

@@ -68,6 +68,9 @@ protected slots:
 
     void updateChatStatus(Tp::ContactPtr contact, ChannelChatState state);
 
+
+    void chatViewReady();
+
 signals:
     void titleChanged(QString title);
 
@@ -76,7 +79,7 @@ private:
     ChatConnection* m_chatConnection;
 
     /** Stores whether the channel is ready with all contacts upgraded*/
-    bool m_channelInitialised;
+    bool m_chatviewlInitialised;
 
 
     MessageBoxEventFilter* messageBoxEventFilter;

@@ -30,20 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->chatView->initialise(info);
 
-
-    //add a fake message
-    //in my head Bob Marley is quite a chatty friendly guy...
-
-    TelepathyChatMessageInfo message(TelepathyChatMessageInfo::RemoteToLocal);
-    message.setMessage("Hello, how are things?");
-    message.setSenderDisplayName("BobMarley@yahoo.com");
-    message.setSenderScreenName("Bob Marley");
-    message.setService("Jabber");
-    message.setTime(QDateTime::currentDateTime());
-
-
-    ui->chatView->addMessage(message);
-
+    connect(ui->chatView,SIGNAL(loadFinished(bool)),SLOT(sendDemoMessages()));
 }
 
 MainWindow::~MainWindow()
@@ -66,4 +53,18 @@ void MainWindow::changeEvent(QEvent *e)
     default:
         break;
     }*/
+}
+
+void MainWindow::sendDemoMessages()
+{
+    //add a fake message
+    //in my head Bob Marley is quite a chatty friendly guy...
+
+    TelepathyChatMessageInfo message(TelepathyChatMessageInfo::RemoteToLocal);
+    message.setMessage("Hello, how are things?");
+    message.setSenderDisplayName("BobMarley@yahoo.com");
+    message.setSenderScreenName("Bob Marley");
+    message.setService("Jabber");
+    message.setTime(QDateTime::currentDateTime());
+    ui->chatView->addMessage(message);
 }

@@ -21,6 +21,9 @@
 #include <QDebug>
 #include <QWebFrame>
 #include <QWebElement>
+#include <QFile>
+#include <QTextCodec>
+#include <QTextDocument> //needed for Qt::escape
 
 #include <KDebug>
 #include <KEmoticonsTheme>
@@ -53,78 +56,107 @@ ChatView::ChatView(QWidget *parent) :
 
 void ChatView::initialise(const TelepathyChatInfo &chatInfo)
 {
-    //Stolen from Kopete code..took out some stuff we will need in future (variants and custom Kopete style)
-
-    QString headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(),chatInfo);
+    QString templateHtml;
 
 
-    QString xhtmlBase;
+    QString templateFileName( KGlobal::dirs()->findResource("data","ktelepathy/template.html"));
 
-    xhtmlBase = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
-                        "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"\n"
-                        "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n"
-                        "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-                        "<head>\n"
-                        "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\n\" />\n"
-                        "<base href=\"file://%1\">\n"
-                        "<style id=\"baseStyle\" type=\"text/css\" media=\"screen,print\">\n"
-                        "	@import url(\"main.css\");\n"
-                        "   @import url(\"%4\");\n"
-                        "	*{ word-wrap:break-word; }\n"
-                        "</style>\n"
-                        "</head>\n"
-                        "<body>\n"
-                        "%2\n"
-                        "<div id=\"Chat\">\n</div>\n"
-                        "%3\n"
-                        "</body>"
-                        "</html>"
-                       ).arg(m_chatStyle->getStyleBaseHref()).arg(headerHtml).arg(m_chatStyle->getFooterHtml()).arg(m_variantPath);
+    if (! templateFileName.isEmpty() && QFile::exists(templateFileName))
+    {
+        QFile fileAccess;
 
-    setHtml(xhtmlBase);
+        fileAccess.setFileName(templateFileName);
+        fileAccess.open(QIODevice::ReadOnly);
+        QTextStream headerStream(&fileAccess);
+        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
+        templateHtml = headerStream.readAll();
+        fileAccess.close();
+    }
+    else
+    {
+        KMessageBox::error(this,"Missing required file Template.html - check your installation.");
+    }
 
+    QString headerHtml;
+    if (m_showHeader)
+    {
+        headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(),chatInfo);
+    } //otherwise leave as blank.
+
+    templateHtml.replace("%baseRef%",m_chatStyle->getStyleBaseHref());
+    templateHtml.replace("%extraStyleCode%",""); // FIXME once we get some font from the config file, put it here
+    templateHtml.replace("%variant%",m_variantPath);
+    templateHtml.replace("%header%",headerHtml);
+    templateHtml.replace("%footer%",m_chatStyle->getFooterHtml());
+
+    setHtml(templateHtml);
 }
 
 
 
 void ChatView::addMessage(TelepathyChatMessageInfo & message)
 {
-    QWebElement chat = page()->mainFrame()->findFirstElement("#Chat");
-    if (chat.isNull())
+    QString styleHtml;
+    bool consecutiveMessage = false;
+
+    //FIXME "if group consecutive messages....{
+    if (lastSender == message.senderScreenName())
     {
-        kDebug() << "Cannot find #Chat element.";
-        return;
+        consecutiveMessage = true;
+    }
+    else
+    {
+        lastSender = message.senderScreenName();
     }
 
-    //Kopete added messages (manipulating the DOM) in a completely different way to how Adium does (via some JS)
-    //Gone with the Kopete way, but the Adium way is probably worth at least considering. (the latter allows for sexy theme animations)
-    QString styleHtml;
 
     switch(message.type())
     {
     case TelepathyChatMessageInfo::RemoteToLocal:
-        styleHtml= m_chatStyle->getIncomingHtml();
+        if(consecutiveMessage)
+        {
+            styleHtml = m_chatStyle->getNextIncomingHtml();
+        }
+        else
+        {
+            styleHtml= m_chatStyle->getIncomingHtml();
+        }
         break;
     case TelepathyChatMessageInfo::LocalToRemote:
-        styleHtml = m_chatStyle->getOutgoingHtml();
+        if(consecutiveMessage)
+        {
+            styleHtml = m_chatStyle->getNextOutgoingHtml();
+        }
+        else
+        {
+            styleHtml = m_chatStyle->getOutgoingHtml();
+        }
         break;
     case TelepathyChatMessageInfo::Status:
         styleHtml = m_chatStyle->getStatusHtml();
+        consecutiveMessage = false;
         break;
     }
 
-    QString messageHtml = m_emoticons.theme().parseEmoticons(message.message());
+    QString messageHtml = m_emoticons.theme().parseEmoticons(Qt::escape(message.message()));
+
     styleHtml.replace("%message%", messageHtml);
     styleHtml.replace("%messageDirection%",message.messageDirection());
     styleHtml.replace("%sender%", message.senderDisplayName()); // FIXME sender is complex: not always this
     styleHtml.replace("%time%", message.time().toString());
     styleHtml.replace("%userIconPath%", "Outgoing/buddy_icon.png");// this fallback should be done in the messageinfo
 
-    chat.appendInside(styleHtml);
+    if(consecutiveMessage)
+    {
+        appendNextMessage(styleHtml);
+    }
+    else
+    {
+        appendNewMessage(styleHtml);
+    }
 }
 
 
-/* FIXME? maybe this method should be in the telepathychatinfo class, then not have the getters in that class.? */
 QString ChatView::replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo & info)
 {
     htmlTemplate.replace("%chatName%", info.chatName());
@@ -136,7 +168,19 @@ QString ChatView::replaceHeaderKeywords(QString htmlTemplate, const TelepathyCha
     htmlTemplate.replace("%timeOpened%", info.timeOpened().toString()); //FIXME use KLocale to get format.
     //FIXME time fields - remember to do both, steal the complicated one from Kopete code.
 
-    qDebug() << htmlTemplate;
-
     return htmlTemplate;
+}
+
+void ChatView::appendNewMessage(QString html)
+{
+    //by making the JS return false evaluateJavaScript is a _lot_ faster, as it has nothing to convert to QVariant.
+    //escape quotes, and merge HTML onto one line.
+    QString js = QString("appendMessage(\"%1\");false;").arg(html.replace('"',"\\\"").replace('\n',""));
+    page()->mainFrame()->evaluateJavaScript(js);
+}
+
+void ChatView::appendNextMessage(QString html)
+{
+    QString js = QString("appendNextMessage(\"%1\");false;").arg(html.replace('"',"\\\"").replace('\n',""));
+    page()->mainFrame()->evaluateJavaScript(js);
 }

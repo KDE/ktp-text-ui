@@ -23,6 +23,9 @@ public slots:
 
 private:
     Ui::ChatWindowConfig *ui;
+
+private slots:
+    void sendDemoMessages();
 };
 
 #endif // MAINWINDOW_H
