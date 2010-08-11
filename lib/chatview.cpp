@@ -24,6 +24,8 @@
 #include <QFile>
 #include <QTextCodec>
 #include <QTextDocument> //needed for Qt::escape
+#include <QWebInspector>
+#include <QWebSettings>
 
 #include <KDebug>
 #include <KEmoticonsTheme>
@@ -43,21 +45,20 @@ ChatView::ChatView(QWidget *parent) :
     KConfig config(KGlobal::dirs()->findResource("config", "kopeterc"));
     KConfigGroup appearanceConfig = config.group("Appearance");
 
-    qDebug() << QString("Loading ") << appearanceConfig.readEntry("styleName");
-
-    m_chatStyle = new ChatWindowStyle(appearanceConfig.readEntry("styleName")); //FIXME this gets leaked !!! //FIXME hardcoded style
+    m_chatStyle = new ChatWindowStyle(appearanceConfig.readEntry("styleName")); //FIXME this gets leaked !!!
     if (!m_chatStyle->isValid()) {
         KMessageBox::error(this, "Failed to load a valid Kopete theme. Note this current version reads chat window settings from your Kopete config file.");
     }
 
     m_variantPath = appearanceConfig.readEntry("styleVariant");
+
+    //special HTML debug mode. Debugging/Profiling only (or theme creating) should have no visible way to turn this flag on.
+    m_webInspector = appearanceConfig.readEntry("debug", false);
 }
 
 void ChatView::initialise(const TelepathyChatInfo &chatInfo)
 {
     QString templateHtml;
-
-
     QString templateFileName(KGlobal::dirs()->findResource("data", "ktelepathy/template.html"));
 
     if (! templateFileName.isEmpty() && QFile::exists(templateFileName)) {
@@ -85,6 +86,17 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
     templateHtml.replace("%footer%", m_chatStyle->getFooterHtml());
 
     setHtml(templateHtml);
+
+
+    //hidden HTML debugging mode. Should have no visible way to turn it on.
+    if (m_webInspector) {
+        QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+        QWebInspector* inspector = new QWebInspector(0);
+        inspector->setPage(page());
+        inspector->show();
+    }
+
+
 }
 
 

@@ -68,6 +68,7 @@ protected slots:
 
     void updateChatStatus(Tp::ContactPtr contact, ChannelChatState state);
 
+    void onContactPresenceChange(Tp::ContactPtr, uint type);
 
     void chatViewReady();
 

@@ -21,6 +21,8 @@
 #include "ui_chatwindow.h"
 #include "telepathychatmessageinfo.h"
 #include "telepathychatinfo.h"
+#include "channelcontactlist.h"
+
 #include <QKeyEvent>
 
 
@@ -37,6 +39,7 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
 
     //chat connection lifespan should be same as the chatwindow
     m_chatConnection->setParent(this);
+
 
     connect(m_chatConnection, SIGNAL(channelReadyStateChanged(bool)), SLOT(updateEnabledState(bool)));
     connect(m_chatConnection->channel().data(), SIGNAL(messageReceived(Tp::ReceivedMessage)), SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
@@ -136,11 +139,57 @@ void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state
     case ChannelChatStateComposing:
         ui->statusLabel->setText(i18n("%1 is typing a message").arg(contact->alias()));
     }
+}
+
+
+
+void ChatWindow::onContactPresenceChange(Tp::ContactPtr contact, uint type)
+{
+    QString message;
+    bool isYou = (contact.data() == m_chatConnection->channel()->groupSelfContact().data());
+
+    switch (type) {
+    case Tp::ConnectionPresenceTypeOffline:
+        if (! isYou) {
+            message = i18n("%1 is offline").arg(contact->alias());
+        } else {
+            message = i18n("You are now marked as offline");
+        }
+        break;
+    case Tp::ConnectionPresenceTypeAvailable:
+        if (! isYou) {
+            message = i18n("%1 is online").arg(contact->alias());
+        } else {
+            message = i18n("You are now marked as online");
+        }
+        break;
+    case Tp::ConnectionPresenceTypeAway:
+        if (! isYou) {
+            message = i18n("%1 is busy").arg(contact->alias());
+        } else {
+            message = i18n("You are now marked as busy");
+        }
+        break;
+    default:
+        /*Do nothing*/
+        ;
+    }
+
+    if (!message.isNull()) {
+        TelepathyChatMessageInfo statusMessage(TelepathyChatMessageInfo::Status);
+        statusMessage.setMessage(message);
+        ui->chatArea->addMessage(statusMessage);
+    }
 
 }
 
 void ChatWindow::updateEnabledState(bool enable)
 {
+    //channel is now valid, start keeping track of contacts.
+    ChannelContactList* contactList = new ChannelContactList(m_chatConnection->channel(), this);
+    connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr, uint)), SLOT(onContactPresenceChange(Tp::ContactPtr, uint)));
+
+    //update GUI
     ui->sendMessageBox->setEnabled(enable);
     ui->sendMessageButton->setEnabled(enable);
 

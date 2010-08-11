@@ -51,6 +51,8 @@ private:
 
     void appendNewMessage(QString);
     void appendNextMessage(QString);
+
+    bool m_webInspector;
 };
 
 #endif // CHATVIEW_H

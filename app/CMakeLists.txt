@@ -8,10 +8,13 @@ set(telepathy_chat_handler_SRCS
         ../lib/chatconnection.cpp
         ../lib/chatwindow.cpp
         ../lib/chatwindowstyle.cpp
+        ../lib/chatwindowstylemanager.cpp
         ../lib/chatview.cpp
         ../lib/telepathychatmessageinfo.cpp
         ../lib/telepathychatinfo.cpp
+        ../lib/channelcontactlist.cpp
 )
+
 
 set(telepathy_chat_handler_UI
     ../lib/chatwindow.ui

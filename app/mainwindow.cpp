@@ -49,7 +49,7 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
     ChatConnection* chatConnection = new ChatConnection(this, account, connection, channels);
     ChatWindow* newWindow = new ChatWindow(chatConnection, this);
 
-    connect(newWindow,SIGNAL(titleChanged(QString)),SLOT(updateTabText(QString)));
+    connect(newWindow, SIGNAL(titleChanged(QString)), SLOT(updateTabText(QString)));
     addTab(newWindow, "");
     resize(newWindow->sizeHint());// FUDGE
 
