@@ -45,18 +45,19 @@ ChatView::ChatView(QWidget *parent) :
     //determine the chat window style to use (from the Kopete config file).
     //FIXME use our own config file. I think we probably want everything from the appearance config group in ours, so it's a simple change.
 
-    KConfig config(KGlobal::dirs()->findResource("config", "kopeterc"));
-    KConfigGroup appearanceConfig = config.group("Appearance");
+    KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
+    KConfigGroup appearanceConfig = config->group("Appearance");
 
     QString chatStyleName = appearanceConfig.readEntry("styleName", "Renkoo.AdiumMessageStyle");
-
     m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
 
     if (!m_chatStyle->isValid()) {
-        KMessageBox::error(this, "Failed to load a valid Kopete theme. Note this current version reads chat window settings from your Kopete config file.");
+        KMessageBox::error(this, "Failed to load a valid Kopete theme. Please make sure you run the chat window configuration program first.");
     }
 
-    m_variantPath = appearanceConfig.readEntry("styleVariant");
+    QString variant = appearanceConfig.readEntry("styleVariant");
+    m_variantPath = QString("Variants/%1.css").arg(variant);
+
 
     //special HTML debug mode. Debugging/Profiling only (or theme creating) should have no visible way to turn this flag on.
     m_webInspector = appearanceConfig.readEntry("debug", false);

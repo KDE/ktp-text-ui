@@ -136,4 +136,5 @@ void MainWindow::accept()
 
     appearanceConfig.sync();
     config->sync();
+    QDialog::accept();
 }
