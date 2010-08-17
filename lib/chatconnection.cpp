@@ -33,8 +33,7 @@ ChatConnection::ChatConnection(QObject *parent, const AccountPtr account, const 
         PendingReady* op = m_channel->becomeReady(Features() << TextChannel::FeatureMessageQueue
                            << TextChannel::FeatureMessageSentSignal
                            << TextChannel::FeatureChatState
-                           << Channel::FeatureCore
-                                                 );
+                           << Channel::FeatureCore);
 
 
         connect(op, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onChannelReady(Tp::PendingOperation*)));

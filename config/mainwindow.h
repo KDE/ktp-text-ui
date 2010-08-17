@@ -18,15 +18,18 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
-
-public slots:
-    void debugStyleList();
+    void accept();
 
 private:
     Ui::ChatWindowConfig *ui;
 
 private slots:
     void sendDemoMessages();
+    void onStylesLoaded();
+    void updateVariantsList();
+
+    void onStyleSelected(const QString&);
+    void onVariantSelected(const QString&);
 };
 
 #endif // MAINWINDOW_H

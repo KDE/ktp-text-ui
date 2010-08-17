@@ -35,16 +35,32 @@ public:
     explicit ChatView(QWidget *parent = 0);
     void initialise(const TelepathyChatInfo&);
 
+    //override various parts loaded from the config file.
+    //note that the following will clear the contents of the chat window.
+
+    const QString variant() const;
+    void setVariant(const QString& variant);
+
+    ChatWindowStyle *chatStyle() const;
+    void setChatStyle(ChatWindowStyle* chatStyle);
+
+    /* bool displayHeader()*/
+    /* .. font, backgrounds, everything else.*/
+
+
 public slots:
     void addMessage(TelepathyChatMessageInfo & message);
 
 private:
     ChatWindowStyle* m_chatStyle;
     QString m_variantPath;
+
+
     KEmoticons m_emoticons;
     QString replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo&);
     //QString replaceMessageKeywords(QString htmlTemplate, const TelepathyChatMessageInfo&);
 
+    TelepathyChatInfo m_chatInfo;
 
     QString lastSender;
     bool m_showHeader;

@@ -18,6 +18,8 @@
  ***************************************************************************/
 
 #include "chatview.h"
+#include "chatwindowstylemanager.h"
+
 #include <QDebug>
 #include <QWebFrame>
 #include <QWebElement>
@@ -37,7 +39,8 @@
 
 
 ChatView::ChatView(QWidget *parent) :
-        QWebView(parent)
+        QWebView(parent),
+        m_showHeader(true)
 {
     //determine the chat window style to use (from the Kopete config file).
     //FIXME use our own config file. I think we probably want everything from the appearance config group in ours, so it's a simple change.
@@ -45,7 +48,10 @@ ChatView::ChatView(QWidget *parent) :
     KConfig config(KGlobal::dirs()->findResource("config", "kopeterc"));
     KConfigGroup appearanceConfig = config.group("Appearance");
 
-    m_chatStyle = new ChatWindowStyle(appearanceConfig.readEntry("styleName")); //FIXME this gets leaked !!!
+    QString chatStyleName = appearanceConfig.readEntry("styleName","Renkoo.AdiumMessageStyle");
+
+    m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
+
     if (!m_chatStyle->isValid()) {
         KMessageBox::error(this, "Failed to load a valid Kopete theme. Note this current version reads chat window settings from your Kopete config file.");
     }
@@ -71,7 +77,7 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
         templateHtml = headerStream.readAll();
         fileAccess.close();
     } else {
-        KMessageBox::error(this, "Missing required file Template.html - check your installation.");
+        KMessageBox::error(this, "Missing required file template.html - check your installation.");
     }
 
     QString headerHtml;
@@ -86,7 +92,7 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
     templateHtml.replace("%footer%", m_chatStyle->getFooterHtml());
 
     setHtml(templateHtml);
-
+    lastSender = "";
 
     //hidden HTML debugging mode. Should have no visible way to turn it on.
     if (m_webInspector) {
@@ -95,10 +101,44 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
         inspector->setPage(page());
         inspector->show();
     }
-
-
 }
 
+const QString ChatView::variant() const
+{
+    return m_variantPath;
+}
+
+void ChatView::setVariant(const QString &variant)
+{
+    m_variantPath = QString("Variants/%1.css").arg(variant);
+
+    //FIXME update the display!
+    initialise(m_chatInfo);
+}
+
+ChatWindowStyle* ChatView::chatStyle() const
+{
+    return m_chatStyle;
+}
+
+void ChatView::setChatStyle(ChatWindowStyle *chatStyle)
+{
+    m_chatStyle = chatStyle;
+
+    //load the first variant
+    QHash<QString, QString> variants = chatStyle->getVariants();
+    if(variants.keys().length() > 0)
+    {
+        m_variantPath = variants.values()[0];
+    }
+    else
+    {
+        m_variantPath = "";
+    }
+
+
+    initialise(m_chatInfo);
+}
 
 
 void ChatView::addMessage(TelepathyChatMessageInfo & message)

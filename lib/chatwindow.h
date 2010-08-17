@@ -70,7 +70,11 @@ protected slots:
 
     void onContactPresenceChange(Tp::ContactPtr, uint type);
 
+    void onInputBoxChanged();
+
     void chatViewReady();
+
+
 
 signals:
     void titleChanged(QString title);
@@ -83,6 +87,7 @@ private:
     bool m_chatviewlInitialised;
 
     MessageBoxEventFilter* messageBoxEventFilter;
+    ChannelChatState lastRequestedChannelChatState;
 };
 
 #endif // CHATWINDOW_H

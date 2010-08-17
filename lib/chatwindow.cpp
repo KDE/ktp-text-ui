@@ -40,7 +40,6 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     //chat connection lifespan should be same as the chatwindow
     m_chatConnection->setParent(this);
 
-
     connect(m_chatConnection, SIGNAL(channelReadyStateChanged(bool)), SLOT(updateEnabledState(bool)));
     connect(m_chatConnection->channel().data(), SIGNAL(messageReceived(Tp::ReceivedMessage)), SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
     connect(m_chatConnection->channel().data(), SIGNAL(messageSent(Tp::Message, Tp::MessageSendingFlags, QString)), SLOT(handleMessageSent(Tp::Message, Tp::MessageSendingFlags, QString)));
@@ -228,6 +227,15 @@ void ChatWindow::updateEnabledState(bool enable)
 
 
     }
+}
+
+
+void ChatWindow::onInputBoxChanged()
+{
+    //if the box is empty
+    bool currentlyTyping = ui->sendMessageBox->toPlainText().isEmpty();
+
+
 }
 
 bool MessageBoxEventFilter::eventFilter(QObject *obj, QEvent *event)

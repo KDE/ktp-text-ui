@@ -4,3 +4,7 @@ Interfaces=org.freedesktop.Telepathy.Client.Handler;org.freedesktop.Telepathy.Cl
 [org.freedesktop.Telepathy.Client.Handler.HandlerChannelFilter 0]
 org.freedesktop.Telepathy.Channel.ChannelType s=org.freedesktop.Telepathy.Channel.Type.Text
 org.freedesktop.Telepathy.Channel.TargetHandleType u=1
+
+[org.freedesktop.Telepathy.Client.Handler.HandlerChannelFilter 0]
+org.freedesktop.Telepathy.Channel.ChannelType s=org.freedesktop.Telepathy.Channel.Type.Text
+org.freedesktop.Telepathy.Channel.TargetHandleType u=2

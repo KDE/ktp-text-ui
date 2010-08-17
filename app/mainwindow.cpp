@@ -24,9 +24,21 @@ inline ChannelClassList channelClassList()
 {
     ChannelClassList filters;
     QMap<QString, QDBusVariant> filter;
+
     filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".ChannelType"),
                   QDBusVariant(TELEPATHY_INTERFACE_CHANNEL_TYPE_TEXT));
+    filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".TargetHandleType"),
+                  QDBusVariant((uint) Tp::HandleTypeContact));
     filters.append(filter);
+    
+    filter.clear();
+    filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".ChannelType"),
+                  QDBusVariant(TELEPATHY_INTERFACE_CHANNEL_TYPE_TEXT));
+    filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".TargetHandleType"),
+                  QDBusVariant((uint) Tp::HandleTypeRoom));
+    filters.append(filter);
+    
+    
     return filters;
 }
 
