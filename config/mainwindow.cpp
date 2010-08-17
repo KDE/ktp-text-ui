@@ -32,8 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->chatView->initialise(info);
 
     connect(ui->chatView, SIGNAL(loadFinished(bool)), SLOT(sendDemoMessages()));
-    connect(ui->styleComboBox,SIGNAL(activated(const QString&)),SLOT(onStyleSelected(QString)));
-    connect(ui->variantComboBox,SIGNAL(activated(const QString&)),SLOT(onVariantSelected(const QString&)));
+    connect(ui->styleComboBox, SIGNAL(activated(const QString&)), SLOT(onStyleSelected(QString)));
+    connect(ui->variantComboBox, SIGNAL(activated(const QString&)), SLOT(onVariantSelected(const QString&)));
 }
 
 MainWindow::~MainWindow()

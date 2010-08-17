@@ -48,7 +48,7 @@ ChatView::ChatView(QWidget *parent) :
     KConfig config(KGlobal::dirs()->findResource("config", "kopeterc"));
     KConfigGroup appearanceConfig = config.group("Appearance");
 
-    QString chatStyleName = appearanceConfig.readEntry("styleName","Renkoo.AdiumMessageStyle");
+    QString chatStyleName = appearanceConfig.readEntry("styleName", "Renkoo.AdiumMessageStyle");
 
     m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
 
@@ -127,12 +127,9 @@ void ChatView::setChatStyle(ChatWindowStyle *chatStyle)
 
     //load the first variant
     QHash<QString, QString> variants = chatStyle->getVariants();
-    if(variants.keys().length() > 0)
-    {
+    if (variants.keys().length() > 0) {
         m_variantPath = variants.values()[0];
-    }
-    else
-    {
+    } else {
         m_variantPath = "";
     }
 
