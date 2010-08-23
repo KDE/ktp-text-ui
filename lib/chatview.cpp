@@ -40,7 +40,7 @@
 
 ChatView::ChatView(QWidget *parent) :
         QWebView(parent),
-        m_showHeader(true)
+        m_displayHeader(true)
 {
     //determine the chat window style to use (from the Kopete config file).
     //FIXME use our own config file. I think we probably want everything from the appearance config group in ours, so it's a simple change.
@@ -50,13 +50,13 @@ ChatView::ChatView(QWidget *parent) :
 
     QString chatStyleName = appearanceConfig.readEntry("styleName", "Renkoo.AdiumMessageStyle");
     m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
-
     if (m_chatStyle == 0 || !m_chatStyle->isValid()) {
         KMessageBox::error(this, "Failed to load a valid Kopete theme. Please make sure you run the chat window configuration program first.");
     }
 
     QString variant = appearanceConfig.readEntry("styleVariant");
     m_variantPath = QString("Variants/%1.css").arg(variant);
+    m_displayHeader = appearanceConfig.readEntry("displayHeader", false);
 
 
     //special HTML debug mode. Debugging/Profiling only (or theme creating) should have no visible way to turn this flag on.
@@ -82,7 +82,7 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
     }
 
     QString headerHtml;
-    if (m_showHeader) {
+    if (m_displayHeader) {
         headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(), chatInfo);
     } //otherwise leave as blank.
 
@@ -139,7 +139,18 @@ void ChatView::setChatStyle(ChatWindowStyle *chatStyle)
 }
 
 
-void ChatView::addMessage(TelepathyChatMessageInfo & message)
+bool ChatView::isHeaderDisplayed() const
+{
+    return m_displayHeader;
+}
+
+void ChatView::setHeaderDisplayed(bool displayHeader)
+{
+    m_displayHeader = displayHeader;
+    initialise(m_chatInfo);
+}
+
+void ChatView::addMessage(const TelepathyChatMessageInfo &message)
 {
     QString styleHtml;
     bool consecutiveMessage = false;
@@ -213,7 +224,7 @@ QString ChatView::replaceHeaderKeywords(QString htmlTemplate, const TelepathyCha
     return htmlTemplate;
 }
 
-void ChatView::appendNewMessage(QString html)
+void ChatView::appendNewMessage(QString &html)
 {
     //by making the JS return false evaluateJavaScript is a _lot_ faster, as it has nothing to convert to QVariant.
     //escape quotes, and merge HTML onto one line.
@@ -221,7 +232,7 @@ void ChatView::appendNewMessage(QString html)
     page()->mainFrame()->evaluateJavaScript(js);
 }
 
-void ChatView::appendNextMessage(QString html)
+void ChatView::appendNextMessage(QString &html)
 {
     QString js = QString("appendNextMessage(\"%1\");false;").arg(html.replace('"', "\\\"").replace('\n', ""));
     page()->mainFrame()->evaluateJavaScript(js);

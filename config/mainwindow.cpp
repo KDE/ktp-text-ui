@@ -18,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
     manager->loadStyles();
     connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
-    //FIXME move all the demo chat code into a different file, as it will be quite long and in the way.
-
     //set up a pretend config chat.
     TelepathyChatInfo info;
 
@@ -31,9 +29,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->chatView->initialise(info);
 
+    ui->showHeader->setChecked(ui->chatView->isHeaderDisplayed());
+
     connect(ui->chatView, SIGNAL(loadFinished(bool)), SLOT(sendDemoMessages()));
-    connect(ui->styleComboBox, SIGNAL(activated(const QString&)), SLOT(onStyleSelected(QString)));
-    connect(ui->variantComboBox, SIGNAL(activated(const QString&)), SLOT(onVariantSelected(const QString&)));
+    connect(ui->styleComboBox, SIGNAL(activated(QString)), SLOT(onStyleSelected(QString)));
+    connect(ui->variantComboBox, SIGNAL(activated(QString)), SLOT(onVariantSelected(QString)));
+    connect(ui->showHeader,SIGNAL(clicked(bool)), SLOT(onShowHeaderChanged(bool)));
 }
 
 MainWindow::~MainWindow()
@@ -96,6 +97,12 @@ void MainWindow::onVariantSelected(const QString &variant)
 }
 
 
+void MainWindow::onShowHeaderChanged(bool showHeader)
+{
+    ui->chatView->setHeaderDisplayed(showHeader);
+}
+
+
 void MainWindow::sendDemoMessages()
 {
     //add a fake message
@@ -133,8 +140,10 @@ void MainWindow::accept()
 
     appearanceConfig.writeEntry("styleName", ui->styleComboBox->currentText());
     appearanceConfig.writeEntry("styleVariant", ui->variantComboBox->currentText());
+    appearanceConfig.writeEntry("displayHeader", ui->showHeader->isChecked());
 
     appearanceConfig.sync();
     config->sync();
+
     QDialog::accept();
 }

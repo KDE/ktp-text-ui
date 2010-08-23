@@ -30,6 +30,7 @@ private slots:
 
     void onStyleSelected(const QString&);
     void onVariantSelected(const QString&);
+    void onShowHeaderChanged(bool);
 };
 
 #endif // MAINWINDOW_H

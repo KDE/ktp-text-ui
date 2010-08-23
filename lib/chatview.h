@@ -44,18 +44,17 @@ public:
     ChatWindowStyle *chatStyle() const;
     void setChatStyle(ChatWindowStyle* chatStyle);
 
-    /* bool displayHeader()*/
+    bool isHeaderDisplayed() const;
+    void setHeaderDisplayed(bool);
     /* .. font, backgrounds, everything else.*/
 
 
 public slots:
-    void addMessage(TelepathyChatMessageInfo & message);
+    void addMessage(const TelepathyChatMessageInfo &message);
 
 private:
     ChatWindowStyle* m_chatStyle;
     QString m_variantPath;
-
-
     KEmoticons m_emoticons;
     QString replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo&);
     //QString replaceMessageKeywords(QString htmlTemplate, const TelepathyChatMessageInfo&);
@@ -65,10 +64,10 @@ private:
     TelepathyChatInfo m_chatInfo;
 
     QString lastSender;
-    bool m_showHeader;
+    bool m_displayHeader;
 
-    void appendNewMessage(QString);
-    void appendNextMessage(QString);
+    void appendNewMessage(QString&);
+    void appendNextMessage(QString&);
 
     bool m_webInspector;
 };
