@@ -17,18 +17,25 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include <QtGui/QApplication>
 #include "mainwindow.h"
-
-#include <QDebug>
 
 #include <TelepathyQt4/Channel>
 #include <TelepathyQt4/ClientRegistrar>
-#include "mainwindow.h"
+
+#include <KApplication>
+#include <KAboutData>
+#include <KCmdLineArgs>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+
+    KAboutData aboutData("telepathy-chat-handler",
+                         0,
+                         ki18n("Telepathy Chat Handler"),
+                         "0.1");
+
+    KCmdLineArgs::init( argc, argv, &aboutData );
+    KApplication app;
 
     registerTypes();
 
@@ -40,6 +47,6 @@ int main(int argc, char *argv[])
 
     mainWindow->show();
 
-    return a.exec();
+    return app.exec();
     delete mainWindow;
 }
