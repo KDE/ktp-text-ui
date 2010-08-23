@@ -60,6 +60,8 @@ private:
     QString replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo&);
     //QString replaceMessageKeywords(QString htmlTemplate, const TelepathyChatMessageInfo&);
 
+    QString formatTime(const QString&, const QDateTime&);
+
     TelepathyChatInfo m_chatInfo;
 
     QString lastSender;
