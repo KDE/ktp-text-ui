@@ -191,14 +191,15 @@ void ChatView::addMessage(const TelepathyChatMessageInfo &message)
     styleHtml.replace("%sender%", message.senderDisplayName()); // FIXME sender is complex: not always this
     styleHtml.replace("%time%", KGlobal::locale()->formatTime(message.time().time(), true));
     styleHtml.replace("%userIconPath%", "Outgoing/buddy_icon.png");// this fallback should be done in the messageinfo
+    styleHtml.replace("%messageClasses%", message.messageClasses());
+
 
     // Look for %time{X}%
     QRegExp timeRegExp("%time\\{([^}]*)\\}%");
-    int pos=0;
-    while( (pos=timeRegExp.indexIn(styleHtml , pos) ) != -1 )
-    {
-            QString timeKeyword = formatTime( timeRegExp.cap(1), message.time() );
-            styleHtml.replace( pos , timeRegExp.cap(0).length() , timeKeyword );
+    int pos = 0;
+    while ((pos = timeRegExp.indexIn(styleHtml , pos)) != -1) {
+        QString timeKeyword = formatTime(timeRegExp.cap(1), message.time());
+        styleHtml.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
     }
 
     if (consecutiveMessage) {
@@ -242,20 +243,20 @@ void ChatView::appendNextMessage(QString &html)
 //taken from Kopete code
 QString ChatView::formatTime(const QString &_timeFormat, const QDateTime &dateTime)
 {
-        char buffer[256];
+    char buffer[256];
 #ifdef Q_WS_WIN
-        QString timeFormat = _timeFormat;
-        // some formats are not supported on windows (gnu extension?)
-        timeFormat = timeFormat.replace(QLatin1String("%e"), QLatin1String("%d"));
-        timeFormat = timeFormat.replace(QLatin1String("%T"), QLatin1String("%H:%M:%S"));
+    QString timeFormat = _timeFormat;
+    // some formats are not supported on windows (gnu extension?)
+    timeFormat = timeFormat.replace(QLatin1String("%e"), QLatin1String("%d"));
+    timeFormat = timeFormat.replace(QLatin1String("%T"), QLatin1String("%H:%M:%S"));
 #else
-        const QString timeFormat = _timeFormat;
+    const QString timeFormat = _timeFormat;
 #endif
-        // Get current time
-        time_t timeT = dateTime.toTime_t();
-        // Convert it to local time representation.
-        struct tm* loctime = localtime (&timeT);
-        strftime (buffer, 256, timeFormat.toAscii(), loctime);
+    // Get current time
+    time_t timeT = dateTime.toTime_t();
+    // Convert it to local time representation.
+    struct tm* loctime = localtime(&timeT);
+    strftime(buffer, 256, timeFormat.toAscii(), loctime);
 
-        return QString(buffer);
+    return QString(buffer);
 }

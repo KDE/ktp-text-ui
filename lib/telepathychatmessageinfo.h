@@ -22,7 +22,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QUrl>
-
+#include <QStringList>
 
 /** This class contains all the information that is needed for a message or status message*/
 
@@ -99,8 +99,32 @@ public:
     QString senderDisplayName() const {
         return m_senderDisplayName;
     }
+
     void setSenderDisplayName(const QString senderDisplayName) {
         m_senderDisplayName = senderDisplayName;
+    }
+
+    QString messageClasses() const {
+        //in the future this will also contain history, consecutive, autoreply, status, event
+        //these will be stored internally as flags
+
+        QStringList classes;
+
+        if (m_type == RemoteToLocal) {
+            classes.append("incoming");
+            classes.append("message");
+        }
+
+        if (m_type == LocalToRemote) {
+            classes.append("outgoing");
+            classes.append("message");
+        }
+
+        if (m_type == Status) {
+            classes.append("status");
+        }
+
+        return classes.join(" ");
     }
 
 
