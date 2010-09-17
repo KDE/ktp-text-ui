@@ -190,8 +190,10 @@ void ChatView::addMessage(const TelepathyChatMessageInfo &message)
     styleHtml.replace("%messageDirection%", message.messageDirection());
     styleHtml.replace("%sender%", message.senderDisplayName()); // FIXME sender is complex: not always this
     styleHtml.replace("%time%", KGlobal::locale()->formatTime(message.time().time(), true));
+    styleHtml.replace("%shortTime%", KGlobal::locale()->formatTime(message.time().time(), false));
     styleHtml.replace("%userIconPath%", "Outgoing/buddy_icon.png");// this fallback should be done in the messageinfo
     styleHtml.replace("%messageClasses%", message.messageClasses());
+    styleHtml.replace("%service%", message.service());
 
 
     // Look for %time{X}%
@@ -219,7 +221,15 @@ QString ChatView::replaceHeaderKeywords(QString htmlTemplate, const TelepathyCha
     htmlTemplate.replace("%incomingIconPath%", info.incomingIconPath().toString());
     htmlTemplate.replace("%outgoingIconPath%", info.outgoingIconPath().toString());
     htmlTemplate.replace("%timeOpened%", KGlobal::locale()->formatDateTime(info.timeOpened()));
+
     //FIXME time fields - remember to do both, steal the complicated one from Kopete code.
+    // Look for %timeOpened{X}%
+    QRegExp timeRegExp("%timeOpened\\{([^}]*)\\}%");
+    int pos = 0;
+    while ((pos = timeRegExp.indexIn(htmlTemplate , pos)) != -1) {
+        QString timeKeyword = formatTime(timeRegExp.cap(1), info.timeOpened());
+        htmlTemplate.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
+    }
 
 
     return htmlTemplate;
