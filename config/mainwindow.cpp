@@ -15,16 +15,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ChatWindowStyleManager* manager = ChatWindowStyleManager::self();
-    manager->loadStyles();
+   // manager->loadStyles();
     connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
     //set up a pretend config chat.
     TelepathyChatInfo info;
 
     info.setChatName("A demo chat");
+    info.setSourceName("Jabber");
     info.setTimeOpened(QDateTime::currentDateTime());
     info.setDestinationName("BobMarley@yahoo.com");
-    info.setSourceName("Jabber");
     info.setDestinationDisplayName("Bob Marley");
 
     ui->chatView->initialise(info);
@@ -66,7 +66,9 @@ void MainWindow::onStylesLoaded()
     ui->styleComboBox->setCurrentItem(currentStyle->getStyleName());
 
     updateVariantsList();
+    //FIXME call onStyleSelected
 }
+
 
 void MainWindow::updateVariantsList()
 {
@@ -88,6 +90,8 @@ void MainWindow::onStyleSelected(const QString & styleName)
     ChatWindowStyle* style = ChatWindowStyleManager::self()->getValidStyleFromPool(styleName);
     ui->chatView->setChatStyle(style);
     updateVariantsList();
+    ui->showHeader->setEnabled(style->hasHeader());
+
 }
 
 void MainWindow::onVariantSelected(const QString &variant)
@@ -106,7 +110,6 @@ void MainWindow::onShowHeaderChanged(bool showHeader)
 void MainWindow::sendDemoMessages()
 {
     //add a fake message
-    //in my head Bob Marley is quite a chatty friendly guy...
 
     TelepathyChatMessageInfo message(TelepathyChatMessageInfo::RemoteToLocal);
     message.setMessage("Hello");
