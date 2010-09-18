@@ -82,9 +82,10 @@ ChatWindowStyleManager::~ChatWindowStyleManager()
 void ChatWindowStyleManager::loadStyles()
 {
     // Make sure there exists a directory where chat styles can be installed to and it will be watched for changes
-    KStandardDirs::locateLocal("data", QLatin1String("kopete/styles/"));
+    KStandardDirs::locateLocal("data", QLatin1String("ktelepathy/styles/"));
 
-    QStringList chatStyles = KGlobal::dirs()->findDirs("data", QLatin1String("kopete/styles"));
+    QStringList chatStyles = KGlobal::dirs()->findDirs("data", QLatin1String("ktelepathy/styles"));
+
     foreach(const QString &styleDir, chatStyles) {
         kDebug(14000) << styleDir;
         d->styleDirs.push(KUrl(styleDir));

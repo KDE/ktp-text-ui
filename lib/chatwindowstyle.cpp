@@ -72,9 +72,8 @@ ChatWindowStyle::ChatWindowStyle(const QString &styleName, const QString &varian
 
 void ChatWindowStyle::init(const QString &styleName, StyleBuildMode styleBuildMode)
 {
-    //FIXME stop looking in Kopete's directory!
+    QStringList styleDirs = KGlobal::dirs()->findDirs("data", QString("ktelepathy/styles/%1/Contents/Resources/").arg(styleName));
 
-    QStringList styleDirs = KGlobal::dirs()->findDirs("data", QString("kopete/styles/%1/Contents/Resources/").arg(styleName));
     if (styleDirs.isEmpty()) {
         kDebug(14000) << "Failed to find style" << styleName;
         return;
@@ -119,6 +118,12 @@ QString ChatWindowStyle::getStyleName() const
 QString ChatWindowStyle::getStyleBaseHref() const
 {
     return d->baseHref;
+}
+
+
+bool ChatWindowStyle::hasHeader() const
+{
+   return ! d->headerHtml.isEmpty();
 }
 
 QString ChatWindowStyle::getHeaderHtml() const

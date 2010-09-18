@@ -43,7 +43,6 @@ ChatView::ChatView(QWidget *parent) :
         m_displayHeader(true)
 {
     //determine the chat window style to use (from the Kopete config file).
-    //FIXME use our own config file. I think we probably want everything from the appearance config group in ours, so it's a simple change.
 
     KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
     KConfigGroup appearanceConfig = config->group("Appearance");
@@ -90,7 +89,10 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
     templateHtml.replace("%extraStyleCode%", ""); // FIXME once we get some font/background from the config file, put it here
     templateHtml.replace("%variant%", m_variantPath);
     templateHtml.replace("%header%", headerHtml);
-    templateHtml.replace("%footer%", m_chatStyle->getFooterHtml());
+
+    QString footerHtml;
+    footerHtml = replaceHeaderKeywords(m_chatStyle->getFooterHtml(), chatInfo);
+    templateHtml.replace("%footer%", footerHtml);
 
     setHtml(templateHtml);
     lastSender = "";

@@ -218,8 +218,7 @@ void ChatWindow::updateEnabledState(bool enable)
 
         //set up anything related to 'self'
         info.setOutgoingIconPath(m_chatConnection->channel()->groupSelfContact()->avatarToken());
-        info.setTimeOpened(QDateTime::currentDateTime()); //FIXME how do I know when the channel opened? Using current time for now.
-
+        info.setTimeOpened(QDateTime::currentDateTime());
         ui->chatArea->initialise(info);
 
         //inform anyone using the class of the new name for this chat.

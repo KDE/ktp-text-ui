@@ -4,7 +4,8 @@
 #include <QObject>
 #include <TelepathyQt4/TextChannel>
 #include <TelepathyQt4/Contact>
-
+#include <TelepathyQt4/Types>
+#include <TelepathyQt4/Channel>
 
 class ChannelContactListContact: public QObject
 {
@@ -35,7 +36,14 @@ signals:
     void contactPresenceChanged(Tp::ContactPtr contact, uint type);
 
 public slots:
+    void groupMembersChanged(const Tp::Contacts &groupMembersAdded,
+                             const Tp::Contacts &groupLocalPendingMembersAdded,
+                             const Tp::Contacts &groupRemotePendingMembersAdded,
+                             const Tp::Contacts &groupMembersRemoved,
+                             const Tp::Channel::GroupMemberChangeDetails &details);
 
+private:
+    QSet<ChannelContactListContact> contacts;
 };
 
 

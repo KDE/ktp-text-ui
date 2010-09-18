@@ -26,8 +26,6 @@
 
 /** This class contains all the information that is needed for a message or status message*/
 
-//FIXME enum type for incoming, outgoing or status. Set on construct.
-//messageDirection only has getter based on this
 //no value handling to be done in this class.
 
 //rules for this class
@@ -151,7 +149,6 @@ private:
     QString m_userIcons;
 
     /** A space separated list of type information for messages, suitable for use as a class attribute. Currently available types are listed below. */
-    //do this on my magical "messageType enum"
     QString m_messageClasses;
 
     /** A description of the status event. This is neither in the user's local language nor expected to be displayed; it may be useful to use a different div class to present different types of status messages. The following is a list of some of the more important status messages; your message style should be able to handle being shown a status message not in this list, as even at present the list is incomplete and is certain to become out of date in the future: */
