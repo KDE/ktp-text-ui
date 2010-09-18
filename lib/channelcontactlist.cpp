@@ -4,7 +4,7 @@
 /** \breif This class provides an abstracted way of getting presence changes from a contact
   * It was needed to be able to pair up a contact changing, with the name of the contact.
   * It gives a single signal for the calling code to handle for every contact, and
-  * also safetly handles connect and disconnecting slots as contacts enter and leave a channel (future).
+  * also safetly handles connect and disconnecting slots as contacts enter and leave a channel
 */
 
 /** Internal private class*/

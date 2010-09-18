@@ -177,6 +177,7 @@ void ChatWindow::onContactPresenceChange(Tp::ContactPtr contact, uint type)
     if (!message.isNull()) {
         TelepathyChatMessageInfo statusMessage(TelepathyChatMessageInfo::Status);
         statusMessage.setMessage(message);
+        statusMessage.setTime(QDateTime::currentDateTime());
         ui->chatArea->addMessage(statusMessage);
     }
 
@@ -208,7 +209,6 @@ void ChatWindow::updateEnabledState(bool enable)
                     info.setDestinationName(it->id());
                     info.setChatName(it->alias());
                     info.setIncomingIconPath(it->avatarToken());
-
                 }
             }
         } else {
