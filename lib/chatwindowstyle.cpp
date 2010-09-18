@@ -97,8 +97,16 @@ ChatWindowStyle::~ChatWindowStyle()
 
 bool ChatWindowStyle::isValid() const
 {
-    return (!d->statusHtml.isEmpty() && !d->fileTransferIncomingHtml.isEmpty() && !d->nextIncomingHtml.isEmpty()
-            && !d->incomingHtml.isEmpty() && !d->nextOutgoingHtml.isEmpty() && !d->outgoingHtml.isEmpty());
+    kDebug();
+    bool statusHtml = !d->statusHtml.isEmpty();
+    bool fileTransferIncomingHtml = !d->fileTransferIncomingHtml.isEmpty();
+    bool nextIncomingHtml = !d->nextIncomingHtml.isEmpty();
+    bool incomingHtml = !d->incomingHtml.isEmpty();
+    bool nextOutgoingHtml = !d->nextOutgoingHtml.isEmpty();
+    bool outgoingHtml = !d->outgoingHtml.isEmpty();
+
+    return (statusHtml && fileTransferIncomingHtml && nextIncomingHtml
+            && incomingHtml && nextOutgoingHtml  && outgoingHtml);
 }
 
 ChatWindowStyle::StyleVariants ChatWindowStyle::getVariants()
@@ -290,6 +298,12 @@ void ChatWindowStyle::readStyleFiles()
         d->nextIncomingHtml = headerStream.readAll();
         fileAccess.close();
     }
+
+    if(d->nextIncomingHtml.isEmpty()) {
+      d->nextIncomingHtml = d->incomingHtml;
+    }
+
+
     // Load outgoing file
     if (QFile::exists(outgoingFile)) {
         fileAccess.setFileName(outgoingFile);
@@ -299,6 +313,11 @@ void ChatWindowStyle::readStyleFiles()
         d->outgoingHtml = headerStream.readAll();
         fileAccess.close();
     }
+
+    if(d->outgoingHtml.isEmpty()) {
+      d->outgoingHtml = d->incomingHtml;
+    }
+
     // Load next outgoing file
     if (QFile::exists(nextOutgoingFile)) {
         fileAccess.setFileName(nextOutgoingFile);
@@ -308,6 +327,11 @@ void ChatWindowStyle::readStyleFiles()
         d->nextOutgoingHtml = headerStream.readAll();
         fileAccess.close();
     }
+
+    if(d->nextOutgoingHtml.isEmpty()) {
+      d->nextOutgoingHtml = d->outgoingHtml;
+    }
+
     // Load status file
     if (QFile::exists(statusFile)) {
         fileAccess.setFileName(statusFile);
