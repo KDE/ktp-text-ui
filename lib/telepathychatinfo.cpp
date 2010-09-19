@@ -19,7 +19,94 @@
 
 #include "telepathychatinfo.h"
 
-TelepathyChatInfo::TelepathyChatInfo() :
-        m_incomingIconPath("incoming_icon.png")
+//FIXME HTML escaping is maybe needed.
+
+class TelepathyChatInfoPrivate
+{
+public:
+    QString chatName;
+    QString sourceName;
+    QString destinationName;
+    QString destinationDisplayName;
+    QUrl incomingIconPath;
+    QUrl outgoingIconPath;
+    QDateTime timeOpened;
+};
+
+TelepathyChatInfo::TelepathyChatInfo()
+        : d(new TelepathyChatInfoPrivate)
 {
 }
+
+TelepathyChatInfo::~TelepathyChatInfo()
+{
+    delete d;
+}
+
+QString TelepathyChatInfo::chatName() const
+{
+    return d->chatName;
+};
+
+void TelepathyChatInfo::setChatName(const QString& chatName)
+{
+    d->chatName = chatName;
+};
+
+QString TelepathyChatInfo::sourceName() const
+{
+    return d->sourceName;
+};
+
+void TelepathyChatInfo::setSourceName(const QString& sourceName)
+{
+    d->sourceName = sourceName;
+};
+
+QString TelepathyChatInfo::destinationName() const
+{
+    return d->destinationName;
+}
+void TelepathyChatInfo::setDestinationName(const QString& destinationName)
+{
+    d->destinationName = destinationName;
+};
+
+QString TelepathyChatInfo::destinationDisplayName() const
+{
+    return d->destinationDisplayName;
+}
+void TelepathyChatInfo::setDestinationDisplayName(const QString& destinationDisplayName)
+{
+    d->destinationDisplayName = destinationDisplayName;
+}
+
+QUrl TelepathyChatInfo::incomingIconPath() const
+{
+    return d->incomingIconPath;
+};
+
+void TelepathyChatInfo::setIncomingIconPath(const QUrl& incomingIconPath)
+{
+    d->incomingIconPath = incomingIconPath;
+};
+
+QUrl TelepathyChatInfo::outgoingIconPath() const
+{
+    return d->outgoingIconPath;
+};
+
+void TelepathyChatInfo::setOutgoingIconPath(const QUrl& outgoingIconPath)
+{
+    d->outgoingIconPath = outgoingIconPath;
+};
+
+QDateTime TelepathyChatInfo::timeOpened() const
+{
+    return d->timeOpened;
+};
+
+void TelepathyChatInfo::setTimeOpened(const QDateTime& timeOpened)
+{
+    d->timeOpened = timeOpened;
+};

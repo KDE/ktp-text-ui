@@ -26,76 +26,45 @@
 
 /** Containts all the information needed for the header generation from the Adium/Kopete templates */
 
+class TelepathyChatInfoPrivate;
+
 class TelepathyChatInfo
 {
 public:
     TelepathyChatInfo();
+    ~TelepathyChatInfo();
 
     /** A name for the chat. For a one-on-one chat, this will be the display name of the remote user. For a group chat, it is the group chat name or topic, as appropriate. */
-    QString chatName() const {
-        return m_chatName;
-    };
-    void setChatName(const QString chatName) {
-        m_chatName = chatName;
-    };
+    QString chatName() const;
+    void setChatName(const QString& chatName);
 
-    /** The name of the source account for this chat. */
-    QString sourceName() const {
-        return m_sourceName;
-    };
-    void setSourceName(const QString sourceName) {
-        m_sourceName = sourceName;
-    };
+    /** The name of the source account for this chat. (i.e MSN)*/
+    QString sourceName() const;
+    void setSourceName(const QString& sourceName);
 
     /** The name of the chat's destination.*/
-    QString destinationName() const {
-        return m_destinationName;
-    }
-    void setDestinationName(const QString destinationName) {
-        m_destinationName = destinationName;
-    };
+    QString destinationName() const;
+    void setDestinationName(const QString& destinationName);
 
     /** The serverside (remotely set) name of the chat's destination, such as an MSN display name. */
-    QString destinationDisplayName() const {
-        return m_destinationDisplayName;
-    }
-    void setDestinationDisplayName(const QString destinationDisplayName) {
-        m_destinationDisplayName = destinationDisplayName;
-    }
+    QString destinationDisplayName() const;
+    void setDestinationDisplayName(const QString& destinationDisplayName);
 
     //FIXME this documentation should say (optional) - then the handing of not setting it should be handled in the getter method - or even the constructor.
     /** A full path to the image of the remote user. If the remote user does not have an image, or this is a group chat so no image is appropriate, this tag will be replaced by incoming_icon.png, so you should have that file available if this tag is used. */
-    QUrl incomingIconPath() const {
-        return m_incomingIconPath;
-    };
-    void setIncomingIconPath(const QUrl incomingIconPath) {
-        m_incomingIconPath = incomingIconPath;
-    };
+    QUrl incomingIconPath() const;
+    void setIncomingIconPath(const QUrl& incomingIconPath);
 
     /** A full path to the image for the local user. If the local user does not have an image this tag will be replaced by outgoing_icon.png, so you should have that file available if this tag is used. */
-    QUrl outgoingIconPath() const {
-        return m_outgoingIconPath;
-    };
-    void setOutgoingIconPath(const QUrl outgoingIconPath) {
-        m_outgoingIconPath = outgoingIconPath;
-    };
+    QUrl outgoingIconPath() const;
+    void setOutgoingIconPath(const QUrl& outgoingIconPath);
 
     /** The time at which the chat was opened. */
-    QDateTime timeOpened() const {
-        return m_timeOpened;
-    };
-    void setTimeOpened(const QDateTime timeOpened) {
-        m_timeOpened = timeOpened;
-    };
+    QDateTime timeOpened() const;
+    void setTimeOpened(const QDateTime& timeOpened);
 
 private:
-    QString m_chatName;
-    QString m_sourceName;
-    QString m_destinationName;
-    QString m_destinationDisplayName;
-    QUrl m_incomingIconPath;
-    QUrl m_outgoingIconPath;
-    QDateTime m_timeOpened;
+    TelepathyChatInfoPrivate* const d;
 
 };
 
