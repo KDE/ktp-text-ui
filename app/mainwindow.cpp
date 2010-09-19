@@ -24,7 +24,6 @@ inline ChannelClassList channelClassList()
 {
     ChannelClassList filters;
     QMap<QString, QDBusVariant> filter;
-
     filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".ChannelType"),
                   QDBusVariant(TELEPATHY_INTERFACE_CHANNEL_TYPE_TEXT));
     filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".TargetHandleType"),
@@ -37,8 +36,6 @@ inline ChannelClassList channelClassList()
     filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".TargetHandleType"),
                   QDBusVariant((uint) Tp::HandleTypeRoom));
     filters.append(filter);
-
-
     return filters;
 }
 
@@ -63,7 +60,7 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
 
     connect(newWindow, SIGNAL(titleChanged(QString)), SLOT(updateTabText(QString)));
     addTab(newWindow, "");
-    resize(newWindow->sizeHint());// FUDGE
+    resize(newWindow->sizeHint() - QSize(50,50));// FUDGE
 
     context->setFinished();
 }

@@ -95,6 +95,9 @@ public:
     /** Returns true if this style supports showing a header at the top of the chat window*/
 
     bool hasHeader() const;
+
+
+    QString getTemplateHtml() const;
     QString getHeaderHtml() const;
     QString getFooterHtml() const;
     QString getIncomingHtml() const;

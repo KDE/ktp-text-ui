@@ -38,6 +38,7 @@ public:
     QString baseHref;
     QString currentVariantPath;
 
+    QString templateHtml;
     QString headerHtml;
     QString footerHtml;
     QString incomingHtml;
@@ -132,6 +133,11 @@ QString ChatWindowStyle::getStyleBaseHref() const
 bool ChatWindowStyle::hasHeader() const
 {
    return ! d->headerHtml.isEmpty();
+}
+
+QString ChatWindowStyle::getTemplateHtml() const
+{
+    return d->templateHtml;
 }
 
 QString ChatWindowStyle::getHeaderHtml() const
@@ -245,6 +251,7 @@ void ChatWindowStyle::listVariants()
 
 void ChatWindowStyle::readStyleFiles()
 {
+    QString templateFile = d->baseHref + QString("Template.html");
     QString headerFile = d->baseHref + QString("Header.html");
     QString footerFile = d->baseHref + QString("Footer.html");
     QString incomingFile = d->baseHref + QString("Incoming/Content.html");
@@ -262,7 +269,19 @@ void ChatWindowStyle::readStyleFiles()
     QString outgoingStateErrorFile = d->baseHref + QString("Outgoing/StateError.html");
 
     QFile fileAccess;
-    // First load header file.
+
+    //Load template file
+    if (QFile::exists(templateFile))
+    {
+        fileAccess.setFileName(templateFile);
+        fileAccess.open(QIODevice::ReadOnly);
+        QTextStream headerStream(&fileAccess);
+        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
+        d->templateHtml = headerStream.readAll();
+        fileAccess.close();
+    }
+
+    // Load header file.
     if (QFile::exists(headerFile)) {
         fileAccess.setFileName(headerFile);
         fileAccess.open(QIODevice::ReadOnly);

@@ -25,7 +25,8 @@
 
 #include <QKeyEvent>
 
-
+//FIXME once TP::Factory stuff is in, remove all of ChatConnection, replace this with
+//ChatWindow::ChatWindow(ConnectionPtr,TextChannelPtr, QWidget* parent) :...
 ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
         QWidget(parent),
         ui(new Ui::ChatWindow),
