@@ -41,8 +41,8 @@ public:
     int defaultFontSize();
     QString defaultVariant();
     int messageViewVersion();
-    
-    
+
+
 private:
     QMap<QString, QVariant> data;
     void readFile(QString& fileName);

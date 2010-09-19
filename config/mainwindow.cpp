@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->showHeader->setChecked(ui->chatView->isHeaderDisplayed());
 
     connect(ui->chatView, SIGNAL(loadFinished(bool)), SLOT(sendDemoMessages()));
-    connect(ui->styleComboBox, SIGNAL(activated(QString)), SLOT(onStyleSelected(QString)));
+    connect(ui->styleComboBox, SIGNAL(activated(int)), SLOT(onStyleSelected(int)));
     connect(ui->variantComboBox, SIGNAL(activated(QString)), SLOT(onVariantSelected(QString)));
     connect(ui->showHeader,SIGNAL(clicked(bool)), SLOT(onShowHeaderChanged(bool)));
 }
@@ -59,11 +59,22 @@ void MainWindow::onStylesLoaded()
 {
     kDebug();
 
-    QStringList styles = ChatWindowStyleManager::self()->getAvailableStyles();
+    QMap<QString, QString> styles = ChatWindowStyleManager::self()->getAvailableStyles();
     ChatWindowStyle *currentStyle = ui->chatView->chatStyle();
 
-    ui->styleComboBox->addItems(styles);
-    ui->styleComboBox->setCurrentItem(currentStyle->getStyleName());
+    QMap<QString, QString>::const_iterator i = styles.constBegin();
+    while (i != styles.constEnd()) {
+        ui->styleComboBox->addItem(i.value(), i.key());
+
+        if(i.key() == currentStyle->getStyleName())
+        {
+            ui->styleComboBox->setCurrentItem(i.value());
+        }
+
+        ++i;
+    }
+
+    //ui->styleComboBox->setCurrentItem(currentStyle->getStyleName());
 
     updateVariantsList();
     //FIXME call onStyleSelected
@@ -83,15 +94,20 @@ void MainWindow::updateVariantsList()
 }
 
 
-void MainWindow::onStyleSelected(const QString & styleName)
+void MainWindow::onStyleSelected(int index)
 {
     kDebug();
     //load the style.
-    ChatWindowStyle* style = ChatWindowStyleManager::self()->getValidStyleFromPool(styleName);
-    ui->chatView->setChatStyle(style);
-    updateVariantsList();
-    ui->showHeader->setEnabled(style->hasHeader());
+    QString styleId = ui->styleComboBox->itemData(index).toString();
 
+    ChatWindowStyle* style = ChatWindowStyleManager::self()->getValidStyleFromPool(styleId);
+
+    if (style)
+    {
+        ui->chatView->setChatStyle(style);
+        updateVariantsList();
+        ui->showHeader->setEnabled(style->hasHeader());
+    }
 }
 
 void MainWindow::onVariantSelected(const QString &variant)
@@ -141,7 +157,7 @@ void MainWindow::accept()
     //KConfig config(KGlobal::dirs()->findResource("config","ktelepathyrc"));
     KConfigGroup appearanceConfig = config->group("Appearance");
 
-    appearanceConfig.writeEntry("styleName", ui->styleComboBox->currentText());
+    appearanceConfig.writeEntry("styleName", ui->styleComboBox->itemData(ui->styleComboBox->currentIndex()).toString());
     appearanceConfig.writeEntry("styleVariant", ui->variantComboBox->currentText());
     appearanceConfig.writeEntry("displayHeader", ui->showHeader->isChecked());
 

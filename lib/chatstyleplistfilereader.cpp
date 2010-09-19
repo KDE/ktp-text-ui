@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QVariant>
+#include <QDebug>
 
 ChatStylePlistFileReader::ChatStylePlistFileReader(QString fileName)
 {
@@ -32,20 +33,21 @@ ChatStylePlistFileReader::ChatStylePlistFileReader(QString fileName)
 void ChatStylePlistFileReader::readFile(QString &fileName)
 {
     QFile file(fileName);
-    
+
     QDomDocument document = QDomDocument();
     if (!file.open(QIODevice::ReadOnly))
+    {
         return;
-    if (!document.setContent(&file)) {
-       file.close();
-       return;
+    }if (!document.setContent(&file)) {
+        file.close();
+        return;
     }
     file.close();
-    
+
     QString key, value;
     QDomNodeList keyElements = document.elementsByTagName("key");
-    for(int i=0;i<keyElements.size();i++) {
-        if(keyElements.at(i).nextSibling().toElement().tagName() != "key") {
+    for (int i = 0; i < keyElements.size(); i++) {
+        if (keyElements.at(i).nextSibling().toElement().tagName() != "key") {
             key = keyElements.at(i).toElement().text();
             value = keyElements.at(i).nextSibling().toElement().text();
             data.insert(key, value);

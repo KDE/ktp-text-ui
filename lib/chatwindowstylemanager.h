@@ -76,7 +76,7 @@ public:
     /**
      * Get all available styles.
      */
-    QStringList getAvailableStyles() const;
+    QMap<QString, QString> getAvailableStyles() const;
 
 public slots:
     /**

@@ -28,7 +28,7 @@ private slots:
     void onStylesLoaded();
     void updateVariantsList();
 
-    void onStyleSelected(const QString&);
+    void onStyleSelected(int index);
     void onVariantSelected(const QString&);
     void onShowHeaderChanged(bool);
 };

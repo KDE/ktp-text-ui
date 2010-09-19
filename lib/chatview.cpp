@@ -100,9 +100,6 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
     //hidden HTML debugging mode. Should have no visible way to turn it on.
     if (m_webInspector) {
         QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-        QWebInspector* inspector = new QWebInspector(0);
-        inspector->setPage(page());
-        inspector->show();
     }
 }
 
