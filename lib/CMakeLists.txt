@@ -7,6 +7,7 @@ set(telepathy_chat_handler_lib_SRCS
         telepathychatmessageinfo.cpp
         telepathychatinfo.cpp
         channelcontactlist.cpp
+        chatstyleplistfilereader.cpp
 )
 
 set(telepathy_chat_handler_lib_UI
