@@ -352,8 +352,7 @@ void ChatWindowStyleManager::slotNewStyles(const KFileItemList &dirList)
                 d->stylePool[styleId]->reload();
 
                 // Add to available if required.
-                if (! d->availableStyles.contains(styleId))
-                {
+                if (! d->availableStyles.contains(styleId)) {
 
                     //FIXME this code is in two places.. this sucks!!!
                     ChatStylePlistFileReader plistReader(item.url().path().append("/Contents/Info.plist"));

@@ -60,7 +60,7 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
 
     connect(newWindow, SIGNAL(titleChanged(QString)), SLOT(updateTabText(QString)));
     addTab(newWindow, "");
-    resize(newWindow->sizeHint() - QSize(50,50));// FUDGE
+    resize(newWindow->sizeHint() - QSize(50, 50));// FUDGE
 
     context->setFinished();
 }

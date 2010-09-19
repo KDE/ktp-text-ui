@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ChatWindowStyleManager* manager = ChatWindowStyleManager::self();
-   // manager->loadStyles();
+    // manager->loadStyles();
     connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
     //set up a pretend config chat.
@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->chatView, SIGNAL(loadFinished(bool)), SLOT(sendDemoMessages()));
     connect(ui->styleComboBox, SIGNAL(activated(int)), SLOT(onStyleSelected(int)));
     connect(ui->variantComboBox, SIGNAL(activated(QString)), SLOT(onVariantSelected(QString)));
-    connect(ui->showHeader,SIGNAL(clicked(bool)), SLOT(onShowHeaderChanged(bool)));
+    connect(ui->showHeader, SIGNAL(clicked(bool)), SLOT(onShowHeaderChanged(bool)));
 }
 
 MainWindow::~MainWindow()
@@ -66,8 +66,7 @@ void MainWindow::onStylesLoaded()
     while (i != styles.constEnd()) {
         ui->styleComboBox->addItem(i.value(), i.key());
 
-        if(i.key() == currentStyle->getStyleName())
-        {
+        if (i.key() == currentStyle->getStyleName()) {
             ui->styleComboBox->setCurrentItem(i.value());
         }
 
@@ -102,8 +101,7 @@ void MainWindow::onStyleSelected(int index)
 
     ChatWindowStyle* style = ChatWindowStyleManager::self()->getValidStyleFromPool(styleId);
 
-    if (style)
-    {
+    if (style) {
         ui->chatView->setChatStyle(style);
         updateVariantsList();
         ui->showHeader->setEnabled(style->hasHeader());

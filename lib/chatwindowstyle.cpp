@@ -132,7 +132,7 @@ QString ChatWindowStyle::getStyleBaseHref() const
 
 bool ChatWindowStyle::hasHeader() const
 {
-   return ! d->headerHtml.isEmpty();
+    return ! d->headerHtml.isEmpty();
 }
 
 QString ChatWindowStyle::getTemplateHtml() const
@@ -271,8 +271,7 @@ void ChatWindowStyle::readStyleFiles()
     QFile fileAccess;
 
     //Load template file
-    if (QFile::exists(templateFile))
-    {
+    if (QFile::exists(templateFile)) {
         fileAccess.setFileName(templateFile);
         fileAccess.open(QIODevice::ReadOnly);
         QTextStream headerStream(&fileAccess);
@@ -318,8 +317,8 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
 
-    if(d->nextIncomingHtml.isEmpty()) {
-      d->nextIncomingHtml = d->incomingHtml;
+    if (d->nextIncomingHtml.isEmpty()) {
+        d->nextIncomingHtml = d->incomingHtml;
     }
 
 
@@ -333,8 +332,8 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
 
-    if(d->outgoingHtml.isEmpty()) {
-      d->outgoingHtml = d->incomingHtml;
+    if (d->outgoingHtml.isEmpty()) {
+        d->outgoingHtml = d->incomingHtml;
     }
 
     // Load next outgoing file
@@ -347,8 +346,8 @@ void ChatWindowStyle::readStyleFiles()
         fileAccess.close();
     }
 
-    if(d->nextOutgoingHtml.isEmpty()) {
-      d->nextOutgoingHtml = d->outgoingHtml;
+    if (d->nextOutgoingHtml.isEmpty()) {
+        d->nextOutgoingHtml = d->outgoingHtml;
     }
 
     // Load status file

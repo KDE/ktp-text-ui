@@ -35,10 +35,9 @@ void ChatStylePlistFileReader::readFile(QString &fileName)
     QFile file(fileName);
 
     QDomDocument document = QDomDocument();
-    if (!file.open(QIODevice::ReadOnly))
-    {
+    if (!file.open(QIODevice::ReadOnly)) {
         return;
-    }if (!document.setContent(&file)) {
+    } if (!document.setContent(&file)) {
         file.close();
         return;
     }

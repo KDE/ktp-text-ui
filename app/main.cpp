@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
                          ki18n("Telepathy Chat Handler"),
                          "0.1");
 
-    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 
     registerTypes();
