@@ -23,7 +23,7 @@ include_directories (${KDE4_INCLUDES}
                      ${QT_QTWEBKIT_INCLUDES}
 )
 
-
+add_subdirectory(lib)
 add_subdirectory(app)
 add_subdirectory(config)
 add_subdirectory(data)
