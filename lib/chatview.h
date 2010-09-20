@@ -38,7 +38,8 @@ public:
     //override various parts loaded from the config file.
     //note that the following will clear the contents of the chat window.
 
-    const QString variant() const;
+    const QString variantPath() const;
+    const QString variantName() const;
     void setVariant(const QString& variant);
 
     ChatWindowStyle *chatStyle() const;
@@ -55,6 +56,7 @@ public slots:
 private:
     ChatWindowStyle* m_chatStyle;
     QString m_variantPath;
+    QString m_variantName;
     KEmoticons m_emoticons;
     QString replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo&);
     //QString replaceMessageKeywords(QString htmlTemplate, const TelepathyChatMessageInfo&);

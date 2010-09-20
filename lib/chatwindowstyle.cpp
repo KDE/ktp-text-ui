@@ -38,7 +38,6 @@ public:
     QString baseHref;
     StyleVariants variantsList;
     QString defaultVariantName;
-    QString currentVariantPath;
 
     QString templateHtml;
     QString headerHtml;
@@ -89,6 +88,9 @@ void ChatWindowStyle::init(const QString &styleId, StyleBuildMode styleBuildMode
     readStyleFiles();
     if (styleBuildMode & StyleBuildNormal) {
         listVariants();
+        if(d->defaultVariantName.isEmpty() && !d->variantsList.isEmpty()) {
+            d->defaultVariantName = d->variantsList.keys().first();
+        }
     }
 }
 
@@ -124,6 +126,11 @@ ChatWindowStyle::StyleVariants ChatWindowStyle::getVariants()
 QString ChatWindowStyle::id() const
 {
     return d->styleId;
+}
+
+QString ChatWindowStyle::defaultVariantName()
+{
+    return d->defaultVariantName;
 }
 
 QString ChatWindowStyle::getStyleBaseHref() const

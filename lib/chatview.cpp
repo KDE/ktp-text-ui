@@ -54,7 +54,13 @@ ChatView::ChatView(QWidget *parent) :
     }
 
     QString variant = appearanceConfig.readEntry("styleVariant");
-    m_variantPath = QString("Variants/%1.css").arg(variant);
+    if(!variant.isEmpty()) {
+        m_variantPath = QString("Variants/%1.css").arg(variant);
+        m_variantName = variant;
+    } else {
+        m_variantPath = QString("Variants/%1.css").arg(m_chatStyle->defaultVariantName());
+        m_variantName = m_chatStyle->defaultVariantName();
+    }
     m_displayHeader = appearanceConfig.readEntry("displayHeader", false);
 
 
@@ -138,13 +144,9 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
     }
 }
 
-const QString ChatView::variant() const
-{
-    return m_variantPath;
-}
-
 void ChatView::setVariant(const QString &variant)
 {
+    m_variantName = variant;
     m_variantPath = QString("Variants/%1.css").arg(variant);
 
     //FIXME update the display!
@@ -162,10 +164,15 @@ void ChatView::setChatStyle(ChatWindowStyle *chatStyle)
 
     //load the first variant
     QHash<QString, QString> variants = chatStyle->getVariants();
-    if (variants.keys().length() > 0) {
+    if(!chatStyle->defaultVariantName().isEmpty()) {
+        m_variantPath = variants.value(chatStyle->defaultVariantName());
+        m_variantName = chatStyle->defaultVariantName();
+    } else if (variants.keys().length() > 0) {
         m_variantPath = variants.values()[0];
+        m_variantName = variants.keys()[0];
     } else {
         m_variantPath = "";
+        m_variantName = "";
     }
 
 
@@ -306,4 +313,14 @@ QString ChatView::formatTime(const QString &_timeFormat, const QDateTime &dateTi
     strftime(buffer, 256, timeFormat.toAscii(), loctime);
 
     return QString(buffer);
+}
+
+const QString ChatView::variantName() const
+{
+    return m_variantName;
+}
+
+const QString ChatView::variantPath() const
+{
+    return m_variantPath;
 }
