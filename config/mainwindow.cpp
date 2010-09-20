@@ -66,7 +66,7 @@ void MainWindow::onStylesLoaded()
     while (i != styles.constEnd()) {
         ui->styleComboBox->addItem(i.value(), i.key());
 
-        if (i.key() == currentStyle->getStyleName()) {
+        if (i.key() == currentStyle->id()) {
             ui->styleComboBox->setCurrentItem(i.value());
         }
 
