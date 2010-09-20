@@ -2,8 +2,11 @@
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<base href="file://%baseRef%" />
+	<base href="%@">
 	<script type="text/javascript" defer="defer">
+		// NOTE:
+		// Any percent signs in this file must be escaped!
+		// Use two escape signs (%%) to display it, this is passed through a format call!
 		
 		function appendHTML(html) {
 			var node = document.getElementById("Chat");
@@ -271,7 +274,7 @@
 		
 		function imageToText(node)
 		{
-			if (!node.alt)
+			if (client.zoomImage(node) || !node.alt)
 				return;
 			var a = document.createElement('a');
 			a.setAttribute('onclick', 'imageSwap(this, true)');
@@ -317,25 +320,24 @@
 		.actionMessageBody:before { content:"*"; }
 		.actionMessageBody:after { content:"*"; }
 		* { word-wrap:break-word; text-rendering: optimizelegibility; }
-		img.scaledToFitImage { height: auto; max-width: 100%; }
+		img.scaledToFitImage { height: auto; max-width: 100%%; }
 	</style>
 
 	<!-- This style is shared by all variants. !-->
 	<style id="baseStyle" type="text/css" media="screen,print">
-		%extraStyleCode%
+		%@
 	</style>
 
 	<!-- Although we call this mainStyle for legacy reasons, it's actually the variant style !-->
 	<style id="mainStyle" type="text/css" media="screen,print">
-            @import url( "main.css" );
-            @import url( "%variant%" );
+		@import url( "%@" );
 	</style>
 
 </head>
-<body onload="initStyle();">
-%header%
+<body onload="initStyle();" style="==bodyBackground==">
+%@
 <div id="Chat">
 </div>
-%footer%
+%@
 </body>
 </html>

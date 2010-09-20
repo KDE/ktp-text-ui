@@ -67,32 +67,67 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
     QString templateHtml;
     QString templateFileName(KGlobal::dirs()->findResource("data", "ktelepathy/template.html"));
 
-    if (! templateFileName.isEmpty() && QFile::exists(templateFileName)) {
-        QFile fileAccess;
+    templateHtml = m_chatStyle->getTemplateHtml();
 
-        fileAccess.setFileName(templateFileName);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        templateHtml = headerStream.readAll();
-        fileAccess.close();
-    } else {
-        KMessageBox::error(this, "Missing required file template.html - check your installation.");
+    if (templateHtml.isEmpty()) {
+        //FIXME, move this to ChatStyle (maybe?)
+        QString templateFileName(KGlobal::dirs()->findResource("data", "ktelepathy/template.html"));
+
+        if (! templateFileName.isEmpty() && QFile::exists(templateFileName)) {
+            QFile fileAccess;
+
+            fileAccess.setFileName(templateFileName);
+            fileAccess.open(QIODevice::ReadOnly);
+            QTextStream headerStream(&fileAccess);
+            headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
+            templateHtml = headerStream.readAll();
+            fileAccess.close();
+        } else {
+            KMessageBox::error(this, "Missing required file template.html - check your installation.");
+        }
     }
 
     QString headerHtml;
     if (m_displayHeader) {
         headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(), chatInfo);
     } //otherwise leave as blank.
-
-    templateHtml.replace("%baseRef%", m_chatStyle->getStyleBaseHref());
-    templateHtml.replace("%extraStyleCode%", ""); // FIXME once we get some font/background from the config file, put it here
-    templateHtml.replace("%variant%", m_variantPath);
-    templateHtml.replace("%header%", headerHtml);
-
     QString footerHtml;
     footerHtml = replaceHeaderKeywords(m_chatStyle->getFooterHtml(), chatInfo);
-    templateHtml.replace("%footer%", footerHtml);
+
+    QString extraStyleHtml = "@import url( \"main.css\" );";
+
+    //The templateHtml is in a horrific NSString format.
+    //Want to use this rather than roll our own, as that way we can get templates from themes too
+    //"%@" is each argument.
+    // all other %'s are escaped.
+
+    // first is baseref
+    // second is extra style code (This is sometimes missing !!!!)
+    // third is variant CSS
+    // 4th is header
+    // 5th is footer
+
+    templateHtml.replace("%%", "%");
+
+    int numberOfPlaceholders = templateHtml.count("%@");
+
+    int index;
+    index = templateHtml.indexOf("%@", index);
+    templateHtml.replace(index, 2, QString("file:///").append(m_chatStyle->getStyleBaseHref()));
+
+    if (numberOfPlaceholders == 5) {
+        index = templateHtml.indexOf("%@", index);
+        templateHtml.replace(index, 2, extraStyleHtml);
+    }
+
+    index = templateHtml.indexOf("%@", index);
+    templateHtml.replace(index, 2, m_variantPath);
+
+    index = templateHtml.indexOf("%@", index);
+    templateHtml.replace(index, 2, headerHtml);
+
+    index = templateHtml.indexOf("%@", index);
+    templateHtml.replace(index, 2, footerHtml);
 
     setHtml(templateHtml);
     lastSender = "";
@@ -188,6 +223,7 @@ void ChatView::addMessage(const TelepathyChatMessageInfo &message)
     styleHtml.replace("%message%", messageHtml);
     styleHtml.replace("%messageDirection%", message.messageDirection());
     styleHtml.replace("%sender%", message.senderDisplayName()); // FIXME sender is complex: not always this
+    styleHtml.replace("%senderScreenName%", message.senderScreenName());
     styleHtml.replace("%time%", KGlobal::locale()->formatTime(message.time().time(), true));
     styleHtml.replace("%shortTime%", KGlobal::locale()->formatTime(message.time().time(), false));
     styleHtml.replace("%userIconPath%", "Outgoing/buddy_icon.png");// this fallback should be done in the messageinfo
