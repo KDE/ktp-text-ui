@@ -68,7 +68,6 @@ ChatWindowStyle::ChatWindowStyle(const QString &styleId, StyleBuildMode styleBui
 ChatWindowStyle::ChatWindowStyle(const QString &styleId, const QString &variantPath, StyleBuildMode styleBuildMode)
 	: QObject(), d(new Private)
 {
-    d->currentVariantPath = variantPath;
     init(styleId, styleBuildMode);
 }
 

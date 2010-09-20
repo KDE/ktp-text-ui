@@ -86,10 +86,7 @@ void MainWindow::updateVariantsList()
     QHash<QString, QString> variants = ui->chatView->chatStyle()->getVariants();
     ui->variantComboBox->clear();
     ui->variantComboBox->addItems(variants.keys());
-
-    //FIXME maybe - select the correct one.
-    //ui->variantComboBox->setCurrentItem(currentStyle->getCurrentVariantPath());
-
+    ui->variantComboBox->setCurrentItem(ui->chatView->variantName());
 }
 
 
