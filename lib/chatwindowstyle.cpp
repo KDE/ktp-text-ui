@@ -16,6 +16,7 @@
 */
 
 #include "chatwindowstyle.h"
+#include "chatstyleplistfilereader.h"
 
 // Qt includes
 #include <QFile>
@@ -33,9 +34,10 @@
 class ChatWindowStyle::Private
 {
 public:
-    QString styleName;
-    StyleVariants variantsList;
+    QString styleId;
     QString baseHref;
+    StyleVariants variantsList;
+    QString defaultVariantName;
     QString currentVariantPath;
 
     QString templateHtml;
@@ -58,28 +60,28 @@ public:
     QHash<QString, bool> compactVariants;
 };
 
-ChatWindowStyle::ChatWindowStyle(const QString &styleName, StyleBuildMode styleBuildMode)
-        : QObject(), d(new Private)
+ChatWindowStyle::ChatWindowStyle(const QString &styleId, StyleBuildMode styleBuildMode)
+	: QObject(), d(new Private)
 {
-    init(styleName, styleBuildMode);
+    init(styleId, styleBuildMode);
 }
 
-ChatWindowStyle::ChatWindowStyle(const QString &styleName, const QString &variantPath, StyleBuildMode styleBuildMode)
-        : QObject(), d(new Private)
+ChatWindowStyle::ChatWindowStyle(const QString &styleId, const QString &variantPath, StyleBuildMode styleBuildMode)
+	: QObject(), d(new Private)
 {
     d->currentVariantPath = variantPath;
-    init(styleName, styleBuildMode);
+    init(styleId, styleBuildMode);
 }
 
-void ChatWindowStyle::init(const QString &styleName, StyleBuildMode styleBuildMode)
+void ChatWindowStyle::init(const QString &styleId, StyleBuildMode styleBuildMode)
 {
-    QStringList styleDirs = KGlobal::dirs()->findDirs("data", QString("ktelepathy/styles/%1/Contents/Resources/").arg(styleName));
+    QStringList styleDirs = KGlobal::dirs()->findDirs("data", QString("ktelepathy/styles/%1/Contents/Resources/").arg(styleId));
 
     if (styleDirs.isEmpty()) {
-        kDebug(14000) << "Failed to find style" << styleName;
-        return;
+	kDebug(14000) << "Failed to find style" << styleId;
+	return;
     }
-    d->styleName = styleName;
+    d->styleId = styleId;
     if (styleDirs.count() > 1)
         kDebug(14000) << "found several styles with the same name. using first";
     d->baseHref = styleDirs.at(0);
@@ -119,9 +121,9 @@ ChatWindowStyle::StyleVariants ChatWindowStyle::getVariants()
     return d->variantsList;
 }
 
-QString ChatWindowStyle::getStyleName() const
+QString ChatWindowStyle::id() const
 {
-    return d->styleName;
+    return d->styleId;
 }
 
 QString ChatWindowStyle::getStyleBaseHref() const
@@ -267,8 +269,13 @@ void ChatWindowStyle::readStyleFiles()
     QString outgoingStateSendingFile = d->baseHref + QString("Outgoing/StateSending.html");
     QString outgoingStateSentFile = d->baseHref + QString("Outgoing/StateSent.html");
     QString outgoingStateErrorFile = d->baseHref + QString("Outgoing/StateError.html");
+    QString infoPlistFile = d->baseHref + QString("../Info.plist");
+
 
     QFile fileAccess;
+
+    ChatStylePlistFileReader plistReader(infoPlistFile);
+    d->defaultVariantName = plistReader.defaultVariant();
 
     //Load template file
     if (QFile::exists(templateFile)) {

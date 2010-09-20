@@ -51,8 +51,8 @@ public:
      * @brief Build a single chat window style.
      *
      */
-    explicit ChatWindowStyle(const QString &styleName, StyleBuildMode styleBuildMode = StyleBuildNormal);
-    ChatWindowStyle(const QString &styleName, const QString &variantPath, StyleBuildMode styleBuildMode = StyleBuildFast);
+    explicit ChatWindowStyle(const QString &styleId, StyleBuildMode styleBuildMode = StyleBuildNormal);
+    ChatWindowStyle(const QString &styleId, const QString &variantPath, StyleBuildMode styleBuildMode = StyleBuildFast);
     ~ChatWindowStyle();
 
     /**
@@ -77,7 +77,7 @@ public:
      *
      * @return the style path based.
      */
-    QString getStyleName() const;
+    QString id() const;
 
     /**
      * Get the style resource directory.
@@ -139,6 +139,8 @@ public:
      * Reload style from disk.
      */
     void reload();
+
+    QString defaultVariantName();
 private:
     /**
      * Read style HTML files from disk
