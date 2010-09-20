@@ -70,13 +70,13 @@ ChatWindowStyleManager *ChatWindowStyleManager::self()
 ChatWindowStyleManager::ChatWindowStyleManager(QObject *parent)
         : QObject(parent), d(new Private())
 {
-    kDebug(14000) ;
+    kDebug() ;
     loadStyles();
 }
 
 ChatWindowStyleManager::~ChatWindowStyleManager()
 {
-    kDebug(14000) ;
+    kDebug() ;
     delete d;
 }
 
@@ -88,7 +88,7 @@ void ChatWindowStyleManager::loadStyles()
     QStringList chatStyles = KGlobal::dirs()->findDirs("data", QLatin1String("ktelepathy/styles"));
 
     foreach(const QString &styleDir, chatStyles) {
-        kDebug(14000) << styleDir;
+        kDebug() << styleDir;
         d->styleDirs.push(KUrl(styleDir));
     }
 
@@ -247,7 +247,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
 
 bool ChatWindowStyleManager::removeStyle(const QString &styleId)
 {
-//    kDebug(14000) << styleId;
+//    kDebug() << styleId;
 //    // Find for the current style in avaiableStyles map.
 //    int foundStyleIdx = d->availableStyles.indexOf(styleId);
 
@@ -263,7 +263,7 @@ bool ChatWindowStyleManager::removeStyle(const QString &styleId)
 
 //        QStringList styleDirs = KGlobal::dirs()->findDirs("appdata", QString("styles/%1").arg(styleId));
 //        if (styleDirs.isEmpty()) {
-//            kDebug(14000) << "Failed to find style" << styleId;
+//            kDebug() << "Failed to find style" << styleId;
 //            return false;
 //        }
 
@@ -288,13 +288,13 @@ ChatWindowStyle *ChatWindowStyleManager::getValidStyleFromPool(const QString &st
     if (style)
         return style;
 
-    kDebug(14000) << "Trying default style";
+    kDebug() << "Trying default style";
     // Try default style
     style = getStyleFromPool("Kopete");
     if (style)
         return style;
 
-    kDebug(14000) << "Trying first valid style";
+    kDebug() << "Trying first valid style";
     // Try first valid style
     foreach(const QString& name, d->availableStyles) {
         style = getStyleFromPool(name);
@@ -302,14 +302,14 @@ ChatWindowStyle *ChatWindowStyleManager::getValidStyleFromPool(const QString &st
             return style;
     }
 
-    kDebug(14000) << "Valid style not found!";
+    kDebug() << "Valid style not found!";
     return 0;
 }
 
 ChatWindowStyle *ChatWindowStyleManager::getStyleFromPool(const QString &styleId)
 {
     if (d->stylePool.contains(styleId)) {
-        kDebug(14000) << styleId << " was on the pool";
+        kDebug() << styleId << " was on the pool";
 
         // NOTE: This is a hidden config switch for style developers
         // Check in the config if the cache is disabled.
@@ -326,13 +326,13 @@ ChatWindowStyle *ChatWindowStyleManager::getStyleFromPool(const QString &styleId
     // Build a chat window style and list its variants, then add it to the pool.
     ChatWindowStyle *style = new ChatWindowStyle(styleId, ChatWindowStyle::StyleBuildNormal);
     if (!style->isValid()) {
-        kDebug(14000) << styleId << " is invalid style!";
+        kDebug() << styleId << " is invalid style!";
         delete style;
         return 0;
     }
 
     d->stylePool.insert(styleId, style);
-    kDebug(14000) << styleId << " is just created";
+    kDebug() << styleId << " is just created";
 
     return style;
 }
@@ -342,12 +342,12 @@ void ChatWindowStyleManager::slotNewStyles(const KFileItemList &dirList)
     foreach(const KFileItem &item, dirList) {
         // Ignore data dir(from deprecated XSLT themes)
         if (!item.url().fileName().contains(QString::fromUtf8("data"))) {
-            kDebug(14000) << "Listing: " << item.url().fileName();
+            kDebug() << "Listing: " << item.url().fileName();
             // If the style path is already in the pool, that's mean the style was updated on disk
             // Reload the style
             QString styleId = item.url().fileName();
             if (d->stylePool.contains(styleId)) {
-                kDebug(14000) << "Updating style: " << styleId;
+                kDebug() << "Updating style: " << styleId;
 
                 d->stylePool[styleId]->reload();
 
@@ -378,7 +378,7 @@ void ChatWindowStyleManager::slotDirectoryFinished()
 {
     // Start another scanning if the directories stack is not empty
     if (!d->styleDirs.isEmpty()) {
-        kDebug(14000) << "Starting another directory.";
+        kDebug() << "Starting another directory.";
         d->styleDirLister->openUrl(d->styleDirs.pop(), KDirLister::Keep);
     } else {
         emit loadStylesFinished();
