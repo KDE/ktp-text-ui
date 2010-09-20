@@ -217,6 +217,8 @@ void ChatWindow::updateEnabledState(bool enable)
             info.setChatName("Group Chat");
         }
 
+        info.setSourceName(m_chatConnection->connection()->protocolName());
+
         //set up anything related to 'self'
         info.setOutgoingIconPath(m_chatConnection->channel()->groupSelfContact()->avatarToken());
         info.setTimeOpened(QDateTime::currentDateTime());
@@ -224,8 +226,6 @@ void ChatWindow::updateEnabledState(bool enable)
 
         //inform anyone using the class of the new name for this chat.
         Q_EMIT titleChanged(info.chatName());
-
-
     }
 }
 

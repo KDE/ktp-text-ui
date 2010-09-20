@@ -25,3 +25,9 @@ TelepathyChatMessageInfo::TelepathyChatMessageInfo(MessageType type)
 {
     m_type = type;
 }
+
+QString TelepathyChatMessageInfo::userIcons() const
+{
+    //FIXME read config, return correct value.
+    return QString("showIcons");
+}

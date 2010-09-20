@@ -226,9 +226,11 @@ void ChatView::addMessage(const TelepathyChatMessageInfo &message)
     styleHtml.replace("%senderScreenName%", message.senderScreenName());
     styleHtml.replace("%time%", KGlobal::locale()->formatTime(message.time().time(), true));
     styleHtml.replace("%shortTime%", KGlobal::locale()->formatTime(message.time().time(), false));
-    styleHtml.replace("%userIconPath%", "Outgoing/buddy_icon.png");// this fallback should be done in the messageinfo
+    styleHtml.replace("%userIconPath%", "outgoing_icon.png");// this fallback should be done in the messageinfo
     styleHtml.replace("%messageClasses%", message.messageClasses());
     styleHtml.replace("%service%", message.service());
+    styleHtml.replace("%userIcons%", message.userIcons());
+    styleHtml.replace("%status%", "idle");
 
 
     // Look for %time{X}%

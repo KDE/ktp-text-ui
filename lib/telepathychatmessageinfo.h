@@ -125,7 +125,9 @@ public:
         return classes.join(" ");
     }
 
-
+    /** Will be replaced with "showIcons" if the "Show user icons" checkbox is selected, and will be replaced with "hideIcons" if the checkbox is deselected.*/
+    //This is pure style - do in the chat view instead?
+    QString userIcons() const;
 
 private:
     //descriptions come from the data we need for Adium theme templates
@@ -144,8 +146,7 @@ private:
     /** A human readable description for the messaging service associated with this message, such as "AIM" or "MSN". */
     QString m_service;
 
-    /** Will be replaced with "showIcons" if the "Show user icons" checkbox is selected, and will be replaced with "hideIcons" if the checkbox is deselected.*/
-    //This is pure style - do in the chat view instead?
+
     QString m_userIcons;
 
     /** A space separated list of type information for messages, suitable for use as a class attribute. Currently available types are listed below. */
