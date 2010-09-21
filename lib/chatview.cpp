@@ -47,10 +47,10 @@ ChatView::ChatView(QWidget *parent) :
     KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
     KConfigGroup appearanceConfig = config->group("Appearance");
 
-    QString chatStyleName = appearanceConfig.readEntry("styleName", "Renkoo.AdiumMessageStyle");
+    QString chatStyleName = appearanceConfig.readEntry("styleName", "renkoo.AdiumMessageStyle");
     m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
     if (m_chatStyle == 0 || !m_chatStyle->isValid()) {
-        KMessageBox::error(this, "Failed to load a valid Kopete theme. Please make sure you run the chat window configuration program first.");
+        KMessageBox::error(this, "Failed to load a valid theme. Please make sure you run the chat window configuration program first. Will now crash.");
     }
 
     QString variant = appearanceConfig.readEntry("styleVariant");
