@@ -79,9 +79,9 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
     if (m_chatviewlInitialised) {
         TelepathyChatMessageInfo messageInfo(TelepathyChatMessageInfo::RemoteToLocal);
         messageInfo.setMessage(message.text());
-        messageInfo.setSenderScreenName(message.sender()->id());
         messageInfo.setTime(message.received());
         messageInfo.setSenderDisplayName(message.sender()->alias());
+        messageInfo.setSenderScreenName(message.sender()->id());
 
         ui->chatArea->addMessage(messageInfo);
         m_chatConnection->channel()->acknowledge(QList<Tp::ReceivedMessage>() << message);
@@ -93,9 +93,10 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     TelepathyChatMessageInfo messageInfo(TelepathyChatMessageInfo::LocalToRemote);
     messageInfo.setMessage(message.text());
     messageInfo.setTime(message.sent());
-    messageInfo.setSenderDisplayName(m_chatConnection->account()->displayName());
-    messageInfo.setSenderScreenName(m_chatConnection->account()->nickname());
 
+    Tp::ContactPtr sender = m_chatConnection->connection()->selfContact();
+    messageInfo.setSenderDisplayName(sender->alias());
+    messageInfo.setSenderScreenName(sender->id());
 
     ui->chatArea->addMessage(messageInfo);
 }
