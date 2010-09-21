@@ -136,7 +136,7 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
     templateHtml.replace(index, 2, footerHtml);
 
     setHtml(templateHtml);
-    lastSender = "";
+    m_lastSender = "";
 
     //hidden HTML debugging mode. Should have no visible way to turn it on.
     if (m_webInspector) {
@@ -196,11 +196,13 @@ void ChatView::addMessage(const TelepathyChatMessageInfo &message)
     QString styleHtml;
     bool consecutiveMessage = false;
 
+    qDebug() << m_lastSender;
+
     //FIXME "if group consecutive messages....{
-    if (lastSender == message.senderScreenName()) {
+    if (m_lastSender == message.senderScreenName()) {
         consecutiveMessage = true;
     } else {
-        lastSender = message.senderScreenName();
+        m_lastSender = message.senderScreenName();
     }
 
 

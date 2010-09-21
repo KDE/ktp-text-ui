@@ -34,9 +34,13 @@ ChatConnection::ChatConnection(QObject *parent, const AccountPtr account, const 
                            << TextChannel::FeatureMessageSentSignal
                            << TextChannel::FeatureChatState
                            << Channel::FeatureCore);
-
-
         connect(op, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onChannelReady(Tp::PendingOperation*)));
+
+        //FIXME, we need to actually wait for this. Fortunately we can use factories soon.
+        connection->becomeReady(Features() << Connection::FeatureSelfContact
+                                << Connection::FeatureCore);
+
+
     } else {
         qDebug() << "more than one channel?"; // I don't understand channels yet.
     }

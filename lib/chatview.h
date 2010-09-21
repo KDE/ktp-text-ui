@@ -65,7 +65,7 @@ private:
 
     TelepathyChatInfo m_chatInfo;
 
-    QString lastSender;
+    QString m_lastSender;
     bool m_displayHeader;
 
     void appendNewMessage(QString&);
