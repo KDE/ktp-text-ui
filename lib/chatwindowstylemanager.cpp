@@ -290,7 +290,7 @@ ChatWindowStyle *ChatWindowStyleManager::getValidStyleFromPool(const QString &st
 
     kDebug() << "Trying default style";
     // Try default style
-    style = getStyleFromPool("Kopete");
+    style = getStyleFromPool("renkoo.AdiumMessageStyle");
     if (style)
         return style;
 

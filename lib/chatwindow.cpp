@@ -123,7 +123,7 @@ void ChatWindow::sendMessage()
 void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state)
 {
     //don't show our own status changes.
-    if (contact.data() == m_chatConnection->connection()->selfContact())
+    if (contact == m_chatConnection->connection()->selfContact())
     {
         return;
     }
