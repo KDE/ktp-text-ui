@@ -48,6 +48,7 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     connect(ui->sendMessageButton, SIGNAL(released()), SLOT(sendMessage()));
     connect(ui->chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()));
 
+    connect(ui->sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
     messageBoxEventFilter = new MessageBoxEventFilter(this);
     ui->sendMessageBox->installEventFilter(messageBoxEventFilter);
     connect(messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
@@ -120,6 +121,12 @@ void ChatWindow::sendMessage()
 
 void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state)
 {
+    //don't show our own status changes.
+    if (contact.data() == m_chatConnection->connection()->selfContact())
+    {
+        return;
+    }
+
     switch (state) {
     case ChannelChatStateGone: {
         TelepathyChatMessageInfo statusMessage(TelepathyChatMessageInfo::Status);
@@ -198,7 +205,6 @@ void ChatWindow::updateEnabledState(bool enable)
     if (enable) {
         TelepathyChatInfo info;
         Tp::Contacts allContacts = m_chatConnection->channel()->groupContacts();
-
         //normal chat - self and one other person.
         if (allContacts.size() == 2) {
             //find the other contact which isn't self.
@@ -233,9 +239,18 @@ void ChatWindow::updateEnabledState(bool enable)
 void ChatWindow::onInputBoxChanged()
 {
     //if the box is empty
-    bool currentlyTyping = ui->sendMessageBox->toPlainText().isEmpty();
+    bool currentlyTyping = ! ui->sendMessageBox->toPlainText().isEmpty();
 
-
+    //FIXME buffer what we've sent to telepathy, make this more efficient.
+    //FIXME check spec (with olly) as to whether we have to handle idle state etc.
+    if(currentlyTyping)
+    {
+        m_chatConnection->channel()->requestChatState(Tp::ChannelChatStateComposing);
+    }
+    else
+    {
+        m_chatConnection->channel()->requestChatState(Tp::ChannelChatStateActive);
+    }
 }
 
 bool MessageBoxEventFilter::eventFilter(QObject *obj, QEvent *event)
