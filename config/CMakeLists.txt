@@ -17,3 +17,5 @@ kde4_add_executable(telepathy-chat-config ${telepathy_chat_config_SRCS})
 
 target_link_libraries(telepathy-chat-config ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTWEBKIT_LIBRARY} ${KDE4_KUTILS_LIBS} ktelepathy_chat_lib)
 
+
+install(TARGETS telepathy-chat-config ${INSTALL_TARGETS_DEFAULT_ARGS})
