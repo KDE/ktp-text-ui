@@ -28,7 +28,6 @@ void AdiumThemeContentInfo::setUserIconPath(const QString &userIconPath)
     d->userIconPath = userIconPath;
 }
 
-
 QString AdiumThemeContentInfo::senderScreenName() const
 {
     return d->senderScreenName;
