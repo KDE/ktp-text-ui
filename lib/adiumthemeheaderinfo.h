@@ -26,13 +26,13 @@
 
 /** Containts all the information needed for the header generation from the Adium/Kopete templates */
 
-class TelepathyChatInfoPrivate;
+class AdiumThemeHeaderInfoPrivate;
 
-class TelepathyChatInfo
+class AdiumThemeHeaderInfo
 {
 public:
-    TelepathyChatInfo();
-    ~TelepathyChatInfo();
+    AdiumThemeHeaderInfo();
+    ~AdiumThemeHeaderInfo();
 
     /** A name for the chat. For a one-on-one chat, this will be the display name of the remote user. For a group chat, it is the group chat name or topic, as appropriate. */
     QString chatName() const;
@@ -64,7 +64,7 @@ public:
     void setTimeOpened(const QDateTime& timeOpened);
 
 private:
-    TelepathyChatInfoPrivate* const d;
+    AdiumThemeHeaderInfoPrivate* const d;
 
 };
 

@@ -17,11 +17,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "telepathychatinfo.h"
+#include "adiumthemeheaderinfo.h"
 
 //FIXME HTML escaping is maybe needed.
 
-class TelepathyChatInfoPrivate
+class AdiumThemeHeaderInfoPrivate
 {
 public:
     QString chatName;
@@ -33,80 +33,80 @@ public:
     QDateTime timeOpened;
 };
 
-TelepathyChatInfo::TelepathyChatInfo()
-        : d(new TelepathyChatInfoPrivate)
+AdiumThemeHeaderInfo::AdiumThemeHeaderInfo()
+        : d(new AdiumThemeHeaderInfoPrivate)
 {
 }
 
-TelepathyChatInfo::~TelepathyChatInfo()
+AdiumThemeHeaderInfo::~AdiumThemeHeaderInfo()
 {
     delete d;
 }
 
-QString TelepathyChatInfo::chatName() const
+QString AdiumThemeHeaderInfo::chatName() const
 {
     return d->chatName;
 };
 
-void TelepathyChatInfo::setChatName(const QString& chatName)
+void AdiumThemeHeaderInfo::setChatName(const QString& chatName)
 {
     d->chatName = chatName;
 };
 
-QString TelepathyChatInfo::sourceName() const
+QString AdiumThemeHeaderInfo::sourceName() const
 {
     return d->sourceName;
 };
 
-void TelepathyChatInfo::setSourceName(const QString& sourceName)
+void AdiumThemeHeaderInfo::setSourceName(const QString& sourceName)
 {
     d->sourceName = sourceName;
 };
 
-QString TelepathyChatInfo::destinationName() const
+QString AdiumThemeHeaderInfo::destinationName() const
 {
     return d->destinationName;
 }
-void TelepathyChatInfo::setDestinationName(const QString& destinationName)
+void AdiumThemeHeaderInfo::setDestinationName(const QString& destinationName)
 {
     d->destinationName = destinationName;
 };
 
-QString TelepathyChatInfo::destinationDisplayName() const
+QString AdiumThemeHeaderInfo::destinationDisplayName() const
 {
     return d->destinationDisplayName;
 }
-void TelepathyChatInfo::setDestinationDisplayName(const QString& destinationDisplayName)
+void AdiumThemeHeaderInfo::setDestinationDisplayName(const QString& destinationDisplayName)
 {
     d->destinationDisplayName = destinationDisplayName;
 }
 
-QUrl TelepathyChatInfo::incomingIconPath() const
+QUrl AdiumThemeHeaderInfo::incomingIconPath() const
 {
     return d->incomingIconPath;
 };
 
-void TelepathyChatInfo::setIncomingIconPath(const QUrl& incomingIconPath)
+void AdiumThemeHeaderInfo::setIncomingIconPath(const QUrl& incomingIconPath)
 {
     d->incomingIconPath = incomingIconPath;
 };
 
-QUrl TelepathyChatInfo::outgoingIconPath() const
+QUrl AdiumThemeHeaderInfo::outgoingIconPath() const
 {
     return d->outgoingIconPath;
 };
 
-void TelepathyChatInfo::setOutgoingIconPath(const QUrl& outgoingIconPath)
+void AdiumThemeHeaderInfo::setOutgoingIconPath(const QUrl& outgoingIconPath)
 {
     d->outgoingIconPath = outgoingIconPath;
 };
 
-QDateTime TelepathyChatInfo::timeOpened() const
+QDateTime AdiumThemeHeaderInfo::timeOpened() const
 {
     return d->timeOpened;
 };
 
-void TelepathyChatInfo::setTimeOpened(const QDateTime& timeOpened)
+void AdiumThemeHeaderInfo::setTimeOpened(const QDateTime& timeOpened)
 {
     d->timeOpened = timeOpened;
 };

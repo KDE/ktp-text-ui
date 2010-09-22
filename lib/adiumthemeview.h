@@ -23,7 +23,7 @@
 #include <QWebView>
 #include "chatwindowstyle.h"
 #include "telepathychatmessageinfo.h"
-#include "telepathychatinfo.h"
+#include "adiumthemeheaderinfo.h"
 #include <KEmoticons>
 
 
@@ -33,7 +33,7 @@ class AdiumThemeView : public QWebView
     Q_OBJECT
 public:
     explicit AdiumThemeView(QWidget *parent = 0);
-    void initialise(const TelepathyChatInfo&);
+    void initialise(const AdiumThemeHeaderInfo&);
 
     //override various parts loaded from the config file.
     //note that the following will clear the contents of the chat window.
@@ -58,12 +58,12 @@ private:
     QString m_variantPath;
     QString m_variantName;
     KEmoticons m_emoticons;
-    QString replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo&);
+    QString replaceHeaderKeywords(QString htmlTemplate, const AdiumThemeHeaderInfo&);
     //QString replaceMessageKeywords(QString htmlTemplate, const TelepathyChatMessageInfo&);
 
     QString formatTime(const QString&, const QDateTime&);
 
-    TelepathyChatInfo m_chatInfo;
+    AdiumThemeHeaderInfo m_chatInfo;
 
     QString m_lastSender;
     bool m_displayHeader;

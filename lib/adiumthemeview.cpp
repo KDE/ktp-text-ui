@@ -68,7 +68,7 @@ AdiumThemeView::AdiumThemeView(QWidget *parent) :
     m_webInspector = appearanceConfig.readEntry("debug", false);
 }
 
-void AdiumThemeView::initialise(const TelepathyChatInfo &chatInfo)
+void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 {
     QString templateHtml;
     QString templateFileName(KGlobal::dirs()->findResource("data", "ktelepathy/template.html"));
@@ -258,7 +258,7 @@ void AdiumThemeView::addMessage(const TelepathyChatMessageInfo &message)
 }
 
 
-QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo & info)
+QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumThemeHeaderInfo & info)
 {
     htmlTemplate.replace("%chatName%", info.chatName());
     htmlTemplate.replace("%sourceName%", info.sourceName());

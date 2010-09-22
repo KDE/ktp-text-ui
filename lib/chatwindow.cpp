@@ -20,7 +20,7 @@
 #include "chatwindow.h"
 #include "ui_chatwindow.h"
 #include "telepathychatmessageinfo.h"
-#include "telepathychatinfo.h"
+#include "adiumthemeheaderinfo.h"
 #include "channelcontactlist.h"
 
 #include <QKeyEvent>
@@ -215,7 +215,7 @@ void ChatWindow::updateEnabledState(bool enable)
 
     //set up the initial chat window details.
     if (enable) {
-        TelepathyChatInfo info;
+        AdiumThemeHeaderInfo info;
         Tp::Contacts allContacts = m_chatConnection->channel()->groupContacts();
         //normal chat - self and one other person.
         if (allContacts.size() == 2) {

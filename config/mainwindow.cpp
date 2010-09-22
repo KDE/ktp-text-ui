@@ -2,7 +2,7 @@
 #include "ui_chatwindowconfig.h"
 #include "chatwindowstylemanager.h"
 
-#include "telepathychatinfo.h"
+#include "adiumthemeheaderinfo.h"
 #include "telepathychatmessageinfo.h"
 
 #include <QDebug>
@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
     //set up a pretend config chat.
-    TelepathyChatInfo info;
+    AdiumThemeHeaderInfo info;
 
     info.setChatName("A demo chat");
     info.setSourceName("Jabber");
