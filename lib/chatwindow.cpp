@@ -73,6 +73,11 @@ void ChatWindow::changeEvent(QEvent *e)
 }
 
 
+QString ChatWindow::title()
+{
+    return "not implemented yet.";
+}
+
 
 void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
@@ -85,7 +90,10 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 
         ui->chatArea->addMessage(messageInfo);
         m_chatConnection->channel()->acknowledge(QList<Tp::ReceivedMessage>() << message);
+
+        Q_EMIT(SIGNAL(messageReceived()));
     }
+    //if the window isn't ready, we don't acknowledge the mesage. We process them as soon as we are ready.
 }
 
 void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
@@ -147,6 +155,9 @@ void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state
     case ChannelChatStateComposing:
         ui->statusLabel->setText(i18n("%1 is typing a message").arg(contact->alias()));
     }
+
+    //FIXME work out if _any_ user is typing and emit contactIsTypingChanged();
+
 }
 
 

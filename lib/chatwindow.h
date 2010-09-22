@@ -50,6 +50,10 @@ public:
     explicit ChatWindow(ChatConnection* chat, QWidget *parent = 0);
     ~ChatWindow();
 
+
+    /** Returns the name of this chat window*/
+    QString title();
+
 protected:
     void changeEvent(QEvent *e);
 
@@ -77,7 +81,14 @@ protected slots:
 
 
 signals:
+    /** Emitted whenever the title for the chat changes, normally the name of the contact or a topic*/
     void titleChanged(QString title);
+
+    /** Emmited whenever a message is received in this channel*/
+    void messageReceived();
+
+    /** Emitted when another contact in the channel starts/stops typing (if supported by the protocol)*/
+    void userTypingChanged(bool);
 
 private:
     Ui::ChatWindow *ui;
