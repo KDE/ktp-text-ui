@@ -6,6 +6,7 @@ set(telepathy_chat_handler_lib_SRCS
         adiumthemeview.cpp
         telepathychatmessageinfo.cpp
         adiumthemeheaderinfo.cpp
+        adiumthemecontentinfo.cpp
         channelcontactlist.cpp
         chatstyleplistfilereader.cpp
 )
