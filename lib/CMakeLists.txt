@@ -3,7 +3,7 @@ set(telepathy_chat_handler_lib_SRCS
         chatwindow.cpp
         chatwindowstyle.cpp
         chatwindowstylemanager.cpp
-        chatview.cpp
+        adiumthemeview.cpp
         telepathychatmessageinfo.cpp
         telepathychatinfo.cpp
         channelcontactlist.cpp

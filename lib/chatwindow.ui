@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="ChatView" name="chatArea" native="true"/>
+    <widget class="AdiumThemeView" name="chatArea" native="true"/>
    </item>
    <item>
     <widget class="QSplitter" name="splitter">
@@ -60,9 +60,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ChatView</class>
+   <class>AdiumThemeView</class>
    <extends>QWidget</extends>
-   <header>chatview.h</header>
+   <header>adiumthemeview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

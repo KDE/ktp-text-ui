@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "chatview.h"
+#include "adiumthemeview.h"
 #include "chatwindowstylemanager.h"
 
 #include <QDebug>
@@ -38,7 +38,7 @@
 #include <KMessageBox>
 
 
-ChatView::ChatView(QWidget *parent) :
+AdiumThemeView::AdiumThemeView(QWidget *parent) :
         QWebView(parent),
         m_displayHeader(true)
 {
@@ -68,7 +68,7 @@ ChatView::ChatView(QWidget *parent) :
     m_webInspector = appearanceConfig.readEntry("debug", false);
 }
 
-void ChatView::initialise(const TelepathyChatInfo &chatInfo)
+void AdiumThemeView::initialise(const TelepathyChatInfo &chatInfo)
 {
     QString templateHtml;
     QString templateFileName(KGlobal::dirs()->findResource("data", "ktelepathy/template.html"));
@@ -144,7 +144,7 @@ void ChatView::initialise(const TelepathyChatInfo &chatInfo)
     }
 }
 
-void ChatView::setVariant(const QString &variant)
+void AdiumThemeView::setVariant(const QString &variant)
 {
     m_variantName = variant;
     m_variantPath = QString("Variants/%1.css").arg(variant);
@@ -153,12 +153,12 @@ void ChatView::setVariant(const QString &variant)
     initialise(m_chatInfo);
 }
 
-ChatWindowStyle* ChatView::chatStyle() const
+ChatWindowStyle* AdiumThemeView::chatStyle() const
 {
     return m_chatStyle;
 }
 
-void ChatView::setChatStyle(ChatWindowStyle *chatStyle)
+void AdiumThemeView::setChatStyle(ChatWindowStyle *chatStyle)
 {
     m_chatStyle = chatStyle;
 
@@ -180,18 +180,18 @@ void ChatView::setChatStyle(ChatWindowStyle *chatStyle)
 }
 
 
-bool ChatView::isHeaderDisplayed() const
+bool AdiumThemeView::isHeaderDisplayed() const
 {
     return m_displayHeader;
 }
 
-void ChatView::setHeaderDisplayed(bool displayHeader)
+void AdiumThemeView::setHeaderDisplayed(bool displayHeader)
 {
     m_displayHeader = displayHeader;
     initialise(m_chatInfo);
 }
 
-void ChatView::addMessage(const TelepathyChatMessageInfo &message)
+void AdiumThemeView::addMessage(const TelepathyChatMessageInfo &message)
 {
     QString styleHtml;
     bool consecutiveMessage = false;
@@ -258,7 +258,7 @@ void ChatView::addMessage(const TelepathyChatMessageInfo &message)
 }
 
 
-QString ChatView::replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo & info)
+QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const TelepathyChatInfo & info)
 {
     htmlTemplate.replace("%chatName%", info.chatName());
     htmlTemplate.replace("%sourceName%", info.sourceName());
@@ -281,7 +281,7 @@ QString ChatView::replaceHeaderKeywords(QString htmlTemplate, const TelepathyCha
     return htmlTemplate;
 }
 
-void ChatView::appendNewMessage(QString &html)
+void AdiumThemeView::appendNewMessage(QString &html)
 {
     //by making the JS return false evaluateJavaScript is a _lot_ faster, as it has nothing to convert to QVariant.
     //escape quotes, and merge HTML onto one line.
@@ -289,7 +289,7 @@ void ChatView::appendNewMessage(QString &html)
     page()->mainFrame()->evaluateJavaScript(js);
 }
 
-void ChatView::appendNextMessage(QString &html)
+void AdiumThemeView::appendNextMessage(QString &html)
 {
     QString js = QString("appendNextMessage(\"%1\");false;").arg(html.replace('"', "\\\"").replace('\n', ""));
     page()->mainFrame()->evaluateJavaScript(js);
@@ -297,7 +297,7 @@ void ChatView::appendNextMessage(QString &html)
 
 
 //taken from Kopete code
-QString ChatView::formatTime(const QString &_timeFormat, const QDateTime &dateTime)
+QString AdiumThemeView::formatTime(const QString &_timeFormat, const QDateTime &dateTime)
 {
     char buffer[256];
 #ifdef Q_WS_WIN
@@ -317,12 +317,12 @@ QString ChatView::formatTime(const QString &_timeFormat, const QDateTime &dateTi
     return QString(buffer);
 }
 
-const QString ChatView::variantName() const
+const QString AdiumThemeView::variantName() const
 {
     return m_variantName;
 }
 
-const QString ChatView::variantPath() const
+const QString AdiumThemeView::variantPath() const
 {
     return m_variantPath;
 }

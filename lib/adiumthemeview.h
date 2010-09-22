@@ -28,11 +28,11 @@
 
 
 
-class ChatView : public QWebView
+class AdiumThemeView : public QWebView
 {
     Q_OBJECT
 public:
-    explicit ChatView(QWidget *parent = 0);
+    explicit AdiumThemeView(QWidget *parent = 0);
     void initialise(const TelepathyChatInfo&);
 
     //override various parts loaded from the config file.
