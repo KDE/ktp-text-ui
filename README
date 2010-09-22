@@ -13,27 +13,65 @@ This widget contains the widget above, an area to type text etc. It also contain
 
 All other classes are just for making a demo application.
 
-It requires Kopete to be installed and to be using a custom Kopete theme. Code currently reads from the Kopete config file.
-
 Once installed, receiving a text channel to your telepathy contact should start this program.
 
-The current telepathy contact list in SVN does not support starting a chat. 
 
-TODO:
-  KCModule for configuring theme. Identical to Kopete's I think.
-  
-  Finish all the template code that I couldn't be bothered to do.
 
-  Polishing on the chatwindow. eventFilter for pressing enter etc.
-  
+TODO (in no particular order):
+  Support user chosen fonts, user chosen default background
+
+  Load the above defaults from .PList
+
+  Turn chat config into a KCModule
+
+  Fix bug: if the .plist file has a DefaultVariant that doesn't exist, no variant gets selected.
+
+  Fix bug: default theme Renkoo doesn't have aligned bubble images when name is on the right. Potential underlying Adium theme issue.
+
+  Support avatars.
+
+  Refactor for factories (may as well wait for ContactFactory?)
+
+  Code tidy, tidy, tidy and review.
+
+  Moan at Ubuntu for shipping a totally broken Adium theme for empathy. Fix it for them.
+    (note, it doesn't load main.css, which is why it fails.)
+
   Rename all the classes to something sensible. I need help with this.
-
-  Split into a library of a chatwidget that any app can use - and an awesome chat program.
-  I think we need to split the code as follows:
-
-  lib/ (the chatwindow library, that can be used any program)
-  lib/kcmodule (for configuring chat window style)
-  app/ (a main chat window application)
 
   Try adding telepathy into another program to show my lib works as a lib. (maybe Geore's whiteboard program?)
 
+  Support multipart messages sending.
+
+  Support multipart messages receiving. (how on Earth am I going to make this safe wrt XSS?)
+
+  Build formatting into the application.
+
+  Sprint decided to have a automatically resizing send message box. This is a pain.
+
+  Notifications.
+
+  in the lib:
+    emit signal when a message is received 
+    emit signal when user typing changes.
+    getter for title();
+    signal + getter for what icon the tab should have too.
+    have a appendStatusMessage() method in chatWindow for apps to use
+    
+  in the app, colour tab text like Kopete.
+
+  check all theme keywords are both set and tested
+
+  maybe: split status/messages messageinfo classes away from each other.
+
+  support conferences/rooms better - make sure header parsing is correct, use topic.html
+
+  have a room participants widget. Sprint decided we should use contact list code.
+
+  conduct an actaul 3 way MSN chat in telepathy.
+
+  
+
+  
+
+  
