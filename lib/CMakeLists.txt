@@ -11,6 +11,7 @@ set(telepathy_chat_handler_lib_SRCS
         adiumthemestatusinfo.cpp
         channelcontactlist.cpp
         chatstyleplistfilereader.cpp
+        chattextedit.cpp
 )
 
 set(telepathy_chat_handler_lib_UI

@@ -36,6 +36,23 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     ui->setupUi(this);
     ui->statusLabel->setText("");
 
+    ui->formatBold->setText("");
+    ui->formatBold->setIcon(KIcon("format-text-bold"));
+
+    ui->formatItalic->setText("");
+    ui->formatItalic->setIcon(KIcon("format-text-italic"));
+
+    ui->formatUnderline->setText("");
+    ui->formatUnderline->setIcon(KIcon("format-text-underline"));
+
+    ui->insertEmoticon->setText("");
+    ui->insertEmoticon->setIcon(KIcon("face-smile"));
+
+    connect(ui->formatBold, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontBold(bool)));
+    connect(ui->formatItalic, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontItalic(bool)));
+    connect(ui->formatUnderline, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontUnderline(bool)));
+
+
     updateEnabledState(false);
 
     //chat connection lifespan should be same as the chatwindow

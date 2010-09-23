@@ -108,6 +108,8 @@ public:
 
         QStringList classes;
 
+        classes.append("action");
+
         if (m_type == RemoteToLocal) {
             classes.append("incoming");
             classes.append("message");

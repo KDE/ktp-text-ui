@@ -18,12 +18,61 @@
     <widget class="AdiumThemeView" name="chatArea" native="true"/>
    </item>
    <item>
-    <widget class="QSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <widget class="QPlainTextEdit" name="sendMessageBox"/>
-    </widget>
+    <layout class="QHBoxLayout" name="formatToolbar">
+     <item>
+      <widget class="QPushButton" name="formatBold">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="formatItalic">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="formatUnderline">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="insertEmoticon">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="ChatTextEdit" name="sendMessageBox"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -64,6 +113,11 @@
    <extends>QWidget</extends>
    <header>adiumthemeview.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ChatTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>chattextedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
