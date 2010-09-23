@@ -1,14 +1,16 @@
 #ifndef ADIUMTHEMECONTENTINFO_H
 #define ADIUMTHEMECONTENTINFO_H
+#include "adiumthememessageinfo.h"
 
 class QString;
 class AdiumThemeContentInfoPrivate;
 
 
-class AdiumThemeContentInfo
+
+class AdiumThemeContentInfo : AdiumThemeMessageInfo
 {
 public:
-    explicit AdiumThemeContentInfo();
+    explicit AdiumThemeContentInfo(AdiumThemeMessageInfo::MessageType);
 
     /** Path to the user icon associated with this message */
     QString userIconPath() const;

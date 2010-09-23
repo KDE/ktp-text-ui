@@ -8,6 +8,7 @@ public:
 };
 
 AdiumThemeStatusInfo::AdiumThemeStatusInfo():
+        AdiumThemeMessageInfo(AdiumThemeMessageInfo::Status),
         d(new AdiumThemeStatusInfoPrivate)
 {
 }

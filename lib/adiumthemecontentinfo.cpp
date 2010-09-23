@@ -13,9 +13,11 @@ public:
     QString textbackgroundcolor;
 };
 
-AdiumThemeContentInfo::AdiumThemeContentInfo() :
-        d(new AdiumThemeContentInfoPrivate)
+AdiumThemeContentInfo::AdiumThemeContentInfo(AdiumThemeMessageInfo::MessageType type) :
+  AdiumThemeMessageInfo(type),
+  d(new AdiumThemeContentInfoPrivate)
 {
+
 }
 
 QString AdiumThemeContentInfo::userIconPath() const
@@ -42,7 +44,6 @@ QString AdiumThemeContentInfo::sender() const
 {
     return d->senderDisplayName;
 }
-
 
 QString AdiumThemeContentInfo::senderColor() const
 {
