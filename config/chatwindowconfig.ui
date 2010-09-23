@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="ChatView" name="chatView" native="true">
+    <widget class="AdiumThemeView" name="chatView" native="true">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -141,9 +141,9 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>ChatView</class>
+   <class>AdiumThemeView</class>
    <extends>QWidget</extends>
-   <header>chatview.h</header>
+   <header>adiumthemeview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
