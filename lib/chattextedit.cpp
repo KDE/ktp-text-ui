@@ -29,7 +29,6 @@ void ChatTextEdit::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu *menu = createStandardContextMenu();
     menu->addActions(actions());
-    menu->addAction("asdlfkjasdflkj");
     menu->exec(event->globalPos());
     delete menu;
 }
