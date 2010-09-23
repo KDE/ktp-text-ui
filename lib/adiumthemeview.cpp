@@ -117,7 +117,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 
     int numberOfPlaceholders = templateHtml.count("%@");
 
-    int index;
+    int index = 0;
     index = templateHtml.indexOf("%@", index);
     templateHtml.replace(index, 2, QString("file:///").append(m_chatStyle->getStyleBaseHref()));
 
@@ -276,10 +276,11 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
         QString timeKeyword = formatTime(timeRegExp.cap(1), info.timeOpened());
         htmlTemplate.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
     }
-
-
     return htmlTemplate;
 }
+
+
+
 
 void AdiumThemeView::appendNewMessage(QString &html)
 {
