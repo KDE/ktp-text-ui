@@ -24,6 +24,14 @@
 #include "channelcontactlist.h"
 
 #include <QKeyEvent>
+#include <QAction>
+#include <QWidget>
+
+
+#include <TelepathyQt4/Message>
+#include <TelepathyQt4/Types>
+
+
 
 //FIXME once TP::Factory stuff is in, remove all of ChatConnection, replace this with
 //ChatWindow::ChatWindow(ConnectionPtr,TextChannelPtr, QWidget* parent) :...
@@ -31,7 +39,8 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
         QWidget(parent),
         ui(new Ui::ChatWindow),
         m_chatConnection(chat),
-        m_chatviewlInitialised(false)
+        m_chatviewlInitialised(false),
+        m_showFormatToolbarAction(new QAction(i18n("Show format options"), this))
 {
     ui->setupUi(this);
     ui->statusLabel->setText("");
@@ -48,12 +57,22 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     ui->insertEmoticon->setText("");
     ui->insertEmoticon->setIcon(KIcon("face-smile"));
 
+    updateEnabledState(false);
+
+    //format toolbar visibility
+    m_showFormatToolbarAction->setCheckable(true);
+    connect(m_showFormatToolbarAction, SIGNAL(toggled(bool)), ui->formatToolbar, SLOT(setVisible(bool)));
+    ui->sendMessageBox->addAction(m_showFormatToolbarAction);
+
+    //FIXME load whether to show/hide by default from config file (do per account)
+    bool formatToolbarIsVisible = false;
+    ui->formatToolbar->setVisible(formatToolbarIsVisible);
+    m_showFormatToolbarAction->setChecked(formatToolbarIsVisible);
+
+    //connect signals/slots from format toolbar
     connect(ui->formatBold, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontBold(bool)));
     connect(ui->formatItalic, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontItalic(bool)));
     connect(ui->formatUnderline, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontUnderline(bool)));
-
-
-    updateEnabledState(false);
 
     //chat connection lifespan should be same as the chatwindow
     m_chatConnection->setParent(this);
@@ -100,6 +119,18 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
     if (m_chatviewlInitialised) {
         TelepathyChatMessageInfo messageInfo(TelepathyChatMessageInfo::RemoteToLocal);
+
+        //debug the message parts (looking for HTML etc)
+//        foreach(Tp::MessagePart part, message.parts())
+//        {
+//            qDebug() << "***";
+//            foreach(QString key, part.keys())
+//            {
+//                qDebug() << key << part.value(key).variant();
+//            }
+//        }
+
+
         messageInfo.setMessage(message.text());
         messageInfo.setTime(message.received());
         messageInfo.setSenderDisplayName(message.sender()->alias());

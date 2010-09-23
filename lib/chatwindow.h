@@ -99,6 +99,7 @@ private:
 
     MessageBoxEventFilter* messageBoxEventFilter;
     ChannelChatState lastRequestedChannelChatState;
+    QAction* m_showFormatToolbarAction;
 };
 
 #endif // CHATWINDOW_H

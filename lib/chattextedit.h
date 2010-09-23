@@ -11,6 +11,10 @@ public:
 
 signals:
 
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *e);
+
 public slots:
     /** wraps setFontWeight to a simple on/off bold) */
     void setFontBold(bool);
