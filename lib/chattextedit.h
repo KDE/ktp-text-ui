@@ -9,11 +9,18 @@ class ChatTextEdit : public QTextEdit
 public:
     explicit ChatTextEdit(QWidget *parent = 0);
 
-signals:
-
+    // reimplemented
+    QSize minimumSizeHint() const;
+    QSize sizeHint() const;
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *e);
+    // reimplemented
+    void resizeEvent(QResizeEvent*);
+    void contextMenuEvent(QContextMenuEvent *);
+
+private slots:
+    void recalculateSize();
+    void updateScrollBar();
 
 public slots:
     /** wraps setFontWeight to a simple on/off bold) */
