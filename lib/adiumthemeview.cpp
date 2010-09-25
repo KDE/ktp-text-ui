@@ -18,6 +18,12 @@
  ***************************************************************************/
 
 #include "adiumthemeview.h"
+
+#include "adiumthemeheaderinfo.h"
+#include "adiumthemecontentinfo.h"
+#include "adiumthememessageinfo.h"
+#include "adiumthemestatusinfo.h"
+
 #include "chatwindowstylemanager.h"
 
 #include <QDebug>
@@ -191,6 +197,54 @@ void AdiumThemeView::setHeaderDisplayed(bool displayHeader)
     initialise(m_chatInfo);
 }
 
+
+void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessage)
+{
+    QString styleHtml;
+    bool consecutiveMessage = false;
+
+    if (m_lastSender == contentMessage.senderScreenName()) {
+        consecutiveMessage = true;
+    } else {
+        m_lastSender = contentMessage.senderScreenName();
+    }
+
+    switch (contentMessage.type()) {
+    case TelepathyChatMessageInfo::RemoteToLocal:
+        if (consecutiveMessage) {
+            styleHtml = m_chatStyle->getNextIncomingHtml();
+        } else {
+            styleHtml = m_chatStyle->getIncomingHtml();
+        }
+        break;
+    case TelepathyChatMessageInfo::LocalToRemote:
+        if (consecutiveMessage) {
+            styleHtml = m_chatStyle->getNextOutgoingHtml();
+        } else {
+            styleHtml = m_chatStyle->getOutgoingHtml();
+        }
+        break;
+    default:
+        qWarning() << "Unexpected message type to addContentMessage";
+    }
+
+    replaceContentKeywords(styleHtml, contentMessage);
+
+    if (consecutiveMessage) {
+        appendNextMessage(styleHtml);
+    } else {
+        appendNewMessage(styleHtml);
+    }
+}
+
+void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
+{
+    QString styleHtml = m_chatStyle->getStatusHtml();
+    m_lastSender = "";
+    replaceStatusKeywords(styleHtml, statusMessage);
+    appendNewMessage(styleHtml);
+}
+
 void AdiumThemeView::addMessage(const TelepathyChatMessageInfo &message)
 {
     QString styleHtml;
@@ -279,7 +333,50 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
     return htmlTemplate;
 }
 
+QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const AdiumThemeContentInfo& info)
+{
+    //userIconPath
+    htmlTemplate.replace("%userIconPath%", info.userIconPath());
+    //senderScreenName
+    htmlTemplate.replace("%senderScreenName%", info.senderScreenName());
+    //sender
+    htmlTemplate.replace("%sender%", info.sender());
+    //senderColor
+    htmlTemplate.replace("%senderColor%", info.senderColor());
+    //senderStatusIcon
+    htmlTemplate.replace("senderStatusIcon", info.senderStatusIcon());
+    //messageDirection
+    htmlTemplate.replace("%messageDirection%", info.messageDirection());
+    //senderDisplayName
+    htmlTemplate.replace("%senderDisplayName%", info.senderDisplayName());
 
+    //FIXME %textbackgroundcolor{X}%
+    return replaceMessageKeywords(htmlTemplate, info);
+}
+
+QString AdiumThemeView::replaceStatusKeywords(QString &htmlTemplate, const AdiumThemeStatusInfo& info)
+{
+    htmlTemplate.replace("%status%", info.status());
+    return replaceMessageKeywords(htmlTemplate, info);
+}
+
+QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const AdiumThemeMessageInfo& info)
+{
+    //message
+    htmlTemplate.replace("%message%", info.message());
+    //time
+    htmlTemplate.replace("%time%", KGlobal::locale()->formatTime(info.time().time(), true));
+    //shortTime
+    htmlTemplate.replace("%shortTime%", KGlobal::locale()->formatTime(info.time().time(), false));
+    //time{X}
+    QRegExp timeRegExp("%time\\{([^}]*)\\}%");
+    int pos = 0;
+    while ((pos = timeRegExp.indexIn(htmlTemplate , pos)) != -1) {
+        QString timeKeyword = formatTime(timeRegExp.cap(1), info.time());
+        htmlTemplate.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
+    }
+    return htmlTemplate;
+}
 
 
 void AdiumThemeView::appendNewMessage(QString &html)

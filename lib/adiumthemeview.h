@@ -27,6 +27,10 @@
 #include <KEmoticons>
 
 
+class AdiumThemeContentInfo;
+class AdiumThemeHeaderInfo;
+class AdiumThemeMessageInfo;
+class AdiumThemeStatusInfo;
 
 class AdiumThemeView : public QWebView
 {
@@ -49,9 +53,10 @@ public:
     void setHeaderDisplayed(bool);
     /* .. font, backgrounds, everything else.*/
 
-
 public slots:
     void addMessage(const TelepathyChatMessageInfo &message);
+    void addContentMessage(const AdiumThemeContentInfo&);
+    void addStatusMessage(const AdiumThemeStatusInfo&);
 
 private:
     ChatWindowStyle* m_chatStyle;
@@ -59,7 +64,9 @@ private:
     QString m_variantName;
     KEmoticons m_emoticons;
     QString replaceHeaderKeywords(QString htmlTemplate, const AdiumThemeHeaderInfo&);
-    //QString replaceMessageKeywords(QString htmlTemplate, const TelepathyChatMessageInfo&);
+    QString replaceContentKeywords(QString& htmlTemplate, const AdiumThemeContentInfo&);
+    QString replaceStatusKeywords(QString& htmlTemplate, const AdiumThemeStatusInfo&);
+    QString replaceMessageKeywords(QString& htmlTemplate, const AdiumThemeMessageInfo&);
 
     QString formatTime(const QString&, const QDateTime&);
 

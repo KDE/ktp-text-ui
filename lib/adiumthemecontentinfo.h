@@ -7,7 +7,7 @@ class AdiumThemeContentInfoPrivate;
 
 
 
-class AdiumThemeContentInfo : AdiumThemeMessageInfo
+class AdiumThemeContentInfo : public AdiumThemeMessageInfo
 {
 public:
     explicit AdiumThemeContentInfo(AdiumThemeMessageInfo::MessageType);

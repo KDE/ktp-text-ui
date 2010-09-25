@@ -27,10 +27,10 @@
 #include <QAction>
 #include <QWidget>
 
+//#include <Sonnet/Highlighter>
 
 #include <TelepathyQt4/Message>
 #include <TelepathyQt4/Types>
-
 
 
 //FIXME once TP::Factory stuff is in, remove all of ChatConnection, replace this with
@@ -139,8 +139,9 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
         ui->chatArea->addMessage(messageInfo);
         m_chatConnection->channel()->acknowledge(QList<Tp::ReceivedMessage>() << message);
 
-        Q_EMIT(SIGNAL(messageReceived()));
+        emit messageReceived();
     }
+
     //if the window isn't ready, we don't acknowledge the mesage. We process them as soon as we are ready.
 }
 

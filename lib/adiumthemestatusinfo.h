@@ -5,7 +5,7 @@
 class QString;
 class AdiumThemeStatusInfoPrivate;
 
-class AdiumThemeStatusInfo : AdiumThemeMessageInfo
+class AdiumThemeStatusInfo : public AdiumThemeMessageInfo
 {
 public:
     explicit AdiumThemeStatusInfo();
