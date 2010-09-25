@@ -21,6 +21,11 @@
 #include "ui_chatwindow.h"
 #include "telepathychatmessageinfo.h"
 #include "adiumthemeheaderinfo.h"
+#include "adiumthemecontentinfo.h"
+#include "adiumthememessageinfo.h"
+#include "adiumthemestatusinfo.h"
+
+
 #include "channelcontactlist.h"
 
 #include <QKeyEvent>
@@ -118,7 +123,7 @@ QString ChatWindow::title()
 void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
     if (m_chatviewlInitialised) {
-        TelepathyChatMessageInfo messageInfo(TelepathyChatMessageInfo::RemoteToLocal);
+        AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
         //debug the message parts (looking for HTML etc)
 //        foreach(Tp::MessagePart part, message.parts())
@@ -130,13 +135,12 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 //            }
 //        }
 
-
         messageInfo.setMessage(message.text());
         messageInfo.setTime(message.received());
         messageInfo.setSenderDisplayName(message.sender()->alias());
         messageInfo.setSenderScreenName(message.sender()->id());
 
-        ui->chatArea->addMessage(messageInfo);
+        ui->chatArea->addContentMessage(messageInfo);
         m_chatConnection->channel()->acknowledge(QList<Tp::ReceivedMessage>() << message);
 
         emit messageReceived();
@@ -147,7 +151,7 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 
 void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
 {
-    TelepathyChatMessageInfo messageInfo(TelepathyChatMessageInfo::LocalToRemote);
+    AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::LocalToRemote);
     messageInfo.setMessage(message.text());
     messageInfo.setTime(message.sent());
 
@@ -155,7 +159,7 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     messageInfo.setSenderDisplayName(sender->alias());
     messageInfo.setSenderScreenName(sender->id());
 
-    ui->chatArea->addMessage(messageInfo);
+    ui->chatArea->addContentMessage(messageInfo);
 }
 
 void ChatWindow::chatViewReady()
@@ -187,9 +191,12 @@ void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state
 
     switch (state) {
     case ChannelChatStateGone: {
-        TelepathyChatMessageInfo statusMessage(TelepathyChatMessageInfo::Status);
+        AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(i18n("%1 has left the chat").arg(contact->alias()));
-        ui->chatArea->addMessage(statusMessage);
+        statusMessage.setService("");
+        statusMessage.setStatus("away");
+        statusMessage.setTime(QDateTime::currentDateTime());
+        ui->chatArea->addStatusMessage(statusMessage);
     }
     break;
     case ChannelChatStateInactive:

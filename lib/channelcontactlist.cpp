@@ -16,8 +16,6 @@ other sets (taking set union of them is easiest)
  */
 
 
-
-
 ChannelContactListContact::ChannelContactListContact(Tp::ContactPtr contact, QObject *parent)
         : QObject(parent)
 {

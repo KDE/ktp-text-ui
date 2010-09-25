@@ -180,8 +180,6 @@ void AdiumThemeView::setChatStyle(ChatWindowStyle *chatStyle)
         m_variantPath = "";
         m_variantName = "";
     }
-
-
     initialise(m_chatInfo);
 }
 
@@ -258,7 +256,6 @@ void AdiumThemeView::addMessage(const TelepathyChatMessageInfo &message)
     } else {
         m_lastSender = message.senderScreenName();
     }
-
 
     switch (message.type()) {
     case TelepathyChatMessageInfo::RemoteToLocal:
