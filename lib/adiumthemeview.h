@@ -22,7 +22,6 @@
 
 #include <QWebView>
 #include "chatwindowstyle.h"
-#include "telepathychatmessageinfo.h"
 #include "adiumthemeheaderinfo.h"
 #include <KEmoticons>
 
@@ -54,7 +53,6 @@ public:
     /* .. font, backgrounds, everything else.*/
 
 public slots:
-    void addMessage(const TelepathyChatMessageInfo &message);
     void addContentMessage(const AdiumThemeContentInfo&);
     void addStatusMessage(const AdiumThemeStatusInfo&);
 

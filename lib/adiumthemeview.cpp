@@ -31,7 +31,6 @@
 #include <QWebElement>
 #include <QFile>
 #include <QTextCodec>
-#include <QTextDocument> //needed for Qt::escape
 #include <QWebInspector>
 #include <QWebSettings>
 
@@ -208,14 +207,14 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
     }
 
     switch (contentMessage.type()) {
-    case TelepathyChatMessageInfo::RemoteToLocal:
+    case AdiumThemeMessageInfo::RemoteToLocal:
         if (consecutiveMessage) {
             styleHtml = m_chatStyle->getNextIncomingHtml();
         } else {
             styleHtml = m_chatStyle->getIncomingHtml();
         }
         break;
-    case TelepathyChatMessageInfo::LocalToRemote:
+    case AdiumThemeMessageInfo::LocalToRemote:
         if (consecutiveMessage) {
             styleHtml = m_chatStyle->getNextOutgoingHtml();
         } else {
@@ -243,71 +242,8 @@ void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
     appendNewMessage(styleHtml);
 }
 
-void AdiumThemeView::addMessage(const TelepathyChatMessageInfo &message)
-{
-    QString styleHtml;
-    bool consecutiveMessage = false;
 
-    qDebug() << m_lastSender;
-
-    //FIXME "if group consecutive messages....{
-    if (m_lastSender == message.senderScreenName()) {
-        consecutiveMessage = true;
-    } else {
-        m_lastSender = message.senderScreenName();
-    }
-
-    switch (message.type()) {
-    case TelepathyChatMessageInfo::RemoteToLocal:
-        if (consecutiveMessage) {
-            styleHtml = m_chatStyle->getNextIncomingHtml();
-        } else {
-            styleHtml = m_chatStyle->getIncomingHtml();
-        }
-        break;
-    case TelepathyChatMessageInfo::LocalToRemote:
-        if (consecutiveMessage) {
-            styleHtml = m_chatStyle->getNextOutgoingHtml();
-        } else {
-            styleHtml = m_chatStyle->getOutgoingHtml();
-        }
-        break;
-    case TelepathyChatMessageInfo::Status:
-        styleHtml = m_chatStyle->getStatusHtml();
-        consecutiveMessage = false;
-        break;
-    }
-
-    QString messageHtml = m_emoticons.theme().parseEmoticons(Qt::escape(message.message()));
-
-    styleHtml.replace("%message%", messageHtml);
-    styleHtml.replace("%messageDirection%", message.messageDirection());
-    styleHtml.replace("%sender%", message.senderDisplayName()); // FIXME sender is complex: not always this
-    styleHtml.replace("%senderScreenName%", message.senderScreenName());
-    styleHtml.replace("%time%", KGlobal::locale()->formatTime(message.time().time(), true));
-    styleHtml.replace("%shortTime%", KGlobal::locale()->formatTime(message.time().time(), false));
-    styleHtml.replace("%userIconPath%", "outgoing_icon.png");// this fallback should be done in the messageinfo
-    styleHtml.replace("%messageClasses%", message.messageClasses());
-    styleHtml.replace("%service%", message.service());
-    styleHtml.replace("%userIcons%", message.userIcons());
-    styleHtml.replace("%status%", "idle");
-
-
-    // Look for %time{X}%
-    QRegExp timeRegExp("%time\\{([^}]*)\\}%");
-    int pos = 0;
-    while ((pos = timeRegExp.indexIn(styleHtml , pos)) != -1) {
-        QString timeKeyword = formatTime(timeRegExp.cap(1), message.time());
-        styleHtml.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
-    }
-
-    if (consecutiveMessage) {
-        appendNextMessage(styleHtml);
-    } else {
-        appendNewMessage(styleHtml);
-    }
-}
-
+/** Private */
 
 QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumThemeHeaderInfo & info)
 {
@@ -360,7 +296,7 @@ QString AdiumThemeView::replaceStatusKeywords(QString &htmlTemplate, const Adium
 QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const AdiumThemeMessageInfo& info)
 {
     //message
-    htmlTemplate.replace("%message%", info.message());
+    htmlTemplate.replace("%message%", m_emoticons.theme().parseEmoticons(info.message()));
     //time
     htmlTemplate.replace("%time%", KGlobal::locale()->formatTime(info.time().time(), true));
     //shortTime

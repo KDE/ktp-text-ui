@@ -19,7 +19,6 @@
 
 #include "chatwindow.h"
 #include "ui_chatwindow.h"
-#include "telepathychatmessageinfo.h"
 #include "adiumthemeheaderinfo.h"
 #include "adiumthemecontentinfo.h"
 #include "adiumthememessageinfo.h"
@@ -251,10 +250,12 @@ void ChatWindow::onContactPresenceChange(Tp::ContactPtr contact, uint type)
     }
 
     if (!message.isNull()) {
-        TelepathyChatMessageInfo statusMessage(TelepathyChatMessageInfo::Status);
+        AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(message);
+        statusMessage.setStatus("");
+        statusMessage.setService(m_chatConnection->connection()->protocolName());
         statusMessage.setTime(QDateTime::currentDateTime());
-        ui->chatArea->addMessage(statusMessage);
+        ui->chatArea->addStatusMessage(statusMessage);
     }
 
 }

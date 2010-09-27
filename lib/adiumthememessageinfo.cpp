@@ -2,6 +2,8 @@
 #include <QString>
 #include <QStringList>
 #include <QDateTime>
+#include <QTextDocument> //needed for Qt::escape
+
 
 class AdiumThemeMessageInfoPrivate
 {
@@ -26,7 +28,10 @@ AdiumThemeMessageInfo::MessageType AdiumThemeMessageInfo::type() const
 
 QString AdiumThemeMessageInfo::message() const
 {
-    return d->message;
+    QString htmlMessage= Qt::escape(d->message);
+    htmlMessage.replace('\n', "<br/>");
+
+    return htmlMessage;
 }
 
 void AdiumThemeMessageInfo::setMessage(const QString& message)

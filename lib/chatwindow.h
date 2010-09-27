@@ -21,8 +21,11 @@
 #define CHATWINDOW_H
 
 #include <QWidget>
+#include <QString>
+#include <KIcon>
+
 #include <TelepathyQt4/ReceivedMessage>
-#include <chatconnection.h>
+#include "chatconnection.h"
 
 
 namespace Ui
@@ -84,11 +87,15 @@ signals:
     /** Emitted whenever the title for the chat changes, normally the name of the contact or a topic*/
     void titleChanged(QString title);
 
+    /** Emmitted if the icon for this channel changes*/
+    void iconChanged(KIcon icon);
+
     /** Emmited whenever a message is received in this channel*/
     void messageReceived();
 
     /** Emitted when another contact in the channel starts/stops typing (if supported by the protocol)*/
     void userTypingChanged(bool);
+
 
 private:
     Ui::ChatWindow *ui;

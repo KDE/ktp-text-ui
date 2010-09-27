@@ -4,7 +4,6 @@ set(telepathy_chat_handler_lib_SRCS
         chatwindowstyle.cpp
         chatwindowstylemanager.cpp
         adiumthemeview.cpp
-        telepathychatmessageinfo.cpp
         adiumthemeheaderinfo.cpp
         adiumthememessageinfo.cpp
         adiumthemecontentinfo.cpp
