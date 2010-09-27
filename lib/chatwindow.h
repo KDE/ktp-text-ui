@@ -97,6 +97,9 @@ signals:
     void userTypingChanged(bool);
 
 
+private slots:
+    void onFormatColorReleased();
+
 private:
     Ui::ChatWindow *ui;
     ChatConnection* m_chatConnection;

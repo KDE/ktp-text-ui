@@ -31,6 +31,7 @@
 #include <QAction>
 #include <QWidget>
 
+#include <KColorDialog>
 //#include <Sonnet/Highlighter>
 
 #include <TelepathyQt4/Message>
@@ -49,6 +50,9 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     ui->setupUi(this);
     ui->statusLabel->setText("");
 
+    ui->formatColor->setText("");
+    ui->formatColor->setIcon(KIcon("format-text-color"));
+
     ui->formatBold->setText("");
     ui->formatBold->setIcon(KIcon("format-text-bold"));
 
@@ -63,6 +67,9 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
 
     updateEnabledState(false);
 
+    qDebug() << "chat connection message support is:";
+    qDebug() << m_chatConnection->channel()->messagePartSupport();
+
     //format toolbar visibility
     m_showFormatToolbarAction->setCheckable(true);
     connect(m_showFormatToolbarAction, SIGNAL(toggled(bool)), ui->formatToolbar, SLOT(setVisible(bool)));
@@ -74,6 +81,7 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     m_showFormatToolbarAction->setChecked(formatToolbarIsVisible);
 
     //connect signals/slots from format toolbar
+    connect(ui->formatColor, SIGNAL(released()), SLOT(onFormatColorReleased()));
     connect(ui->formatBold, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontBold(bool)));
     connect(ui->formatItalic, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontItalic(bool)));
     connect(ui->formatUnderline, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontUnderline(bool)));
@@ -335,4 +343,12 @@ bool MessageBoxEventFilter::eventFilter(QObject *obj, QEvent *event)
     }
     // standard event processing
     return QObject::eventFilter(obj, event);
+}
+
+
+void ChatWindow::onFormatColorReleased()
+{
+    QColor color;
+    KColorDialog::getColor(color,this);
+    ui->sendMessageBox->setTextColor(color);
 }
