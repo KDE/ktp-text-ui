@@ -3,7 +3,8 @@
 #include "chatwindowstylemanager.h"
 
 #include "adiumthemeheaderinfo.h"
-#include "telepathychatmessageinfo.h"
+#include "adiumthemecontentinfo.h"
+#include "adiumthemestatusinfo.h"
 
 #include <QDebug>
 #include <KDebug>
@@ -122,26 +123,28 @@ void MainWindow::sendDemoMessages()
 {
     //add a fake message
 
-    TelepathyChatMessageInfo message(TelepathyChatMessageInfo::RemoteToLocal);
+    AdiumThemeContentInfo message(AdiumThemeMessageInfo::RemoteToLocal);
     message.setMessage("Hello");
     message.setSenderDisplayName("larry@example.com");
     message.setSenderScreenName("Larry Demo");
     message.setService("Jabber");
     message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addMessage(message);
+    ui->chatView->addContentMessage(message);
 
-    message = TelepathyChatMessageInfo(TelepathyChatMessageInfo::LocalToRemote);
+    message = AdiumThemeContentInfo(AdiumThemeMessageInfo::LocalToRemote);
     message.setMessage("A different example message");
     message.setSenderDisplayName("ted@example.com");
     message.setSenderScreenName("Ted Example");
     message.setService("Jabber");
     message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addMessage(message);
+    ui->chatView->addContentMessage(message);
 
-    message = TelepathyChatMessageInfo(TelepathyChatMessageInfo::Status);
-    message.setMessage("Ted Example has left the chat."); //FIXME sync this with chat text logic.
-    message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addMessage(message);
+    AdiumThemeStatusInfo  statusMessage;
+    statusMessage.setMessage("Ted Example has left the chat."); //FIXME sync this with chat text logic.
+    statusMessage.setTime(QDateTime::currentDateTime());
+    statusMessage.setService("Jabber");
+    statusMessage.setStatus("away");
+    ui->chatView->addStatusMessage(statusMessage);
 }
 
 void MainWindow::accept()
