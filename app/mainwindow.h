@@ -21,13 +21,15 @@
 #define REALCLIENTHANDLER_H
 
 #include <KTabWidget>
+#include <KIcon>
 
 #include <TelepathyQt4/AbstractClientHandler>
 #include <TelepathyQt4/types.h>
 #include <TelepathyQt4/Channel>
 #include <TelepathyQt4/TextChannel>
 #include <TelepathyQt4/ReceivedMessage>
-#include <chatconnection.h>
+
+#include "chatconnection.h"
 
 using namespace Tp;
 
@@ -56,6 +58,10 @@ public:
 
 private slots:
     void updateTabText(QString newTitle);
+    void updateTabIcon(KIcon newIcon);
+
+    /** keep the main window title in line with active tab */
+    void onCurrentIndexChanged(int index);
 
 };
 

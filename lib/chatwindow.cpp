@@ -45,7 +45,8 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
         ui(new Ui::ChatWindow),
         m_chatConnection(chat),
         m_chatviewlInitialised(false),
-        m_showFormatToolbarAction(new QAction(i18n("Show format options"), this))
+        m_showFormatToolbarAction(new QAction(i18n("Show format options"), this)),
+        m_isGroupChat(false)
 {
     ui->setupUi(this);
     ui->statusLabel->setText("");
@@ -219,7 +220,6 @@ void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state
         ui->statusLabel->setText(i18n("%1 is typing a message").arg(contact->alias()));
     }
 
-    //FIXME work out if _any_ user is typing and emit contactIsTypingChanged();
 
 }
 
@@ -266,6 +266,13 @@ void ChatWindow::onContactPresenceChange(Tp::ContactPtr contact, uint type)
         ui->chatArea->addStatusMessage(statusMessage);
     }
 
+
+    //if in a non-group chat situation, and the other contact has changed state...
+    if (! m_isGroupChat && ! isYou)
+    {
+        KIcon icon = iconForPresence(type);
+        Q_EMIT iconChanged(icon);
+    }
 }
 
 void ChatWindow::updateEnabledState(bool enable)
@@ -298,6 +305,7 @@ void ChatWindow::updateEnabledState(bool enable)
         } else {
             //some sort of group chat scenario.. Not sure how to create this yet.
             info.setChatName("Group Chat");
+            m_isGroupChat = true;
         }
 
         info.setSourceName(m_chatConnection->connection()->protocolName());
@@ -309,6 +317,7 @@ void ChatWindow::updateEnabledState(bool enable)
 
         //inform anyone using the class of the new name for this chat.
         Q_EMIT titleChanged(info.chatName());
+        //FIXME emit the correct icon here too
     }
 }
 
@@ -351,4 +360,32 @@ void ChatWindow::onFormatColorReleased()
     QColor color;
     KColorDialog::getColor(color,this);
     ui->sendMessageBox->setTextColor(color);
+}
+
+KIcon ChatWindow::iconForPresence(uint presence)
+{
+    QString iconName;
+
+    switch (presence) {
+        case Tp::ConnectionPresenceTypeAvailable:
+            iconName = QLatin1String("user-online");
+            break;
+        case Tp::ConnectionPresenceTypeAway:
+            iconName = QLatin1String("user-away");
+            break;
+        case Tp::ConnectionPresenceTypeExtendedAway:
+            iconName = QLatin1String("user-away-extended");
+            break;
+        case Tp::ConnectionPresenceTypeHidden:
+            iconName = QLatin1String("user-invisible");
+            break;
+        case Tp::ConnectionPresenceTypeBusy:
+            iconName = QLatin1String("user-busy");
+            break;
+        default:
+            iconName = QLatin1String("user-offline");
+            break;
+    }
+
+    return KIcon(iconName);
 }

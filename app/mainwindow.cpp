@@ -20,6 +20,7 @@
 #include "mainwindow.h"
 #include "chatwindow.h"
 
+
 inline ChannelClassList channelClassList()
 {
     ChannelClassList filters;
@@ -44,6 +45,8 @@ MainWindow::MainWindow() :
         KTabWidget(),
         AbstractClientHandler(channelClassList())
 {
+    setTabReorderingEnabled(true);
+    connect(this, SIGNAL(currentChanged(int)), SLOT(onCurrentIndexChanged(int)));
 }
 
 void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
@@ -58,8 +61,11 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
     ChatConnection* chatConnection = new ChatConnection(this, account, connection, channels);
     ChatWindow* newWindow = new ChatWindow(chatConnection, this);
 
+    addTab(newWindow,KIcon("user-online"),"");
+
     connect(newWindow, SIGNAL(titleChanged(QString)), SLOT(updateTabText(QString)));
-    addTab(newWindow, "");
+    connect(newWindow,SIGNAL(iconChanged(KIcon)), SLOT(updateTabIcon(KIcon)));
+
     resize(newWindow->sizeHint() - QSize(50, 50));// FUDGE
 
     context->setFinished();
@@ -72,5 +78,26 @@ void MainWindow::updateTabText(QString newTitle)
     if (sender) {
         int tabIndexToChange = indexOf(sender);
         setTabText(tabIndexToChange, newTitle);
+
+        if (tabIndexToChange == currentIndex())
+        {
+            onCurrentIndexChanged(tabIndexToChange);
+        }
     }
+}
+
+void MainWindow::updateTabIcon(KIcon newIcon)
+{
+    //find out which widget made the call, and update the correct tab.
+    QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
+    if (sender) {
+        int tabIndexToChange = indexOf(sender);
+        setTabIcon(tabIndexToChange, newIcon);
+    }
+}
+
+
+void MainWindow::onCurrentIndexChanged(int index)
+{
+    setWindowTitle(tabText(index));
 }
