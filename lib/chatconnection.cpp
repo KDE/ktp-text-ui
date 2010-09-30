@@ -33,14 +33,11 @@ ChatConnection::ChatConnection(QObject *parent, const AccountPtr account, const 
         PendingReady* op = m_channel->becomeReady(Features() << TextChannel::FeatureMessageQueue
                            << TextChannel::FeatureMessageSentSignal
                            << TextChannel::FeatureChatState
+                           << TextChannel::FeatureMessageCapabilities
                            << Channel::FeatureCore);
+
+
         connect(op, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onChannelReady(Tp::PendingOperation*)));
-
-        //FIXME, we need to actually wait for this. Fortunately we can use factories soon.
-        connection->becomeReady(Features() << Connection::FeatureSelfContact
-                                << Connection::FeatureCore);
-
-
     } else {
         qDebug() << "more than one channel?"; // I don't understand channels yet.
     }
@@ -50,16 +47,18 @@ ChatConnection::ChatConnection(QObject *parent, const AccountPtr account, const 
 
 //Private slots
 
-void ChatConnection::onChannelReady(Tp::PendingOperation*)
+void ChatConnection::onChannelReady(Tp::PendingOperation* op)
 {
+    qDebug() << "done";
     PendingContacts* p = m_connection->contactManager()->upgradeContacts(QList<ContactPtr>::fromSet(m_channel->groupContacts()),
                          QSet<Contact::Feature>() << Contact::FeatureAlias
                          << Contact::FeatureAvatarToken
+                         << Contact::FeatureAvatarData
                          << Contact::FeatureCapabilities
-                         << Contact::FeatureSimplePresence
-                                                                        );
+                         << Contact::FeatureSimplePresence);
     connect(p, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onPendingContactsReady(Tp::PendingOperation*)));
     qDebug() << "channel ready";
+
 }
 
 void ChatConnection::onPendingContactsReady(Tp::PendingOperation*)

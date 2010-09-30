@@ -21,6 +21,9 @@
 
 #include <TelepathyQt4/Channel>
 #include <TelepathyQt4/ClientRegistrar>
+#include <TelepathyQt4/AccountFactory>
+#include <TelepathyQt4/ConnectionFactory>
+
 
 #include <KApplication>
 #include <KAboutData>
@@ -39,7 +42,16 @@ int main(int argc, char *argv[])
 
     registerTypes();
 
-    ClientRegistrarPtr registrar = ClientRegistrar::create();
+
+    AccountFactoryPtr  accountFactory = AccountFactory::create(QDBusConnection::sessionBus(),
+                                                               Features() << Account::FeatureCore);
+
+    ConnectionFactoryPtr  connectionFactory = ConnectionFactory::create(QDBusConnection::sessionBus(),
+                                                               Features() <<  Connection::FeatureSelfContact
+                                                               << Connection::FeatureCore);
+
+
+    ClientRegistrarPtr registrar = ClientRegistrar::create(accountFactory, connectionFactory);
     MainWindow* mainWindow = new MainWindow();
 
     AbstractClientPtr handler = AbstractClientPtr::dynamicCast(SharedPtr<MainWindow>(mainWindow));
