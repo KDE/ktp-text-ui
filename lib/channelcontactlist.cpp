@@ -37,7 +37,6 @@ ChannelContactList::ChannelContactList(Tp::TextChannelPtr channel, QObject *pare
         //FIXME move this to a slot called "addContact" - also call this when chat gains a person.
         ChannelContactListContact*  contactProxy = new ChannelContactListContact(contact, this);
         connect(contactProxy, SIGNAL(contactPresenceChanged(Tp::ContactPtr, uint)), SIGNAL(contactPresenceChanged(Tp::ContactPtr, uint)));
-        qDebug() << contact->alias();
     }
     connect(channel.data(), SIGNAL(groupMembersChanged(Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Channel::GroupMemberChangeDetails)),
             SLOT(groupMembersChanged(Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Channel::GroupMemberChangeDetails)));
