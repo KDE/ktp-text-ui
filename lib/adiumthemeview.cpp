@@ -297,6 +297,8 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
 {
     //message
     htmlTemplate.replace("%message%", m_emoticons.theme().parseEmoticons(info.message()));
+    //service
+    htmlTemplate.replace("%service%", info.service());
     //time
     htmlTemplate.replace("%time%", KGlobal::locale()->formatTime(info.time().time(), true));
     //shortTime

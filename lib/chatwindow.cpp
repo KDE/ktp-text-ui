@@ -68,9 +68,6 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
 
     updateEnabledState(false);
 
-    qDebug() << "chat connection message support is:";
-    qDebug() << m_chatConnection->channel()->messagePartSupport();
-
     //format toolbar visibility
     m_showFormatToolbarAction->setCheckable(true);
     connect(m_showFormatToolbarAction, SIGNAL(toggled(bool)), ui->formatToolbar, SLOT(setVisible(bool)));
@@ -142,9 +139,11 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 //                qDebug() << key << part.value(key).variant();
 //            }
 //        }
+//      turns out we have no HTML, because no CM supports it yet
 
         messageInfo.setMessage(message.text());
         messageInfo.setTime(message.received());
+        messageInfo.setUserIconPath(message.sender()->avatarData().fileName);
         messageInfo.setSenderDisplayName(message.sender()->alias());
         messageInfo.setSenderScreenName(message.sender()->id());
 
@@ -166,7 +165,7 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     Tp::ContactPtr sender = m_chatConnection->connection()->selfContact();
     messageInfo.setSenderDisplayName(sender->alias());
     messageInfo.setSenderScreenName(sender->id());
-
+    messageInfo.setUserIconPath(sender->avatarData().fileName);
     ui->chatArea->addContentMessage(messageInfo);
 }
 
@@ -201,7 +200,7 @@ void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state
     case ChannelChatStateGone: {
         AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(i18n("%1 has left the chat").arg(contact->alias()));
-        statusMessage.setService("");
+        statusMessage.setService(m_chatConnection->connection()->protocolName());
         statusMessage.setStatus("away");
         statusMessage.setTime(QDateTime::currentDateTime());
         ui->chatArea->addStatusMessage(statusMessage);
@@ -277,16 +276,16 @@ void ChatWindow::onContactPresenceChange(Tp::ContactPtr contact, uint type)
 
 void ChatWindow::updateEnabledState(bool enable)
 {
-    //channel is now valid, start keeping track of contacts.
-    ChannelContactList* contactList = new ChannelContactList(m_chatConnection->channel(), this);
-    connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr, uint)), SLOT(onContactPresenceChange(Tp::ContactPtr, uint)));
-
     //update GUI
     ui->sendMessageBox->setEnabled(enable);
     ui->sendMessageButton->setEnabled(enable);
 
     //set up the initial chat window details.
     if (enable) {
+        //channel is now valid, start keeping track of contacts.
+        ChannelContactList* contactList = new ChannelContactList(m_chatConnection->channel(), this);
+        connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr, uint)), SLOT(onContactPresenceChange(Tp::ContactPtr, uint)));
+
         AdiumThemeHeaderInfo info;
         Tp::Contacts allContacts = m_chatConnection->channel()->groupContacts();
         //normal chat - self and one other person.
@@ -299,7 +298,7 @@ void ChatWindow::updateEnabledState(bool enable)
                     info.setDestinationDisplayName(it->alias());
                     info.setDestinationName(it->id());
                     info.setChatName(it->alias());
-                    info.setIncomingIconPath(it->avatarToken());
+                    info.setIncomingIconPath(it->avatarData().fileName);
                 }
             }
         } else {
@@ -311,7 +310,7 @@ void ChatWindow::updateEnabledState(bool enable)
         info.setSourceName(m_chatConnection->connection()->protocolName());
 
         //set up anything related to 'self'
-        info.setOutgoingIconPath(m_chatConnection->channel()->groupSelfContact()->avatarToken());
+        info.setOutgoingIconPath(m_chatConnection->channel()->groupSelfContact()->avatarData().fileName);
         info.setTimeOpened(QDateTime::currentDateTime());
         ui->chatArea->initialise(info);
 
@@ -389,3 +388,4 @@ KIcon ChatWindow::iconForPresence(uint presence)
 
     return KIcon(iconName);
 }
+
