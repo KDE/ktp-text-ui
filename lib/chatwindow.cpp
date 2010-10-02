@@ -37,6 +37,16 @@
 #include <TelepathyQt4/Message>
 #include <TelepathyQt4/Types>
 
+class ChatWindowPrivate
+{
+public:
+    /** Stores whether the channel is ready with all contacts upgraded*/
+    bool chatviewlInitialised;
+    MessageBoxEventFilter* messageBoxEventFilter;
+    QAction* showFormatToolbarAction;
+    bool isGroupChat;
+};
+
 
 //FIXME once TP::Factory stuff is in, remove all of ChatConnection, replace this with
 //ChatWindow::ChatWindow(ConnectionPtr,TextChannelPtr, QWidget* parent) :...
@@ -44,10 +54,13 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
         QWidget(parent),
         ui(new Ui::ChatWindow),
         m_chatConnection(chat),
-        m_chatviewlInitialised(false),
-        m_showFormatToolbarAction(new QAction(i18n("Show format options"), this)),
-        m_isGroupChat(false)
+        d(new ChatWindowPrivate)
 {
+
+    d->chatviewlInitialised = false;
+    d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
+    d->isGroupChat = false;
+
     ui->setupUi(this);
     ui->statusLabel->setText("");
 
@@ -69,14 +82,14 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     updateEnabledState(false);
 
     //format toolbar visibility
-    m_showFormatToolbarAction->setCheckable(true);
-    connect(m_showFormatToolbarAction, SIGNAL(toggled(bool)), ui->formatToolbar, SLOT(setVisible(bool)));
-    ui->sendMessageBox->addAction(m_showFormatToolbarAction);
+    d->showFormatToolbarAction->setCheckable(true);
+    connect(d->showFormatToolbarAction, SIGNAL(toggled(bool)), ui->formatToolbar, SLOT(setVisible(bool)));
+    ui->sendMessageBox->addAction(d->showFormatToolbarAction);
 
     //FIXME load whether to show/hide by default from config file (do per account)
     bool formatToolbarIsVisible = false;
     ui->formatToolbar->setVisible(formatToolbarIsVisible);
-    m_showFormatToolbarAction->setChecked(formatToolbarIsVisible);
+    d->showFormatToolbarAction->setChecked(formatToolbarIsVisible);
 
     //connect signals/slots from format toolbar
     connect(ui->formatColor, SIGNAL(released()), SLOT(onFormatColorReleased()));
@@ -95,15 +108,16 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     connect(ui->chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()));
 
     connect(ui->sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
-    messageBoxEventFilter = new MessageBoxEventFilter(this);
-    ui->sendMessageBox->installEventFilter(messageBoxEventFilter);
-    connect(messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
+    d->messageBoxEventFilter = new MessageBoxEventFilter(this);
+    ui->sendMessageBox->installEventFilter(d->messageBoxEventFilter);
+    connect(d->messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
 }
 
 
 ChatWindow::~ChatWindow()
 {
     delete ui;
+    delete d;
 }
 
 void ChatWindow::changeEvent(QEvent *e)
@@ -127,7 +141,7 @@ QString ChatWindow::title()
 
 void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
-    if (m_chatviewlInitialised) {
+    if (d->chatviewlInitialised) {
         AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
         //debug the message parts (looking for HTML etc)
@@ -171,7 +185,7 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
 
 void ChatWindow::chatViewReady()
 {
-    m_chatviewlInitialised = true;
+    d->chatviewlInitialised = true;
 
     //process any messages we've 'missed' whilst initialising.
     foreach(Tp::ReceivedMessage message, m_chatConnection->channel()->messageQueue()) {
@@ -267,7 +281,7 @@ void ChatWindow::onContactPresenceChange(Tp::ContactPtr contact, uint type)
 
 
     //if in a non-group chat situation, and the other contact has changed state...
-    if (! m_isGroupChat && ! isYou)
+    if (! d->isGroupChat && ! isYou)
     {
         KIcon icon = iconForPresence(type);
         Q_EMIT iconChanged(icon);
@@ -304,7 +318,7 @@ void ChatWindow::updateEnabledState(bool enable)
         } else {
             //some sort of group chat scenario.. Not sure how to create this yet.
             info.setChatName("Group Chat");
-            m_isGroupChat = true;
+            d->isGroupChat = true;
         }
 
         info.setSourceName(m_chatConnection->connection()->protocolName());

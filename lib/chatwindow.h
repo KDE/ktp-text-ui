@@ -33,6 +33,8 @@ namespace Ui
 class ChatWindow;
 }
 
+class ChatWindowPrivate;
+
 class MessageBoxEventFilter : public QObject
 {
     Q_OBJECT
@@ -101,18 +103,12 @@ private slots:
     void onFormatColorReleased();
 
 private:
-    Ui::ChatWindow *ui;
-    ChatConnection* m_chatConnection;
-
-    /** Stores whether the channel is ready with all contacts upgraded*/
-    bool m_chatviewlInitialised;
-
     KIcon iconForPresence(uint presence);
 
-    MessageBoxEventFilter* messageBoxEventFilter;
-    ChannelChatState lastRequestedChannelChatState;
-    QAction* m_showFormatToolbarAction;
-    bool m_isGroupChat;
+    Ui::ChatWindow *ui;
+    ChatConnection* m_chatConnection; //FIXME deprecate this whole class when factories is finished.
+    ChatWindowPrivate *d;
+
 };
 
 #endif // CHATWINDOW_H
