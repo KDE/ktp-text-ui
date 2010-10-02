@@ -63,6 +63,7 @@ void MainWindow::onStylesLoaded()
     QMap<QString, QString> styles = ChatWindowStyleManager::self()->getAvailableStyles();
     ChatWindowStyle *currentStyle = ui->chatView->chatStyle();
 
+    ui->styleComboBox->clear();
     QMap<QString, QString>::const_iterator i = styles.constBegin();
     while (i != styles.constEnd()) {
         ui->styleComboBox->addItem(i.value(), i.key());
