@@ -15,9 +15,11 @@ public:
 
 signals:
     void contactPresenceChanged(Tp::ContactPtr contact, uint type);
+    void contactAliasChanged(Tp::ContactPtr contact, QString alias);
 
 private slots:
     void onSimplePresenceChanged(const QString &status, uint type);
+    void onAliasChanged(const QString &alias);
 
 private:
     Tp::ContactPtr m_contact;
@@ -34,6 +36,7 @@ public:
 
 signals:
     void contactPresenceChanged(Tp::ContactPtr contact, uint type);
+    void contactAliasChanged(Tp::ContactPtr contact, QString alias);
 
 public slots:
     void groupMembersChanged(const Tp::Contacts &groupMembersAdded,

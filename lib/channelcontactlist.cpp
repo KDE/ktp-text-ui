@@ -21,6 +21,7 @@ ChannelContactListContact::ChannelContactListContact(Tp::ContactPtr contact, QOb
 {
     m_contact = contact;
     connect(m_contact.data(), SIGNAL(simplePresenceChanged(const QString, uint, const QString)), SLOT(onSimplePresenceChanged(QString, uint)));
+    connect(m_contact.data(), SIGNAL(aliasChanged(QString)), SLOT(onAliasChanged(QString)));
 }
 
 void ChannelContactListContact::onSimplePresenceChanged(const QString &status, uint type)
@@ -29,6 +30,10 @@ void ChannelContactListContact::onSimplePresenceChanged(const QString &status, u
     Q_EMIT contactPresenceChanged(m_contact, type);
 }
 
+void ChannelContactListContact::onAliasChanged(const QString &alias)
+{
+    Q_EMIT contactAliasChanged(m_contact, alias);
+}
 
 ChannelContactList::ChannelContactList(Tp::TextChannelPtr channel, QObject *parent) :
         QObject(parent)
@@ -37,6 +42,7 @@ ChannelContactList::ChannelContactList(Tp::TextChannelPtr channel, QObject *pare
         //FIXME move this to a slot called "addContact" - also call this when chat gains a person.
         ChannelContactListContact*  contactProxy = new ChannelContactListContact(contact, this);
         connect(contactProxy, SIGNAL(contactPresenceChanged(Tp::ContactPtr, uint)), SIGNAL(contactPresenceChanged(Tp::ContactPtr, uint)));
+        connect(contactProxy, SIGNAL(contactAliasChanged(Tp::ContactPtr, QString)), SIGNAL(contactAliasChanged(Tp::ContactPtr, QString)));
     }
     connect(channel.data(), SIGNAL(groupMembersChanged(Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Channel::GroupMemberChangeDetails)),
             SLOT(groupMembersChanged(Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Channel::GroupMemberChangeDetails)));
