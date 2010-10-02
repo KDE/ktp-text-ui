@@ -20,6 +20,7 @@
 #include "mainwindow.h"
 #include "chatwindow.h"
 
+#include <KColorScheme>
 
 inline ChannelClassList channelClassList()
 {
@@ -65,6 +66,7 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
 
     connect(newWindow, SIGNAL(titleChanged(QString)), SLOT(updateTabText(QString)));
     connect(newWindow,SIGNAL(iconChanged(KIcon)), SLOT(updateTabIcon(KIcon)));
+    connect(newWindow, SIGNAL(userTypingChanged(bool)), SLOT(onUserTypingChanged(bool)));
 
     resize(newWindow->sizeHint() - QSize(50, 50));// FUDGE
 
@@ -101,4 +103,22 @@ void MainWindow::onCurrentIndexChanged(int index)
 {
     ChatWindow* chat = qobject_cast<ChatWindow*>(widget(index));
     setWindowTitle(chat->title());
+}
+
+void MainWindow::onUserTypingChanged(bool isTyping)
+{
+    QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
+    if (sender)
+    {
+        KColorScheme scheme(QPalette::Active, KColorScheme::Window);
+        int tabIndex = indexOf(sender);
+        if (isTyping)
+        {
+            this->setTabTextColor(tabIndex, scheme.foreground(KColorScheme::PositiveText).color() );
+        }
+        else
+        {
+            this->setTabTextColor(tabIndex, scheme.foreground(KColorScheme::NormalText).color() );
+        }
+    }
 }

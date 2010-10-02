@@ -104,7 +104,7 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     connect(m_chatConnection, SIGNAL(channelReadyStateChanged(bool)), SLOT(updateEnabledState(bool)));
     connect(m_chatConnection->channel().data(), SIGNAL(messageReceived(Tp::ReceivedMessage)), SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
     connect(m_chatConnection->channel().data(), SIGNAL(messageSent(Tp::Message, Tp::MessageSendingFlags, QString)), SLOT(handleMessageSent(Tp::Message, Tp::MessageSendingFlags, QString)));
-    connect(m_chatConnection->channel().data(), SIGNAL(chatStateChanged(Tp::ContactPtr, ChannelChatState)), SLOT(updateChatStatus(Tp::ContactPtr, ChannelChatState)));
+    connect(m_chatConnection->channel().data(), SIGNAL(chatStateChanged(Tp::ContactPtr, ChannelChatState)), SLOT(onChatStatusChanged(Tp::ContactPtr, ChannelChatState)));
     connect(ui->sendMessageButton, SIGNAL(released()), SLOT(sendMessage()));
     connect(ui->chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()));
 
@@ -203,13 +203,15 @@ void ChatWindow::sendMessage()
     }
 }
 
-void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state)
+void ChatWindow::onChatStatusChanged(Tp::ContactPtr contact, ChannelChatState state)
 {
     //don't show our own status changes.
     if (contact == m_chatConnection->connection()->selfContact())
     {
         return;
     }
+
+    bool contactIsTyping = false;
 
     switch (state) {
     case ChannelChatStateGone: {
@@ -224,15 +226,33 @@ void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state
     case ChannelChatStateInactive:
         //FIXME send a 'chat timed out' message to chatview
         break;
-    case ChannelChatStateActive:
-        //This is the normal state.
-        ui->statusLabel->setText("");
+    case ChannelChatStateActive:     
     case ChannelChatStatePaused:
-        //not sure what this means..safest to do nothing.
         break;
     case ChannelChatStateComposing:
-        ui->statusLabel->setText(i18n("%1 is typing a message").arg(contact->alias()));
+        contactIsTyping = true;
     }
+
+
+    if (!contactIsTyping)
+    {
+        //In a multiperson chat just because this user is no longer typing it doesn't mean that no-one is.
+        //loop through each contact, check no-one is in composing mode.
+        foreach (Tp::ContactPtr contact, m_chatConnection->channel()->groupContacts())
+        {
+            if (contact == m_chatConnection->connection()->selfContact())
+            {
+                continue;
+            }
+
+            if (m_chatConnection->channel()->chatState(contact) == ChannelChatStateComposing)
+            {
+                contactIsTyping = true;
+            }
+        }
+    }
+
+    emit userTypingChanged(contactIsTyping);
 }
 
 

@@ -63,6 +63,8 @@ private slots:
     /** keep the main window title in line with active tab */
     void onCurrentIndexChanged(int index);
 
+    void onUserTypingChanged(bool isTyping);
+
 };
 
 #endif // REALCLIENTHANDLER_H
