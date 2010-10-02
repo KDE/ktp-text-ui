@@ -233,8 +233,6 @@ void ChatWindow::updateChatStatus(Tp::ContactPtr contact, ChannelChatState state
     case ChannelChatStateComposing:
         ui->statusLabel->setText(i18n("%1 is typing a message").arg(contact->alias()));
     }
-
-
 }
 
 

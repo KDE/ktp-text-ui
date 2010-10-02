@@ -75,7 +75,7 @@ protected slots:
     /** Enable/Disable buttons in the chat window*/
     void updateEnabledState(bool enabled);
 
-    void updateChatStatus(Tp::ContactPtr contact, ChannelChatState state);
+    void onChatStatusChanged(Tp::ContactPtr contact, ChannelChatState state);
 
     void onContactPresenceChange(Tp::ContactPtr, uint type);
 
