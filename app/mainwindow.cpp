@@ -99,5 +99,6 @@ void MainWindow::updateTabIcon(KIcon newIcon)
 
 void MainWindow::onCurrentIndexChanged(int index)
 {
-    setWindowTitle(tabText(index));
+    ChatWindow* chat = qobject_cast<ChatWindow*>(widget(index));
+    setWindowTitle(chat->title());
 }

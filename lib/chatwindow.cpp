@@ -45,6 +45,7 @@ public:
     MessageBoxEventFilter* messageBoxEventFilter;
     QAction* showFormatToolbarAction;
     bool isGroupChat;
+    QString title;
 };
 
 
@@ -135,7 +136,7 @@ void ChatWindow::changeEvent(QEvent *e)
 
 QString ChatWindow::title()
 {
-    return "not implemented yet.";
+    return d->title;
 }
 
 
@@ -329,7 +330,8 @@ void ChatWindow::updateEnabledState(bool enable)
         ui->chatArea->initialise(info);
 
         //inform anyone using the class of the new name for this chat.
-        Q_EMIT titleChanged(info.chatName());
+        d->title = info.chatName();
+        Q_EMIT titleChanged(d->title);
         //FIXME emit the correct icon here too
     }
 }
