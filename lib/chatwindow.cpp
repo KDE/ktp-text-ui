@@ -63,7 +63,6 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     d->isGroupChat = false;
 
     ui->setupUi(this);
-    ui->statusLabel->setText("");
 
     ui->formatColor->setText("");
     ui->formatColor->setIcon(KIcon("format-text-color"));
@@ -105,7 +104,6 @@ ChatWindow::ChatWindow(ChatConnection* chat, QWidget *parent) :
     connect(m_chatConnection->channel().data(), SIGNAL(messageReceived(Tp::ReceivedMessage)), SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
     connect(m_chatConnection->channel().data(), SIGNAL(messageSent(Tp::Message, Tp::MessageSendingFlags, QString)), SLOT(handleMessageSent(Tp::Message, Tp::MessageSendingFlags, QString)));
     connect(m_chatConnection->channel().data(), SIGNAL(chatStateChanged(Tp::ContactPtr, ChannelChatState)), SLOT(onChatStatusChanged(Tp::ContactPtr, ChannelChatState)));
-    connect(ui->sendMessageButton, SIGNAL(released()), SLOT(sendMessage()));
     connect(ui->chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()));
 
     connect(ui->sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
@@ -311,7 +309,6 @@ void ChatWindow::updateEnabledState(bool enable)
 {
     //update GUI
     ui->sendMessageBox->setEnabled(enable);
-    ui->sendMessageButton->setEnabled(enable);
 
     //set up the initial chat window details.
     if (enable) {

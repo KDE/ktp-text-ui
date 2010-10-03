@@ -39,7 +39,7 @@ class MessageBoxEventFilter : public QObject
 {
     Q_OBJECT
 public:
-    MessageBoxEventFilter(QObject* parent = 0) : QObject(parent) {};
+    MessageBoxEventFilter(QObject* parent = 0) : QObject(parent) {}
     virtual ~MessageBoxEventFilter() {}
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
