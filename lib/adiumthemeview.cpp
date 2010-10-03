@@ -63,9 +63,15 @@ AdiumThemeView::AdiumThemeView(QWidget *parent) :
         m_variantPath = QString("Variants/%1.css").arg(variant);
         m_variantName = variant;
     } else {
-        m_variantPath = QString("Variants/%1.css").arg(m_chatStyle->defaultVariantName());
-        m_variantName = m_chatStyle->defaultVariantName();
+        if(m_chatStyle->getVariants().contains(m_chatStyle->defaultVariantName())) {
+            m_variantPath = QString("Variants/%1.css").arg(m_chatStyle->defaultVariantName());
+            m_variantName = m_chatStyle->defaultVariantName();
+        } else {
+            m_variantPath = QString("Variants/%1.css").arg(m_chatStyle->getVariants().keys().first());
+            m_variantName = m_chatStyle->getVariants().keys().first();
+        }
     }
+
     m_displayHeader = appearanceConfig.readEntry("displayHeader", false);
 
 
@@ -169,12 +175,13 @@ void AdiumThemeView::setChatStyle(ChatWindowStyle *chatStyle)
 
     //load the first variant
     QHash<QString, QString> variants = chatStyle->getVariants();
-    if(!chatStyle->defaultVariantName().isEmpty()) {
+    if(!chatStyle->defaultVariantName().isEmpty()
+            && variants.keys().contains(chatStyle->defaultVariantName())) {
         m_variantPath = variants.value(chatStyle->defaultVariantName());
         m_variantName = chatStyle->defaultVariantName();
     } else if (variants.keys().length() > 0) {
-        m_variantPath = variants.values()[0];
-        m_variantName = variants.keys()[0];
+        m_variantPath = variants.values().first();
+        m_variantName = variants.keys().first();
     } else {
         m_variantPath = "";
         m_variantName = "";
