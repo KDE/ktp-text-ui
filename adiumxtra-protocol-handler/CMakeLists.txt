@@ -15,7 +15,14 @@ kde4_add_ui_files(telepathy_chat_config_SRCS)
 
 kde4_add_executable(adiumxtra-protocol-handler ${telepathy_chat_config_SRCS})
 
-target_link_libraries(adiumxtra-protocol-handler ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTWEBKIT_LIBRARY} ${KDE4_KUTILS_LIBS} ktelepathy_chat_lib)
+target_link_libraries(adiumxtra-protocol-handler
+			${KDE4_KDECORE_LIBS}
+			${KDE4_KDEUI_LIBS}
+			${QT_QTWEBKIT_LIBRARY}
+			${KDE4_KUTILS_LIBS}
+			${QT_QTXML_LIBRARY}
+			${KDE4_KIO_LIBRARIES}
+			ktelepathy_chat_lib)
 
 
 install(TARGETS adiumxtra-protocol-handler ${INSTALL_TARGETS_DEFAULT_ARGS})
