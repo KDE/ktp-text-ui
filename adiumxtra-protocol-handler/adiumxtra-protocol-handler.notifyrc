@@ -1,17 +1,21 @@
 [Global]
 IconName=telepathy
 Comment=adiumxtra
+Comment[x-test]=xxadiumxtraxx
 Name=adiumxtra-protocol-handler
+Name[x-test]=xxadiumxtra-protocol-handlerxx
 
 
 [Event/chatstyleRequest]
 Name=Chatstyle Install Request
+Name[x-test]=xxChatstyle Install Requestxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
 
 [Event/chatstyleSuccess]
 Name=Installed Chatstyle successfully
+Name[x-test]=xxInstalled Chatstyle successfullyxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
@@ -19,18 +23,21 @@ Flags=Persistent
 
 [Event/chatstyleFailure]
 Name=Install Chatstyle Installation failed
+Name[x-test]=xxInstall Chatstyle Installation failedxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
 
 [Event/emoticonsRequest]
 Name=Emoticonset Install Request
+Name[x-test]=xxEmoticonset Install Requestxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
 
 [Event/emoticonsSuccess]
 Name=Installed Emoticonset successfully
+Name[x-test]=xxInstalled Emoticonset successfullyxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
@@ -38,6 +45,7 @@ Flags=Persistent
 
 [Event/emoticonsFailure]
 Name=Emoticonset Installation failed
+Name[x-test]=xxEmoticonset Installation failedxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
