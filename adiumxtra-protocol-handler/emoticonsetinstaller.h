@@ -13,12 +13,12 @@ class EmoticonSetInstaller : public BundleInstaller
 
     public:
         EmoticonSetInstaller(KArchive *archive, KTemporaryFile *tmpFile);
-        bool validate();
+        BundleStatus validate();
         QString bundleName();
         ~EmoticonSetInstaller() { kDebug(); };
 
     public Q_SLOTS:
-        bool install();
+        BundleStatus install();
 
 private:
     KArchive *m_archive;

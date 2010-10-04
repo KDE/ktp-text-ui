@@ -13,12 +13,12 @@ class ChatStyleInstaller : public BundleInstaller
 
     public:
         ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFile);
-        bool validate();
+        BundleInstaller::BundleStatus validate();
         QString bundleName();
         ~ChatStyleInstaller() { kDebug(); };
 
     public Q_SLOTS:
-        bool install();
+        BundleInstaller::BundleStatus install();
 
     private:
         KArchive *m_archive;

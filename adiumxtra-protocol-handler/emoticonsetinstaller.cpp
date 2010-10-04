@@ -16,7 +16,7 @@ EmoticonSetInstaller::EmoticonSetInstaller(KArchive *archive, KTemporaryFile *tm
     m_tmpFile = tmpFile;
 }
 
-bool EmoticonSetInstaller::validate()
+BundleInstaller::BundleStatus EmoticonSetInstaller::validate()
 {
     kDebug();
 
@@ -26,7 +26,6 @@ bool EmoticonSetInstaller::validate()
     m_archive->fileName();
     m_archive->directory();
     const KArchiveDirectory* rootDir = m_archive->directory();
-    int validResult = 0;
     const QStringList entries = rootDir->entries();
     // Will be reused later.
     QStringList::ConstIterator entriesIt, entriesItEnd = entries.end();
@@ -42,13 +41,13 @@ bool EmoticonSetInstaller::validate()
                    if(m_bundleName.isEmpty() && currentItem.endsWith(".AdiumEmoticonset")) {
                        m_bundleName = currentItem.remove(".AdiumEmoticonset");
                    }
-                   return true;
+                   return BundleValid;
                 }
             }
         }
     }
 
-    return false;
+    return BundleNotValid;
 }
 
 QString EmoticonSetInstaller::bundleName()
@@ -58,7 +57,7 @@ QString EmoticonSetInstaller::bundleName()
     return m_bundleName;
 }
 
-bool EmoticonSetInstaller::install()
+BundleInstaller::BundleStatus EmoticonSetInstaller::install()
 {
     kDebug();
 
@@ -66,5 +65,5 @@ bool EmoticonSetInstaller::install()
     emoticons.installTheme(m_tmpFile->fileName());
 
     emit(finished());
-    return true;
+    return BundleInstallOk;
 }

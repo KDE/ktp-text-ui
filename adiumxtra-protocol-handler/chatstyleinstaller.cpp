@@ -14,7 +14,7 @@ ChatStyleInstaller::ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFil
     m_tmpFile = tmpFile;
 }
 
-bool ChatStyleInstaller::validate()
+BundleInstaller::BundleStatus ChatStyleInstaller::validate()
 {
     kDebug();
 
@@ -37,7 +37,8 @@ bool ChatStyleInstaller::validate()
                 if (currentDir->entry(QString::fromUtf8("Contents/Info.plist"))) {
                    kDebug() << "Contents/Info.plist found";
                    KArchiveFile const *info = dynamic_cast<KArchiveFile const *>(currentDir->entry(QString::fromUtf8("Contents/Info.plist")));
-                   ChatStylePlistFileReader reader(info->data());
+                   QByteArray data = info->data();
+                   ChatStylePlistFileReader reader(data);
                    if(m_bundleName.isEmpty()) {
                        m_bundleName = reader.CFBundleName();
                    }
@@ -48,9 +49,9 @@ bool ChatStyleInstaller::validate()
     }
 
     if(validResult >= 2) {
-        return true;
+        return BundleValid;
     } else {
-        return false;
+        return BundleValid;
     }
 }
 
@@ -61,19 +62,15 @@ QString ChatStyleInstaller::bundleName()
     return m_bundleName;
 }
 
-bool ChatStyleInstaller::install()
+BundleInstaller::BundleStatus ChatStyleInstaller::install()
 {
     kDebug();
 
-    int status = ChatWindowStyleManager::self()->installStyle(m_archive->fileName());
+    BundleInstaller::BundleStatus status = static_cast<BundleInstaller::BundleStatus>(ChatWindowStyleManager::self()->installStyle(m_archive->fileName()));
     kDebug()<< "status " << status;
     delete(m_tmpFile);
 
     emit(finished());
 
-    if(!status) {
-        return true;
-    } else  {
-        return false;
-    }
+    return status;
 }
