@@ -18,12 +18,16 @@ class ChatStyleInstaller : public BundleInstaller
         ~ChatStyleInstaller() { kDebug(); };
 
     public Q_SLOTS:
+        void showRequest();
         BundleInstaller::BundleStatus install();
+        void showResult();
+        void ignoreRequest();
 
     private:
         KArchive *m_archive;
         KTemporaryFile *m_tmpFile;
         QString m_bundleName;
+        BundleInstaller::BundleStatus m_status;
 
 };
 

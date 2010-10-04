@@ -15,10 +15,14 @@ class BundleInstaller : public QObject
         virtual ~BundleInstaller(){ kDebug(); };
 
     Q_SIGNALS:
-        void finished();
+        void ignoredRequest();
+        void finished(BundleInstaller::BundleStatus status);
+        void showedResult();
 
     public Q_SLOTS:
+        virtual void showRequest() = 0;
         virtual BundleStatus install() = 0;
+        virtual void showResult() = 0;
 };
 
 #endif // BUNDLEINSTALLER_H

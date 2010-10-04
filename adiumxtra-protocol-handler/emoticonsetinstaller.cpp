@@ -6,7 +6,8 @@
 #include <KArchiveFile>
 #include <KEmoticons>
 #include <KArchiveDirectory>
-
+#include <KNotification>
+#include <KLocale>
 
 EmoticonSetInstaller::EmoticonSetInstaller(KArchive *archive, KTemporaryFile *tmpFile)
 {
@@ -64,6 +65,52 @@ BundleInstaller::BundleStatus EmoticonSetInstaller::install()
     KEmoticons emoticons;
     emoticons.installTheme(m_tmpFile->fileName());
 
-    emit(finished());
+    // we trust in KEmoticons as it gives us no status information
+    // installTheme only returns a list of installed themes if we compare the list before and after
+    // the style could have been updated and the list would not have changed 
+    emit(finished(BundleInstallOk));
     return BundleInstallOk;
+}
+
+void EmoticonSetInstaller::showRequest()
+{
+    kDebug();
+
+    KNotification *notification = new KNotification("emoticonsRequest", NULL, KNotification::Persistent);
+    notification->setText( i18n("Install Emoticonset %1", this->bundleName()) );
+    notification->setActions( QStringList() << i18n("Install") << i18n("Cancel") );
+
+    QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));
+    QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
+
+    QObject::connect(notification, SIGNAL(ignored()), this, SLOT(ignoreRequest()));
+    QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
+
+    QObject::connect(notification, SIGNAL(action2Activated()), this, SLOT(ignoreRequest()));
+    QObject::connect(notification, SIGNAL(action2Activated()), notification, SLOT(close()));
+
+    notification->sendEvent();
+}
+
+void EmoticonSetInstaller::showResult()
+{
+    kDebug();
+
+    KNotification *notification = new KNotification("emoticonsSuccess", NULL, KNotification::Persistent);
+    notification->setText( i18n("Installed Emoticonset %1 successfully.", this->bundleName()) );
+
+    notification->setActions( QStringList() << i18n("OK") );
+    QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
+    QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
+
+    notification->sendEvent();
+
+    emit(showedResult());
+}
+
+void EmoticonSetInstaller::ignoreRequest()
+{
+    kDebug();
+
+    emit(ignoredRequest());
 }

@@ -4,20 +4,40 @@ Comment=adiumxtra
 Name=adiumxtra-protocol-handler
 
 
-[Event/installchatstyle]
-Name=Install Chatstyle
+[Event/chatstyleRequest]
+Name=Chatstyle Install Request
 IconName=telepathy
 Action=Popup
 Flags=Persistent
 
-[Event/installemoticonset]
-Name=Install Emoticonset
+[Event/chatstyleSuccess]
+Name=Installed Chatstyle successfully
 IconName=telepathy
 Action=Popup
 Flags=Persistent
 
-[Event/packagenotrecognized]
-Name=Package not recognized
+
+[Event/chatstyleFailure]
+Name=Install Chatstyle Installation failed
+IconName=telepathy
+Action=Popup
+Flags=Persistent
+
+[Event/emoticonsRequest]
+Name=Emoticonset Install Request
+IconName=telepathy
+Action=Popup
+Flags=Persistent
+
+[Event/emoticonsSuccess]
+Name=Installed Emoticonset successfully
+IconName=telepathy
+Action=Popup
+Flags=Persistent
+
+
+[Event/emoticonsFailure]
+Name=Emoticonset Installation failed
 IconName=telepathy
 Action=Popup
 Flags=Persistent

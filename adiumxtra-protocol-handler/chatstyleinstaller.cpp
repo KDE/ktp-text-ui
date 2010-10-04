@@ -4,6 +4,9 @@
 #include <KDebug>
 #include <KTemporaryFile>
 #include <KArchiveFile>
+#include <KLocale>
+#include <KNotification>
+#include <KApplication>
 
 
 ChatStyleInstaller::ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFile)
@@ -51,7 +54,7 @@ BundleInstaller::BundleStatus ChatStyleInstaller::validate()
     if(validResult >= 2) {
         return BundleValid;
     } else {
-        return BundleValid;
+        return BundleNotValid;
     }
 }
 
@@ -70,7 +73,58 @@ BundleInstaller::BundleStatus ChatStyleInstaller::install()
     kDebug()<< "status " << status;
     delete(m_tmpFile);
 
-    emit(finished());
+    m_status = status;
+
+    emit(finished(status));
 
     return status;
+}
+
+void ChatStyleInstaller::showRequest()
+{
+    kDebug();
+
+    KNotification *notification = new KNotification("chatstyleRequest", NULL, KNotification::Persistent);
+    notification->setText( i18n("Install Chatstyle %1", this->bundleName()) );
+    notification->setActions( QStringList() << i18n("Install") << i18n("Cancel") );
+
+    QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));
+    QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
+
+    QObject::connect(notification, SIGNAL(ignored()), this, SLOT(ignoreRequest()));
+    QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
+
+    QObject::connect(notification, SIGNAL(action2Activated()), this, SLOT(ignoreRequest()));
+    QObject::connect(notification, SIGNAL(action2Activated()), notification, SLOT(close()));
+
+    notification->sendEvent();
+}
+
+void ChatStyleInstaller::showResult()
+{
+    kDebug();
+
+    KNotification *notification;
+    if(m_status == BundleInstaller::BundleInstallOk) {
+        notification = new KNotification("chatstyleSuccess", NULL, KNotification::Persistent);
+        notification->setText( i18n("Installed Chatstyle %1 successfully.", this->bundleName()) );
+    } else {
+        notification = new KNotification("chatstyleFailure", NULL, KNotification::Persistent);
+        notification->setText( i18n("Installation of Chatstyle %1 failed.", this->bundleName()) );
+    }
+
+    notification->setActions( QStringList() << i18n("OK") );
+    QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
+    QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
+
+    notification->sendEvent();
+
+    emit(showedResult());
+}
+
+void ChatStyleInstaller::ignoreRequest()
+{
+    kDebug();
+
+    emit(ignoredRequest());
 }

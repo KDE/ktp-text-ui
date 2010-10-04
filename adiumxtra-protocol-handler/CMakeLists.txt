@@ -6,6 +6,7 @@ set(telepathy_chat_config_SRCS
         bundleinstaller.cpp
         chatstyleinstaller.cpp
         emoticonsetinstaller.cpp
+        adiumxtraprotocolhandler.cpp
         main.cpp
 )
 
