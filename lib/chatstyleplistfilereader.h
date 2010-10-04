@@ -44,6 +44,17 @@ public:
     int defaultFontSize();
     QString defaultVariant();
     int messageViewVersion();
+    bool showUserIcons();
+    bool showUserIcons(const QString &variantName);
+    bool disableCombineConsecutive();
+    bool defaultBackgroundIsTransparent();
+    bool disableCustomBackground();
+    QString defaultBackgroundColor();
+    QString defaultBackgroundColor(const QString &variantName);
+    bool allowTextColors();
+    bool allowTextColors(const QString &variantName);
+    QString imageMask();
+
     Status status();
 
 
