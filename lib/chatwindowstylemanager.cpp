@@ -279,6 +279,7 @@ bool ChatWindowStyleManager::removeStyle(const QString &styleId)
 //    } else {
 //        return false;
 //    }
+    return false;
 }
 
 ChatWindowStyle *ChatWindowStyleManager::getValidStyleFromPool(const QString &styleId)
