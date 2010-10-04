@@ -1,0 +1,23 @@
+[Global]
+IconName=telepathy
+Comment=adiumxtra
+Name=adiumxtra-protocol-handler
+
+
+[Event/installchatstyle]
+Name=Install Chatstyle
+IconName=telepathy
+Action=Popup
+Flags=Persistent
+
+[Event/installemoticonset]
+Name=Install Emoticonset
+IconName=telepathy
+Action=Popup
+Flags=Persistent
+
+[Event/packagenotrecognized]
+Name=Package not recognized
+IconName=telepathy
+Action=Popup
+Flags=Persistent

@@ -1,0 +1,14 @@
+[Protocol]
+Type=Service
+exec=adiumxtra-protocol-handler "%U"
+protocol=adiumxtra
+input=none
+output=none
+helper=true
+listing=
+reading=false
+writing=false
+makedir=false
+deleting=false
+URIMode=rawuri
+Icon=evolution
