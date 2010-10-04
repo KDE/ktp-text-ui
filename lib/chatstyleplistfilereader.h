@@ -32,6 +32,7 @@ class ChatStylePlistFileReader
 {
 
 public:
+    enum Status { Ok = 0, CannotOpenFileError, ParseError, UnknownError };
     ChatStylePlistFileReader(const QString &fileName);
     ChatStylePlistFileReader(const QByteArray &file);
     virtual ~ChatStylePlistFileReader();
@@ -43,12 +44,14 @@ public:
     int defaultFontSize();
     QString defaultVariant();
     int messageViewVersion();
+    Status status();
 
 
 private:
-    QMap<QString, QVariant> data;
-    int readAndParseFile(QFile &file);
-    int parse(const QDomDocument &document);
+    class Private;
+    Private *d;
+    ChatStylePlistFileReader::Status readAndParseFile(QFile &file);
+    ChatStylePlistFileReader::Status parse(const QDomDocument &document);
 };
 
 #endif // CHATSTYLEPLISTFILEREADER_H

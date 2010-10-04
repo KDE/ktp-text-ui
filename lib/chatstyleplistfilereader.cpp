@@ -25,11 +25,23 @@
 #include <QVariant>
 #include <QDebug>
 
+class ChatStylePlistFileReader::Private
+{
+public:
+    Private() {}
+
+    ~Private() {}
+
+    QMap<QString, QVariant> data;
+    Status m_status;
+};
+
 ChatStylePlistFileReader::ChatStylePlistFileReader(const QString &fileName)
 {
-    QFile bla(fileName);
+    QFile file(fileName);
 
-    readAndParseFile(bla);
+    d = new Private();
+    d->m_status = readAndParseFile(file);
 }
 
 ChatStylePlistFileReader::ChatStylePlistFileReader(const QByteArray& fileContent)
@@ -37,31 +49,26 @@ ChatStylePlistFileReader::ChatStylePlistFileReader(const QByteArray& fileContent
     QDomDocument document;
     document.setContent(fileContent);
 
-    parse(document);
+    d = new Private();
+    d->m_status = parse(document);
 }
 
-int ChatStylePlistFileReader::readAndParseFile(QFile& file)
+ChatStylePlistFileReader::Status ChatStylePlistFileReader::readAndParseFile(QFile& file)
 {
     QDomDocument document;
 
     if (!file.open(QIODevice::ReadOnly)) {
-        return 1;
+        return CannotOpenFileError;
     } if (!document.setContent(&file)) {
         file.close();
-        return 2;
+        return UnknownError;
     }
     file.close();
 
-    if(!parse(document)) {
-        // everything ok
-        return 0;
-    } else {
-        // parse failed
-        return 3;
-    }
+     return parse(document);
 }
 
-int ChatStylePlistFileReader::parse(const QDomDocument &document)
+ChatStylePlistFileReader::Status ChatStylePlistFileReader::parse(const QDomDocument& document)
 {
     QString key, value;
     QDomNodeList keyElements = document.elementsByTagName("key");
@@ -69,48 +76,54 @@ int ChatStylePlistFileReader::parse(const QDomDocument &document)
         if (keyElements.at(i).nextSibling().toElement().tagName() != "key") {
             key = keyElements.at(i).toElement().text();
             value = keyElements.at(i).nextSibling().toElement().text();
-            data.insert(key, value);
+            d->data.insert(key, value);
         }
     }
 
-    return 0;
+    return Ok;
 }
 
 ChatStylePlistFileReader::~ChatStylePlistFileReader()
 {
+    delete d;
 }
 
 QString ChatStylePlistFileReader::CFBundleGetInfoString()
 {
-    return data.value("CFBundleGetInfoString").toString();
+    return d->data.value("CFBundleGetInfoString").toString();
 }
 
 QString ChatStylePlistFileReader::CFBundleName()
 {
-    return data.value("CFBundleName").toString();
+    return d->data.value("CFBundleName").toString();
 }
 
 QString ChatStylePlistFileReader::CFBundleIdentifier()
 {
-    return data.value("CFBundleIdentifier").toString();
+    return d->data.value("CFBundleIdentifier").toString();
 }
 
 QString ChatStylePlistFileReader::defaultFontFamily()
 {
-    return data.value("DefaultFontFamily").toString();
+    return d->data.value("DefaultFontFamily").toString();
 }
 
 int ChatStylePlistFileReader::defaultFontSize()
 {
-    return data.value("DefaultFontSize").toInt();
+    return d->data.value("DefaultFontSize").toInt();
 }
 
 QString ChatStylePlistFileReader::defaultVariant()
 {
-    return data.value("DefaultVariant").toString();
+    return d->data.value("DefaultVariant").toString();
 }
 
 int ChatStylePlistFileReader::messageViewVersion()
 {
-    return data.value("MessageViewVersion").toInt();
+    return d->data.value("MessageViewVersion").toInt();
+}
+
+ChatStylePlistFileReader::Status ChatStylePlistFileReader::status()
+{
+    return d->m_status;
 }
