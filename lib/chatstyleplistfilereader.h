@@ -25,13 +25,15 @@
 class QString;
 class QFile;
 class QVariant;
+class QDomDocument;
 
 
 class ChatStylePlistFileReader
 {
 
 public:
-    ChatStylePlistFileReader(QString fileName);
+    ChatStylePlistFileReader(const QString &fileName);
+    ChatStylePlistFileReader(const QByteArray &file);
     virtual ~ChatStylePlistFileReader();
 
     QString CFBundleGetInfoString();
@@ -45,7 +47,8 @@ public:
 
 private:
     QMap<QString, QVariant> data;
-    void readFile(QString& fileName);
+    int readAndParseFile(QFile &file);
+    int parse(const QDomDocument &document);
 };
 
 #endif // CHATSTYLEPLISTFILEREADER_H

@@ -25,24 +25,44 @@
 #include <QVariant>
 #include <QDebug>
 
-ChatStylePlistFileReader::ChatStylePlistFileReader(QString fileName)
+ChatStylePlistFileReader::ChatStylePlistFileReader(const QString &fileName)
 {
-    readFile(fileName);
+    QFile bla(fileName);
+
+    readAndParseFile(bla);
 }
 
-void ChatStylePlistFileReader::readFile(QString &fileName)
+ChatStylePlistFileReader::ChatStylePlistFileReader(const QByteArray& fileContent)
 {
-    QFile file(fileName);
+    QDomDocument document;
+    document.setContent(fileContent);
 
-    QDomDocument document = QDomDocument();
+    parse(document);
+}
+
+int ChatStylePlistFileReader::readAndParseFile(QFile& file)
+{
+    QDomDocument document;
+
     if (!file.open(QIODevice::ReadOnly)) {
-        return;
+        return 1;
     } if (!document.setContent(&file)) {
         file.close();
-        return;
+        return 2;
     }
     file.close();
 
+    if(!parse(document)) {
+        // everything ok
+        return 0;
+    } else {
+        // parse failed
+        return 3;
+    }
+}
+
+int ChatStylePlistFileReader::parse(const QDomDocument &document)
+{
     QString key, value;
     QDomNodeList keyElements = document.elementsByTagName("key");
     for (int i = 0; i < keyElements.size(); i++) {
@@ -52,6 +72,8 @@ void ChatStylePlistFileReader::readFile(QString &fileName)
             data.insert(key, value);
         }
     }
+
+    return 0;
 }
 
 ChatStylePlistFileReader::~ChatStylePlistFileReader()
