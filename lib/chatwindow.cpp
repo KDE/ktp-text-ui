@@ -32,6 +32,8 @@
 #include <QWidget>
 
 #include <KColorDialog>
+#include <KNotification>
+
 //#include <Sonnet/Highlighter>
 
 #include <TelepathyQt4/Message>
@@ -164,6 +166,11 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
         m_chatConnection->channel()->acknowledge(QList<Tp::ReceivedMessage>() << message);
 
         emit messageReceived();
+
+        qDebug() << "sending notification";
+        KNotification *notification= new KNotification ("kde_telepathy_contact_incoming", this);
+        notification->setText("New Message");
+        notification->sendEvent();
     }
 
     //if the window isn't ready, we don't acknowledge the mesage. We process them as soon as we are ready.

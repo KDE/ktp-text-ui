@@ -24,8 +24,6 @@ TODO (in no particular order):
 
   Turn chat config into a KCModule
 
-  Fix bug: if the .plist file has a DefaultVariant that doesn't exist, no variant gets selected.
-
   Fix bug: default theme Renkoo doesn't have aligned bubble images when name is on the right. Potential underlying Adium theme issue.
 
   Support avatars.
@@ -47,22 +45,15 @@ TODO (in no particular order):
 
   Build formatting into the application.
 
-  Sprint decided to have a automatically resizing send message box. This is a pain.
-
   Notifications.
 
   in the lib:
-    emit signal when a message is received 
-    emit signal when user typing changes.
-    getter for title();
     signal + getter for what icon the tab should have too.
     have a appendStatusMessage() method in chatWindow for apps to use
     
   in the app, colour tab text like Kopete.
 
   check all theme keywords are both set and tested
-
-  maybe: split status/messages messageinfo classes away from each other.
 
   support conferences/rooms better - make sure header parsing is correct, use topic.html
 
