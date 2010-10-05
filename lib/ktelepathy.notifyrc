@@ -1,7 +1,7 @@
 [Global]
 IconName=telepathy
 Comment=KDE Telepathy
-Name=telepathy-chat-handler
+Name=ktelepathy
 
 [Context/group]
 Name=Group
