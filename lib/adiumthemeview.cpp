@@ -160,8 +160,6 @@ void AdiumThemeView::setVariant(const QString &variant)
     m_variantName = variant;
     m_variantPath = QString("Variants/%1.css").arg(variant);
 
-    //FIXME update the display!
-    initialise(m_chatInfo);
 }
 
 ChatWindowStyle* AdiumThemeView::chatStyle() const
@@ -186,7 +184,6 @@ void AdiumThemeView::setChatStyle(ChatWindowStyle *chatStyle)
         m_variantPath = "";
         m_variantName = "";
     }
-    initialise(m_chatInfo);
 }
 
 
@@ -198,7 +195,6 @@ bool AdiumThemeView::isHeaderDisplayed() const
 void AdiumThemeView::setHeaderDisplayed(bool displayHeader)
 {
     m_displayHeader = displayHeader;
-    initialise(m_chatInfo);
 }
 
 

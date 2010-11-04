@@ -19,16 +19,14 @@ MainWindow::MainWindow(QWidget *parent) :
     // manager->loadStyles();
     connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
-    //set up a pretend config chat.
-    AdiumThemeHeaderInfo info;
 
-    info.setChatName("A demo chat");
-    info.setSourceName("Jabber");
-    info.setTimeOpened(QDateTime::currentDateTime());
-    info.setDestinationName("BobMarley@yahoo.com");
-    info.setDestinationDisplayName("Bob Marley");
+    m_demoChatHeader.setChatName("A demo chat");
+    m_demoChatHeader.setSourceName("Jabber");
+    m_demoChatHeader.setTimeOpened(QDateTime::currentDateTime());
+    m_demoChatHeader.setDestinationName("BobMarley@yahoo.com");
+    m_demoChatHeader.setDestinationDisplayName("Bob Marley");
 
-    ui->chatView->initialise(info);
+    ui->chatView->initialise(m_demoChatHeader);
 
     ui->showHeader->setChecked(ui->chatView->isHeaderDisplayed());
 
@@ -104,6 +102,7 @@ void MainWindow::onStyleSelected(int index)
         ui->chatView->setChatStyle(style);
         updateVariantsList();
         ui->showHeader->setEnabled(style->hasHeader());
+        ui->chatView->initialise(m_demoChatHeader);
     }
 }
 
@@ -111,12 +110,14 @@ void MainWindow::onVariantSelected(const QString &variant)
 {
     kDebug();
     ui->chatView->setVariant(variant);
+    ui->chatView->initialise(m_demoChatHeader);
 }
 
 
 void MainWindow::onShowHeaderChanged(bool showHeader)
 {
     ui->chatView->setHeaderDisplayed(showHeader);
+    ui->chatView->initialise(m_demoChatHeader);
 }
 
 

@@ -46,9 +46,11 @@ public:
     void setVariant(const QString& variant);
 
     ChatWindowStyle *chatStyle() const;
+    /** Set the theme to use. Display will only change once initialise() is called.*/
     void setChatStyle(ChatWindowStyle* chatStyle);
 
     bool isHeaderDisplayed() const;
+    /** Set whether a header is displayed at the top of the window. Output will only change once initialise() is called. */
     void setHeaderDisplayed(bool);
     /* .. font, backgrounds, everything else.*/
 
@@ -67,8 +69,6 @@ private:
     QString replaceMessageKeywords(QString& htmlTemplate, const AdiumThemeMessageInfo&);
 
     QString formatTime(const QString&, const QDateTime&);
-
-    AdiumThemeHeaderInfo m_chatInfo;
 
     QString m_lastSender;
     bool m_displayHeader;

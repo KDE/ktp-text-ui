@@ -2,11 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QDialog>
+#include <adiumthemeheaderinfo.h>
 
 namespace Ui
 {
 class ChatWindowConfig;
 }
+
 
 class MainWindow : public QDialog
 {
@@ -22,6 +24,7 @@ protected:
 
 private:
     Ui::ChatWindowConfig *ui;
+    AdiumThemeHeaderInfo m_demoChatHeader;
 
 private slots:
     void sendDemoMessages();
