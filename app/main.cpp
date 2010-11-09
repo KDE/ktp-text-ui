@@ -32,7 +32,7 @@
 int main(int argc, char *argv[])
 {
 
-    KAboutData aboutData("ktelepathy",
+    KAboutData aboutData("telepathy-chat-handler",
                          0,
                          ki18n("Telepathy Chat Handler"),
                          "0.1");
