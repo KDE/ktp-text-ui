@@ -38,10 +38,23 @@ AdiumThemeHeaderInfo::AdiumThemeHeaderInfo()
 {
 }
 
+AdiumThemeHeaderInfo::AdiumThemeHeaderInfo(const AdiumThemeHeaderInfo &other) :
+    d(new AdiumThemeHeaderInfoPrivate(*other.d))
+{
+
+}
+
 AdiumThemeHeaderInfo::~AdiumThemeHeaderInfo()
 {
     delete d;
 }
+
+AdiumThemeHeaderInfo& AdiumThemeHeaderInfo::operator=(const AdiumThemeHeaderInfo& other)
+{
+    *d = *other.d;
+    return *this;
+}
+
 
 QString AdiumThemeHeaderInfo::chatName() const
 {

@@ -5,12 +5,14 @@
 class QString;
 class AdiumThemeContentInfoPrivate;
 
-
-
 class AdiumThemeContentInfo : public AdiumThemeMessageInfo
 {
 public:
     explicit AdiumThemeContentInfo(AdiumThemeMessageInfo::MessageType);
+    explicit AdiumThemeContentInfo(const AdiumThemeContentInfo &other);
+    ~AdiumThemeContentInfo();
+    AdiumThemeContentInfo &operator=(const AdiumThemeContentInfo &other);
+
 
     /** Path to the user icon associated with this message */
     QString userIconPath() const;

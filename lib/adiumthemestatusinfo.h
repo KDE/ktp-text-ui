@@ -9,6 +9,10 @@ class AdiumThemeStatusInfo : public AdiumThemeMessageInfo
 {
 public:
     explicit AdiumThemeStatusInfo();
+    explicit AdiumThemeStatusInfo(const AdiumThemeStatusInfo &other);
+
+    ~AdiumThemeStatusInfo();
+    AdiumThemeStatusInfo &operator=(const AdiumThemeStatusInfo &other);
 
     /** A description of the status event. This is neither in the user's local language nor expected to be displayed*/
     QString status() const;

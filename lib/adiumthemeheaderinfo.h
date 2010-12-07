@@ -32,7 +32,9 @@ class AdiumThemeHeaderInfo
 {
 public:
     AdiumThemeHeaderInfo();
+    AdiumThemeHeaderInfo(const AdiumThemeHeaderInfo &other);
     ~AdiumThemeHeaderInfo();
+    AdiumThemeHeaderInfo &operator=(const AdiumThemeHeaderInfo &other);
 
     /** A name for the chat. For a one-on-one chat, this will be the display name of the remote user. For a group chat, it is the group chat name or topic, as appropriate. */
     QString chatName() const;

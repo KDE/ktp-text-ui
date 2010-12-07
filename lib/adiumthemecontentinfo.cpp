@@ -20,6 +20,25 @@ AdiumThemeContentInfo::AdiumThemeContentInfo(AdiumThemeMessageInfo::MessageType 
 
 }
 
+AdiumThemeContentInfo::AdiumThemeContentInfo(const AdiumThemeContentInfo &other) :
+    AdiumThemeMessageInfo(other),
+    d(new AdiumThemeContentInfoPrivate(*other.d))
+{
+
+}
+
+AdiumThemeContentInfo::~AdiumThemeContentInfo()
+{
+    delete d;
+}
+
+AdiumThemeContentInfo& AdiumThemeContentInfo::operator=(const AdiumThemeContentInfo& other)
+{
+    *d = *other.d;
+    return *this;
+}
+
+
 QString AdiumThemeContentInfo::userIconPath() const
 {
     return d->userIconPath;

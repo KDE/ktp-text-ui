@@ -21,6 +21,23 @@ AdiumThemeMessageInfo::AdiumThemeMessageInfo(MessageType type)
     d->type = type;
 }
 
+AdiumThemeMessageInfo::AdiumThemeMessageInfo(const AdiumThemeMessageInfo &other)
+    : d(new AdiumThemeMessageInfoPrivate(*other.d))
+{
+
+}
+
+AdiumThemeMessageInfo::~AdiumThemeMessageInfo()
+{
+    delete d;
+}
+
+AdiumThemeMessageInfo& AdiumThemeMessageInfo::operator=(const AdiumThemeMessageInfo& other)
+{
+    *d = *other.d;
+    return *this;
+}
+
 AdiumThemeMessageInfo::MessageType AdiumThemeMessageInfo::type() const
 {
     return d->type;
