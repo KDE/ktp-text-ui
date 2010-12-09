@@ -33,7 +33,7 @@
 
 using namespace Tp;
 
-inline ChannelClassList channelClassList();
+inline ChannelClassSpecList channelClassList();
 
 //In the future I want to have a (potential) list of tab widgets. Like Kopete presently. This may need a bit of a rewrite.
 

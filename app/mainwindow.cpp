@@ -25,29 +25,17 @@
 #include <TelepathyQt4/ChannelClassSpecList>
 
 
-inline ChannelClassList channelClassList()
+inline ChannelClassSpecList channelClassList()
 {
-    ChannelClassList filters;
-    QMap<QString, QDBusVariant> filter;
-    filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".ChannelType"),
-                  QDBusVariant(TELEPATHY_INTERFACE_CHANNEL_TYPE_TEXT));
-    filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".TargetHandleType"),
-                  QDBusVariant((uint) Tp::HandleTypeContact));
-    filters.append(filter);
-
-    filter.clear();
-    filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".ChannelType"),
-                  QDBusVariant(TELEPATHY_INTERFACE_CHANNEL_TYPE_TEXT));
-    filter.insert(QLatin1String(TELEPATHY_INTERFACE_CHANNEL ".TargetHandleType"),
-                  QDBusVariant((uint) Tp::HandleTypeRoom));
-    filters.append(filter);
-    return filters;
-}
+    return ChannelClassSpecList() << ChannelClassSpec::textChat()
+                                  << ChannelClassSpec::unnamedTextChat()
+                                  << ChannelClassSpec::textChatroom();
+}	
 
 
 MainWindow::MainWindow() :
         KTabWidget(),
-        AbstractClientHandler(ChannelClassSpecList())
+        AbstractClientHandler(channelClassList())
 {
     setTabReorderingEnabled(true);
     connect(this, SIGNAL(currentChanged(int)), SLOT(onCurrentIndexChanged(int)));
@@ -61,6 +49,7 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
         const QDateTime &userActionTime,
         const AbstractClientHandler::HandlerInfo &handlerInfo)
 {
+
     ChatConnection* chatConnection = new ChatConnection(this, account, connection, channels);
     ChatWindow* newWindow = new ChatWindow(chatConnection, this);
 
