@@ -22,6 +22,9 @@
 
 #include <KColorScheme>
 
+#include <TelepathyQt4/ChannelClassSpecList>
+
+
 inline ChannelClassList channelClassList()
 {
     ChannelClassList filters;
@@ -44,20 +47,19 @@ inline ChannelClassList channelClassList()
 
 MainWindow::MainWindow() :
         KTabWidget(),
-        AbstractClientHandler(channelClassList())
+        AbstractClientHandler(ChannelClassSpecList())
 {
     setTabReorderingEnabled(true);
     connect(this, SIGNAL(currentChanged(int)), SLOT(onCurrentIndexChanged(int)));
 }
 
 void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
-                                const AccountPtr & account,
-                                const ConnectionPtr & connection,
-                                const QList< ChannelPtr > & channels,
-                                const QList< ChannelRequestPtr > & ,
-                                const QDateTime & ,
-                                const QVariantMap&
-                               )
+        const AccountPtr &account,
+        const ConnectionPtr &connection,
+        const QList<ChannelPtr> &channels,
+        const QList<ChannelRequestPtr> &requestsSatisfied,
+        const QDateTime &userActionTime,
+        const AbstractClientHandler::HandlerInfo &handlerInfo)
 {
     ChatConnection* chatConnection = new ChatConnection(this, account, connection, channels);
     ChatWindow* newWindow = new ChatWindow(chatConnection, this);

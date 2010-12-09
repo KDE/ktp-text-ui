@@ -51,7 +51,7 @@ void ChatConnection::onChannelReady(Tp::PendingOperation* op)
 {
     qDebug() << "done";
     PendingContacts* p = m_connection->contactManager()->upgradeContacts(QList<ContactPtr>::fromSet(m_channel->groupContacts()),
-                         QSet<Contact::Feature>() << Contact::FeatureAlias
+                         Features() << Contact::FeatureAlias
                          << Contact::FeatureAvatarToken
                          << Contact::FeatureAvatarData
                          << Contact::FeatureCapabilities

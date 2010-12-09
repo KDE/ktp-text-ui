@@ -44,13 +44,12 @@ public:
     MainWindow();
 
     virtual void handleChannels(const MethodInvocationContextPtr<> &context,
-                                const AccountPtr & account,
-                                const ConnectionPtr & connection,
-                                const QList< ChannelPtr > & channels,
-                                const QList< ChannelRequestPtr > & requestsSatisfied,
-                                const QDateTime &  userActionTime,
-                                const QVariantMap & handlerInfo
-                               );
+            const AccountPtr &account,
+            const ConnectionPtr &connection,
+            const QList<ChannelPtr> &channels,
+            const QList<ChannelRequestPtr> &requestsSatisfied,
+            const QDateTime &userActionTime,
+            const AbstractClientHandler::HandlerInfo &handlerInfo);
 
     bool bypassApproval() const {
         return false;

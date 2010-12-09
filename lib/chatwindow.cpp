@@ -38,6 +38,7 @@
 
 #include <TelepathyQt4/Message>
 #include <TelepathyQt4/Types>
+#include <TelepathyQt4/AvatarData>
 
 class ChatWindowPrivate
 {
@@ -236,6 +237,8 @@ void ChatWindow::onChatStatusChanged(Tp::ContactPtr contact, ChannelChatState st
         break;
     case ChannelChatStateComposing:
         contactIsTyping = true;
+    default:
+        qDebug() << QString("Unknown case %1").arg(state);
     }
 
 
