@@ -82,41 +82,6 @@ Sound=KDE-Im-Highlight-Msg.ogg
 Action=Sound|Popup|Taskbar
 Persistant=true
 
-
-[Event/kde_telepathy_contact_lowpriority]
-Name=Low Priority Messages
-Name[x-test]=xxLow Priority Messagesxx
-Comment=A message marked with a low priority has been received
-Comment[x-test]=xxA message marked with a low priority has been receivedxx
-Contexts=contact,group,class
-Action=None
-Persistant=true
-
-
-[Event/irc_event]
-Name=IRC Event
-Name[x-test]=xxIRC Eventxx
-Comment=An IRC event has occurred
-Comment[x-test]=xxAn IRC event has occurredxx
-Action=Popup
-Persistant=true
-
-[Event/connection_error]
-Name=Connection Error
-Name[x-test]=xxConnection Errorxx
-Comment=An error on connection has occurred
-Comment[x-test]=xxAn error on connection has occurredxx
-Action=Popup
-Persistant=true
-
-[Event/connection_lost]
-Name=Connection Lost
-Name[x-test]=xxConnection Lostxx
-Comment=The connection have been lost
-Comment[x-test]=xxThe connection have been lostxx
-Action=Popup
-
-
 [Event/buzz_nudge]
 Name=Buzz/Nudge
 Name[x-test]=xxBuzz/Nudgexx
