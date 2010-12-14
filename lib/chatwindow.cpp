@@ -168,9 +168,35 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 
         emit messageReceived();
 
-        qDebug() << "sending notification";
-        KNotification *notification= new KNotification ("kde_telepathy_contact_incoming", this);
-        notification->setText("New Message");
+
+        //send the correct notification:
+        QString notificationType(0);
+        //choose the correct notification type:
+        //options are:
+        // kde_telepathy_contact_incoming
+        // kde_telepathy_contact_incoming_active_window - TODO - requires information not available yet.
+        // kde_telepathy_contact_highlight (contains your name)
+        // kde_telepathy_info_event
+
+        //if the message text contains sender name, it's a "highlighted message"
+        if(message.text().contains(m_chatConnection->connection()->selfContact()->alias())) {
+            notificationType = QLatin1String("kde_telepathy_contact_highlight");
+        } else if(message.messageType() == Tp::ChannelTextMessageTypeNotice) {
+            notificationType = QLatin1String("kde_telepathy_info_event");
+        } else {
+            notificationType = QLatin1String("kde_telepathy_contact_incoming");
+        }
+
+        KNotification *notification = new KNotification(notificationType, this);
+        notification->setTitle(i18n("%1 has sent you a message").arg(message.sender()->alias()));
+        notification->setText(message.text());
+        //allows per contact notifications
+        notification->addContext("contact", message.sender()->id());
+        //TODO notification->addContext("group",... Requires KDE Telepathy Contact to work out which group they are in.
+
+        notification->setActions(QStringList(i18n("View")));
+        connect(notification, SIGNAL(activated(unsigned int)), notification, SLOT(raiseWidget()));
+
         notification->sendEvent();
     }
 
@@ -188,6 +214,13 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     messageInfo.setSenderScreenName(sender->id());
     messageInfo.setUserIconPath(sender->avatarData().fileName);
     ui->chatArea->addContentMessage(messageInfo);
+
+
+    //send the notification that a message has been sent
+    KNotification *notification = new KNotification(QLatin1String("kde_telepathy_outgoing"), this);
+    notification->setTitle(i18n("You have sent a message"));
+    notification->setText(message.text());
+    notification->sendEvent();
 }
 
 void ChatWindow::chatViewReady()
