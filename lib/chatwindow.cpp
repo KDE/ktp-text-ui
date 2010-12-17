@@ -191,6 +191,7 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
         // kde_telepathy_info_event
 
         //if the message text contains sender name, it's a "highlighted message"
+        //TODO DrDanz suggested this could be a configurable list of words that make it highlighted.(seems like a good idea to me)
         if(message.text().contains(m_chatConnection->connection()->selfContact()->alias())) {
             notificationType = QLatin1String("kde_telepathy_contact_highlight");
         } else if(message.messageType() == Tp::ChannelTextMessageTypeNotice) {
