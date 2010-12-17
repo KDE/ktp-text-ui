@@ -33,6 +33,9 @@
 
 #include <KColorDialog>
 #include <KNotification>
+#include <KAboutData>
+#include <KComponentData>
+
 
 //#include <Sonnet/Highlighter>
 
@@ -49,8 +52,17 @@ public:
     QAction* showFormatToolbarAction;
     bool isGroupChat;
     QString title;
+
+    KComponentData telepathyComponentData();
 };
 
+
+//FIXME I would like this to be part of the main KDE Telepathy library as a static function somewhere.
+KComponentData ChatWindowPrivate::telepathyComponentData()
+{
+    KAboutData telepathySharedAboutData("ktelepathy",0,ki18n(""),0);
+    return KComponentData(telepathySharedAboutData);
+}
 
 //FIXME once TP::Factory stuff is in, remove all of ChatConnection, replace this with
 //ChatWindow::ChatWindow(ConnectionPtr,TextChannelPtr, QWidget* parent) :...
@@ -170,7 +182,7 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 
 
         //send the correct notification:
-        QString notificationType(0);
+        QString notificationType;
         //choose the correct notification type:
         //options are:
         // kde_telepathy_contact_incoming
@@ -187,7 +199,9 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
             notificationType = QLatin1String("kde_telepathy_contact_incoming");
         }
 
+
         KNotification *notification = new KNotification(notificationType, this);
+        notification->setComponentData(d->telepathyComponentData());
         notification->setTitle(i18n("%1 has sent you a message").arg(message.sender()->alias()));
         notification->setText(message.text());
         //allows per contact notifications
@@ -218,6 +232,7 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
 
     //send the notification that a message has been sent
     KNotification *notification = new KNotification(QLatin1String("kde_telepathy_outgoing"), this);
+    notification->setComponentData(d->telepathyComponentData());
     notification->setTitle(i18n("You have sent a message"));
     notification->setText(message.text());
     notification->sendEvent();
