@@ -203,6 +203,13 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
         KNotification *notification = new KNotification(notificationType, this);
         notification->setComponentData(d->telepathyComponentData());
         notification->setTitle(i18n("%1 has sent you a message").arg(message.sender()->alias()));
+
+        QPixmap notificationPixmap;
+        if (notificationPixmap.load(message.sender()->avatarData().fileName))
+        {
+            notification->setPixmap(notificationPixmap);
+        }
+
         notification->setText(message.text());
         //allows per contact notifications
         notification->addContext("contact", message.sender()->id());
@@ -234,6 +241,11 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     KNotification *notification = new KNotification(QLatin1String("kde_telepathy_outgoing"), this);
     notification->setComponentData(d->telepathyComponentData());
     notification->setTitle(i18n("You have sent a message"));
+    QPixmap notificationPixmap;
+    if (notificationPixmap.load(sender->avatarData().fileName))
+    {
+        notification->setPixmap(notificationPixmap);
+    }
     notification->setText(message.text());
     notification->sendEvent();
 }
