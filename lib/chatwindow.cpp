@@ -60,7 +60,7 @@ public:
 //FIXME I would like this to be part of the main KDE Telepathy library as a static function somewhere.
 KComponentData ChatWindowPrivate::telepathyComponentData()
 {
-    KAboutData telepathySharedAboutData("ktelepathy",0,ki18n(""),0);
+    KAboutData telepathySharedAboutData("ktelepathy",0,KLocalizedString(),0);
     return KComponentData(telepathySharedAboutData);
 }
 
