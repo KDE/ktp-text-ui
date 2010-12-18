@@ -38,6 +38,7 @@ MainWindow::MainWindow() :
         AbstractClientHandler(channelClassList())
 {
     setTabReorderingEnabled(true);
+    setDocumentMode(true);
     connect(this, SIGNAL(currentChanged(int)), SLOT(onCurrentIndexChanged(int)));
 }
 
@@ -60,6 +61,7 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
     connect(newWindow, SIGNAL(userTypingChanged(bool)), SLOT(onUserTypingChanged(bool)));
 
     resize(newWindow->sizeHint() - QSize(50, 50));// FUDGE
+
 
     context->setFinished();
 }
