@@ -203,7 +203,7 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 
         KNotification *notification = new KNotification(notificationType, this);
         notification->setComponentData(d->telepathyComponentData());
-        notification->setTitle(i18n("%1 has sent you a message").arg(message.sender()->alias()));
+        notification->setTitle(i18n("%1 has sent you a message", message.sender()->alias()));
 
         QPixmap notificationPixmap;
         if (notificationPixmap.load(message.sender()->avatarData().fileName))
@@ -283,7 +283,7 @@ void ChatWindow::onChatStatusChanged(Tp::ContactPtr contact, ChannelChatState st
     switch (state) {
     case ChannelChatStateGone: {
         AdiumThemeStatusInfo statusMessage;
-        statusMessage.setMessage(i18n("%1 has left the chat").arg(contact->alias()));
+        statusMessage.setMessage(i18n("%1 has left the chat", contact->alias()));
         statusMessage.setService(m_chatConnection->connection()->protocolName());
         statusMessage.setStatus("away");
         statusMessage.setTime(QDateTime::currentDateTime());
@@ -334,21 +334,21 @@ void ChatWindow::onContactPresenceChange(Tp::ContactPtr contact, uint type)
     switch (type) {
     case Tp::ConnectionPresenceTypeOffline:
         if (! isYou) {
-            message = i18n("%1 is offline").arg(contact->alias());
+            message = i18n("%1 is offline", contact->alias());
         } else {
             message = i18n("You are now marked as offline");
         }
         break;
     case Tp::ConnectionPresenceTypeAvailable:
         if (! isYou) {
-            message = i18n("%1 is online").arg(contact->alias());
+            message = i18n("%1 is online", contact->alias());
         } else {
             message = i18n("You are now marked as online");
         }
         break;
     case Tp::ConnectionPresenceTypeAway:
         if (! isYou) {
-            message = i18n("%1 is busy").arg(contact->alias());
+            message = i18n("%1 is busy", contact->alias());
         } else {
             message = i18n("You are now marked as busy");
         }
