@@ -25,8 +25,8 @@
 #include <KIcon>
 
 #include <TelepathyQt4/ReceivedMessage>
-#include "chatconnection.h"
 
+using namespace Tp;
 
 namespace Ui
 {
@@ -52,7 +52,7 @@ class ChatWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChatWindow(ChatConnection* chat, QWidget *parent = 0);
+    explicit ChatWindow(const Tp::TextChannelPtr & channel, QWidget *parent = 0);
     ~ChatWindow();
 
 
@@ -106,7 +106,6 @@ private:
     KIcon iconForPresence(uint presence);
 
     Ui::ChatWindow *ui;
-    ChatConnection* m_chatConnection; //FIXME deprecate this whole class when factories is finished.
     ChatWindowPrivate *d;
 
 };

@@ -43,15 +43,35 @@ int main(int argc, char *argv[])
     registerTypes();
 
 
-    AccountFactoryPtr  accountFactory = AccountFactory::create(QDBusConnection::sessionBus(),
-                                                               Features() << Account::FeatureCore);
+    Tp::AccountFactoryPtr accountFactory = Tp::AccountFactory::create(QDBusConnection::sessionBus(),
+                                                                      Tp::Account::FeatureCore);
 
-    ConnectionFactoryPtr  connectionFactory = ConnectionFactory::create(QDBusConnection::sessionBus(),
-                                                               Features() <<  Connection::FeatureSelfContact
-                                                               << Connection::FeatureCore);
+    Tp::ConnectionFactoryPtr  connectionFactory = Tp::ConnectionFactory::create(
+        QDBusConnection::sessionBus(),
+        Tp::Features() << Tp::Connection::FeatureSelfContact
+                       << Tp::Connection::FeatureCore
+    );
 
+    Tp::ChannelFactoryPtr channelFactory = Tp::ChannelFactory::create(QDBusConnection::sessionBus());
+    channelFactory->addCommonFeatures(Tp::Channel::FeatureCore);
 
-    ClientRegistrarPtr registrar = ClientRegistrar::create(accountFactory, connectionFactory);
+    Tp::Features textFeatures = Tp::Features() << Tp::TextChannel::FeatureMessageQueue
+                                               << Tp::TextChannel::FeatureMessageSentSignal
+                                               << Tp::TextChannel::FeatureChatState
+                                               << Tp::TextChannel::FeatureMessageCapabilities;
+    channelFactory->addFeaturesForTextChats(textFeatures);
+    channelFactory->addFeaturesForTextChatrooms(textFeatures);
+
+    Tp::ContactFactoryPtr contactFactory = Tp::ContactFactory::create(
+        Tp::Features() << Tp::Contact::FeatureAlias
+                       << Tp::Contact::FeatureAvatarToken
+                       << Tp::Contact::FeatureAvatarData
+                       << Tp::Contact::FeatureCapabilities
+                       << Tp::Contact::FeatureSimplePresence
+    );
+
+    Tp::ClientRegistrarPtr registrar = Tp::ClientRegistrar::create(accountFactory, connectionFactory,
+                                                                   channelFactory, contactFactory);
     MainWindow* mainWindow = new MainWindow();
 
     AbstractClientPtr handler = AbstractClientPtr::dynamicCast(SharedPtr<MainWindow>(mainWindow));

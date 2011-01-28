@@ -20,8 +20,6 @@
 #ifndef REALCLIENTHANDLER_H
 #define REALCLIENTHANDLER_H
 
-#include "chatconnection.h"
-
 #include <KTabWidget>
 #include <KIcon>
 

@@ -50,11 +50,18 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
         const QDateTime &userActionTime,
         const AbstractClientHandler::HandlerInfo &handlerInfo)
 {
+    Tp::TextChannelPtr textChannel;
+    foreach(const Tp::ChannelPtr & channel, channels) {
+        textChannel = Tp::TextChannelPtr::dynamicCast(channel);
+        if (textChannel) {
+            break;
+        }
+    }
+    Q_ASSERT(textChannel);
 
-    ChatConnection* chatConnection = new ChatConnection(this, account, connection, channels);
-    ChatWindow* newWindow = new ChatWindow(chatConnection, this);
+    ChatWindow* newWindow = new ChatWindow(textChannel, this);
 
-    addTab(newWindow,KIcon("user-online"),"");
+    addTab(newWindow, KIcon("user-online"), newWindow->title());
 
     connect(newWindow, SIGNAL(titleChanged(QString)), SLOT(updateTabText(QString)));
     connect(newWindow,SIGNAL(iconChanged(KIcon)), SLOT(updateTabIcon(KIcon)));

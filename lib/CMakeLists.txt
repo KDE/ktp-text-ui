@@ -1,5 +1,4 @@
 set(telepathy_chat_handler_lib_SRCS
-        chatconnection.cpp
         chatwindow.cpp
         chatwindowstyle.cpp
         chatwindowstylemanager.cpp
