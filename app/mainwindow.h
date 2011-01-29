@@ -20,6 +20,8 @@
 #ifndef REALCLIENTHANDLER_H
 #define REALCLIENTHANDLER_H
 
+#include "chatconnection.h"
+
 #include <KTabWidget>
 #include <KIcon>
 
@@ -28,8 +30,6 @@
 #include <TelepathyQt4/Channel>
 #include <TelepathyQt4/TextChannel>
 #include <TelepathyQt4/ReceivedMessage>
-
-#include "chatconnection.h"
 
 using namespace Tp;
 
