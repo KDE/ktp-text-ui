@@ -20,15 +20,16 @@
 #include "adiumxtraprotocolhandler.h"
 #include "chatstyleinstaller.h"
 #include "emoticonsetinstaller.h"
-#include <chatwindowstylemanager.h>
+
+#include "chatwindowstylemanager.h"
 
 #include <KDebug>
 #include <KZip>
 #include <KTar>
 #include <KEmoticons>
 #include <KTemporaryFile>
-#include <kio/job.h>
-#include <kio/netaccess.h>
+#include <KIO/Job>
+#include <KIO/NetAccess>
 #include <KNotification>
 #include <KIcon>
 
@@ -44,7 +45,7 @@ AdiumxtraProtocolHandler::~AdiumxtraProtocolHandler()
 
 BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &path)
 {
-   kDebug();
+    kDebug();
 
     KUrl url(path);
     if(url.protocol() == "adiumxtra") {
@@ -65,7 +66,10 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
     QString currentBundleMimeType = KMimeType::findByPath(tmpFile->fileName(), 0, false)->name();
     if (currentBundleMimeType == "application/zip") {
         archive = new KZip(tmpFile->fileName());
-    } else if (currentBundleMimeType == "application/x-compressed-tar" || currentBundleMimeType == "application/x-bzip-compressed-tar" || currentBundleMimeType == "application/x-gzip" || currentBundleMimeType == "application/x-bzip") {
+    } else if (currentBundleMimeType == "application/x-compressed-tar" ||
+               currentBundleMimeType == "application/x-bzip-compressed-tar" ||
+               currentBundleMimeType == "application/x-gzip" ||
+               currentBundleMimeType == "application/x-bzip") {
         archive = new KTar(tmpFile->fileName());
     } else {
         KNotification *notification = new KNotification("packagenotrecognized", NULL, KNotification::Persistent);
@@ -84,7 +88,7 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
 
     if (!archive->open(QIODevice::ReadOnly)) {
         delete archive;
-         kDebug() << "cannot open theme file";
+        kDebug() << "cannot open theme file";
         return BundleInstaller::BundleCannotOpen;
     }
 
@@ -92,7 +96,8 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
     if(installer->validate() == BundleInstaller::BundleValid) {
         installer->showRequest();
 
-        QObject::connect(installer, SIGNAL(finished(BundleInstaller::BundleStatus)), installer, SLOT(showResult()));
+        QObject::connect(installer, SIGNAL(finished(BundleInstaller::BundleStatus)),
+                         installer, SLOT(showResult()));
         QObject::connect(installer, SIGNAL(showedResult()), this, SLOT(quit()));
         QObject::connect(installer, SIGNAL(ignoredRequest()), this, SLOT(quit()));
 
@@ -103,13 +108,15 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
         if(installer->validate() == BundleInstaller::BundleValid) {
             installer->showRequest();
 
-            QObject::connect(installer, SIGNAL(finished(BundleInstaller::BundleStatus)), installer, SLOT(showResult()));
+            QObject::connect(installer, SIGNAL(finished(BundleInstaller::BundleStatus)),
+                             installer, SLOT(showResult()));
             QObject::connect(installer, SIGNAL(showedResult()), this, SLOT(quit()));
             QObject::connect(installer, SIGNAL(ignoredRequest()), this, SLOT(quit()));
 
             kDebug() << "sent emoticonset request";
         } else {
-            KNotification *notification = new KNotification("packagenotrecognized", NULL, KNotification::Persistent);
+            KNotification *notification = new KNotification("packagenotrecognized", NULL,
+                                                            KNotification::Persistent);
             notification->setText( i18n("Package type not recognized or not supported") );
             QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));
             QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));

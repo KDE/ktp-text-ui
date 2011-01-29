@@ -20,7 +20,7 @@
 #ifndef CHANNELCONTACTLIST_H
 #define CHANNELCONTACTLIST_H
 
-#include <QObject>
+#include <QtCore/QObject>
 #include <TelepathyQt4/TextChannel>
 #include <TelepathyQt4/Contact>
 #include <TelepathyQt4/Types>
@@ -30,11 +30,11 @@ class ChannelContactListContact: public QObject
 {
     Q_OBJECT
 public:
-    explicit ChannelContactListContact(Tp::ContactPtr, QObject *parent);
+    explicit ChannelContactListContact(const Tp::ContactPtr & contact, QObject *parent);
 
 signals:
-    void contactPresenceChanged(Tp::ContactPtr contact, uint type);
-    void contactAliasChanged(Tp::ContactPtr contact, QString alias);
+    void contactPresenceChanged(const Tp::ContactPtr & contact, uint type);
+    void contactAliasChanged(const Tp::ContactPtr & contact, const QString & alias);
 
 private slots:
     void onSimplePresenceChanged(const QString &status, uint type);
@@ -45,17 +45,15 @@ private:
 };
 
 
-
-
 class ChannelContactList : public QObject
 {
     Q_OBJECT
 public:
-    explicit ChannelContactList(Tp::TextChannelPtr, QObject *parent = 0);
+    explicit ChannelContactList(const Tp::TextChannelPtr & channel, QObject *parent = 0);
 
 signals:
-    void contactPresenceChanged(Tp::ContactPtr contact, uint type);
-    void contactAliasChanged(Tp::ContactPtr contact, QString alias);
+    void contactPresenceChanged(const Tp::ContactPtr & contact, uint type);
+    void contactAliasChanged(const Tp::ContactPtr & contact, const QString & alias);
 
 public slots:
     void groupMembersChanged(const Tp::Contacts &groupMembersAdded,
@@ -67,10 +65,5 @@ public slots:
 private:
     QSet<ChannelContactListContact> contacts;
 };
-
-
-
-
-
 
 #endif // CHANNELCONTACTLIST_H

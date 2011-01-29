@@ -17,51 +17,43 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef REALCLIENTHANDLER_H
-#define REALCLIENTHANDLER_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <KTabWidget>
 #include <KIcon>
 
 #include <TelepathyQt4/AbstractClientHandler>
-#include <TelepathyQt4/types.h>
-#include <TelepathyQt4/Channel>
-#include <TelepathyQt4/TextChannel>
-#include <TelepathyQt4/ReceivedMessage>
 
-using namespace Tp;
+//In the future I want to have a (potential) list of tab widgets.
+//Like Kopete presently. This may need a bit of a rewrite.
 
-inline ChannelClassSpecList channelClassList();
-
-//In the future I want to have a (potential) list of tab widgets. Like Kopete presently. This may need a bit of a rewrite.
-
-class MainWindow : public KTabWidget, public AbstractClientHandler
+class MainWindow : public KTabWidget, public Tp::AbstractClientHandler
 {
     Q_OBJECT
 public:
     MainWindow();
 
-    virtual void handleChannels(const MethodInvocationContextPtr<> &context,
-            const AccountPtr &account,
-            const ConnectionPtr &connection,
-            const QList<ChannelPtr> &channels,
-            const QList<ChannelRequestPtr> &requestsSatisfied,
-            const QDateTime &userActionTime,
-            const AbstractClientHandler::HandlerInfo &handlerInfo);
+    virtual void handleChannels(const Tp::MethodInvocationContextPtr<> & context,
+            const Tp::AccountPtr & account,
+            const Tp::ConnectionPtr & connection,
+            const QList<Tp::ChannelPtr> & channels,
+            const QList<Tp::ChannelRequestPtr> & requestsSatisfied,
+            const QDateTime & userActionTime,
+            const Tp::AbstractClientHandler::HandlerInfo & handlerInfo);
 
-    bool bypassApproval() const {
+    virtual bool bypassApproval() const {
         return false;
     }
 
 private slots:
-    void updateTabText(QString newTitle);
-    void updateTabIcon(KIcon newIcon);
+    void updateTabText(const QString & newTitle);
+    void updateTabIcon(const KIcon & newIcon);
 
     /** keep the main window title in line with active tab */
     void onCurrentIndexChanged(int index);
 
     void onUserTypingChanged(bool isTyping);
-
 };
 
-#endif // REALCLIENTHANDLER_H
+#endif // MAINWINDOW_H

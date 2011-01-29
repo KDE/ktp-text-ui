@@ -20,7 +20,7 @@
 #ifndef CHATTEXTEDIT_H
 #define CHATTEXTEDIT_H
 
-#include <QTextEdit>
+#include <QtGui/QTextEdit>
 
 class ChatTextEdit : public QTextEdit
 {

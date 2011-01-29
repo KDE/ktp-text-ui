@@ -17,12 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef TELEPATHYCHATINFO_H
-#define TELEPATHYCHATINFO_H
+#ifndef ADIUMTHEMEHEADERINFO_H
+#define ADIUMTHEMEHEADERINFO_H
 
-#include <QString>
-#include <QUrl>
-#include <QDateTime>
+#include <QtCore/QString>
+#include <QtCore/QUrl>
+#include <QtCore/QDateTime>
 
 /** Containts all the information needed for the header generation from the Adium/Kopete templates */
 
@@ -36,7 +36,8 @@ public:
     ~AdiumThemeHeaderInfo();
     AdiumThemeHeaderInfo &operator=(const AdiumThemeHeaderInfo &other);
 
-    /** A name for the chat. For a one-on-one chat, this will be the display name of the remote user. For a group chat, it is the group chat name or topic, as appropriate. */
+    /** A name for the chat. For a one-on-one chat, this will be the display name of the
+     * remote user. For a group chat, it is the group chat name or topic, as appropriate. */
     QString chatName() const;
     void setChatName(const QString& chatName);
 
@@ -52,12 +53,17 @@ public:
     QString destinationDisplayName() const;
     void setDestinationDisplayName(const QString& destinationDisplayName);
 
-    //FIXME this documentation should say (optional) - then the handing of not setting it should be handled in the getter method - or even the constructor.
-    /** A full path to the image of the remote user. If the remote user does not have an image, or this is a group chat so no image is appropriate, this tag will be replaced by incoming_icon.png, so you should have that file available if this tag is used. */
+    //FIXME this documentation should say (optional) - then the handing of not setting it
+    //should be handled in the getter method - or even the constructor.
+    /** A full path to the image of the remote user. If the remote user does not have an image,
+     * or this is a group chat so no image is appropriate, this tag will be replaced by
+     * incoming_icon.png, so you should have that file available if this tag is used. */
     QUrl incomingIconPath() const;
     void setIncomingIconPath(const QUrl& incomingIconPath);
 
-    /** A full path to the image for the local user. If the local user does not have an image this tag will be replaced by outgoing_icon.png, so you should have that file available if this tag is used. */
+    /** A full path to the image for the local user. If the local user does not have an image
+     * this tag will be replaced by outgoing_icon.png, so you should have that file available
+     * if this tag is used. */
     QUrl outgoingIconPath() const;
     void setOutgoingIconPath(const QUrl& outgoingIconPath);
 
@@ -70,4 +76,4 @@ private:
 
 };
 
-#endif // TELEPATHYCHATINFO_H
+#endif // ADIUMTHEMEHEADERINFO_H

@@ -23,33 +23,40 @@
 #include <KColorScheme>
 
 #include <TelepathyQt4/ChannelClassSpecList>
+#include <TelepathyQt4/TextChannel>
 
 
-inline ChannelClassSpecList channelClassList()
+inline Tp::ChannelClassSpecList channelClassList()
 {
-    return ChannelClassSpecList() << ChannelClassSpec::textChat()
-                                  << ChannelClassSpec::unnamedTextChat()
-                                  << ChannelClassSpec::textChatroom();
-}	
+    return Tp::ChannelClassSpecList() << Tp::ChannelClassSpec::textChat()
+                                      << Tp::ChannelClassSpec::unnamedTextChat()
+                                      << Tp::ChannelClassSpec::textChatroom();
+}
 
 
-MainWindow::MainWindow() :
-        KTabWidget(),
-        AbstractClientHandler(channelClassList())
+MainWindow::MainWindow()
+    : KTabWidget(),
+      AbstractClientHandler(channelClassList())
 {
     setTabReorderingEnabled(true);
     setDocumentMode(true);
     connect(this, SIGNAL(currentChanged(int)), SLOT(onCurrentIndexChanged(int)));
 }
 
-void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
-        const AccountPtr &account,
-        const ConnectionPtr &connection,
-        const QList<ChannelPtr> &channels,
-        const QList<ChannelRequestPtr> &requestsSatisfied,
-        const QDateTime &userActionTime,
-        const AbstractClientHandler::HandlerInfo &handlerInfo)
+void MainWindow::handleChannels(const Tp::MethodInvocationContextPtr<> & context,
+        const Tp::AccountPtr & account,
+        const Tp::ConnectionPtr & connection,
+        const QList<Tp::ChannelPtr> & channels,
+        const QList<Tp::ChannelRequestPtr> & requestsSatisfied,
+        const QDateTime & userActionTime,
+        const Tp::AbstractClientHandler::HandlerInfo & handlerInfo)
 {
+    Q_UNUSED(account);
+    Q_UNUSED(connection);
+    Q_UNUSED(requestsSatisfied);
+    Q_UNUSED(userActionTime);
+    Q_UNUSED(handlerInfo);
+
     Tp::TextChannelPtr textChannel;
     foreach(const Tp::ChannelPtr & channel, channels) {
         textChannel = Tp::TextChannelPtr::dynamicCast(channel);
@@ -69,11 +76,10 @@ void MainWindow::handleChannels(const MethodInvocationContextPtr<> &context,
 
     resize(newWindow->sizeHint() - QSize(50, 50));// FUDGE
 
-
     context->setFinished();
 }
 
-void MainWindow::updateTabText(QString newTitle)
+void MainWindow::updateTabText(const QString & newTitle)
 {
     //find out which widget made the call, and update the correct tab.
     QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
@@ -81,14 +87,13 @@ void MainWindow::updateTabText(QString newTitle)
         int tabIndexToChange = indexOf(sender);
         setTabText(tabIndexToChange, newTitle);
 
-        if (tabIndexToChange == currentIndex())
-        {
+        if (tabIndexToChange == currentIndex()) {
             onCurrentIndexChanged(tabIndexToChange);
         }
     }
 }
 
-void MainWindow::updateTabIcon(KIcon newIcon)
+void MainWindow::updateTabIcon(const KIcon & newIcon)
 {
     //find out which widget made the call, and update the correct tab.
     QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
@@ -108,17 +113,13 @@ void MainWindow::onCurrentIndexChanged(int index)
 void MainWindow::onUserTypingChanged(bool isTyping)
 {
     QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
-    if (sender)
-    {
+    if (sender) {
         KColorScheme scheme(QPalette::Active, KColorScheme::Window);
         int tabIndex = indexOf(sender);
-        if (isTyping)
-        {
-            this->setTabTextColor(tabIndex, scheme.foreground(KColorScheme::PositiveText).color() );
-        }
-        else
-        {
-            this->setTabTextColor(tabIndex, scheme.foreground(KColorScheme::NormalText).color() );
+        if (isTyping) {
+            setTabTextColor(tabIndex, scheme.foreground(KColorScheme::PositiveText).color());
+        } else {
+            setTabTextColor(tabIndex, scheme.foreground(KColorScheme::NormalText).color());
         }
     }
 }

@@ -32,18 +32,16 @@ public:
     QString textbackgroundcolor;
 };
 
-AdiumThemeContentInfo::AdiumThemeContentInfo(AdiumThemeMessageInfo::MessageType type) :
-  AdiumThemeMessageInfo(type),
-  d(new AdiumThemeContentInfoPrivate)
+AdiumThemeContentInfo::AdiumThemeContentInfo(AdiumThemeMessageInfo::MessageType type)
+    : AdiumThemeMessageInfo(type),
+      d(new AdiumThemeContentInfoPrivate)
 {
-
 }
 
-AdiumThemeContentInfo::AdiumThemeContentInfo(const AdiumThemeContentInfo &other) :
-    AdiumThemeMessageInfo(other),
-    d(new AdiumThemeContentInfoPrivate(*other.d))
+AdiumThemeContentInfo::AdiumThemeContentInfo(const AdiumThemeContentInfo &other)
+    : AdiumThemeMessageInfo(other),
+      d(new AdiumThemeContentInfoPrivate(*other.d))
 {
-
 }
 
 AdiumThemeContentInfo::~AdiumThemeContentInfo()
@@ -73,7 +71,7 @@ QString AdiumThemeContentInfo::senderScreenName() const
     return d->senderScreenName;
 }
 
-void AdiumThemeContentInfo::setSenderScreenName(const QString senderScreenName)
+void AdiumThemeContentInfo::setSenderScreenName(const QString & senderScreenName)
 {
     d->senderScreenName = senderScreenName;
 }
@@ -105,13 +103,11 @@ void AdiumThemeContentInfo::setSenderStatusIcon(const QString &senderStatusIcon)
 
 QString AdiumThemeContentInfo::messageDirection() const
 {
-    switch(type())
-    {
+    switch(type()) {
     case AdiumThemeMessageInfo::RemoteToLocal:
-        return "trl";
-        break;
+        return QLatin1String("trl");
     default:
-        return "ltr";
+        return QLatin1String("ltr");
     }
 }
 

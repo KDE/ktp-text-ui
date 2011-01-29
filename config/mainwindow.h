@@ -20,10 +20,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <adiumthemeheaderinfo.h>
+#include "adiumthemeheaderinfo.h"
 
-#include <QDialog>
-
+#include <QtGui/QDialog>
 
 namespace Ui
 {

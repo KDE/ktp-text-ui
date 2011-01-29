@@ -18,10 +18,10 @@
  ***************************************************************************/
 
 #include "adiumthememessageinfo.h"
-#include <QString>
-#include <QStringList>
-#include <QDateTime>
-#include <QTextDocument> //needed for Qt::escape
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QDateTime>
+#include <QtGui/QTextDocument> //needed for Qt::escape
 
 
 class AdiumThemeMessageInfoPrivate

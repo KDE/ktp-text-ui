@@ -29,24 +29,24 @@ class ChatStyleInstaller : public BundleInstaller
 {
     Q_OBJECT
 
-    public:
-        ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFile);
-        BundleInstaller::BundleStatus validate();
-        QString bundleName();
-        ~ChatStyleInstaller() { kDebug(); };
+public:
+    ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFile);
+    virtual ~ChatStyleInstaller();
 
-    public Q_SLOTS:
-        void showRequest();
-        BundleInstaller::BundleStatus install();
-        void showResult();
-        void ignoreRequest();
+    virtual BundleInstaller::BundleStatus validate();
+    virtual QString bundleName() const;
 
-    private:
-        KArchive *m_archive;
-        KTemporaryFile *m_tmpFile;
-        QString m_bundleName;
-        BundleInstaller::BundleStatus m_status;
+public Q_SLOTS:
+    virtual void showRequest();
+    virtual BundleInstaller::BundleStatus install();
+    virtual void showResult();
+    void ignoreRequest();
 
+private:
+    KArchive *m_archive;
+    KTemporaryFile *m_tmpFile;
+    QString m_bundleName;
+    BundleInstaller::BundleStatus m_status;
 };
 
 #endif // CHATSTYLEINSTALLER_H

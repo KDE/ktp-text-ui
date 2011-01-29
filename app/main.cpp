@@ -19,11 +19,12 @@
 
 #include "mainwindow.h"
 
-#include <TelepathyQt4/Channel>
 #include <TelepathyQt4/ClientRegistrar>
 #include <TelepathyQt4/AccountFactory>
 #include <TelepathyQt4/ConnectionFactory>
-
+#include <TelepathyQt4/ChannelFactory>
+#include <TelepathyQt4/ContactFactory>
+#include <TelepathyQt4/TextChannel>
 
 #include <KApplication>
 #include <KAboutData>
@@ -31,7 +32,6 @@
 
 int main(int argc, char *argv[])
 {
-
     KAboutData aboutData("telepathy-chat-handler",
                          0,
                          ki18n("Telepathy Chat Handler"),
@@ -40,8 +40,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 
-    registerTypes();
-
+    Tp::registerTypes();
 
     Tp::AccountFactoryPtr accountFactory = Tp::AccountFactory::create(QDBusConnection::sessionBus(),
                                                                       Tp::Account::FeatureCore);
@@ -74,11 +73,10 @@ int main(int argc, char *argv[])
                                                                    channelFactory, contactFactory);
     MainWindow* mainWindow = new MainWindow();
 
-    AbstractClientPtr handler = AbstractClientPtr::dynamicCast(SharedPtr<MainWindow>(mainWindow));
-    registrar->registerClient(handler, "KDEChatHandler");
+    Tp::AbstractClientPtr handler = Tp::AbstractClientPtr(mainWindow);
+    registrar->registerClient(handler, QLatin1String("KDEChatHandler"));
 
     mainWindow->show();
 
     return app.exec();
-    delete mainWindow;
 }

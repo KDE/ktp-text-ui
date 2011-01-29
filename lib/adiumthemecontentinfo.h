@@ -20,6 +20,7 @@
 
 #ifndef ADIUMTHEMECONTENTINFO_H
 #define ADIUMTHEMECONTENTINFO_H
+
 #include "adiumthememessageinfo.h"
 
 class QString;
@@ -40,7 +41,7 @@ public:
 
     /** The screen name (UID, ID, member name, etc.) of the sender of this message.*/
     QString senderScreenName() const;
-    void setSenderScreenName(const QString senderScreenName);
+    void setSenderScreenName(const QString & senderScreenName);
 
     /** The name of the sender of this message as the user's preferences request it.*/
     QString sender() const;

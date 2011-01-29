@@ -23,37 +23,58 @@
 #include "adiumthemecontentinfo.h"
 #include "adiumthememessageinfo.h"
 #include "adiumthemestatusinfo.h"
-
-
 #include "channelcontactlist.h"
 
-#include <QKeyEvent>
-#include <QAction>
-#include <QWidget>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QAction>
 
 #include <KColorDialog>
 #include <KNotification>
 #include <KAboutData>
 #include <KComponentData>
 
-
-//#include <Sonnet/Highlighter>
-
 #include <TelepathyQt4/Message>
 #include <TelepathyQt4/Types>
 #include <TelepathyQt4/AvatarData>
 #include <TelepathyQt4/Connection>
+
+class MessageBoxEventFilter : public QObject
+{
+    Q_OBJECT
+public:
+    MessageBoxEventFilter(QObject* parent = 0) : QObject(parent) {}
+
+protected:
+    virtual bool eventFilter(QObject *obj, QEvent *event)
+    {
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+                if (!keyEvent->modifiers()) {
+                    Q_EMIT returnKeyPressed();
+                    return true;
+                }
+            }
+        }
+        // standard event processing
+        return QObject::eventFilter(obj, event);
+    }
+
+Q_SIGNALS:
+    void returnKeyPressed();
+};
+
 
 class ChatWindowPrivate
 {
 public:
     /** Stores whether the channel is ready with all contacts upgraded*/
     bool chatviewlInitialised;
-    MessageBoxEventFilter* messageBoxEventFilter;
-    QAction* showFormatToolbarAction;
+    QAction *showFormatToolbarAction;
     bool isGroupChat;
     QString title;
     Tp::TextChannelPtr channel;
+    Ui::ChatWindow ui;
 
     KComponentData telepathyComponentData();
 };
@@ -66,66 +87,70 @@ KComponentData ChatWindowPrivate::telepathyComponentData()
     return KComponentData(telepathySharedAboutData);
 }
 
-ChatWindow::ChatWindow(const Tp::TextChannelPtr & channel, QWidget *parent) :
-        QWidget(parent),
-        ui(new Ui::ChatWindow),
-        d(new ChatWindowPrivate)
+ChatWindow::ChatWindow(const Tp::TextChannelPtr & channel, QWidget *parent)
+    : QWidget(parent),
+      d(new ChatWindowPrivate)
 {
     d->channel = channel;
     d->chatviewlInitialised = false;
     d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
     d->isGroupChat = false;
 
-    ui->setupUi(this);
 
-    ui->formatColor->setText("");
-    ui->formatColor->setIcon(KIcon("format-text-color"));
+    d->ui.setupUi(this);
 
-    ui->formatBold->setText("");
-    ui->formatBold->setIcon(KIcon("format-text-bold"));
+    d->ui.formatColor->setText(QString());
+    d->ui.formatColor->setIcon(KIcon("format-text-color"));
 
-    ui->formatItalic->setText("");
-    ui->formatItalic->setIcon(KIcon("format-text-italic"));
+    d->ui.formatBold->setText(QString());
+    d->ui.formatBold->setIcon(KIcon("format-text-bold"));
 
-    ui->formatUnderline->setText("");
-    ui->formatUnderline->setIcon(KIcon("format-text-underline"));
+    d->ui.formatItalic->setText(QString());
+    d->ui.formatItalic->setIcon(KIcon("format-text-italic"));
 
-    ui->insertEmoticon->setText("");
-    ui->insertEmoticon->setIcon(KIcon("face-smile"));
+    d->ui.formatUnderline->setText(QString());
+    d->ui.formatUnderline->setIcon(KIcon("format-text-underline"));
+
+    d->ui.insertEmoticon->setText(QString());
+    d->ui.insertEmoticon->setIcon(KIcon("face-smile"));
 
     updateEnabledState(true); //FIXME
 
     //format toolbar visibility
     d->showFormatToolbarAction->setCheckable(true);
-    connect(d->showFormatToolbarAction, SIGNAL(toggled(bool)), ui->formatToolbar, SLOT(setVisible(bool)));
-    ui->sendMessageBox->addAction(d->showFormatToolbarAction);
+    connect(d->showFormatToolbarAction, SIGNAL(toggled(bool)),
+            d->ui.formatToolbar, SLOT(setVisible(bool)));
+    d->ui.sendMessageBox->addAction(d->showFormatToolbarAction);
 
     //FIXME load whether to show/hide by default from config file (do per account)
     bool formatToolbarIsVisible = false;
-    ui->formatToolbar->setVisible(formatToolbarIsVisible);
+    d->ui.formatToolbar->setVisible(formatToolbarIsVisible);
     d->showFormatToolbarAction->setChecked(formatToolbarIsVisible);
 
     //connect signals/slots from format toolbar
-    connect(ui->formatColor, SIGNAL(released()), SLOT(onFormatColorReleased()));
-    connect(ui->formatBold, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontBold(bool)));
-    connect(ui->formatItalic, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontItalic(bool)));
-    connect(ui->formatUnderline, SIGNAL(toggled(bool)), ui->sendMessageBox, SLOT(setFontUnderline(bool)));
+    connect(d->ui.formatColor, SIGNAL(released()), SLOT(onFormatColorReleased()));
+    connect(d->ui.formatBold, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontBold(bool)));
+    connect(d->ui.formatItalic, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontItalic(bool)));
+    connect(d->ui.formatUnderline, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontUnderline(bool)));
 
-    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)), SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
-    connect(d->channel.data(), SIGNAL(messageSent(Tp::Message, Tp::MessageSendingFlags, QString)), SLOT(handleMessageSent(Tp::Message, Tp::MessageSendingFlags, QString)));
-    connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr, ChannelChatState)), SLOT(onChatStatusChanged(Tp::ContactPtr, ChannelChatState)));
-    connect(ui->chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()));
+    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
+            SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
+    connect(d->channel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
+            SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
+    connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
+            SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
 
-    connect(ui->sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
-    d->messageBoxEventFilter = new MessageBoxEventFilter(this);
-    ui->sendMessageBox->installEventFilter(d->messageBoxEventFilter);
-    connect(d->messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
+    connect(d->ui.chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()));
+
+    connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
+
+    MessageBoxEventFilter *messageBoxEventFilter = new MessageBoxEventFilter(this);
+    d->ui.sendMessageBox->installEventFilter(messageBoxEventFilter);
+    connect(messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
 }
-
 
 ChatWindow::~ChatWindow()
 {
-    delete ui;
     delete d;
 }
 
@@ -134,7 +159,7 @@ void ChatWindow::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        d->ui.retranslateUi(this);
         break;
     default:
         break;
@@ -142,7 +167,7 @@ void ChatWindow::changeEvent(QEvent *e)
 }
 
 
-QString ChatWindow::title()
+QString ChatWindow::title() const
 {
     return d->title;
 }
@@ -170,7 +195,7 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
         messageInfo.setSenderDisplayName(message.sender()->alias());
         messageInfo.setSenderScreenName(message.sender()->id());
 
-        ui->chatArea->addContentMessage(messageInfo);
+        d->ui.chatArea->addContentMessage(messageInfo);
         d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
 
         emit messageReceived();
@@ -201,8 +226,7 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
         notification->setTitle(i18n("%1 has sent you a message", message.sender()->alias()));
 
         QPixmap notificationPixmap;
-        if (notificationPixmap.load(message.sender()->avatarData().fileName))
-        {
+        if (notificationPixmap.load(message.sender()->avatarData().fileName)) {
             notification->setPixmap(notificationPixmap);
         }
 
@@ -230,7 +254,7 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     messageInfo.setSenderDisplayName(sender->alias());
     messageInfo.setSenderScreenName(sender->id());
     messageInfo.setUserIconPath(sender->avatarData().fileName);
-    ui->chatArea->addContentMessage(messageInfo);
+    d->ui.chatArea->addContentMessage(messageInfo);
 
 
     //send the notification that a message has been sent
@@ -238,8 +262,7 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     notification->setComponentData(d->telepathyComponentData());
     notification->setTitle(i18n("You have sent a message"));
     QPixmap notificationPixmap;
-    if (notificationPixmap.load(sender->avatarData().fileName))
-    {
+    if (notificationPixmap.load(sender->avatarData().fileName)) {
         notification->setPixmap(notificationPixmap);
     }
     notification->setText(message.text());
@@ -259,58 +282,55 @@ void ChatWindow::chatViewReady()
 
 void ChatWindow::sendMessage()
 {
-    if (!ui->sendMessageBox->toPlainText().isEmpty()) {
-        d->channel->send(ui->sendMessageBox->toPlainText());
-        ui->sendMessageBox->clear();
+    if (!d->ui.sendMessageBox->toPlainText().isEmpty()) {
+        d->channel->send(d->ui.sendMessageBox->toPlainText());
+        d->ui.sendMessageBox->clear();
     }
 }
 
-void ChatWindow::onChatStatusChanged(Tp::ContactPtr contact, ChannelChatState state)
+void ChatWindow::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state)
 {
     //don't show our own status changes.
-    if (contact == d->channel->connection()->selfContact())
-    {
+    if (contact == d->channel->connection()->selfContact()) {
         return;
     }
 
     bool contactIsTyping = false;
 
     switch (state) {
-    case ChannelChatStateGone: {
+    case Tp::ChannelChatStateGone:
+      {
         AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(i18n("%1 has left the chat", contact->alias()));
         statusMessage.setService(d->channel->connection()->protocolName());
         statusMessage.setStatus("away");
         statusMessage.setTime(QDateTime::currentDateTime());
-        ui->chatArea->addStatusMessage(statusMessage);
-    }
-    break;
-    case ChannelChatStateInactive:
+        d->ui.chatArea->addStatusMessage(statusMessage);
+        break;
+      }
+    case Tp::ChannelChatStateInactive:
         //FIXME send a 'chat timed out' message to chatview
         break;
-    case ChannelChatStateActive:     
-    case ChannelChatStatePaused:
+    case Tp::ChannelChatStateActive:
+    case Tp::ChannelChatStatePaused:
         break;
-    case ChannelChatStateComposing:
+    case Tp::ChannelChatStateComposing:
         contactIsTyping = true;
+        break;
     default:
         qDebug() << QString("Unknown case %1").arg(state);
     }
 
 
-    if (!contactIsTyping)
-    {
+    if (!contactIsTyping) {
         //In a multiperson chat just because this user is no longer typing it doesn't mean that no-one is.
         //loop through each contact, check no-one is in composing mode.
-        foreach (Tp::ContactPtr contact, d->channel->groupContacts())
-        {
-            if (contact == d->channel->connection()->selfContact())
-            {
+        foreach (const Tp::ContactPtr & contact, d->channel->groupContacts()) {
+            if (contact == d->channel->connection()->selfContact()) {
                 continue;
             }
 
-            if (d->channel->chatState(contact) == ChannelChatStateComposing)
-            {
+            if (d->channel->chatState(contact) == Tp::ChannelChatStateComposing) {
                 contactIsTyping = true;
             }
         }
@@ -321,28 +341,28 @@ void ChatWindow::onChatStatusChanged(Tp::ContactPtr contact, ChannelChatState st
 
 
 
-void ChatWindow::onContactPresenceChange(Tp::ContactPtr contact, uint type)
+void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, uint type)
 {
     QString message;
-    bool isYou = (contact.data() == d->channel->groupSelfContact().data());
+    bool isYou = (contact == d->channel->groupSelfContact());
 
     switch (type) {
     case Tp::ConnectionPresenceTypeOffline:
-        if (! isYou) {
+        if (!isYou) {
             message = i18n("%1 is offline", contact->alias());
         } else {
             message = i18n("You are now marked as offline");
         }
         break;
     case Tp::ConnectionPresenceTypeAvailable:
-        if (! isYou) {
+        if (!isYou) {
             message = i18n("%1 is online", contact->alias());
         } else {
             message = i18n("You are now marked as online");
         }
         break;
     case Tp::ConnectionPresenceTypeAway:
-        if (! isYou) {
+        if (!isYou) {
             message = i18n("%1 is busy", contact->alias());
         } else {
             message = i18n("You are now marked as busy");
@@ -356,16 +376,15 @@ void ChatWindow::onContactPresenceChange(Tp::ContactPtr contact, uint type)
     if (!message.isNull()) {
         AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(message);
-        statusMessage.setStatus("");
+        statusMessage.setStatus(QString());
         statusMessage.setService(d->channel->connection()->protocolName());
         statusMessage.setTime(QDateTime::currentDateTime());
-        ui->chatArea->addStatusMessage(statusMessage);
+        d->ui.chatArea->addStatusMessage(statusMessage);
     }
 
 
     //if in a non-group chat situation, and the other contact has changed state...
-    if (! d->isGroupChat && ! isYou)
-    {
+    if (!d->isGroupChat && !isYou) {
         KIcon icon = iconForPresence(type);
         Q_EMIT iconChanged(icon);
     }
@@ -374,21 +393,22 @@ void ChatWindow::onContactPresenceChange(Tp::ContactPtr contact, uint type)
 void ChatWindow::updateEnabledState(bool enable)
 {
     //update GUI
-    ui->sendMessageBox->setEnabled(enable);
+    d->ui.sendMessageBox->setEnabled(enable);
 
     //set up the initial chat window details.
     if (enable) {
         //channel is now valid, start keeping track of contacts.
         ChannelContactList* contactList = new ChannelContactList(d->channel, this);
-        connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr, uint)), SLOT(onContactPresenceChange(Tp::ContactPtr, uint)));
+        connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr,uint)),
+                SLOT(onContactPresenceChange(Tp::ContactPtr,uint)));
 
         AdiumThemeHeaderInfo info;
         Tp::Contacts allContacts = d->channel->groupContacts();
         //normal chat - self and one other person.
         if (allContacts.size() == 2) {
             //find the other contact which isn't self.
-            foreach(Tp::ContactPtr it, allContacts) {
-                if (it.data() == d->channel->groupSelfContact().data()) {
+            foreach(const Tp::ContactPtr & it, allContacts) {
+                if (it == d->channel->groupSelfContact()) {
                     continue;
                 } else {
                     info.setDestinationDisplayName(it->alias());
@@ -408,7 +428,7 @@ void ChatWindow::updateEnabledState(bool enable)
         //set up anything related to 'self'
         info.setOutgoingIconPath(d->channel->groupSelfContact()->avatarData().fileName);
         info.setTimeOpened(QDateTime::currentDateTime());
-        ui->chatArea->initialise(info);
+        d->ui.chatArea->initialise(info);
 
         //inform anyone using the class of the new name for this chat.
         d->title = info.chatName();
@@ -421,41 +441,22 @@ void ChatWindow::updateEnabledState(bool enable)
 void ChatWindow::onInputBoxChanged()
 {
     //if the box is empty
-    bool currentlyTyping = ! ui->sendMessageBox->toPlainText().isEmpty();
+    bool currentlyTyping = !d->ui.sendMessageBox->toPlainText().isEmpty();
 
     //FIXME buffer what we've sent to telepathy, make this more efficient.
     //FIXME check spec (with olly) as to whether we have to handle idle state etc.
-    if(currentlyTyping)
-    {
+    if(currentlyTyping) {
         d->channel->requestChatState(Tp::ChannelChatStateComposing);
-    }
-    else
-    {
+    } else {
         d->channel->requestChatState(Tp::ChannelChatStateActive);
     }
 }
-
-bool MessageBoxEventFilter::eventFilter(QObject *obj, QEvent *event)
-{
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
-            if (!keyEvent->modifiers()) {
-                Q_EMIT returnKeyPressed();
-                return true;
-            }
-        }
-    }
-    // standard event processing
-    return QObject::eventFilter(obj, event);
-}
-
 
 void ChatWindow::onFormatColorReleased()
 {
     QColor color;
     KColorDialog::getColor(color,this);
-    ui->sendMessageBox->setTextColor(color);
+    d->ui.sendMessageBox->setTextColor(color);
 }
 
 KIcon ChatWindow::iconForPresence(uint presence)
@@ -486,3 +487,5 @@ KIcon ChatWindow::iconForPresence(uint presence)
     return KIcon(iconName);
 }
 
+#include "chatwindow.moc" //for MessageBoxEventFilter
+#include "moc_chatwindow.cpp" //for ChatWindow

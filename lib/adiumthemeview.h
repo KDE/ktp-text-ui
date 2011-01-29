@@ -17,12 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef CHATVIEW_H
-#define CHATVIEW_H
+#ifndef ADIUMTHEMEVIEW_H
+#define ADIUMTHEMEVIEW_H
 
-#include <QWebView>
 #include "chatwindowstyle.h"
 #include "adiumthemeheaderinfo.h"
+#include <QtWebKit/QWebView>
 #include <KEmoticons>
 
 
@@ -50,7 +50,8 @@ public:
     void setChatStyle(ChatWindowStyle* chatStyle);
 
     bool isHeaderDisplayed() const;
-    /** Set whether a header is displayed at the top of the window. Output will only change once initialise() is called. */
+    /** Set whether a header is displayed at the top of the window.
+     * Output will only change once initialise() is called. */
     void setHeaderDisplayed(bool);
     /* .. font, backgrounds, everything else.*/
 
@@ -79,4 +80,4 @@ private:
     bool m_webInspector;
 };
 
-#endif // CHATVIEW_H
+#endif // ADIUMTHEMEVIEW_H

@@ -18,8 +18,8 @@
 
 #include "chatstyleinstaller.h"
 
-#include <chatwindowstylemanager.h>
-#include <chatstyleplistfilereader.h>
+#include "chatwindowstylemanager.h"
+#include "chatstyleplistfilereader.h"
 
 #include <KDebug>
 #include <KTemporaryFile>
@@ -37,6 +37,11 @@ ChatStyleInstaller::ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFil
     m_tmpFile = tmpFile;
 }
 
+ChatStyleInstaller::~ChatStyleInstaller()
+{
+    kDebug();
+}
+
 BundleInstaller::BundleStatus ChatStyleInstaller::validate()
 {
     kDebug();
@@ -46,25 +51,28 @@ BundleInstaller::BundleStatus ChatStyleInstaller::validate()
     const KArchiveDirectory* rootDir = m_archive->directory();
     int validResult = 0;
     const QStringList entries = rootDir->entries();
-    QStringList::ConstIterator entriesIt, entriesItEnd = entries.end();
+    QStringList::ConstIterator entriesIt;
+
     for (entriesIt = entries.begin(); entriesIt != entries.end(); ++entriesIt) {
         currentEntry = const_cast<KArchiveEntry*>(rootDir->entry(*entriesIt));
         kDebug() << "Current entry name: " << currentEntry->name();
         if (currentEntry->isDirectory()) {
             currentDir = dynamic_cast<KArchiveDirectory*>(currentEntry);
             if (currentDir) {
-                if (currentDir->entry(QString::fromUtf8("Contents"))) {
-                   kDebug() << "Contents found";
+                if (currentDir->entry(QLatin1String("Contents"))) {
+                    kDebug() << "Contents found";
                     validResult += 1;
                 }
-                if (currentDir->entry(QString::fromUtf8("Contents/Info.plist"))) {
-                   kDebug() << "Contents/Info.plist found";
-                   KArchiveFile const *info = dynamic_cast<KArchiveFile const *>(currentDir->entry(QString::fromUtf8("Contents/Info.plist")));
-                   QByteArray data = info->data();
-                   ChatStylePlistFileReader reader(data);
-                   if(m_bundleName.isEmpty()) {
-                       m_bundleName = reader.CFBundleName();
-                   }
+                if (currentDir->entry(QLatin1String("Contents/Info.plist"))) {
+                    kDebug() << "Contents/Info.plist found";
+                    KArchiveFile const *info = dynamic_cast<KArchiveFile const *>(
+                        currentDir->entry(QLatin1String("Contents/Info.plist"))
+                    );
+                    QByteArray data = info->data();
+                    ChatStylePlistFileReader reader(data);
+                    if(m_bundleName.isEmpty()) {
+                        m_bundleName = reader.CFBundleName();
+                    }
                     validResult += 1;
                 }
             }
@@ -78,7 +86,7 @@ BundleInstaller::BundleStatus ChatStyleInstaller::validate()
     }
 }
 
-QString ChatStyleInstaller::bundleName()
+QString ChatStyleInstaller::bundleName() const
 {
     kDebug();
 
@@ -89,9 +97,11 @@ BundleInstaller::BundleStatus ChatStyleInstaller::install()
 {
     kDebug();
 
-    BundleInstaller::BundleStatus status = static_cast<BundleInstaller::BundleStatus>(ChatWindowStyleManager::self()->installStyle(m_archive->fileName()));
+    BundleInstaller::BundleStatus status = static_cast<BundleInstaller::BundleStatus>(
+        ChatWindowStyleManager::self()->installStyle(m_archive->fileName())
+    );
     kDebug()<< "status " << status;
-    delete(m_tmpFile);
+    delete m_tmpFile;
 
     m_status = status;
 

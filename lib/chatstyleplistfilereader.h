@@ -17,11 +17,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-
 #ifndef CHATSTYLEPLISTFILEREADER_H
 #define CHATSTYLEPLISTFILEREADER_H
 
-#include <QMap>
+#include <QtCore/QMap>
+
 class QString;
 class QFile;
 class QVariant;
@@ -30,37 +30,36 @@ class QDomDocument;
 
 class ChatStylePlistFileReader
 {
-
 public:
     enum Status { Ok = 0, CannotOpenFileError, ParseError, UnknownError };
     ChatStylePlistFileReader(const QString &fileName);
     ChatStylePlistFileReader(const QByteArray &file);
     virtual ~ChatStylePlistFileReader();
 
-    QString CFBundleGetInfoString();
-    QString CFBundleIdentifier();
-    QString CFBundleName();
-    QString defaultFontFamily();
-    int defaultFontSize();
-    QString defaultVariant();
-    int messageViewVersion();
-    bool showUserIcons();
-    bool showUserIcons(const QString &variantName);
-    bool disableCombineConsecutive();
-    bool defaultBackgroundIsTransparent();
-    bool disableCustomBackground();
-    QString defaultBackgroundColor();
-    QString defaultBackgroundColor(const QString &variantName);
-    bool allowTextColors();
-    bool allowTextColors(const QString &variantName);
-    QString imageMask();
+    QString CFBundleGetInfoString() const;
+    QString CFBundleIdentifier() const;
+    QString CFBundleName() const;
+    QString defaultFontFamily() const;
+    int defaultFontSize() const;
+    QString defaultVariant() const;
+    int messageViewVersion() const;
+    bool showUserIcons() const;
+    bool showUserIcons(const QString &variantName) const;
+    bool disableCombineConsecutive() const;
+    bool defaultBackgroundIsTransparent() const;
+    bool disableCustomBackground() const;
+    QString defaultBackgroundColor() const;
+    QString defaultBackgroundColor(const QString &variantName) const;
+    bool allowTextColors() const;
+    bool allowTextColors(const QString &variantName) const;
+    QString imageMask() const;
 
-    Status status();
+    Status status() const;
 
 
 private:
     class Private;
-    Private *d;
+    Private * const d;
     ChatStylePlistFileReader::Status readAndParseFile(QFile &file);
     ChatStylePlistFileReader::Status parse(const QDomDocument &document);
 };
