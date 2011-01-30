@@ -56,7 +56,7 @@ protected slots:
 
     void onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state);
 
-    void onContactPresenceChange(const Tp::ContactPtr & contact, uint type);
+    void onContactPresenceChange(const Tp::ContactPtr & contact, const Tp::Presence & presence);
 
     void onInputBoxChanged();
 
@@ -81,7 +81,7 @@ private slots:
 private:
     void init();
     //FIXME this should be in the ktelepathy lib
-    static KIcon iconForPresence(uint presence);
+    static KIcon iconForPresence(Tp::ConnectionPresenceType presence);
 
     ChatWindowPrivate * const d;
 };

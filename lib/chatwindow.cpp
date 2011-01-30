@@ -125,8 +125,8 @@ void ChatWindow::init()
 
     //channel is now valid, start keeping track of contacts.
     ChannelContactList* contactList = new ChannelContactList(d->channel, this);
-    connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr,uint)),
-            SLOT(onContactPresenceChange(Tp::ContactPtr,uint)));
+    connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr,Tp::Presence)),
+            SLOT(onContactPresenceChange(Tp::ContactPtr,Tp::Presence)));
 
     AdiumThemeHeaderInfo info;
     Tp::Contacts allContacts = d->channel->groupContacts();
@@ -380,12 +380,12 @@ void ChatWindow::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
 
 
 
-void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, uint type)
+void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, const Tp::Presence & presence)
 {
     QString message;
     bool isYou = (contact == d->channel->groupSelfContact());
 
-    switch (type) {
+    switch (presence.type()) {
     case Tp::ConnectionPresenceTypeOffline:
         if (!isYou) {
             message = i18n("%1 is offline", contact->alias());
@@ -421,10 +421,9 @@ void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, uint ty
         d->ui.chatArea->addStatusMessage(statusMessage);
     }
 
-
     //if in a non-group chat situation, and the other contact has changed state...
     if (!d->isGroupChat && !isYou) {
-        KIcon icon = iconForPresence(type);
+        KIcon icon = iconForPresence(presence.type());
         Q_EMIT iconChanged(icon);
     }
 }
@@ -450,7 +449,7 @@ void ChatWindow::onFormatColorReleased()
     d->ui.sendMessageBox->setTextColor(color);
 }
 
-KIcon ChatWindow::iconForPresence(uint presence)
+KIcon ChatWindow::iconForPresence(Tp::ConnectionPresenceType presence)
 {
     QString iconName;
 
