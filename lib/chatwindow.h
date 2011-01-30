@@ -49,6 +49,9 @@ protected slots:
     /** Show the received message in the chat window*/
     void handleIncomingMessage(const Tp::ReceivedMessage & message);
 
+    /** Show notification about a received message */
+    void notifyAboutIncomingMessage(const Tp::ReceivedMessage & message);
+
     /** Show the message sent in the chat window*/
     void handleMessageSent(const Tp::Message & message,
                            Tp::MessageSendingFlags flags,

@@ -181,6 +181,8 @@ void ChatWindow::init()
 
     connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
             SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
+    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
+            SLOT(notifyAboutIncomingMessage(Tp::ReceivedMessage)));
     connect(d->channel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
             SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
     connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
@@ -256,49 +258,51 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
         d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
 
         emit messageReceived();
-
-
-        //send the correct notification:
-        QString notificationType;
-        //choose the correct notification type:
-        //options are:
-        // kde_telepathy_contact_incoming
-        // kde_telepathy_contact_incoming_active_window - TODO - requires information not available yet.
-        // kde_telepathy_contact_highlight (contains your name)
-        // kde_telepathy_info_event
-
-        //if the message text contains sender name, it's a "highlighted message"
-        //TODO DrDanz suggested this could be a configurable list of words that make it highlighted.(seems like a good idea to me)
-        if(message.text().contains(d->channel->connection()->selfContact()->alias())) {
-            notificationType = QLatin1String("kde_telepathy_contact_highlight");
-        } else if(message.messageType() == Tp::ChannelTextMessageTypeNotice) {
-            notificationType = QLatin1String("kde_telepathy_info_event");
-        } else {
-            notificationType = QLatin1String("kde_telepathy_contact_incoming");
-        }
-
-
-        KNotification *notification = new KNotification(notificationType, this);
-        notification->setComponentData(d->telepathyComponentData());
-        notification->setTitle(i18n("%1 has sent you a message", message.sender()->alias()));
-
-        QPixmap notificationPixmap;
-        if (notificationPixmap.load(message.sender()->avatarData().fileName)) {
-            notification->setPixmap(notificationPixmap);
-        }
-
-        notification->setText(message.text());
-        //allows per contact notifications
-        notification->addContext("contact", message.sender()->id());
-        //TODO notification->addContext("group",... Requires KDE Telepathy Contact to work out which group they are in.
-
-        notification->setActions(QStringList(i18n("View")));
-        connect(notification, SIGNAL(activated(unsigned int)), notification, SLOT(raiseWidget()));
-
-        notification->sendEvent();
     }
 
     //if the window isn't ready, we don't acknowledge the mesage. We process them as soon as we are ready.
+}
+
+void ChatWindow::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
+{
+    //send the correct notification:
+    QString notificationType;
+    //choose the correct notification type:
+    //options are:
+    // kde_telepathy_contact_incoming
+    // kde_telepathy_contact_incoming_active_window - TODO - requires information not available yet.
+    // kde_telepathy_contact_highlight (contains your name)
+    // kde_telepathy_info_event
+
+    //if the message text contains sender name, it's a "highlighted message"
+    //TODO DrDanz suggested this could be a configurable list of words that make it highlighted.(seems like a good idea to me)
+    if(message.text().contains(d->channel->connection()->selfContact()->alias())) {
+        notificationType = QLatin1String("kde_telepathy_contact_highlight");
+    } else if(message.messageType() == Tp::ChannelTextMessageTypeNotice) {
+        notificationType = QLatin1String("kde_telepathy_info_event");
+    } else {
+        notificationType = QLatin1String("kde_telepathy_contact_incoming");
+    }
+
+
+    KNotification *notification = new KNotification(notificationType, this);
+    notification->setComponentData(d->telepathyComponentData());
+    notification->setTitle(i18n("%1 has sent you a message", message.sender()->alias()));
+
+    QPixmap notificationPixmap;
+    if (notificationPixmap.load(message.sender()->avatarData().fileName)) {
+        notification->setPixmap(notificationPixmap);
+    }
+
+    notification->setText(message.text());
+    //allows per contact notifications
+    notification->addContext("contact", message.sender()->id());
+    //TODO notification->addContext("group",... Requires KDE Telepathy Contact to work out which group they are in.
+
+    notification->setActions(QStringList(i18n("View")));
+    connect(notification, SIGNAL(activated(unsigned int)), notification, SLOT(raiseWidget()));
+
+    notification->sendEvent();
 }
 
 void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
