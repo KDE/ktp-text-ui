@@ -416,11 +416,19 @@ void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, const T
             message = i18n("You are now marked as online");
         }
         break;
-    case Tp::ConnectionPresenceTypeAway:
+    case Tp::ConnectionPresenceTypeBusy:
         if (!isYou) {
             message = i18n("%1 is busy", contact->alias());
         } else {
             message = i18n("You are now marked as busy");
+        }
+        break;
+    case Tp::ConnectionPresenceTypeAway:
+    case Tp::ConnectionPresenceTypeExtendedAway:
+        if (!isYou) {
+            message = i18n("%1 is away", contact->alias());
+        } else {
+            message = i18n("You are now marked as away");
         }
         break;
     default:
