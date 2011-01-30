@@ -39,6 +39,9 @@ public:
     /** Returns the name of this chat window*/
     QString title() const;
 
+    /** Returns the icon of this chat window */
+    KIcon icon() const;
+
 protected:
     void changeEvent(QEvent *e);
 

@@ -37,6 +37,7 @@
 #include <TelepathyQt4/Types>
 #include <TelepathyQt4/AvatarData>
 #include <TelepathyQt4/Connection>
+#include <TelepathyQt4/Presence>
 
 class MessageBoxEventFilter : public QObject
 {
@@ -211,6 +212,21 @@ QString ChatWindow::title() const
     return d->title;
 }
 
+KIcon ChatWindow::icon() const
+{
+    //normal chat - self and one other person.
+    if (!d->isGroupChat) {
+        //find the other contact which isn't self.
+        foreach(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
+            if (contact != d->channel->groupSelfContact()) {
+                return iconForPresence(contact->presence().type());
+            }
+        }
+    }
+
+    //group chat
+    return iconForPresence(Tp::ConnectionPresenceTypeAvailable);
+}
 
 void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
