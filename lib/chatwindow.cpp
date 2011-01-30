@@ -92,10 +92,19 @@ ChatWindow::ChatWindow(const Tp::TextChannelPtr & channel, QWidget *parent)
       d(new ChatWindowPrivate)
 {
     d->channel = channel;
+    init();
+}
+
+ChatWindow::~ChatWindow()
+{
+    delete d;
+}
+
+void ChatWindow::init()
+{
     d->chatviewlInitialised = false;
     d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
     d->isGroupChat = false;
-
 
     d->ui.setupUi(this);
 
@@ -114,7 +123,41 @@ ChatWindow::ChatWindow(const Tp::TextChannelPtr & channel, QWidget *parent)
     d->ui.insertEmoticon->setText(QString());
     d->ui.insertEmoticon->setIcon(KIcon("face-smile"));
 
-    updateEnabledState(true); //FIXME
+    //channel is now valid, start keeping track of contacts.
+    ChannelContactList* contactList = new ChannelContactList(d->channel, this);
+    connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr,uint)),
+            SLOT(onContactPresenceChange(Tp::ContactPtr,uint)));
+
+    AdiumThemeHeaderInfo info;
+    Tp::Contacts allContacts = d->channel->groupContacts();
+    //normal chat - self and one other person.
+    if (allContacts.size() == 2) {
+        //find the other contact which isn't self.
+        foreach(const Tp::ContactPtr & it, allContacts) {
+            if (it == d->channel->groupSelfContact()) {
+                continue;
+            } else {
+                info.setDestinationDisplayName(it->alias());
+                info.setDestinationName(it->id());
+                info.setChatName(it->alias());
+                info.setIncomingIconPath(it->avatarData().fileName);
+            }
+        }
+    } else {
+        //some sort of group chat scenario.. Not sure how to create this yet.
+        info.setChatName("Group Chat");
+        d->isGroupChat = true;
+    }
+
+    info.setSourceName(d->channel->connection()->protocolName());
+
+    //set up anything related to 'self'
+    info.setOutgoingIconPath(d->channel->groupSelfContact()->avatarData().fileName);
+    info.setTimeOpened(QDateTime::currentDateTime());
+    d->ui.chatArea->initialise(info);
+
+    //set the title of this chat.
+    d->title = info.chatName();
 
     //format toolbar visibility
     d->showFormatToolbarAction->setCheckable(true);
@@ -149,10 +192,6 @@ ChatWindow::ChatWindow(const Tp::TextChannelPtr & channel, QWidget *parent)
     connect(messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
 }
 
-ChatWindow::~ChatWindow()
-{
-    delete d;
-}
 
 void ChatWindow::changeEvent(QEvent *e)
 {
@@ -389,54 +428,6 @@ void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, uint ty
         Q_EMIT iconChanged(icon);
     }
 }
-
-void ChatWindow::updateEnabledState(bool enable)
-{
-    //update GUI
-    d->ui.sendMessageBox->setEnabled(enable);
-
-    //set up the initial chat window details.
-    if (enable) {
-        //channel is now valid, start keeping track of contacts.
-        ChannelContactList* contactList = new ChannelContactList(d->channel, this);
-        connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr,uint)),
-                SLOT(onContactPresenceChange(Tp::ContactPtr,uint)));
-
-        AdiumThemeHeaderInfo info;
-        Tp::Contacts allContacts = d->channel->groupContacts();
-        //normal chat - self and one other person.
-        if (allContacts.size() == 2) {
-            //find the other contact which isn't self.
-            foreach(const Tp::ContactPtr & it, allContacts) {
-                if (it == d->channel->groupSelfContact()) {
-                    continue;
-                } else {
-                    info.setDestinationDisplayName(it->alias());
-                    info.setDestinationName(it->id());
-                    info.setChatName(it->alias());
-                    info.setIncomingIconPath(it->avatarData().fileName);
-                }
-            }
-        } else {
-            //some sort of group chat scenario.. Not sure how to create this yet.
-            info.setChatName("Group Chat");
-            d->isGroupChat = true;
-        }
-
-        info.setSourceName(d->channel->connection()->protocolName());
-
-        //set up anything related to 'self'
-        info.setOutgoingIconPath(d->channel->groupSelfContact()->avatarData().fileName);
-        info.setTimeOpened(QDateTime::currentDateTime());
-        d->ui.chatArea->initialise(info);
-
-        //inform anyone using the class of the new name for this chat.
-        d->title = info.chatName();
-        Q_EMIT titleChanged(d->title);
-        //FIXME emit the correct icon here too
-    }
-}
-
 
 void ChatWindow::onInputBoxChanged()
 {

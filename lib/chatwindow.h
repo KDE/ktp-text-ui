@@ -54,9 +54,6 @@ protected slots:
     /** send the text in the text area widget to the client handler*/
     void sendMessage();
 
-    /** Enable/Disable buttons in the chat window*/
-    void updateEnabledState(bool enabled);
-
     void onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state);
 
     void onContactPresenceChange(const Tp::ContactPtr & contact, uint type);
@@ -82,6 +79,7 @@ private slots:
     void onFormatColorReleased();
 
 private:
+    void init();
     //FIXME this should be in the ktelepathy lib
     static KIcon iconForPresence(uint presence);
 
