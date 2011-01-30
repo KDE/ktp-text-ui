@@ -128,6 +128,8 @@ void ChatWindow::init()
     ChannelContactList* contactList = new ChannelContactList(d->channel, this);
     connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr,Tp::Presence)),
             SLOT(onContactPresenceChange(Tp::ContactPtr,Tp::Presence)));
+    connect(contactList, SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)),
+            SLOT(onContactAliasChanged(Tp::ContactPtr,QString)));
 
     AdiumThemeHeaderInfo info;
     Tp::Contacts allContacts = d->channel->groupContacts();
@@ -449,6 +451,35 @@ void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, const T
     if (!d->isGroupChat && !isYou) {
         KIcon icon = iconForPresence(presence.type());
         Q_EMIT iconChanged(icon);
+    }
+}
+
+void ChatWindow::onContactAliasChanged(const Tp::ContactPtr & contact, const QString& alias)
+{
+    QString message;
+    bool isYou = (contact == d->channel->groupSelfContact());
+
+    if (isYou) {
+        message = i18n("You are now known as %1", alias);
+    } else if (!d->isGroupChat) {
+        //HACK the title is the contact alias on non-groupchats,
+        //but we should have a better way of keeping the previous
+        //aliases of all contacts
+        message = i18n("%1 is now known as %2", d->title, alias);
+    }
+
+    if (!message.isEmpty()) {
+        AdiumThemeStatusInfo statusMessage;
+        statusMessage.setMessage(message);
+        statusMessage.setStatus(QString());
+        statusMessage.setService(d->channel->connection()->protocolName());
+        statusMessage.setTime(QDateTime::currentDateTime());
+        d->ui.chatArea->addStatusMessage(statusMessage);
+    }
+
+    //if in a non-group chat situation, and the other contact has changed alias...
+    if (!d->isGroupChat && !isYou) {
+        Q_EMIT titleChanged(alias);
     }
 }
 

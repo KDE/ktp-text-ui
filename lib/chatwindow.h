@@ -61,6 +61,8 @@ protected slots:
 
     void onContactPresenceChange(const Tp::ContactPtr & contact, const Tp::Presence & presence);
 
+    void onContactAliasChanged(const Tp::ContactPtr & contact, const QString & alias);
+
     void onInputBoxChanged();
 
     void chatViewReady();
