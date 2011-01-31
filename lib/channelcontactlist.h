@@ -25,6 +25,7 @@
 #include <TelepathyQt4/Contact>
 #include <TelepathyQt4/Types>
 #include <TelepathyQt4/Channel>
+#include <TelepathyQt4/Presence>
 
 class ChannelContactListContact: public QObject
 {
@@ -33,11 +34,11 @@ public:
     explicit ChannelContactListContact(const Tp::ContactPtr & contact, QObject *parent);
 
 signals:
-    void contactPresenceChanged(const Tp::ContactPtr & contact, uint type);
+    void contactPresenceChanged(const Tp::ContactPtr & contact, const Tp::Presence & presence);
     void contactAliasChanged(const Tp::ContactPtr & contact, const QString & alias);
 
 private slots:
-    void onSimplePresenceChanged(const QString &status, uint type);
+    void onPresenceChanged(const Tp::Presence & newPresence);
     void onAliasChanged(const QString &alias);
 
 private:
@@ -52,7 +53,7 @@ public:
     explicit ChannelContactList(const Tp::TextChannelPtr & channel, QObject *parent = 0);
 
 signals:
-    void contactPresenceChanged(const Tp::ContactPtr & contact, uint type);
+    void contactPresenceChanged(const Tp::ContactPtr & contact, const Tp::Presence & presence);
     void contactAliasChanged(const Tp::ContactPtr & contact, const QString & alias);
 
 public slots:

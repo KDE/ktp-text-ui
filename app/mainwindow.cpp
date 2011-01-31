@@ -68,7 +68,7 @@ void MainWindow::handleChannels(const Tp::MethodInvocationContextPtr<> & context
 
     ChatWindow* newWindow = new ChatWindow(textChannel, this);
 
-    addTab(newWindow, KIcon("user-online"), newWindow->title());
+    addTab(newWindow, newWindow->icon(), newWindow->title());
 
     connect(newWindow, SIGNAL(titleChanged(QString)), SLOT(updateTabText(QString)));
     connect(newWindow,SIGNAL(iconChanged(KIcon)), SLOT(updateTabIcon(KIcon)));

@@ -37,6 +37,7 @@
 #include <TelepathyQt4/Types>
 #include <TelepathyQt4/AvatarData>
 #include <TelepathyQt4/Connection>
+#include <TelepathyQt4/Presence>
 
 class MessageBoxEventFilter : public QObject
 {
@@ -125,8 +126,10 @@ void ChatWindow::init()
 
     //channel is now valid, start keeping track of contacts.
     ChannelContactList* contactList = new ChannelContactList(d->channel, this);
-    connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr,uint)),
-            SLOT(onContactPresenceChange(Tp::ContactPtr,uint)));
+    connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr,Tp::Presence)),
+            SLOT(onContactPresenceChange(Tp::ContactPtr,Tp::Presence)));
+    connect(contactList, SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)),
+            SLOT(onContactAliasChanged(Tp::ContactPtr,QString)));
 
     AdiumThemeHeaderInfo info;
     Tp::Contacts allContacts = d->channel->groupContacts();
@@ -178,6 +181,8 @@ void ChatWindow::init()
 
     connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
             SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
+    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
+            SLOT(notifyAboutIncomingMessage(Tp::ReceivedMessage)));
     connect(d->channel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
             SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
     connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
@@ -211,6 +216,21 @@ QString ChatWindow::title() const
     return d->title;
 }
 
+KIcon ChatWindow::icon() const
+{
+    //normal chat - self and one other person.
+    if (!d->isGroupChat) {
+        //find the other contact which isn't self.
+        foreach(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
+            if (contact != d->channel->groupSelfContact()) {
+                return iconForPresence(contact->presence().type());
+            }
+        }
+    }
+
+    //group chat
+    return iconForPresence(Tp::ConnectionPresenceTypeAvailable);
+}
 
 void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
@@ -238,49 +258,51 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
         d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
 
         emit messageReceived();
-
-
-        //send the correct notification:
-        QString notificationType;
-        //choose the correct notification type:
-        //options are:
-        // kde_telepathy_contact_incoming
-        // kde_telepathy_contact_incoming_active_window - TODO - requires information not available yet.
-        // kde_telepathy_contact_highlight (contains your name)
-        // kde_telepathy_info_event
-
-        //if the message text contains sender name, it's a "highlighted message"
-        //TODO DrDanz suggested this could be a configurable list of words that make it highlighted.(seems like a good idea to me)
-        if(message.text().contains(d->channel->connection()->selfContact()->alias())) {
-            notificationType = QLatin1String("kde_telepathy_contact_highlight");
-        } else if(message.messageType() == Tp::ChannelTextMessageTypeNotice) {
-            notificationType = QLatin1String("kde_telepathy_info_event");
-        } else {
-            notificationType = QLatin1String("kde_telepathy_contact_incoming");
-        }
-
-
-        KNotification *notification = new KNotification(notificationType, this);
-        notification->setComponentData(d->telepathyComponentData());
-        notification->setTitle(i18n("%1 has sent you a message", message.sender()->alias()));
-
-        QPixmap notificationPixmap;
-        if (notificationPixmap.load(message.sender()->avatarData().fileName)) {
-            notification->setPixmap(notificationPixmap);
-        }
-
-        notification->setText(message.text());
-        //allows per contact notifications
-        notification->addContext("contact", message.sender()->id());
-        //TODO notification->addContext("group",... Requires KDE Telepathy Contact to work out which group they are in.
-
-        notification->setActions(QStringList(i18n("View")));
-        connect(notification, SIGNAL(activated(unsigned int)), notification, SLOT(raiseWidget()));
-
-        notification->sendEvent();
     }
 
     //if the window isn't ready, we don't acknowledge the mesage. We process them as soon as we are ready.
+}
+
+void ChatWindow::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
+{
+    //send the correct notification:
+    QString notificationType;
+    //choose the correct notification type:
+    //options are:
+    // kde_telepathy_contact_incoming
+    // kde_telepathy_contact_incoming_active_window - TODO - requires information not available yet.
+    // kde_telepathy_contact_highlight (contains your name)
+    // kde_telepathy_info_event
+
+    //if the message text contains sender name, it's a "highlighted message"
+    //TODO DrDanz suggested this could be a configurable list of words that make it highlighted.(seems like a good idea to me)
+    if(message.text().contains(d->channel->connection()->selfContact()->alias())) {
+        notificationType = QLatin1String("kde_telepathy_contact_highlight");
+    } else if(message.messageType() == Tp::ChannelTextMessageTypeNotice) {
+        notificationType = QLatin1String("kde_telepathy_info_event");
+    } else {
+        notificationType = QLatin1String("kde_telepathy_contact_incoming");
+    }
+
+
+    KNotification *notification = new KNotification(notificationType, this);
+    notification->setComponentData(d->telepathyComponentData());
+    notification->setTitle(i18n("%1 has sent you a message", message.sender()->alias()));
+
+    QPixmap notificationPixmap;
+    if (notificationPixmap.load(message.sender()->avatarData().fileName)) {
+        notification->setPixmap(notificationPixmap);
+    }
+
+    notification->setText(message.text());
+    //allows per contact notifications
+    notification->addContext("contact", message.sender()->id());
+    //TODO notification->addContext("group",... Requires KDE Telepathy Contact to work out which group they are in.
+
+    notification->setActions(QStringList(i18n("View")));
+    connect(notification, SIGNAL(activated(unsigned int)), notification, SLOT(raiseWidget()));
+
+    notification->sendEvent();
 }
 
 void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
@@ -380,12 +402,12 @@ void ChatWindow::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
 
 
 
-void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, uint type)
+void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, const Tp::Presence & presence)
 {
     QString message;
     bool isYou = (contact == d->channel->groupSelfContact());
 
-    switch (type) {
+    switch (presence.type()) {
     case Tp::ConnectionPresenceTypeOffline:
         if (!isYou) {
             message = i18n("%1 is offline", contact->alias());
@@ -400,11 +422,19 @@ void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, uint ty
             message = i18n("You are now marked as online");
         }
         break;
-    case Tp::ConnectionPresenceTypeAway:
+    case Tp::ConnectionPresenceTypeBusy:
         if (!isYou) {
             message = i18n("%1 is busy", contact->alias());
         } else {
             message = i18n("You are now marked as busy");
+        }
+        break;
+    case Tp::ConnectionPresenceTypeAway:
+    case Tp::ConnectionPresenceTypeExtendedAway:
+        if (!isYou) {
+            message = i18n("%1 is away", contact->alias());
+        } else {
+            message = i18n("You are now marked as away");
         }
         break;
     default:
@@ -421,11 +451,39 @@ void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, uint ty
         d->ui.chatArea->addStatusMessage(statusMessage);
     }
 
-
     //if in a non-group chat situation, and the other contact has changed state...
     if (!d->isGroupChat && !isYou) {
-        KIcon icon = iconForPresence(type);
+        KIcon icon = iconForPresence(presence.type());
         Q_EMIT iconChanged(icon);
+    }
+}
+
+void ChatWindow::onContactAliasChanged(const Tp::ContactPtr & contact, const QString& alias)
+{
+    QString message;
+    bool isYou = (contact == d->channel->groupSelfContact());
+
+    if (isYou) {
+        message = i18n("You are now known as %1", alias);
+    } else if (!d->isGroupChat) {
+        //HACK the title is the contact alias on non-groupchats,
+        //but we should have a better way of keeping the previous
+        //aliases of all contacts
+        message = i18n("%1 is now known as %2", d->title, alias);
+    }
+
+    if (!message.isEmpty()) {
+        AdiumThemeStatusInfo statusMessage;
+        statusMessage.setMessage(message);
+        statusMessage.setStatus(QString());
+        statusMessage.setService(d->channel->connection()->protocolName());
+        statusMessage.setTime(QDateTime::currentDateTime());
+        d->ui.chatArea->addStatusMessage(statusMessage);
+    }
+
+    //if in a non-group chat situation, and the other contact has changed alias...
+    if (!d->isGroupChat && !isYou) {
+        Q_EMIT titleChanged(alias);
     }
 }
 
@@ -450,7 +508,7 @@ void ChatWindow::onFormatColorReleased()
     d->ui.sendMessageBox->setTextColor(color);
 }
 
-KIcon ChatWindow::iconForPresence(uint presence)
+KIcon ChatWindow::iconForPresence(Tp::ConnectionPresenceType presence)
 {
     QString iconName;
 

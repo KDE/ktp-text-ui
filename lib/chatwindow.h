@@ -39,12 +39,18 @@ public:
     /** Returns the name of this chat window*/
     QString title() const;
 
+    /** Returns the icon of this chat window */
+    KIcon icon() const;
+
 protected:
     void changeEvent(QEvent *e);
 
 protected slots:
     /** Show the received message in the chat window*/
     void handleIncomingMessage(const Tp::ReceivedMessage & message);
+
+    /** Show notification about a received message */
+    void notifyAboutIncomingMessage(const Tp::ReceivedMessage & message);
 
     /** Show the message sent in the chat window*/
     void handleMessageSent(const Tp::Message & message,
@@ -56,7 +62,9 @@ protected slots:
 
     void onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state);
 
-    void onContactPresenceChange(const Tp::ContactPtr & contact, uint type);
+    void onContactPresenceChange(const Tp::ContactPtr & contact, const Tp::Presence & presence);
+
+    void onContactAliasChanged(const Tp::ContactPtr & contact, const QString & alias);
 
     void onInputBoxChanged();
 
@@ -81,7 +89,7 @@ private slots:
 private:
     void init();
     //FIXME this should be in the ktelepathy lib
-    static KIcon iconForPresence(uint presence);
+    static KIcon iconForPresence(Tp::ConnectionPresenceType presence);
 
     ChatWindowPrivate * const d;
 };
