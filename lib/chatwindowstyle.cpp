@@ -19,17 +19,17 @@
 #include "chatstyleplistfilereader.h"
 
 // Qt includes
-#include <QFile>
-#include <QDir>
-#include <QHash>
-#include <QStringList>
-#include <QTextCodec>
-#include <QTextStream>
+#include <QtCore/QFile>
+#include <QtCore/QDir>
+#include <QtCore/QHash>
+#include <QtCore/QStringList>
+#include <QtCore/QTextCodec>
+#include <QtCore/QTextStream>
 
 // KDE includes
-#include <kdebug.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
+#include <KDebug>
+#include <KLocale>
+#include <KStandardDirs>
 
 class ChatWindowStyle::Private
 {
@@ -60,28 +60,33 @@ public:
 };
 
 ChatWindowStyle::ChatWindowStyle(const QString &styleId, StyleBuildMode styleBuildMode)
-	: QObject(), d(new Private)
+    : QObject(), d(new Private)
 {
     init(styleId, styleBuildMode);
 }
 
-ChatWindowStyle::ChatWindowStyle(const QString &styleId, const QString &variantPath, StyleBuildMode styleBuildMode)
-	: QObject(), d(new Private)
+ChatWindowStyle::ChatWindowStyle(const QString &styleId, const QString &variantPath,
+                                 StyleBuildMode styleBuildMode)
+    : QObject(), d(new Private)
 {
+    Q_UNUSED(variantPath);
     init(styleId, styleBuildMode);
 }
 
 void ChatWindowStyle::init(const QString &styleId, StyleBuildMode styleBuildMode)
 {
-    QStringList styleDirs = KGlobal::dirs()->findDirs("data", QString("ktelepathy/styles/%1/Contents/Resources/").arg(styleId));
+    QStringList styleDirs = KGlobal::dirs()->findDirs("data",
+        QString(QLatin1String("ktelepathy/styles/%1/Contents/Resources/")).arg(styleId)
+    );
 
     if (styleDirs.isEmpty()) {
-	kDebug() << "Failed to find style" << styleId;
-	return;
+        kDebug() << "Failed to find style" << styleId;
+        return;
     }
     d->styleId = styleId;
-    if (styleDirs.count() > 1)
+    if (styleDirs.count() > 1) {
         kDebug() << "found several styles with the same name. using first";
+    }
     d->baseHref = styleDirs.at(0);
     kDebug() << "Using style:" << d->baseHref;
     readStyleFiles();
@@ -259,23 +264,23 @@ void ChatWindowStyle::listVariants()
 
 void ChatWindowStyle::readStyleFiles()
 {
-    QString templateFile = d->baseHref + QString("Template.html");
-    QString headerFile = d->baseHref + QString("Header.html");
-    QString footerFile = d->baseHref + QString("Footer.html");
-    QString incomingFile = d->baseHref + QString("Incoming/Content.html");
-    QString nextIncomingFile = d->baseHref + QString("Incoming/NextContent.html");
-    QString outgoingFile = d->baseHref + QString("Outgoing/Content.html");
-    QString nextOutgoingFile = d->baseHref + QString("Outgoing/NextContent.html");
-    QString statusFile = d->baseHref + QString("Status.html");
-    QString actionIncomingFile = d->baseHref + QString("Incoming/Action.html");
-    QString actionOutgoingFile = d->baseHref + QString("Outgoing/Action.html");
-    QString fileTransferIncomingFile = d->baseHref + QString("Incoming/FileTransferRequest.html");
-    QString voiceClipIncomingFile = d->baseHref + QString("Incoming/voiceClipRequest.html");
-    QString outgoingStateUnknownFile = d->baseHref + QString("Outgoing/StateUnknown.html");
-    QString outgoingStateSendingFile = d->baseHref + QString("Outgoing/StateSending.html");
-    QString outgoingStateSentFile = d->baseHref + QString("Outgoing/StateSent.html");
-    QString outgoingStateErrorFile = d->baseHref + QString("Outgoing/StateError.html");
-    QString infoPlistFile = d->baseHref + QString("../Info.plist");
+    QString templateFile = d->baseHref + QLatin1String("Template.html");
+    QString headerFile = d->baseHref + QLatin1String("Header.html");
+    QString footerFile = d->baseHref + QLatin1String("Footer.html");
+    QString incomingFile = d->baseHref + QLatin1String("Incoming/Content.html");
+    QString nextIncomingFile = d->baseHref + QLatin1String("Incoming/NextContent.html");
+    QString outgoingFile = d->baseHref + QLatin1String("Outgoing/Content.html");
+    QString nextOutgoingFile = d->baseHref + QLatin1String("Outgoing/NextContent.html");
+    QString statusFile = d->baseHref + QLatin1String("Status.html");
+    QString actionIncomingFile = d->baseHref + QLatin1String("Incoming/Action.html");
+    QString actionOutgoingFile = d->baseHref + QLatin1String("Outgoing/Action.html");
+    QString fileTransferIncomingFile = d->baseHref + QLatin1String("Incoming/FileTransferRequest.html");
+    QString voiceClipIncomingFile = d->baseHref + QLatin1String("Incoming/voiceClipRequest.html");
+    QString outgoingStateUnknownFile = d->baseHref + QLatin1String("Outgoing/StateUnknown.html");
+    QString outgoingStateSendingFile = d->baseHref + QLatin1String("Outgoing/StateSending.html");
+    QString outgoingStateSentFile = d->baseHref + QLatin1String("Outgoing/StateSent.html");
+    QString outgoingStateErrorFile = d->baseHref + QLatin1String("Outgoing/StateError.html");
+    QString infoPlistFile = d->baseHref + QLatin1String("../Info.plist");
 
 
     QFile fileAccess;
@@ -516,6 +521,6 @@ QString ChatWindowStyle::compact(const QString & styleVariant) const
     if (styleVariant.isEmpty()) {
         return QLatin1String("Variants/_compact_.css");
     } else {
-        return compacted.insert(compacted.lastIndexOf('/') + 1, QString("_compact_"));
+        return compacted.insert(compacted.lastIndexOf('/') + 1, QLatin1String("_compact_"));
     }
 }

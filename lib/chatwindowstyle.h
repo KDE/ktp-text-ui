@@ -16,13 +16,10 @@
    *                                                                       *
    *************************************************************************
 */
-#ifndef KOPETECHATWINDOWSTYLE_H
-#define KOPETECHATWINDOWSTYLE_H
+#ifndef CHATWINDOWSTYLE_H
+#define CHATWINDOWSTYLE_H
 
-
-#include <QHash>
-
-//#include <kopete_export.h>
+#include <QtCore/QHash>
 
 /**
 * This class represent a single chat window style.
@@ -52,7 +49,8 @@ public:
      *
      */
     explicit ChatWindowStyle(const QString &styleId, StyleBuildMode styleBuildMode = StyleBuildNormal);
-    ChatWindowStyle(const QString &styleId, const QString &variantPath, StyleBuildMode styleBuildMode = StyleBuildFast);
+    ChatWindowStyle(const QString &styleId, const QString &variantPath,
+                    StyleBuildMode styleBuildMode = StyleBuildFast);
     ~ChatWindowStyle();
 
     /**

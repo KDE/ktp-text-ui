@@ -18,8 +18,8 @@
 
 #include "emoticonsetinstaller.h"
 
-#include <chatwindowstylemanager.h>
-#include <chatstyleplistfilereader.h>
+#include "chatwindowstylemanager.h"
+#include "chatstyleplistfilereader.h"
 
 #include <KDebug>
 #include <KTemporaryFile>
@@ -35,6 +35,11 @@ EmoticonSetInstaller::EmoticonSetInstaller(KArchive *archive, KTemporaryFile *tm
 
     m_archive = archive;
     m_tmpFile = tmpFile;
+}
+
+EmoticonSetInstaller::~EmoticonSetInstaller()
+{
+    kDebug();
 }
 
 BundleInstaller::BundleStatus EmoticonSetInstaller::validate()
@@ -71,7 +76,7 @@ BundleInstaller::BundleStatus EmoticonSetInstaller::validate()
     return BundleNotValid;
 }
 
-QString EmoticonSetInstaller::bundleName()
+QString EmoticonSetInstaller::bundleName() const
 {
     kDebug();
 

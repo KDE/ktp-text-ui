@@ -34,12 +34,12 @@ public:
 };
 
 AdiumThemeHeaderInfo::AdiumThemeHeaderInfo()
-        : d(new AdiumThemeHeaderInfoPrivate)
+    : d(new AdiumThemeHeaderInfoPrivate)
 {
 }
 
-AdiumThemeHeaderInfo::AdiumThemeHeaderInfo(const AdiumThemeHeaderInfo &other) :
-    d(new AdiumThemeHeaderInfoPrivate(*other.d))
+AdiumThemeHeaderInfo::AdiumThemeHeaderInfo(const AdiumThemeHeaderInfo &other)
+    : d(new AdiumThemeHeaderInfoPrivate(*other.d))
 {
 
 }

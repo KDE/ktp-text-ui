@@ -17,26 +17,26 @@
 
 #include "chatwindowstylemanager.h"
 #include "chatstyleplistfilereader.h"
+#include "chatwindowstyle.h"
 
 // Qt includes
-#include <QStack>
-#include <QFileInfo>
+#include <QtCore/QStack>
+#include <QtCore/QFileInfo>
 
 // KDE includes
-#include <kstandarddirs.h>
-#include <kdirlister.h>
-#include <kdebug.h>
-#include <kurl.h>
-#include <kglobal.h>
-#include <karchive.h>
-#include <kzip.h>
-#include <ktar.h>
-#include <kmimetype.h>
-#include <kio/netaccess.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
+#include <KStandardDirs>
+#include <KDirLister>
+#include <KDebug>
+#include <KUrl>
+#include <KGlobal>
+#include <KArchive>
+#include <KZip>
+#include <KTar>
+#include <KMimeType>
+#include <KIO/NetAccess>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
-#include "chatwindowstyle.h"
 
 class ChatWindowStyleManager::Private
 {
@@ -95,11 +95,13 @@ void ChatWindowStyleManager::loadStyles()
     d->styleDirLister = new KDirLister(this);
     d->styleDirLister->setDirOnlyMode(true);
 
-    connect(d->styleDirLister, SIGNAL(newItems(const KFileItemList &)), this, SLOT(slotNewStyles(const KFileItemList &)));
+    connect(d->styleDirLister, SIGNAL(newItems(KFileItemList)),
+            this, SLOT(slotNewStyles(KFileItemList)));
     connect(d->styleDirLister, SIGNAL(completed()), this, SLOT(slotDirectoryFinished()));
 
-    if (!d->styleDirs.isEmpty())
+    if (!d->styleDirs.isEmpty()) {
         d->styleDirLister->openUrl(d->styleDirs.pop(), KDirLister::Keep);
+    }
 }
 
 QMap<QString, QString> ChatWindowStyleManager::getAvailableStyles() const
@@ -132,9 +134,12 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
    QString currentBundleMimeType = KMimeType::findByPath(styleBundlePath, 0, false)->name();
    if (currentBundleMimeType == "application/zip") {
        archive = new KZip(styleBundlePath);
-   } else if (currentBundleMimeType == "application/x-compressed-tar" || currentBundleMimeType == "application/x-bzip-compressed-tar" || currentBundleMimeType == "application/x-gzip" || currentBundleMimeType == "application/x-bzip") {
+   } else if (currentBundleMimeType == "application/x-compressed-tar" ||
+              currentBundleMimeType == "application/x-bzip-compressed-tar" ||
+              currentBundleMimeType == "application/x-gzip" ||
+              currentBundleMimeType == "application/x-bzip") {
        archive = new KTar(styleBundlePath);
-   } else if (currentBundleMimeType == "application/octet-stream"){
+   } else if (currentBundleMimeType == "application/octet-stream") {
        archive = new KZip(styleBundlePath);
        if (!archive->open(QIODevice::ReadOnly)) {
            delete archive;
@@ -177,43 +182,43 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
        if (currentEntry->isDirectory()) {
            currentDir = dynamic_cast<KArchiveDirectory*>(currentEntry);
            if (currentDir) {
-               if (currentDir->entry(QString::fromUtf8("Contents"))) {
+               if (currentDir->entry(QLatin1String("Contents"))) {
                   kDebug() << "Contents found";
                    validResult += 1;
                }
-               if (currentDir->entry(QString::fromUtf8("Contents/Resources"))) {
+               if (currentDir->entry(QLatin1String("Contents/Resources"))) {
                   kDebug() << "Contents/Resources found";
                    validResult += 1;
                }
-               if (currentDir->entry(QString::fromUtf8("Contents/Resources/Incoming"))) {
+               if (currentDir->entry(QLatin1String("Contents/Resources/Incoming"))) {
                   kDebug() << "Contents/Resources/Incoming found";
                    validResult += 1;
                }
-               if (currentDir->entry(QString::fromUtf8("Contents/Resources/Outgoing"))) {
+               if (currentDir->entry(QLatin1String("Contents/Resources/Outgoing"))) {
                   kDebug() << "Contents/Resources/Outgoing found";
                    validResult += 1;
                }
-               if (currentDir->entry(QString::fromUtf8("Contents/Resources/main.css"))) {
+               if (currentDir->entry(QLatin1String("Contents/Resources/main.css"))) {
                   kDebug() << "Contents/Resources/main.css found";
                    validResult += 1;
                }
-               if (currentDir->entry(QString::fromUtf8("Contents/Resources/Footer.html"))) {
+               if (currentDir->entry(QLatin1String("Contents/Resources/Footer.html"))) {
                   kDebug() << "Contents/Resources/Footer.html found";
                    validResult += 1;
                }
-               if (currentDir->entry(QString::fromUtf8("Contents/Resources/Status.html"))) {
+               if (currentDir->entry(QLatin1String("Contents/Resources/Status.html"))) {
                   kDebug() << "Contents/Resources/Status.html found";
                    validResult += 1;
                }
-               if (currentDir->entry(QString::fromUtf8("Contents/Resources/Header.html"))) {
+               if (currentDir->entry(QLatin1String("Contents/Resources/Header.html"))) {
                   kDebug() << "Contents/Resources/Header.html found";
                    validResult += 1;
                }
-               if (currentDir->entry(QString::fromUtf8("Contents/Resources/Incoming/Content.html"))) {
+               if (currentDir->entry(QLatin1String("Contents/Resources/Incoming/Content.html"))) {
                   kDebug() << "Contents/Resources/Incoming/Content.html found";
                    validResult += 1;
                }
-               if (currentDir->entry(QString::fromUtf8("Contents/Resources/Outgoing/Content.html"))) {
+               if (currentDir->entry(QLatin1String("Contents/Resources/Outgoing/Content.html"))) {
                   kDebug() << "Contents/Resources/Outgoing/Content.html found";
                    validResult += 1;
                }
@@ -228,7 +233,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
            currentEntry = const_cast<KArchiveEntry*>(rootDir->entry(*entriesIt));
            if (currentEntry && currentEntry->isDirectory()) {
                // Ignore this MacOS X "garbage" directory in zip.
-               if (currentEntry->name() == QString::fromUtf8("__MACOSX")) {
+               if (currentEntry->name() == QLatin1String("__MACOSX")) {
                    continue;
                } else {
                    currentDir = dynamic_cast<KArchiveDirectory*>(currentEntry);
@@ -243,10 +248,11 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
        archive->close();
        delete archive;
 
-       if (installOk)
+       if (installOk) {
            return StyleInstallOk;
-       else
+       } else {
            return StyleUnknow;
+       }
    } else {
        archive->close();
        delete archive;
@@ -304,21 +310,24 @@ ChatWindowStyle *ChatWindowStyleManager::getValidStyleFromPool(const QString &st
 {
     ChatWindowStyle *style = 0;
     style = getStyleFromPool(styleId);
-    if (style)
+    if (style) {
         return style;
+    }
 
     kDebug() << "Trying default style";
     // Try default style
-    style = getStyleFromPool("renkoo.AdiumMessageStyle");
-    if (style)
+    style = getStyleFromPool(QLatin1String("renkoo.AdiumMessageStyle"));
+    if (style) {
         return style;
+    }
 
     kDebug() << "Trying first valid style";
     // Try first valid style
     foreach(const QString& name, d->availableStyles) {
         style = getStyleFromPool(name);
-        if (style)
+        if (style) {
             return style;
+        }
     }
 
     kDebug() << "Valid style not found!";
@@ -360,7 +369,7 @@ void ChatWindowStyleManager::slotNewStyles(const KFileItemList &dirList)
 {
     foreach(const KFileItem &item, dirList) {
         // Ignore data dir(from deprecated XSLT themes)
-        if (!item.url().fileName().contains(QString::fromUtf8("data"))) {
+        if (!item.url().fileName().contains(QLatin1String("data"))) {
             kDebug() << "Listing: " << item.url().fileName();
             // If the style path is already in the pool, that's mean the style was updated on disk
             // Reload the style
@@ -371,7 +380,7 @@ void ChatWindowStyleManager::slotNewStyles(const KFileItemList &dirList)
                 d->stylePool[styleId]->reload();
 
                 // Add to available if required.
-                if (! d->availableStyles.contains(styleId)) {
+                if (!d->availableStyles.contains(styleId)) {
 
                     //FIXME this code is in two places.. this sucks!!!
                     ChatStylePlistFileReader plistReader(item.url().path().append("/Contents/Info.plist"));

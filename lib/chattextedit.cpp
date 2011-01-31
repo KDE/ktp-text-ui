@@ -19,11 +19,10 @@
 
 #include "chattextedit.h"
 
-#include <QMenu>
-#include <QContextMenuEvent>
-#include <QAction>
-#include <QDebug>
-#include <QTimer>
+#include <QtGui/QMenu>
+#include <QtGui/QContextMenuEvent>
+#include <QtGui/QAction>
+#include <QtCore/QTimer>
 
 
 class ChatTextEditPrivate
@@ -45,12 +44,9 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
 
 void ChatTextEdit::setFontBold(bool isBold)
 {
-    if (isBold)
-    {
+    if (isBold) {
         setFontWeight(QFont::Bold);
-    }
-    else
-    {
+    } else {
         setFontWeight(QFont::Normal);
     }
 }
@@ -86,18 +82,18 @@ QSize ChatTextEdit::sizeHint() const
 
 void ChatTextEdit::resizeEvent(QResizeEvent* e)
 {
-        QTextEdit::resizeEvent(e);
-        QTimer::singleShot(0, this, SLOT(updateScrollBar()));
+    QTextEdit::resizeEvent(e);
+    QTimer::singleShot(0, this, SLOT(updateScrollBar()));
 }
 
 void ChatTextEdit::recalculateSize()
 {
-        updateGeometry();
-        QTimer::singleShot(0, this, SLOT(updateScrollBar()));
+    updateGeometry();
+    QTimer::singleShot(0, this, SLOT(updateScrollBar()));
 }
 
 void ChatTextEdit::updateScrollBar()
 {
-        setVerticalScrollBarPolicy(sizeHint().height() > height() ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAlwaysOff);
-        ensureCursorVisible();
+    setVerticalScrollBarPolicy(sizeHint().height() > height() ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAlwaysOff);
+    ensureCursorVisible();
 }

@@ -25,12 +25,12 @@
 #include "adiumthemecontentinfo.h"
 #include "adiumthemestatusinfo.h"
 
-#include <QDebug>
 #include <KDebug>
+#include <KLocalizedString>
 
-MainWindow::MainWindow(QWidget *parent) :
-        QDialog(parent),
-        ui(new Ui::ChatWindowConfig)
+MainWindow::MainWindow(QWidget *parent)
+    : QDialog(parent),
+      ui(new Ui::ChatWindowConfig)
 {
     ui->setupUi(this);
 
@@ -39,11 +39,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
 
-    m_demoChatHeader.setChatName("A demo chat");
-    m_demoChatHeader.setSourceName("Jabber");
+    m_demoChatHeader.setChatName(i18n("A demo chat"));
+    m_demoChatHeader.setSourceName(i18n("Jabber"));
     m_demoChatHeader.setTimeOpened(QDateTime::currentDateTime());
-    m_demoChatHeader.setDestinationName("BobMarley@yahoo.com");
-    m_demoChatHeader.setDestinationDisplayName("Bob Marley");
+    m_demoChatHeader.setDestinationName(i18n("BobMarley@yahoo.com"));
+    m_demoChatHeader.setDestinationDisplayName(i18n("Bob Marley"));
 
     ui->chatView->initialise(m_demoChatHeader);
 
@@ -145,25 +145,25 @@ void MainWindow::sendDemoMessages()
     //add a fake message
 
     AdiumThemeContentInfo message(AdiumThemeMessageInfo::RemoteToLocal);
-    message.setMessage("Hello");
-    message.setSenderDisplayName("larry@example.com");
-    message.setSenderScreenName("Larry Demo");
-    message.setService("Jabber");
+    message.setMessage(i18n("Hello"));
+    message.setSenderDisplayName(i18n("larry@example.com"));
+    message.setSenderScreenName(i18n("Larry Demo"));
+    message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::LocalToRemote);
-    message.setMessage("A different example message");
-    message.setSenderDisplayName("ted@example.com");
-    message.setSenderScreenName("Ted Example");
-    message.setService("Jabber");
+    message.setMessage(i18n("A different example message"));
+    message.setSenderDisplayName(i18n("ted@example.com"));
+    message.setSenderScreenName(i18n("Ted Example"));
+    message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
 
     AdiumThemeStatusInfo  statusMessage;
-    statusMessage.setMessage("Ted Example has left the chat."); //FIXME sync this with chat text logic.
+    statusMessage.setMessage(i18n("Ted Example has left the chat.")); //FIXME sync this with chat text logic.
     statusMessage.setTime(QDateTime::currentDateTime());
-    statusMessage.setService("Jabber");
+    statusMessage.setService(i18n("Jabber"));
     statusMessage.setStatus("away");
     ui->chatView->addStatusMessage(statusMessage);
 }

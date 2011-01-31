@@ -17,19 +17,16 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-
 #include "chatstyleplistfilereader.h"
 
-#include <QFile>
-#include <QDomDocument>
-#include <QVariant>
-#include <QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QVariant>
+#include <QtXml/QDomDocument>
 
 class ChatStylePlistFileReader::Private
 {
 public:
     Private() {}
-
     ~Private() {}
 
     QMap<QString, QVariant> data;
@@ -37,19 +34,19 @@ public:
 };
 
 ChatStylePlistFileReader::ChatStylePlistFileReader(const QString &fileName)
+    : d(new Private)
 {
     QFile file(fileName);
 
-    d = new Private();
     d->m_status = readAndParseFile(file);
 }
 
 ChatStylePlistFileReader::ChatStylePlistFileReader(const QByteArray& fileContent)
+    : d(new Private)
 {
     QDomDocument document;
     document.setContent(fileContent);
 
-    d = new Private();
     d->m_status = parse(document);
 }
 
@@ -94,92 +91,92 @@ ChatStylePlistFileReader::~ChatStylePlistFileReader()
     delete d;
 }
 
-QString ChatStylePlistFileReader::CFBundleGetInfoString()
+QString ChatStylePlistFileReader::CFBundleGetInfoString() const
 {
     return d->data.value("CFBundleGetInfoString").toString();
 }
 
-QString ChatStylePlistFileReader::CFBundleName()
+QString ChatStylePlistFileReader::CFBundleName() const
 {
     return d->data.value("CFBundleName").toString();
 }
 
-QString ChatStylePlistFileReader::CFBundleIdentifier()
+QString ChatStylePlistFileReader::CFBundleIdentifier() const
 {
     return d->data.value("CFBundleIdentifier").toString();
 }
 
-QString ChatStylePlistFileReader::defaultFontFamily()
+QString ChatStylePlistFileReader::defaultFontFamily() const
 {
     return d->data.value("DefaultFontFamily").toString();
 }
 
-int ChatStylePlistFileReader::defaultFontSize()
+int ChatStylePlistFileReader::defaultFontSize() const
 {
     return d->data.value("DefaultFontSize").toInt();
 }
 
-QString ChatStylePlistFileReader::defaultVariant()
+QString ChatStylePlistFileReader::defaultVariant() const
 {
     return d->data.value("DefaultVariant").toString();
 }
 
-int ChatStylePlistFileReader::messageViewVersion()
+int ChatStylePlistFileReader::messageViewVersion() const
 {
     return d->data.value("MessageViewVersion").toInt();
 }
 
-ChatStylePlistFileReader::Status ChatStylePlistFileReader::status()
+ChatStylePlistFileReader::Status ChatStylePlistFileReader::status() const
 {
     return d->m_status;
 }
 
-bool ChatStylePlistFileReader::showUserIcons()
+bool ChatStylePlistFileReader::showUserIcons() const
 {
     return d->data.value("ShowUserIcons").toBool();
 }
 
-bool ChatStylePlistFileReader::showUserIcons(const QString& variantName)
+bool ChatStylePlistFileReader::showUserIcons(const QString& variantName) const
 {
     return d->data.value(QString("ShowUserIcons:%1").arg(variantName)).toBool();
 }
 
-bool ChatStylePlistFileReader::disableCombineConsecutive()
+bool ChatStylePlistFileReader::disableCombineConsecutive() const
 {
     return d->data.value("DisableCombineConsecutive").toBool();
 }
 
-bool ChatStylePlistFileReader::defaultBackgroundIsTransparent()
+bool ChatStylePlistFileReader::defaultBackgroundIsTransparent() const
 {
     return d->data.value("DefaultBackgroundIsTransparent").toBool();
 }
 
-bool ChatStylePlistFileReader::disableCustomBackground()
+bool ChatStylePlistFileReader::disableCustomBackground() const
 {
     return d->data.value("DisableCustomBackground").toBool();
 }
 
-QString ChatStylePlistFileReader::defaultBackgroundColor()
+QString ChatStylePlistFileReader::defaultBackgroundColor() const
 {
     return d->data.value("DefaultBackgroundColor").toString();
 }
 
-QString ChatStylePlistFileReader::defaultBackgroundColor(const QString& variantName)
+QString ChatStylePlistFileReader::defaultBackgroundColor(const QString& variantName) const
 {
     return d->data.value(QString("DefaultBackgroundColor:%1").arg(variantName)).toString();
 }
 
-bool ChatStylePlistFileReader::allowTextColors()
+bool ChatStylePlistFileReader::allowTextColors() const
 {
     return d->data.value("AllowTextColors").toBool();
 }
 
-bool ChatStylePlistFileReader::allowTextColors(const QString& variantName)
+bool ChatStylePlistFileReader::allowTextColors(const QString& variantName) const
 {
     return d->data.value(QString("AllowTextColors").arg(variantName)).toBool();
 }
 
-QString ChatStylePlistFileReader::imageMask()
+QString ChatStylePlistFileReader::imageMask() const
 {
     return d->data.value("ImageMask").toString();
 }

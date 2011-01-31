@@ -15,13 +15,13 @@
    *************************************************************************
 */
 
-#ifndef KOPETECHATWINDOWSTYLEMANAGER_H
-#define KOPETECHATWINDOWSTYLEMANAGER_H
+#ifndef CHATWINDOWSTYLEMANAGER_H
+#define CHATWINDOWSTYLEMANAGER_H
 
-#include <QObject>
-#include <QHash>
+#include <QtCore/QObject>
+#include <QtCore/QHash>
 
-#include <kfileitem.h>
+#include <KFileItem>
 
 
 class ChatWindowStyle;
@@ -54,7 +54,8 @@ public:
      * - StyleCannotOpen : The archive couldn't be openned.
      * - StyleUnknow : Unknow error.
      */
-    enum StyleInstallStatus { StyleInstallOk = 0, StyleNotValid, StyleNoDirectoryValid, StyleCannotOpen, StyleUnknow };
+    enum StyleInstallStatus { StyleInstallOk = 0, StyleNotValid, StyleNoDirectoryValid,
+                              StyleCannotOpen, StyleUnknow };
 
     /**
      * Destructor.

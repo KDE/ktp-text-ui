@@ -19,6 +19,7 @@
 
 #include "channelcontactlist.h"
 #include <TelepathyQt4/Contact>
+#include <KDebug>
 
 /** \breif This class provides an abstracted way of getting presence changes from a contact
   * It was needed to be able to pair up a contact changing, with the name of the contact.
@@ -35,11 +36,12 @@ other sets (taking set union of them is easiest)
  */
 
 
-ChannelContactListContact::ChannelContactListContact(Tp::ContactPtr contact, QObject *parent)
-        : QObject(parent)
+ChannelContactListContact::ChannelContactListContact(const Tp::ContactPtr & contact, QObject *parent)
+    : QObject(parent)
 {
     m_contact = contact;
-    connect(m_contact.data(), SIGNAL(simplePresenceChanged(const QString, uint, const QString)), SLOT(onSimplePresenceChanged(QString, uint)));
+    connect(m_contact.data(), SIGNAL(simplePresenceChanged(QString,uint,QString)),
+            SLOT(onSimplePresenceChanged(QString,uint)));
     connect(m_contact.data(), SIGNAL(aliasChanged(QString)), SLOT(onAliasChanged(QString)));
 }
 
@@ -54,21 +56,29 @@ void ChannelContactListContact::onAliasChanged(const QString &alias)
     Q_EMIT contactAliasChanged(m_contact, alias);
 }
 
-ChannelContactList::ChannelContactList(Tp::TextChannelPtr channel, QObject *parent) :
-        QObject(parent)
+ChannelContactList::ChannelContactList(const Tp::TextChannelPtr & channel, QObject *parent)
+    : QObject(parent)
 {
     foreach(Tp::ContactPtr contact, channel->groupContacts()) {
         //FIXME move this to a slot called "addContact" - also call this when chat gains a person.
         ChannelContactListContact*  contactProxy = new ChannelContactListContact(contact, this);
-        connect(contactProxy, SIGNAL(contactPresenceChanged(Tp::ContactPtr, uint)), SIGNAL(contactPresenceChanged(Tp::ContactPtr, uint)));
-        connect(contactProxy, SIGNAL(contactAliasChanged(Tp::ContactPtr, QString)), SIGNAL(contactAliasChanged(Tp::ContactPtr, QString)));
+        connect(contactProxy, SIGNAL(contactPresenceChanged(Tp::ContactPtr,uint)),
+                SIGNAL(contactPresenceChanged(Tp::ContactPtr,uint)));
+        connect(contactProxy, SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)),
+                SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)));
     }
-    connect(channel.data(), SIGNAL(groupMembersChanged(Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Channel::GroupMemberChangeDetails)),
-            SLOT(groupMembersChanged(Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Contacts, Tp::Channel::GroupMemberChangeDetails)));
+    connect(channel.data(),
+            SIGNAL(groupMembersChanged(Tp::Contacts,Tp::Contacts,Tp::Contacts,
+                                       Tp::Contacts,Tp::Channel::GroupMemberChangeDetails)),
+            SLOT(groupMembersChanged(Tp::Contacts,Tp::Contacts,Tp::Contacts,
+                                     Tp::Contacts,Tp::Channel::GroupMemberChangeDetails)));
 }
 
-void ChannelContactList::groupMembersChanged(const Tp::Contacts &groupMembersAdded, const Tp::Contacts &groupLocalPendingMembersAdded, const Tp::Contacts &groupRemotePendingMembersAdded, const Tp::Contacts &groupMembersRemoved, const Tp::Channel::GroupMemberChangeDetails &details)
+void ChannelContactList::groupMembersChanged(const Tp::Contacts & groupMembersAdded,
+                                             const Tp::Contacts & groupLocalPendingMembersAdded,
+                                             const Tp::Contacts & groupRemotePendingMembersAdded,
+                                             const Tp::Contacts & groupMembersRemoved,
+                                             const Tp::Channel::GroupMemberChangeDetails & details)
 {
-    qDebug() << "members changed.";
+    kDebug() << "members changed.";
 }
-

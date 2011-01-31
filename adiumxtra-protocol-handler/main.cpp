@@ -34,17 +34,15 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineOptions options;
     options.add("!+install-chatstyles", ki18n("Install Adium packages"));
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::addCmdLineOptions(options);
 
 
     AdiumxtraProtocolHandler app;
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    for(int i = 0; i < args->count(); i++)
-    {
+    for(int i = 0; i < args->count(); i++) {
         kDebug() << "install: " << args->arg(i);
         app.install(args->arg(i));
-
     }
     args->clear();
 

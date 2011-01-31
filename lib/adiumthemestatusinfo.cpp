@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "adiumthemestatusinfo.h"
-#include <QString>
+#include <QtCore/QString>
 
 class AdiumThemeStatusInfoPrivate
 {
@@ -26,15 +26,15 @@ public:
     QString status;
 };
 
-AdiumThemeStatusInfo::AdiumThemeStatusInfo():
-        AdiumThemeMessageInfo(AdiumThemeMessageInfo::Status),
-        d(new AdiumThemeStatusInfoPrivate)
+AdiumThemeStatusInfo::AdiumThemeStatusInfo()
+    : AdiumThemeMessageInfo(AdiumThemeMessageInfo::Status),
+      d(new AdiumThemeStatusInfoPrivate)
 {
 }
 
-AdiumThemeStatusInfo::AdiumThemeStatusInfo(const AdiumThemeStatusInfo &other) :
-    AdiumThemeMessageInfo(other),
-    d(new AdiumThemeStatusInfoPrivate(*other.d))
+AdiumThemeStatusInfo::AdiumThemeStatusInfo(const AdiumThemeStatusInfo &other)
+    : AdiumThemeMessageInfo(other),
+      d(new AdiumThemeStatusInfoPrivate(*other.d))
 {
 
 }

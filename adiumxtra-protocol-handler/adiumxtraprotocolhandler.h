@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef ADIUMXTRAPROTOCOLHANDLER_H
 #define ADIUMXTRAPROTOCOLHANDLER_H
 
@@ -24,15 +23,13 @@
 
 #include <KApplication>
 
-
-
 class AdiumxtraProtocolHandler : public KApplication
 {
-    public:
-        AdiumxtraProtocolHandler();
-        virtual ~AdiumxtraProtocolHandler();
+public:
+    AdiumxtraProtocolHandler();
+    virtual ~AdiumxtraProtocolHandler();
 
-        BundleInstaller::BundleStatus install(const QString& path);
+    BundleInstaller::BundleStatus install(const QString& path);
 };
 
 #endif // ADIUMXTRAPROTOCOLHANDLER_H

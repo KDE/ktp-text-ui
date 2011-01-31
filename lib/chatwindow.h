@@ -20,77 +20,54 @@
 #ifndef CHATWINDOW_H
 #define CHATWINDOW_H
 
-#include <QWidget>
-#include <QString>
+#include <QtCore/QString>
+#include <QtGui/QWidget>
 #include <KIcon>
 
 #include <TelepathyQt4/ReceivedMessage>
-#include "chatconnection.h"
-
-
-namespace Ui
-{
-class ChatWindow;
-}
 
 class ChatWindowPrivate;
-
-class MessageBoxEventFilter : public QObject
-{
-    Q_OBJECT
-public:
-    MessageBoxEventFilter(QObject* parent = 0) : QObject(parent) {}
-    virtual ~MessageBoxEventFilter() {}
-protected:
-    bool eventFilter(QObject *obj, QEvent *event);
-Q_SIGNALS:
-    void returnKeyPressed();
-};
 
 class ChatWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ChatWindow(ChatConnection* chat, QWidget *parent = 0);
-    ~ChatWindow();
-
+    explicit ChatWindow(const Tp::TextChannelPtr & channel, QWidget *parent = 0);
+    virtual ~ChatWindow();
 
     /** Returns the name of this chat window*/
-    QString title();
+    QString title() const;
 
 protected:
     void changeEvent(QEvent *e);
 
 protected slots:
     /** Show the received message in the chat window*/
-    void handleIncomingMessage(const Tp::ReceivedMessage  &message);
+    void handleIncomingMessage(const Tp::ReceivedMessage & message);
 
     /** Show the message sent in the chat window*/
-    void handleMessageSent(const Tp::Message  &message, Tp::MessageSendingFlags flags, const QString &sentMessageToken);
+    void handleMessageSent(const Tp::Message & message,
+                           Tp::MessageSendingFlags flags,
+                           const QString & sentMessageToken);
 
     /** send the text in the text area widget to the client handler*/
     void sendMessage();
 
-    /** Enable/Disable buttons in the chat window*/
-    void updateEnabledState(bool enabled);
+    void onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state);
 
-    void onChatStatusChanged(Tp::ContactPtr contact, ChannelChatState state);
-
-    void onContactPresenceChange(Tp::ContactPtr, uint type);
+    void onContactPresenceChange(const Tp::ContactPtr & contact, uint type);
 
     void onInputBoxChanged();
 
     void chatViewReady();
 
-
-
 signals:
     /** Emitted whenever the title for the chat changes, normally the name of the contact or a topic*/
-    void titleChanged(QString title);
+    void titleChanged(const QString & title);
 
     /** Emmitted if the icon for this channel changes*/
-    void iconChanged(KIcon icon);
+    void iconChanged(const KIcon & icon);
 
     /** Emmited whenever a message is received in this channel*/
     void messageReceived();
@@ -98,17 +75,15 @@ signals:
     /** Emitted when another contact in the channel starts/stops typing (if supported by the protocol)*/
     void userTypingChanged(bool);
 
-
 private slots:
     void onFormatColorReleased();
 
 private:
-    KIcon iconForPresence(uint presence);
+    void init();
+    //FIXME this should be in the ktelepathy lib
+    static KIcon iconForPresence(uint presence);
 
-    Ui::ChatWindow *ui;
-    ChatConnection* m_chatConnection; //FIXME deprecate this whole class when factories is finished.
-    ChatWindowPrivate *d;
-
+    ChatWindowPrivate * const d;
 };
 
 #endif // CHATWINDOW_H

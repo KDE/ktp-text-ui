@@ -21,31 +21,29 @@
 
 #include "bundleinstaller.h"
 
-#include <KDebug>
-
 class KTemporaryFile;
 
 class EmoticonSetInstaller : public BundleInstaller
 {
     Q_OBJECT
 
-    public:
-        EmoticonSetInstaller(KArchive *archive, KTemporaryFile *tmpFile);
-        BundleStatus validate();
-        QString bundleName();
-        void showRequest();
-        void showResult();
-        ~EmoticonSetInstaller() { kDebug(); };
+public:
+    EmoticonSetInstaller(KArchive *archive, KTemporaryFile *tmpFile);
+    virtual ~EmoticonSetInstaller();
 
-    public Q_SLOTS:
-        void ignoreRequest();
-        BundleStatus install();
+    virtual BundleStatus validate();
+    virtual QString bundleName() const;
+
+public Q_SLOTS:
+    virtual BundleStatus install();
+    virtual void showRequest();
+    virtual void showResult();
+    void ignoreRequest();
 
 private:
     KArchive *m_archive;
     KTemporaryFile *m_tmpFile;
     QString m_bundleName;
-
 };
 
 #endif // EMOTICONSETINSTALLER_H

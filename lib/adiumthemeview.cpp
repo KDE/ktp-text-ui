@@ -26,13 +26,12 @@
 
 #include "chatwindowstylemanager.h"
 
-#include <QDebug>
-#include <QWebFrame>
-#include <QWebElement>
-#include <QFile>
-#include <QTextCodec>
-#include <QWebInspector>
-#include <QWebSettings>
+#include <QtCore/QFile>
+#include <QtCore/QTextCodec>
+#include <QtWebKit/QWebFrame>
+#include <QtWebKit/QWebElement>
+#include <QtWebKit/QWebInspector>
+#include <QtWebKit/QWebSettings>
 
 #include <KDebug>
 #include <KEmoticonsTheme>
@@ -43,9 +42,9 @@
 #include <KMessageBox>
 
 
-AdiumThemeView::AdiumThemeView(QWidget *parent) :
-        QWebView(parent),
-        m_displayHeader(true)
+AdiumThemeView::AdiumThemeView(QWidget *parent)
+    : QWebView(parent),
+      m_displayHeader(true)
 {
     //determine the chat window style to use (from the Kopete config file).
 
@@ -55,7 +54,9 @@ AdiumThemeView::AdiumThemeView(QWidget *parent) :
     QString chatStyleName = appearanceConfig.readEntry("styleName", "renkoo.AdiumMessageStyle");
     m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
     if (m_chatStyle == 0 || !m_chatStyle->isValid()) {
-        KMessageBox::error(this, "Failed to load a valid theme. Please make sure you run the chat window configuration program first. Will now crash.");
+        KMessageBox::error(this, i18n("Failed to load a valid theme. Please make sure you "
+                                      "run the chat window configuration program first. "
+                                      "Will now crash."));
     }
 
     QString variant = appearanceConfig.readEntry("styleVariant");
@@ -100,7 +101,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
             templateHtml = headerStream.readAll();
             fileAccess.close();
         } else {
-            KMessageBox::error(this, "Missing required file template.html - check your installation.");
+            KMessageBox::error(this, i18n("Missing required file template.html - check your installation."));
         }
     }
 
