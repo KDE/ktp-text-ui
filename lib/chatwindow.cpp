@@ -445,7 +445,6 @@ void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, const T
     if (!message.isNull()) {
         AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(message);
-        statusMessage.setStatus(QString());
         statusMessage.setService(d->channel->connection()->protocolName());
         statusMessage.setTime(QDateTime::currentDateTime());
         d->ui.chatArea->addStatusMessage(statusMessage);
@@ -475,7 +474,6 @@ void ChatWindow::onContactAliasChanged(const Tp::ContactPtr & contact, const QSt
     if (!message.isEmpty()) {
         AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(message);
-        statusMessage.setStatus(QString());
         statusMessage.setService(d->channel->connection()->protocolName());
         statusMessage.setTime(QDateTime::currentDateTime());
         d->ui.chatArea->addStatusMessage(statusMessage);
