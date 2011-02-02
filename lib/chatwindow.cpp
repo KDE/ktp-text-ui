@@ -192,6 +192,9 @@ void ChatWindow::init()
 
     connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
 
+    // make the sendMessageBox a focus proxy for the chatview
+    d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
+
     MessageBoxEventFilter *messageBoxEventFilter = new MessageBoxEventFilter(this);
     d->ui.sendMessageBox->installEventFilter(messageBoxEventFilter);
     connect(messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
