@@ -47,7 +47,7 @@ ChatWindow::ChatWindow()
 
     setCentralWidget(m_tabWidget);
 
-    setupGUI(Default, "chatwindow.rc");
+    setupGUI(static_cast<StandardWindowOptions>(Default^StatusBar), "chatwindow.rc");
 }
 
 ChatWindow::~ChatWindow()
