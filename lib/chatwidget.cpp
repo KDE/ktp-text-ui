@@ -198,6 +198,7 @@ void ChatWidget::init()
     MessageBoxEventFilter *messageBoxEventFilter = new MessageBoxEventFilter(this);
     d->ui.sendMessageBox->installEventFilter(messageBoxEventFilter);
     connect(messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
+    connect(d->ui.sendButton, SIGNAL(clicked()), SLOT(sendMessage()));
 }
 
 
