@@ -21,6 +21,7 @@
 #include "chatwindow.h"
 
 #include <KColorScheme>
+#include <KDebug>
 
 #include <TelepathyQt4/ChannelClassSpecList>
 #include <TelepathyQt4/TextChannel>
@@ -40,6 +41,11 @@ MainWindow::MainWindow()
 {
     setTabReorderingEnabled(true);
     setDocumentMode(true);
+
+    setCloseButtonEnabled(true);
+    setHoverCloseButtonDelayed(true);
+    connect(this, SIGNAL(closeRequest(QWidget*)), SLOT(removePage(QWidget*)));
+
     connect(this, SIGNAL(currentChanged(int)), SLOT(onCurrentIndexChanged(int)));
 }
 
@@ -106,6 +112,12 @@ void MainWindow::updateTabIcon(const KIcon & newIcon)
 
 void MainWindow::onCurrentIndexChanged(int index)
 {
+    kDebug() << index;
+
+    if(index == -1) {
+        return;
+    }
+
     ChatWindow* chat = qobject_cast<ChatWindow*>(widget(index));
     setWindowTitle(chat->title());
 }
