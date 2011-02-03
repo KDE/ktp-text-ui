@@ -43,6 +43,7 @@ ChatWindow::ChatWindow()
     m_tabWidget->setDocumentMode(true);
     m_tabWidget->setCloseButtonEnabled(true);
     m_tabWidget->setHoverCloseButtonDelayed(true);
+    m_tabWidget->setTabBarHidden(true);
     connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), m_tabWidget, SLOT(removePage(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
     connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)),
@@ -65,6 +66,12 @@ void ChatWindow::addTab(ChatWidget* chatWidget)
 
     m_tabWidget->addTab(chatWidget, chatWidget->icon(), chatWidget->title());
     m_tabWidget->setCurrentWidget(chatWidget);
+
+    if(m_tabWidget->isTabBarHidden()) {
+        if(m_tabWidget->count() > 1) {
+            m_tabWidget->setTabBarHidden(false);
+        }
+    }
 
     activateWindow();
 }
