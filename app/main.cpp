@@ -37,6 +37,9 @@ int main(int argc, char *argv[])
                          ki18n("Telepathy Chat Handler"),
                          "0.1");
 
+    aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "david@davidedmundson.co.uk");
+    aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
+
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     Tp::registerTypes();
