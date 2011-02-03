@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "chatwindow.h"
-#include "ui_chatwindow.h"
+#include "chatwidget.h"
+#include "ui_chatwidget.h"
 #include "adiumthemeheaderinfo.h"
 #include "adiumthemecontentinfo.h"
 #include "adiumthememessageinfo.h"
@@ -66,7 +66,7 @@ Q_SIGNALS:
 };
 
 
-class ChatWindowPrivate
+class ChatWidgetPrivate
 {
 public:
     /** Stores whether the channel is ready with all contacts upgraded*/
@@ -75,33 +75,33 @@ public:
     bool isGroupChat;
     QString title;
     Tp::TextChannelPtr channel;
-    Ui::ChatWindow ui;
+    Ui::ChatWidget ui;
 
     KComponentData telepathyComponentData();
 };
 
 
 //FIXME I would like this to be part of the main KDE Telepathy library as a static function somewhere.
-KComponentData ChatWindowPrivate::telepathyComponentData()
+KComponentData ChatWidgetPrivate::telepathyComponentData()
 {
     KAboutData telepathySharedAboutData("ktelepathy",0,KLocalizedString(),0);
     return KComponentData(telepathySharedAboutData);
 }
 
-ChatWindow::ChatWindow(const Tp::TextChannelPtr & channel, QWidget *parent)
+ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
     : QWidget(parent),
-      d(new ChatWindowPrivate)
+      d(new ChatWidgetPrivate)
 {
     d->channel = channel;
     init();
 }
 
-ChatWindow::~ChatWindow()
+ChatWidget::~ChatWidget()
 {
     delete d;
 }
 
-void ChatWindow::init()
+void ChatWidget::init()
 {
     d->chatviewlInitialised = false;
     d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
@@ -201,7 +201,7 @@ void ChatWindow::init()
 }
 
 
-void ChatWindow::changeEvent(QEvent *e)
+void ChatWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -214,12 +214,12 @@ void ChatWindow::changeEvent(QEvent *e)
 }
 
 
-QString ChatWindow::title() const
+QString ChatWidget::title() const
 {
     return d->title;
 }
 
-KIcon ChatWindow::icon() const
+KIcon ChatWidget::icon() const
 {
     //normal chat - self and one other person.
     if (!d->isGroupChat) {
@@ -235,7 +235,7 @@ KIcon ChatWindow::icon() const
     return iconForPresence(Tp::ConnectionPresenceTypeAvailable);
 }
 
-void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
+void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
     if (d->chatviewlInitialised) {
         AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
@@ -266,7 +266,7 @@ void ChatWindow::handleIncomingMessage(const Tp::ReceivedMessage &message)
     //if the window isn't ready, we don't acknowledge the mesage. We process them as soon as we are ready.
 }
 
-void ChatWindow::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
+void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
 {
     //send the correct notification:
     QString notificationType;
@@ -308,7 +308,7 @@ void ChatWindow::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
     notification->sendEvent();
 }
 
-void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
+void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
 {
     AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::LocalToRemote);
     messageInfo.setMessage(message.text());
@@ -333,7 +333,7 @@ void ChatWindow::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     notification->sendEvent();
 }
 
-void ChatWindow::chatViewReady()
+void ChatWidget::chatViewReady()
 {
     d->chatviewlInitialised = true;
 
@@ -344,7 +344,7 @@ void ChatWindow::chatViewReady()
 }
 
 
-void ChatWindow::sendMessage()
+void ChatWidget::sendMessage()
 {
     if (!d->ui.sendMessageBox->toPlainText().isEmpty()) {
         d->channel->send(d->ui.sendMessageBox->toPlainText());
@@ -352,7 +352,7 @@ void ChatWindow::sendMessage()
     }
 }
 
-void ChatWindow::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state)
+void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state)
 {
     //don't show our own status changes.
     if (contact == d->channel->connection()->selfContact()) {
@@ -405,7 +405,7 @@ void ChatWindow::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
 
 
 
-void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, const Tp::Presence & presence)
+void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const Tp::Presence & presence)
 {
     QString message;
     bool isYou = (contact == d->channel->groupSelfContact());
@@ -460,7 +460,7 @@ void ChatWindow::onContactPresenceChange(const Tp::ContactPtr & contact, const T
     }
 }
 
-void ChatWindow::onContactAliasChanged(const Tp::ContactPtr & contact, const QString& alias)
+void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QString& alias)
 {
     QString message;
     bool isYou = (contact == d->channel->groupSelfContact());
@@ -488,7 +488,7 @@ void ChatWindow::onContactAliasChanged(const Tp::ContactPtr & contact, const QSt
     }
 }
 
-void ChatWindow::onInputBoxChanged()
+void ChatWidget::onInputBoxChanged()
 {
     //if the box is empty
     bool currentlyTyping = !d->ui.sendMessageBox->toPlainText().isEmpty();
@@ -502,14 +502,14 @@ void ChatWindow::onInputBoxChanged()
     }
 }
 
-void ChatWindow::onFormatColorReleased()
+void ChatWidget::onFormatColorReleased()
 {
     QColor color;
     KColorDialog::getColor(color,this);
     d->ui.sendMessageBox->setTextColor(color);
 }
 
-KIcon ChatWindow::iconForPresence(Tp::ConnectionPresenceType presence)
+KIcon ChatWidget::iconForPresence(Tp::ConnectionPresenceType presence)
 {
     QString iconName;
 
@@ -537,5 +537,5 @@ KIcon ChatWindow::iconForPresence(Tp::ConnectionPresenceType presence)
     return KIcon(iconName);
 }
 
-#include "chatwindow.moc" //for MessageBoxEventFilter
-#include "moc_chatwindow.cpp" //for ChatWindow
+#include "chatwidget.moc" //for MessageBoxEventFilter
+#include "moc_chatwidget.cpp" //for ChatWidget

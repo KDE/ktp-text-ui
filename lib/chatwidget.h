@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef CHATWINDOW_H
-#define CHATWINDOW_H
+#ifndef CHATWIDGET_H
+#define CHATWIDGET_H
 
 #include <QtCore/QString>
 #include <QtGui/QWidget>
@@ -26,15 +26,15 @@
 
 #include <TelepathyQt4/ReceivedMessage>
 
-class ChatWindowPrivate;
+class ChatWidgetPrivate;
 
-class ChatWindow : public QWidget
+class ChatWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ChatWindow(const Tp::TextChannelPtr & channel, QWidget *parent = 0);
-    virtual ~ChatWindow();
+    explicit ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent = 0);
+    virtual ~ChatWidget();
 
     /** Returns the name of this chat window*/
     QString title() const;
@@ -91,7 +91,7 @@ private:
     //FIXME this should be in the ktelepathy lib
     static KIcon iconForPresence(Tp::ConnectionPresenceType presence);
 
-    ChatWindowPrivate * const d;
+    ChatWidgetPrivate * const d;
 };
 
-#endif // CHATWINDOW_H
+#endif // CHATWIDGET_H

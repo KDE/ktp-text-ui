@@ -1,5 +1,5 @@
 set(telepathy_chat_handler_lib_SRCS
-        chatwindow.cpp
+        chatwidget.cpp
         chatwindowstyle.cpp
         chatwindowstylemanager.cpp
         adiumthemeview.cpp
@@ -13,7 +13,7 @@ set(telepathy_chat_handler_lib_SRCS
 )
 
 set(telepathy_chat_handler_lib_UI
-    chatwindow.ui)
+    chatwidget.ui)
 
 kde4_add_ui_files(telepathy_chat_handler_lib_SRCS ${telepathy_chat_handler_lib_UI})
 

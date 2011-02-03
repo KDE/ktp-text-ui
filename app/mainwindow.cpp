@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "mainwindow.h"
-#include "chatwindow.h"
+#include "chatwidget.h"
 
 #include <KColorScheme>
 #include <KDebug>
@@ -72,7 +72,7 @@ void MainWindow::handleChannels(const Tp::MethodInvocationContextPtr<> & context
     }
     Q_ASSERT(textChannel);
 
-    ChatWindow* newWindow = new ChatWindow(textChannel, this);
+    ChatWidget* newWindow = new ChatWidget(textChannel, this);
 
     addTab(newWindow, newWindow->icon(), newWindow->title());
 
@@ -118,7 +118,7 @@ void MainWindow::onCurrentIndexChanged(int index)
         return;
     }
 
-    ChatWindow* chat = qobject_cast<ChatWindow*>(widget(index));
+    ChatWidget* chat = qobject_cast<ChatWidget*>(widget(index));
     setWindowTitle(chat->title());
 }
 
