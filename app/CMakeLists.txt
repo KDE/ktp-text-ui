@@ -4,7 +4,8 @@ include_directories(../lib/)
 
 set(telepathy_chat_handler_SRCS
         main.cpp
-        mainwindow.cpp
+        telepathychatui.cpp
+        chatwindow.cpp
 )
 
 kde4_add_executable(telepathy-chat-handler ${telepathy_chat_handler_SRCS})
@@ -18,3 +19,5 @@ install(TARGETS telepathy-chat-handler ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDEChatHandler.service
         DESTINATION ${DBUS_SERVICES_INSTALL_DIR})
 install(FILES KDEChatHandler.client DESTINATION ${SHARE_INSTALL_PREFIX}/telepathy/clients/)
+install(FILES chatwindow.rc
+        DESTINATION  ${DATA_INSTALL_DIR}/telepathy-chat-handler/)

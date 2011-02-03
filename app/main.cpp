@@ -1,23 +1,23 @@
-/***************************************************************************
- *   Copyright (C) 2010 by David Edmundson <kde@davidedmundson.co.uk>      *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
- ***************************************************************************/
+/*
+    Copyright (C) 2010  David Edmundson <kde@davidedmundson.co.uk>
+    Copyright (C) 2011  Dominik Schmidt <dev@dominik-schmidt.de>
 
-#include "mainwindow.h"
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "chatwindow.h"
+#include "telepathychatui.h"
 
 #include <TelepathyQt4/ClientRegistrar>
 #include <TelepathyQt4/AccountFactory>
@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
                          "0.1");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
-    KApplication app;
 
     Tp::registerTypes();
 
@@ -71,12 +70,10 @@ int main(int argc, char *argv[])
 
     Tp::ClientRegistrarPtr registrar = Tp::ClientRegistrar::create(accountFactory, connectionFactory,
                                                                    channelFactory, contactFactory);
-    MainWindow* mainWindow = new MainWindow();
 
-    Tp::AbstractClientPtr handler = Tp::AbstractClientPtr(mainWindow);
+    Tp::SharedPtr<TelepathyChatUi> app = Tp::SharedPtr<TelepathyChatUi>(new TelepathyChatUi);
+    Tp::AbstractClientPtr handler = Tp::AbstractClientPtr(app);
     registrar->registerClient(handler, QLatin1String("KDEChatHandler"));
 
-    mainWindow->show();
-
-    return app.exec();
+    return app->exec();
 }
