@@ -64,8 +64,9 @@ void ChatWindow::addTab(ChatWidget* chatWidget)
     connect(chatWidget, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged(bool)));
 
     m_tabWidget->addTab(chatWidget, chatWidget->icon(), chatWidget->title());
+    m_tabWidget->setCurrentWidget(chatWidget);
 
-    onCurrentIndexChanged(m_tabWidget->indexOf(chatWidget));
+    activateWindow();
 }
 
 void ChatWindow::removeTab(ChatWidget* chatWidget)
