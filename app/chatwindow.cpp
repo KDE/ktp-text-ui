@@ -30,12 +30,14 @@
 #include <KIcon>
 #include <KColorScheme>
 #include <KTabBar>
+#include <KSettings/Dialog>
 
 ChatWindow::ChatWindow()
 {
     //setup actions
-    KStandardAction::quit(KApplication::instance(), SLOT(quit()),
-                        actionCollection());
+    KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
+    KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
+
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
@@ -134,5 +136,17 @@ void ChatWindow::onUserTypingChanged(bool isTyping)
     }
 }
 
+void ChatWindow::showSettingsDialog()
+{
+    kDebug();
+
+    KSettings::Dialog *dialog = new KSettings::Dialog(this);
+
+    dialog->addModule("kcm_telepathy_chat");
+    dialog->addModule("kcm_telepathy_accounts");
+
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
+}
 
 #include "chatwindow.moc"

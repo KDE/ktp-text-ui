@@ -44,6 +44,9 @@ public slots:
     void updateTabIcon(const KIcon &newIcon);
     void onUserTypingChanged(bool isTyping);
 
+protected slots:
+    void showSettingsDialog();
+
 private:
     KTabWidget *m_tabWidget;
 };
