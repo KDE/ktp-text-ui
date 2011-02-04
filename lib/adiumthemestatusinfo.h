@@ -22,11 +22,12 @@
 #define ADIUMTHEMESTATUSINFO_H
 
 #include "adiumthememessageinfo.h"
+#include "kdetelepathychat_export.h"
 
 class QString;
 class AdiumThemeStatusInfoPrivate;
 
-class AdiumThemeStatusInfo : public AdiumThemeMessageInfo
+class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeStatusInfo : public AdiumThemeMessageInfo
 {
 public:
     explicit AdiumThemeStatusInfo();

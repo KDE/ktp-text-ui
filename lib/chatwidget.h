@@ -26,9 +26,11 @@
 
 #include <TelepathyQt4/ReceivedMessage>
 
+#include "kdetelepathychat_export.h"
+
 class ChatWidgetPrivate;
 
-class ChatWidget : public QWidget
+class KDE_TELEPATHY_CHAT_EXPORT ChatWidget : public QWidget
 {
     Q_OBJECT
 

@@ -20,13 +20,14 @@
 #define CHATWINDOWSTYLE_H
 
 #include <QtCore/QHash>
+#include <kdetelepathychat_export.h>
 
 /**
 * This class represent a single chat window style.
 *
 * @author Michaël Larouche <larouche@kde.org>
 */
-class ChatWindowStyle : public QObject
+class KDE_TELEPATHY_CHAT_EXPORT ChatWindowStyle : public QObject
 {
 public:
     /**

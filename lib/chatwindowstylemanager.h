@@ -23,6 +23,7 @@
 
 #include <KFileItem>
 
+#include "kdetelepathychat_export.h"
 
 class ChatWindowStyle;
 /**
@@ -42,7 +43,7 @@ class ChatWindowStyle;
  *
  * @author Michaël Larouche <larouche@kde.org>
  */
-class ChatWindowStyleManager : public QObject
+class KDE_TELEPATHY_CHAT_EXPORT ChatWindowStyleManager : public QObject
 {
     Q_OBJECT
 public:

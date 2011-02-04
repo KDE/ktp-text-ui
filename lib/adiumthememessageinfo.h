@@ -20,11 +20,13 @@
 #ifndef ADIUMTHEMEMESSAGEINFO_H
 #define ADIUMTHEMEMESSAGEINFO_H
 
+#include "kdetelepathychat_export.h"
+
 class QString;
 class QDateTime;
 class AdiumThemeMessageInfoPrivate;
 
-class AdiumThemeMessageInfo
+class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeMessageInfo
 {
 public:
     enum MessageType {

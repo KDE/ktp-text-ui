@@ -20,7 +20,9 @@
 #ifndef CHATSTYLEPLISTFILEREADER_H
 #define CHATSTYLEPLISTFILEREADER_H
 
+
 #include <QtCore/QMap>
+#include "kdetelepathychat_export.h"
 
 class QString;
 class QFile;
@@ -28,7 +30,7 @@ class QVariant;
 class QDomDocument;
 
 
-class ChatStylePlistFileReader
+class KDE_TELEPATHY_CHAT_EXPORT ChatStylePlistFileReader
 {
 public:
     enum Status { Ok = 0, CannotOpenFileError, ParseError, UnknownError };

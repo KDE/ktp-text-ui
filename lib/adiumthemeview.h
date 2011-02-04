@@ -25,13 +25,14 @@
 #include <QtWebKit/QWebView>
 #include <KEmoticons>
 
+#include "kdetelepathychat_export.h"
 
 class AdiumThemeContentInfo;
 class AdiumThemeHeaderInfo;
 class AdiumThemeMessageInfo;
 class AdiumThemeStatusInfo;
 
-class AdiumThemeView : public QWebView
+class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public QWebView
 {
     Q_OBJECT
 public:

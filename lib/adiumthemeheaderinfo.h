@@ -24,11 +24,13 @@
 #include <QtCore/QUrl>
 #include <QtCore/QDateTime>
 
+#include "kdetelepathychat_export.h"
+
 /** Containts all the information needed for the header generation from the Adium/Kopete templates */
 
 class AdiumThemeHeaderInfoPrivate;
 
-class AdiumThemeHeaderInfo
+class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeHeaderInfo
 {
 public:
     AdiumThemeHeaderInfo();

@@ -23,10 +23,12 @@
 
 #include "adiumthememessageinfo.h"
 
+#include "kdetelepathychat_export.h"
+
 class QString;
 class AdiumThemeContentInfoPrivate;
 
-class AdiumThemeContentInfo : public AdiumThemeMessageInfo
+class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeContentInfo : public AdiumThemeMessageInfo
 {
 public:
     explicit AdiumThemeContentInfo(AdiumThemeMessageInfo::MessageType);
