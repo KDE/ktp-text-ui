@@ -29,6 +29,7 @@
 #include <KDebug>
 #include <KIcon>
 #include <KColorScheme>
+#include <KTabBar>
 
 ChatWindow::ChatWindow()
 {
@@ -44,6 +45,8 @@ ChatWindow::ChatWindow()
     m_tabWidget->setHoverCloseButtonDelayed(true);
     connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), m_tabWidget, SLOT(removePage(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
+    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)),
+                m_tabWidget, SLOT(removeTab(int)));
 
     setCentralWidget(m_tabWidget);
 
