@@ -93,16 +93,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
       d(new ChatWidgetPrivate)
 {
     d->channel = channel;
-    init();
-}
 
-ChatWidget::~ChatWidget()
-{
-    delete d;
-}
 
-void ChatWidget::init()
-{
     d->chatviewlInitialised = false;
     d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
     d->isGroupChat = false;
@@ -201,6 +193,10 @@ void ChatWidget::init()
     connect(d->ui.sendButton, SIGNAL(clicked()), SLOT(sendMessage()));
 }
 
+ChatWidget::~ChatWidget()
+{
+    delete d;
+}
 
 void ChatWidget::changeEvent(QEvent *e)
 {
