@@ -75,8 +75,6 @@ QSize ChatTextEdit::sizeHint() const
     QSize sh = QTextEdit::sizeHint();
     sh.setHeight(int(document()->size().height()));
     sh += QSize(0, (QFrame::lineWidth() * 2) + 1);
-    ((QTextEdit*)this)->setMaximumHeight(sh.height());
-
     return sh;
 }
 
