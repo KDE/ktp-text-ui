@@ -210,6 +210,17 @@ void ChatWidget::changeEvent(QEvent *e)
     }
 }
 
+void ChatWidget::resizeEvent(QResizeEvent *e)
+{
+    //set the maximum height of a text box to a third of the total window height (but no smaller than the minimum size)
+    int textBoxHeight = e->size().height() / 3;
+    if (textBoxHeight < d->ui.sendMessageBox->minimumSizeHint().height()) {
+        textBoxHeight = d->ui.sendMessageBox->minimumSizeHint().height();
+    }
+    d->ui.sendMessageBox->setMaximumHeight(textBoxHeight);
+    QWidget::resizeEvent(e);
+}
+
 
 QString ChatWidget::title() const
 {
@@ -533,6 +544,8 @@ KIcon ChatWidget::iconForPresence(Tp::ConnectionPresenceType presence)
 
     return KIcon(iconName);
 }
+
+
 
 #include "chatwidget.moc" //for MessageBoxEventFilter
 #include "moc_chatwidget.cpp" //for ChatWidget

@@ -46,6 +46,7 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
+    void resizeEvent(QResizeEvent *);
 
 protected slots:
     /** Show the received message in the chat window*/
