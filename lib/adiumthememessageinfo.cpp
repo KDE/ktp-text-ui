@@ -66,6 +66,7 @@ QString AdiumThemeMessageInfo::message() const
 {
     QString htmlMessage= Qt::escape(d->message);
     htmlMessage.replace('\n', "<br/>");
+    htmlMessage.replace('\\', "\\\\"); //replace a single backslash with two backslashes.
 
     return htmlMessage;
 }
