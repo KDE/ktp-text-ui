@@ -1,0 +1,6 @@
+#ifndef KDE_TELEPATHY_TEXT_UI_ADIUM_THEME_VIEW
+#define KDE_TELEPATHY_TEXT_UI_ADIUM_THEME_VIEW
+
+#include <adiumthemeview.h>
+
+#endif
