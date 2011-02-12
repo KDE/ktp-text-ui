@@ -1,33 +1,17 @@
 [Global]
 IconName=telepathy
 Comment=adiumxtra
-Comment[pt]=adiumxtra
-Comment[sv]=adiumxtra
-Comment[uk]=adiumxtra
-Comment[x-test]=xxadiumxtraxx
 Name=adiumxtra-protocol-handler
-Name[pt]=adiumxtra-protocol-handler
-Name[sv]=adiumxtra-protokollhantering
-Name[uk]=Обробник протоколу adiumxtra
-Name[x-test]=xxadiumxtra-protocol-handlerxx
 
 
 [Event/chatstyleRequest]
 Name=Chatstyle Install Request
-Name[pt]=Pedido de Instalação de Estilo da Conversação
-Name[sv]=Installationsbegäran av Chatstyle
-Name[uk]=Запит щодо встановлення стилю балачки
-Name[x-test]=xxChatstyle Install Requestxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
 
 [Event/chatstyleSuccess]
 Name=Installed Chatstyle successfully
-Name[pt]=O Estilo de Conversação foi instalado com sucesso
-Name[sv]=Installerade Chatstyle med lyckat resultat
-Name[uk]=Стиль балачки успішно встановлено
-Name[x-test]=xxInstalled Chatstyle successfullyxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
@@ -35,30 +19,18 @@ Flags=Persistent
 
 [Event/chatstyleFailure]
 Name=Install Chatstyle Installation failed
-Name[pt]=O Estilo de Conversação não foi instalado
-Name[sv]=Misslyckades installera Chatstyle
-Name[uk]=Спроба встановлення стилю балачки зазнала невдачі
-Name[x-test]=xxInstall Chatstyle Installation failedxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
 
 [Event/emoticonsRequest]
 Name=Emoticonset Install Request
-Name[pt]=Pedido de Instalação de Ícones Emotivos
-Name[sv]=Installationsbegäran av smilisar
-Name[uk]=Запит щодо встановлення емоційок
-Name[x-test]=xxEmoticonset Install Requestxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
 
 [Event/emoticonsSuccess]
 Name=Installed Emoticonset successfully
-Name[pt]=Os ícones emotivos foram instalados com sucesso
-Name[sv]=installerade smilisar med lyckat resultat
-Name[uk]=Набір емоційок успішно встановлено
-Name[x-test]=xxInstalled Emoticonset successfullyxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent
@@ -66,10 +38,6 @@ Flags=Persistent
 
 [Event/emoticonsFailure]
 Name=Emoticonset Installation failed
-Name[pt]=Não foi possível instalar os ícones emotivos
-Name[sv]=Misslyckades installera smilisar
-Name[uk]=Спроба встановлення емоційок зазнала невдачі
-Name[x-test]=xxEmoticonset Installation failedxx
 IconName=telepathy
 Action=Popup
 Flags=Persistent

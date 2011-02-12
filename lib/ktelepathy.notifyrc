@@ -1,37 +1,27 @@
 [Global]
 IconName=telepathy
 Comment=KDE Telepathy
-Comment[x-test]=xxKDE Telepathyxx
 Name=ktelepathy
-Name[x-test]=xxktelepathyxx
 
 [Context/group]
 Name=Group
-Name[x-test]=xxGroupxx
 Comment=The group where the contact resides
-Comment[x-test]=xxThe group where the contact residesxx
 Icon=folder
 
 [Context/contact]
 Name=Contact
-Name[x-test]=xxContactxx
 Comment=The specified contact
-Comment[x-test]=xxThe specified contactxx
 Icon=metacontact
 
 [Context/class]
 Name=Class
-Name[x-test]=xxClassxx
 Comment=The message class
-Comment[x-test]=xxThe message classxx
 Icon=highlight
 
 
 [Event/kde_telepathy_contact_incoming]
 Name=Incoming Message
-Name[x-test]=xxIncoming Messagexx
 Comment=An incoming message has been received
-Comment[x-test]=xxAn incoming message has been receivedxx
 Contexts=contact,group,class
 Sound=KDE-Im-Message-In.ogg
 Action=Popup|Taskbar
@@ -39,69 +29,40 @@ Persistant=true
 
 [Event/kde_telepathy_contact_incoming_active_window]
 Name=Incoming Message in Active Chat
-Name[x-test]=xxIncoming Message in Active Chatxx
 Comment=An incoming message in the active chat window has been received
-Comment[x-test]=xxAn incoming message in the active chat window has been receivedxx
 Contexts=contact,group,class
 Sound=KDE-Im-Message-In.ogg
 Action=Sound
 
 [Event/kde_telepathy_outgoing]
 Name=Outgoing Message
-Name[x-test]=xxOutgoing Messagexx
 Comment=An outgoing message has been sent
-Comment[x-test]=xxAn outgoing message has been sentxx
 Contexts=contact,group,class
 Sound=KDE-Im-Message-Out.ogg
 Action=None
 
 [Event/kde_telepathy_contact_highlight]
 Name=Highlight
-Name[bg]=Осветяване
-Name[da]=Fremhævning
-Name[en_GB]=Highlight
-Name[eo]=Emfazaĵo
-Name[es]=Realce
-Name[ga]=Aibhsiú
-Name[km]=បន្លិច​
-Name[mai]=उभारू
-Name[pa]=ਹਾਈਲਾਈਟ
-Name[pt]=Realce
-Name[pt_BR]=Realce
-Name[ro]=Evidențiere
-Name[ru]=Выделение
-Name[sv]=Färgläggning
-Name[tr]=Vurgulama
-Name[uk]=Підсвічування
-Name[x-test]=xxHighlightxx
-Name[zh_CN]=突出显示
 Contexts=contact,group,class
 Comment=A highlighted message has been received
-Comment[x-test]=xxA highlighted message has been receivedxx
 Sound=KDE-Im-Highlight-Msg.ogg
 Action=Sound|Popup|Taskbar
 Persistant=true
 
 [Event/buzz_nudge]
 Name=Buzz/Nudge
-Name[x-test]=xxBuzz/Nudgexx
 Comment=A contact has sent you a buzz/nudge.
-Comment[x-test]=xxA contact has sent you a buzz/nudge.xx
 Sound=KDE-Im-Nudge.ogg
 Action=Popup|Sound|Taskbar
 
 [Event/message_dropped]
 Name=Message Dropped
-Name[x-test]=xxMessage Droppedxx
 Comment=A message was filtered by the Privacy Plugin
-Comment[x-test]=xxA message was filtered by the Privacy Pluginxx
 Action=Popup
 
 [Event/kde_telepathy_info_event]
 Name=Service Message
-Name[x-test]=xxService Messagexx
 Comment=A service message has been received (e.g. authorization request)
-Comment[x-test]=xxA service message has been received (e.g. authorization request)xx
 Action=Popup
 Sound=
 
