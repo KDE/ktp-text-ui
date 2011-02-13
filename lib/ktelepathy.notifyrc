@@ -1,27 +1,85 @@
 [Global]
 IconName=telepathy
 Comment=KDE Telepathy
+Comment[nl]=KDE Telepathy
+Comment[pt]=Telepathy do KDE
+Comment[sv]=KDE Telepathy
+Comment[uk]=Telepathy KDE
+Comment[x-test]=xxKDE Telepathyxx
 Name=ktelepathy
+Name[nl]=ktelepathy
+Name[pt]=ktelepathy
+Name[sv]=ktelepathy
+Name[uk]=ktelepathy
+Name[x-test]=xxktelepathyxx
 
 [Context/group]
 Name=Group
+Name[nl]=Groep
+Name[nn]=Gruppe
+Name[pt]=Grupo
+Name[sv]=Grupp
+Name[uk]=Група
+Name[x-test]=xxGroupxx
 Comment=The group where the contact resides
+Comment[nl]=De groep waarin de contact zich bevindt
+Comment[nn]=Gruppa kontaktane ligg i
+Comment[pt]=O grupo onde reside o contacto
+Comment[sv]=Gruppen där kontakten ingår
+Comment[uk]=Група, до якої належать контакти
+Comment[x-test]=xxThe group where the contact residesxx
 Icon=folder
 
 [Context/contact]
 Name=Contact
+Name[nl]=Contact
+Name[nn]=Kontakt
+Name[pt]=Contacto
+Name[sv]=Kontakt
+Name[uk]=Контакт
+Name[x-test]=xxContactxx
 Comment=The specified contact
+Comment[nl]=De opgegeven contactpersoon
+Comment[nn]=Den oppgjevne kontakten
+Comment[pt]=O contacto indicado
+Comment[sv]=Den angivna kontakten
+Comment[uk]=Вказаний контакт
+Comment[x-test]=xxThe specified contactxx
 Icon=metacontact
 
 [Context/class]
 Name=Class
+Name[nl]=Klasse
+Name[nn]=Klasse
+Name[pt]=Classe
+Name[sv]=Klass
+Name[uk]=Клас
+Name[x-test]=xxClassxx
 Comment=The message class
+Comment[nl]=De berichtenklasse
+Comment[nn]=Meldingsklassen
+Comment[pt]=A classe da mensagem
+Comment[sv]=Meddelandeklassen
+Comment[uk]=Клас повідомлення
+Comment[x-test]=xxThe message classxx
 Icon=highlight
 
 
 [Event/kde_telepathy_contact_incoming]
 Name=Incoming Message
+Name[nl]=Inkomend bericht
+Name[nn]=Innkommande melding
+Name[pt]=Mensagem Recebida
+Name[sv]=Inkommande meddelande
+Name[uk]=Вхідне повідомлення
+Name[x-test]=xxIncoming Messagexx
 Comment=An incoming message has been received
+Comment[nl]=Er is een inkomend bericht ontvangen
+Comment[nn]=Du har fått ei melding
+Comment[pt]=Foi recebida uma mensagem
+Comment[sv]=Ett inkommande meddelande har anlänt
+Comment[uk]=Отримано вхідне повідомлення
+Comment[x-test]=xxAn incoming message has been receivedxx
 Contexts=contact,group,class
 Sound=KDE-Im-Message-In.ogg
 Action=Popup|Taskbar
@@ -29,40 +87,112 @@ Persistant=true
 
 [Event/kde_telepathy_contact_incoming_active_window]
 Name=Incoming Message in Active Chat
+Name[nl]=Inkomend bericht in actief gesprek
+Name[nn]=Innkommande melding i aktiv prat
+Name[pt]=Mensagem Recebida na Conversa Activa
+Name[sv]=Inkommande meddelande i aktiv chatt
+Name[uk]=Вхідне повідомлення в активні балачці
+Name[x-test]=xxIncoming Message in Active Chatxx
 Comment=An incoming message in the active chat window has been received
+Comment[nl]=Er is een inkomend bericht ontvangen in het actieve gespreksvenster
+Comment[nn]=Du har fått ei melding i det aktive pratevindauget
+Comment[pt]=Foi recebida uma mensagem na janela de conversação activa
+Comment[sv]=Ett inkommande meddelande i det aktiva chattfönstret har anlänt
+Comment[uk]=Отримано вхідне повідомлення у вікні активної балачки
+Comment[x-test]=xxAn incoming message in the active chat window has been receivedxx
 Contexts=contact,group,class
 Sound=KDE-Im-Message-In.ogg
 Action=Sound
 
 [Event/kde_telepathy_outgoing]
 Name=Outgoing Message
+Name[nl]=Uitgaand bericht
+Name[nn]=Utgåande melding
+Name[pt]=Mensagem Enviada
+Name[sv]=Utgående meddelande
+Name[uk]=Вихідне повідомлення
+Name[x-test]=xxOutgoing Messagexx
 Comment=An outgoing message has been sent
+Comment[nl]=Er is een uitgaand bericht verzonden
+Comment[nn]=Du har sendt ei melding
+Comment[pt]=Foi enviada uma mensagem
+Comment[sv]=Ett utgående meddelande har skickats
+Comment[uk]=Відіслано вихідне повідомлення
+Comment[x-test]=xxAn outgoing message has been sentxx
 Contexts=contact,group,class
 Sound=KDE-Im-Message-Out.ogg
 Action=None
 
 [Event/kde_telepathy_contact_highlight]
 Name=Highlight
+Name[nl]=Accentueren
+Name[nn]=Markert melding
+Name[pt]=Realce
+Name[sv]=Markera
+Name[uk]=Підсвічування
+Name[x-test]=xxHighlightxx
 Contexts=contact,group,class
 Comment=A highlighted message has been received
+Comment[nl]=Er is een geaccentueerd bericht ontvangen
+Comment[nn]=Du har fått ei markert melding
+Comment[pt]=Foi recebida uma mensagem realçada
+Comment[sv]=Ett markerat meddelande har anlänt
+Comment[uk]=Було отримано підсвічене повідомлення
+Comment[x-test]=xxA highlighted message has been receivedxx
 Sound=KDE-Im-Highlight-Msg.ogg
 Action=Sound|Popup|Taskbar
 Persistant=true
 
 [Event/buzz_nudge]
 Name=Buzz/Nudge
+Name[nl]=Buzzer
+Name[nn]=Rist
+Name[pt]=Apito/Abanão
+Name[sv]=Påringning/knuff
+Name[uk]=Не спати!
+Name[x-test]=xxBuzz/Nudgexx
 Comment=A contact has sent you a buzz/nudge.
+Comment[nl]=Een contactpersoon heeft u een buzzer gestuurd.
+Comment[nn]=Ein kontakt har rista deg.
+Comment[pt]=Um contacto enviou-lhe um apito/abanão.
+Comment[sv]=En kontakt har ringt eller knuffat dig.
+Comment[uk]=Контакт хоче привернути вашу увагу
+Comment[x-test]=xxA contact has sent you a buzz/nudge.xx
 Sound=KDE-Im-Nudge.ogg
 Action=Popup|Sound|Taskbar
 
 [Event/message_dropped]
 Name=Message Dropped
+Name[nl]=Bericht geweigerd
+Name[nn]=Fjerna melding
+Name[pt]=Mensagem Perdida
+Name[sv]=Meddelande kastat
+Name[uk]=Повідомлення відкинуто
+Name[x-test]=xxMessage Droppedxx
 Comment=A message was filtered by the Privacy Plugin
+Comment[nl]=Er is een bericht gefilterd door de privacyplugin
+Comment[nn]=Ei melding vart filtrert vekk av personvernstillegget
+Comment[pt]=Foi filtrada uma mensagem pelo 'Plugin' de Privacidade
+Comment[sv]=Ett meddelande filtrerades av integritetsinsticksprogrammet
+Comment[uk]=Повідомлення не пройшло крізь фільтр додатка конфіденційності
+Comment[x-test]=xxA message was filtered by the Privacy Pluginxx
 Action=Popup
 
 [Event/kde_telepathy_info_event]
 Name=Service Message
+Name[nl]=Dienstmededeling
+Name[nn]=Tenestemelding
+Name[pt]=Mensagem do Serviço
+Name[sv]=Tjänstmeddelande
+Name[uk]=Службове повідомлення
+Name[x-test]=xxService Messagexx
 Comment=A service message has been received (e.g. authorization request)
+Comment[nl]=Er is een dienstmededeling (zoals een autorisatieverzoek) ontvangen
+Comment[nn]=Du har fått ei tenestemelding (for eksempel ein førespurnad om godkjenning)
+Comment[pt]=Foi recebida uma mensagem do serviço (p.ex., um pedido de autorização)
+Comment[sv]=Ett tjänstmeddelande har tagits emot (t.ex. behörighetsbegäran)
+Comment[uk]=Було отримано службове повідомлення (наприклад, запит на авторизацію)
+Comment[x-test]=xxA service message has been received (e.g. authorization request)xx
 Action=Popup
 Sound=
 
