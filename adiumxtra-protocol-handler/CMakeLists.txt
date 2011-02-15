@@ -22,7 +22,7 @@ target_link_libraries(adiumxtra-protocol-handler
 			${QT_QTWEBKIT_LIBRARY}
 			${KDE4_KUTILS_LIBS}
 			${QT_QTXML_LIBRARY}
-			${KDE4_KIO_LIBRARIES}
+			${KDE4_KIO_LIBS}
 			ktelepathy_chat_lib)
 
 
