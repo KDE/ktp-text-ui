@@ -89,7 +89,6 @@ private slots:
     void onFormatColorReleased();
 
 private:
-    void init();
     //FIXME this should be in the ktelepathy lib
     static KIcon iconForPresence(Tp::ConnectionPresenceType presence);
 
