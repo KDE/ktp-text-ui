@@ -25,7 +25,8 @@ target_link_libraries(ktelepathy_chat_lib
     ${KDE4_KDEUI_LIBS}
     ${TELEPATHY_QT4_LIBRARIES}
     ${QT_QTWEBKIT_LIBRARY}
-    ${KDE4_KUTILS_LIBS}
+    ${KDE4_KEMOTICONS_LIBS}
+    ${KDE4_KCMUTILS_LIBS}
 )
 install(TARGETS ktelepathy_chat_lib ${INSTALL_TARGETS_DEFAULT_ARGS})
 

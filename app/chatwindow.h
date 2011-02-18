@@ -46,6 +46,7 @@ public slots:
 
 protected slots:
     void showSettingsDialog();
+    void showNotificationsDialog();
 
 private:
     KTabWidget *m_tabWidget;

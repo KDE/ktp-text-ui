@@ -31,13 +31,14 @@
 #include <KColorScheme>
 #include <KTabBar>
 #include <KSettings/Dialog>
+#include <KNotifyConfigWidget>
 
 ChatWindow::ChatWindow()
 {
     //setup actions
     KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
     KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
-
+    KStandardAction::configureNotifications(this, SLOT(showNotificationsDialog()), actionCollection());
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
@@ -148,5 +149,11 @@ void ChatWindow::showSettingsDialog()
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
+
+void ChatWindow::showNotificationsDialog()
+{
+    KNotifyConfigWidget::configure(this, "ktelepathy");
+}
+
 
 #include "chatwindow.moc"
