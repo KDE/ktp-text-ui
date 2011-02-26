@@ -1,0 +1,6 @@
+#ifndef KDE_TELEPATHY_TEXT_UI_ADIUM_THEME_STATUSINFO
+#define KDE_TELEPATHY_TEXT_UI_ADIUM_THEME_STATUSINFO
+
+#include "adium-theme-status-info.h"
+
+#endif

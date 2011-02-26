@@ -19,11 +19,11 @@
 
 #include "main-window.h"
 #include "ui_chatwindowconfig.h"
-#include "chat-window-style-manager.h"
 
-#include "adium-theme-header-info.h"
-#include "adium-theme-content-info.h"
-#include "adium-theme-status-info.h"
+#include <KDETelepathy/ChatWindowStyleManager>
+#include <KDETelepathy/AdiumThemeHeaderInfo>
+#include <KDETelepathy/AdiumThemeContentInfo>
+#include <KDETelepathy/AdiumThemeStatusInfo>
 
 #include <KDebug>
 #include <KLocalizedString>

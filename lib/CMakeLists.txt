@@ -12,6 +12,30 @@ set(telepathy_chat_handler_lib_SRCS
         chat-text-edit.cpp
 )
 
+set(telepathy_chat_handler_lib_HDRS
+    adiumthemecontentinfo.h
+    adiumthemeheaderinfo.h
+    adiumthememessageinfo.h
+    adiumthemestatusinfo.h
+    adiumthemeview.h
+    chatstyleplistfilereader.h
+    chatwidget.h
+    chatwindowstyle.h
+    chatwindowstylemanager.h
+)
+
+set(telepathy_chat_handler_lib_PRETTY_HDRS
+    KDETelepathy/AdiumThemeContentInfo
+    KDETelepathy/AdiumThemeHeaderInfo
+    KDETelepathy/AdiumThemeMessageInfo
+    KDETelepathy/AdiumThemeStatusInfo
+    KDETelepathy/AdiumThemeView
+    KDETelepathy/ChatStylePlistFileReader
+    KDETelepathy/ChatWidget
+    KDETelepathy/ChatWindowStyle
+    KDETelepathy/ChatWindowStyleManager
+)
+
 set(telepathy_chat_handler_lib_UI
     chat-widget.ui)
 
@@ -29,5 +53,13 @@ target_link_libraries(ktelepathy_chat_lib
     ${KDE4_KCMUTILS_LIBS}
 )
 install(TARGETS ktelepathy_chat_lib ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+install(FILES
+        ${telepathy_chat_handler_lib_HDRS}
+        ${telepathy_chat_handler_lib_PRETTY_HDRS}
+        kdetelepathychat_export.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}/KDETelepathy COMPONENT Devel
+)
+
 
 install( FILES ktelepathy.notifyrc DESTINATION ${DATA_INSTALL_DIR}/ktelepathy)
