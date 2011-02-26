@@ -1,6 +1,4 @@
-# FIXME when the chat connection builds a lib correctly, don't do this weird horrible hack.
-
-include_directories(../lib/)
+include_directories(${TELEPATHY_CHAT_HANDLER_SOURCE_DIR}/lib)
 
 set(telepathy_chat_config_SRCS
         bundle-installer.cpp

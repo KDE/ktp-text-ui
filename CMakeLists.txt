@@ -1,4 +1,4 @@
-project (telepathy_chat_handler)
+project (TELEPATHY_CHAT_HANDLER)
 
 # Include our extra FindFoo.cmake files.
 set (CMAKE_MODULE_PATH
