@@ -36,9 +36,9 @@ public:
     virtual ~ChatWindow();
 
     void addTab(ChatWidget *chatWidget);
-    void removeTab(ChatWidget *chatWidget);
 
 public slots:
+    void removeTab(QWidget *chatWidget);
     void onCurrentIndexChanged(int index);
     void updateTabText(const QString &newTitle);
     void updateTabIcon(const KIcon &newIcon);

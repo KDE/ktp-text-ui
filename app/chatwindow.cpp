@@ -47,7 +47,7 @@ ChatWindow::ChatWindow()
     m_tabWidget->setCloseButtonEnabled(true);
     m_tabWidget->setHoverCloseButtonDelayed(true);
     m_tabWidget->setTabBarHidden(true);
-    connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), m_tabWidget, SLOT(removePage(QWidget*)));
+    connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(removeTab(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
     connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)),
                 m_tabWidget, SLOT(removeTab(int)));
@@ -79,9 +79,10 @@ void ChatWindow::addTab(ChatWidget* chatWidget)
     activateWindow();
 }
 
-void ChatWindow::removeTab(ChatWidget* chatWidget)
+void ChatWindow::removeTab(QWidget* chatWidget)
 {
-    m_tabWidget->removeTab(m_tabWidget->indexOf(chatWidget));
+    m_tabWidget->removePage(chatWidget);
+    delete chatWidget;
 }
 
 void ChatWindow::updateTabText(const QString & newTitle)
