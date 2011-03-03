@@ -43,7 +43,9 @@ public:
     virtual bool bypassApproval() const;
 
 private:
+    typedef QPair<Tp::TextChannelPtr, ChatTab*> ChannelWidgetPair;
     ChatWindow *m_chatWindow;
+    QList<ChannelWidgetPair> m_channelWidgetMap;
 };
 
 #endif // TELEPATHYCHATUI_H

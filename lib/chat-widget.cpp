@@ -38,6 +38,8 @@
 #include <TelepathyQt4/AvatarData>
 #include <TelepathyQt4/Connection>
 #include <TelepathyQt4/Presence>
+#include <KDebug>
+#include <KColorScheme>
 
 class MessageBoxEventFilter : public QObject
 {
@@ -69,13 +71,20 @@ Q_SIGNALS:
 class ChatWidgetPrivate
 {
 public:
+    ChatWidgetPrivate()
+    {
+        isGroupChat = false;
+        unreadMessages = 0;
+    }
     /** Stores whether the channel is ready with all contacts upgraded*/
     bool chatviewlInitialised;
     QAction *showFormatToolbarAction;
     bool isGroupChat;
+    int unreadMessages;
     QString title;
     Tp::TextChannelPtr channel;
     Ui::ChatWidget ui;
+    KIcon icon;
 
     KComponentData telepathyComponentData();
 };
@@ -149,6 +158,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
     //set up anything related to 'self'
     info.setOutgoingIconPath(d->channel->groupSelfContact()->avatarData().fileName);
     info.setTimeOpened(QDateTime::currentDateTime());
+    connect(d->ui.chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()), Qt::QueuedConnection);
     d->ui.chatArea->initialise(info);
 
     //set the title of this chat.
@@ -179,8 +189,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
             SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
     connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
             SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
-
-    connect(d->ui.chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()));
 
     connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
 
@@ -227,6 +235,15 @@ Tp::TextChannelPtr ChatWidget::textChannel() const
     return d->channel;
 }
 
+void ChatWidget::showEvent(QShowEvent* e)
+{
+    kDebug();
+
+    resetUnreadMessages();
+
+    QWidget::showEvent(e);
+}
+
 QString ChatWidget::title() const
 {
     return d->title;
@@ -248,8 +265,72 @@ KIcon ChatWidget::icon() const
     return iconForPresence(Tp::ConnectionPresenceTypeAvailable);
 }
 
+QColor ChatWidget::titleColor() const
+{
+    //normal chat - self and one other person.
+    if (!d->isGroupChat) {
+        //find the other contact which isn't self.
+        foreach(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
+            if (contact != d->channel->groupSelfContact()) {
+                return colorForPresence(contact->presence().type());
+            }
+        }
+    }
+
+    //group chat
+    return colorForPresence(Tp::ConnectionPresenceTypeAvailable);
+}
+
+bool ChatWidget::isNewMessageUnread()
+{
+    kDebug() << !isOnTop();
+    return !isOnTop();
+}
+
+int ChatWidget::unreadMessages() const
+{
+    kDebug() << title() << d->unreadMessages;
+
+    return d->unreadMessages;
+}
+
+void ChatWidget::incrementUnreadMessages()
+{
+    kDebug();
+
+    d->unreadMessages++;
+
+    kDebug() << "emit" << d->unreadMessages;
+    emit unreadMessagesChanged(d->unreadMessages);
+}
+
+void ChatWidget::resetUnreadMessages()
+{
+    kDebug();
+
+    if(d->unreadMessages > 0) {
+        d->unreadMessages = 0;
+        emit unreadMessagesChanged(d->unreadMessages);
+    }
+}
+
+
+bool ChatWidget::isOnTop() const
+{
+    kDebug() << ( isActiveWindow() && isVisible() );
+    return ( isActiveWindow() && isVisible() );
+}
+
+void ChatWidget::showOnTop()
+{
+    kDebug() << "isOnTop:" << isOnTop();
+
+    activateWindow();
+}
+
 void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
+    kDebug() << title() << message.text();
     if (d->chatviewlInitialised) {
         AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
@@ -273,6 +354,10 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
         d->ui.chatArea->addContentMessage(messageInfo);
         d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
 
+        if(isNewMessageUnread()) {
+            incrementUnreadMessages();
+        }
+
         emit messageReceived();
     }
 
@@ -287,6 +372,11 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
     //options are:
     // kde_telepathy_contact_incoming
     // kde_telepathy_contact_incoming_active_window - TODO - requires information not available yet.
+    //FIXME: until the above is available, simply deactivate the event
+    if(isOnTop()) {
+        kDebug() << "Widget is on top, not doing anything";
+        return;
+    }
     // kde_telepathy_contact_highlight (contains your name)
     // kde_telepathy_info_event
 
@@ -317,6 +407,7 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
 
     notification->setActions(QStringList(i18n("View")));
     connect(notification, SIGNAL(activated(unsigned int)), notification, SLOT(raiseWidget()));
+    connect(notification, SIGNAL(activated(unsigned int)), this, SLOT(showOnTop()));
 
     notification->sendEvent();
 }
@@ -468,9 +559,11 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const T
 
     //if in a non-group chat situation, and the other contact has changed state...
     if (!d->isGroupChat && !isYou) {
-        KIcon icon = iconForPresence(presence.type());
-        Q_EMIT iconChanged(icon);
+        d->icon = iconForPresence(presence.type());
+        Q_EMIT iconChanged(d->icon);
     }
+
+    Q_EMIT contactPresenceChanged(presence);
 }
 
 void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QString& alias)
@@ -550,6 +643,31 @@ KIcon ChatWidget::iconForPresence(Tp::ConnectionPresenceType presence)
     return KIcon(iconName);
 }
 
+QColor ChatWidget::colorForPresence(Tp::ConnectionPresenceType presence)
+{
+    TitleColor role;
+
+    switch (presence) {
+        case Tp::ConnectionPresenceTypeAvailable:
+        case Tp::ConnectionPresenceTypeAway:
+        case Tp::ConnectionPresenceTypeExtendedAway:
+        case Tp::ConnectionPresenceTypeHidden:
+        case Tp::ConnectionPresenceTypeBusy:
+            role = Default;
+            break;
+        default:
+            role = Offline;
+            break;
+    }
+
+    return colorForRole(role);
+}
+
+QColor ChatWidget::colorForRole(ChatWidget::TitleColor role)
+{
+    KColorScheme scheme(QPalette::Active, KColorScheme::Window);
+    return scheme.foreground(static_cast<KColorScheme::ForegroundRole>(role)).color();
+}
 
 
 #include "chat-widget.moc" //for MessageBoxEventFilter

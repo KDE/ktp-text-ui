@@ -6,6 +6,7 @@ set(telepathy_chat_handler_SRCS
         main.cpp
         telepathy-chat-ui.cpp
         chat-window.cpp
+        chattab.cpp
 )
 
 kde4_add_executable(telepathy-chat-handler ${telepathy_chat_handler_SRCS})

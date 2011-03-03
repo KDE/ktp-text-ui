@@ -17,7 +17,7 @@
 */
 
 #include "telepathy-chat-ui.h"
-#include "chat-widget.h"
+#include "chat-tab.h"
 #include "chat-window.h"
 
 #include <KDebug>
@@ -68,12 +68,11 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
             break;
         }
     }
+
     Q_ASSERT(textChannel);
 
     // create new chat
     m_chatWindow->startChat(textChannel);
-
-    m_chatWindow->show();
 
     context->setFinished();
 }

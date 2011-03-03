@@ -20,21 +20,35 @@
 #ifndef CHATWIDGET_H
 #define CHATWIDGET_H
 
+#include "kdetelepathychat_export.h"
+
 #include <QtCore/QString>
 #include <QtGui/QWidget>
 #include <KIcon>
+#include <KColorScheme>
 
 #include <TelepathyQt4/ReceivedMessage>
 
-#include "kdetelepathychat_export.h"
+
 
 class ChatWidgetPrivate;
+class QShowEvent;
 
 class KDE_TELEPATHY_CHAT_EXPORT ChatWidget : public QWidget
 {
     Q_OBJECT
 
 public:
+    enum TitleColor {
+        Default = KColorScheme::NormalText,
+        Offline = KColorScheme::InactiveText,
+        UnreadMessages = KColorScheme::ActiveText,
+        UnreadStatus = KColorScheme::NeutralText,
+        UnauthorizedContact = KColorScheme::NegativeText,
+        CurrentlyTyping = KColorScheme::PositiveText
+    };
+    static QColor colorForRole(ChatWidget::TitleColor role);
+
     explicit ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent = 0);
     virtual ~ChatWidget();
 
@@ -47,9 +61,28 @@ public:
     /** Returns the icon of this chat window */
     KIcon icon() const;
 
+
+    QColor titleColor() const;
+
+    // unread messages methods
+    /** Queried by standard isNewMessageUnread() **/
+    virtual bool isOnTop() const;
+
+    /** Decides whether a currently processed message should increment the unread messages counter **/
+    virtual bool isNewMessageUnread();
+
+    int unreadMessages() const;
+    void incrementUnreadMessages();
+    void resetUnreadMessages();
+
 protected:
     void changeEvent(QEvent *e);
     void resizeEvent(QResizeEvent *);
+    void showEvent(QShowEvent *e);
+
+
+public slots:
+    virtual void showOnTop();
 
 protected slots:
     /** Show the received message in the chat window*/
@@ -89,12 +122,17 @@ signals:
     /** Emitted when another contact in the channel starts/stops typing (if supported by the protocol)*/
     void userTypingChanged(bool);
 
+    void contactPresenceChanged(Tp::Presence presence);
+
+    void unreadMessagesChanged(int messages);
+
 private slots:
     void onFormatColorReleased();
 
 private:
     //FIXME this should be in the ktelepathy lib
     static KIcon iconForPresence(Tp::ConnectionPresenceType presence);
+    static QColor colorForPresence(Tp::ConnectionPresenceType presence);
 
     ChatWidgetPrivate * const d;
 };

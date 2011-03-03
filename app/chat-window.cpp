@@ -18,7 +18,8 @@
 
 
 #include "chat-window.h"
-#include "chat-widget.h"
+
+#include "chattab.h"
 
 #include <KStandardAction>
 #include <KIcon>
@@ -71,7 +72,7 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
     for(int index = 0; index < m_tabWidget->count() && !duplicateTab; index++) {
 
         // get chatWidget object
-        ChatWidget *auxChatWidget = qobject_cast<ChatWidget*>(m_tabWidget->widget(index));
+        ChatTab *auxChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
 
         // this should never happen
         if(!auxChatWidget)
@@ -85,13 +86,13 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
 
     // got new chat, create it
     if(!duplicateTab) {
-        ChatWidget *chatWidget = new ChatWidget(incomingTextChannel, m_tabWidget);
-        connect(chatWidget, SIGNAL(titleChanged(QString)), this, SLOT(updateTabText(QString)));
-        connect(chatWidget, SIGNAL(iconChanged(KIcon)), this, SLOT(updateTabIcon(KIcon)));
-        connect(chatWidget, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged(bool)));
+        ChatTab *chatTab = new ChatWidget(incomingTextChannel, m_tabWidget);
+        connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(updateTabText(QString)));
+        connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(updateTabIcon(KIcon)));
+        connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged(bool)));
 
-        m_tabWidget->addTab(chatWidget, chatWidget->icon(), chatWidget->title());
-        m_tabWidget->setCurrentWidget(chatWidget);
+        m_tabWidget->addTab(chatTab, chatTab->icon(), chatTab->title());
+        m_tabWidget->setCurrentWidget(chatTab);
 
         if(m_tabWidget->isTabBarHidden()) {
             if(m_tabWidget->count() > 1) {
@@ -99,8 +100,6 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
             }
         }
     }
-
-    activateWindow();
 }
 
 void ChatWindow::removeTab(QWidget* chatWidget)
@@ -109,30 +108,30 @@ void ChatWindow::removeTab(QWidget* chatWidget)
     delete chatWidget;
 }
 
-void ChatWindow::updateTabText(const QString & newTitle)
+void ChatWindow::setTabText(int index, const QString &newTitle)
 {
-    //find out which widget made the call, and update the correct tab.
-    QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
-    if (sender) {
-        int tabIndexToChange = m_tabWidget->indexOf(sender);
-        m_tabWidget->setTabText(tabIndexToChange, newTitle);
+    m_tabWidget->setTabText(index, newTitle);
 
-        if (tabIndexToChange == m_tabWidget->currentIndex()) {
-            onCurrentIndexChanged(tabIndexToChange);
-        }
+    // this updates the window title and icon if the updated tab is the current one
+    if (index == m_tabWidget->currentIndex()) {
+        onCurrentIndexChanged(index);
     }
 }
 
-void ChatWindow::updateTabIcon(const KIcon & newIcon)
+void ChatWindow::setTabIcon(int index, const KIcon & newIcon)
 {
-    //find out which widget made the call, and update the correct tab.
-    QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
-    if (sender) {
-        int tabIndexToChange = m_tabWidget->indexOf(sender);
-        m_tabWidget->setTabIcon(tabIndexToChange, newIcon);
+    m_tabWidget->setTabIcon(index, newIcon);
+
+    // this updates the window title and icon if the updated tab is the current one
+    if (index == m_tabWidget->currentIndex()) {
+        onCurrentIndexChanged(index);
     }
 }
 
+void ChatWindow::setTabTextColor(int index, const QColor& color)
+{
+    m_tabWidget->setTabTextColor(index, color);
+}
 
 void ChatWindow::onCurrentIndexChanged(int index)
 {
@@ -143,22 +142,57 @@ void ChatWindow::onCurrentIndexChanged(int index)
         return;
     }
 
-    ChatWidget* currentChatWidget = qobject_cast<ChatWidget*>(m_tabWidget->widget(index));
-    setWindowTitle(currentChatWidget->title());
-    setWindowIcon(currentChatWidget->icon());
+    ChatTab* currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    setWindowTitle(currentChatTab->title());
+    setWindowIcon(currentChatTab->icon());
+
 }
 
 void ChatWindow::onUserTypingChanged(bool isTyping)
 {
     QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
     if (sender) {
-        KColorScheme scheme(QPalette::Active, KColorScheme::Window);
         int tabIndex = m_tabWidget->indexOf(sender);
         if (isTyping) {
-            m_tabWidget->setTabTextColor(tabIndex, scheme.foreground(KColorScheme::PositiveText).color());
+            setTabTextColor(tabIndex, ChatTab::colorForRole(ChatTab::CurrentlyTyping));
         } else {
-            m_tabWidget->setTabTextColor(tabIndex, scheme.foreground(KColorScheme::NormalText).color());
+            setTabTextColor(tabIndex, ChatTab::colorForRole(ChatTab::Default));
         }
+    }
+}
+
+void ChatWindow::onContactPresenceChanged(const Tp::Presence& presence)
+{
+    kDebug();
+
+    ChatTab* sender = qobject_cast<ChatTab*>(QObject::sender());
+    if (sender) {
+        int tabIndexToChange = m_tabWidget->indexOf(sender);
+        setTabIcon(tabIndexToChange, sender->icon());
+        setTabText(tabIndexToChange, sender->title());
+        setTabTextColor(tabIndexToChange, sender->titleColor());
+    }
+}
+
+void ChatWindow::onUnreadMessagesChanged()
+{
+    kDebug();
+
+    ChatTab* sender = qobject_cast<ChatTab*>(QObject::sender());
+    if (sender) {
+        int tabIndexToChange = m_tabWidget->indexOf(sender);
+        if(sender->unreadMessages() > 0) {
+            kDebug() << "New unread messages";
+            // only change tab color if the widget is hidden
+            // the slot is also triggered if the window is not active
+            if(!sender->isVisible()) {
+                setTabTextColor(tabIndexToChange, ChatTab::colorForRole(ChatTab::UnreadMessages));
+            }
+        } else {
+            kDebug() << "No unread messages anymore";
+            setTabTextColor(tabIndexToChange, sender->titleColor());
+        }
+
     }
 }
 

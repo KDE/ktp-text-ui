@@ -26,6 +26,7 @@
 #include <KTabWidget>
 
 class KIcon;
+class ChatTab;
 
 class ChatWindow : public KXmlGuiWindow
 {
@@ -41,13 +42,17 @@ public:
      * @param incomingTextChannel new text channel
      */
     void startChat(Tp::TextChannelPtr incomingTextChannel);
+    void removeTab(ChatTab *chatWidget);
+    void setTabText(int index, const QString &newTitle);
+    void setTabIcon(int index, const KIcon &newIcon);
+    void setTabTextColor(int index,const QColor &color);
 
 public slots:
     void removeTab(QWidget *chatWidget);
     void onCurrentIndexChanged(int index);
-    void updateTabText(const QString &newTitle);
-    void updateTabIcon(const KIcon &newIcon);
     void onUserTypingChanged(bool isTyping);
+    void onContactPresenceChanged(const Tp::Presence &presence);
+    void onUnreadMessagesChanged();
 
 protected slots:
     void showSettingsDialog();
