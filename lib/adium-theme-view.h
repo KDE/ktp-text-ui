@@ -20,8 +20,8 @@
 #ifndef ADIUMTHEMEVIEW_H
 #define ADIUMTHEMEVIEW_H
 
-#include "chatwindowstyle.h"
-#include "adiumthemeheaderinfo.h"
+#include "chat-window-style.h"
+#include "adium-theme-header-info.h"
 #include <QtWebKit/QWebView>
 #include <KEmoticons>
 

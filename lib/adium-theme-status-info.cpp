@@ -17,43 +17,47 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "adium-theme-status-info.h"
+#include <QtCore/QString>
 
-#include "adiumthemeheaderinfo.h"
-
-#include <QtGui/QDialog>
-
-namespace Ui
+class AdiumThemeStatusInfoPrivate
 {
-class ChatWindowConfig;
+public:
+    QString status;
+};
+
+AdiumThemeStatusInfo::AdiumThemeStatusInfo()
+    : AdiumThemeMessageInfo(AdiumThemeMessageInfo::Status),
+      d(new AdiumThemeStatusInfoPrivate)
+{
+}
+
+AdiumThemeStatusInfo::AdiumThemeStatusInfo(const AdiumThemeStatusInfo &other)
+    : AdiumThemeMessageInfo(other),
+      d(new AdiumThemeStatusInfoPrivate(*other.d))
+{
+
+}
+
+AdiumThemeStatusInfo::~AdiumThemeStatusInfo()
+{
+    delete d;
 }
 
 
-class MainWindow : public QDialog
+AdiumThemeStatusInfo& AdiumThemeStatusInfo::operator=(const AdiumThemeStatusInfo& other)
 {
-    Q_OBJECT
+    *d = *other.d;
+    return *this;
+}
 
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+QString AdiumThemeStatusInfo::status() const
+{
+    return d->status;
+}
 
-protected:
-    void changeEvent(QEvent *e);
-    void accept();
+void AdiumThemeStatusInfo::setStatus(const QString& status)
+{
+    d->status = status;
+}
 
-private:
-    Ui::ChatWindowConfig *ui;
-    AdiumThemeHeaderInfo m_demoChatHeader;
-
-private slots:
-    void sendDemoMessages();
-    void onStylesLoaded();
-    void updateVariantsList();
-
-    void onStyleSelected(int index);
-    void onVariantSelected(const QString&);
-    void onShowHeaderChanged(bool);
-};
-
-#endif // MAINWINDOW_H

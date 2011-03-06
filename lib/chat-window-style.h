@@ -1,7 +1,7 @@
 //Stolen from Kopete.
 
 /*
-   kopetechatwindowstyle.h - A Chat Window Style.
+   kopetechat-window-style.h - A Chat Window Style.
 
    Copyright (c) 2005      by Michaël Larouche     <larouche@kde.org>
 

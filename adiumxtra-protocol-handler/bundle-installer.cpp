@@ -1,4 +1,4 @@
-#include "bundleinstaller.h"
+#include "bundle-installer.h"
 #include <KDebug>
 
 BundleInstaller::~BundleInstaller()

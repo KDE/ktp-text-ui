@@ -1,5 +1,5 @@
 /*
-   kopetechatwindowstylemanager.cpp - Manager all chat window styles
+   kopetechat-window-style-manager.cpp - Manager all chat window styles
 
    Copyright (c) 2005      by Michaël Larouche     <larouche@kde.org>
 
@@ -15,9 +15,9 @@
    *************************************************************************
 */
 
-#include "chatwindowstylemanager.h"
-#include "chatstyleplistfilereader.h"
-#include "chatwindowstyle.h"
+#include "chat-window-style-manager.h"
+#include "chat-style-plist-file-reader.h"
+#include "chat-window-style.h"
 
 // Qt includes
 #include <QtCore/QStack>
@@ -413,4 +413,4 @@ void ChatWindowStyleManager::slotDirectoryFinished()
     }
 }
 
-#include "chatwindowstylemanager.moc"
+#include "chat-window-style-manager.moc"

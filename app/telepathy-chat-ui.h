@@ -20,7 +20,7 @@
 #ifndef TELEPATHYCHATUI_H
 #define TELEPATHYCHATUI_H
 
-#include "chatwindow.h"
+#include "chat-window.h"
 
 #include <TelepathyQt4/AbstractClientHandler>
 #include <KApplication>

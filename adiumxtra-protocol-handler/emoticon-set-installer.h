@@ -19,7 +19,7 @@
 #ifndef EMOTICONSETINSTALLER_H
 #define EMOTICONSETINSTALLER_H
 
-#include "bundleinstaller.h"
+#include "bundle-installer.h"
 
 class KTemporaryFile;
 

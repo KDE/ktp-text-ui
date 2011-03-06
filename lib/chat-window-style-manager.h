@@ -1,5 +1,5 @@
 /*
-   kopetechatwindowstylemanager.h - Manager all chat window styles
+   kopetechat-window-style-manager.h - Manager all chat window styles
 
    Copyright (c) 2005      by Michaël Larouche     <larouche@kde.org>
 

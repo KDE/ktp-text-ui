@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "chattextedit.h"
+#include "chat-text-edit.h"
 
 #include <QtGui/QMenu>
 #include <QtGui/QContextMenuEvent>

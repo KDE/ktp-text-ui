@@ -19,7 +19,7 @@
 #ifndef CHATSTYLEINSTALLER_H
 #define CHATSTYLEINSTALLER_H
 
-#include "bundleinstaller.h"
+#include "bundle-installer.h"
 
 #include <KDebug>
 

@@ -3,10 +3,10 @@
 include_directories(../lib/)
 
 set(telepathy_chat_config_SRCS
-        bundleinstaller.cpp
-        chatstyleinstaller.cpp
-        emoticonsetinstaller.cpp
-        adiumxtraprotocolhandler.cpp
+        bundle-installer.cpp
+        chat-style-installer.cpp
+        emoticon-set-installer.cpp
+        adiumxtra-protocol-handler.cpp
         main.cpp
 )
 

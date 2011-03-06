@@ -4,8 +4,8 @@ include_directories(../lib/)
 
 set(telepathy_chat_handler_SRCS
         main.cpp
-        telepathychatui.cpp
-        chatwindow.cpp
+        telepathy-chat-ui.cpp
+        chat-window.cpp
 )
 
 kde4_add_executable(telepathy-chat-handler ${telepathy_chat_handler_SRCS})

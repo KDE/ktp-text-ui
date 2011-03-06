@@ -19,7 +19,7 @@
 #ifndef ADIUMXTRAPROTOCOLHANDLER_H
 #define ADIUMXTRAPROTOCOLHANDLER_H
 
-#include "bundleinstaller.h"
+#include "bundle-installer.h"
 
 #include <KApplication>
 

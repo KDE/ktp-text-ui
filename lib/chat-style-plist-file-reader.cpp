@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "chatstyleplistfilereader.h"
+#include "chat-style-plist-file-reader.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QVariant>

@@ -1,19 +1,19 @@
 set(telepathy_chat_handler_lib_SRCS
-        chatwidget.cpp
-        chatwindowstyle.cpp
-        chatwindowstylemanager.cpp
-        adiumthemeview.cpp
-        adiumthemeheaderinfo.cpp
-        adiumthememessageinfo.cpp
-        adiumthemecontentinfo.cpp
-        adiumthemestatusinfo.cpp
-        channelcontactlist.cpp
-        chatstyleplistfilereader.cpp
-        chattextedit.cpp
+        chat-widget.cpp
+        chat-window-style.cpp
+        chat-window-style-manager.cpp
+        adium-theme-view.cpp
+        adium-theme-header-info.cpp
+        adium-theme-message-info.cpp
+        adium-theme-content-info.cpp
+        adium-theme-status-info.cpp
+        channel-contact-list.cpp
+        chat-style-plist-file-reader.cpp
+        chat-text-edit.cpp
 )
 
 set(telepathy_chat_handler_lib_UI
-    chatwidget.ui)
+    chat-widget.ui)
 
 kde4_add_ui_files(telepathy_chat_handler_lib_SRCS ${telepathy_chat_handler_lib_UI})
 

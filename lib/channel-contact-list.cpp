@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "channelcontactlist.h"
+#include "channel-contact-list.h"
 #include <TelepathyQt4/Contact>
 #include <KDebug>
 

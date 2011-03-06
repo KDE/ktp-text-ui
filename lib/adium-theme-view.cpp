@@ -17,14 +17,14 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "adiumthemeview.h"
+#include "adium-theme-view.h"
 
-#include "adiumthemeheaderinfo.h"
-#include "adiumthemecontentinfo.h"
-#include "adiumthememessageinfo.h"
-#include "adiumthemestatusinfo.h"
+#include "adium-theme-header-info.h"
+#include "adium-theme-content-info.h"
+#include "adium-theme-message-info.h"
+#include "adium-theme-status-info.h"
 
-#include "chatwindowstylemanager.h"
+#include "chat-window-style-manager.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QTextCodec>

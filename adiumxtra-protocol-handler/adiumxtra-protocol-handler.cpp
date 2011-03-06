@@ -17,11 +17,11 @@
 */
 
 
-#include "adiumxtraprotocolhandler.h"
-#include "chatstyleinstaller.h"
-#include "emoticonsetinstaller.h"
+#include "adiumxtra-protocol-handler.h"
+#include "chat-style-installer.h"
+#include "emoticon-set-installer.h"
 
-#include "chatwindowstylemanager.h"
+#include "chat-window-style-manager.h"
 
 #include <KDebug>
 #include <KZip>

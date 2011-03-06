@@ -17,47 +17,43 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "adiumthemestatusinfo.h"
-#include <QtCore/QString>
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-class AdiumThemeStatusInfoPrivate
+#include "adium-theme-header-info.h"
+
+#include <QtGui/QDialog>
+
+namespace Ui
 {
+class ChatWindowConfig;
+}
+
+
+class MainWindow : public QDialog
+{
+    Q_OBJECT
+
 public:
-    QString status;
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+protected:
+    void changeEvent(QEvent *e);
+    void accept();
+
+private:
+    Ui::ChatWindowConfig *ui;
+    AdiumThemeHeaderInfo m_demoChatHeader;
+
+private slots:
+    void sendDemoMessages();
+    void onStylesLoaded();
+    void updateVariantsList();
+
+    void onStyleSelected(int index);
+    void onVariantSelected(const QString&);
+    void onShowHeaderChanged(bool);
 };
 
-AdiumThemeStatusInfo::AdiumThemeStatusInfo()
-    : AdiumThemeMessageInfo(AdiumThemeMessageInfo::Status),
-      d(new AdiumThemeStatusInfoPrivate)
-{
-}
-
-AdiumThemeStatusInfo::AdiumThemeStatusInfo(const AdiumThemeStatusInfo &other)
-    : AdiumThemeMessageInfo(other),
-      d(new AdiumThemeStatusInfoPrivate(*other.d))
-{
-
-}
-
-AdiumThemeStatusInfo::~AdiumThemeStatusInfo()
-{
-    delete d;
-}
-
-
-AdiumThemeStatusInfo& AdiumThemeStatusInfo::operator=(const AdiumThemeStatusInfo& other)
-{
-    *d = *other.d;
-    return *this;
-}
-
-QString AdiumThemeStatusInfo::status() const
-{
-    return d->status;
-}
-
-void AdiumThemeStatusInfo::setStatus(const QString& status)
-{
-    d->status = status;
-}
-
+#endif // MAINWINDOW_H

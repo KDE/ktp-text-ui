@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "adiumthememessageinfo.h"
+#include "adium-theme-message-info.h"
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QDateTime>

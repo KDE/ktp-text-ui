@@ -20,7 +20,7 @@
 #ifndef CHATWINDOW_H
 #define CHATWINDOW_H
 
-#include "chatwidget.h"
+#include "chat-widget.h"
 
 #include <KXmlGuiWindow>
 #include <KTabWidget>

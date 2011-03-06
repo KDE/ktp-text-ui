@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "chatwindow.h"
-#include "telepathychatui.h"
+#include "chat-window.h"
+#include "telepathy-chat-ui.h"
 
 #include <TelepathyQt4/ClientRegistrar>
 #include <TelepathyQt4/AccountFactory>

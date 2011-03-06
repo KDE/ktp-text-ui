@@ -16,20 +16,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "emoticonsetinstaller.h"
+#include "chat-style-installer.h"
 
-#include "chatwindowstylemanager.h"
-#include "chatstyleplistfilereader.h"
+#include "chat-window-style-manager.h"
+#include "chat-style-plist-file-reader.h"
 
 #include <KDebug>
 #include <KTemporaryFile>
 #include <KArchiveFile>
-#include <KEmoticons>
-#include <KArchiveDirectory>
-#include <KNotification>
 #include <KLocale>
+#include <KNotification>
+#include <KApplication>
 
-EmoticonSetInstaller::EmoticonSetInstaller(KArchive *archive, KTemporaryFile *tmpFile)
+
+ChatStyleInstaller::ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFile)
 {
     kDebug();
 
@@ -37,72 +37,85 @@ EmoticonSetInstaller::EmoticonSetInstaller(KArchive *archive, KTemporaryFile *tm
     m_tmpFile = tmpFile;
 }
 
-EmoticonSetInstaller::~EmoticonSetInstaller()
+ChatStyleInstaller::~ChatStyleInstaller()
 {
     kDebug();
 }
 
-BundleInstaller::BundleStatus EmoticonSetInstaller::validate()
+BundleInstaller::BundleStatus ChatStyleInstaller::validate()
 {
     kDebug();
 
     KArchiveEntry *currentEntry = 0L;
     KArchiveDirectory* currentDir = 0L;
-    if(m_archive == 0) exit(1);
-    m_archive->fileName();
-    m_archive->directory();
     const KArchiveDirectory* rootDir = m_archive->directory();
+    int validResult = 0;
     const QStringList entries = rootDir->entries();
-    // Will be reused later.
-    QStringList::ConstIterator entriesIt, entriesItEnd = entries.end();
+    QStringList::ConstIterator entriesIt;
+
     for (entriesIt = entries.begin(); entriesIt != entries.end(); ++entriesIt) {
         currentEntry = const_cast<KArchiveEntry*>(rootDir->entry(*entriesIt));
         kDebug() << "Current entry name: " << currentEntry->name();
         if (currentEntry->isDirectory()) {
             currentDir = dynamic_cast<KArchiveDirectory*>(currentEntry);
             if (currentDir) {
-                if (currentDir->entry(QString::fromUtf8("Emoticons.plist"))) {
-                   kDebug() << "Emoticons.plist found";
-                   QString currentItem = currentEntry->name();
-                   if(m_bundleName.isEmpty() && currentItem.endsWith(".AdiumEmoticonset")) {
-                       m_bundleName = currentItem.remove(".AdiumEmoticonset");
-                   }
-                   return BundleValid;
+                if (currentDir->entry(QLatin1String("Contents"))) {
+                    kDebug() << "Contents found";
+                    validResult += 1;
+                }
+                if (currentDir->entry(QLatin1String("Contents/Info.plist"))) {
+                    kDebug() << "Contents/Info.plist found";
+                    KArchiveFile const *info = dynamic_cast<KArchiveFile const *>(
+                        currentDir->entry(QLatin1String("Contents/Info.plist"))
+                    );
+                    QByteArray data = info->data();
+                    ChatStylePlistFileReader reader(data);
+                    if(m_bundleName.isEmpty()) {
+                        m_bundleName = reader.CFBundleName();
+                    }
+                    validResult += 1;
                 }
             }
         }
     }
 
-    return BundleNotValid;
+    if(validResult >= 2) {
+        return BundleValid;
+    } else {
+        return BundleNotValid;
+    }
 }
 
-QString EmoticonSetInstaller::bundleName() const
+QString ChatStyleInstaller::bundleName() const
 {
     kDebug();
 
     return m_bundleName;
 }
 
-BundleInstaller::BundleStatus EmoticonSetInstaller::install()
+BundleInstaller::BundleStatus ChatStyleInstaller::install()
 {
     kDebug();
 
-    KEmoticons emoticons;
-    emoticons.installTheme(m_tmpFile->fileName());
+    BundleInstaller::BundleStatus status = static_cast<BundleInstaller::BundleStatus>(
+        ChatWindowStyleManager::self()->installStyle(m_archive->fileName())
+    );
+    kDebug()<< "status " << status;
+    delete m_tmpFile;
 
-    // we trust in KEmoticons as it gives us no status information
-    // installTheme only returns a list of installed themes if we compare the list before and after
-    // the style could have been updated and the list would not have changed 
-    emit(finished(BundleInstallOk));
-    return BundleInstallOk;
+    m_status = status;
+
+    emit(finished(status));
+
+    return status;
 }
 
-void EmoticonSetInstaller::showRequest()
+void ChatStyleInstaller::showRequest()
 {
     kDebug();
 
-    KNotification *notification = new KNotification("emoticonsRequest", NULL, KNotification::Persistent);
-    notification->setText( i18n("Install Emoticonset %1", this->bundleName()) );
+    KNotification *notification = new KNotification("chatstyleRequest", NULL, KNotification::Persistent);
+    notification->setText( i18n("Install Chatstyle %1", this->bundleName()) );
     notification->setActions( QStringList() << i18n("Install") << i18n("Cancel") );
 
     QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));
@@ -117,12 +130,18 @@ void EmoticonSetInstaller::showRequest()
     notification->sendEvent();
 }
 
-void EmoticonSetInstaller::showResult()
+void ChatStyleInstaller::showResult()
 {
     kDebug();
 
-    KNotification *notification = new KNotification("emoticonsSuccess", NULL, KNotification::Persistent);
-    notification->setText( i18n("Installed Emoticonset %1 successfully.", this->bundleName()) );
+    KNotification *notification;
+    if(m_status == BundleInstaller::BundleInstallOk) {
+        notification = new KNotification("chatstyleSuccess", NULL, KNotification::Persistent);
+        notification->setText( i18n("Installed Chatstyle %1 successfully.", this->bundleName()) );
+    } else {
+        notification = new KNotification("chatstyleFailure", NULL, KNotification::Persistent);
+        notification->setText( i18n("Installation of Chatstyle %1 failed.", this->bundleName()) );
+    }
 
     notification->setActions( QStringList() << i18n("OK") );
     QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
@@ -133,7 +152,7 @@ void EmoticonSetInstaller::showResult()
     emit(showedResult());
 }
 
-void EmoticonSetInstaller::ignoreRequest()
+void ChatStyleInstaller::ignoreRequest()
 {
     kDebug();
 

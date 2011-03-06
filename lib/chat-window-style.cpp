@@ -1,5 +1,5 @@
 /*
-   kopetechatwindowstyle.cpp - A Chat Window Style.
+   kopetechat-window-style.cpp - A Chat Window Style.
 
    Copyright (c) 2005      by Michaël Larouche     <larouche@kde.org>
 
@@ -15,8 +15,8 @@
    *************************************************************************
 */
 
-#include "chatwindowstyle.h"
-#include "chatstyleplistfilereader.h"
+#include "chat-window-style.h"
+#include "chat-style-plist-file-reader.h"
 
 // Qt includes
 #include <QtCore/QFile>

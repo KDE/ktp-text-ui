@@ -4,7 +4,7 @@ include_directories(../lib/)
 
 set(telepathy_chat_config_SRCS
         main.cpp
-        mainwindow.cpp
+        main-window.cpp
 )
 
 set(telepathy_chat_config_UI

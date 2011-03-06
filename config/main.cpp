@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 
-#include "mainwindow.h"
+#include "main-window.h"
 
 #include <KApplication>
 #include <KAboutData>

@@ -167,13 +167,13 @@
   <customwidget>
    <class>AdiumThemeView</class>
    <extends>QWidget</extends>
-   <header>adiumthemeview.h</header>
+   <header>adium-theme-view.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>ChatTextEdit</class>
    <extends>QTextEdit</extends>
-   <header>chattextedit.h</header>
+   <header>chat-text-edit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

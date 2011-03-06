@@ -21,7 +21,7 @@
 #ifndef ADIUMTHEMECONTENTINFO_H
 #define ADIUMTHEMECONTENTINFO_H
 
-#include "adiumthememessageinfo.h"
+#include "adium-theme-message-info.h"
 
 #include "kdetelepathychat_export.h"
 

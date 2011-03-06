@@ -17,8 +17,8 @@
 */
 
 
-#include "chatwindow.h"
-#include "chatwidget.h"
+#include "chat-window.h"
+#include "chat-widget.h"
 
 #include <KStandardAction>
 #include <KIcon>
@@ -157,4 +157,4 @@ void ChatWindow::showNotificationsDialog()
 }
 
 
-#include "chatwindow.moc"
+#include "chat-window.moc"

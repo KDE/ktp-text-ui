@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "adiumthemeheaderinfo.h"
+#include "adium-theme-header-info.h"
 
 //FIXME HTML escaping is maybe needed.
 

@@ -17,13 +17,13 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "chatwidget.h"
-#include "ui_chatwidget.h"
-#include "adiumthemeheaderinfo.h"
-#include "adiumthemecontentinfo.h"
-#include "adiumthememessageinfo.h"
-#include "adiumthemestatusinfo.h"
-#include "channelcontactlist.h"
+#include "chat-widget.h"
+#include "ui_chat-widget.h"
+#include "adium-theme-header-info.h"
+#include "adium-theme-content-info.h"
+#include "adium-theme-message-info.h"
+#include "adium-theme-status-info.h"
+#include "channel-contact-list.h"
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
@@ -547,5 +547,5 @@ KIcon ChatWidget::iconForPresence(Tp::ConnectionPresenceType presence)
 
 
 
-#include "chatwidget.moc" //for MessageBoxEventFilter
-#include "moc_chatwidget.cpp" //for ChatWidget
+#include "chat-widget.moc" //for MessageBoxEventFilter
+#include "moc_chat-widget.cpp" //for ChatWidget
