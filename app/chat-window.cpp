@@ -148,19 +148,6 @@ void ChatWindow::onCurrentIndexChanged(int index)
 
 }
 
-void ChatWindow::onUserTypingChanged(bool isTyping)
-{
-    QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
-    if (sender) {
-        int tabIndex = m_tabWidget->indexOf(sender);
-        if (isTyping) {
-            setTabTextColor(tabIndex, ChatTab::colorForRole(ChatTab::CurrentlyTyping));
-        } else {
-            setTabTextColor(tabIndex, ChatTab::colorForRole(ChatTab::Default));
-        }
-    }
-}
-
 void ChatWindow::onContactPresenceChanged(const Tp::Presence& presence)
 {
     kDebug();
@@ -174,25 +161,17 @@ void ChatWindow::onContactPresenceChanged(const Tp::Presence& presence)
     }
 }
 
-void ChatWindow::onUnreadMessagesChanged()
+void ChatWindow::onTabStateChanged()
 {
     kDebug();
 
     ChatTab* sender = qobject_cast<ChatTab*>(QObject::sender());
     if (sender) {
-        int tabIndexToChange = m_tabWidget->indexOf(sender);
-        if(sender->unreadMessages() > 0) {
-            kDebug() << "New unread messages";
-            // only change tab color if the widget is hidden
-            // the slot is also triggered if the window is not active
-            if(!sender->isVisible()) {
-                setTabTextColor(tabIndexToChange, ChatTab::colorForRole(ChatTab::UnreadMessages));
-            }
-        } else {
-            kDebug() << "No unread messages anymore";
-            setTabTextColor(tabIndexToChange, sender->titleColor());
-        }
-
+        int tabIndex = m_tabWidget->indexOf(sender);
+        setTabTextColor(tabIndex, sender->titleColor());
+    }
+    else {
+        kDebug() << "AAARGH";
     }
 }
 
@@ -213,6 +192,5 @@ void ChatWindow::showNotificationsDialog()
 {
     KNotifyConfigWidget::configure(this, "ktelepathy");
 }
-
 
 #include "chat-window.moc"

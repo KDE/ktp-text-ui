@@ -50,9 +50,8 @@ public:
 public slots:
     void removeTab(QWidget *chatWidget);
     void onCurrentIndexChanged(int index);
-    void onUserTypingChanged(bool isTyping);
     void onContactPresenceChanged(const Tp::Presence &presence);
-    void onUnreadMessagesChanged();
+    void onTabStateChanged();
 
 protected slots:
     void showSettingsDialog();

@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "chat-widget.h"
+
 #include "ui_chat-widget.h"
 #include "adium-theme-header-info.h"
 #include "adium-theme-content-info.h"
@@ -32,14 +33,15 @@
 #include <KNotification>
 #include <KAboutData>
 #include <KComponentData>
+#include <KDebug>
+#include <KColorScheme>
 
 #include <TelepathyQt4/Message>
 #include <TelepathyQt4/Types>
 #include <TelepathyQt4/AvatarData>
 #include <TelepathyQt4/Connection>
 #include <TelepathyQt4/Presence>
-#include <KDebug>
-#include <KColorScheme>
+
 
 class MessageBoxEventFilter : public QObject
 {
@@ -74,10 +76,12 @@ public:
     ChatWidgetPrivate()
     {
         isGroupChat = false;
+        remoteContactIsTyping = false;
         unreadMessages = 0;
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
     bool chatviewlInitialised;
+    bool remoteContactIsTyping;
     QAction *showFormatToolbarAction;
     bool isGroupChat;
     int unreadMessages;
@@ -239,7 +243,7 @@ void ChatWidget::showEvent(QShowEvent* e)
 {
     kDebug();
 
-    resetUnreadMessages();
+    resetUnreadMessageCount();
 
     QWidget::showEvent(e);
 }
@@ -267,50 +271,66 @@ KIcon ChatWidget::icon() const
 
 QColor ChatWidget::titleColor() const
 {
+    /*return a color to set the tab text as in order of importance
+
+    typing
+    unread messages
+    user offline
+
+    */
+
+    KColorScheme scheme(QPalette::Active, KColorScheme::Window);
+
+    if (d->remoteContactIsTyping) {
+        kDebug() << "remote is typing";
+        return scheme.foreground(KColorScheme::PositiveText).color();
+    }
+
+    if (d->unreadMessages > 0) {
+        kDebug() << "unread messages";
+        return scheme.foreground(KColorScheme::ActiveText).color();
+    }
+
     //normal chat - self and one other person.
     if (!d->isGroupChat) {
         //find the other contact which isn't self.
         foreach(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
             if (contact != d->channel->groupSelfContact()) {
-                return colorForPresence(contact->presence().type());
+                if (contact->presence().type() == Tp::ConnectionPresenceTypeOffline ||
+                    contact->presence().type() == Tp::ConnectionPresenceTypeHidden) {
+                    return scheme.foreground(KColorScheme::InactiveText).color();
+                }
             }
         }
     }
 
-    //group chat
-    return colorForPresence(Tp::ConnectionPresenceTypeAvailable);
+    return scheme.foreground(KColorScheme::NormalText).color();
 }
 
-bool ChatWidget::isNewMessageUnread()
-{
-    kDebug() << !isOnTop();
-    return !isOnTop();
-}
-
-int ChatWidget::unreadMessages() const
+int ChatWidget::unreadMessageCount() const
 {
     kDebug() << title() << d->unreadMessages;
 
     return d->unreadMessages;
 }
 
-void ChatWidget::incrementUnreadMessages()
+void ChatWidget::incrementUnreadMessageCount()
 {
     kDebug();
 
     d->unreadMessages++;
 
     kDebug() << "emit" << d->unreadMessages;
-    emit unreadMessagesChanged(d->unreadMessages);
+    Q_EMIT unreadMessagesChanged(d->unreadMessages);
 }
 
-void ChatWidget::resetUnreadMessages()
+void ChatWidget::resetUnreadMessageCount()
 {
     kDebug();
 
     if(d->unreadMessages > 0) {
         d->unreadMessages = 0;
-        emit unreadMessagesChanged(d->unreadMessages);
+        Q_EMIT unreadMessagesChanged(d->unreadMessages);
     }
 }
 
@@ -319,13 +339,6 @@ bool ChatWidget::isOnTop() const
 {
     kDebug() << ( isActiveWindow() && isVisible() );
     return ( isActiveWindow() && isVisible() );
-}
-
-void ChatWidget::showOnTop()
-{
-    kDebug() << "isOnTop:" << isOnTop();
-
-    activateWindow();
 }
 
 void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
@@ -354,11 +367,11 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
         d->ui.chatArea->addContentMessage(messageInfo);
         d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
 
-        if(isNewMessageUnread()) {
-            incrementUnreadMessages();
+        if(!isOnTop()) {
+            incrementUnreadMessageCount();
         }
 
-        emit messageReceived();
+        Q_EMIT messageReceived();
     }
 
     //if the window isn't ready, we don't acknowledge the mesage. We process them as soon as we are ready.
@@ -489,7 +502,6 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
         qDebug() << QString("Unknown case %1").arg(state);
     }
 
-
     if (!contactIsTyping) {
         //In a multiperson chat just because this user is no longer typing it doesn't mean that no-one is.
         //loop through each contact, check no-one is in composing mode.
@@ -504,7 +516,10 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
         }
     }
 
-    emit userTypingChanged(contactIsTyping);
+    if (contactIsTyping != d->remoteContactIsTyping) {
+        d->remoteContactIsTyping = contactIsTyping;
+        Q_EMIT userTypingChanged(contactIsTyping);
+    }
 }
 
 
