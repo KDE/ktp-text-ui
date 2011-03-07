@@ -195,6 +195,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
 
 ChatWidget::~ChatWidget()
 {
+    d->channel->requestClose(); // ensure closing; does nothing, if already closed
     delete d;
 }
 
