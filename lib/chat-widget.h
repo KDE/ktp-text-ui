@@ -38,6 +38,9 @@ public:
     explicit ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent = 0);
     virtual ~ChatWidget();
 
+    /** Returns the text channel pointer of the chatWidget */
+    Tp::TextChannelPtr textChannel() const;
+
     /** Returns the name of this chat window*/
     QString title() const;
 

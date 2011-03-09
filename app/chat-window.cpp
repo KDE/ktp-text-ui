@@ -33,6 +33,8 @@
 #include <KSettings/Dialog>
 #include <KNotifyConfigWidget>
 
+#include <TelepathyQt4/TextChannel>
+
 ChatWindow::ChatWindow()
 {
     //setup actions
@@ -61,18 +63,40 @@ ChatWindow::~ChatWindow()
 {
 }
 
-void ChatWindow::addTab(ChatWidget* chatWidget)
+void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
 {
-    connect(chatWidget, SIGNAL(titleChanged(QString)), this, SLOT(updateTabText(QString)));
-    connect(chatWidget, SIGNAL(iconChanged(KIcon)), this, SLOT(updateTabIcon(KIcon)));
-    connect(chatWidget, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged(bool)));
+    bool duplicateTab = false;
 
-    m_tabWidget->addTab(chatWidget, chatWidget->icon(), chatWidget->title());
-    m_tabWidget->setCurrentWidget(chatWidget);
+    // check that the tab requested isn't already open
+    for(int index = 0; index < m_tabWidget->count() && !duplicateTab; index++) {
 
-    if(m_tabWidget->isTabBarHidden()) {
-        if(m_tabWidget->count() > 1) {
-            m_tabWidget->setTabBarHidden(false);
+        // get chatWidget object
+        ChatWidget *auxChatWidget = qobject_cast<ChatWidget*>(m_tabWidget->widget(index));
+
+        // this should never happen
+        if(!auxChatWidget)
+            return;
+
+        if(auxChatWidget->textChannel() == incomingTextChannel) {   // got duplicate tab
+            duplicateTab = true;
+            m_tabWidget->setCurrentIndex(index);                    // set focus on selected tab
+        }
+    }
+
+    // got new chat, create it
+    if(!duplicateTab) {
+        ChatWidget *chatWidget = new ChatWidget(incomingTextChannel, m_tabWidget);
+        connect(chatWidget, SIGNAL(titleChanged(QString)), this, SLOT(updateTabText(QString)));
+        connect(chatWidget, SIGNAL(iconChanged(KIcon)), this, SLOT(updateTabIcon(KIcon)));
+        connect(chatWidget, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged(bool)));
+
+        m_tabWidget->addTab(chatWidget, chatWidget->icon(), chatWidget->title());
+        m_tabWidget->setCurrentWidget(chatWidget);
+
+        if(m_tabWidget->isTabBarHidden()) {
+            if(m_tabWidget->count() > 1) {
+                m_tabWidget->setTabBarHidden(false);
+            }
         }
     }
 

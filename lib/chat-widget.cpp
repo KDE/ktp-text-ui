@@ -221,6 +221,10 @@ void ChatWidget::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 }
 
+Tp::TextChannelPtr ChatWidget::textChannel() const
+{
+    return d->channel;
+}
 
 QString ChatWidget::title() const
 {

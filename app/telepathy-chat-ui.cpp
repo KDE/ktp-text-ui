@@ -70,9 +70,8 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     }
     Q_ASSERT(textChannel);
 
-    ChatWidget* newChatWidget = new ChatWidget(textChannel, m_chatWindow);
-
-    m_chatWindow->addTab(newChatWidget);
+    // create new chat
+    m_chatWindow->startChat(textChannel);
 
     m_chatWindow->show();
 

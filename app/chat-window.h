@@ -35,7 +35,12 @@ public:
     ChatWindow();
     virtual ~ChatWindow();
 
-    void addTab(ChatWidget *chatWidget);
+    /**
+     * starts a new chat with the textChannelPtr given only if the
+     * chat doesn't already exist
+     * @param incomingTextChannel new text channel
+     */
+    void startChat(Tp::TextChannelPtr incomingTextChannel);
 
 public slots:
     void removeTab(QWidget *chatWidget);
