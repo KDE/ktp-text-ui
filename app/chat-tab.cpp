@@ -17,8 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "chattab.h"
-#include "chatwidget.h"
+#include "chat-tab.h"
+
+#include "chat-widget.h"
 
 #include <KTabWidget>
 #include <KDebug>

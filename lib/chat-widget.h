@@ -39,15 +39,6 @@ class KDE_TELEPATHY_CHAT_EXPORT ChatWidget : public QWidget
     Q_OBJECT
 
 public:
-//    enum TitleColor {
-//        Default = KColorScheme::NormalText,
-//        Offline = KColorScheme::InactiveText,
-//        UnreadMessages = KColorScheme::ActiveText,
-//        UnreadStatus = KColorScheme::NeutralText,
-//        UnauthorizedContact = KColorScheme::NegativeText,
-//        CurrentlyTyping = KColorScheme::PositiveText
-//    };
-
     explicit ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent = 0);
     virtual ~ChatWidget();
 

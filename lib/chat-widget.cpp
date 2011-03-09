@@ -658,32 +658,5 @@ KIcon ChatWidget::iconForPresence(Tp::ConnectionPresenceType presence)
     return KIcon(iconName);
 }
 
-QColor ChatWidget::colorForPresence(Tp::ConnectionPresenceType presence)
-{
-    TitleColor role;
-
-    switch (presence) {
-        case Tp::ConnectionPresenceTypeAvailable:
-        case Tp::ConnectionPresenceTypeAway:
-        case Tp::ConnectionPresenceTypeExtendedAway:
-        case Tp::ConnectionPresenceTypeHidden:
-        case Tp::ConnectionPresenceTypeBusy:
-            role = Default;
-            break;
-        default:
-            role = Offline;
-            break;
-    }
-
-    return colorForRole(role);
-}
-
-QColor ChatWidget::colorForRole(ChatWidget::TitleColor role)
-{
-    KColorScheme scheme(QPalette::Active, KColorScheme::Window);
-    return scheme.foreground(static_cast<KColorScheme::ForegroundRole>(role)).color();
-}
-
-
 #include "chat-widget.moc" //for MessageBoxEventFilter
 #include "moc_chat-widget.cpp" //for ChatWidget

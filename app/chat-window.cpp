@@ -19,7 +19,7 @@
 
 #include "chat-window.h"
 
-#include "chattab.h"
+#include "chat-tab.h"
 
 #include <KStandardAction>
 #include <KIcon>
@@ -75,10 +75,10 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
         ChatTab *auxChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
 
         // this should never happen
-        if(!auxChatWidget)
+        if(!auxChatTab)
             return;
 
-        if(auxChatWidget->textChannel() == incomingTextChannel) {   // got duplicate tab
+        if(auxChatTab->textChannel() == incomingTextChannel) {   // got duplicate tab
             duplicateTab = true;
             m_tabWidget->setCurrentIndex(index);                    // set focus on selected tab
         }
@@ -86,7 +86,7 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
 
     // got new chat, create it
     if(!duplicateTab) {
-        ChatTab *chatTab = new ChatWidget(incomingTextChannel, m_tabWidget);
+        ChatTab *chatTab = new ChatTab(incomingTextChannel, m_tabWidget);
         connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(updateTabText(QString)));
         connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(updateTabIcon(KIcon)));
         connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged(bool)));
@@ -169,9 +169,6 @@ void ChatWindow::onTabStateChanged()
     if (sender) {
         int tabIndex = m_tabWidget->indexOf(sender);
         setTabTextColor(tabIndex, sender->titleColor());
-    }
-    else {
-        kDebug() << "AAARGH";
     }
 }
 

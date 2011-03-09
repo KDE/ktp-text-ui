@@ -20,7 +20,7 @@
 #ifndef CHATTAB_H
 #define CHATTAB_H
 
-#include "chatwidget.h"
+#include "chat-widget.h"
 
 #include <QtCore/QString>
 #include <QtGui/QWidget>
