@@ -1,6 +1,0 @@
-#ifndef KDE_TELEPATHY_TEXT_UI_CHAT_STYLE_PLIST_FILE_READER
-#define KDE_TELEPATHY_TEXT_UI_CHAT_STYLE_PLIST_FILE_READER
-
-#include <chatstyleplistfilereader.h>
-
-#endif
