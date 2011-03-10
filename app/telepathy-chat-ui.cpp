@@ -73,6 +73,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
 
     // create new chat
     m_chatWindow->startChat(textChannel);
+    m_chatWindow->show();
     context->setFinished();
 }
 
