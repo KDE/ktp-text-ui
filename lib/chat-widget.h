@@ -105,6 +105,7 @@ signals:
 
 private slots:
     void onFormatColorReleased();
+    void windowActivated();
 
 private:
     void resetUnreadMessageCount();

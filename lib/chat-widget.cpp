@@ -69,6 +69,24 @@ Q_SIGNALS:
     void returnKeyPressed();
 };
 
+class WindowEventFilter : public QObject
+{
+    Q_OBJECT
+public:
+    WindowEventFilter(QObject* parent = 0) : QObject(parent) {}
+
+protected:
+    virtual bool eventFilter(QObject *obj, QEvent *event)
+    {
+        if (event->type() == QEvent::ActivationChange) {
+            Q_EMIT windowActivated();
+        }
+        return QObject::eventFilter(obj, event);
+    }
+
+Q_SIGNALS:
+    void windowActivated();
+};
 
 class ChatWidgetPrivate
 {
@@ -106,7 +124,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
       d(new ChatWidgetPrivate)
 {
     d->channel = channel;
-
 
     d->chatviewlInitialised = false;
     d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
@@ -203,6 +220,11 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
     d->ui.sendMessageBox->installEventFilter(messageBoxEventFilter);
     connect(messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
     connect(d->ui.sendButton, SIGNAL(clicked()), SLOT(sendMessage()));
+
+    WindowEventFilter *windowEventFilter = new WindowEventFilter(this);
+    this->window()->installEventFilter(windowEventFilter);
+    connect(windowEventFilter, SIGNAL(windowActivated()), SLOT(windowActivated()));
+
 }
 
 ChatWidget::~ChatWidget()
@@ -248,6 +270,7 @@ void ChatWidget::showEvent(QShowEvent* e)
     QWidget::showEvent(e);
 }
 
+
 QString ChatWidget::title() const
 {
     return d->title;
@@ -286,7 +309,7 @@ QColor ChatWidget::titleColor() const
         return scheme.foreground(KColorScheme::PositiveText).color();
     }
 
-    if (d->unreadMessages > 0) {
+    if (d->unreadMessages > 0 && !isOnTop()) {
         kDebug() << "unread messages";
         return scheme.foreground(KColorScheme::ActiveText).color();
     }
@@ -322,6 +345,14 @@ void ChatWidget::incrementUnreadMessageCount()
 
     kDebug() << "emit" << d->unreadMessages;
     Q_EMIT unreadMessagesChanged(d->unreadMessages);
+}
+
+void ChatWidget::windowActivated()
+{
+    kDebug();
+    if (isOnTop()) {
+        resetUnreadMessageCount();
+    }
 }
 
 void ChatWidget::resetUnreadMessageCount()
