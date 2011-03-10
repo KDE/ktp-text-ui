@@ -13,15 +13,15 @@ set(telepathy_chat_handler_lib_SRCS
 )
 
 set(telepathy_chat_handler_lib_HDRS
-    adiumthemecontentinfo.h
-    adiumthemeheaderinfo.h
-    adiumthememessageinfo.h
-    adiumthemestatusinfo.h
-    adiumthemeview.h
-    chatstyleplistfilereader.h
-    chatwidget.h
-    chatwindowstyle.h
-    chatwindowstylemanager.h
+    adium-theme-content-info.h
+    adium-theme-header-info.h
+    adium-theme-message-info.h
+    adium-theme-status-info.h
+    adium-theme-view.h
+    chat-style-plist-file-reader.h
+    chat-widget.h
+    chat-window-style.h
+    chat-window-style-manager.h
 )
 
 set(telepathy_chat_handler_lib_PRETTY_HDRS
