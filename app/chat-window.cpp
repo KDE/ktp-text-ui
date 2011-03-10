@@ -87,9 +87,11 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
     // got new chat, create it
     if(!duplicateTab) {
         ChatTab *chatTab = new ChatTab(incomingTextChannel, m_tabWidget);
-        connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(updateTabText(QString)));
-        connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(updateTabIcon(KIcon)));
-        connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged(bool)));
+        connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
+        connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
+        connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
+        connect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
+        connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
 
         m_tabWidget->addTab(chatTab, chatTab->icon(), chatTab->title());
         m_tabWidget->setCurrentWidget(chatTab);
@@ -145,20 +147,6 @@ void ChatWindow::onCurrentIndexChanged(int index)
     ChatTab* currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
     setWindowTitle(currentChatTab->title());
     setWindowIcon(currentChatTab->icon());
-
-}
-
-void ChatWindow::onContactPresenceChanged(const Tp::Presence& presence)
-{
-    kDebug();
-
-    ChatTab* sender = qobject_cast<ChatTab*>(QObject::sender());
-    if (sender) {
-        int tabIndexToChange = m_tabWidget->indexOf(sender);
-        setTabIcon(tabIndexToChange, sender->icon());
-        setTabText(tabIndexToChange, sender->title());
-        setTabTextColor(tabIndexToChange, sender->titleColor());
-    }
 }
 
 void ChatWindow::onTabStateChanged()
@@ -169,6 +157,26 @@ void ChatWindow::onTabStateChanged()
     if (sender) {
         int tabIndex = m_tabWidget->indexOf(sender);
         setTabTextColor(tabIndex, sender->titleColor());
+    }
+}
+
+void ChatWindow::onTabIconChanged(const KIcon & newIcon)
+{
+    //find out which widget made the call, and update the correct tab.
+    QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
+    if (sender) {
+        int tabIndexToChange = m_tabWidget->indexOf(sender);
+        setTabIcon(tabIndexToChange, newIcon);
+    }
+}
+
+void ChatWindow::onTabTextChanged(const QString &newTitle)
+{
+    //find out which widget made the call, and update the correct tab.
+    QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
+    if (sender) {
+        int tabIndexToChange = m_tabWidget->indexOf(sender);
+        setTabText(tabIndexToChange, newTitle);
     }
 }
 
