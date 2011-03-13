@@ -40,6 +40,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KMessageBox>
+#include <KToolInvocation>
 
 
 AdiumThemeView::AdiumThemeView(QWidget *parent)
@@ -78,6 +79,11 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
 
     //special HTML debug mode. Debugging/Profiling only (or theme creating) should have no visible way to turn this flag on.
     m_webInspector = appearanceConfig.readEntry("debug", false);
+
+    // don't let QWebView handle the links, we do
+    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+
+    connect(this, SIGNAL(linkClicked(QUrl)), this, SLOT(onLinkClicked(QUrl)));
 }
 
 void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
@@ -246,6 +252,11 @@ void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
     appendNewMessage(styleHtml);
 }
 
+void AdiumThemeView::onLinkClicked(const QUrl& url)
+{
+    KToolInvocation::invokeBrowser(url.toString());
+}
+
 
 /** Private */
 
@@ -301,6 +312,16 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
 {
     //message
     htmlTemplate.replace("%message%", m_emoticons.theme().parseEmoticons(info.message()));
+
+    QRegExp linkRegExp("https{0,1}://[^ \t\n\r\f\v]+");
+    int index = 0;
+    while((index = linkRegExp.indexIn(htmlTemplate, index)) != -1) {
+        QString link = "<a href='" + linkRegExp.cap(0) + "'>" + linkRegExp.cap(0) + "</a>";
+        htmlTemplate.replace(index, linkRegExp.cap(0).length(), link);
+        // advance pos otherwise i end up parsing same link
+        index += link.length();
+    }
+
     //service
     htmlTemplate.replace("%service%", info.service());
     //time
@@ -314,6 +335,7 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
         QString timeKeyword = formatTime(timeRegExp.cap(1), info.time());
         htmlTemplate.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
     }
+
     return htmlTemplate;
 }
 

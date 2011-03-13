@@ -59,6 +59,7 @@ public:
 public slots:
     void addContentMessage(const AdiumThemeContentInfo&);
     void addStatusMessage(const AdiumThemeStatusInfo&);
+    void onLinkClicked(const QUrl&);
 
 private:
     ChatWindowStyle* m_chatStyle;
