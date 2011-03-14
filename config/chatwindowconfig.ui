@@ -32,7 +32,7 @@
         <widget class="KComboBox" name="styleComboBox"/>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="styleLabel">
          <property name="text">
           <string>Message Style:</string>
          </property>
@@ -48,7 +48,7 @@
         <widget class="KComboBox" name="variantComboBox"/>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="variantLabel">
          <property name="text">
           <string>Variant:</string>
          </property>
@@ -61,7 +61,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QCheckBox" name="checkBox">
+        <widget class="QCheckBox" name="showUserIcons">
          <property name="text">
           <string>Show User Icons</string>
          </property>
@@ -75,7 +75,7 @@
         </widget>
        </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="fontLabel">
          <property name="text">
           <string>Select Font: </string>
          </property>
