@@ -1,3 +1,3 @@
 [D-BUS Service]
 Name=org.freedesktop.Telepathy.Client.KDEChatHandler
-Exec=@CMAKE_INSTALL_PREFIX@/bin/telepathy-chat-handler
+Exec=@CMAKE_INSTALL_PREFIX@/bin/telepathy-kde-text-ui

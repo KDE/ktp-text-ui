@@ -1,15 +1,15 @@
 include_directories(${TELEPATHY_CHAT_HANDLER_SOURCE_DIR}/lib)
 
-set(telepathy_chat_handler_SRCS
+set(telepathy_kde_text_ui_SRCS
         main.cpp
         telepathy-chat-ui.cpp
         chat-window.cpp
         chat-tab.cpp
 )
 
-kde4_add_executable(telepathy-chat-handler ${telepathy_chat_handler_SRCS})
+kde4_add_executable(telepathy-kde-text-ui ${telepathy_kde_text_ui_SRCS})
 
-target_link_libraries(telepathy-chat-handler
+target_link_libraries(telepathy-kde-text-ui
             ${KDE4_KDECORE_LIBS}
             ${KDE4_KDEUI_LIBS}
             ${TELEPATHY_QT4_LIBRARIES}
@@ -21,9 +21,9 @@ target_link_libraries(telepathy-chat-handler
 configure_file(org.freedesktop.Telepathy.Client.KDEChatHandler.service.in
                ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDEChatHandler.service)
 
-install(TARGETS telepathy-chat-handler ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS telepathy-kde-text-ui ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDEChatHandler.service
         DESTINATION ${DBUS_SERVICES_INSTALL_DIR})
 install(FILES KDEChatHandler.client DESTINATION ${SHARE_INSTALL_PREFIX}/telepathy/clients/)
 install(FILES chatwindow.rc
-        DESTINATION  ${DATA_INSTALL_DIR}/ktelepathy/)
+        DESTINATION  ${DATA_INSTALL_DIR}/telepathy-kde-text-ui/)
