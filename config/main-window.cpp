@@ -28,8 +28,11 @@
 #include <KDebug>
 #include <KLocalizedString>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QDialog(parent),
+K_PLUGIN_FACTORY(KCMTelepathyChatConfigFactory, registerPlugin<MainWindow>();)
+K_EXPORT_PLUGIN(KCMTelepathyChatConfigFactory("telepathy_chat_config", "kcm_telepathy_chat_config"))
+
+MainWindow::MainWindow(QWidget *parent, const QVariantList& args)
+    : KCModule(KCMTelepathyChatConfigFactory::componentData(), parent, args),
       ui(new Ui::ChatWindowConfig)
 {
     ui->setupUi(this);
@@ -63,7 +66,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::changeEvent(QEvent *e)
 {
-    QDialog::changeEvent(e);
+    QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
@@ -168,12 +171,11 @@ void MainWindow::sendDemoMessages()
     ui->chatView->addStatusMessage(statusMessage);
 }
 
-void MainWindow::accept()
+void MainWindow::save()
 {
     kDebug();
 
     KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
-    //KConfig config(KGlobal::dirs()->findResource("config","ktelepathyrc"));
     KConfigGroup appearanceConfig = config->group("Appearance");
 
     appearanceConfig.writeEntry("styleName", ui->styleComboBox->itemData(ui->styleComboBox->currentIndex()).toString());
@@ -183,5 +185,5 @@ void MainWindow::accept()
     appearanceConfig.sync();
     config->sync();
 
-    QDialog::accept();
+    KCModule::save();
 }

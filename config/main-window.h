@@ -22,21 +22,25 @@
 
 #include "adium-theme-header-info.h"
 
-#include <QtGui/QDialog>
+#include <KCModule>
 
 namespace Ui
 {
-class ChatWindowConfig;
+  class ChatWindowConfig;
 }
 
 
-class MainWindow : public QDialog
+class MainWindow : public KCModule
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0,
+				const QVariantList& args = QVariantList());
     ~MainWindow();
+
+public slots:
+    void save();
 
 protected:
     void changeEvent(QEvent *e);
