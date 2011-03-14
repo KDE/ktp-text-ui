@@ -1,4 +1,4 @@
-include_directories(${TELEPATHY_CHAT_HANDLER_SOURCE_DIR}/lib)
+include_directories(${TELEPATHY_KDE_TEXT_UI_SOURCE_DIR}/lib)
 
 set(telepathy_chat_config_SRCS
         main.cpp

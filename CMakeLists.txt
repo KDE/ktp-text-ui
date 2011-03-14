@@ -1,4 +1,4 @@
-project (TELEPATHY_CHAT_HANDLER)
+project (TELEPATHY_KDE_TEXT_UI)
 
 # Include our extra FindFoo.cmake files.
 set (CMAKE_MODULE_PATH
