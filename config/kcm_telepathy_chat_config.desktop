@@ -1,0 +1,13 @@
+[Desktop Entry]
+Comment=Configure 
+StartupNotify=true
+Terminal=false
+Type=Service
+X-KDE-ServiceTypes=KCModule
+X-DBUS-StartupType=
+X-KDE-HasReadOnlyMode=false
+X-KDE-Library=kcm_telepathy_chat_config
+X-KDE-SubstituteUID=false
+X-KDE-RootOnly=false
+Categories=Qt;KDE;X-KDE-settings-network;
+Icon=telepathy
