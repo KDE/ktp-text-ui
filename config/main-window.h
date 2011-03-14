@@ -44,7 +44,6 @@ public slots:
 
 protected:
     void changeEvent(QEvent *e);
-    void accept();
 
 private:
     Ui::ChatWindowConfig *ui;

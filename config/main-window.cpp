@@ -126,6 +126,7 @@ void MainWindow::onStyleSelected(int index)
         ui->showHeader->setEnabled(style->hasHeader());
         ui->chatView->initialise(m_demoChatHeader);
     }
+    changed();
 }
 
 void MainWindow::onVariantSelected(const QString &variant)
@@ -133,6 +134,7 @@ void MainWindow::onVariantSelected(const QString &variant)
     kDebug();
     ui->chatView->setVariant(variant);
     ui->chatView->initialise(m_demoChatHeader);
+    changed();
 }
 
 
@@ -140,6 +142,7 @@ void MainWindow::onShowHeaderChanged(bool showHeader)
 {
     ui->chatView->setHeaderDisplayed(showHeader);
     ui->chatView->initialise(m_demoChatHeader);
+    changed();
 }
 
 
@@ -174,7 +177,7 @@ void MainWindow::sendDemoMessages()
 void MainWindow::save()
 {
     kDebug();
-
+    
     KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
     KConfigGroup appearanceConfig = config->group("Appearance");
 
