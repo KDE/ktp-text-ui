@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 
     Tp::SharedPtr<TelepathyChatUi> app = Tp::SharedPtr<TelepathyChatUi>(new TelepathyChatUi);
     Tp::AbstractClientPtr handler = Tp::AbstractClientPtr(app);
-    registrar->registerClient(handler, QLatin1String("KDEChatHandler"));
+    registrar->registerClient(handler, QLatin1String("KDE.TextUi"));
 
     return app->exec();
 }

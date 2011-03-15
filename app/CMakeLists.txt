@@ -18,12 +18,12 @@ target_link_libraries(telepathy-kde-text-ui
 	    ${KDE4_KCMUTILS_LIBS}
             ktelepathy_chat_lib)
 
-configure_file(org.freedesktop.Telepathy.Client.KDEChatHandler.service.in
-               ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDEChatHandler.service)
+configure_file(org.freedesktop.Telepathy.Client.KDE.TextUi.service.in
+               ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDE.TextUi.service)
 
 install(TARGETS telepathy-kde-text-ui ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDEChatHandler.service
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDE.TextUi.service
         DESTINATION ${DBUS_SERVICES_INSTALL_DIR})
-install(FILES KDEChatHandler.client DESTINATION ${SHARE_INSTALL_PREFIX}/telepathy/clients/)
+install(FILES KDE.TextUi.client DESTINATION ${SHARE_INSTALL_PREFIX}/telepathy/clients/)
 install(FILES chatwindow.rc
         DESTINATION  ${DATA_INSTALL_DIR}/telepathy-kde-text-ui/)
