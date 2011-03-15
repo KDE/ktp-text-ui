@@ -41,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent, const QVariantList& args)
     // manager->loadStyles();
     connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
-
     m_demoChatHeader.setChatName(i18n("A demo chat"));
     m_demoChatHeader.setSourceName(i18n("Jabber"));
     m_demoChatHeader.setTimeOpened(QDateTime::currentDateTime());
@@ -62,7 +61,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 
 void MainWindow::changeEvent(QEvent *e)
 {
@@ -101,7 +99,6 @@ void MainWindow::onStylesLoaded()
     //FIXME call onStyleSelected
 }
 
-
 void MainWindow::updateVariantsList()
 {
     kDebug();
@@ -110,7 +107,6 @@ void MainWindow::updateVariantsList()
     ui->variantComboBox->addItems(variants.keys());
     ui->variantComboBox->setCurrentItem(ui->chatView->variantName());
 }
-
 
 void MainWindow::onStyleSelected(int index)
 {
@@ -137,14 +133,12 @@ void MainWindow::onVariantSelected(const QString &variant)
     changed();
 }
 
-
 void MainWindow::onShowHeaderChanged(bool showHeader)
 {
     ui->chatView->setHeaderDisplayed(showHeader);
     ui->chatView->initialise(m_demoChatHeader);
     changed();
 }
-
 
 void MainWindow::sendDemoMessages()
 {
@@ -177,7 +171,7 @@ void MainWindow::sendDemoMessages()
 void MainWindow::save()
 {
     kDebug();
-    
+
     KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
     KConfigGroup appearanceConfig = config->group("Appearance");
 
