@@ -41,10 +41,12 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 #include <KToolInvocation>
-
+#include <KIconLoader>
 
 AdiumThemeView::AdiumThemeView(QWidget *parent)
     : QWebView(parent),
+      // check iconPath docs for minus sign in -KIconLoader::SizeLarge
+      m_defaultAvatar(KIconLoader::global()->iconPath("im-user",-KIconLoader::SizeLarge)),
       m_displayHeader(true)
 {
     //determine the chat window style to use (from the Kopete config file).
@@ -284,7 +286,7 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
 QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const AdiumThemeContentInfo& info)
 {
     //userIconPath
-    htmlTemplate.replace("%userIconPath%", info.userIconPath());
+    htmlTemplate.replace("%userIconPath%", !info.userIconPath().isEmpty() ? info.userIconPath() : m_defaultAvatar);
     //senderScreenName
     htmlTemplate.replace("%senderScreenName%", info.senderScreenName());
     //sender

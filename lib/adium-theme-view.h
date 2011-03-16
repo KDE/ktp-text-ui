@@ -73,6 +73,7 @@ private:
 
     QString formatTime(const QString&, const QDateTime&);
 
+    QString m_defaultAvatar;
     QString m_lastSender;
     bool m_displayHeader;
 
