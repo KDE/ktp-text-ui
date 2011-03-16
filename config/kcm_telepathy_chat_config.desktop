@@ -1,5 +1,8 @@
 [Desktop Entry]
 Comment=Configure
+Comment[pt]=Configurar
+Comment[uk]=Налаштування
+Comment[x-test]=xxConfigurexx
 StartupNotify=true
 Terminal=false
 Type=Service
