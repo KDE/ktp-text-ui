@@ -66,8 +66,10 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
     if(!variant.isEmpty()) {
         m_variantPath = QString("Variants/%1.css").arg(variant);
         m_variantName = variant;
-    } else {
-        if(m_chatStyle->getVariants().contains(m_chatStyle->defaultVariantName())) {
+
+    // keep m_variantPath, m_variantName empty if there is no variant
+    } else if (!m_chatStyle->getVariants().isEmpty()) {
+        if (m_chatStyle->getVariants().contains(m_chatStyle->defaultVariantName())) {
             m_variantPath = QString("Variants/%1.css").arg(m_chatStyle->defaultVariantName());
             m_variantName = m_chatStyle->defaultVariantName();
         } else {
@@ -77,7 +79,6 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
     }
 
     m_displayHeader = appearanceConfig.readEntry("displayHeader", false);
-
 
     //special HTML debug mode. Debugging/Profiling only (or theme creating) should have no visible way to turn this flag on.
     m_webInspector = appearanceConfig.readEntry("debug", false);
