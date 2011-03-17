@@ -288,7 +288,7 @@ void ChatWindowStyle::readStyleFiles()
     ChatStylePlistFileReader plistReader(infoPlistFile);
     d->defaultVariantName = plistReader.defaultVariant();
 
-    //Load template file
+    // Load template file
     if (QFile::exists(templateFile)) {
         fileAccess.setFileName(templateFile);
         fileAccess.open(QIODevice::ReadOnly);
@@ -296,6 +296,21 @@ void ChatWindowStyle::readStyleFiles()
         headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
         d->templateHtml = headerStream.readAll();
         fileAccess.close();
+    }
+
+    // Load template file fallback
+    if (d->templateHtml.isEmpty())
+    {
+        QString templateFileName(KGlobal::dirs()->findResource("data", "ktelepathy/template.html"));
+
+        if (! templateFileName.isEmpty() && QFile::exists(templateFileName)) {
+            fileAccess.setFileName(templateFileName);
+            fileAccess.open(QIODevice::ReadOnly);
+            QTextStream headerStream(&fileAccess);
+            headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
+            d->templateHtml = headerStream.readAll();
+            fileAccess.close();
+        }
     }
 
     // Load header file.

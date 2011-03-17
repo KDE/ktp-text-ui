@@ -91,37 +91,19 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
 
 void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 {
-    QString templateHtml;
-    QString templateFileName(KGlobal::dirs()->findResource("data", "ktelepathy/template.html"));
-
-    templateHtml = m_chatStyle->getTemplateHtml();
+    QString headerHtml;
+    QString templateHtml = m_chatStyle->getTemplateHtml();
+    QString footerHtml = replaceHeaderKeywords(m_chatStyle->getFooterHtml(), chatInfo);
+    QString extraStyleHtml = "@import url( \"main.css\" );";
 
     if (templateHtml.isEmpty()) {
-        //FIXME, move this to ChatStyle (maybe?)
-        QString templateFileName(KGlobal::dirs()->findResource("data", "ktelepathy/template.html"));
-
-        if (! templateFileName.isEmpty() && QFile::exists(templateFileName)) {
-            QFile fileAccess;
-
-            fileAccess.setFileName(templateFileName);
-            fileAccess.open(QIODevice::ReadOnly);
-            QTextStream headerStream(&fileAccess);
-            headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-            templateHtml = headerStream.readAll();
-            fileAccess.close();
-        } else {
-            KMessageBox::error(this, i18n("Missing required file template.html - check your installation."));
-        }
+        // if templateHtml is empty, we failed to load the fallback template file
+        KMessageBox::error(this, i18n("Missing required file template.html - check your installation."));
     }
 
-    QString headerHtml;
     if (m_displayHeader) {
         headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(), chatInfo);
     } //otherwise leave as blank.
-    QString footerHtml;
-    footerHtml = replaceHeaderKeywords(m_chatStyle->getFooterHtml(), chatInfo);
-
-    QString extraStyleHtml = "@import url( \"main.css\" );";
 
     //The templateHtml is in a horrific NSString format.
     //Want to use this rather than roll our own, as that way we can get templates from themes too
