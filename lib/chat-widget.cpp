@@ -211,7 +211,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
     connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
             SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
 
-    connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
+    if (d->channel->hasChatStateInterface()) {
+        connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
+    }
 
     // make the sendMessageBox a focus proxy for the chatview
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
