@@ -251,8 +251,8 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
     htmlTemplate.replace("%sourceName%", info.sourceName());
     htmlTemplate.replace("%destinationName%", info.destinationName());
     htmlTemplate.replace("%destinationDisplayName%", info.destinationDisplayName());
-    htmlTemplate.replace("%incomingIconPath%", info.incomingIconPath().toString());
-    htmlTemplate.replace("%outgoingIconPath%", info.outgoingIconPath().toString());
+    htmlTemplate.replace("%incomingIconPath%", (!info.incomingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
+    htmlTemplate.replace("%outgoingIconPath%", (!info.outgoingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
     htmlTemplate.replace("%timeOpened%", KGlobal::locale()->formatDateTime(info.timeOpened()));
 
     //FIXME time fields - remember to do both, steal the complicated one from Kopete code.
