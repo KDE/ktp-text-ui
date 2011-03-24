@@ -29,17 +29,20 @@
 #include <TelepathyQt4/Presence>
 
 /** A model of all users in the channel.
-  Also acts as a proxy for emiting presence and alias changes of any contacts in the channel for displaying as notifications*/
+  Also acts as a proxy for emiting presence and alias changes of any contacts in the channel
+  so that the main class doesn't need to monitor this and keep connection/disconnecting to alias change/presence
+  change for notification messages
+  */
 
 class ChannelContactList : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit ChannelContactList(const Tp::TextChannelPtr & channel, QObject *parent = 0);
+    explicit ChannelContactList(const Tp::TextChannelPtr &channel, QObject *parent = 0);
 
 signals:
-    void contactPresenceChanged(const Tp::ContactPtr & contact, const Tp::Presence & presence);
-    void contactAliasChanged(const Tp::ContactPtr & contact, const QString & alias);
+    void contactPresenceChanged(const Tp::ContactPtr &contact, const Tp::Presence &presence);
+    void contactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
 
 protected:
     int rowCount(const QModelIndex &parent) const;
@@ -51,7 +54,7 @@ private slots:
                              const Tp::Contacts &groupRemotePendingMembersAdded,
                              const Tp::Contacts &groupMembersRemoved,
                              const Tp::Channel::GroupMemberChangeDetails &details);
-    void onContactPresenceChanged(const Tp::Presence& presence);
+    void onContactPresenceChanged(const Tp::Presence &presence);
     void onContactAliasChanged(const QString &alias);
 
 

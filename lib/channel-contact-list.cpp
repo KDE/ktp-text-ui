@@ -25,14 +25,59 @@
 ChannelContactList::ChannelContactList(const Tp::TextChannelPtr & channel, QObject *parent)
     : QAbstractListModel(parent)
 {
-
+    //add existing contacts
     addContacts(channel->groupContacts());
 
+    //monitor for future changes
     connect(channel.data(),
             SIGNAL(groupMembersChanged(Tp::Contacts,Tp::Contacts,Tp::Contacts,
                                        Tp::Contacts,Tp::Channel::GroupMemberChangeDetails)),
             SLOT(onGroupMembersChanged(Tp::Contacts,Tp::Contacts,Tp::Contacts,
                                      Tp::Contacts,Tp::Channel::GroupMemberChangeDetails)));
+}
+
+
+int ChannelContactList::rowCount(const QModelIndex &parent) const
+{
+    if (! parent.isValid()) {
+        return m_contacts.size();
+    }
+    return 0;
+}
+
+QVariant ChannelContactList::data(const QModelIndex &index, int role) const
+{
+    if(!index.isValid()) {
+        return QVariant();
+    }
+
+    int row = index.row();
+
+    switch (role) {
+    case Qt::DisplayRole:
+        return QVariant(m_contacts[row]->alias());
+
+    case Qt::DecorationRole:
+        switch(m_contacts[row]->presence().type()) {
+        case Tp::ConnectionPresenceTypeAvailable:
+            return QVariant(KIcon("im-user"));
+        case Tp::ConnectionPresenceTypeAway:
+            //fall through
+        case Tp::ConnectionPresenceTypeExtendedAway:
+            return QVariant(KIcon("im-user-away"));
+        case Tp::ConnectionPresenceTypeBusy:
+            return QVariant(KIcon("im-user-busy"));
+        case Tp::ConnectionPresenceTypeOffline:
+            //fall through
+        case Tp::ConnectionPresenceTypeHidden:
+            return QVariant(KIcon("im-user-offline"));
+        default:
+            return QVariant(KIcon("im-user"));
+        }
+
+    default:
+        return QVariant();
+    }
 }
 
 void ChannelContactList::onGroupMembersChanged(const Tp::Contacts & groupMembersAdded,
@@ -70,46 +115,6 @@ void ChannelContactList::onContactAliasChanged(const QString &alias)
     emit contactAliasChanged(contact, alias);
 }
 
-int ChannelContactList::rowCount(const QModelIndex &parent) const
-{
-    if (! parent.isValid()) {
-        return m_contacts.size();
-    }
-    return 0;
-}
-
-QVariant ChannelContactList::data(const QModelIndex &index, int role) const
-{
-    if(!index.isValid()) {
-        return QVariant();
-    }
-
-    int row = index.row();
-
-    switch (role) {
-    case Qt::DisplayRole:
-        return QVariant(m_contacts[row]->alias());
-    case Qt::DecorationRole:
-        switch(m_contacts[row]->presence().type()) {
-        case Tp::ConnectionPresenceTypeAvailable:
-            return QVariant(KIcon("im-user"));
-        case Tp::ConnectionPresenceTypeAway:
-        case Tp::ConnectionPresenceTypeExtendedAway:
-            return QVariant(KIcon("im-user-away"));
-        case Tp::ConnectionPresenceTypeBusy:
-            return QVariant(KIcon("im-user-busy"));
-        case Tp::ConnectionPresenceTypeOffline:
-        case Tp::ConnectionPresenceTypeHidden:
-            return QVariant(KIcon("im-user-offline"));
-        default:
-            return QVariant(KIcon("im-user"));
-        }
-         //icon for presence stuff here? im-user-away etc.
-    default:
-        return QVariant();
-    }
-}
-
 void ChannelContactList::addContacts(const Tp::Contacts &contacts)
 {
     QList<Tp::ContactPtr> newContacts = contacts.toList();
@@ -127,7 +132,13 @@ void ChannelContactList::addContacts(const Tp::Contacts &contacts)
 void ChannelContactList::removeContacts(const Tp::Contacts &contacts)
 {
     foreach(Tp::ContactPtr contact, contacts) {
-        //does it make sense to disconnect the signals here too? as technically the contact itself hasn't actually been deleted yet...
+
+        //I think this is needed as technically the contact itself hasn't actually been deleted even if we remove our pointers to it
+        //and could be used referenced elsewhere in the chat application in a different tab.
+        //if we don't disconnect could we still get notifications here about their status/presence changes even if a contact has left the room
+        disconnect(contact.data(), SIGNAL(aliasChanged(QString)), SLOT(onContactAliasChanged(QString)));
+        disconnect(contact.data(), SIGNAL(presenceChanged(Tp::Presence)), SLOT(onContactPresenceChanged(Tp::Presence)));
+
         beginRemoveRows(QModelIndex(), m_contacts.indexOf(contact), m_contacts.indexOf(contact));
         m_contacts.removeAll(contact);
         endRemoveRows();
