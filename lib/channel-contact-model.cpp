@@ -22,7 +22,7 @@
 #include <KDebug>
 #include <KIcon>
 
-ChannelContactModel::ChannelContactModel(const Tp::TextChannelPtr & channel, QObject *parent)
+ChannelContactModel::ChannelContactModel(const Tp::TextChannelPtr &channel, QObject *parent)
     : QAbstractListModel(parent)
 {
     //add existing contacts
@@ -71,8 +71,8 @@ QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
             //fall through
         case Tp::ConnectionPresenceTypeHidden:
             return QVariant(KIcon("im-user-offline"));
-        default:
-            return QVariant(KIcon("im-user"));
+        default: //presence unknown or error
+            return QVariant(KIcon("dialog-warning"));
         }
 
     default:
@@ -80,11 +80,11 @@ QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
     }
 }
 
-void ChannelContactModel::onGroupMembersChanged(const Tp::Contacts & groupMembersAdded,
-                                             const Tp::Contacts & groupLocalPendingMembersAdded,
-                                             const Tp::Contacts & groupRemotePendingMembersAdded,
-                                             const Tp::Contacts & groupMembersRemoved,
-                                             const Tp::Channel::GroupMemberChangeDetails & details)
+void ChannelContactModel::onGroupMembersChanged(const Tp::Contacts &groupMembersAdded,
+                                             const Tp::Contacts &groupLocalPendingMembersAdded,
+                                             const Tp::Contacts &groupRemotePendingMembersAdded,
+                                             const Tp::Contacts &groupMembersRemoved,
+                                             const Tp::Channel::GroupMemberChangeDetails &details)
 {
     kDebug();
 
@@ -103,7 +103,8 @@ void ChannelContactModel::onContactPresenceChanged(const Tp::Presence &presence)
     QModelIndex index = createIndex(m_contacts.lastIndexOf(contact), 0);
     emit dataChanged(index, index);
 
-    emit contactPresenceChanged(contact, presence);}
+    emit contactPresenceChanged(contact, presence);
+}
 
 void ChannelContactModel::onContactAliasChanged(const QString &alias)
 {
