@@ -153,6 +153,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
     connect(contactList, SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)),
             SLOT(onContactAliasChanged(Tp::ContactPtr,QString)));
 
+    d->ui.contactsView->setModel(contactList);
+
     AdiumThemeHeaderInfo info;
     Tp::Contacts allContacts = d->channel->groupContacts();
     //normal chat - self and one other person.

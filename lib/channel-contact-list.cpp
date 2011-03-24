@@ -18,66 +18,119 @@
  ***************************************************************************/
 
 #include "channel-contact-list.h"
-#include <TelepathyQt4/Contact>
+
 #include <KDebug>
-
-/** \breif This class provides an abstracted way of getting presence changes from a contact
-  * It was needed to be able to pair up a contact changing, with the name of the contact.
-  * It gives a single signal for the calling code to handle for every contact, and
-  * also safetly handles connect and disconnecting slots as contacts enter and leave a channel
-*/
-
-/** Internal private class*/
-
-/*
- [23:50] <oggis_> if you want to show events just for the current members, then i'd maintain said list/set by connecting to
-groupMembersChanged and adding to it everybody in the groupMembersAdded set, and removing to it everybody in any of the
-other sets (taking set union of them is easiest)
- */
-
-
-ChannelContactListContact::ChannelContactListContact(const Tp::ContactPtr & contact, QObject *parent)
-    : QObject(parent)
-{
-    m_contact = contact;
-    connect(m_contact.data(), SIGNAL(presenceChanged(Tp::Presence)),
-            SLOT(onPresenceChanged(Tp::Presence)));
-    connect(m_contact.data(), SIGNAL(aliasChanged(QString)), SLOT(onAliasChanged(QString)));
-}
-
-void ChannelContactListContact::onPresenceChanged(const Tp::Presence & presence)
-{
-    Q_EMIT contactPresenceChanged(m_contact, presence);
-}
-
-void ChannelContactListContact::onAliasChanged(const QString &alias)
-{
-    Q_EMIT contactAliasChanged(m_contact, alias);
-}
+#include <KIcon>
 
 ChannelContactList::ChannelContactList(const Tp::TextChannelPtr & channel, QObject *parent)
-    : QObject(parent)
+    : QAbstractListModel(parent)
 {
-    foreach(Tp::ContactPtr contact, channel->groupContacts()) {
-        //FIXME move this to a slot called "addContact" - also call this when chat gains a person.
-        ChannelContactListContact*  contactProxy = new ChannelContactListContact(contact, this);
-        connect(contactProxy, SIGNAL(contactPresenceChanged(Tp::ContactPtr,Tp::Presence)),
-                SIGNAL(contactPresenceChanged(Tp::ContactPtr,Tp::Presence)));
-        connect(contactProxy, SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)),
-                SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)));
-    }
+
+    addContacts(channel->groupContacts());
+
     connect(channel.data(),
             SIGNAL(groupMembersChanged(Tp::Contacts,Tp::Contacts,Tp::Contacts,
                                        Tp::Contacts,Tp::Channel::GroupMemberChangeDetails)),
-            SLOT(groupMembersChanged(Tp::Contacts,Tp::Contacts,Tp::Contacts,
+            SLOT(onGroupMembersChanged(Tp::Contacts,Tp::Contacts,Tp::Contacts,
                                      Tp::Contacts,Tp::Channel::GroupMemberChangeDetails)));
 }
 
-void ChannelContactList::groupMembersChanged(const Tp::Contacts & groupMembersAdded,
+void ChannelContactList::onGroupMembersChanged(const Tp::Contacts & groupMembersAdded,
                                              const Tp::Contacts & groupLocalPendingMembersAdded,
                                              const Tp::Contacts & groupRemotePendingMembersAdded,
                                              const Tp::Contacts & groupMembersRemoved,
                                              const Tp::Channel::GroupMemberChangeDetails & details)
 {
-    kDebug() << "members changed.";
+    kDebug();
+
+    Q_UNUSED(groupLocalPendingMembersAdded);
+    Q_UNUSED(groupRemotePendingMembersAdded);
+    Q_UNUSED(details);
+
+    addContacts(groupMembersAdded);
+    removeContacts(groupMembersRemoved);
 }
+
+void ChannelContactList::onContactPresenceChanged(const Tp::Presence &presence)
+{
+    Tp::ContactPtr contact(qobject_cast<Tp::Contact*>(sender()));
+
+    QModelIndex index = createIndex(m_contacts.lastIndexOf(contact), 0);
+    emit dataChanged(index, index);
+
+    emit contactPresenceChanged(contact, presence);}
+
+void ChannelContactList::onContactAliasChanged(const QString &alias)
+{
+    Tp::ContactPtr contact(qobject_cast<Tp::Contact*>(sender()));
+
+    QModelIndex index = createIndex(m_contacts.lastIndexOf(contact), 0);
+    emit dataChanged(index, index);
+
+    emit contactAliasChanged(contact, alias);
+}
+
+int ChannelContactList::rowCount(const QModelIndex &parent) const
+{
+    if (! parent.isValid()) {
+        return m_contacts.size();
+    }
+    return 0;
+}
+
+QVariant ChannelContactList::data(const QModelIndex &index, int role) const
+{
+    if(!index.isValid()) {
+        return QVariant();
+    }
+
+    int row = index.row();
+
+    switch (role) {
+    case Qt::DisplayRole:
+        return QVariant(m_contacts[row]->alias());
+    case Qt::DecorationRole:
+        switch(m_contacts[row]->presence().type()) {
+        case Tp::ConnectionPresenceTypeAvailable:
+            return QVariant(KIcon("im-user"));
+        case Tp::ConnectionPresenceTypeAway:
+        case Tp::ConnectionPresenceTypeExtendedAway:
+            return QVariant(KIcon("im-user-away"));
+        case Tp::ConnectionPresenceTypeBusy:
+            return QVariant(KIcon("im-user-busy"));
+        case Tp::ConnectionPresenceTypeOffline:
+        case Tp::ConnectionPresenceTypeHidden:
+            return QVariant(KIcon("im-user-offline"));
+        default:
+            return QVariant(KIcon("im-user"));
+        }
+         //icon for presence stuff here? im-user-away etc.
+    default:
+        return QVariant();
+    }
+}
+
+void ChannelContactList::addContacts(const Tp::Contacts &contacts)
+{
+    QList<Tp::ContactPtr> newContacts = contacts.toList();
+
+    foreach(Tp::ContactPtr contact, newContacts) {
+        connect(contact.data(), SIGNAL(aliasChanged(QString)), SLOT(onContactAliasChanged(QString)));
+        connect(contact.data(), SIGNAL(presenceChanged(Tp::Presence)), SLOT(onContactPresenceChanged(Tp::Presence)));
+    }
+
+    beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size() + newContacts.size());
+    m_contacts << newContacts;
+    endInsertRows();
+}
+
+void ChannelContactList::removeContacts(const Tp::Contacts &contacts)
+{
+    foreach(Tp::ContactPtr contact, contacts) {
+        //does it make sense to disconnect the signals here too? as technically the contact itself hasn't actually been deleted yet...
+        beginRemoveRows(QModelIndex(), m_contacts.indexOf(contact), m_contacts.indexOf(contact));
+        m_contacts.removeAll(contact);
+        endRemoveRows();
+    }
+}
+

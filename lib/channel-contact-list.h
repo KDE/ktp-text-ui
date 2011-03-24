@@ -20,33 +20,18 @@
 #ifndef CHANNELCONTACTLIST_H
 #define CHANNELCONTACTLIST_H
 
-#include <QtCore/QObject>
+#include <QtCore/QAbstractListModel>
+
 #include <TelepathyQt4/TextChannel>
 #include <TelepathyQt4/Contact>
 #include <TelepathyQt4/Types>
 #include <TelepathyQt4/Channel>
 #include <TelepathyQt4/Presence>
 
-class ChannelContactListContact: public QObject
-{
-    Q_OBJECT
-public:
-    explicit ChannelContactListContact(const Tp::ContactPtr & contact, QObject *parent);
+/** A model of all users in the channel.
+  Also acts as a proxy for emiting presence and alias changes of any contacts in the channel for displaying as notifications*/
 
-signals:
-    void contactPresenceChanged(const Tp::ContactPtr & contact, const Tp::Presence & presence);
-    void contactAliasChanged(const Tp::ContactPtr & contact, const QString & alias);
-
-private slots:
-    void onPresenceChanged(const Tp::Presence & newPresence);
-    void onAliasChanged(const QString &alias);
-
-private:
-    Tp::ContactPtr m_contact;
-};
-
-
-class ChannelContactList : public QObject
+class ChannelContactList : public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -56,15 +41,24 @@ signals:
     void contactPresenceChanged(const Tp::ContactPtr & contact, const Tp::Presence & presence);
     void contactAliasChanged(const Tp::ContactPtr & contact, const QString & alias);
 
-public slots:
-    void groupMembersChanged(const Tp::Contacts &groupMembersAdded,
+protected:
+    int rowCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
+
+private slots:
+    void onGroupMembersChanged(const Tp::Contacts &groupMembersAdded,
                              const Tp::Contacts &groupLocalPendingMembersAdded,
                              const Tp::Contacts &groupRemotePendingMembersAdded,
                              const Tp::Contacts &groupMembersRemoved,
                              const Tp::Channel::GroupMemberChangeDetails &details);
+    void onContactPresenceChanged(const Tp::Presence& presence);
+    void onContactAliasChanged(const QString &alias);
+
 
 private:
-    QSet<ChannelContactListContact> contacts;
+    void addContacts(const Tp::Contacts &contacts);
+    void removeContacts(const Tp::Contacts &contacts);
+    QList<Tp::ContactPtr> m_contacts;
 };
 
 #endif // CHANNELCONTACTLIST_H
