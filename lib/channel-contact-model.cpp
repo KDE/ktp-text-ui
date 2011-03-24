@@ -17,12 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "channel-contact-list.h"
+#include "channel-contact-model.h"
 
 #include <KDebug>
 #include <KIcon>
 
-ChannelContactList::ChannelContactList(const Tp::TextChannelPtr & channel, QObject *parent)
+ChannelContactModel::ChannelContactModel(const Tp::TextChannelPtr & channel, QObject *parent)
     : QAbstractListModel(parent)
 {
     //add existing contacts
@@ -37,7 +37,7 @@ ChannelContactList::ChannelContactList(const Tp::TextChannelPtr & channel, QObje
 }
 
 
-int ChannelContactList::rowCount(const QModelIndex &parent) const
+int ChannelContactModel::rowCount(const QModelIndex &parent) const
 {
     if (! parent.isValid()) {
         return m_contacts.size();
@@ -45,7 +45,7 @@ int ChannelContactList::rowCount(const QModelIndex &parent) const
     return 0;
 }
 
-QVariant ChannelContactList::data(const QModelIndex &index, int role) const
+QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
 {
     if(!index.isValid()) {
         return QVariant();
@@ -80,7 +80,7 @@ QVariant ChannelContactList::data(const QModelIndex &index, int role) const
     }
 }
 
-void ChannelContactList::onGroupMembersChanged(const Tp::Contacts & groupMembersAdded,
+void ChannelContactModel::onGroupMembersChanged(const Tp::Contacts & groupMembersAdded,
                                              const Tp::Contacts & groupLocalPendingMembersAdded,
                                              const Tp::Contacts & groupRemotePendingMembersAdded,
                                              const Tp::Contacts & groupMembersRemoved,
@@ -96,7 +96,7 @@ void ChannelContactList::onGroupMembersChanged(const Tp::Contacts & groupMembers
     removeContacts(groupMembersRemoved);
 }
 
-void ChannelContactList::onContactPresenceChanged(const Tp::Presence &presence)
+void ChannelContactModel::onContactPresenceChanged(const Tp::Presence &presence)
 {
     Tp::ContactPtr contact(qobject_cast<Tp::Contact*>(sender()));
 
@@ -105,7 +105,7 @@ void ChannelContactList::onContactPresenceChanged(const Tp::Presence &presence)
 
     emit contactPresenceChanged(contact, presence);}
 
-void ChannelContactList::onContactAliasChanged(const QString &alias)
+void ChannelContactModel::onContactAliasChanged(const QString &alias)
 {
     Tp::ContactPtr contact(qobject_cast<Tp::Contact*>(sender()));
 
@@ -115,7 +115,7 @@ void ChannelContactList::onContactAliasChanged(const QString &alias)
     emit contactAliasChanged(contact, alias);
 }
 
-void ChannelContactList::addContacts(const Tp::Contacts &contacts)
+void ChannelContactModel::addContacts(const Tp::Contacts &contacts)
 {
     QList<Tp::ContactPtr> newContacts = contacts.toList();
 
@@ -129,7 +129,7 @@ void ChannelContactList::addContacts(const Tp::Contacts &contacts)
     endInsertRows();
 }
 
-void ChannelContactList::removeContacts(const Tp::Contacts &contacts)
+void ChannelContactModel::removeContacts(const Tp::Contacts &contacts)
 {
     foreach(Tp::ContactPtr contact, contacts) {
 

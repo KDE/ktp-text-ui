@@ -34,11 +34,11 @@
   change for notification messages
   */
 
-class ChannelContactList : public QAbstractListModel
+class ChannelContactModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit ChannelContactList(const Tp::TextChannelPtr &channel, QObject *parent = 0);
+    explicit ChannelContactModel(const Tp::TextChannelPtr &channel, QObject *parent = 0);
 
 signals:
     void contactPresenceChanged(const Tp::ContactPtr &contact, const Tp::Presence &presence);

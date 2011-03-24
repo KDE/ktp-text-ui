@@ -24,7 +24,7 @@
 #include "adium-theme-content-info.h"
 #include "adium-theme-message-info.h"
 #include "adium-theme-status-info.h"
-#include "channel-contact-list.h"
+#include "channel-contact-model.h"
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
@@ -147,7 +147,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
     d->ui.insertEmoticon->setIcon(KIcon("face-smile"));
 
     //channel is now valid, start keeping track of contacts.
-    ChannelContactList* contactList = new ChannelContactList(d->channel, this);
+    ChannelContactModel* contactList = new ChannelContactModel(d->channel, this);
     connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr,Tp::Presence)),
             SLOT(onContactPresenceChange(Tp::ContactPtr,Tp::Presence)));
     connect(contactList, SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)),

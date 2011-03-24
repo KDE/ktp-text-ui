@@ -7,7 +7,7 @@ set(telepathy_chat_handler_lib_SRCS
         adium-theme-message-info.cpp
         adium-theme-content-info.cpp
         adium-theme-status-info.cpp
-        channel-contact-list.cpp
+        channel-contact-model.cpp
         chat-style-plist-file-reader.cpp
         chat-text-edit.cpp
 )
