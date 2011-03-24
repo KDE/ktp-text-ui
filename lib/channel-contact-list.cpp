@@ -136,8 +136,8 @@ void ChannelContactList::removeContacts(const Tp::Contacts &contacts)
         //I think this is needed as technically the contact itself hasn't actually been deleted even if we remove our pointers to it
         //and could be used referenced elsewhere in the chat application in a different tab.
         //if we don't disconnect could we still get notifications here about their status/presence changes even if a contact has left the room
-        disconnect(contact.data(), SIGNAL(aliasChanged(QString)), SLOT(onContactAliasChanged(QString)));
-        disconnect(contact.data(), SIGNAL(presenceChanged(Tp::Presence)), SLOT(onContactPresenceChanged(Tp::Presence)));
+        disconnect(contact.data(), SIGNAL(aliasChanged(QString)), this, SLOT(onContactAliasChanged(QString)));
+        disconnect(contact.data(), SIGNAL(presenceChanged(Tp::Presence)), this, SLOT(onContactPresenceChanged(Tp::Presence)));
 
         beginRemoveRows(QModelIndex(), m_contacts.indexOf(contact), m_contacts.indexOf(contact));
         m_contacts.removeAll(contact);

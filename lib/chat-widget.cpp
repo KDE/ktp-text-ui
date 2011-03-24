@@ -176,6 +176,10 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
         d->isGroupChat = true;
     }
 
+    if (!d->isGroupChat) {
+        d->ui.contactsView->hide();
+    }
+
     info.setSourceName(d->channel->connection()->protocolName());
 
     //set up anything related to 'self'
