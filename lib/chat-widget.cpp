@@ -35,6 +35,7 @@
 #include <KComponentData>
 #include <KDebug>
 #include <KColorScheme>
+#include <KLineEdit>
 
 #include <TelepathyQt4/Message>
 #include <TelepathyQt4/Types>
@@ -130,7 +131,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
     d->isGroupChat = false;
 
     d->ui.setupUi(this);
-
+    d->ui.formatToolbar->show();
     d->ui.formatColor->setText(QString());
     d->ui.formatColor->setIcon(KIcon("format-text-color"));
 
@@ -233,6 +234,13 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
     this->window()->installEventFilter(windowEventFilter);
     connect(windowEventFilter, SIGNAL(windowActivated()), SLOT(windowActivated()));
 
+    // find text in chat
+    connect(d->ui.searchBar, SIGNAL(findTextSignal(QString,QWebPage::FindFlags)), this, SLOT(findTextInChat(QString,QWebPage::FindFlags)));
+    connect(d->ui.searchBar, SIGNAL(findNextSignal(QString,QWebPage::FindFlags)), this, SLOT(findNextTextInChat(QString,QWebPage::FindFlags)));
+    connect(d->ui.searchBar, SIGNAL(findPreviousSignal(QString,QWebPage::FindFlags)), this, SLOT(findPreviousTextInChat(QString,QWebPage::FindFlags)));
+    connect(d->ui.searchBar, SIGNAL(flagsChangedSignal(QString,QWebPage::FindFlags)), this, SLOT(findTextInChat(QString,QWebPage::FindFlags)));
+
+    connect(this, SIGNAL(searchTextComplete(bool)), d->ui.searchBar, SLOT(onSearchTextComplete(bool)));
 }
 
 ChatWidget::~ChatWidget()
@@ -343,6 +351,15 @@ int ChatWidget::unreadMessageCount() const
     kDebug() << title() << d->unreadMessages;
 
     return d->unreadMessages;
+}
+
+void ChatWidget::toggleSearchBar()
+{
+    if(d->ui.searchBar->isVisible()) {
+        d->ui.searchBar->toggleView(false);
+    } else {
+        d->ui.searchBar->toggleView(true);
+    }
 }
 
 void ChatWidget::incrementUnreadMessageCount()
@@ -660,6 +677,30 @@ void ChatWidget::onInputBoxChanged()
     } else {
         d->channel->requestChatState(Tp::ChannelChatStateActive);
     }
+}
+
+void ChatWidget::findTextInChat(const QString& text, QWebPage::FindFlags flags)
+{
+    // reset find
+    d->ui.chatArea->findText(QString(), flags);
+
+    if(d->ui.chatArea->findText(text, flags)) {
+        emit(searchTextComplete(true));
+    } else {
+        emit(searchTextComplete(false));
+    }
+}
+
+void ChatWidget::findNextTextInChat(const QString& text, QWebPage::FindFlags flags)
+{
+    d->ui.chatArea->findText(text, flags);
+}
+
+void ChatWidget::findPreviousTextInChat(const QString& text, QWebPage::FindFlags flags)
+{
+    // for "backwards" search
+    flags |= QWebPage::FindBackward;
+    d->ui.chatArea->findText(text, flags);
 }
 
 void ChatWidget::onFormatColorReleased()

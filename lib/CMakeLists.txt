@@ -10,6 +10,7 @@ set(telepathy_chat_handler_lib_SRCS
         channel-contact-model.cpp
         chat-style-plist-file-reader.cpp
         chat-text-edit.cpp
+        chat-search-bar.cpp
 )
 
 set(telepathy_chat_handler_lib_HDRS

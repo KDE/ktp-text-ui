@@ -46,6 +46,16 @@ ChatWindow::ChatWindow()
     KStandardAction::showMenubar(this->menuBar(), SLOT(setVisible(bool)), actionCollection());
 
 
+    // keyboard shortcut to toggle search bar
+    KAction *toggleSearchBarAction = new KAction(this);
+    toggleSearchBarAction->setIcon(KIcon("edit-find"));
+    toggleSearchBarAction->setShortcut(QKeySequence(QKeySequence::Find));
+
+    connect(toggleSearchBarAction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(onSearchActionToggled()));
+
+    // add to collection so user can modify shortcut
+    actionCollection()->addAction(i18n("Find text"), toggleSearchBarAction);
+
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
     m_tabWidget->setTabReorderingEnabled(true);
@@ -150,6 +160,17 @@ void ChatWindow::onCurrentIndexChanged(int index)
     ChatTab* currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
     setWindowTitle(currentChatTab->title());
     setWindowIcon(currentChatTab->icon());
+}
+
+void ChatWindow::onSearchActionToggled()
+{
+    ChatTab *currChat = qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
+
+    // This should never happen
+    if(!currChat) {
+        return;
+    }
+    currChat->toggleSearchBar();
 }
 
 void ChatWindow::onTabStateChanged()
