@@ -33,6 +33,7 @@
 #include <KTabBar>
 #include <KSettings/Dialog>
 #include <KNotifyConfigWidget>
+#include <KMenuBar>
 
 #include <TelepathyQt4/TextChannel>
 
@@ -42,6 +43,8 @@ ChatWindow::ChatWindow()
     KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
     KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
     KStandardAction::configureNotifications(this, SLOT(showNotificationsDialog()), actionCollection());
+    KStandardAction::showMenubar(this->menuBar(), SLOT(setVisible(bool)), actionCollection());
+
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
