@@ -24,6 +24,7 @@
 
 #include <QtCore/QString>
 #include <QtGui/QWidget>
+#include <QWebPage>
 #include <KIcon>
 #include <KColorScheme>
 
@@ -55,6 +56,10 @@ public:
     QColor titleColor() const;
 
     int unreadMessageCount() const;
+
+public slots:
+    /** toggle the search bar visibility */
+    void toggleSearchBar();
 
 protected:
     void changeEvent(QEvent *e);
@@ -96,6 +101,9 @@ signals:
     /** Emmited whenever a message is received in this channel*/
     void messageReceived();
 
+    /** emitted when searching for text */
+    void searchTextComplete(bool found);
+
     /** Emitted when another contact in the channel starts/stops typing (if supported by the protocol)*/
     void userTypingChanged(bool);
 
@@ -104,6 +112,10 @@ signals:
     void unreadMessagesChanged(int messages);
 
 private slots:
+    /** recieved when user changes search criteria or when searching for text */
+    void findTextInChat(const QString &text, QWebPage::FindFlags flags);
+    void findNextTextInChat(const QString &text, QWebPage::FindFlags flags);
+    void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
     void onFormatColorReleased();
     void windowActivated();
 

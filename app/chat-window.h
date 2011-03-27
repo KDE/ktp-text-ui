@@ -49,8 +49,10 @@ public:
 
 public slots:
     void removeTab(QWidget *chatWidget);
+
 private slots:
     void onCurrentIndexChanged(int index);
+    void onSearchActionToggled();
     void onTabStateChanged();
     void onTabTextChanged(const QString &newTitle);
     void onTabIconChanged(const KIcon &newIcon);
