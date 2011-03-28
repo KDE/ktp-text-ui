@@ -122,6 +122,12 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="leftMargin">
+           <number>4</number>
+       </property>
+       <property name="rightMargin">
+           <number>4</number>
+       </property>
      <item>
       <widget class="ChatTextEdit" name="sendMessageBox">
        <property name="sizePolicy">
