@@ -272,6 +272,27 @@ void ChatWidget::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 }
 
+KIcon ChatWidget::icon() const
+{
+    //normal chat - self and one other person.
+    if (!d->isGroupChat) {
+        //find the other contact which isn't self.
+        foreach(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
+            if (contact != d->channel->groupSelfContact()) {
+                return iconForPresence(contact->presence().type());
+            }
+        }
+    }
+
+    //group chat
+    return iconForPresence(Tp::ConnectionPresenceTypeAvailable);
+}
+
+ChatSearchBar* ChatWidget::chatSearchBar() const
+{
+    return d->ui.searchBar;
+}
+
 Tp::TextChannelPtr ChatWidget::textChannel() const
 {
     return d->channel;
@@ -290,22 +311,6 @@ void ChatWidget::showEvent(QShowEvent* e)
 QString ChatWidget::title() const
 {
     return d->title;
-}
-
-KIcon ChatWidget::icon() const
-{
-    //normal chat - self and one other person.
-    if (!d->isGroupChat) {
-        //find the other contact which isn't self.
-        foreach(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
-            if (contact != d->channel->groupSelfContact()) {
-                return iconForPresence(contact->presence().type());
-            }
-        }
-    }
-
-    //group chat
-    return iconForPresence(Tp::ConnectionPresenceTypeAvailable);
 }
 
 QColor ChatWidget::titleColor() const
@@ -353,7 +358,7 @@ int ChatWidget::unreadMessageCount() const
     return d->unreadMessages;
 }
 
-void ChatWidget::toggleSearchBar()
+void ChatWidget::toggleSearchBar() const
 {
     if(d->ui.searchBar->isVisible()) {
         d->ui.searchBar->toggleView(false);
@@ -681,7 +686,7 @@ void ChatWidget::onInputBoxChanged()
 
 void ChatWidget::findTextInChat(const QString& text, QWebPage::FindFlags flags)
 {
-    // reset find
+    // reset highlights
     d->ui.chatArea->findText(QString(), flags);
 
     if(d->ui.chatArea->findText(text, flags)) {

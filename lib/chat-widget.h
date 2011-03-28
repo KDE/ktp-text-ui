@@ -30,8 +30,7 @@
 
 #include <TelepathyQt4/ReceivedMessage>
 
-
-
+class ChatSearchBar;
 class ChatWidgetPrivate;
 class QShowEvent;
 
@@ -43,14 +42,17 @@ public:
     explicit ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent = 0);
     virtual ~ChatWidget();
 
+    /** Returns the icon of this chat window */
+    KIcon icon() const;
+
+    /** Returns a pointer to the Chatwidget's search bar */
+    ChatSearchBar *chatSearchBar() const;
+
     /** Returns the text channel pointer of the chatWidget */
     Tp::TextChannelPtr textChannel() const;
 
     /** Returns the name of this chat window*/
     QString title() const;
-
-    /** Returns the icon of this chat window */
-    KIcon icon() const;
 
     /** Returns the suggested color for the title of the window*/
     QColor titleColor() const;
@@ -59,7 +61,7 @@ public:
 
 public slots:
     /** toggle the search bar visibility */
-    void toggleSearchBar();
+    void toggleSearchBar() const;
 
 protected:
     void changeEvent(QEvent *e);

@@ -20,6 +20,8 @@
 #ifndef CHATSEARCHBAR_H
 #define CHATSEARCHBAR_H
 
+#include "kdetelepathychat_export.h"
+
 #include <QWebPage>
 #include <QWidget>
 
@@ -31,7 +33,7 @@ class KPushButton;
  * @author Francesco Nwokeka <francesco.nwokeka@gmail.com>
  */
 
-class ChatSearchBar : public QWidget
+class KDE_TELEPATHY_CHAT_EXPORT ChatSearchBar : public QWidget
 {
     Q_OBJECT
 public:

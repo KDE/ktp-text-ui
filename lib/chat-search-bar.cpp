@@ -33,8 +33,8 @@ ChatSearchBar::ChatSearchBar(QWidget* parent)
     : QWidget(parent)
     , m_searchInput(new KLineEdit(this))
     , m_closeButton(new KPushButton(this))
-    , m_nextButton(new KPushButton(KIcon("arrow-down"), i18n("&Next"), this))
-    , m_previousButton(new KPushButton(KIcon("arrow-up"), i18n("&Previous"), this))
+    , m_nextButton(new KPushButton(KIcon("go-down-search"), i18n("&Next"), this))
+    , m_previousButton(new KPushButton(KIcon("go-up-search"), i18n("&Previous"), this))
     , m_caseSensitive(false)
 {
     // close button setup
@@ -92,12 +92,18 @@ KLineEdit* ChatSearchBar::searchBar() const
 
 void ChatSearchBar::onNextButtonClicked()
 {
-    emit(findNextSignal(m_searchInput->text(), findFlags()));
+    // no need to call this if search bar is hidden
+    if(isVisible()) {
+        emit(findNextSignal(m_searchInput->text(), findFlags()));
+    }
 }
 
 void ChatSearchBar::onPreviousButtonClicked()
 {
-    emit(findPreviousSignal(m_searchInput->text(), findFlags()));
+    // no need to call this if search bar is hidden
+    if(isVisible()) {
+        emit(findPreviousSignal(m_searchInput->text(), findFlags()));
+    }
 }
 
 void ChatSearchBar::onSearchTextComplete(bool found)

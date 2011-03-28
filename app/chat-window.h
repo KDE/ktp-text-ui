@@ -52,7 +52,9 @@ public slots:
 
 private slots:
     void onCurrentIndexChanged(int index);
-    void onSearchActionToggled();
+    void onFindNextText();              /** go to next text the user is searching for */
+    void onFindPreviousText();          /** go to previous text the user is searching for */
+    void onSearchActionToggled();       /** toggle search bar visibility */
     void onTabStateChanged();
     void onTabTextChanged(const QString &newTitle);
     void onTabIconChanged(const KIcon &newIcon);
