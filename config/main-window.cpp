@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent, const QVariantList& args)
     ui->setupUi(this);
 
     ChatWindowStyleManager* manager = ChatWindowStyleManager::self();
-    // manager->loadStyles();
+    manager->loadStyles();
     connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
     m_demoChatHeader.setChatName(i18n("A demo chat"));
