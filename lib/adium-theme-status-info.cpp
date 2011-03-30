@@ -47,6 +47,7 @@ AdiumThemeStatusInfo::~AdiumThemeStatusInfo()
 
 AdiumThemeStatusInfo& AdiumThemeStatusInfo::operator=(const AdiumThemeStatusInfo& other)
 {
+    AdiumThemeMessageInfo::operator =(other);
     *d = *other.d;
     return *this;
 }
