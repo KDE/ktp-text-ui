@@ -50,11 +50,17 @@ MainWindow::MainWindow(QWidget *parent, const QVariantList& args)
     ui->chatView->initialise(m_demoChatHeader);
 
     ui->showHeader->setChecked(ui->chatView->isHeaderDisplayed());
+    ui->customFontBox->setChecked(ui->chatView->isCustomFont());
+    ui->fontFamily->setCurrentFont(QFont(ui->chatView->fontFamily()));
+    ui->fontSize->setValue(ui->chatView->fontSize());
 
     connect(ui->chatView, SIGNAL(loadFinished(bool)), SLOT(sendDemoMessages()));
     connect(ui->styleComboBox, SIGNAL(activated(int)), SLOT(onStyleSelected(int)));
     connect(ui->variantComboBox, SIGNAL(activated(QString)), SLOT(onVariantSelected(QString)));
     connect(ui->showHeader, SIGNAL(clicked(bool)), SLOT(onShowHeaderChanged(bool)));
+    connect(ui->customFontBox, SIGNAL(clicked(bool)), SLOT(onFontGroupChanged(bool)));
+    connect(ui->fontFamily, SIGNAL(currentFontChanged(QFont)), SLOT(onFontFamilyChanged(QFont)));
+    connect(ui->fontSize, SIGNAL(valueChanged(int)), SLOT(onFontSizeChanged(int)));
 }
 
 MainWindow::~MainWindow()
@@ -140,6 +146,30 @@ void MainWindow::onShowHeaderChanged(bool showHeader)
     changed();
 }
 
+void MainWindow::onFontGroupChanged(bool useCustomFont)
+{
+    kDebug();
+    ui->chatView->setUseCustomFont(useCustomFont);
+    ui->chatView->initialise(m_demoChatHeader);
+    changed();
+}
+
+void MainWindow::onFontFamilyChanged(QFont fontFamily)
+{
+    kDebug() << fontFamily.family();
+    ui->chatView->setFontFamily(fontFamily.family());
+    ui->chatView->initialise(m_demoChatHeader);
+    changed();
+}
+
+void MainWindow::onFontSizeChanged(int fontSize)
+{
+    kDebug() << fontSize;
+    ui->chatView->setFontSize(fontSize);
+    ui->chatView->initialise(m_demoChatHeader);
+    changed();
+}
+
 void MainWindow::sendDemoMessages()
 {
     //add a fake message
@@ -178,6 +208,9 @@ void MainWindow::save()
     appearanceConfig.writeEntry("styleName", ui->styleComboBox->itemData(ui->styleComboBox->currentIndex()).toString());
     appearanceConfig.writeEntry("styleVariant", ui->variantComboBox->currentText());
     appearanceConfig.writeEntry("displayHeader", ui->showHeader->isChecked());
+    appearanceConfig.writeEntry("useCustomFont", ui->customFontBox->isChecked());
+    appearanceConfig.writeEntry("fontFamily", ui->fontFamily->currentFont().family());
+    appearanceConfig.writeEntry("fontSize", ui->fontSize->value());
 
     appearanceConfig.sync();
     config->sync();

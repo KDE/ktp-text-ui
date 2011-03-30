@@ -57,6 +57,9 @@ private slots:
     void onStyleSelected(int index);
     void onVariantSelected(const QString&);
     void onShowHeaderChanged(bool);
+    void onFontGroupChanged(bool);
+    void onFontFamilyChanged(QFont);
+    void onFontSizeChanged(int);
 };
 
 #endif // MAINWINDOW_H

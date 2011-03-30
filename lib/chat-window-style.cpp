@@ -38,6 +38,8 @@ public:
     QString baseHref;
     StyleVariants variantsList;
     QString defaultVariantName;
+    QString defaultFontFamily;
+    int     defaultFontSize;
 
     QString templateHtml;
     QString headerHtml;
@@ -135,6 +137,16 @@ QString ChatWindowStyle::id() const
 QString ChatWindowStyle::defaultVariantName()
 {
     return d->defaultVariantName;
+}
+
+QString ChatWindowStyle::defaultFontFamily()
+{
+    return d->defaultFontFamily;
+}
+
+int ChatWindowStyle::defaultFontSize()
+{
+    return d->defaultFontSize;
 }
 
 QString ChatWindowStyle::getStyleBaseHref() const
@@ -287,6 +299,8 @@ void ChatWindowStyle::readStyleFiles()
 
     ChatStylePlistFileReader plistReader(infoPlistFile);
     d->defaultVariantName = plistReader.defaultVariant();
+    d->defaultFontFamily  = plistReader.defaultFontFamily();
+    d->defaultFontSize    = plistReader.defaultFontSize();
 
     // Load template file
     if (QFile::exists(templateFile)) {
