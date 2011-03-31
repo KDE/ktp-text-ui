@@ -480,8 +480,7 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
     //TODO notification->addContext("group",... Requires KDE Telepathy Contact to work out which group they are in.
 
     notification->setActions(QStringList(i18n("View")));
-    connect(notification, SIGNAL(activated(unsigned int)), notification, SLOT(raiseWidget()));
-    connect(notification, SIGNAL(activated(unsigned int)), this, SLOT(showOnTop()));
+    connect(notification, SIGNAL(activated(unsigned int)), this, SIGNAL(notificationClicked()));
 
     notification->sendEvent();
 }

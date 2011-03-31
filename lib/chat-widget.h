@@ -113,6 +113,9 @@ signals:
 
     void unreadMessagesChanged(int messages);
 
+    /** Emitted when a notification for the chat window has been activated*/
+    void notificationClicked();
+
 private slots:
     /** recieved when user changes search criteria or when searching for text */
     void findTextInChat(const QString &text, QWebPage::FindFlags flags);
