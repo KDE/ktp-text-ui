@@ -27,8 +27,10 @@
 #include <KDE/KColorScheme>
 
 ChatTab::ChatTab(const Tp::TextChannelPtr & channel, QWidget *parent)
-    : ChatWidget(channel, parent)
+    : ChatWidget(channel, parent),
+      m_tabWidget(0)
 {
+    connect(this, SIGNAL(notificationClicked()), SLOT(showOnTop()));
 }
 
 ChatTab::~ChatTab()

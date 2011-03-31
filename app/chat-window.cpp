@@ -95,6 +95,7 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
     // got new chat, create it
     if(!duplicateTab) {
         ChatTab *chatTab = new ChatTab(incomingTextChannel, m_tabWidget);
+        chatTab->setTabWidget(m_tabWidget);
         connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
         connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
         connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
