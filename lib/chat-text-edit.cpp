@@ -24,12 +24,6 @@
 #include <QtGui/QAction>
 #include <QtCore/QTimer>
 
-
-class ChatTextEditPrivate
-{
-    QWidget* formatToolbar;
-};
-
 ChatTextEdit::ChatTextEdit(QWidget *parent) :
     KTextEdit(parent)
 {
@@ -49,14 +43,6 @@ void ChatTextEdit::setFontBold(bool isBold)
     } else {
         setFontWeight(QFont::Normal);
     }
-}
-
-void ChatTextEdit::contextMenuEvent(QContextMenuEvent *event)
-{
-    QMenu *menu = createStandardContextMenu();
-    menu->addActions(actions());
-    menu->exec(event->globalPos());
-    delete menu;
 }
 
 //Size code based on LineEdit in PSI

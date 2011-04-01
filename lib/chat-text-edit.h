@@ -35,7 +35,6 @@ public:
 protected:
     // reimplemented
     void resizeEvent(QResizeEvent*);
-    void contextMenuEvent(QContextMenuEvent *);
 
 private slots:
     void recalculateSize();
