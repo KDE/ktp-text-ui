@@ -31,8 +31,9 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setCheckSpellingEnabled(true);
+    enableFindReplace(false);
     setMinimumHeight(0);
-
+    
     connect(this, SIGNAL(textChanged()), SLOT(recalculateSize()));
 }
 
