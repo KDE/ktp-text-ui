@@ -20,9 +20,9 @@
 #ifndef CHATTEXTEDIT_H
 #define CHATTEXTEDIT_H
 
-#include <QtGui/QTextEdit>
+#include <KTextEdit>
 
-class ChatTextEdit : public QTextEdit
+class ChatTextEdit : public KTextEdit
 {
     Q_OBJECT
 public:

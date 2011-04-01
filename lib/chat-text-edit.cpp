@@ -31,12 +31,12 @@ class ChatTextEditPrivate
 };
 
 ChatTextEdit::ChatTextEdit(QWidget *parent) :
-    QTextEdit(parent)
+    KTextEdit(parent)
 {
     setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere); // no need for horizontal scrollbar with this
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
+    setCheckSpellingEnabled(true);
     setMinimumHeight(0);
 
     connect(this, SIGNAL(textChanged()), SLOT(recalculateSize()));
