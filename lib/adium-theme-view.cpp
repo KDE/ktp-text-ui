@@ -28,6 +28,7 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QTextCodec>
+#include <QtGui/QFontDatabase>
 #include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebElement>
 #include <QtWebKit/QWebInspector>
@@ -83,6 +84,10 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
     //special HTML debug mode. Debugging/Profiling only (or theme creating) should have no visible way to turn this flag on.
     m_webInspector = appearanceConfig.readEntry("debug", false);
 
+    m_useCustomFont = appearanceConfig.readEntry("useCustomFont", false);
+    m_fontFamily = appearanceConfig.readEntry("fontFamily", QWebSettings::globalSettings()->fontFamily(QWebSettings::StandardFont));
+    m_fontSize = appearanceConfig.readEntry("fontSize", QWebSettings::globalSettings()->fontSize(QWebSettings::DefaultFontSize));
+
     // don't let QWebView handle the links, we do
     page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
@@ -104,6 +109,30 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     if (m_displayHeader) {
         headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(), chatInfo);
     } //otherwise leave as blank.
+
+    // set fontFamily and fontSize
+    if (m_useCustomFont) {
+        // use user specified fontFamily and Size
+        settings()->setFontFamily(QWebSettings::StandardFont, m_fontFamily);
+        settings()->setFontSize(QWebSettings::DefaultFontSize, m_fontSize);
+
+        // since some themes are pretty odd and hardcode fonts to the css we need to override that
+        // with some extra css. this may not work for all themes!
+        extraStyleHtml.append (
+            QString("\n* {font-family:\"%1\" !important;font-size:%2pt !important};")
+                .arg( m_fontFamily )
+                .arg( m_fontSize )
+        );
+    } else {
+        // FIXME: we should inform the user if the chatStyle want's to use a fontFamily which is not present on the system
+        QFontDatabase fontDB = QFontDatabase();
+        kDebug() << "Theme font installed: " << m_chatStyle->defaultFontFamily()
+                 << fontDB.families().contains(m_chatStyle->defaultFontFamily());
+
+        // use theme fontFamily/Size, if not existent, it falls back to systems default font
+        settings()->setFontFamily(QWebSettings::StandardFont, m_chatStyle->defaultFontFamily());
+        settings()->setFontSize(QWebSettings::DefaultFontSize, m_chatStyle->defaultFontSize());
+    }
 
     //The templateHtml is in a horrific NSString format.
     //Want to use this rather than roll our own, as that way we can get templates from themes too
@@ -178,6 +207,38 @@ void AdiumThemeView::setChatStyle(ChatWindowStyle *chatStyle)
     }
 }
 
+QString AdiumThemeView::fontFamily()
+{
+    return m_fontFamily;
+}
+
+void AdiumThemeView::setFontFamily(QString fontFamily)
+{
+    kDebug();
+    m_fontFamily = fontFamily;
+}
+
+int AdiumThemeView::fontSize()
+{
+    return m_fontSize;
+}
+
+void AdiumThemeView::setFontSize(int fontSize)
+{
+    kDebug();
+    m_fontSize = fontSize;
+}
+
+void AdiumThemeView::setUseCustomFont(bool useCustomFont)
+{
+    kDebug();
+    m_useCustomFont = useCustomFont;
+}
+
+bool AdiumThemeView::isCustomFont() const
+{
+    return m_useCustomFont;
+}
 
 bool AdiumThemeView::isHeaderDisplayed() const
 {

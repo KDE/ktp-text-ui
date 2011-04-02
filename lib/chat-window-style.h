@@ -140,6 +140,8 @@ public:
     void reload();
 
     QString defaultVariantName();
+    QString defaultFontFamily();
+    int defaultFontSize();
 private:
     /**
      * Read style HTML files from disk

@@ -49,7 +49,12 @@ public:
     ChatWindowStyle *chatStyle() const;
     /** Set the theme to use. Display will only change once initialise() is called.*/
     void setChatStyle(ChatWindowStyle* chatStyle);
-
+    void setUseCustomFont(bool);
+    QString fontFamily();
+    int fontSize();
+    void setFontFamily(QString fontFamily);
+    void setFontSize(int fontSize);
+    bool isCustomFont() const;
     bool isHeaderDisplayed() const;
     /** Set whether a header is displayed at the top of the window.
      * Output will only change once initialise() is called. */
@@ -66,6 +71,9 @@ private:
     QString m_variantPath;
     QString m_variantName;
     KEmoticons m_emoticons;
+    bool m_useCustomFont;
+    QString m_fontFamily;
+    int m_fontSize;
     QString replaceHeaderKeywords(QString htmlTemplate, const AdiumThemeHeaderInfo&);
     QString replaceContentKeywords(QString& htmlTemplate, const AdiumThemeContentInfo&);
     QString replaceStatusKeywords(QString& htmlTemplate, const AdiumThemeStatusInfo&);
