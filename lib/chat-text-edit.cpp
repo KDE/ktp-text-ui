@@ -70,6 +70,7 @@ void ChatTextEdit::keyPressEvent(QKeyEvent* e)
     if (e->matches(QKeySequence::Find)) {
         emit findTextShortcutPressed();
     }
+    KTextEdit::keyPressEvent(e);
 }
 
 void ChatTextEdit::resizeEvent(QResizeEvent* e)
