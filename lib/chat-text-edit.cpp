@@ -33,7 +33,7 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
     setCheckSpellingEnabled(true);
     enableFindReplace(false);
     setMinimumHeight(0);
-    
+
     connect(this, SIGNAL(textChanged()), SLOT(recalculateSize()));
 }
 
@@ -63,6 +63,13 @@ QSize ChatTextEdit::sizeHint() const
     sh.setHeight(int(document()->size().height()));
     sh += QSize(0, (QFrame::lineWidth() * 2) + 1);
     return sh;
+}
+
+void ChatTextEdit::keyPressEvent(QKeyEvent* e)
+{
+    if (e->matches(QKeySequence::Find)) {
+        emit findTextShortcutPressed();
+    }
 }
 
 void ChatTextEdit::resizeEvent(QResizeEvent* e)

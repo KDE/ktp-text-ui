@@ -33,12 +33,18 @@ public:
     QSize sizeHint() const;
 
 protected:
+    /// HACK this method is overidden to catch the ctrl+f signal for the toggleSearchBar.
+    void keyPressEvent(QKeyEvent *e);
+
     // reimplemented
     void resizeEvent(QResizeEvent*);
 
 private slots:
     void recalculateSize();
     void updateScrollBar();
+
+signals:
+    void findTextShortcutPressed();
 
 public slots:
     /** wraps setFontWeight to a simple on/off bold) */
