@@ -50,8 +50,10 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
       m_defaultAvatar(KIconLoader::global()->iconPath("im-user",-KIconLoader::SizeLarge)),
       m_displayHeader(true)
 {
-    //determine the chat window style to use (from the Kopete config file).
+    //blocks QWebView functionality which allows you to change page by dragging a URL onto it.
+    setAcceptDrops(false);
 
+    //determine the chat window style to use (from the Kopete config file).
     KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
     KConfigGroup appearanceConfig = config->group("Appearance");
 
