@@ -37,7 +37,7 @@ public:
 
     explicit AdiumThemeMessageInfo(MessageType);
     explicit AdiumThemeMessageInfo(const AdiumThemeMessageInfo &other);
-    ~AdiumThemeMessageInfo();
+    virtual ~AdiumThemeMessageInfo();
     AdiumThemeMessageInfo &operator=(const AdiumThemeMessageInfo &other);
 
     MessageType type() const;
