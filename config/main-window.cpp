@@ -21,6 +21,7 @@
 #include "ui_chatwindowconfig.h"
 
 #include <KDETelepathy/ChatWindowStyleManager>
+#include <KDETelepathy/ChatWindowStyle>
 #include <KDETelepathy/AdiumThemeHeaderInfo>
 #include <KDETelepathy/AdiumThemeContentInfo>
 #include <KDETelepathy/AdiumThemeStatusInfo>

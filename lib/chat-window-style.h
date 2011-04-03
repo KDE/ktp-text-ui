@@ -52,7 +52,7 @@ public:
     explicit ChatWindowStyle(const QString &styleId, StyleBuildMode styleBuildMode = StyleBuildNormal);
     ChatWindowStyle(const QString &styleId, const QString &variantPath,
                     StyleBuildMode styleBuildMode = StyleBuildFast);
-    ~ChatWindowStyle();
+    virtual ~ChatWindowStyle();
 
     /**
      * Checks if the style is valid
