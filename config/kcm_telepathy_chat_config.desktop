@@ -12,12 +12,16 @@ X-KDE-RootOnly=false
 Categories=Qt;KDE;X-KDE-settings-network;
 
 Name=Chat Window Appearance
+Name[da]=Chatvinduets udseende
 Name[pt]=Aparência da Janela de Conversação
 Name[pt_BR]=Aparência da janela de bate-papo
+Name[sv]=Chattfönstrets utseende
 Name[uk]=Вигляд вікна балачки
 Name[x-test]=xxChat Window Appearancexx
 Comment=Choose a Style for your Chat Window and customize it
+Comment[da]=Vælg chatvinduestil og tilpas den
 Comment[pt]=Escolha um estilo para a sua janela de conversação e personalize-o
 Comment[pt_BR]=Escolha o estilo da sua janela de bate-papo e personalize-a
+Comment[sv]=Välj en stil för chattfönstret och anpassa den
 Comment[uk]=Вибір і зміна стилю вікна балачки
 Comment[x-test]=xxChoose a Style for your Chat Window and customize itxx
