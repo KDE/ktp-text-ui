@@ -69,7 +69,13 @@ signals:
     /** emitted when search criteria is changed by user and updates current view */
     void flagsChangedSignal(const QString &, QWebPage::FindFlags flags);
 
+    /** send signal to mainwindow to enable/disable search buttons */
+    void enableSearchButtonsSignal(bool enable);
+
 private:
+    /** enable/disable next and previous buttons for search */
+    void enableSearchButtons(bool enable);
+
     /** returns selected search criteria chosen by user */
     QWebPage::FindFlags findFlags();
 

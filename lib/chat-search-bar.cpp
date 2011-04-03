@@ -44,7 +44,9 @@ ChatSearchBar::ChatSearchBar(QWidget* parent)
     // search line setup
     m_searchInput->setPlaceholderText(i18n("Insert search text..."));
 
-    // search arrows
+    // search arrows, start disabled
+    enableSearchButtons(false);
+
     connect(m_nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
     connect(m_previousButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
 
@@ -72,6 +74,13 @@ ChatSearchBar::ChatSearchBar(QWidget* parent)
 ChatSearchBar::~ChatSearchBar()
 {
 
+}
+
+void ChatSearchBar::enableSearchButtons(bool enable)
+{
+    m_nextButton->setEnabled(enable);
+    m_previousButton->setEnabled(enable);
+    emit enableSearchButtonsSignal(enable);
 }
 
 QWebPage::FindFlags ChatSearchBar::findFlags()
@@ -143,6 +152,12 @@ void ChatSearchBar::toggleView(bool toggle)
 
 void ChatSearchBar::textChanged(const QString& text)
 {
+    // enable/disable next and previous buttons
+    if (!m_searchInput->text().isEmpty()) {
+        enableSearchButtons(true);
+    } else {
+        enableSearchButtons(false);
+    }
     emit(findTextSignal(text, findFlags()));
 }
 

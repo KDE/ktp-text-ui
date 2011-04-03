@@ -35,6 +35,7 @@
 #include <KSettings/Dialog>
 #include <KNotifyConfigWidget>
 #include <KMenuBar>
+#include <KLineEdit>
 
 #include <TelepathyQt4/TextChannel>
 
@@ -48,8 +49,9 @@ ChatWindow::ChatWindow()
 
     // keyboard shortcuts for the search bar
     KStandardAction::find(this, SLOT(onSearchActionToggled()), actionCollection());
-    KStandardAction::findNext(this, SLOT(onFindNextText()), actionCollection());
-    KStandardAction::findPrev(this, SLOT(onFindPreviousText()), actionCollection());
+    // start disabled
+    KStandardAction::findNext(this, SLOT(onFindNextText()), actionCollection())->setEnabled(false);
+    KStandardAction::findPrev(this, SLOT(onFindPreviousText()), actionCollection())->setEnabled(false);
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
@@ -101,6 +103,7 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
         connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
         connect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
         connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
+        connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
 
         m_tabWidget->addTab(chatTab, chatTab->icon(), chatTab->title());
         m_tabWidget->setCurrentWidget(chatTab);
@@ -156,6 +159,19 @@ void ChatWindow::onCurrentIndexChanged(int index)
     ChatTab* currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
     setWindowTitle(currentChatTab->title());
     setWindowIcon(currentChatTab->icon());
+
+    // when the tab changes I need to "refresh" the window's findNext and findPrev actions
+    if (currentChatTab->chatSearchBar()->searchBar()->text().isEmpty()) {
+        onEnableSearchActions(false);
+    } else {
+        onEnableSearchActions(true);
+    }
+}
+
+void ChatWindow::onEnableSearchActions(bool enable)
+{
+    actionCollection()->action(KStandardAction::name(KStandardAction::FindNext))->setEnabled(enable);
+    actionCollection()->action(KStandardAction::name(KStandardAction::FindPrev))->setEnabled(enable);
 }
 
 void ChatWindow::onFindNextText()
