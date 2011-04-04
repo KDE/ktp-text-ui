@@ -34,6 +34,9 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
     enableFindReplace(false);
     setMinimumHeight(0);
 
+    // set to false so it doesn't paste anything unwanted apart from normal text
+    setAcceptRichText(false);
+
     connect(this, SIGNAL(textChanged()), SLOT(recalculateSize()));
 }
 
