@@ -2,6 +2,7 @@
 IconName=telepathy
 Comment=adiumxtra
 Comment[da]=adiumxtra
+Comment[et]=adiumxtra
 Comment[nl]=adiumxtra
 Comment[pt]=adiumxtra
 Comment[pt_BR]=adiumxtra
@@ -10,6 +11,7 @@ Comment[uk]=adiumxtra
 Comment[x-test]=xxadiumxtraxx
 Name=adiumxtra-protocol-handler
 Name[da]=adiumxtra-protocol-handler
+Name[et]=adiumxtra-protocol-handler
 Name[nl]=AdiumXtra-protocolbehandelaar
 Name[pt]=adiumxtra-protocol-handler
 Name[pt_BR]=adiumxtra-protocol-handler
@@ -21,6 +23,7 @@ Name[x-test]=xxadiumxtra-protocol-handlerxx
 [Event/chatstyleRequest]
 Name=Chatstyle Install Request
 Name[da]=Installationsanmodning om chatstil
+Name[et]=Vestlusstiili paigaldamise soov
 Name[nl]=Installatieverzoek van Chatstyle
 Name[pt]=Pedido de Instalação do Estilo de Conversação
 Name[pt_BR]=Pedido de instalação do estilo de bate-papo
@@ -34,6 +37,7 @@ Flags=Persistent
 [Event/chatstyleSuccess]
 Name=Installed Chatstyle successfully
 Name[da]=Chatstil installeret
+Name[et]=Vestlusstiil paigaldati edukalt
 Name[nl]=Chatstyle is met succes geïnstalleerd
 Name[pt]=O Estilo de Conversação foi instalado com sucesso
 Name[pt_BR]=O estilo de bate-papo foi instalado com sucesso
@@ -48,6 +52,7 @@ Flags=Persistent
 [Event/chatstyleFailure]
 Name=Install Chatstyle Installation failed
 Name[da]=Installation af chatstil mislykkedes
+Name[et]=Vestlusstiili paigaldamine nurjus
 Name[nl]=Installatie van Chatstyle is mislukt
 Name[pt]=A instalação do Estilo de Conversação foi mal-sucedida
 Name[pt_BR]=A instalação do estilo de bate-papo falhou
@@ -61,6 +66,7 @@ Flags=Persistent
 [Event/emoticonsRequest]
 Name=Emoticonset Install Request
 Name[da]=Installationsanmodning om emotikonsæt
+Name[et]=Emotikonikogu paigaldamise soov
 Name[nl]=Installatieverzoek voor Emoticonset
 Name[pt]=Pedido de Instalação do Conjunto de Ícones Emotivos
 Name[pt_BR]=Pedido de instalação do conjunto de emoticons
@@ -74,6 +80,7 @@ Flags=Persistent
 [Event/emoticonsSuccess]
 Name=Installed Emoticonset successfully
 Name[da]=Emotikonsæt installeret
+Name[et]=Emotikonikogu paigaldati edukalt
 Name[nl]=Emoticonset is met succes geïnstalleerd
 Name[pt]=O Conjunto de Ícones Emotivos foi instalado com sucesso
 Name[pt_BR]=O conjunto de emoticons foi instalado com sucesso
@@ -88,6 +95,7 @@ Flags=Persistent
 [Event/emoticonsFailure]
 Name=Emoticonset Installation failed
 Name[da]=Installation af emotikonsæt mislykkedes
+Name[et]=Emotikonikogu paigaldamine nurjus
 Name[nl]=Installatie van Emoticonset is mislukt
 Name[pt]=A instalação do Conjunto de Ícones Emotivos foi mal-sucedida
 Name[pt_BR]=A instalação do conjunto de emoticons falhou
