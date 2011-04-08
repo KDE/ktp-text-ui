@@ -84,11 +84,11 @@ protected slots:
     /** send the text in the text area widget to the client handler*/
     void sendMessage();
 
-    void onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state);
+    void onChatStatusChanged(const Tp::ContactPtr &contact, Tp::ChannelChatState state);
 
-    void onContactPresenceChange(const Tp::ContactPtr & contact, const Tp::Presence &presence);
+    void onContactPresenceChange(const Tp::ContactPtr &contact, const Tp::Presence &presence);
 
-    void onContactAliasChanged(const Tp::ContactPtr & contact, const QString &alias);
+    void onContactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
 
     void onInputBoxChanged();
 

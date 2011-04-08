@@ -26,7 +26,6 @@
 #include <TelepathyQt4/ContactFactory>
 #include <TelepathyQt4/TextChannel>
 
-#include <KApplication>
 #include <KAboutData>
 #include <KCmdLineArgs>
 

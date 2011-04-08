@@ -33,7 +33,7 @@ inline Tp::ChannelClassSpecList channelClassList()
 
 
 TelepathyChatUi::TelepathyChatUi()
-    : KApplication(), AbstractClientHandler(channelClassList())
+    : KUniqueApplication(), AbstractClientHandler(channelClassList())
 {
     kDebug();
 
