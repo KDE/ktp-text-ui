@@ -361,11 +361,23 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     //message
     htmlTemplate.replace("%message%", m_emoticons.theme().parseEmoticons(info.message()));
 
-    QRegExp linkRegExp("https{0,1}://[^ \t\n\r\f\v]+");
+    // link detection
+    QRegExp linkRegExp("(smb://|s{0,1}ftp://|www.|https{0,1}://)[^ \t\n\r\f\v]+");
     int index = 0;
     while((index = linkRegExp.indexIn(htmlTemplate, index)) != -1) {
-        QString link = "<a href='" + linkRegExp.cap(0) + "'>" + linkRegExp.cap(0) + "</a>";
+        QString realUrl = linkRegExp.cap(0);
+
+        // remove line breaks
+        realUrl.remove("<br/>");
+
+        if (realUrl.startsWith("www")) {
+            realUrl.prepend("http://");
+        }
+
+        // if the url is changed, show in chat what the user typed in
+        QString link = "<a href='" + realUrl + "'>" + linkRegExp.cap(0) + "</a>";
         htmlTemplate.replace(index, linkRegExp.cap(0).length(), link);
+
         // advance pos otherwise i end up parsing same link
         index += link.length();
     }
