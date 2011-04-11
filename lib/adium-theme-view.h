@@ -20,9 +20,10 @@
 #ifndef ADIUMTHEMEVIEW_H
 #define ADIUMTHEMEVIEW_H
 
-#include "chat-window-style.h"
-#include "adium-theme-header-info.h"
 #include <QtWebKit/QWebView>
+
+#include "adium-theme-header-info.h"
+
 #include <KEmoticons>
 
 #include "kdetelepathychat_export.h"
@@ -31,6 +32,7 @@ class AdiumThemeContentInfo;
 class AdiumThemeHeaderInfo;
 class AdiumThemeMessageInfo;
 class AdiumThemeStatusInfo;
+class ChatWindowStyle;
 
 class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public QWebView
 {
@@ -39,14 +41,11 @@ public:
     explicit AdiumThemeView(QWidget *parent = 0);
     void initialise(const AdiumThemeHeaderInfo&);
 
-    //override various parts loaded from the config file.
-    //note that the following will clear the contents of the chat window.
-
     const QString variantPath() const;
     const QString variantName() const;
     void setVariant(const QString& variant);
-
     ChatWindowStyle *chatStyle() const;
+
     /** Set the theme to use. Display will only change once initialise() is called.*/
     void setChatStyle(ChatWindowStyle* chatStyle);
     void setUseCustomFont(bool);

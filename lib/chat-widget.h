@@ -24,7 +24,8 @@
 
 #include <QtCore/QString>
 #include <QtGui/QWidget>
-#include <QWebPage>
+#include <QtWebKit/QWebPage>
+
 #include <KIcon>
 #include <KColorScheme>
 
@@ -70,24 +71,24 @@ protected:
 
 protected slots:
     /** Show the received message in the chat window*/
-    void handleIncomingMessage(const Tp::ReceivedMessage & message);
+    void handleIncomingMessage(const Tp::ReceivedMessage &message);
 
     /** Show notification about a received message */
-    void notifyAboutIncomingMessage(const Tp::ReceivedMessage & message);
+    void notifyAboutIncomingMessage(const Tp::ReceivedMessage &message);
 
     /** Show the message sent in the chat window*/
-    void handleMessageSent(const Tp::Message & message,
+    void handleMessageSent(const Tp::Message &message,
                            Tp::MessageSendingFlags flags,
-                           const QString & sentMessageToken);
+                           const QString &sentMessageToken);
 
     /** send the text in the text area widget to the client handler*/
     void sendMessage();
 
-    void onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state);
+    void onChatStatusChanged(const Tp::ContactPtr &contact, Tp::ChannelChatState state);
 
-    void onContactPresenceChange(const Tp::ContactPtr & contact, const Tp::Presence & presence);
+    void onContactPresenceChange(const Tp::ContactPtr &contact, const Tp::Presence &presence);
 
-    void onContactAliasChanged(const Tp::ContactPtr & contact, const QString & alias);
+    void onContactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
 
     void onInputBoxChanged();
 
@@ -95,10 +96,10 @@ protected slots:
 
 signals:
     /** Emitted whenever the title for the chat changes, normally the name of the contact or a topic*/
-    void titleChanged(const QString & title);
+    void titleChanged(const QString &title);
 
     /** Emmitted if the icon for this channel changes*/
-    void iconChanged(const KIcon & icon);
+    void iconChanged(const KIcon &icon);
 
     /** Emmited whenever a message is received in this channel*/
     void messageReceived();

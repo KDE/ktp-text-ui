@@ -32,8 +32,7 @@ class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeStatusInfo : public AdiumThemeMessageI
 public:
     explicit AdiumThemeStatusInfo();
     explicit AdiumThemeStatusInfo(const AdiumThemeStatusInfo &other);
-
-    ~AdiumThemeStatusInfo();
+    virtual ~AdiumThemeStatusInfo();
     AdiumThemeStatusInfo &operator=(const AdiumThemeStatusInfo &other);
 
     /** A description of the status event. This is neither in

@@ -22,8 +22,8 @@
 
 #include "kdetelepathychat_export.h"
 
-#include <QWebPage>
-#include <QWidget>
+#include <QtWebKit/QWebPage>
+#include <QtGui/QWidget>
 
 class KLineEdit;
 class KPushButton;

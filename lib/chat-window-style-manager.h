@@ -61,7 +61,7 @@ public:
     /**
      * Destructor.
      */
-    ~ChatWindowStyleManager();
+    virtual ~ChatWindowStyleManager();
 
     /**
      * Singleton access to this class.
