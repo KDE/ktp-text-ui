@@ -23,10 +23,10 @@
 #include "chat-window.h"
 
 #include <TelepathyQt4/AbstractClientHandler>
-#include <KUniqueApplication>
+#include <KApplication>
 
 
-class TelepathyChatUi : public KUniqueApplication, public Tp::AbstractClientHandler
+class TelepathyChatUi : public KApplication, public Tp::AbstractClientHandler
 {
 public:
     TelepathyChatUi();
