@@ -34,6 +34,7 @@
 class ChatSearchBar;
 class ChatWidgetPrivate;
 class QShowEvent;
+class QKeyEvent;
 
 class KDE_TELEPATHY_CHAT_EXPORT ChatWidget : public QWidget
 {
@@ -68,6 +69,7 @@ protected:
     void changeEvent(QEvent *e);
     void resizeEvent(QResizeEvent *);
     void showEvent(QShowEvent *e);
+    void keyPressEvent(QKeyEvent *e);
 
 protected slots:
     /** Show the received message in the chat window*/

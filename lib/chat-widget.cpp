@@ -308,6 +308,14 @@ void ChatWidget::showEvent(QShowEvent* e)
     QWidget::showEvent(e);
 }
 
+void ChatWidget::keyPressEvent(QKeyEvent* e)
+{
+    if (e->key() == Qt::Key_Escape && d->ui.searchBar->isVisible()) {
+        d->ui.searchBar->toggleView(false);
+    } else {
+        QWidget::keyPressEvent(e);
+    }
+}
 
 QString ChatWidget::title() const
 {
