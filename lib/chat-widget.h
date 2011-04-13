@@ -92,6 +92,8 @@ protected slots:
 
     void onContactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
 
+    void onChannelInvalidated();
+
     void onInputBoxChanged();
 
     void chatViewReady();

@@ -217,6 +217,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
             SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
     connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
             SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
+    connect(d->channel->connection().data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
+            this, SLOT(onChannelInvalidated()));
 
     if (d->channel->hasChatStateInterface()) {
         connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
@@ -676,6 +678,19 @@ void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QSt
     if (!d->isGroupChat && !isYou) {
         Q_EMIT titleChanged(alias);
     }
+}
+
+void ChatWidget::onChannelInvalidated()
+{
+    d->ui.sendMessageBox->setDisabled(true);
+    d->ui.sendButton->setDisabled(true);
+
+    // show a message informing the user
+    AdiumThemeStatusInfo statusMessage;
+    statusMessage.setMessage(i18n("Connection closed"));
+    statusMessage.setService(d->channel->connection()->protocolName());
+    statusMessage.setTime(QDateTime::currentDateTime());
+    d->ui.chatArea->addStatusMessage(statusMessage);
 }
 
 void ChatWidget::onInputBoxChanged()
