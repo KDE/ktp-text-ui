@@ -462,6 +462,10 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
         kDebug() << "Widget is on top, not doing anything";
         return;
     }
+    // don't notify of messages sent by self from another computer
+    if (message.sender() == d->channel->connection()->selfContact()) {
+        return;
+    }
     // kde_telepathy_contact_highlight (contains your name)
     // kde_telepathy_info_event
 
