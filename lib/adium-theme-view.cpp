@@ -362,24 +362,40 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     htmlTemplate.replace("%message%", m_emoticons.theme().parseEmoticons(info.message()));
 
     // link detection
-    QRegExp linkRegExp("(smb://|s{0,1}ftp://|www.|https{0,1}://)[^ \t\n\r\f\v]+");
+    QRegExp linkRegExp("\\b(smb://|s{0,1}ftp://|www\\.|https{0,1}://)\\b[^ \t\n\r\f\v]+");
     int index = 0;
-    while((index = linkRegExp.indexIn(htmlTemplate, index)) != -1) {
+
+    while ((index = linkRegExp.indexIn(htmlTemplate, index)) != -1) {
         QString realUrl = linkRegExp.cap(0);
 
-        // remove line breaks
-        realUrl.remove("<br/>");
+        // text not wanted in a link ( <,> )
+        QRegExp unwanted("(&lt;|&gt;)");
 
-        if (realUrl.startsWith("www")) {
-            realUrl.prepend("http://");
+        if (!realUrl.contains(unwanted)) {
+            // string to show to user
+            QString shownUrl = realUrl;
+
+            // check for newline and cut link when found
+            if (realUrl.contains("<br/>")) {
+                int findIndex = realUrl.indexOf("<br/>");
+                realUrl.truncate(findIndex);
+                shownUrl.truncate(findIndex);
+            }
+
+            // check prefix
+            if (realUrl.startsWith("www")) {
+                realUrl.prepend("http://");
+            }
+
+            // if the url is changed, show in chat what the user typed in
+            QString link = "<a href='" + realUrl + "'>" + shownUrl + "</a>";
+            htmlTemplate.replace(index, shownUrl.length(), link);
+
+            // advance position otherwise I end up parsing the same link
+            index += link.length();
+        } else {
+            index += realUrl.length();
         }
-
-        // if the url is changed, show in chat what the user typed in
-        QString link = "<a href='" + realUrl + "'>" + linkRegExp.cap(0) + "</a>";
-        htmlTemplate.replace(index, linkRegExp.cap(0).length(), link);
-
-        // advance pos otherwise i end up parsing same link
-        index += link.length();
     }
 
     //service
