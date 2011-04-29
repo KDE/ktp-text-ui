@@ -108,6 +108,7 @@ public:
     Tp::TextChannelPtr channel;
     Ui::ChatWidget ui;
     KIcon icon;
+    ChannelContactModel *contactModel;
 
     KComponentData telepathyComponentData();
 };
@@ -147,14 +148,14 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
     d->ui.insertEmoticon->setText(QString());
     d->ui.insertEmoticon->setIcon(KIcon("face-smile"));
 
-    //channel is now valid, start keeping track of contacts.
-    ChannelContactModel* contactList = new ChannelContactModel(d->channel, this);
-    connect(contactList, SIGNAL(contactPresenceChanged(Tp::ContactPtr,Tp::Presence)),
-            SLOT(onContactPresenceChange(Tp::ContactPtr,Tp::Presence)));
-    connect(contactList, SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)),
-            SLOT(onContactAliasChanged(Tp::ContactPtr,QString)));
+    // connect channel signals
+    setupChannelSignals();
 
-    d->ui.contactsView->setModel(contactList);
+    // create contactModel and start keeping track of contacts.
+    d->contactModel = new ChannelContactModel(d->channel, this);
+    setupContactModelSignals();
+
+    d->ui.contactsView->setModel(d->contactModel);
 
     AdiumThemeHeaderInfo info;
     Tp::Contacts allContacts = d->channel->groupContacts();
@@ -208,21 +209,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
     connect(d->ui.formatBold, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontBold(bool)));
     connect(d->ui.formatItalic, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontItalic(bool)));
     connect(d->ui.formatUnderline, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontUnderline(bool)));
-
-    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
-            SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
-    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
-            SLOT(notifyAboutIncomingMessage(Tp::ReceivedMessage)));
-    connect(d->channel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
-            SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
-    connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
-            SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
-    connect(d->channel->connection().data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
-            this, SLOT(onChannelInvalidated()));
-
-    if (d->channel->hasChatStateInterface()) {
-        connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
-    }
 
     // make the sendMessageBox a focus proxy for the chatview
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
@@ -378,6 +364,32 @@ void ChatWidget::toggleSearchBar() const
     }
 }
 
+void ChatWidget::setupChannelSignals()
+{
+    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
+            SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
+    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
+            SLOT(notifyAboutIncomingMessage(Tp::ReceivedMessage)));
+    connect(d->channel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
+            SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
+    connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
+            SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
+    connect(d->channel->connection().data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
+            this, SLOT(onChannelInvalidated()));
+
+    if (d->channel->hasChatStateInterface()) {
+        connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
+    }
+}
+
+void ChatWidget::setupContactModelSignals()
+{
+    connect(d->contactModel, SIGNAL(contactPresenceChanged(Tp::ContactPtr,Tp::Presence)),
+            SLOT(onContactPresenceChange(Tp::ContactPtr,Tp::Presence)));
+    connect(d->contactModel, SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)),
+            SLOT(onContactAliasChanged(Tp::ContactPtr,QString)));
+}
+
 void ChatWidget::incrementUnreadMessageCount()
 {
     kDebug();
@@ -405,7 +417,6 @@ void ChatWidget::resetUnreadMessageCount()
         Q_EMIT unreadMessagesChanged(d->unreadMessages);
     }
 }
-
 
 bool ChatWidget::isOnTop() const
 {

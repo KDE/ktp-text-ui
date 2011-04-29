@@ -65,6 +65,16 @@ protected slots:
     void showNotificationsDialog();
 
 private:
+    /** creats a new chat and adds it to the tab widget
+     * @param channelPtr pointer to textChannel to use
+     */
+    void createNewChat(Tp::TextChannelPtr channelPtr);
+
+    /** connects the neccessary chat tab signals with slots in chatwindow
+     * @param chatTab chatTab object to connect
+     */
+    void setupChatTabSignals(ChatTab *chatTab);
+
     KTabWidget *m_tabWidget;
 };
 

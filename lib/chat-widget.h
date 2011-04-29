@@ -53,10 +53,10 @@ public:
     /** Returns the text channel pointer of the chatWidget */
     Tp::TextChannelPtr textChannel() const;
 
-    /** Returns the name of this chat window*/
+    /** Returns the name of this chat window */
     QString title() const;
 
-    /** Returns the suggested color for the title of the window*/
+    /** Returns the suggested color for the title of the window */
     QColor titleColor() const;
 
     int unreadMessageCount() const;
@@ -130,9 +130,14 @@ private slots:
     void windowActivated();
 
 private:
-    void resetUnreadMessageCount();
-    void incrementUnreadMessageCount();
+    /** connects neccessary signals for the channel */
+    void setupChannelSignals();
 
+    /** connects neccessary signals for the contactModel */
+    void setupContactModelSignals();
+
+    void incrementUnreadMessageCount();
+    void resetUnreadMessageCount();
     virtual bool isOnTop() const;
 
     //FIXME this should be in the ktelepathy lib

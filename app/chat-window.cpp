@@ -76,43 +76,42 @@ ChatWindow::~ChatWindow()
 
 void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
 {
+    // if targetHandle is None, targetId is also "", so create new chat
+    if (incomingTextChannel->targetHandleType() == Tp::HandleTypeNone) {
+        kDebug() << "ChatWindow::startChat target handle type is HandleTypeNone";
+        createNewChat(incomingTextChannel);
+        return;
+    }
+
     bool duplicateTab = false;
 
     // check that the tab requested isn't already open
-    for(int index = 0; index < m_tabWidget->count() && !duplicateTab; index++) {
+    for (int index = 0; index < m_tabWidget->count() && !duplicateTab; ++index) {
 
         // get chatWidget object
         ChatTab *auxChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
 
         // this should never happen
-        if(!auxChatTab)
+        if (!auxChatTab) {
             return;
+        }
 
-        if(auxChatTab->textChannel() == incomingTextChannel) {   // got duplicate tab
+        // check for 1on1 duplicate chat
+        if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
+        && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
             duplicateTab = true;
-            m_tabWidget->setCurrentIndex(index);                    // set focus on selected tab
+            m_tabWidget->setCurrentIndex(index);    // set focus on selected tab
+        } else if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
+          && auxChatTab->textChannel()->targetHandleType() == Tp::HandleTypeContact) {
+            // got duplicate group chat. Wait for group handling to be sorted out
+            ///TODO sort this out once group chats are supported
+            kDebug() << "ChatWindow::startChat TODO need to implement when group chat is supported";
         }
     }
 
     // got new chat, create it
     if(!duplicateTab) {
-        ChatTab *chatTab = new ChatTab(incomingTextChannel, m_tabWidget);
-        chatTab->setTabWidget(m_tabWidget);
-        connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
-        connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
-        connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
-        connect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
-        connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
-        connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
-
-        m_tabWidget->addTab(chatTab, chatTab->icon(), chatTab->title());
-        m_tabWidget->setCurrentWidget(chatTab);
-
-        if(m_tabWidget->isTabBarHidden()) {
-            if(m_tabWidget->count() > 1) {
-                m_tabWidget->setTabBarHidden(false);
-            }
-        }
+        createNewChat(incomingTextChannel);
     }
 }
 
@@ -256,4 +255,28 @@ void ChatWindow::showNotificationsDialog()
     KNotifyConfigWidget::configure(this, "ktelepathy");
 }
 
+void ChatWindow::createNewChat(Tp::TextChannelPtr channelPtr)
+{
+    ChatTab *chatTab = new ChatTab(channelPtr, m_tabWidget);
+    setupChatTabSignals(chatTab);
+    chatTab->setTabWidget(m_tabWidget);
+    m_tabWidget->addTab(chatTab, chatTab->icon(), chatTab->title());
+    m_tabWidget->setCurrentWidget(chatTab);
+
+    if (m_tabWidget->isTabBarHidden()) {
+        if (m_tabWidget->count() > 1) {
+            m_tabWidget->setTabBarHidden(false);
+        }
+    }
+}
+
+void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
+{
+    connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
+    connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
+    connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
+    connect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
+    connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
+    connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
+}
 #include "chat-window.moc"
