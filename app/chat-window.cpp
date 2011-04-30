@@ -101,6 +101,13 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
         && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
             duplicateTab = true;
             m_tabWidget->setCurrentIndex(index);    // set focus on selected tab
+
+            // check if channel is invalid. Replace only if invalid
+            // You get this status if user goes offline and then back on without closing the chat
+            if (!auxChatTab->textChannel()->isValid()) {
+                auxChatTab->setTextChannel(incomingTextChannel);    // replace with new one
+                auxChatTab->setChatEnabled(true);                   // re-enable chat
+            }
         } else if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
           && auxChatTab->textChannel()->targetHandleType() == Tp::HandleTypeContact) {
             // got duplicate group chat. Wait for group handling to be sorted out
@@ -110,7 +117,7 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
     }
 
     // got new chat, create it
-    if(!duplicateTab) {
+    if (!duplicateTab) {
         createNewChat(incomingTextChannel);
     }
 }

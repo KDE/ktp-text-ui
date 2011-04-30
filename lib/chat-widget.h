@@ -50,6 +50,14 @@ public:
     /** Returns a pointer to the Chatwidget's search bar */
     ChatSearchBar *chatSearchBar() const;
 
+    /** invalidates the use of the chat.
+     * @param enable flag to validate/invalidate chatWidget
+     */
+    void setChatEnabled(bool enable);
+
+    /** Sets textchannel to given one */
+    void setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr);
+
     /** Returns the text channel pointer of the chatWidget */
     Tp::TextChannelPtr textChannel() const;
 

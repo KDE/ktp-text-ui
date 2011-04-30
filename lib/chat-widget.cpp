@@ -282,6 +282,32 @@ ChatSearchBar* ChatWidget::chatSearchBar() const
     return d->ui.searchBar;
 }
 
+void ChatWidget::setChatEnabled(bool enable)
+{
+    d->ui.sendMessageBox->setEnabled(enable);
+    d->ui.sendButton->setEnabled(enable);
+
+    // show a message informing the user
+    AdiumThemeStatusInfo statusMessage;
+
+    if (!enable) {
+        statusMessage.setMessage(i18n("Connection closed"));
+    } else {
+        statusMessage.setMessage(i18n("Connected"));
+    }
+    statusMessage.setService(d->channel->connection()->protocolName());
+    statusMessage.setTime(QDateTime::currentDateTime());
+    d->ui.chatArea->addStatusMessage(statusMessage);
+}
+
+void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
+{
+    d->channel = newTextChannelPtr;     // set the new channel
+
+    // connect signals for the new textchannel
+    setupChannelSignals();
+}
+
 Tp::TextChannelPtr ChatWidget::textChannel() const
 {
     return d->channel;
@@ -697,15 +723,7 @@ void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QSt
 
 void ChatWidget::onChannelInvalidated()
 {
-    d->ui.sendMessageBox->setDisabled(true);
-    d->ui.sendButton->setDisabled(true);
-
-    // show a message informing the user
-    AdiumThemeStatusInfo statusMessage;
-    statusMessage.setMessage(i18n("Connection closed"));
-    statusMessage.setService(d->channel->connection()->protocolName());
-    statusMessage.setTime(QDateTime::currentDateTime());
-    d->ui.chatArea->addStatusMessage(statusMessage);
+    setChatEnabled(false);
 }
 
 void ChatWidget::onInputBoxChanged()
