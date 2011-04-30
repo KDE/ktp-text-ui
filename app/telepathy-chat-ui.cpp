@@ -54,8 +54,6 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
         const Tp::AbstractClientHandler::HandlerInfo & handlerInfo)
 {
     kDebug();
-
-    Q_UNUSED(account);
     Q_UNUSED(connection);
     Q_UNUSED(requestsSatisfied);
     Q_UNUSED(userActionTime);
@@ -72,7 +70,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     Q_ASSERT(textChannel);
 
     // create new chat
-    m_chatWindow->startChat(textChannel);
+    m_chatWindow->startChat(textChannel, account);
     m_chatWindow->show();
     context->setFinished();
 }

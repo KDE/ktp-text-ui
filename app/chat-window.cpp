@@ -37,6 +37,7 @@
 #include <KMenuBar>
 #include <KLineEdit>
 
+#include <TelepathyQt4/Account>
 #include <TelepathyQt4/TextChannel>
 
 ChatWindow::ChatWindow()
@@ -74,12 +75,12 @@ ChatWindow::~ChatWindow()
 {
 }
 
-void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
+void ChatWindow::startChat(const Tp::TextChannelPtr &incomingTextChannel, const Tp::AccountPtr &account)
 {
     // if targetHandle is None, targetId is also "", so create new chat
     if (incomingTextChannel->targetHandleType() == Tp::HandleTypeNone) {
         kDebug() << "ChatWindow::startChat target handle type is HandleTypeNone";
-        createNewChat(incomingTextChannel);
+        createNewChat(incomingTextChannel, account);
         return;
     }
 
@@ -118,7 +119,7 @@ void ChatWindow::startChat(Tp::TextChannelPtr incomingTextChannel)
 
     // got new chat, create it
     if (!duplicateTab) {
-        createNewChat(incomingTextChannel);
+        createNewChat(incomingTextChannel, account);
     }
 }
 
@@ -262,9 +263,9 @@ void ChatWindow::showNotificationsDialog()
     KNotifyConfigWidget::configure(this, "ktelepathy");
 }
 
-void ChatWindow::createNewChat(Tp::TextChannelPtr channelPtr)
+void ChatWindow::createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::AccountPtr &accountPtr)
 {
-    ChatTab *chatTab = new ChatTab(channelPtr, m_tabWidget);
+    ChatTab *chatTab = new ChatTab(channelPtr, accountPtr, m_tabWidget);
     setupChatTabSignals(chatTab);
     chatTab->setTabWidget(m_tabWidget);
     m_tabWidget->addTab(chatTab, chatTab->icon(), chatTab->title());

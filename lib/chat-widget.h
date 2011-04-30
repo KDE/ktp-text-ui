@@ -41,8 +41,11 @@ class KDE_TELEPATHY_CHAT_EXPORT ChatWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent = 0);
+    explicit ChatWidget(const Tp::TextChannelPtr &channel, const Tp::AccountPtr &account, QWidget *parent = 0);
     virtual ~ChatWidget();
+
+    /** Returns pointer to account used for chat */
+    Tp::AccountPtr account() const;
 
     /** Returns the icon of this chat window */
     KIcon icon() const;

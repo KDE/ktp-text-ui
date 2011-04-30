@@ -41,7 +41,7 @@ public:
      * chat doesn't already exist
      * @param incomingTextChannel new text channel
      */
-    void startChat(Tp::TextChannelPtr incomingTextChannel);
+    void startChat(const Tp::TextChannelPtr &incomingTextChannel, const Tp::AccountPtr &account);
     void removeTab(ChatTab *chatWidget);
     void setTabText(int index, const QString &newTitle);
     void setTabIcon(int index, const KIcon &newIcon);
@@ -68,7 +68,7 @@ private:
     /** creats a new chat and adds it to the tab widget
      * @param channelPtr pointer to textChannel to use
      */
-    void createNewChat(Tp::TextChannelPtr channelPtr);
+    void createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::AccountPtr &account);
 
     /** connects the neccessary chat tab signals with slots in chatwindow
      * @param chatTab chatTab object to connect

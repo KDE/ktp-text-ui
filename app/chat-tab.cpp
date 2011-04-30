@@ -26,11 +26,17 @@
 #include <QStackedWidget>
 #include <KDE/KColorScheme>
 
-ChatTab::ChatTab(const Tp::TextChannelPtr & channel, QWidget *parent)
-    : ChatWidget(channel, parent),
-      m_tabWidget(0)
+#include <TelepathyQt4/Account>
+#include <TelepathyQt4/TextChannel>
+
+ChatTab::ChatTab(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, QWidget* parent)
+    : ChatWidget(channel, account, parent)
+    , m_tabWidget(0)
 {
     connect(this, SIGNAL(notificationClicked()), SLOT(showOnTop()));
+
+    // connect account connection status
+    connect(account.data(), SIGNAL(connectionStatusChanged(Tp::ConnectionStatus)), this, SLOT(onConnectionStatusChanged(Tp::ConnectionStatus)));
 }
 
 ChatTab::~ChatTab()
@@ -55,4 +61,12 @@ void ChatTab::showOnTop()
     }
 
     activateWindow();
+}
+
+void ChatTab::onConnectionStatusChanged(Tp::ConnectionStatus status)
+{
+    // request a new text channel for the chat
+    if (status == Tp::ConnectionStatusConnected) {
+        account()->ensureTextChat(textChannel()->targetId());
+    }
 }

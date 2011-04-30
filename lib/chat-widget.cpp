@@ -37,6 +37,7 @@
 #include <KColorScheme>
 #include <KLineEdit>
 
+#include <TelepathyQt4/Account>
 #include <TelepathyQt4/Message>
 #include <TelepathyQt4/Types>
 #include <TelepathyQt4/AvatarData>
@@ -106,6 +107,7 @@ public:
     int unreadMessages;
     QString title;
     Tp::TextChannelPtr channel;
+    Tp::AccountPtr account;
     Ui::ChatWidget ui;
     KIcon icon;
     ChannelContactModel *contactModel;
@@ -121,11 +123,12 @@ KComponentData ChatWidgetPrivate::telepathyComponentData()
     return KComponentData(telepathySharedAboutData);
 }
 
-ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, QWidget *parent)
+ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr &account, QWidget *parent)
     : QWidget(parent),
       d(new ChatWidgetPrivate)
 {
     d->channel = channel;
+    d->account = account;
 
     d->chatviewlInitialised = false;
     d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
@@ -259,6 +262,11 @@ void ChatWidget::resizeEvent(QResizeEvent *e)
     }
     d->ui.sendMessageBox->setMaximumHeight(textBoxHeight);
     QWidget::resizeEvent(e);
+}
+
+Tp::AccountPtr ChatWidget::account() const
+{
+    return d->account;
 }
 
 KIcon ChatWidget::icon() const

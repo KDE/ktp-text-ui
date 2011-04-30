@@ -37,7 +37,7 @@ class ChatTab : public ChatWidget
     Q_OBJECT
 
 public:
-    explicit ChatTab(const Tp::TextChannelPtr & channel, QWidget *parent = 0);
+    explicit ChatTab(const Tp::TextChannelPtr &channel, const Tp::AccountPtr &account, QWidget *parent = 0);
     virtual ~ChatTab();
 
     void setTabWidget(KTabWidget *tabWidget);
@@ -45,6 +45,11 @@ public:
 
 public slots:
     void showOnTop();
+
+private slots:
+    /** connect account's connection status.
+     * This re-enables open chats if user goes offline and then back online */
+    void onConnectionStatusChanged(Tp::ConnectionStatus);
 
 private:
     KTabWidget *m_tabWidget;
