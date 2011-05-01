@@ -25,7 +25,18 @@
 ChannelContactModel::ChannelContactModel(const Tp::TextChannelPtr &channel, QObject *parent)
     : QAbstractListModel(parent)
 {
-    //add existing contacts
+    setTextChannel(channel);
+}
+
+
+void ChannelContactModel::setTextChannel(const Tp::TextChannelPtr &channel)
+{
+    //remove existing contacts in list
+    beginRemoveRows(QModelIndex(), 0, m_contacts.size());
+    m_contacts.clear();
+    endRemoveRows();
+
+    //add existing contacts from channel
     addContacts(channel->groupContacts());
 
     //monitor for future changes

@@ -311,6 +311,7 @@ void ChatWidget::setChatEnabled(bool enable)
 void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 {
     d->channel = newTextChannelPtr;     // set the new channel
+    d->contactModel->setTextChannel(newTextChannelPtr);
 
     // connect signals for the new textchannel
     setupChannelSignals();

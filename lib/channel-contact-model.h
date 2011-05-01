@@ -40,6 +40,8 @@ class ChannelContactModel : public QAbstractListModel
 public:
     explicit ChannelContactModel(const Tp::TextChannelPtr &channel, QObject *parent = 0);
 
+    void setTextChannel(const Tp::TextChannelPtr &channel);
+
 signals:
     void contactPresenceChanged(const Tp::ContactPtr &contact, const Tp::Presence &presence);
     void contactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
