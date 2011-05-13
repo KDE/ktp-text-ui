@@ -51,6 +51,7 @@ public slots:
     void removeTab(QWidget *chatWidget);
 
 private slots:
+    void closeCurrentTab();
     void onCurrentIndexChanged(int index);
     void onEnableSearchActions(bool enable);    /** enables/disables menu search actions */
     void onFindNextText();                      /** go to next text the user is searching for */

@@ -43,6 +43,7 @@
 ChatWindow::ChatWindow()
 {
     //setup actions
+    KStandardAction::close(this,SLOT(closeCurrentTab()),actionCollection());
     KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
     KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
     KStandardAction::configureNotifications(this, SLOT(showNotificationsDialog()), actionCollection());
@@ -152,6 +153,11 @@ void ChatWindow::setTabIcon(int index, const KIcon & newIcon)
 void ChatWindow::setTabTextColor(int index, const QColor& color)
 {
     m_tabWidget->setTabTextColor(index, color);
+}
+
+void ChatWindow::closeCurrentTab()
+{
+    removeTab(m_tabWidget->currentWidget());
 }
 
 void ChatWindow::onCurrentIndexChanged(int index)
@@ -287,4 +293,5 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
 }
+
 #include "chat-window.moc"
