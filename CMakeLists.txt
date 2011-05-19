@@ -8,10 +8,7 @@ set (CMAKE_MODULE_PATH
 
 set(KDE_MIN_VERSION "4.4.75")
 find_package (KDE4 ${KDE_MIN_VERSION} REQUIRED)
-find_package (Nepomuk REQUIRED)
 find_package (TelepathyQt4 REQUIRED)
-set(SDO_MIN_VERSION "0.3.60")
-find_package(SharedDesktopOntologies ${SDO_MIN_VERSION} REQUIRED)
 
 include (CheckIncludeFiles)
 include (KDE4Defaults)
