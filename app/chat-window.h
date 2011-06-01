@@ -56,6 +56,8 @@ private slots:
     void onEnableSearchActions(bool enable);    /** enables/disables menu search actions */
     void onFindNextText();                      /** go to next text the user is searching for */
     void onFindPreviousText();                  /** go to previous text the user is searching for */
+    void onNextTabActionToggled();              /** go to next tab in the tabwidget */
+    void onPreviousTabActionToggled();          /** go to previous tab in the tabwidget */
     void onSearchActionToggled();               /** toggle search bar visibility */
     void onTabStateChanged();
     void onTabTextChanged(const QString &newTitle);

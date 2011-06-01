@@ -55,6 +55,18 @@ ChatWindow::ChatWindow()
     KStandardAction::findNext(this, SLOT(onFindNextText()), actionCollection())->setEnabled(false);
     KStandardAction::findPrev(this, SLOT(onFindPreviousText()), actionCollection())->setEnabled(false);
 
+    KAction *nextTabAction = new KAction(KIcon("go-next-view"), i18n("&Next Tab"), this);
+    nextTabAction->setShortcuts(KStandardShortcut::tabNext());
+    connect(nextTabAction, SIGNAL(triggered()), this, SLOT(onNextTabActionToggled()));
+
+    KAction *previousTabAction = new KAction(KIcon("go-previous-view"), i18n("&Previous Tab"), this);
+    previousTabAction->setShortcuts(KStandardShortcut::tabPrev());
+    connect(previousTabAction, SIGNAL(triggered()), this, SLOT(onPreviousTabActionToggled()));
+
+    // add custom actions to the collection
+    actionCollection()->addAction("next-tab", nextTabAction);
+    actionCollection()->addAction("previous-tab", previousTabAction);
+
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
     m_tabWidget->setTabReorderingEnabled(true);
@@ -207,6 +219,24 @@ void ChatWindow::onFindPreviousText()
         return;
     }
     currChat->chatSearchBar()->onPreviousButtonClicked();
+}
+
+void ChatWindow::onNextTabActionToggled()
+{
+    int currIndex = m_tabWidget->currentIndex();
+
+    if (currIndex < m_tabWidget->count() && m_tabWidget->count() != 1) {
+        m_tabWidget->setCurrentIndex(++currIndex);
+    }
+}
+
+void ChatWindow::onPreviousTabActionToggled()
+{
+    int currIndex = m_tabWidget->currentIndex();
+
+    if (currIndex > 0) {
+        m_tabWidget->setCurrentIndex(--currIndex);
+    }
 }
 
 void ChatWindow::onSearchActionToggled()
