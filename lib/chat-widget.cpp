@@ -109,7 +109,6 @@ public:
     Tp::TextChannelPtr channel;
     Tp::AccountPtr account;
     Ui::ChatWidget ui;
-    KIcon icon;
     ChannelContactModel *contactModel;
 
     KComponentData telepathyComponentData();
@@ -701,8 +700,7 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const T
 
     //if in a non-group chat situation, and the other contact has changed state...
     if (!d->isGroupChat && !isYou) {
-        d->icon = iconForPresence(presence.type());
-        Q_EMIT iconChanged(d->icon);
+        Q_EMIT iconChanged(iconForPresence(presence.type()));
     }
 
     Q_EMIT contactPresenceChanged(presence);
