@@ -109,7 +109,6 @@ public:
     Tp::TextChannelPtr channel;
     Tp::AccountPtr account;
     Ui::ChatWidget ui;
-    KIcon icon;
     ChannelContactModel *contactModel;
 
     KComponentData telepathyComponentData();
@@ -271,18 +270,22 @@ Tp::AccountPtr ChatWidget::account() const
 
 KIcon ChatWidget::icon() const
 {
-    //normal chat - self and one other person.
-    if (!d->isGroupChat) {
-        //find the other contact which isn't self.
-        foreach(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
-            if (contact != d->channel->groupSelfContact()) {
-                return iconForPresence(contact->presence().type());
+    if (d->channel->connection()->status() == Tp::ConnectionStatusConnected) {
+        //normal chat - self and one other person.
+        if (!d->isGroupChat) {
+            //find the other contact which isn't self.
+            foreach(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
+                if (contact != d->channel->groupSelfContact()) {
+                    return iconForPresence(contact->presence().type());
+                }
             }
         }
-    }
 
-    //group chat
-    return iconForPresence(Tp::ConnectionPresenceTypeAvailable);
+        //group chat
+        return iconForPresence(Tp::ConnectionPresenceTypeAvailable);
+    } else {
+        return iconForPresence(Tp::ConnectionPresenceTypeOffline);
+    }
 }
 
 ChatSearchBar* ChatWidget::chatSearchBar() const
@@ -306,6 +309,8 @@ void ChatWidget::setChatEnabled(bool enable)
     statusMessage.setService(d->channel->connection()->protocolName());
     statusMessage.setTime(QDateTime::currentDateTime());
     d->ui.chatArea->addStatusMessage(statusMessage);
+
+    Q_EMIT iconChanged(icon());
 }
 
 void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
@@ -695,8 +700,7 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const T
 
     //if in a non-group chat situation, and the other contact has changed state...
     if (!d->isGroupChat && !isYou) {
-        d->icon = iconForPresence(presence.type());
-        Q_EMIT iconChanged(d->icon);
+        Q_EMIT iconChanged(iconForPresence(presence.type()));
     }
 
     Q_EMIT contactPresenceChanged(presence);
