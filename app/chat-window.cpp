@@ -55,17 +55,8 @@ ChatWindow::ChatWindow()
     KStandardAction::findNext(this, SLOT(onFindNextText()), actionCollection())->setEnabled(false);
     KStandardAction::findPrev(this, SLOT(onFindPreviousText()), actionCollection())->setEnabled(false);
 
-    KAction *nextTabAction = new KAction(KIcon("go-next-view"), i18n("&Next Tab"), this);
-    nextTabAction->setShortcuts(KStandardShortcut::tabNext());
-    connect(nextTabAction, SIGNAL(triggered()), this, SLOT(onNextTabActionToggled()));
-
-    KAction *previousTabAction = new KAction(KIcon("go-previous-view"), i18n("&Previous Tab"), this);
-    previousTabAction->setShortcuts(KStandardShortcut::tabPrev());
-    connect(previousTabAction, SIGNAL(triggered()), this, SLOT(onPreviousTabActionToggled()));
-
-    // add custom actions to the collection
-    actionCollection()->addAction("next-tab", nextTabAction);
-    actionCollection()->addAction("previous-tab", previousTabAction);
+    // create custom actions
+    setupCustomActions();
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
@@ -172,6 +163,11 @@ void ChatWindow::closeCurrentTab()
     removeTab(m_tabWidget->currentWidget());
 }
 
+void ChatWindow::onAudioCallTriggered()
+{
+    /// TODO
+}
+
 void ChatWindow::onCurrentIndexChanged(int index)
 {
     kDebug() << index;
@@ -199,6 +195,11 @@ void ChatWindow::onEnableSearchActions(bool enable)
     actionCollection()->action(KStandardAction::name(KStandardAction::FindPrev))->setEnabled(enable);
 }
 
+void ChatWindow::onFileTransferTriggered()
+{
+    /// TODO
+}
+
 void ChatWindow::onFindNextText()
 {
     ChatTab *currChat = qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
@@ -221,7 +222,12 @@ void ChatWindow::onFindPreviousText()
     currChat->chatSearchBar()->onPreviousButtonClicked();
 }
 
-void ChatWindow::onNextTabActionToggled()
+void ChatWindow::onInviteToChatTriggered()
+{
+    /// TODO
+}
+
+void ChatWindow::onNextTabActionTriggered()
 {
     int currIndex = m_tabWidget->currentIndex();
 
@@ -230,7 +236,7 @@ void ChatWindow::onNextTabActionToggled()
     }
 }
 
-void ChatWindow::onPreviousTabActionToggled()
+void ChatWindow::onPreviousTabActionTriggered()
 {
     int currIndex = m_tabWidget->currentIndex();
 
@@ -281,6 +287,11 @@ void ChatWindow::onTabTextChanged(const QString &newTitle)
     }
 }
 
+void ChatWindow::onVideoCallTriggered()
+{
+    /// TODO
+}
+
 void ChatWindow::showSettingsDialog()
 {
     kDebug();
@@ -322,6 +333,41 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
     connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
+}
+
+void ChatWindow::setupCustomActions()
+{
+    KAction *separator = new KAction(this);
+    separator->setSeparator(true);
+
+    KAction *nextTabAction = new KAction(KIcon("go-next-view"), i18n("&Next Tab"), this);
+    nextTabAction->setShortcuts(KStandardShortcut::tabNext());
+    connect(nextTabAction, SIGNAL(triggered()), this, SLOT(onNextTabActionTriggered()));
+
+    KAction *previousTabAction = new KAction(KIcon("go-previous-view"), i18n("&Previous Tab"), this);
+    previousTabAction->setShortcuts(KStandardShortcut::tabPrev());
+    connect(previousTabAction, SIGNAL(triggered()), this, SLOT(onPreviousTabActionTriggered()));
+
+    KAction *audioCallAction = new KAction(KIcon("voicecall"), i18n("&Audio Call"), this);
+    connect(audioCallAction, SIGNAL(triggered()), this, SLOT(onAudioCallTriggered()));
+
+    KAction *fileTransferAction = new KAction(KIcon("mail-attachment"), i18n("&Send File"), this);
+    connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
+
+    KAction *inviteToChat = new KAction(KIcon("user-group-new"), i18n("&Invite to chat"), this);
+    connect(inviteToChat, SIGNAL(triggered()), this, SLOT(onInviteToChatTriggered()));
+
+    KAction *videoCallAction = new KAction(KIcon("webcamsend"), i18n("&Video Call"), this);
+    connect(videoCallAction, SIGNAL(triggered()), this, SLOT(onVideoCallTriggered()));
+
+    // add custom actions to the collection
+    actionCollection()->addAction("separator", separator);
+    actionCollection()->addAction("next-tab", nextTabAction);
+    actionCollection()->addAction("previous-tab", previousTabAction);
+    actionCollection()->addAction("audio-call", audioCallAction);
+    actionCollection()->addAction("send-file", fileTransferAction);
+    actionCollection()->addAction("video-call", videoCallAction);
+    actionCollection()->addAction("invite-to-chat", inviteToChat);
 }
 
 #include "chat-window.moc"

@@ -52,16 +52,20 @@ public slots:
 
 private slots:
     void closeCurrentTab();
+    void onAudioCallTriggered();                /** start an audio call */
     void onCurrentIndexChanged(int index);
     void onEnableSearchActions(bool enable);    /** enables/disables menu search actions */
+    void onFileTransferTriggered();             /** start a file transfer */
     void onFindNextText();                      /** go to next text the user is searching for */
     void onFindPreviousText();                  /** go to previous text the user is searching for */
-    void onNextTabActionToggled();              /** go to next tab in the tabwidget */
-    void onPreviousTabActionToggled();          /** go to previous tab in the tabwidget */
+    void onInviteToChatTriggered();             /** invite contact(s) to chat */
+    void onNextTabActionTriggered();            /** go to next tab in the tabwidget */
+    void onPreviousTabActionTriggered();        /** go to previous tab in the tabwidget */
     void onSearchActionToggled();               /** toggle search bar visibility */
     void onTabStateChanged();
     void onTabTextChanged(const QString &newTitle);
     void onTabIconChanged(const KIcon &newIcon);
+    void onVideoCallTriggered();                /** start a video call */
 
 protected slots:
     void showSettingsDialog();
@@ -77,6 +81,9 @@ private:
      * @param chatTab chatTab object to connect
      */
     void setupChatTabSignals(ChatTab *chatTab);
+
+    /** creates and adds custom actions for the chat window */
+    void setupCustomActions();
 
     KTabWidget *m_tabWidget;
 };
