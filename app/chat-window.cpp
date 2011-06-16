@@ -436,7 +436,7 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
     // check for existance of ContactPtr
     Q_ASSERT(contact);
 
-    // use the keyword "KdeTelepathyFileTransfer" for setting last used dir for file transfer
+    // use the keyword "FileTransferLastDirectory" for setting last used dir for file transfer
     QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///FileTransferLastDirectory"),
                                                     QString(),
                                                     this,
