@@ -27,3 +27,4 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDE.T
 install(FILES KDE.TextUi.client DESTINATION ${SHARE_INSTALL_PREFIX}/telepathy/clients/)
 install(FILES chatwindow.rc
         DESTINATION  ${DATA_INSTALL_DIR}/telepathy-kde-text-ui/)
+install(FILES telepathy-kde-text-ui.notifyrc DESTINATION ${DATA_INSTALL_DIR}/telepathy-kde-text-ui)

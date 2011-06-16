@@ -36,6 +36,11 @@ public:
     ChatWindow();
     virtual ~ChatWindow();
 
+    enum NotificationType {
+        SystemErrorMessage,
+        SystemInfoMessage
+    };
+
     /**
      * starts a new chat with the textChannelPtr given only if the
      * chat doesn't already exist
@@ -52,20 +57,21 @@ public slots:
 
 private slots:
     void closeCurrentTab();
-    void onAudioCallTriggered();                /** start an audio call */
+    void onAudioCallTriggered();                                /** start an audio call */
     void onCurrentIndexChanged(int index);
-    void onEnableSearchActions(bool enable);    /** enables/disables menu search actions */
-    void onFileTransferTriggered();             /** start a file transfer */
-    void onFindNextText();                      /** go to next text the user is searching for */
-    void onFindPreviousText();                  /** go to previous text the user is searching for */
-    void onInviteToChatTriggered();             /** invite contact(s) to chat */
-    void onNextTabActionTriggered();            /** go to next tab in the tabwidget */
-    void onPreviousTabActionTriggered();        /** go to previous tab in the tabwidget */
-    void onSearchActionToggled();               /** toggle search bar visibility */
+    void onEnableSearchActions(bool enable);                    /** enables/disables menu search actions */
+    void onFileTransferTriggered();                             /** start a file transfer (to be used only for 1on1 chats!) */
+    void onFindNextText();                                      /** go to next text the user is searching for */
+    void onFindPreviousText();                                  /** go to previous text the user is searching for */
+    void onGenericOperationFinished(Tp::PendingOperation *op);
+    void onInviteToChatTriggered();                             /** invite contact(s) to chat */
+    void onNextTabActionTriggered();                            /** go to next tab in the tabwidget */
+    void onPreviousTabActionTriggered();                        /** go to previous tab in the tabwidget */
+    void onSearchActionToggled();                               /** toggle search bar visibility */
     void onTabStateChanged();
     void onTabTextChanged(const QString &newTitle);
     void onTabIconChanged(const KIcon &newIcon);
-    void onVideoCallTriggered();                /** start a video call */
+    void onVideoCallTriggered();                                /** start a video call */
 
 protected slots:
     void showSettingsDialog();
@@ -77,6 +83,12 @@ private:
      */
     void createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::AccountPtr &account);
 
+    /** sends notification to the user via plasma desktop notification system
+     * @param type notification type
+     * @param errorMsg message to display
+     */
+    void sendNotificationToUser(NotificationType type, const QString &errorMsg);
+
     /** connects the neccessary chat tab signals with slots in chatwindow
      * @param chatTab chatTab object to connect
      */
@@ -84,6 +96,24 @@ private:
 
     /** creates and adds custom actions for the chat window */
     void setupCustomActions();
+
+    /** starts audio call with given contact
+     * @param account account sending the audio call request
+     * @param contact contact with whom to start audio call
+     */
+    void startAudioCall(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
+
+    /** starts file transfer
+     * @param account account starting the file transfer
+     * @param contact contact with whom to start file transfer
+     */
+    void startFileTransfer(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
+
+    /** starts a video call with given contact
+     * @param account account starting the file transfer
+     * @param contact contact with whom to start file transfer
+     */
+    void startVideoCall(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
 
     KTabWidget *m_tabWidget;
 };

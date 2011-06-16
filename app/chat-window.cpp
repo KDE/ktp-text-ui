@@ -29,16 +29,23 @@
 #include <KAction>
 #include <KActionCollection>
 #include <KDebug>
+#include <KFileDialog>
 #include <KIcon>
 #include <KColorScheme>
 #include <KTabBar>
 #include <KSettings/Dialog>
+#include <KNotification>
 #include <KNotifyConfigWidget>
 #include <KMenuBar>
 #include <KLineEdit>
 
 #include <TelepathyQt4/Account>
+#include <TelepathyQt4/PendingChannelRequest>
 #include <TelepathyQt4/TextChannel>
+
+#define PREFERRED_TEXTCHAT_HANDLER "org.freedesktop.Telepathy.Client.KDE.TextUi"
+#define PREFERRED_FILETRANSFER_HANDLER "org.freedesktop.Telepathy.Client.KDE.FileTransfer"
+#define PREFERRED_AUDIO_VIDEO_HANDLER "org.freedesktop.Telepathy.Client.KDE.CallUi"
 
 ChatWindow::ChatWindow()
 {
@@ -165,7 +172,14 @@ void ChatWindow::closeCurrentTab()
 
 void ChatWindow::onAudioCallTriggered()
 {
-    /// TODO
+    ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+
+    // a check. Should never happen
+    if (!currChat) {
+        return;
+    }
+
+    startAudioCall(currChat->account(), currChat->textChannel()->targetContact());
 }
 
 void ChatWindow::onCurrentIndexChanged(int index)
@@ -197,7 +211,15 @@ void ChatWindow::onEnableSearchActions(bool enable)
 
 void ChatWindow::onFileTransferTriggered()
 {
-    /// TODO
+    // This feature should be used only in 1on1 chats!
+    ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+
+    // This should never happen
+    if (!currChat) {
+        return;
+    }
+
+    startFileTransfer(currChat->account(), currChat->textChannel()->targetContact());
 }
 
 void ChatWindow::onFindNextText()
@@ -220,6 +242,15 @@ void ChatWindow::onFindPreviousText()
         return;
     }
     currChat->chatSearchBar()->onPreviousButtonClicked();
+}
+
+void ChatWindow::onGenericOperationFinished(Tp::PendingOperation* op)
+{
+    // send notification via plasma like the contactlist does
+    if (op->isError()) {
+        QString errorMsg(op->errorName() + ": " + op->errorMessage());
+        sendNotificationToUser(SystemErrorMessage, errorMsg);
+    }
 }
 
 void ChatWindow::onInviteToChatTriggered()
@@ -289,7 +320,14 @@ void ChatWindow::onTabTextChanged(const QString &newTitle)
 
 void ChatWindow::onVideoCallTriggered()
 {
-    /// TODO
+    ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+
+    // This should never happen
+    if (!currChat) {
+        return;
+    }
+
+    startVideoCall(currChat->account(), currChat->textChannel()->targetContact());
 }
 
 void ChatWindow::showSettingsDialog()
@@ -323,6 +361,21 @@ void ChatWindow::createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::A
             m_tabWidget->setTabBarHidden(false);
         }
     }
+}
+
+void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const QString& errorMsg)
+{
+    //The pointer is automatically deleted when the event is closed
+    KNotification *notification;
+
+    if (type == SystemInfoMessage) {
+        notification = new KNotification("telepathyInfo", this);
+    } else {
+        notification = new KNotification("telepathyError", this);
+    }
+
+    notification->setText(errorMsg);
+    notification->sendEvent();
 }
 
 void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
@@ -369,5 +422,57 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction("video-call", videoCallAction);
     actionCollection()->addAction("invite-to-chat", inviteToChat);
 }
+
+void ChatWindow::startAudioCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
+{
+    Tp::PendingChannelRequest* channelRequest = account->ensureStreamedMediaAudioCall(contact,
+                                                                                      QDateTime::currentDateTime(),
+                                                                                      PREFERRED_AUDIO_VIDEO_HANDLER);
+    connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
+}
+
+void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
+{
+    // check for existance of ContactPtr
+    Q_ASSERT(contact);
+
+    // use the keyword "KdeTelepathyFileTransfer" for setting last used dir for file transfer
+    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///FileTransferLastDirectory"),
+                                                    QString(),
+                                                    this,
+                                                    i18n("Choose a file"));
+
+    // User hit cancel button
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QFileInfo fileinfo(fileName);
+
+    kDebug() << "Filename:" << fileName;
+    kDebug() << "Content type:" << KMimeType::findByFileContent(fileName)->name();
+    // TODO Let the user set a description?
+
+    Tp::FileTransferChannelCreationProperties fileTransferProperties(fileName, KMimeType::findByFileContent(fileName)->name());
+
+    Tp::PendingChannelRequest* channelRequest = account->createFileTransfer(contact,
+                                                                            fileTransferProperties,
+                                                                            QDateTime::currentDateTime(),
+                                                                            PREFERRED_FILETRANSFER_HANDLER);
+
+    connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
+}
+
+void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
+{
+    Tp::PendingChannelRequest* channelRequest = account->ensureStreamedMediaVideoCall(contact,
+                                                                                      true,
+                                                                                      QDateTime::currentDateTime(),
+                                                                                      PREFERRED_AUDIO_VIDEO_HANDLER);
+    connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
+}
+
+
+
 
 #include "chat-window.moc"
