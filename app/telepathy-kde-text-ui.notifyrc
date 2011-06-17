@@ -1,53 +1,17 @@
 [Global]
 Name=Instant messaging
-Name[nl]=Instant Messaging
-Name[pt]=Mensagem instantânea
-Name[pt_BR]=Mensagens instantâneas
-Name[sv]=Direktmeddelanden
-Name[uk]=Миттєвий обмін повідомленнями
-Name[x-test]=xxInstant messagingxx
 Comment=Instant messaging
-Comment[nl]=Instant Messaging
-Comment[pt]=Mensagem instantânea
-Comment[pt_BR]=Mensagens instantâneas
-Comment[sv]=Direktmeddelanden
-Comment[uk]=Миттєвий обмін повідомленнями
-Comment[x-test]=xxInstant messagingxx
 
 [Event/telepathyError]
 IconName=dialog-error
 Name=Instant messaging error
-Name[nl]=Fout met Instant Messaging
-Name[pt]=Erro das Mensagens Instantâneas
-Name[pt_BR]=Erro das mensagens instantâneas
-Name[sv]=Fel för direktmeddelanden
-Name[uk]=Помилка системи обміну повідомленнями
-Name[x-test]=xxInstant messaging errorxx
 Comment=An error occurred within instant messaging
-Comment[nl]=Er is een fout opgetreden met Instant Messaging
-Comment[pt]=Ocorreu um erro nas mensagens instantâneas
-Comment[pt_BR]=Ocorreu um erro nas mensagens instantâneas
-Comment[sv]=Ett fel uppstod med direktmeddelanden
-Comment[uk]=У системі обміну повідомленнями сталася помилка
-Comment[x-test]=xxAn error occurred within instant messagingxx
 Sound=KDE-Im-Cant-Connect.ogg
 Action=Popup|Sound
 
 [Event/telepathyInfo]
 IconName=dialog-information
 Name=Instant messaging info message
-Name[nl]=Informatiemelding van Instant Messaging
-Name[pt]=Mensagem informativa instantânea
-Name[pt_BR]=Mensagem informativa instantânea
-Name[sv]=Information från direktmeddelanden
-Name[uk]=Повідомлення системи обміну повідомленнями
-Name[x-test]=xxInstant messaging info messagexx
 Comment=A general info message from instant messaging
-Comment[nl]=Een algemene informatiemelding uit Instant Messaging
-Comment[pt]=Uma mensagem informativa geral das mensagens instantâneas
-Comment[pt_BR]=Uma mensagem informativa geral das mensagens instantâneas
-Comment[sv]=Allmän information från direktmeddelanden
-Comment[uk]=Загальне повідомлення системи обміну повідомленнями
-Comment[x-test]=xxA general info message from instant messagingxx
 Sound=KDE-Im-Low-Priority-Message.ogg
 Action=Popup|Sound
