@@ -1,6 +1,7 @@
 /*
     Copyright (C) 2010  David Edmundson <kde@davidedmundson.co.uk>
     Copyright (C) 2011  Dominik Schmidt <dev@dominik-schmidt.de>
+    Copyright (C) 2011  Francesco Nwokeka <francesco.nwokeka@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,6 +41,7 @@
 #include <KLineEdit>
 
 #include <TelepathyQt4/Account>
+#include <TelepathyQt4/ContactCapabilities>
 #include <TelepathyQt4/PendingChannelRequest>
 #include <TelepathyQt4/TextChannel>
 
@@ -186,7 +188,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
 {
     kDebug() << index;
 
-    if(index == -1) {
+    if (index == -1) {
         close();
         return;
     }
@@ -201,6 +203,17 @@ void ChatWindow::onCurrentIndexChanged(int index)
     } else {
         onEnableSearchActions(true);
     }
+
+    // check which capabilities the contact and user supports
+    Tp::ContactCapabilities contactCapabilites = currentChatTab->textChannel()->targetContact()->capabilities();
+    Tp::ContactCapabilities selfCapabilities = currentChatTab->account()->connection()->selfContact()->capabilities();
+
+    setAudioCallEnabled(selfCapabilities.streamedMediaAudioCalls() && contactCapabilites.streamedMediaAudioCalls());
+    setFileTransferEnabled(selfCapabilities.fileTransfers() && contactCapabilites.fileTransfers());
+    setVideoCallEnabled(selfCapabilities.streamedMediaVideoCalls() && contactCapabilites.streamedMediaVideoCalls());
+
+    /// TODO re-activate check when invitation to chat has been sorted out
+    setInviteToChatEnabled(false);
 }
 
 void ChatWindow::onEnableSearchActions(bool enable)
@@ -421,6 +434,43 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction("send-file", fileTransferAction);
     actionCollection()->addAction("video-call", videoCallAction);
     actionCollection()->addAction("invite-to-chat", inviteToChat);
+}
+
+void ChatWindow::setAudioCallEnabled(bool enable)
+{
+    QAction *action = actionCollection()->action("audio-call");
+
+    // don't want to segfault. Should never happen
+    if (action) {
+        action->setEnabled(enable);
+    }
+}
+
+void ChatWindow::setFileTransferEnabled(bool enable)
+{
+    QAction *action = actionCollection()->action("send-file");
+
+    if (action) {
+        action->setEnabled(enable);
+    }
+}
+
+void ChatWindow::setInviteToChatEnabled(bool enable)
+{
+    QAction *action = actionCollection()->action("invite-to-chat");
+
+    if (action) {
+        action->setEnabled(enable);
+    }
+}
+
+void ChatWindow::setVideoCallEnabled(bool enable)
+{
+    QAction *action = actionCollection()->action("video-call");
+
+    if (action) {
+        action->setEnabled(enable);
+    }
 }
 
 void ChatWindow::startAudioCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)

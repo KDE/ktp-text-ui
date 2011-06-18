@@ -97,6 +97,12 @@ private:
     /** creates and adds custom actions for the chat window */
     void setupCustomActions();
 
+    /** setters for chat actions */
+    void setAudioCallEnabled(bool enable);
+    void setFileTransferEnabled(bool enable);
+    void setInviteToChatEnabled(bool enable);
+    void setVideoCallEnabled(bool enable);
+
     /** starts audio call with given contact
      * @param account account sending the audio call request
      * @param contact contact with whom to start audio call
