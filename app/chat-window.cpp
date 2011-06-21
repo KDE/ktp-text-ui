@@ -69,7 +69,7 @@ ChatWindow::ChatWindow()
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
-    m_tabWidget->setTabReorderingEnabled(true);
+    m_tabWidget->setMovable(true);
     m_tabWidget->setDocumentMode(true);
     m_tabWidget->setCloseButtonEnabled(true);
     m_tabWidget->setHoverCloseButtonDelayed(true);
