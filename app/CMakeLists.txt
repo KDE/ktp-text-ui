@@ -12,6 +12,7 @@ kde4_add_executable(telepathy-kde-text-ui ${telepathy_kde_text_ui_SRCS})
 target_link_libraries(telepathy-kde-text-ui
             ${KDE4_KDECORE_LIBS}
             ${KDE4_KDEUI_LIBS}
+            ${KDE4_KIO_LIBS}
             ${TELEPATHY_QT4_LIBRARIES}
             ${QT_QTWEBKIT_LIBRARY}
             ${KDE4_KNOTIFYCONFIG_LIBS}
