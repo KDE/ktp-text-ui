@@ -288,6 +288,11 @@ KIcon ChatWidget::icon() const
     }
 }
 
+bool ChatWidget::isGroupChat() const
+{
+    return d->isGroupChat;
+}
+
 ChatSearchBar* ChatWidget::chatSearchBar() const
 {
     return d->ui.searchBar;
