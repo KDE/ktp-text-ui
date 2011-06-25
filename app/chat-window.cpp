@@ -196,24 +196,16 @@ void ChatWindow::onCurrentIndexChanged(int index)
         onEnableSearchActions(true);
     }
 
-    if (!currentChatTab->isGroupChat()) {
-        // check which capabilities the contact and user supports
-        Tp::ContactCapabilities contactCapabilites = currentChatTab->textChannel()->targetContact()->capabilities();
-        Tp::ContactCapabilities selfCapabilities = currentChatTab->account()->connection()->selfContact()->capabilities();
+    // check which capabilities the contact and user supports
+    Tp::ContactCapabilities contactCapabilites = currentChatTab->textChannel()->targetContact()->capabilities();
+    Tp::ContactCapabilities selfCapabilities = currentChatTab->account()->connection()->selfContact()->capabilities();
 
-        setAudioCallEnabled(selfCapabilities.streamedMediaAudioCalls() && contactCapabilites.streamedMediaAudioCalls());
-        setFileTransferEnabled(selfCapabilities.fileTransfers() && contactCapabilites.fileTransfers());
-        setVideoCallEnabled(selfCapabilities.streamedMediaVideoCalls() && contactCapabilites.streamedMediaVideoCalls());
-        /// TODO re-activate check when invitation to chat has been sorted out
-        setInviteToChatEnabled(false);
-    } else {
-        // group chats don't have these functions
-        setAudioCallEnabled(false);
-        setFileTransferEnabled(false);
-        setVideoCallEnabled(false);
-        /// TODO re-activate check when invitation to chat has been sorted out
-        setInviteToChatEnabled(false);
-    }
+    setAudioCallEnabled(selfCapabilities.streamedMediaAudioCalls() && contactCapabilites.streamedMediaAudioCalls());
+    setFileTransferEnabled(selfCapabilities.fileTransfers() && contactCapabilites.fileTransfers());
+    setVideoCallEnabled(selfCapabilities.streamedMediaVideoCalls() && contactCapabilites.streamedMediaVideoCalls());
+
+    /// TODO re-activate check when invitation to chat has been sorted out
+    setInviteToChatEnabled(false);
 }
 
 void ChatWindow::onEnableSearchActions(bool enable)

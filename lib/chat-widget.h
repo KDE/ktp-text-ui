@@ -48,14 +48,11 @@ public:
     /** Returns pointer to account used for chat */
     Tp::AccountPtr account() const;
 
-    /** Returns a pointer to the Chatwidget's search bar */
-    ChatSearchBar *chatSearchBar() const;
-
     /** Returns the icon of this chat window */
     KIcon icon() const;
 
-    /** returns wether the chat is considered a group chat */
-    bool isGroupChat() const;
+    /** Returns a pointer to the Chatwidget's search bar */
+    ChatSearchBar *chatSearchBar() const;
 
     /** invalidates the use of the chat.
      * @param enable flag to validate/invalidate chatWidget
