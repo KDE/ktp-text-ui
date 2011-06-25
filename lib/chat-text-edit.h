@@ -45,6 +45,7 @@ private slots:
 
 signals:
     void findTextShortcutPressed();
+	void scrollEventRecieved(QKeyEvent*);
 
 public slots:
     /** wraps setFontWeight to a simple on/off bold) */

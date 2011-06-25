@@ -25,9 +25,9 @@
 #include <QtCore/QTimer>
 
 ChatTextEdit::ChatTextEdit(QWidget *parent) :
-    KTextEdit(parent)
+        KTextEdit(parent)
 {
-    setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere); // no need for horizontal scrollbar with this
+    setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);    // no need for horizontal scrollbar with this
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setCheckSpellingEnabled(true);
@@ -42,9 +42,12 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
 
 void ChatTextEdit::setFontBold(bool isBold)
 {
-    if (isBold) {
+    if (isBold)
+    {
         setFontWeight(QFont::Bold);
-    } else {
+    }
+    else
+    {
         setFontWeight(QFont::Normal);
     }
 }
@@ -63,16 +66,27 @@ QSize ChatTextEdit::minimumSizeHint() const
 QSize ChatTextEdit::sizeHint() const
 {
     QSize sh = QTextEdit::sizeHint();
-    sh.setHeight(int(document()->size().height()));
+    sh.setHeight(int (document()->size().height()));
     sh += QSize(0, (QFrame::lineWidth() * 2) + 1);
     return sh;
 }
 
 void ChatTextEdit::keyPressEvent(QKeyEvent* e)
 {
-    if (e->matches(QKeySequence::Find)) {
-        emit findTextShortcutPressed();
+    switch (e->key())
+    {
+        case Qt::Key_PageUp :
+        case Qt::Key_PageDown :
+            emit scrollEventRecieved(e);
+            break;
+
+        default :
+            if (e->matches(QKeySequence::Find))
+            {
+                emit findTextShortcutPressed();
+            }
     }
+
     KTextEdit::keyPressEvent(e);
 }
 
