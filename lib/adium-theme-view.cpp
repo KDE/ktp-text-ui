@@ -427,7 +427,7 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
 
 void AdiumThemeView::onScrollEvent(QKeyEvent* e)
 {
-	keyPressEvent(e);
+    keyPressEvent(e);
 }
 
 void AdiumThemeView::appendNewMessage(QString &html)

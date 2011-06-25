@@ -45,7 +45,7 @@ private slots:
 
 signals:
     void findTextShortcutPressed();
-	void scrollEventRecieved(QKeyEvent*);
+    void scrollEventRecieved(QKeyEvent*);
 
 public slots:
     /** wraps setFontWeight to a simple on/off bold) */
@@ -53,3 +53,5 @@ public slots:
 };
 
 #endif // CHATTEXTEDIT_H
+
+

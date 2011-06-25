@@ -42,12 +42,9 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
 
 void ChatTextEdit::setFontBold(bool isBold)
 {
-    if (isBold)
-    {
+    if (isBold) {
         setFontWeight(QFont::Bold);
-    }
-    else
-    {
+    } else {
         setFontWeight(QFont::Normal);
     }
 }
@@ -73,16 +70,14 @@ QSize ChatTextEdit::sizeHint() const
 
 void ChatTextEdit::keyPressEvent(QKeyEvent* e)
 {
-    switch (e->key())
-    {
+    switch (e->key()) {
         case Qt::Key_PageUp :
         case Qt::Key_PageDown :
             emit scrollEventRecieved(e);
             break;
 
         default :
-            if (e->matches(QKeySequence::Find))
-            {
+            if (e->matches(QKeySequence::Find)) {
                 emit findTextShortcutPressed();
             }
     }

@@ -64,7 +64,7 @@ public slots:
     void addContentMessage(const AdiumThemeContentInfo&);
     void addStatusMessage(const AdiumThemeStatusInfo&);
     void onLinkClicked(const QUrl&);
-	void onScrollEvent(QKeyEvent*);
+    void onScrollEvent(QKeyEvent*);
 
 private:
     ChatWindowStyle* m_chatStyle;
@@ -92,3 +92,5 @@ private:
 };
 
 #endif // ADIUMTHEMEVIEW_H
+
+
