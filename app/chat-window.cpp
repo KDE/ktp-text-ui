@@ -105,10 +105,7 @@ void ChatWindow::startChat(const Tp::TextChannelPtr &incomingTextChannel, const 
         // get chatWidget object
         ChatTab *auxChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
 
-        // this should never happen
-        if (!auxChatTab) {
-            return;
-        }
+        Q_ASSERT(auxChatTab);
 
         // check for 1on1 duplicate chat
         if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
@@ -122,12 +119,7 @@ void ChatWindow::startChat(const Tp::TextChannelPtr &incomingTextChannel, const 
                 auxChatTab->setTextChannel(incomingTextChannel);    // replace with new one
                 auxChatTab->setChatEnabled(true);                   // re-enable chat
             }
-        } else if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
-          && auxChatTab->textChannel()->targetHandleType() == Tp::HandleTypeContact) {
-            // got duplicate group chat. Wait for group handling to be sorted out
-            ///TODO sort this out once group chats are supported
-            kDebug() << "ChatWindow::startChat TODO need to implement when group chat is supported";
-        }
+        } 
     }
 
     // got new chat, create it
