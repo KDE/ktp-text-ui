@@ -43,12 +43,13 @@
 #include <KMessageBox>
 #include <KToolInvocation>
 #include <KIconLoader>
+#include <KProtocolInfo>
 
 AdiumThemeView::AdiumThemeView(QWidget *parent)
-    : QWebView(parent),
-      // check iconPath docs for minus sign in -KIconLoader::SizeLarge
-      m_defaultAvatar(KIconLoader::global()->iconPath("im-user",-KIconLoader::SizeLarge)),
-      m_displayHeader(true)
+        : QWebView(parent),
+        // check iconPath docs for minus sign in -KIconLoader::SizeLarge
+        m_defaultAvatar(KIconLoader::global()->iconPath("im-user",-KIconLoader::SizeLarge)),
+        m_displayHeader(true)
 {
     //blocks QWebView functionality which allows you to change page by dragging a URL onto it.
     setAcceptDrops(false);
@@ -66,11 +67,11 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
     }
 
     QString variant = appearanceConfig.readEntry("styleVariant");
-    if(!variant.isEmpty()) {
+    if (!variant.isEmpty()) {
         m_variantPath = QString("Variants/%1.css").arg(variant);
         m_variantName = variant;
 
-    // keep m_variantPath, m_variantName empty if there is no variant
+        // keep m_variantPath, m_variantName empty if there is no variant
     } else if (!m_chatStyle->getVariants().isEmpty()) {
         if (m_chatStyle->getVariants().contains(m_chatStyle->defaultVariantName())) {
             m_variantPath = QString("Variants/%1.css").arg(m_chatStyle->defaultVariantName());
@@ -122,14 +123,14 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
         // with some extra css. this may not work for all themes!
         extraStyleHtml.append (
             QString("\n* {font-family:\"%1\" !important;font-size:%2pt !important};")
-                .arg( m_fontFamily )
-                .arg( m_fontSize )
+            .arg( m_fontFamily )
+            .arg( m_fontSize )
         );
     } else {
         // FIXME: we should inform the user if the chatStyle want's to use a fontFamily which is not present on the system
         QFontDatabase fontDB = QFontDatabase();
         kDebug() << "Theme font installed: " << m_chatStyle->defaultFontFamily()
-                 << fontDB.families().contains(m_chatStyle->defaultFontFamily());
+        << fontDB.families().contains(m_chatStyle->defaultFontFamily());
 
         // use theme fontFamily/Size, if not existent, it falls back to systems default font
         settings()->setFontFamily(QWebSettings::StandardFont, m_chatStyle->defaultFontFamily());
@@ -196,7 +197,7 @@ void AdiumThemeView::setChatStyle(ChatWindowStyle *chatStyle)
 
     //load the first variant
     QHash<QString, QString> variants = chatStyle->getVariants();
-    if(!chatStyle->defaultVariantName().isEmpty()
+    if (!chatStyle->defaultVariantName().isEmpty()
             && variants.keys().contains(chatStyle->defaultVariantName())) {
         m_variantPath = variants.value(chatStyle->defaultVariantName());
         m_variantName = chatStyle->defaultVariantName();
@@ -362,39 +363,48 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     htmlTemplate.replace("%message%", m_emoticons.theme().parseEmoticons(info.message()));
 
     // link detection
-    QRegExp linkRegExp("\\b(smb://|s{0,1}ftp://|www\\.|https{0,1}://)\\b[^ \t\n\r\f\v]+");
+    QRegExp linkRegExp("\\b(\\w+)://[^ \t\n\r\f\v]+");
     int index = 0;
 
     while ((index = linkRegExp.indexIn(htmlTemplate, index)) != -1) {
         QString realUrl = linkRegExp.cap(0);
+        QString protocol = linkRegExp.cap(1);
 
-        // text not wanted in a link ( <,> )
-        QRegExp unwanted("(&lt;|&gt;)");
+        kDebug() << "Found URL " << realUrl << "with protocol : " << protocol;
 
-        if (!realUrl.contains(unwanted)) {
-            // string to show to user
-            QString shownUrl = realUrl;
+        // if url has a supported protocol
+        if (KProtocolInfo::protocols().contains(protocol, Qt::CaseInsensitive)) {
 
-            // check for newline and cut link when found
-            if (realUrl.contains("<br/>")) {
-                int findIndex = realUrl.indexOf("<br/>");
-                realUrl.truncate(findIndex);
-                shownUrl.truncate(findIndex);
+            // text not wanted in a link ( <,> )
+            QRegExp unwanted("(&lt;|&gt;)");
+
+            if (!realUrl.contains(unwanted)) {
+                // string to show to user
+                QString shownUrl = realUrl;
+
+                // check for newline and cut link when found
+                if (realUrl.contains("<br/>")) {
+                    int findIndex = realUrl.indexOf("<br/>");
+                    realUrl.truncate(findIndex);
+                    shownUrl.truncate(findIndex);
+                }
+
+                // check prefix
+                if (realUrl.startsWith("www")) {
+                    realUrl.prepend("http://");
+                }
+
+                // if the url is changed, show in chat what the user typed in
+                QString link = "<a href='" + realUrl + "'>" + shownUrl + "</a>";
+                htmlTemplate.replace(index, shownUrl.length(), link);
+
+                // advance position otherwise I end up parsing the same link
+                index += link.length();
+            } else {
+                index += realUrl.length();
             }
-
-            // check prefix
-            if (realUrl.startsWith("www")) {
-                realUrl.prepend("http://");
-            }
-
-            // if the url is changed, show in chat what the user typed in
-            QString link = "<a href='" + realUrl + "'>" + shownUrl + "</a>";
-            htmlTemplate.replace(index, shownUrl.length(), link);
-
-            // advance position otherwise I end up parsing the same link
-            index += link.length();
         } else {
-            index += realUrl.length();
+            index += linkRegExp.matchedLength();
         }
     }
 
@@ -461,3 +471,6 @@ const QString AdiumThemeView::variantPath() const
 {
     return m_variantPath;
 }
+
+
+
