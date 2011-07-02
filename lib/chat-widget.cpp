@@ -160,7 +160,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->ui.contactsView->setModel(d->contactModel);
 
     AdiumThemeHeaderInfo info;
-    Tp::Contacts allContacts = d->channel->groupContacts();
 
     //normal chat - self and one other person.
     if (d->isGroupChat) {
@@ -168,17 +167,14 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     }
     else
     {
-        //find the other contact which isn't self.
-        foreach(const Tp::ContactPtr & it, allContacts) {
-            if (it == d->channel->groupSelfContact()) {
-                continue;
-            } else {
-                info.setDestinationDisplayName(it->alias());
-                info.setDestinationName(it->id());
-                info.setChatName(it->alias());
-                info.setIncomingIconPath(it->avatarData().fileName);
-            }
-        }
+        Tp::ContactPtr otherContact = d->channel->targetContact();
+
+        Q_ASSERT(otherContact);
+
+        info.setDestinationDisplayName(otherContact->alias());
+        info.setDestinationName(otherContact->id());
+        info.setChatName(otherContact->alias());
+        info.setIncomingIconPath(otherContact->avatarData().fileName);
         d->ui.contactsView->hide();
     }
 
