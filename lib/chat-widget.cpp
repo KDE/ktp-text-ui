@@ -161,8 +161,13 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     AdiumThemeHeaderInfo info;
     Tp::Contacts allContacts = d->channel->groupContacts();
+
     //normal chat - self and one other person.
-    if (allContacts.size() == 2) {
+    if (d->isGroupChat) {
+        info.setChatName(d->channel->targetId());
+    }
+    else
+    {
         //find the other contact which isn't self.
         foreach(const Tp::ContactPtr & it, allContacts) {
             if (it == d->channel->groupSelfContact()) {
@@ -174,13 +179,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
                 info.setIncomingIconPath(it->avatarData().fileName);
             }
         }
-    } else {
-        //some sort of group chat scenario.. Not sure how to create this yet.
-        info.setChatName("Group Chat");
-        d->isGroupChat = true;
-    }
-
-    if (!d->isGroupChat) {
         d->ui.contactsView->hide();
     }
 
