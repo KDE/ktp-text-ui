@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
                          "0.1");
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "david@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
+    aboutData.addAuthor(ki18n("Francesco Nwokeka"), ki18n("Developer"), "francesco.nwokeka@gmail.com");
     aboutData.setProductName("telepathy/text-chat-ui"); //set the correct name for bug reporting
 
     KCmdLineArgs::init(argc, argv, &aboutData);

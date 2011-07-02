@@ -131,7 +131,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     d->chatviewlInitialised = false;
     d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
-    d->isGroupChat = false;
+    d->isGroupChat = channel->isConference();
 
     d->ui.setupUi(this);
     d->ui.formatToolbar->show();
@@ -475,34 +475,79 @@ bool ChatWidget::isOnTop() const
 void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
     kDebug() << title() << message.text();
-    if (d->chatviewlInitialised) {
-        AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
-        //debug the message parts (looking for HTML etc)
-//        foreach(Tp::MessagePart part, message.parts())
-//        {
-//            qDebug() << "***";
-//            foreach(QString key, part.keys())
-//            {
-//                qDebug() << key << part.value(key).variant();
-//            }
-//        }
-//      turns out we have no HTML, because no CM supports it yet
+    if (message.isDeliveryReport()) {
+        ///TODO what to do with this info? For now just output to cli
+        // we don't need to show this in chat
+        Tp::ReceivedMessage::DeliveryDetails reportDetails = message.deliveryDetails();
 
-        messageInfo.setMessage(message.text());
-        messageInfo.setTime(message.received());
-        messageInfo.setUserIconPath(message.sender()->avatarData().fileName);
-        messageInfo.setSenderDisplayName(message.sender()->alias());
-        messageInfo.setSenderScreenName(message.sender()->id());
-
-        d->ui.chatArea->addContentMessage(messageInfo);
-        d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
-
-        if(!isOnTop()) {
-            incrementUnreadMessageCount();
+        switch (reportDetails.status()) {
+            case (Tp::DeliveryStatusAccepted):
+                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusAccepted";
+                break;
+            case (Tp::DeliveryStatusDeleted):
+                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusDeleted";
+                break;
+            case (Tp::DeliveryStatusDelivered):
+                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusDelivered";
+                break;
+            case (Tp::DeliveryStatusPermanentlyFailed):
+                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusPermanentlyFailed";
+                break;
+            case (Tp::DeliveryStatusRead):
+                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusRead";
+                break;
+            case (Tp::DeliveryStatusTemporarilyFailed):
+                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusTemporarilyFailed";
+                break;
+            case (Tp::DeliveryStatusUnknown):
+                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusUnknown";
+                break;
         }
 
-        Q_EMIT messageReceived();
+        if (reportDetails.isError()) {
+            kDebug() << "ChatWidget::handleIncomingMessage ERROR: " << reportDetails.error();
+            kDebug() << "ChatWidget::handleIncomingMessage DBUS ERROR: " << reportDetails.dbusError();
+        }
+
+        if (reportDetails.hasDebugMessage()) {
+            kDebug() << "ChatWidget::handleIncomingMessage DEBUG MESSAGE: " << reportDetails.debugMessage();
+        }
+    } else {
+        if (d->chatviewlInitialised) {
+            AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
+
+            //debug the message parts (looking for HTML etc)
+    //        foreach(Tp::MessagePart part, message.parts())
+    //        {
+    //            qDebug() << "***";
+    //            foreach(QString key, part.keys())
+    //            {
+    //                qDebug() << key << part.value(key).variant();
+    //            }
+    //        }
+    //      turns out we have no HTML, because no CM supports it yet
+            messageInfo.setMessage(message.text());
+            messageInfo.setTime(message.received());
+
+            if (message.sender() == 0) {
+                // just need this info
+                messageInfo.setSenderDisplayName(message.senderNickname());
+            } else {
+                messageInfo.setUserIconPath(message.sender()->avatarData().fileName);
+                messageInfo.setSenderDisplayName(message.sender()->alias());
+                messageInfo.setSenderScreenName(message.sender()->id());
+            }
+
+            d->ui.chatArea->addContentMessage(messageInfo);
+            d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
+
+            if (!isOnTop()) {
+                incrementUnreadMessageCount();
+            }
+
+            Q_EMIT messageReceived();
+        }
     }
 
     //if the window isn't ready, we don't acknowledge the mesage. We process them as soon as we are ready.
