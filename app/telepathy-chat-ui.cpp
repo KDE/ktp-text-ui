@@ -46,7 +46,6 @@ TelepathyChatUi::TelepathyChatUi()
         openMode = NewWindow;
     } else if (mode == "FirstWindow"){
         openMode = FirstWindow;
-        createWindow();
     } else if (mode == "LastWindow"){
         openMode = LastWindow;
     }
@@ -128,7 +127,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
         ChatWindow* window = NULL;
         switch (openMode) {
             case FirstWindow:
-                window = m_chatWindows[0];
+                window = m_chatWindows.count()?m_chatWindows[0]:createWindow();
                 break;
             case LastWindow:
             case NewWindow:
