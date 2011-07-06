@@ -135,9 +135,11 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
                 window = createWindow();
                 break;
         }
-        window->createNewChat(textChannel, account);
+        ChatTab* tab = new ChatTab(textChannel, account);
+        tab->setWindow(window);
         window->show();
     }
+
     context->setFinished();
 }
 

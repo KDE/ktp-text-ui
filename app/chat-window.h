@@ -56,7 +56,6 @@ public:
     /** creats a new chat and adds it to the tab widget
      * @param channelPtr pointer to textChannel to use
      */
-    void createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::AccountPtr &account);
     void addTab(ChatTab* tab);
     void removeTab(ChatTab* tab);
 

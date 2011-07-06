@@ -426,15 +426,6 @@ void ChatWindow::showNotificationsDialog()
     KNotifyConfigWidget::configure(this, "ktelepathy");
 }
 
-void ChatWindow::createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::AccountPtr &accountPtr)
-{
-    kDebug();
-
-    ChatTab *chatTab = new ChatTab(channelPtr, accountPtr, m_tabWidget);
-
-    chatTab->setWindow(this);
-}
-
 void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const QString& errorMsg)
 {
     //The pointer is automatically deleted when the event is closed
