@@ -44,6 +44,7 @@
 #include <TelepathyQt4/ContactCapabilities>
 #include <TelepathyQt4/PendingChannelRequest>
 #include <TelepathyQt4/TextChannel>
+#include <KMenu>
 
 #define PREFERRED_TEXTCHAT_HANDLER "org.freedesktop.Telepathy.Client.KDE.TextUi"
 #define PREFERRED_FILETRANSFER_HANDLER "org.freedesktop.Telepathy.Client.KDE.FileTransfer"
@@ -74,10 +75,11 @@ ChatWindow::ChatWindow()
     m_tabWidget->setCloseButtonEnabled(true);
     m_tabWidget->setHoverCloseButtonDelayed(true);
     m_tabWidget->setTabBarHidden(true);
-    connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(removeTab(QWidget*)));
+    connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT( destroyTab(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
     connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)),
                 m_tabWidget, SLOT(removeTab(int)));
+    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int,QPoint)), SLOT(tabBarContextMenu(int,QPoint)));
 
     setCentralWidget(m_tabWidget);
 
@@ -86,51 +88,102 @@ ChatWindow::ChatWindow()
 
 ChatWindow::~ChatWindow()
 {
+    emit aboutToClose();
 }
 
-void ChatWindow::startChat(const Tp::TextChannelPtr &incomingTextChannel, const Tp::AccountPtr &account)
+void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
 {
-    // if targetHandle is None, targetId is also "", so create new chat
-    if (incomingTextChannel->targetHandleType() == Tp::HandleTypeNone) {
-        kDebug() << "ChatWindow::startChat target handle type is HandleTypeNone";
-        createNewChat(incomingTextChannel, account);
-        return;
+    KAction close("Close", this);
+    KAction dettach("Dettach Tab", this);
+
+    KAction moveLeft("Move Tab Left", this), moveRight("Move Tab Right", this);
+
+    KMenu* menu = new KMenu(this);
+    menu->addAction(&moveLeft);
+    menu->addAction(&moveRight);
+    menu->addAction(&dettach);
+    menu->addAction(&close);
+
+    KAction* result = qobject_cast<KAction*>(menu->exec(globalPos));
+
+    if(result == &close) {
+        destroyTab(m_tabWidget->widget(index));
+    } else if (result == &dettach) {
+        emit dettachRequested(qobject_cast<ChatTab*>(m_tabWidget->widget(index)));
+    } else if (result == &moveLeft) {
+        m_tabWidget->moveTab(index, index - 1);
+    } else if (result == &moveRight) {
+        m_tabWidget->moveTab(index, index + 1);
     }
+}
 
-    bool duplicateTab = false;
+void ChatWindow::focusChat ( ChatTab* tab )
+{
+    kDebug();
+    m_tabWidget->setCurrentWidget(tab);
+}
 
-    // check that the tab requested isn't already open
-    for (int index = 0; index < m_tabWidget->count() && !duplicateTab; ++index) {
+ChatTab* ChatWindow::getTab ( const Tp::TextChannelPtr& incomingTextChannel )
+{
+    ChatTab* match = NULL;
 
-        // get chatWidget object
-        ChatTab *auxChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    // if targetHandle is None, targetId is also ""
+    if (!incomingTextChannel->targetHandleType() == Tp::HandleTypeNone) {
+        kDebug() << "ChatWindow::startChat target handle type is NOT HandleTypeNone";
 
-        Q_ASSERT(auxChatTab);
+        // check that the tab requested isn't already open
+        for (int index = 0; index < m_tabWidget->count()/* && !match*/; ++index) {
 
-        // check for 1on1 duplicate chat
-        if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
-        && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
-            duplicateTab = true;
-            m_tabWidget->setCurrentIndex(index);    // set focus on selected tab
+            // get chatWidget object
+            ChatTab *auxChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
 
-            // check if channel is invalid. Replace only if invalid
-            // You get this status if user goes offline and then back on without closing the chat
-            if (!auxChatTab->textChannel()->isValid()) {
-                auxChatTab->setTextChannel(incomingTextChannel);    // replace with new one
-                auxChatTab->setChatEnabled(true);                   // re-enable chat
+            Q_ASSERT(auxChatTab);
+
+            // check for 1on1 duplicate chat
+            if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
+            && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
+                match = auxChatTab;
+
             }
-        } 
+        }
     }
 
-    // got new chat, create it
-    if (!duplicateTab) {
-        createNewChat(incomingTextChannel, account);
+    return match;
+}
+
+void ChatWindow::removeTab ( ChatTab* tab )
+{
+    m_tabWidget->removePage(tab);
+
+    if (!m_tabWidget->isTabBarHidden()){
+        if (m_tabWidget->count() <= 1) {
+            m_tabWidget->setTabBarHidden(true);
+        }
     }
 }
 
-void ChatWindow::removeTab(QWidget* chatWidget)
+void ChatWindow::addTab ( ChatTab* tab )
 {
-    m_tabWidget->removePage(chatWidget);
+    kDebug();
+
+    m_tabWidget->addTab(tab, tab->icon(), tab->title());
+    m_tabWidget->setCurrentWidget(tab);
+
+    if (m_tabWidget->isTabBarHidden()) {
+        if (m_tabWidget->count() > 1) {
+            m_tabWidget->setTabBarHidden(false);
+        }
+    }
+}
+
+void ChatWindow::destroyTab(QWidget* chatWidget)
+{
+    kDebug();
+    
+    ChatTab* tab = qobject_cast<ChatTab*>(chatWidget);
+    Q_ASSERT(tab);
+    
+    tab->setWindow(NULL);
     delete chatWidget;
 }
 
@@ -161,7 +214,7 @@ void ChatWindow::setTabTextColor(int index, const QColor& color)
 
 void ChatWindow::closeCurrentTab()
 {
-    removeTab(m_tabWidget->currentWidget());
+    destroyTab(m_tabWidget->currentWidget());
 }
 
 void ChatWindow::onAudioCallTriggered()
@@ -363,17 +416,12 @@ void ChatWindow::showNotificationsDialog()
 
 void ChatWindow::createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::AccountPtr &accountPtr)
 {
+    kDebug();
+    
     ChatTab *chatTab = new ChatTab(channelPtr, accountPtr, m_tabWidget);
     setupChatTabSignals(chatTab);
-    chatTab->setTabWidget(m_tabWidget);
-    m_tabWidget->addTab(chatTab, chatTab->icon(), chatTab->title());
-    m_tabWidget->setCurrentWidget(chatTab);
-
-    if (m_tabWidget->isTabBarHidden()) {
-        if (m_tabWidget->count() > 1) {
-            m_tabWidget->setTabBarHidden(false);
-        }
-    }
+    
+    chatTab->setWindow(this);
 }
 
 void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const QString& errorMsg)

@@ -27,8 +27,8 @@
 #include <KIcon>
 #include <KColorScheme>
 
+class ChatWindow;
 
-class KTabWidget;
 class ChatWidgetPrivate;
 class QShowEvent;
 
@@ -40,8 +40,8 @@ public:
     explicit ChatTab(const Tp::TextChannelPtr &channel, const Tp::AccountPtr &account, QWidget *parent = 0);
     virtual ~ChatTab();
 
-    void setTabWidget(KTabWidget *tabWidget);
-    KTabWidget* tabWidget() const;
+    void setWindow(ChatWindow* tab);
+    ChatWindow* window() const;
 
 public slots:
     void showOnTop();
@@ -52,7 +52,7 @@ private slots:
     void onConnectionStatusChanged(Tp::ConnectionStatus);
 
 private:
-    KTabWidget *m_tabWidget;
+    ChatWindow *m_chatWindow;
 };
 
 #endif // CHATWIDGET_H

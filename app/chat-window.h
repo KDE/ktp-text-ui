@@ -25,6 +25,7 @@
 #include <KXmlGuiWindow>
 #include <KTabWidget>
 
+class TelepathyChatUi;
 class KIcon;
 class ChatTab;
 
@@ -46,16 +47,31 @@ public:
      * chat doesn't already exist
      * @param incomingTextChannel new text channel
      */
-    void startChat(const Tp::TextChannelPtr &incomingTextChannel, const Tp::AccountPtr &account);
-    void removeTab(ChatTab *chatWidget);
+//     void startChat(const Tp::TextChannelPtr &incomingTextChannel, const Tp::AccountPtr &account);
+    void destroyTab(ChatTab *chatWidget);
     void setTabText(int index, const QString &newTitle);
     void setTabIcon(int index, const KIcon &newIcon);
     void setTabTextColor(int index,const QColor &color);
+	ChatTab* getTab(const Tp::TextChannelPtr &incomingTextChannel);
+	void focusChat(ChatTab* tab);
+	/** creats a new chat and adds it to the tab widget
+     * @param channelPtr pointer to textChannel to use
+     */
+    void createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::AccountPtr &account);
+    void addTab(ChatTab* tab);
+    void removeTab(ChatTab* tab);
 
+	TelepathyChatUi* ui();
+	void setUi(TelepathyChatUi* ui);
+signals:
+    void aboutToClose();
+    void dettachRequested(ChatTab*);
+    
 public slots:
-    void removeTab(QWidget *chatWidget);
+    void destroyTab(QWidget *chatWidget);
 
 private slots:
+    void tabBarContextMenu(int  index, const QPoint &  globalPos);
     void closeCurrentTab();
     void onAudioCallTriggered();                                /** start an audio call */
     void onCurrentIndexChanged(int index);
@@ -78,10 +94,7 @@ protected slots:
     void showNotificationsDialog();
 
 private:
-    /** creats a new chat and adds it to the tab widget
-     * @param channelPtr pointer to textChannel to use
-     */
-    void createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::AccountPtr &account);
+    
 
     /** sends notification to the user via plasma desktop notification system
      * @param type notification type
@@ -122,6 +135,8 @@ private:
     void startVideoCall(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
 
     KTabWidget *m_tabWidget;
+	
+	TelepathyChatUi* m_chatUi;
 };
 
 #endif // CHATWINDOW_H

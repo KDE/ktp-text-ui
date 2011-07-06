@@ -28,10 +28,11 @@
 
 #include <TelepathyQt4/Account>
 #include <TelepathyQt4/TextChannel>
+#include "chat-window.h"
 
 ChatTab::ChatTab(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, QWidget* parent)
     : ChatWidget(channel, account, parent)
-    , m_tabWidget(0)
+    , m_chatWindow(0)
 {
     connect(this, SIGNAL(notificationClicked()), SLOT(showOnTop()));
 
@@ -43,21 +44,33 @@ ChatTab::~ChatTab()
 {
 }
 
-void ChatTab::setTabWidget(KTabWidget* tabWidget)
+void ChatTab::setWindow(ChatWindow* window)
 {
-    m_tabWidget = tabWidget;
+    kDebug();
+
+    if(m_chatWindow) {
+        m_chatWindow->removeTab(this);
+    }
+    
+    m_chatWindow = window;
+    
+    if(window) {
+        window->addTab(this);
+    }
 }
 
-KTabWidget* ChatTab::tabWidget() const
+ChatWindow* ChatTab::window() const
 {
-    return m_tabWidget;
+    return m_chatWindow;
 }
 
 void ChatTab::showOnTop()
 {
     kDebug() << "Show this widget on top" << title();
-    if(m_tabWidget) {
-        m_tabWidget->setCurrentWidget(this);
+    if(m_chatWindow) {
+        m_chatWindow->focusChat(this);
+    } else {
+        kError() << "Attempting to focus chatTab without chatWindow being set!";
     }
 
     activateWindow();

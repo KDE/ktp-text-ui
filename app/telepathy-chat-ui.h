@@ -28,6 +28,8 @@
 
 class TelepathyChatUi : public KApplication, public Tp::AbstractClientHandler
 {
+    Q_OBJECT
+
 public:
     TelepathyChatUi();
     ~TelepathyChatUi();
@@ -41,9 +43,15 @@ public:
             const Tp::AbstractClientHandler::HandlerInfo & handlerInfo);
 
     virtual bool bypassApproval() const;
+    
+private slots:
+	void removeWindow();
+    void dettachTab(ChatTab*);
 
 private:
-    ChatWindow *m_chatWindow;
+    ChatWindow* createWindow();
+    
+    QList<ChatWindow*> m_chatWindows;
 };
 
 #endif // TELEPATHYCHATUI_H

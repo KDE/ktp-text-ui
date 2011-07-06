@@ -36,8 +36,33 @@ TelepathyChatUi::TelepathyChatUi()
     : KApplication(), AbstractClientHandler(channelClassList())
 {
     kDebug();
+    createWindow();
+}
 
-    m_chatWindow = new ChatWindow();
+void TelepathyChatUi::removeWindow()
+{
+    ChatWindow* window = qobject_cast<ChatWindow*>(sender());
+    Q_ASSERT(window);
+    m_chatWindows.removeOne(window);
+}
+
+ChatWindow* TelepathyChatUi::createWindow()
+{
+    kDebug();
+
+    ChatWindow* window = new ChatWindow();
+    connect(window, SIGNAL(aboutToClose()), SLOT(removeWindow()));
+    connect(window, SIGNAL(dettachRequested(ChatTab*)), SLOT(dettachTab(ChatTab*)));
+    m_chatWindows.push_back(window);
+    
+    return window;
+}
+
+void TelepathyChatUi::dettachTab(ChatTab* tab)
+{
+    ChatWindow* window = createWindow();
+    tab->setWindow(window);
+    window->show();
 }
 
 TelepathyChatUi::~TelepathyChatUi()
@@ -69,9 +94,28 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
 
     Q_ASSERT(textChannel);
 
-    // create new chat
-    m_chatWindow->startChat(textChannel, account);
-    m_chatWindow->show();
+    bool tabFound = false;
+    foreach(ChatWindow* window, m_chatWindows) {
+        ChatTab* tab = window->getTab(textChannel);
+        if(tab){
+            tabFound = true;
+            
+            tab->showOnTop();                                       // set focus on selected tab
+
+            // check if channel is invalid. Replace only if invalid
+            // You get this status if user goes offline and then back on without closing the chat
+            if (!tab->textChannel()->isValid()) {
+                tab->setTextChannel(textChannel);    // replace with new one
+                tab->setChatEnabled(true);                   // re-enable chat
+            }
+        }
+    }
+
+    if(!tabFound) {
+        ChatWindow* window = m_chatWindows[0];
+        window->createNewChat(textChannel, account);
+        window->show();
+    }
     context->setFinished();
 }
 
