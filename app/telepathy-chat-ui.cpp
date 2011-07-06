@@ -23,6 +23,7 @@
 #include <KDebug>
 #include <TelepathyQt4/ChannelClassSpec>
 #include <TelepathyQt4/TextChannel>
+#include <KConfigGroup>
 
 inline Tp::ChannelClassSpecList channelClassList()
 {
@@ -36,7 +37,19 @@ TelepathyChatUi::TelepathyChatUi()
     : KApplication(), AbstractClientHandler(channelClassList())
 {
     kDebug();
-    createWindow();
+
+    KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
+    KConfigGroup tabConfig = config->group("Behavior");
+
+    QString mode = tabConfig.readEntry("tabOpenMode", "NewWindow");
+    if(mode == "NewWindow"){
+        openMode = NewWindow;
+    } else if (mode == "FirstWindow"){
+        openMode = FirstWindow;
+        createWindow();
+    } else if (mode == "LastWindow"){
+        openMode = LastWindow;
+    }
 }
 
 void TelepathyChatUi::removeWindow()
@@ -54,7 +67,7 @@ ChatWindow* TelepathyChatUi::createWindow()
     connect(window, SIGNAL(aboutToClose()), SLOT(removeWindow()));
     connect(window, SIGNAL(dettachRequested(ChatTab*)), SLOT(dettachTab(ChatTab*)));
     m_chatWindows.push_back(window);
-    
+
     return window;
 }
 
@@ -99,7 +112,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
         ChatTab* tab = window->getTab(textChannel);
         if(tab){
             tabFound = true;
-            
+
             tab->showOnTop();                                       // set focus on selected tab
 
             // check if channel is invalid. Replace only if invalid
@@ -112,7 +125,16 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     }
 
     if(!tabFound) {
-        ChatWindow* window = m_chatWindows[0];
+        ChatWindow* window = NULL;
+        switch (openMode) {
+            case FirstWindow:
+                window = m_chatWindows[0];
+                break;
+            case LastWindow:
+            case NewWindow:
+                window = createWindow();
+                break;
+        }
         window->createNewChat(textChannel, account);
         window->show();
     }

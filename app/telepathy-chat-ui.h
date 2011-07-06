@@ -43,15 +43,21 @@ public:
             const Tp::AbstractClientHandler::HandlerInfo & handlerInfo);
 
     virtual bool bypassApproval() const;
-    
+
 private slots:
 	void removeWindow();
     void dettachTab(ChatTab*);
 
 private:
     ChatWindow* createWindow();
-    
+
     QList<ChatWindow*> m_chatWindows;
+
+    enum TabOpenMode {
+        NewWindow,
+        FirstWindow,
+        LastWindow
+    } openMode;
 };
 
 #endif // TELEPATHYCHATUI_H

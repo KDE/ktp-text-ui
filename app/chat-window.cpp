@@ -179,10 +179,10 @@ void ChatWindow::addTab ( ChatTab* tab )
 void ChatWindow::destroyTab(QWidget* chatWidget)
 {
     kDebug();
-    
+
     ChatTab* tab = qobject_cast<ChatTab*>(chatWidget);
     Q_ASSERT(tab);
-    
+
     tab->setWindow(NULL);
     delete chatWidget;
 }
@@ -417,10 +417,10 @@ void ChatWindow::showNotificationsDialog()
 void ChatWindow::createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::AccountPtr &accountPtr)
 {
     kDebug();
-    
+
     ChatTab *chatTab = new ChatTab(channelPtr, accountPtr, m_tabWidget);
     setupChatTabSignals(chatTab);
-    
+
     chatTab->setWindow(this);
 }
 

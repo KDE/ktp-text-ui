@@ -47,14 +47,13 @@ public:
      * chat doesn't already exist
      * @param incomingTextChannel new text channel
      */
-//     void startChat(const Tp::TextChannelPtr &incomingTextChannel, const Tp::AccountPtr &account);
     void destroyTab(ChatTab *chatWidget);
     void setTabText(int index, const QString &newTitle);
     void setTabIcon(int index, const KIcon &newIcon);
     void setTabTextColor(int index,const QColor &color);
-	ChatTab* getTab(const Tp::TextChannelPtr &incomingTextChannel);
-	void focusChat(ChatTab* tab);
-	/** creats a new chat and adds it to the tab widget
+    ChatTab* getTab(const Tp::TextChannelPtr &incomingTextChannel);
+    void focusChat(ChatTab* tab);
+    /** creats a new chat and adds it to the tab widget
      * @param channelPtr pointer to textChannel to use
      */
     void createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::AccountPtr &account);
@@ -66,7 +65,7 @@ public:
 signals:
     void aboutToClose();
     void dettachRequested(ChatTab*);
-    
+
 public slots:
     void destroyTab(QWidget *chatWidget);
 
@@ -94,8 +93,6 @@ protected slots:
     void showNotificationsDialog();
 
 private:
-    
-
     /** sends notification to the user via plasma desktop notification system
      * @param type notification type
      * @param errorMsg message to display
@@ -135,7 +132,7 @@ private:
     void startVideoCall(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
 
     KTabWidget *m_tabWidget;
-	
+
 	TelepathyChatUi* m_chatUi;
 };
 

@@ -51,9 +51,9 @@ void ChatTab::setWindow(ChatWindow* window)
     if(m_chatWindow) {
         m_chatWindow->removeTab(this);
     }
-    
+
     m_chatWindow = window;
-    
+
     if(window) {
         window->addTab(this);
     }
