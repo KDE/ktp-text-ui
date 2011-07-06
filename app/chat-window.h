@@ -103,6 +103,7 @@ private:
      * @param chatTab chatTab object to connect
      */
     void setupChatTabSignals(ChatTab *chatTab);
+    void removeChatTabSignals(ChatTab *chatTab);
 
     /** creates and adds custom actions for the chat window */
     void setupCustomActions();

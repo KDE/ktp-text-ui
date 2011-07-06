@@ -93,12 +93,13 @@ ChatWindow::~ChatWindow()
 
 void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
 {
-    KAction close("Close", this);
+//     KIconLoader::global()->loadIcon("close-tab", KIconLoader::Small)
+    KAction close(KIcon("tab-close", KIconLoader::global()), "Close", this);
     KAction dettach("Dettach Tab", this);
-
     KAction moveLeft("Move Tab Left", this), moveRight("Move Tab Right", this);
 
     KMenu* menu = new KMenu(this);
+
     menu->addAction(&moveLeft);
     menu->addAction(&moveRight);
     menu->addAction(&dettach);
@@ -131,8 +132,8 @@ ChatTab* ChatWindow::getTab ( const Tp::TextChannelPtr& incomingTextChannel )
     if (!incomingTextChannel->targetHandleType() == Tp::HandleTypeNone) {
         kDebug() << "ChatWindow::startChat target handle type is NOT HandleTypeNone";
 
-        // check that the tab requested isn't already open
-        for (int index = 0; index < m_tabWidget->count()/* && !match*/; ++index) {
+        // check that the tab requested isn't already open  
+        for (int index = 0; index < m_tabWidget->count() && !match; ++index) {
 
             // get chatWidget object
             ChatTab *auxChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
@@ -143,7 +144,6 @@ ChatTab* ChatWindow::getTab ( const Tp::TextChannelPtr& incomingTextChannel )
             if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
             && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
                 match = auxChatTab;
-
             }
         }
     }
@@ -151,8 +151,12 @@ ChatTab* ChatWindow::getTab ( const Tp::TextChannelPtr& incomingTextChannel )
     return match;
 }
 
-void ChatWindow::removeTab ( ChatTab* tab )
+void ChatWindow::removeTab(ChatTab* tab)
 {
+    kDebug();
+
+    removeChatTabSignals(tab);
+
     m_tabWidget->removePage(tab);
 
     if (!m_tabWidget->isTabBarHidden()){
@@ -165,6 +169,8 @@ void ChatWindow::removeTab ( ChatTab* tab )
 void ChatWindow::addTab ( ChatTab* tab )
 {
     kDebug();
+
+    setupChatTabSignals(tab);
 
     m_tabWidget->addTab(tab, tab->icon(), tab->title());
     m_tabWidget->setCurrentWidget(tab);
@@ -184,7 +190,7 @@ void ChatWindow::destroyTab(QWidget* chatWidget)
     Q_ASSERT(tab);
 
     tab->setWindow(NULL);
-    delete chatWidget;
+    chatWidget->deleteLater();
 }
 
 void ChatWindow::setTabText(int index, const QString &newTitle)
@@ -419,7 +425,6 @@ void ChatWindow::createNewChat(const Tp::TextChannelPtr &channelPtr, const Tp::A
     kDebug();
 
     ChatTab *chatTab = new ChatTab(channelPtr, accountPtr, m_tabWidget);
-    setupChatTabSignals(chatTab);
 
     chatTab->setWindow(this);
 }
@@ -447,6 +452,16 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
     connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
+}
+
+void ChatWindow::removeChatTabSignals(ChatTab* chatTab)
+{
+    disconnect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
+    disconnect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
+    disconnect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
+    disconnect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
+    disconnect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
+    disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
 }
 
 void ChatWindow::setupCustomActions()
