@@ -105,6 +105,12 @@ void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
     menu->addAction(&dettach);
     menu->addAction(&close);
 
+    if(index == 0) {
+        moveLeft.setEnabled(false);
+    } else if(index == (m_tabWidget->count() - 1)) {
+        moveRight.setEnabled(false);
+    }
+
     KAction* result = qobject_cast<KAction*>(menu->exec(globalPos));
 
     if(result == &close) {
