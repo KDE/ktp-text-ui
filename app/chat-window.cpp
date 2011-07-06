@@ -93,10 +93,10 @@ ChatWindow::~ChatWindow()
 
 void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
 {
-//     KIconLoader::global()->loadIcon("close-tab", KIconLoader::Small)
     KAction close(KIcon("tab-close", KIconLoader::global()), "Close", this);
-    KAction dettach("Dettach Tab", this);
-    KAction moveLeft("Move Tab Left", this), moveRight("Move Tab Right", this);
+    KAction dettach(KIcon("tab-detach", KIconLoader::global()), "Dettach Tab", this);
+    KAction moveLeft(KIcon("arrow-left", KIconLoader::global()), "Move Tab Left", this);
+    KAction moveRight(KIcon("arrow-right", KIconLoader::global()),"Move Tab Right", this);
 
     KMenu* menu = new KMenu(this);
 
