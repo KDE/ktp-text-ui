@@ -1,6 +1,7 @@
 /*
-    Copyright (C) 2010  David Edmundson <kde@davidedmundson.co.uk>
-    Copyright (C) 2011  Dominik Schmidt <dev@dominik-schmidt.de>
+    Copyright (C) 2010  David Edmundson    <kde@davidedmundson.co.uk>
+    Copyright (C) 2011  Dominik Schmidt    <dev@dominik-schmidt.de>
+    Copyright (C) 2011  Francesco Nwokeka  <francesco.nwokeka@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,16 +21,15 @@
 #ifndef TELEPATHYCHATUI_H
 #define TELEPATHYCHATUI_H
 
-#include "chat-window.h"
-
 #include <TelepathyQt4/AbstractClientHandler>
 #include <KApplication>
 
+class ChatTab;
+class ChatWindow;
 
 class TelepathyChatUi : public KApplication, public Tp::AbstractClientHandler
 {
     Q_OBJECT
-
 public:
     TelepathyChatUi();
     ~TelepathyChatUi();
@@ -45,19 +45,20 @@ public:
     virtual bool bypassApproval() const;
 
 private slots:
-	void removeWindow();
-    void dettachTab(ChatTab*);
+    void removeWindow(ChatWindow *window);
+    void dettachTab(ChatTab *tab);
 
 private:
-    ChatWindow* createWindow();
-
-    QList<ChatWindow*> m_chatWindows;
-
     enum TabOpenMode {
         NewWindow,
         FirstWindow,
         LastWindow
-    } openMode;
+    };
+
+    ChatWindow* createWindow();
+
+    QList<ChatWindow*> m_chatWindows;
+    TabOpenMode m_openMode;
 };
 
 #endif // TELEPATHYCHATUI_H

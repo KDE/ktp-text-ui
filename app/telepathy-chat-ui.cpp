@@ -1,6 +1,7 @@
 /*
-    Copyright (C) 2010  David Edmundson <kde@davidedmundson.co.uk>
-    Copyright (C) 2011  Dominik Schmidt <dev@dominik-schmidt.de>
+    Copyright (C) 2010  David Edmundson    <kde@davidedmundson.co.uk>
+    Copyright (C) 2011  Dominik Schmidt    <dev@dominik-schmidt.de>
+    Copyright (C) 2011  Francesco Nwokeka  <francesco.nwokeka@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,30 +42,30 @@ TelepathyChatUi::TelepathyChatUi()
     KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
     KConfigGroup tabConfig = config->group("Behavior");
 
+    // load the settings for new tab "open mode"
     QString mode = tabConfig.readEntry("tabOpenMode", "NewWindow");
-    if(mode == "NewWindow"){
-        openMode = NewWindow;
-    } else if (mode == "FirstWindow"){
-        openMode = FirstWindow;
-    } else if (mode == "LastWindow"){
-        openMode = LastWindow;
+    if (mode == "NewWindow") {
+        m_openMode = NewWindow;
+    } else if (mode == "FirstWindow") {
+        m_openMode = FirstWindow;
+    } else if (mode == "LastWindow") {
+        m_openMode = LastWindow;
     }
 }
 
-void TelepathyChatUi::removeWindow()
+void TelepathyChatUi::removeWindow(ChatWindow *window)
 {
-    ChatWindow* window = qobject_cast<ChatWindow*>(sender());
     Q_ASSERT(window);
     m_chatWindows.removeOne(window);
 }
 
 ChatWindow* TelepathyChatUi::createWindow()
 {
-    kDebug();
-
     ChatWindow* window = new ChatWindow();
-    connect(window, SIGNAL(aboutToClose()), SLOT(removeWindow()));
-    connect(window, SIGNAL(dettachRequested(ChatTab*)), SLOT(dettachTab(ChatTab*)));
+
+    connect(window, SIGNAL(detachRequested(ChatTab*)), this, SLOT(dettachTab(ChatTab*)));
+    connect(window, SIGNAL(aboutToClose(ChatWindow*)), this, SLOT(removeWindow(ChatWindow*)));
+
     m_chatWindows.push_back(window);
 
     return window;
@@ -73,13 +74,12 @@ ChatWindow* TelepathyChatUi::createWindow()
 void TelepathyChatUi::dettachTab(ChatTab* tab)
 {
     ChatWindow* window = createWindow();
-    tab->setWindow(window);
+    tab->setChatWindow(window);
     window->show();
 }
 
 TelepathyChatUi::~TelepathyChatUi()
 {
-    kDebug();
 }
 
 void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & context,
@@ -107,25 +107,27 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     Q_ASSERT(textChannel);
 
     bool tabFound = false;
-    foreach(ChatWindow* window, m_chatWindows) {
-        ChatTab* tab = window->getTab(textChannel);
-        if(tab){
-            tabFound = true;
 
-            tab->showOnTop();                                       // set focus on selected tab
+    for (int i = 0; i < m_chatWindows.count() && !tabFound; ++i) {
+        ChatWindow *window = m_chatWindows.at(i);
+        ChatTab* tab = window->getTab(textChannel);
+
+        if (tab) {
+            tabFound = true;
+            window->focusChat(tab);                 // set focus on selected tab
 
             // check if channel is invalid. Replace only if invalid
             // You get this status if user goes offline and then back on without closing the chat
             if (!tab->textChannel()->isValid()) {
                 tab->setTextChannel(textChannel);    // replace with new one
-                tab->setChatEnabled(true);                   // re-enable chat
+                tab->setChatEnabled(true);           // re-enable chat
             }
         }
     }
 
-    if(!tabFound) {
-        ChatWindow* window = NULL;
-        switch (openMode) {
+    if (!tabFound) {
+        ChatWindow* window;
+        switch (m_openMode) {
             case FirstWindow:
                 window = m_chatWindows.count()?m_chatWindows[0]:createWindow();
                 break;
@@ -134,8 +136,9 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
                 window = createWindow();
                 break;
         }
+
         ChatTab* tab = new ChatTab(textChannel, account);
-        tab->setWindow(window);
+        tab->setChatWindow(window);
         window->show();
     }
 

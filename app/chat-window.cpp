@@ -1,6 +1,6 @@
 /*
-    Copyright (C) 2010  David Edmundson <kde@davidedmundson.co.uk>
-    Copyright (C) 2011  Dominik Schmidt <dev@dominik-schmidt.de>
+    Copyright (C) 2010  David Edmundson   <kde@davidedmundson.co.uk>
+    Copyright (C) 2011  Dominik Schmidt   <dev@dominik-schmidt.de>
     Copyright (C) 2011  Francesco Nwokeka <francesco.nwokeka@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
@@ -75,11 +75,11 @@ ChatWindow::ChatWindow()
     m_tabWidget->setCloseButtonEnabled(true);
     m_tabWidget->setHoverCloseButtonDelayed(true);
     m_tabWidget->setTabBarHidden(true);
-    connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT( destroyTab(QWidget*)));
+
+    connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(destroyTab(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
-    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)),
-                m_tabWidget, SLOT(removeTab(int)));
-    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int,QPoint)), SLOT(tabBarContextMenu(int,QPoint)));
+    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)),m_tabWidget, SLOT(removeTab(int)));
+    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int, QPoint)), SLOT(tabBarContextMenu(int, QPoint)));
 
     setCentralWidget(m_tabWidget);
 
@@ -88,15 +88,15 @@ ChatWindow::ChatWindow()
 
 ChatWindow::~ChatWindow()
 {
-    emit aboutToClose();
+    emit aboutToClose(this);
 }
 
 void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
 {
-    KAction close(KIcon("tab-close", KIconLoader::global()), "Close", this);
-    KAction dettach(KIcon("tab-detach", KIconLoader::global()), "Dettach Tab", this);
-    KAction moveLeft(KIcon("arrow-left", KIconLoader::global()), "Move Tab Left", this);
-    KAction moveRight(KIcon("arrow-right", KIconLoader::global()),"Move Tab Right", this);
+    KAction close(KIcon("tab-close", KIconLoader::global()), i18n("Close"), this);
+    KAction dettach(KIcon("tab-detach", KIconLoader::global()), i18n("Dettach Tab"), this);
+    KAction moveLeft(KIcon("arrow-left", KIconLoader::global()), i18n("Move Tab Left"), this);
+    KAction moveRight(KIcon("arrow-right", KIconLoader::global()), i18n("Move Tab Right"), this);
 
     KMenu* menu = new KMenu(this);
 
@@ -105,9 +105,9 @@ void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
     menu->addAction(&dettach);
     menu->addAction(&close);
 
-    if(index == 0) {
+    if (index == 0) {
         moveLeft.setEnabled(false);
-    } else if(index == (m_tabWidget->count() - 1)) {
+    } else if (index == (m_tabWidget->count() - 1)) {
         moveRight.setEnabled(false);
     }
 
@@ -116,7 +116,7 @@ void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
     if(result == &close) {
         destroyTab(m_tabWidget->widget(index));
     } else if (result == &dettach) {
-        emit dettachRequested(qobject_cast<ChatTab*>(m_tabWidget->widget(index)));
+        emit detachRequested(qobject_cast<ChatTab*>(m_tabWidget->widget(index)));
     } else if (result == &moveLeft) {
         m_tabWidget->moveTab(index, index - 1);
     } else if (result == &moveRight) {
@@ -124,21 +124,20 @@ void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
     }
 }
 
-void ChatWindow::focusChat ( ChatTab* tab )
+void ChatWindow::focusChat(ChatTab* tab)
 {
     kDebug();
     m_tabWidget->setCurrentWidget(tab);
 }
 
-ChatTab* ChatWindow::getTab ( const Tp::TextChannelPtr& incomingTextChannel )
+ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
 {
-    ChatTab* match = NULL;
+    ChatTab* match = 0;
 
     // if targetHandle is None, targetId is also ""
     if (!incomingTextChannel->targetHandleType() == Tp::HandleTypeNone) {
-        kDebug() << "ChatWindow::startChat target handle type is NOT HandleTypeNone";
 
-        // check that the tab requested isn't already open  
+        // check that the tab requested isn't already open
         for (int index = 0; index < m_tabWidget->count() && !match; ++index) {
 
             // get chatWidget object
@@ -153,7 +152,6 @@ ChatTab* ChatWindow::getTab ( const Tp::TextChannelPtr& incomingTextChannel )
             }
         }
     }
-
     return match;
 }
 
@@ -172,7 +170,7 @@ void ChatWindow::removeTab(ChatTab* tab)
     }
 }
 
-void ChatWindow::addTab ( ChatTab* tab )
+void ChatWindow::addTab(ChatTab* tab)
 {
     kDebug();
 
@@ -195,7 +193,7 @@ void ChatWindow::destroyTab(QWidget* chatWidget)
     ChatTab* tab = qobject_cast<ChatTab*>(chatWidget);
     Q_ASSERT(tab);
 
-    tab->setWindow(NULL);
+    tab->setChatWindow(0);
     chatWidget->deleteLater();
 }
 
@@ -426,6 +424,16 @@ void ChatWindow::showNotificationsDialog()
     KNotifyConfigWidget::configure(this, "ktelepathy");
 }
 
+void ChatWindow::removeChatTabSignals(ChatTab* chatTab)
+{
+    disconnect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
+    disconnect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
+    disconnect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
+    disconnect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
+    disconnect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
+    disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
+}
+
 void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const QString& errorMsg)
 {
     //The pointer is automatically deleted when the event is closed
@@ -449,16 +457,6 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
     connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
-}
-
-void ChatWindow::removeChatTabSignals(ChatTab* chatTab)
-{
-    disconnect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
-    disconnect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
-    disconnect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
-    disconnect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
-    disconnect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
-    disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
 }
 
 void ChatWindow::setupCustomActions()

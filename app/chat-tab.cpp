@@ -44,22 +44,22 @@ ChatTab::~ChatTab()
 {
 }
 
-void ChatTab::setWindow(ChatWindow* window)
+void ChatTab::setChatWindow(ChatWindow* window)
 {
-    kDebug();
-
-    if(m_chatWindow) {
+    // remove the tab from current ChatWindow
+    if (m_chatWindow) {
         m_chatWindow->removeTab(this);
     }
 
     m_chatWindow = window;
 
-    if(window) {
-        window->addTab(this);
+    // set tab in new chatWindow
+    if (m_chatWindow) {
+        m_chatWindow->addTab(this);
     }
 }
 
-ChatWindow* ChatTab::window() const
+ChatWindow* ChatTab::chatWindow() const
 {
     return m_chatWindow;
 }
@@ -67,7 +67,7 @@ ChatWindow* ChatTab::window() const
 void ChatTab::showOnTop()
 {
     kDebug() << "Show this widget on top" << title();
-    if(m_chatWindow) {
+    if (m_chatWindow) {
         m_chatWindow->focusChat(this);
     } else {
         kError() << "Attempting to focus chatTab without chatWindow being set!";

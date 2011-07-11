@@ -1,6 +1,7 @@
 /*
-    Copyright (C) 2010  David Edmundson <kde@davidedmundson.co.uk>
-    Copyright (C) 2011  Dominik Schmidt <dev@dominik-schmidt.de>
+    Copyright (C) 2010  David Edmundson    <kde@davidedmundson.co.uk>
+    Copyright (C) 2011  Dominik Schmidt    <dev@dominik-schmidt.de>
+    Copyright (C) 2011  Francesco Nwokeka  <francesco.nwokeka@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,7 +26,6 @@
 #include <KXmlGuiWindow>
 #include <KTabWidget>
 
-class TelepathyChatUi;
 class KIcon;
 class ChatTab;
 
@@ -42,28 +42,26 @@ public:
         SystemInfoMessage
     };
 
-    /**
-     * starts a new chat with the textChannelPtr given only if the
-     * chat doesn't already exist
-     * @param incomingTextChannel new text channel
-     */
-    void destroyTab(ChatTab *chatWidget);
+    void destroyTab(ChatTab *tab);
     void setTabText(int index, const QString &newTitle);
     void setTabIcon(int index, const KIcon &newIcon);
     void setTabTextColor(int index,const QColor &color);
-    ChatTab* getTab(const Tp::TextChannelPtr &incomingTextChannel);
-    void focusChat(ChatTab* tab);
-    /** creats a new chat and adds it to the tab widget
-     * @param channelPtr pointer to textChannel to use
+
+    /** retrieves tab with given textChannel if it exists
+     * @param incomingTextChannel textChannel to search for
      */
+    ChatTab* getTab(const Tp::TextChannelPtr &incomingTextChannel);
+
+    void focusChat(ChatTab* tab);
+
     void addTab(ChatTab* tab);
     void removeTab(ChatTab* tab);
 
-	TelepathyChatUi* ui();
-	void setUi(TelepathyChatUi* ui);
 signals:
-    void aboutToClose();
-    void dettachRequested(ChatTab*);
+    /** to emit before closing a window. This signal tells telepathyChatUi to remove the closed
+     * window from it's list of open windows */
+    void aboutToClose(ChatWindow *window);
+    void detachRequested(ChatTab *tab);
 
 public slots:
     void destroyTab(QWidget *chatWidget);
@@ -98,11 +96,15 @@ private:
      */
     void sendNotificationToUser(NotificationType type, const QString &errorMsg);
 
+    /** removes chat tab signals. This is used when reparenting the chat tab
+     * (see "detachTab" )
+     */
+    void removeChatTabSignals(ChatTab *chatTab);
+
     /** connects the neccessary chat tab signals with slots in chatwindow
      * @param chatTab chatTab object to connect
      */
     void setupChatTabSignals(ChatTab *chatTab);
-    void removeChatTabSignals(ChatTab *chatTab);
 
     /** creates and adds custom actions for the chat window */
     void setupCustomActions();
@@ -132,8 +134,6 @@ private:
     void startVideoCall(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
 
     KTabWidget *m_tabWidget;
-
-	TelepathyChatUi* m_chatUi;
 };
 
 #endif // CHATWINDOW_H
