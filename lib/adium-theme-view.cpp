@@ -446,24 +446,9 @@ void AdiumThemeView::appendNextMessage(QString &html)
 
 
 //taken from Kopete code
-QString AdiumThemeView::formatTime(const QString &_timeFormat, const QDateTime &dateTime)
+QString AdiumThemeView::formatTime(const QString &timeFormat, const QDateTime &dateTime)
 {
-    char buffer[256];
-#ifdef Q_WS_WIN
-    QString timeFormat = _timeFormat;
-    // some formats are not supported on windows (gnu extension?)
-    timeFormat = timeFormat.replace(QLatin1String("%e"), QLatin1String("%d"));
-    timeFormat = timeFormat.replace(QLatin1String("%T"), QLatin1String("%H:%M:%S"));
-#else
-    const QString timeFormat = _timeFormat;
-#endif
-    // Get current time
-    time_t timeT = dateTime.toTime_t();
-    // Convert it to local time representation.
-    struct tm* loctime = localtime(&timeT);
-    strftime(buffer, 256, timeFormat.toAscii(), loctime);
-
-    return QString(buffer);
+    return dateTime.toString(timeFormat);
 }
 
 const QString AdiumThemeView::variantName() const
