@@ -43,7 +43,7 @@ TelepathyChatUi::TelepathyChatUi()
     KConfigGroup tabConfig = config->group("Behavior");
 
     // load the settings for new tab "open mode"
-    QString mode = tabConfig.readEntry("tabOpenMode", "NewWindow");
+    QString mode = tabConfig.readEntry("tabOpenMode", "FirstWindow");
     if (mode == "NewWindow") {
         m_openMode = NewWindow;
     } else if (mode == "FirstWindow") {
