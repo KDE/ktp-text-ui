@@ -61,6 +61,3 @@ install(FILES
         kdetelepathychat_export.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/KDETelepathy COMPONENT Devel
 )
-
-
-install( FILES ktelepathy.notifyrc DESTINATION ${DATA_INSTALL_DIR}/ktelepathy)

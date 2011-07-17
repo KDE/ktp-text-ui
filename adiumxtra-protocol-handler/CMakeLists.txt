@@ -27,5 +27,3 @@ target_link_libraries(adiumxtra-protocol-handler
 install(TARGETS adiumxtra-protocol-handler ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES adiumxtra.protocol DESTINATION ${SERVICES_INSTALL_DIR} )
-
-install(FILES adiumxtra-protocol-handler.notifyrc DESTINATION ${DATA_INSTALL_DIR}/adiumxtra-protocol-handler)
