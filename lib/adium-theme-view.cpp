@@ -28,12 +28,15 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QTextCodec>
+#include <QtGui/QContextMenuEvent>
 #include <QtGui/QFontDatabase>
+#include <QtGui/QMenu>
 #include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebElement>
 #include <QtWebKit/QWebInspector>
 #include <QtWebKit/QWebSettings>
 
+#include <KAction>
 #include <KDebug>
 #include <KEmoticonsTheme>
 #include <KGlobal>
@@ -94,7 +97,29 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
     // don't let QWebView handle the links, we do
     page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
+    QAction *defaultOpenLinkAction = pageAction(QWebPage::OpenLink);
+    m_openLinkAction = new KAction(defaultOpenLinkAction->text(), this);
+    connect(m_openLinkAction, SIGNAL(triggered()),
+            this, SLOT(onOpenLinkActionTriggered()));
+
     connect(this, SIGNAL(linkClicked(QUrl)), this, SLOT(onLinkClicked(QUrl)));
+}
+
+void AdiumThemeView::contextMenuEvent(QContextMenuEvent *event)
+{
+    QWebHitTestResult r = page()->mainFrame()->hitTestContent(event->pos());
+    QUrl url = r.linkUrl();
+    if (!url.isEmpty()) {
+        // save current link url in openLinkAction
+        m_openLinkAction->setData(url);
+
+        QMenu menu(this);
+        menu.addAction(m_openLinkAction);
+        menu.addAction(pageAction(QWebPage::CopyLinkToClipboard));
+        menu.exec(mapToGlobal(event->pos()));
+    } else {
+        QWebView::contextMenuEvent(event);
+    }
 }
 
 void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
@@ -301,11 +326,16 @@ void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
     appendNewMessage(styleHtml);
 }
 
-void AdiumThemeView::onLinkClicked(const QUrl& url)
+void AdiumThemeView::onLinkClicked(const QUrl &url)
 {
     KToolInvocation::invokeBrowser(url.toString());
 }
 
+void AdiumThemeView::onOpenLinkActionTriggered()
+{
+    QUrl url = m_openLinkAction->data().toUrl();
+    onLinkClicked(url);
+}
 
 /** Private */
 

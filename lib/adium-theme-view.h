@@ -34,6 +34,10 @@ class AdiumThemeMessageInfo;
 class AdiumThemeStatusInfo;
 class ChatWindowStyle;
 
+class QContextMenuEvent;
+
+class KAction;
+
 class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public QWebView
 {
     Q_OBJECT
@@ -63,11 +67,15 @@ public:
 public slots:
     void addContentMessage(const AdiumThemeContentInfo&);
     void addStatusMessage(const AdiumThemeStatusInfo&);
-    void onLinkClicked(const QUrl&);
+    void onLinkClicked(const QUrl &);
+    void onOpenLinkActionTriggered();
     void onScrollEvent(QKeyEvent*);
 
+protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event);
+
 private:
-    ChatWindowStyle* m_chatStyle;
+    ChatWindowStyle *m_chatStyle;
     QString m_variantPath;
     QString m_variantName;
     KEmoticons m_emoticons;
@@ -84,6 +92,7 @@ private:
     QString m_defaultAvatar;
     QString m_lastSender;
     bool m_displayHeader;
+    KAction *m_openLinkAction;
 
     void appendNewMessage(QString&);
     void appendNextMessage(QString&);
