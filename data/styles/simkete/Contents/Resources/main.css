@@ -1,181 +1,182 @@
 body {
-/*	font-size: 9pt; */
+    font-size: 12px;
 }
 
 /*.KopeteMessage
 {
-	margin:1.4em .2em 0 .2em;
-	clear: both;
+    margin:1.4em .2em 0 .2em;
+    clear: both;
 }
 */
 
 .IncomingMessageHeader
 {
-	background-color:#dfedff;
-	padding:.1em;
-	border:solid;
-	border-color:#fafafa #d1dfef #d1dfef #fafafa;
-	border-width:2px;
+    background-color:#dfedff;
+    padding:.1em;
+    border:solid;
+    border-color:#fafafa #d1dfef #d1dfef #fafafa;
+    border-width:2px;
 }
 
 .IncommingList, .OutgoingList
 {
-	margin-left: 0;
-	padding-left: 0;
-	padding-right: 0;
-	padding-top: 0.15em;
-	padding-bottom: 0.15em;
-	line-height: 1.2em;
-	list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0.15em;
+    padding-bottom: 0.15em;
+    line-height: 1.2em;
+    list-style: none;
 }
 
 
 .IncomingMessage, .NextIncomingMessage
 {
-	padding-left: 0;
-	padding-right: 0;
-	padding-top: 0.1em;
-	padding-bottom: 0.1em;
-	line-height: 1.2em;
-	border-style: hidden; /* fix a strange bug*/
-	border-width: 0 0 1px 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+    line-height: 1.2em;
+    border-style: hidden; /* fix a strange bug*/
+    border-width: 0 0 1px 0;
 }
 
 
 .NextIncomingMessage
 {
-	margin-left: 0;
-	padding-left: 0;
-	border: dotted #d1dfef;
-	border-width: 1px 0 0 0;
+    margin-left: 0;
+    padding-left: 0;
+    border: dotted #d1dfef;
+    border-width: 1px 0 0 0;
 }
 
 .inUserPicture
 {
-	float: left;
-	border: 1px solid #888;
-	height: 48px;
-	margin-top: 0.1em;
-	margin-left: 0.1em;
-	margin-right: 0.1em;
+    float: left;
+    border: 1px solid #888;
+    height: 48px;
+    margin-top: 0.1em;
+    margin-left: 0.1em;
+    margin-right: 0.1em;
 }
 
 .inStatusIcon
 {
-	float: left;
+    float: left;
 }
 
 .inTime
 {
-	float: right;
+    float: right;
 }
 .inMetacontact
 {
-	margin-left: 0;
-	font-weight: bold;
+    margin-left: 0;
+    font-weight: bold;
 }
 
 .IncomingAction
 {
-	border-top: 2px solid #dae5f0; 
-	border-right: 2px solid #aaccf0;
-	border-bottom: 2px solid #aaccf0;
-	border-left: 2px solid #dae5f0;
-	padding: 0.1em; 
-	vertical-align: middle;
-	background-color:#c3d9f0;
+    border-top: 2px solid #dae5f0;
+    border-right: 2px solid #aaccf0;
+    border-bottom: 2px solid #aaccf0;
+    border-left: 2px solid #dae5f0;
+    padding: 0.1em;
+    vertical-align: middle;
+    background-color:#c3d9f0;
 }
 .inActionIcon
 {
-	float: left;
-	margin-right: 0;
+    float: left;
+    margin-right: 0;
 }
 .inActionMetacontact
 {
-	margin-left: 0;
-	font-weight: bold;
+    margin-left: 0;
+    font-weight: bold;
 }
 .inActionMessage
 {
-	margin-left: 1ex;
+    margin-left: 1ex;
 }
 
 .OutgoingMessageHeader
 {
-	background-color:#f5f5f5;
-	padding:.1em;
-	border:solid;
-	border-color:#fafafa #e3e3e3 #e3e3e3 #fafafa;
-	border-width:2px;
+    background-color:#f5f5f5;
+    padding:.1em;
+    border:solid;
+    border-color:#fafafa #e3e3e3 #e3e3e3 #fafafa;
+    border-width:2px;
 }
 
 .OutgoingMessage, .NextOutgoingMessage
 {
-	padding-left: 0;
-	padding-right: 0;
-	padding-top: 0.1em;
-	padding-bottom: 0.1em;
-	line-height: 1.2em;
-	border-style: hidden; /* fix a strange bug*/
-	border-width: 0 0 1px 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+    line-height: 1.2em;
+    border-style: hidden; /* fix a strange bug*/
+    border-width: 0 0 1px 0;
 }
 
 .NextOutgoingMessage
 {
-	margin-left: 0;
-	padding-left: 0;
-	border: dotted #d1dfef;
-	border-width: 1px 0 0 0;
+    margin-left: 0;
+    padding-left: 0;
+    border: dotted #d1dfef;
+    border-width: 1px 0 0 0;
 }
 
 .outUserPicture
 {
-	float: left;
-	border: 1px solid #888;
-	height: 48px;
-	margin-top: 0.1em;
-	margin-left: 0.1em;
-	margin-right: 1ex;
+    float: left;
+    border: 1px solid #888;
+    height: 48px;
+    margin-top: 0.1em;
+    margin-left: 0.1em;
+    margin-right: 1ex;
 }
 
 .outStatusIcon
 {
-	float: left;
+    float: left;
 }
 
 .outTime
 {
-	float: right;
+    float: right;
 }
 .outMetacontact
 {
-	margin-left: 0;
-	font-weight: bold;
+    margin-left: 0;
+    font-weight: bold;
 }
 
 .OutgoingAction
 {
-	border-top: 2px solid fafafa #cfcfcf; 
-	border-right: 2px solid fafafa #afafaf;
-	border-bottom: 2px solid fafafa #afafaf;
-	border-left: 2px solid fafafa #cfcfcf;
-	padding: 0.1em; 
-	vertical-align: middle;
-	background-color:#dedede;
+    border-top: 2px solid fafafa #cfcfcf;
+    border-right: 2px solid fafafa #afafaf;
+    border-bottom: 2px solid fafafa #afafaf;
+    border-left: 2px solid fafafa #cfcfcf;
+    padding: 0.1em;
+    vertical-align: middle;
+    background-color:#dedede;
 }
+
 .outActionIcon
 {
-	float: left;
-	margin-right: 0;
+    float: left;
+    margin-right: 0;
 }
 .outActionMetacontact
 {
-	margin-left: 0;
-	font-weight: bold;
+    margin-left: 0;
+    font-weight: bold;
 }
 .outActionMessage
 {
-	margin-left: 0;
+    margin-left: 0;
 }
 
 /* _%status% which can be
@@ -185,25 +186,27 @@ body {
         encryption (all OTR messages use this status)
         purple (all IRC topic and join/part messages use this status)
         fileTransferBegan
-        fileTransferComplete 
+        fileTransferComplete
 
 Yes, but all this beauty is not supported by Empathy :( ...
 there is only %messageClasses% == "event" for InternalMessages.
 
 .IMHeader_online, .IMHeader_offline, .IMHeader_purple  {
-	display: none;
+    display: none;
 }
 */
 
 .IMHeader {
-	background: #e5e5e5;
-	color: black;
-	font-size: x-small;
-	margin-top: 0.1em;
-	margin-left: 0.1em;
-	margin-right: 0;
+    background: #e5e5e5;
+    color: black;
+    font-size: x-small;
+    margin-top: 0.1em;
+    margin-left: 0.1em;
+    margin-right: 0;
+    font-size: 12px;
 }
 
 .IMHeaderTime {
-	float: right;
+    float: right;
+    font-size: 12px;
 }
