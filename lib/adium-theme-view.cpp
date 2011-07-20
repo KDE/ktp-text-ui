@@ -393,17 +393,21 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     htmlTemplate.replace("%message%", m_emoticons.theme().parseEmoticons(info.message()));
 
     // link detection
-    QRegExp linkRegExp("\\b(\\w+)://[^ \t\n\r\f\v]+");
+    QRegExp linkRegExp("\\b(?:(\\w+)://|(www\\.))([^\\s]+)");
     int index = 0;
 
     while ((index = linkRegExp.indexIn(htmlTemplate, index)) != -1) {
         QString realUrl = linkRegExp.cap(0);
         QString protocol = linkRegExp.cap(1);
 
-        kDebug() << "Found URL " << realUrl << "with protocol : " << protocol;
+        //if cap(1) is empty cap(2) was matched -> starts with www.
+        const bool startsWithWWW = linkRegExp.cap(1).isEmpty();
+
+        kDebug() << "Found URL " << realUrl << "with protocol : " << (startsWithWWW ? QLatin1String("http") : protocol);
+
 
         // if url has a supported protocol
-        if (KProtocolInfo::protocols().contains(protocol, Qt::CaseInsensitive)) {
+        if (startsWithWWW || KProtocolInfo::protocols().contains(protocol, Qt::CaseInsensitive)) {
 
             // text not wanted in a link ( <,> )
             QRegExp unwanted("(&lt;|&gt;)");
@@ -420,14 +424,13 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
                 }
 
                 // check prefix
-                if (realUrl.startsWith("www")) {
+                if (startsWithWWW) {
                     realUrl.prepend("http://");
                 }
 
                 // if the url is changed, show in chat what the user typed in
                 QString link = "<a href='" + realUrl + "'>" + shownUrl + "</a>";
                 htmlTemplate.replace(index, shownUrl.length(), link);
-
                 // advance position otherwise I end up parsing the same link
                 index += link.length();
             } else {
