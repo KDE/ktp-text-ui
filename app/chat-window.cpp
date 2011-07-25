@@ -259,10 +259,12 @@ void ChatWindow::onCurrentIndexChanged(int index)
         onEnableSearchActions(true);
     }
 
-    if (!currentChatTab->isGroupChat()) {
+    //enable/disable  send file/start webcam buttons
+    //always disabled for group chats and offline accounts.
+    if (!currentChatTab->isGroupChat() && currentChatTab->account()->connection()) {
         // check which capabilities the contact and user supports
         Tp::ContactCapabilities contactCapabilites = currentChatTab->textChannel()->targetContact()->capabilities();
-        Tp::ContactCapabilities selfCapabilities = currentChatTab->account()->connection()->selfContact()->capabilities();
+        Tp::ContactCapabilities selfCapabilities = currentChatTab->textChannel()->groupSelfContact()->capabilities();
 
         setAudioCallEnabled(selfCapabilities.streamedMediaAudioCalls() && contactCapabilites.streamedMediaAudioCalls());
         setFileTransferEnabled(selfCapabilities.fileTransfers() && contactCapabilites.fileTransfers());
@@ -270,7 +272,6 @@ void ChatWindow::onCurrentIndexChanged(int index)
         /// TODO re-activate check when invitation to chat has been sorted out
         setInviteToChatEnabled(false);
     } else {
-        // group chats don't have these functions
         setAudioCallEnabled(false);
         setFileTransferEnabled(false);
         setVideoCallEnabled(false);
