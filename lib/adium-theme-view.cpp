@@ -390,13 +390,13 @@ QString AdiumThemeView::replaceStatusKeywords(QString &htmlTemplate, const Adium
 QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const AdiumThemeMessageInfo& info)
 {
     //message
-    htmlTemplate.replace("%message%", m_emoticons.theme().parseEmoticons(info.message()));
+    QString message = info.message();
 
     // link detection
     QRegExp linkRegExp("\\b(?:(\\w+)://|(www\\.))([^\\s]+)");
     int index = 0;
 
-    while ((index = linkRegExp.indexIn(htmlTemplate, index)) != -1) {
+    while ((index = linkRegExp.indexIn(message, index)) != -1) {
         QString realUrl = linkRegExp.cap(0);
         QString protocol = linkRegExp.cap(1);
 
@@ -430,7 +430,7 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
 
                 // if the url is changed, show in chat what the user typed in
                 QString link = "<a href='" + realUrl + "'>" + shownUrl + "</a>";
-                htmlTemplate.replace(index, shownUrl.length(), link);
+                message.replace(index, shownUrl.length(), link);
                 // advance position otherwise I end up parsing the same link
                 index += link.length();
             } else {
@@ -440,6 +440,9 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
             index += linkRegExp.matchedLength();
         }
     }
+
+    message = m_emoticons.theme().parseEmoticons(message);
+    htmlTemplate.replace("%message%", message);
 
     //service
     htmlTemplate.replace("%service%", info.service());
