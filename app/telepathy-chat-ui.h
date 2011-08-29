@@ -42,12 +42,12 @@ public:
 
 
     virtual void handleChannels(const Tp::MethodInvocationContextPtr<> & context,
-            const Tp::AccountPtr & account,
-            const Tp::ConnectionPtr & connection,
-            const QList<Tp::ChannelPtr> & channels,
-            const QList<Tp::ChannelRequestPtr> & requestsSatisfied,
-            const QDateTime & userActionTime,
-            const Tp::AbstractClientHandler::HandlerInfo & handlerInfo);
+            const Tp::AccountPtr &account,
+            const Tp::ConnectionPtr &connection,
+            const QList<Tp::ChannelPtr> &channels,
+            const QList<Tp::ChannelRequestPtr> &channelRequests,
+            const QDateTime &userActionTime,
+            const Tp::AbstractClientHandler::HandlerInfo &handlerInfo);
 
     virtual bool bypassApproval() const;
 

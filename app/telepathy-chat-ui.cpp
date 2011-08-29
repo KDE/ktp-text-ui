@@ -22,9 +22,14 @@
 #include "chat-window.h"
 
 #include <KDebug>
+#include <KConfigGroup>
+#include <KWindowSystem>
+
 #include <TelepathyQt4/ChannelClassSpec>
 #include <TelepathyQt4/TextChannel>
-#include <KConfigGroup>
+#include <TelepathyQt4/ChannelRequest>
+#include <TelepathyQt4/ChannelRequestHints>
+
 
 inline Tp::ChannelClassSpecList channelClassList()
 {
@@ -83,16 +88,15 @@ TelepathyChatUi::~TelepathyChatUi()
 }
 
 void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & context,
-        const Tp::AccountPtr & account,
-        const Tp::ConnectionPtr & connection,
-        const QList<Tp::ChannelPtr> & channels,
-        const QList<Tp::ChannelRequestPtr> & requestsSatisfied,
-        const QDateTime & userActionTime,
-        const Tp::AbstractClientHandler::HandlerInfo & handlerInfo)
+        const Tp::AccountPtr &account,
+        const Tp::ConnectionPtr &connection,
+        const QList<Tp::ChannelPtr> &channels,
+        const QList<Tp::ChannelRequestPtr> &channelRequests,
+        const QDateTime &userActionTime,
+        const Tp::AbstractClientHandler::HandlerInfo &handlerInfo)
 {
     kDebug();
     Q_UNUSED(connection);
-    Q_UNUSED(requestsSatisfied);
     Q_UNUSED(userActionTime);
     Q_UNUSED(handlerInfo);
 
@@ -106,8 +110,24 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
 
     Q_ASSERT(textChannel);
 
+    /*this works round a "bug" in which kwin will _deliberately_ stop the TextUi claiming focus
+     * because it thinks the user is busy interacting with the contact list.
+     * If the special hint org.kde.telepathy forceRaiseWindow is set to true, then we use KWindowSystem::forceActiveWindow
+     * to claim focus.
+     */
+    bool forceRaiseWindowHint = false;
+
+    //find the relevant channelRequest
+    foreach(const Tp::ChannelRequestPtr channelRequest, channelRequests) {
+        kDebug() << channelRequest->hints().allHints();
+        forceRaiseWindowHint = channelRequest->hints().hint("org.kde.telepathy", "forceRaiseWindow").toBool();
+    }
+
+    kDebug() << "force raise window hint set to: " << forceRaiseWindowHint;
+
     bool tabFound = false;
 
+    //search for any tabs which are already handling this channel.
     for (int i = 0; i < m_chatWindows.count() && !tabFound; ++i) {
         ChatWindow *window = m_chatWindows.at(i);
         ChatTab* tab = window->getTab(textChannel);
@@ -123,10 +143,16 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
                 tab->setChatEnabled(true);           // re-enable chat
             }
         }
+
+        if (forceRaiseWindowHint) {
+            KWindowSystem::forceActiveWindow(window->winId());
+        }
+
     }
 
+    //if there is currently no tab containing the incoming channel.
     if (!tabFound) {
-        ChatWindow* window;
+        ChatWindow* window = 0;
         switch (m_openMode) {
             case FirstWindow:
                 window = m_chatWindows.count()?m_chatWindows[0]:createWindow();
@@ -137,9 +163,15 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
                 break;
         }
 
+        Q_ASSERT(window);
+
         ChatTab* tab = new ChatTab(textChannel, account);
         tab->setChatWindow(window);
         window->show();
+
+        if (forceRaiseWindowHint) {
+            KWindowSystem::forceActiveWindow(window->winId());
+        }
     }
 
     context->setFinished();
