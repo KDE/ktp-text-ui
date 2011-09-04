@@ -54,7 +54,7 @@ void ChatTextEdit::setFontBold(bool isBold)
 
 QSize ChatTextEdit::minimumSizeHint() const
 {
-    QSize sh = QTextEdit::minimumSizeHint();
+    QSize sh = KTextEdit::minimumSizeHint();
     sh.setHeight(fontMetrics().height() + 1);
     sh += QSize(0, QFrame::lineWidth() * 2);
     return sh;
@@ -62,7 +62,7 @@ QSize ChatTextEdit::minimumSizeHint() const
 
 QSize ChatTextEdit::sizeHint() const
 {
-    QSize sh = QTextEdit::sizeHint();
+    QSize sh = KTextEdit::sizeHint();
     sh.setHeight(int (document()->size().height()));
     sh += QSize(0, (QFrame::lineWidth() * 2) + 1);
     return sh;
@@ -87,7 +87,7 @@ void ChatTextEdit::keyPressEvent(QKeyEvent* e)
 
 void ChatTextEdit::resizeEvent(QResizeEvent* e)
 {
-    QTextEdit::resizeEvent(e);
+    KTextEdit::resizeEvent(e);
     QTimer::singleShot(0, this, SLOT(updateScrollBar()));
 }
 
