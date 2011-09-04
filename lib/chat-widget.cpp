@@ -628,7 +628,7 @@ void ChatWidget::chatViewReady()
     d->chatviewlInitialised = true;
 
     //process any messages we've 'missed' whilst initialising.
-    foreach(Tp::ReceivedMessage message, d->channel->messageQueue()) {
+    foreach(const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
         handleIncomingMessage(message);
     }
 }
