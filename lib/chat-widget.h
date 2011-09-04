@@ -54,7 +54,7 @@ public:
     /** Returns the icon of this chat window */
     KIcon icon() const;
 
-    /** returns wether the chat is considered a group chat */
+    /** returns whether the chat is considered a group chat */
     bool isGroupChat() const;
 
     /** invalidates the use of the chat.
@@ -137,7 +137,7 @@ signals:
     void notificationClicked();
 
 private slots:
-    /** recieved when user changes search criteria or when searching for text */
+    /** received when user changes search criteria or when searching for text */
     void findTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findNextTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
@@ -145,10 +145,10 @@ private slots:
     void windowActivated();
 
 private:
-    /** connects neccessary signals for the channel */
+    /** connects necessary signals for the channel */
     void setupChannelSignals();
 
-    /** connects neccessary signals for the contactModel */
+    /** connects necessary signals for the contactModel */
     void setupContactModelSignals();
 
     void incrementUnreadMessageCount();

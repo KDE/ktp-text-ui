@@ -33,7 +33,7 @@ public:
     QSize sizeHint() const;
 
 protected:
-    /// HACK this method is overidden to catch the ctrl+f signal for the toggleSearchBar.
+    /// HACK this method is overridden to catch the ctrl+f signal for the toggleSearchBar.
     void keyPressEvent(QKeyEvent *e);
 
     // reimplemented

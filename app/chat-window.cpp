@@ -542,7 +542,7 @@ void ChatWindow::startAudioCall(const Tp::AccountPtr& account, const Tp::Contact
 
 void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
 {
-    // check for existance of ContactPtr
+    // check for existence of ContactPtr
     Q_ASSERT(contact);
 
     // use the keyword "FileTransferLastDirectory" for setting last used dir for file transfer

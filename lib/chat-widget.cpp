@@ -544,7 +544,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
         }
     }
 
-    //if the window isn't ready, we don't acknowledge the mesage. We process them as soon as we are ready.
+    //if the window isn't ready, we don't acknowledge the message. We process them as soon as we are ready.
 }
 
 void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)

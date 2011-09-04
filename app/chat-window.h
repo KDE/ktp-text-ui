@@ -101,7 +101,7 @@ private:
      */
     void removeChatTabSignals(ChatTab *chatTab);
 
-    /** connects the neccessary chat tab signals with slots in chatwindow
+    /** connects the necessary chat tab signals with slots in chatwindow
      * @param chatTab chatTab object to connect
      */
     void setupChatTabSignals(ChatTab *chatTab);
