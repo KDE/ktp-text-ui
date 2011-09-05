@@ -414,7 +414,6 @@ void ChatWindow::showSettingsDialog()
     KSettings::Dialog *dialog = new KSettings::Dialog(this);
 
     dialog->addModule("kcm_telepathy_chat_config");
-    dialog->addModule("kcm_telepathy_accounts");
 
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
