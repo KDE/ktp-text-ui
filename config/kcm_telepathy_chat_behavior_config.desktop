@@ -1,0 +1,14 @@
+[Desktop Entry]
+Icon=tab-duplicate
+StartupNotify=true
+Terminal=false
+Type=Service
+X-KDE-ServiceTypes=KCModule
+X-DBUS-StartupType=
+X-KDE-HasReadOnlyMode=false
+X-KDE-Library=kcm_telepathy_chat_behavior_config
+X-KDE-SubstituteUID=false
+X-KDE-RootOnly=false
+Categories=Qt;KDE;X-KDE-settings-network;
+
+Name=Chat Tab Behavior
