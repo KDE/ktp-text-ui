@@ -34,6 +34,13 @@ public:
     TelepathyChatUi();
     ~TelepathyChatUi();
 
+    enum TabOpenMode {
+        NewWindow,
+        FirstWindow,
+        LastWindow
+    };
+
+
     virtual void handleChannels(const Tp::MethodInvocationContextPtr<> & context,
             const Tp::AccountPtr & account,
             const Tp::ConnectionPtr & connection,
@@ -49,11 +56,6 @@ private slots:
     void dettachTab(ChatTab *tab);
 
 private:
-    enum TabOpenMode {
-        NewWindow,
-        FirstWindow,
-        LastWindow
-    };
 
     ChatWindow* createWindow();
 

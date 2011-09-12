@@ -45,10 +45,6 @@ public slots:
 protected:
     void changeEvent(QEvent *e);
 
-private:
-    Ui::ChatWindowConfig *ui;
-    AdiumThemeHeaderInfo m_demoChatHeader;
-
 private slots:
     void sendDemoMessages();
     void onStylesLoaded();
@@ -60,6 +56,11 @@ private slots:
     void onFontGroupChanged(bool);
     void onFontFamilyChanged(QFont);
     void onFontSizeChanged(int);
+
+private:
+    Ui::ChatWindowConfig *ui;
+    AdiumThemeHeaderInfo m_demoChatHeader;
+    
 };
 
 #endif // MAINWINDOW_H

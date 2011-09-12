@@ -39,7 +39,7 @@ AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList& args)
 {
     ui->setupUi(this);
 
-    ChatWindowStyleManager* manager = ChatWindowStyleManager::self();
+    ChatWindowStyleManager *manager = ChatWindowStyleManager::self();
     manager->loadStyles();
     connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
@@ -122,7 +122,7 @@ void AppearanceConfig::onStyleSelected(int index)
     //load the style.
     QString styleId = ui->styleComboBox->itemData(index).toString();
 
-    ChatWindowStyle* style = ChatWindowStyleManager::self()->getValidStyleFromPool(styleId);
+    ChatWindowStyle *style = ChatWindowStyleManager::self()->getValidStyleFromPool(styleId);
 
     if (style) {
         ui->chatView->setChatStyle(style);

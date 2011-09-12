@@ -413,7 +413,8 @@ void ChatWindow::showSettingsDialog()
 
     KSettings::Dialog *dialog = new KSettings::Dialog(this);
 
-    dialog->addModule("kcm_telepathy_chat_config");
+    dialog->addModule("kcm_telepathy_chat_appearance_config");
+    dialog->addModule("kcm_telepathy_chat_behavior_config");
 
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2011 by Lasath Fernando <kde@lasath.org>
- *   Copyright (C) 2011 by David Edmundson <kde@lasath.org>
+ *   Copyright (C) 2011 by David Edmundson <kde@davidedmundson.co.uk>
  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -50,7 +50,7 @@ private slots:
 
 private:
     int m_openMode;
-    Ui::BehaviorConfigUi* ui;
+    Ui::BehaviorConfigUi *ui;
 };
 
 #endif // BEHAVIOR_CONFIG_H
