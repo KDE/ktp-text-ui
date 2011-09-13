@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "appearance-config.h"
-#include "ui_chatwindowconfig.h"
+#include "ui_appearance-config.h"
 
 #include <KDETelepathy/ChatWindowStyleManager>
 #include <KDETelepathy/ChatWindowStyle>
