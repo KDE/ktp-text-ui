@@ -12,3 +12,7 @@ X-KDE-RootOnly=false
 Categories=Qt;KDE;X-KDE-settings-network;
 
 Name=Chat Tab Behavior
+Name[it]=Comportamento della scheda della chat
+Name[sv]=Chattflikens beteende
+Name[uk]=Поведінка вкладок спілкування
+Name[x-test]=xxChat Tab Behaviorxx
