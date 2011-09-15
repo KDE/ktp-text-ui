@@ -72,8 +72,7 @@ ChatWindow::ChatWindow()
     m_tabWidget = new KTabWidget(this);
     m_tabWidget->setMovable(true);
     m_tabWidget->setDocumentMode(true);
-    m_tabWidget->setCloseButtonEnabled(true);
-    m_tabWidget->setHoverCloseButtonDelayed(true);
+    m_tabWidget->setTabsClosable(true);
     m_tabWidget->setTabBarHidden(true);
 
     connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(destroyTab(QWidget*)));
