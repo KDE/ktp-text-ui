@@ -39,7 +39,7 @@ protected:
     // reimplemented
     void resizeEvent(QResizeEvent*);
 
-private slots:
+private Q_SLOTS:
     void recalculateSize();
     void updateScrollBar();
 
@@ -47,7 +47,7 @@ signals:
     void findTextShortcutPressed();
     void scrollEventRecieved(QKeyEvent*);
 
-public slots:
+public Q_SLOTS:
     /** wraps setFontWeight to a simple on/off bold) */
     void setFontBold(bool);
 };

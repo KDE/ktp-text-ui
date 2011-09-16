@@ -76,7 +76,7 @@ public:
 
     int unreadMessageCount() const;
 
-public slots:
+public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
 
@@ -86,7 +86,7 @@ protected:
     void showEvent(QShowEvent *e);
     void keyPressEvent(QKeyEvent *e);
 
-protected slots:
+protected Q_SLOTS:
     /** Show the received message in the chat window*/
     void handleIncomingMessage(const Tp::ReceivedMessage &message);
 
@@ -136,7 +136,7 @@ signals:
     /** Emitted when a notification for the chat window has been activated*/
     void notificationClicked();
 
-private slots:
+private Q_SLOTS:
     /** received when user changes search criteria or when searching for text */
     void findTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findNextTextInChat(const QString &text, QWebPage::FindFlags flags);

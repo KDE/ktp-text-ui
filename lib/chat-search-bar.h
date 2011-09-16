@@ -42,7 +42,7 @@ public:
 
     KLineEdit *searchBar() const;
 
-public slots:
+public Q_SLOTS:
     void onNextButtonClicked();
     void onPreviousButtonClicked();
 
@@ -51,7 +51,7 @@ public slots:
     /** toggle search bar visibility */
     void toggleView(bool toggle);
 
-private slots:
+private Q_SLOTS:
     /** called when user writes in search bar
      * this emits a signal for chat-window with the text to search for
      * and the appropriate flags for the search criteria

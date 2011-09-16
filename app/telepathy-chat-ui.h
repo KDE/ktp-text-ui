@@ -51,7 +51,7 @@ public:
 
     virtual bool bypassApproval() const;
 
-private slots:
+private Q_SLOTS:
     void removeWindow(ChatWindow *window);
     void dettachTab(ChatTab *tab);
 

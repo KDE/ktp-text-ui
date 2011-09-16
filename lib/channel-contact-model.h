@@ -50,7 +50,7 @@ protected:
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
 
-private slots:
+private Q_SLOTS:
     void onGroupMembersChanged(const Tp::Contacts &groupMembersAdded,
                              const Tp::Contacts &groupLocalPendingMembersAdded,
                              const Tp::Contacts &groupRemotePendingMembersAdded,

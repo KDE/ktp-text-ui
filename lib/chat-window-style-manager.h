@@ -80,7 +80,7 @@ public:
      */
     QMap<QString, QString> getAvailableStyles() const;
 
-public slots:
+public Q_SLOTS:
     /**
      * Install a new style into user style directory
      * Note that you must pass a path to a archive.
@@ -130,7 +130,7 @@ signals:
      */
     void loadStylesFinished();
 
-private slots:
+private Q_SLOTS:
     /**
      * KDirLister found new files.
      * @param dirList new files found.

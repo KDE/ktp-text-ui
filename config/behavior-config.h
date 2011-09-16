@@ -38,14 +38,14 @@ public:
     explicit BehaviorConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
     virtual ~BehaviorConfig();
 
-public slots:
+public Q_SLOTS:
     virtual void load();
     virtual void save();
 
 protected:
     virtual void changeEvent(QEvent *e);
 
-private slots:
+private Q_SLOTS:
     void onRadioSelected(int id);
 
 private:

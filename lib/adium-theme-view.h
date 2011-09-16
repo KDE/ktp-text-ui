@@ -64,7 +64,7 @@ public:
     void setHeaderDisplayed(bool);
     /* .. font, backgrounds, everything else.*/
 
-public slots:
+public Q_SLOTS:
     void addContentMessage(const AdiumThemeContentInfo&);
     void addStatusMessage(const AdiumThemeStatusInfo&);
     void onLinkClicked(const QUrl &);

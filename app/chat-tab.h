@@ -47,10 +47,10 @@ public:
     /** returns currently set chatWindow */
     ChatWindow* chatWindow() const;
 
-public slots:
+public Q_SLOTS:
     void showOnTop();
 
-private slots:
+private Q_SLOTS:
     /** connect account's connection status.
      * This re-enables open chats if user goes offline and then back online */
     void onConnectionStatusChanged(Tp::ConnectionStatus);

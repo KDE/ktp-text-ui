@@ -63,10 +63,10 @@ signals:
     void aboutToClose(ChatWindow *window);
     void detachRequested(ChatTab *tab);
 
-public slots:
+public Q_SLOTS:
     void destroyTab(QWidget *chatWidget);
 
-private slots:
+private Q_SLOTS:
     void tabBarContextMenu(int  index, const QPoint &  globalPos);
     void closeCurrentTab();
     void onAudioCallTriggered();                                /** start an audio call */
@@ -85,7 +85,7 @@ private slots:
     void onTabIconChanged(const KIcon &newIcon);
     void onVideoCallTriggered();                                /** start a video call */
 
-protected slots:
+protected Q_SLOTS:
     void showSettingsDialog();
     void showNotificationsDialog();
 

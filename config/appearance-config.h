@@ -39,13 +39,13 @@ public:
 				const QVariantList& args = QVariantList());
     ~AppearanceConfig();
 
-public slots:
+public Q_SLOTS:
     void save();
 
 protected:
     void changeEvent(QEvent *e);
 
-private slots:
+private Q_SLOTS:
     void sendDemoMessages();
     void onStylesLoaded();
     void updateVariantsList();
