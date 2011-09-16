@@ -250,16 +250,16 @@ void ChatWindowStyle::listVariants()
     QString variantDirPath = d->baseHref + QString::fromUtf8("Variants/");
     QDir variantDir(variantDirPath);
 
-    QStringList variantList = variantDir.entryList(QStringList("*.css"));
+    QStringList variantList = variantDir.entryList(QStringList(QLatin1String("*.css")));
     QStringList::ConstIterator it, itEnd = variantList.constEnd();
     QLatin1String compactVersionPrefix("_compact_");
     for (it = variantList.constBegin(); it != itEnd; ++it) {
         QString variantName = *it, variantPath;
         // Retrieve only the file name.
-        variantName = variantName.left(variantName.lastIndexOf("."));
+        variantName = variantName.left(variantName.lastIndexOf(QLatin1String(".")));
         if (variantName.startsWith(compactVersionPrefix)) {
             if (variantName == compactVersionPrefix) {
-                d->compactVariants.insert("", true);
+                d->compactVariants.insert(QLatin1String(""), true);
             }
             continue;
         }
@@ -269,7 +269,7 @@ void ChatWindowStyle::listVariants()
             d->compactVariants.insert(variantName, true);
         }
         // variantPath is relative to baseHref.
-        variantPath = QString("Variants/%1").arg(*it);
+        variantPath = QString(QLatin1String("Variants/%1")).arg(*it);
         d->variantsList.insert(variantName, variantPath);
     }
 }
@@ -315,7 +315,7 @@ void ChatWindowStyle::readStyleFiles()
     // Load template file fallback
     if (d->templateHtml.isEmpty())
     {
-        QString templateFileName(KGlobal::dirs()->findResource("data", "ktelepathy/template.html"));
+        QString templateFileName(KGlobal::dirs()->findResource("data", QLatin1String("ktelepathy/template.html")));
 
         if (! templateFileName.isEmpty() && QFile::exists(templateFileName)) {
             fileAccess.setFileName(templateFileName);
@@ -436,22 +436,22 @@ void ChatWindowStyle::readStyleFiles()
     }
 
     if (d->fileTransferIncomingHtml.isEmpty() ||
-            (!d->fileTransferIncomingHtml.contains("saveFileHandlerId") &&
-             !d->fileTransferIncomingHtml.contains("saveFileAsHandlerId"))) {   // Create default html
+            (!d->fileTransferIncomingHtml.contains(QLatin1String("saveFileHandlerId")) &&
+             !d->fileTransferIncomingHtml.contains(QLatin1String("saveFileAsHandlerId")))) {   // Create default html
         d->fileTransferIncomingHtml = d->incomingHtml;
-        QString message = QString("%message%\n"
-                                  "<div>\n"
-                                  " <div style=\"width:37px; float:left;\">\n"
-                                  "  <img src=\"%fileIconPath%\" style=\"width:32px; height:32px; vertical-align:middle;\" />\n"
-                                  " </div>\n"
-                                  " <div>\n"
-                                  "  <span><b>%fileName%</b> (%fileSize%)</span><br>\n"
-                                  "  <span>\n"
-                                  "   <input id=\"%saveFileAsHandlerId%\" type=\"button\" value=\"%1\">\n"
-                                  "   <input id=\"%cancelRequestHandlerId%\" type=\"button\" value=\"%2\">\n"
-                                  "  </span>\n"
-                                  " </div>\n"
-                                  "</div>")
+        QString message = QString(QLatin1String("%message%\n"
+                                                "<div>\n"
+                                                " <div style=\"width:37px; float:left;\">\n"
+                                                "  <img src=\"%fileIconPath%\" style=\"width:32px; height:32px; vertical-align:middle;\" />\n"
+                                                " </div>\n"
+                                                " <div>\n"
+                                                "  <span><b>%fileName%</b> (%fileSize%)</span><br>\n"
+                                                "  <span>\n"
+                                                "   <input id=\"%saveFileAsHandlerId%\" type=\"button\" value=\"%1\">\n"
+                                                "   <input id=\"%cancelRequestHandlerId%\" type=\"button\" value=\"%2\">\n"
+                                                "  </span>\n"
+                                                " </div>\n"
+                                                "</div>"))
                           .arg(i18n("Download"), i18n("Cancel"));
         d->fileTransferIncomingHtml.replace(QLatin1String("%message%"), message);
     }
@@ -468,21 +468,21 @@ void ChatWindowStyle::readStyleFiles()
     }
 
     if (d->voiceClipIncomingHtml.isEmpty() ||
-            (!d->voiceClipIncomingHtml.contains("playVoiceHandlerId") &&
-             !d->voiceClipIncomingHtml.contains("saveAsVoiceHandlerId"))) {   // Create default html
+            (!d->voiceClipIncomingHtml.contains(QLatin1String("playVoiceHandlerId")) &&
+             !d->voiceClipIncomingHtml.contains(QLatin1String("saveAsVoiceHandlerId")))) {   // Create default html
         d->voiceClipIncomingHtml = d->incomingHtml;
-        QString message = QString("%message%\n"
-                                  "<div>\n"
-                                  " <div style=\"width:37px; float:left;\">\n"
-                                  "  <img src=\"%fileIconPath%\" style=\"width:32px; height:32px; vertical-align:middle;\" />\n"
-                                  " </div>\n"
-                                  " <div>\n"
-                                  "  <span>\n"
-                                  "   <input id=\"%playVoiceHandlerId%\" type=\"button\" value=\"%1\">\n"
-                                  "   <input id=\"%saveAsVoiceHandlerId%\" type=\"button\" value=\"%2\">\n"
-                                  "  </span>\n"
-                                  " </div>\n"
-                                  "</div>")
+        QString message = QString(QLatin1String("%message%\n"
+                                                "<div>\n"
+                                                " <div style=\"width:37px; float:left;\">\n"
+                                                "  <img src=\"%fileIconPath%\" style=\"width:32px; height:32px; vertical-align:middle;\" />\n"
+                                                " </div>\n"
+                                                " <div>\n"
+                                                "  <span>\n"
+                                                "   <input id=\"%playVoiceHandlerId%\" type=\"button\" value=\"%1\">\n"
+                                                "   <input id=\"%saveAsVoiceHandlerId%\" type=\"button\" value=\"%2\">\n"
+                                                "  </span>\n"
+                                                " </div>\n"
+                                                "</div>"))
                           .arg(i18n("Play"), i18n("Save as"));
         d->voiceClipIncomingHtml.replace(QLatin1String("%message%"), message);
     }
@@ -550,6 +550,6 @@ QString ChatWindowStyle::compact(const QString & styleVariant) const
     if (styleVariant.isEmpty()) {
         return QLatin1String("Variants/_compact_.css");
     } else {
-        return compacted.insert(compacted.lastIndexOf('/') + 1, QLatin1String("_compact_"));
+        return compacted.insert(compacted.lastIndexOf(QLatin1Char('/')) + 1, QLatin1String("_compact_"));
     }
 }

@@ -71,19 +71,19 @@ QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole:
         switch(m_contacts[row]->presence().type()) {
         case Tp::ConnectionPresenceTypeAvailable:
-            return QVariant(KIcon("im-user"));
+            return QVariant(KIcon(QLatin1String("im-user")));
         case Tp::ConnectionPresenceTypeAway:
             //fall through
         case Tp::ConnectionPresenceTypeExtendedAway:
-            return QVariant(KIcon("im-user-away"));
+            return QVariant(KIcon(QLatin1String("im-user-away")));
         case Tp::ConnectionPresenceTypeBusy:
-            return QVariant(KIcon("im-user-busy"));
+            return QVariant(KIcon(QLatin1String("im-user-busy")));
         case Tp::ConnectionPresenceTypeOffline:
             //fall through
         case Tp::ConnectionPresenceTypeHidden:
-            return QVariant(KIcon("im-user-offline"));
+            return QVariant(KIcon(QLatin1String("im-user-offline")));
         default: //presence unknown or error
-            return QVariant(KIcon("dialog-warning"));
+            return QVariant(KIcon(QLatin1String("dialog-warning")));
         }
 
     default:

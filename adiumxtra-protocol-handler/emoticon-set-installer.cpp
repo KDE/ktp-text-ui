@@ -64,8 +64,8 @@ BundleInstaller::BundleStatus EmoticonSetInstaller::validate()
                 if (currentDir->entry(QString::fromUtf8("Emoticons.plist"))) {
                    kDebug() << "Emoticons.plist found";
                    QString currentItem = currentEntry->name();
-                   if(m_bundleName.isEmpty() && currentItem.endsWith(".AdiumEmoticonset")) {
-                       m_bundleName = currentItem.remove(".AdiumEmoticonset");
+                   if(m_bundleName.isEmpty() && currentItem.endsWith(QLatin1String(".AdiumEmoticonset"))) {
+                       m_bundleName = currentItem.remove(QLatin1String(".AdiumEmoticonset"));
                    }
                    return BundleValid;
                 }
@@ -101,7 +101,7 @@ void EmoticonSetInstaller::showRequest()
 {
     kDebug();
 
-    KNotification *notification = new KNotification("emoticonsRequest", NULL, KNotification::Persistent);
+    KNotification *notification = new KNotification(QLatin1String("emoticonsRequest"), NULL, KNotification::Persistent);
     notification->setText( i18n("Install Emoticonset %1", this->bundleName()) );
     notification->setActions( QStringList() << i18n("Install") << i18n("Cancel") );
 
@@ -121,7 +121,7 @@ void EmoticonSetInstaller::showResult()
 {
     kDebug();
 
-    KNotification *notification = new KNotification("emoticonsSuccess", NULL, KNotification::Persistent);
+    KNotification *notification = new KNotification(QLatin1String("emoticonsSuccess"), NULL, KNotification::Persistent);
     notification->setText( i18n("Installed Emoticonset %1 successfully.", this->bundleName()) );
 
     notification->setActions( QStringList() << i18n("OK") );

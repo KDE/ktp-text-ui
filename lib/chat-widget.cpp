@@ -136,19 +136,19 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->ui.setupUi(this);
     d->ui.formatToolbar->show();
     d->ui.formatColor->setText(QString());
-    d->ui.formatColor->setIcon(KIcon("format-text-color"));
+    d->ui.formatColor->setIcon(KIcon(QLatin1String("format-text-color")));
 
     d->ui.formatBold->setText(QString());
-    d->ui.formatBold->setIcon(KIcon("format-text-bold"));
+    d->ui.formatBold->setIcon(KIcon(QLatin1String("format-text-bold")));
 
     d->ui.formatItalic->setText(QString());
-    d->ui.formatItalic->setIcon(KIcon("format-text-italic"));
+    d->ui.formatItalic->setIcon(KIcon(QLatin1String("format-text-italic")));
 
     d->ui.formatUnderline->setText(QString());
-    d->ui.formatUnderline->setIcon(KIcon("format-text-underline"));
+    d->ui.formatUnderline->setIcon(KIcon(QLatin1String("format-text-underline")));
 
     d->ui.insertEmoticon->setText(QString());
-    d->ui.insertEmoticon->setIcon(KIcon("face-smile"));
+    d->ui.insertEmoticon->setIcon(KIcon(QLatin1String("face-smile")));
 
     // connect channel signals
     setupChannelSignals();
@@ -589,7 +589,7 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
 
     notification->setText(message.text());
     //allows per contact notifications
-    notification->addContext("contact", message.sender()->id());
+    notification->addContext(QLatin1String("contact"), message.sender()->id());
     //TODO notification->addContext("group",... Requires KDE Telepathy Contact to work out which group they are in.
 
     notification->setActions(QStringList(i18n("View")));
@@ -657,7 +657,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
         AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(i18n("%1 has left the chat", contact->alias()));
         statusMessage.setService(d->channel->connection()->protocolName());
-        statusMessage.setStatus("away");
+        statusMessage.setStatus(QLatin1String("away"));
         statusMessage.setTime(QDateTime::currentDateTime());
         d->ui.chatArea->addStatusMessage(statusMessage);
         break;
@@ -672,7 +672,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
         contactIsTyping = true;
         break;
     default:
-        qDebug() << QString("Unknown case %1").arg(state);
+        qDebug() << "Unknown case" << state;
     }
 
     if (!contactIsTyping) {

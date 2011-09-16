@@ -68,13 +68,13 @@ ChatStylePlistFileReader::Status ChatStylePlistFileReader::readAndParseFile(QFil
 ChatStylePlistFileReader::Status ChatStylePlistFileReader::parse(const QDomDocument& document)
 {
     QString key, value;
-    QDomNodeList keyElements = document.elementsByTagName("key");
+    QDomNodeList keyElements = document.elementsByTagName(QLatin1String("key"));
 
     for (int i = 0; i < keyElements.size(); i++) {
-        if (keyElements.at(i).nextSibling().toElement().tagName() != "key") {
+        if (keyElements.at(i).nextSibling().toElement().tagName() != QLatin1String("key")) {
             key = keyElements.at(i).toElement().text();
             QDomElement nextElement= keyElements.at(i).nextSibling().toElement();
-            if(nextElement.tagName() == "true" || nextElement.tagName() == "false") {
+            if(nextElement.tagName() == QLatin1String("true") || nextElement.tagName() == QLatin1String("false")) {
                 value = nextElement.tagName();
             } else {
                 value = nextElement.text();
@@ -93,37 +93,37 @@ ChatStylePlistFileReader::~ChatStylePlistFileReader()
 
 QString ChatStylePlistFileReader::CFBundleGetInfoString() const
 {
-    return d->data.value("CFBundleGetInfoString").toString();
+    return d->data.value(QLatin1String("CFBundleGetInfoString")).toString();
 }
 
 QString ChatStylePlistFileReader::CFBundleName() const
 {
-    return d->data.value("CFBundleName").toString();
+    return d->data.value(QLatin1String("CFBundleName")).toString();
 }
 
 QString ChatStylePlistFileReader::CFBundleIdentifier() const
 {
-    return d->data.value("CFBundleIdentifier").toString();
+    return d->data.value(QLatin1String("CFBundleIdentifier")).toString();
 }
 
 QString ChatStylePlistFileReader::defaultFontFamily() const
 {
-    return d->data.value("DefaultFontFamily").toString();
+    return d->data.value(QLatin1String("DefaultFontFamily")).toString();
 }
 
 int ChatStylePlistFileReader::defaultFontSize() const
 {
-    return d->data.value("DefaultFontSize").toInt();
+    return d->data.value(QLatin1String("DefaultFontSize")).toInt();
 }
 
 QString ChatStylePlistFileReader::defaultVariant() const
 {
-    return d->data.value("DefaultVariant").toString();
+    return d->data.value(QLatin1String("DefaultVariant")).toString();
 }
 
 int ChatStylePlistFileReader::messageViewVersion() const
 {
-    return d->data.value("MessageViewVersion").toInt();
+    return d->data.value(QLatin1String("MessageViewVersion")).toInt();
 }
 
 ChatStylePlistFileReader::Status ChatStylePlistFileReader::status() const
@@ -133,50 +133,50 @@ ChatStylePlistFileReader::Status ChatStylePlistFileReader::status() const
 
 bool ChatStylePlistFileReader::showUserIcons() const
 {
-    return d->data.value("ShowUserIcons").toBool();
+    return d->data.value(QLatin1String("ShowUserIcons")).toBool();
 }
 
 bool ChatStylePlistFileReader::showUserIcons(const QString& variantName) const
 {
-    return d->data.value(QString("ShowUserIcons:%1").arg(variantName)).toBool();
+    return d->data.value(QString(QLatin1String("ShowUserIcons:%1")).arg(variantName)).toBool();
 }
 
 bool ChatStylePlistFileReader::disableCombineConsecutive() const
 {
-    return d->data.value("DisableCombineConsecutive").toBool();
+    return d->data.value(QLatin1String("DisableCombineConsecutive")).toBool();
 }
 
 bool ChatStylePlistFileReader::defaultBackgroundIsTransparent() const
 {
-    return d->data.value("DefaultBackgroundIsTransparent").toBool();
+    return d->data.value(QLatin1String("DefaultBackgroundIsTransparent")).toBool();
 }
 
 bool ChatStylePlistFileReader::disableCustomBackground() const
 {
-    return d->data.value("DisableCustomBackground").toBool();
+    return d->data.value(QLatin1String("DisableCustomBackground")).toBool();
 }
 
 QString ChatStylePlistFileReader::defaultBackgroundColor() const
 {
-    return d->data.value("DefaultBackgroundColor").toString();
+    return d->data.value(QLatin1String("DefaultBackgroundColor")).toString();
 }
 
 QString ChatStylePlistFileReader::defaultBackgroundColor(const QString& variantName) const
 {
-    return d->data.value(QString("DefaultBackgroundColor:%1").arg(variantName)).toString();
+    return d->data.value(QString(QLatin1String("DefaultBackgroundColor:%1")).arg(variantName)).toString();
 }
 
 bool ChatStylePlistFileReader::allowTextColors() const
 {
-    return d->data.value("AllowTextColors").toBool();
+    return d->data.value(QLatin1String("AllowTextColors")).toBool();
 }
 
 bool ChatStylePlistFileReader::allowTextColors(const QString& variantName) const
 {
-    return d->data.value(QString("AllowTextColors").arg(variantName)).toBool();
+    return d->data.value(QString(QLatin1String("AllowTextColors")).arg(variantName)).toBool();
 }
 
 QString ChatStylePlistFileReader::imageMask() const
 {
-    return d->data.value("ImageMask").toString();
+    return d->data.value(QLatin1String("ImageMask")).toString();
 }

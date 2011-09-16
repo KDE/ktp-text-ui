@@ -114,7 +114,7 @@ void ChatStyleInstaller::showRequest()
 {
     kDebug();
 
-    KNotification *notification = new KNotification("chatstyleRequest", NULL, KNotification::Persistent);
+    KNotification *notification = new KNotification(QLatin1String("chatstyleRequest"), NULL, KNotification::Persistent);
     notification->setText( i18n("Install Chatstyle %1", this->bundleName()) );
     notification->setActions( QStringList() << i18n("Install") << i18n("Cancel") );
 
@@ -136,10 +136,10 @@ void ChatStyleInstaller::showResult()
 
     KNotification *notification;
     if(m_status == BundleInstaller::BundleInstallOk) {
-        notification = new KNotification("chatstyleSuccess", NULL, KNotification::Persistent);
+        notification = new KNotification(QLatin1String("chatstyleSuccess"), NULL, KNotification::Persistent);
         notification->setText( i18n("Installed Chatstyle %1 successfully.", this->bundleName()) );
     } else {
-        notification = new KNotification("chatstyleFailure", NULL, KNotification::Persistent);
+        notification = new KNotification(QLatin1String("chatstyleFailure"), NULL, KNotification::Persistent);
         notification->setText( i18n("Installation of Chatstyle %1 failed.", this->bundleName()) );
     }
 

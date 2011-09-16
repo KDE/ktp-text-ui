@@ -20,6 +20,10 @@ include_directories (${KDE4_INCLUDES}
                      ${QT_QTWEBKIT_INCLUDES}
 )
 
+
+add_definitions (${KDE4_DEFINITIONS}
+                 -DQT_NO_CAST_FROM_ASCII)
+
 add_subdirectory(lib)
 add_subdirectory(app)
 add_subdirectory(config)

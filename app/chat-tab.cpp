@@ -80,6 +80,6 @@ void ChatTab::onConnectionStatusChanged(Tp::ConnectionStatus status)
 {
     // request a new text channel for the chat
     if (status == Tp::ConnectionStatusConnected) {
-        account()->ensureTextChat(textChannel()->targetId(), QDateTime::currentDateTime(), "org.freedesktop.Telepathy.Client.KDE.TextUi");
+        account()->ensureTextChat(textChannel()->targetId(), QDateTime::currentDateTime(), QLatin1String("org.freedesktop.Telepathy.Client.KDE.TextUi"));
     }
 }

@@ -65,11 +65,11 @@ AdiumThemeMessageInfo::MessageType AdiumThemeMessageInfo::type() const
 QString AdiumThemeMessageInfo::message() const
 {
     QString htmlMessage= Qt::escape(d->message);
-    htmlMessage.replace("\n ", "<br/>&nbsp;"); //keep leading whitespaces
-    htmlMessage.replace('\n', "<br/>");
-    htmlMessage.replace('\t', "&nbsp; &nbsp; "); // replace tabs by 4 spaces
-    htmlMessage.replace("  ", " &nbsp;"); // keep multiple whitespaces
-    htmlMessage.replace('\\', "\\\\"); //replace a single backslash with two backslashes.
+    htmlMessage.replace(QLatin1String("\n "), QLatin1String("<br/>&nbsp;")); //keep leading whitespaces
+    htmlMessage.replace(QLatin1Char('\n'), QLatin1String("<br/>"));
+    htmlMessage.replace(QLatin1Char('\t'), QLatin1String("&nbsp; &nbsp; ")); // replace tabs by 4 spaces
+    htmlMessage.replace(QLatin1String("  "), QLatin1String(" &nbsp;")); // keep multiple whitespaces
+    htmlMessage.replace(QLatin1Char('\\'), QLatin1String("\\\\")); //replace a single backslash with two backslashes.
 
     return htmlMessage;
 }
@@ -102,7 +102,7 @@ void AdiumThemeMessageInfo::setService(const QString& service)
 QString AdiumThemeMessageInfo::userIcons() const
 {
     //FIXME.
-    return QString("showIcons");
+    return QLatin1String("showIcons");
 }
 
 QString AdiumThemeMessageInfo::messageClasses() const {
@@ -112,20 +112,20 @@ QString AdiumThemeMessageInfo::messageClasses() const {
     QStringList classes = d->messageClasses;
 
     if (d->type == RemoteToLocal) {
-        classes.append("incoming");
-        classes.append("message");
+        classes.append(QLatin1String("incoming"));
+        classes.append(QLatin1String("message"));
     }
 
     if (d->type == LocalToRemote) {
-        classes.append("outgoing");
-        classes.append("message");
+        classes.append(QLatin1String("outgoing"));
+        classes.append(QLatin1String("message"));
     }
 
     if (d->type == Status) {
-        classes.append("status");
+        classes.append(QLatin1String("status"));
     }
 
-    return classes.join(" ");
+    return classes.join(QLatin1String(" "));
 }
 
 

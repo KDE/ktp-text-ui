@@ -47,8 +47,8 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
     kDebug();
 
     KUrl url(path);
-    if(url.protocol() == "adiumxtra") {
-        url.setProtocol("http");
+    if(url.protocol() == QLatin1String("adiumxtra")) {
+        url.setProtocol(QLatin1String("http"));
     }
 
     KTemporaryFile *tmpFile = new KTemporaryFile();
@@ -63,15 +63,15 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
     KArchive *archive = 0L;
 
     QString currentBundleMimeType = KMimeType::findByPath(tmpFile->fileName(), 0, false)->name();
-    if (currentBundleMimeType == "application/zip") {
+    if (currentBundleMimeType == QLatin1String("application/zip")) {
         archive = new KZip(tmpFile->fileName());
-    } else if (currentBundleMimeType == "application/x-compressed-tar" ||
-               currentBundleMimeType == "application/x-bzip-compressed-tar" ||
-               currentBundleMimeType == "application/x-gzip" ||
-               currentBundleMimeType == "application/x-bzip") {
+    } else if (currentBundleMimeType == QLatin1String("application/x-compressed-tar") ||
+               currentBundleMimeType == QLatin1String("application/x-bzip-compressed-tar") ||
+               currentBundleMimeType == QLatin1String("application/x-gzip") ||
+               currentBundleMimeType == QLatin1String("application/x-bzip")) {
         archive = new KTar(tmpFile->fileName());
     } else {
-        KNotification *notification = new KNotification("packagenotrecognized", NULL, KNotification::Persistent);
+        KNotification *notification = new KNotification(QLatin1String("packagenotrecognized"), NULL, KNotification::Persistent);
         notification->setText( i18n("Package type not recognized or not supported") );
         notification->setActions( QStringList() << i18n("Ok") );
         QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));
@@ -114,7 +114,7 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
 
             kDebug() << "sent emoticonset request";
         } else {
-            KNotification *notification = new KNotification("packagenotrecognized", NULL,
+            KNotification *notification = new KNotification(QLatin1String("packagenotrecognized"), NULL,
                                                             KNotification::Persistent);
             notification->setText( i18n("Package type not recognized or not supported") );
             QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));

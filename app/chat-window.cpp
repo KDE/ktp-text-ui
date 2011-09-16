@@ -82,7 +82,7 @@ ChatWindow::ChatWindow()
 
     setCentralWidget(m_tabWidget);
 
-    setupGUI(QSize(460, 440), static_cast<StandardWindowOptions>(Default^StatusBar), "chatwindow.rc");
+    setupGUI(QSize(460, 440), static_cast<StandardWindowOptions>(Default^StatusBar), QLatin1String("chatwindow.rc"));
 }
 
 ChatWindow::~ChatWindow()
@@ -92,10 +92,10 @@ ChatWindow::~ChatWindow()
 
 void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
 {
-    KAction close(KIcon("tab-close", KIconLoader::global()), i18n("Close"), this);
-    KAction dettach(KIcon("tab-detach", KIconLoader::global()), i18n("Detach Tab"), this);
-    KAction moveLeft(KIcon("arrow-left", KIconLoader::global()), i18n("Move Tab Left"), this);
-    KAction moveRight(KIcon("arrow-right", KIconLoader::global()), i18n("Move Tab Right"), this);
+    KAction close(KIcon(QLatin1String("tab-close"), KIconLoader::global()), i18n("Close"), this);
+    KAction dettach(KIcon(QLatin1String("tab-detach"), KIconLoader::global()), i18n("Detach Tab"), this);
+    KAction moveLeft(KIcon(QLatin1String("arrow-left"), KIconLoader::global()), i18n("Move Tab Left"), this);
+    KAction moveRight(KIcon(QLatin1String("arrow-right"), KIconLoader::global()), i18n("Move Tab Right"), this);
 
     KMenu* menu = new KMenu(this);
 
@@ -281,8 +281,8 @@ void ChatWindow::onCurrentIndexChanged(int index)
 
 void ChatWindow::onEnableSearchActions(bool enable)
 {
-    actionCollection()->action(KStandardAction::name(KStandardAction::FindNext))->setEnabled(enable);
-    actionCollection()->action(KStandardAction::name(KStandardAction::FindPrev))->setEnabled(enable);
+    actionCollection()->action(QLatin1String(KStandardAction::name(KStandardAction::FindNext)))->setEnabled(enable);
+    actionCollection()->action(QLatin1String(KStandardAction::name(KStandardAction::FindPrev)))->setEnabled(enable);
 }
 
 void ChatWindow::onFileTransferTriggered()
@@ -324,7 +324,7 @@ void ChatWindow::onGenericOperationFinished(Tp::PendingOperation* op)
 {
     // send notification via plasma like the contactlist does
     if (op->isError()) {
-        QString errorMsg(op->errorName() + ": " + op->errorMessage());
+        QString errorMsg(op->errorName() + QLatin1String(": ") + op->errorMessage());
         sendNotificationToUser(SystemErrorMessage, errorMsg);
     }
 }
@@ -412,8 +412,8 @@ void ChatWindow::showSettingsDialog()
 
     KSettings::Dialog *dialog = new KSettings::Dialog(this);
 
-    dialog->addModule("kcm_telepathy_chat_appearance_config");
-    dialog->addModule("kcm_telepathy_chat_behavior_config");
+    dialog->addModule(QLatin1String("kcm_telepathy_chat_appearance_config"));
+    dialog->addModule(QLatin1String("kcm_telepathy_chat_behavior_config"));
 
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
@@ -421,7 +421,7 @@ void ChatWindow::showSettingsDialog()
 
 void ChatWindow::showNotificationsDialog()
 {
-    KNotifyConfigWidget::configure(this, "ktelepathy");
+    KNotifyConfigWidget::configure(this, QLatin1String("ktelepathy"));
 }
 
 void ChatWindow::removeChatTabSignals(ChatTab* chatTab)
@@ -440,9 +440,9 @@ void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const
     KNotification *notification;
 
     if (type == SystemInfoMessage) {
-        notification = new KNotification("telepathyInfo", this);
+        notification = new KNotification(QLatin1String("telepathyInfo"), this);
     } else {
-        notification = new KNotification("telepathyError", this);
+        notification = new KNotification(QLatin1String("telepathyError"), this);
     }
 
     notification->setText(errorMsg);
@@ -464,39 +464,39 @@ void ChatWindow::setupCustomActions()
     KAction *separator = new KAction(this);
     separator->setSeparator(true);
 
-    KAction *nextTabAction = new KAction(KIcon("go-next-view"), i18n("&Next Tab"), this);
+    KAction *nextTabAction = new KAction(KIcon(QLatin1String("go-next-view")), i18n("&Next Tab"), this);
     nextTabAction->setShortcuts(KStandardShortcut::tabNext());
     connect(nextTabAction, SIGNAL(triggered()), this, SLOT(onNextTabActionTriggered()));
 
-    KAction *previousTabAction = new KAction(KIcon("go-previous-view"), i18n("&Previous Tab"), this);
+    KAction *previousTabAction = new KAction(KIcon(QLatin1String("go-previous-view")), i18n("&Previous Tab"), this);
     previousTabAction->setShortcuts(KStandardShortcut::tabPrev());
     connect(previousTabAction, SIGNAL(triggered()), this, SLOT(onPreviousTabActionTriggered()));
 
-    KAction *audioCallAction = new KAction(KIcon("voicecall"), i18n("&Audio Call"), this);
+    KAction *audioCallAction = new KAction(KIcon(QLatin1String("voicecall")), i18n("&Audio Call"), this);
     connect(audioCallAction, SIGNAL(triggered()), this, SLOT(onAudioCallTriggered()));
 
-    KAction *fileTransferAction = new KAction(KIcon("mail-attachment"), i18n("&Send File"), this);
+    KAction *fileTransferAction = new KAction(KIcon(QLatin1String("mail-attachment")), i18n("&Send File"), this);
     connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
 
-    KAction *inviteToChat = new KAction(KIcon("user-group-new"), i18n("&Invite to chat"), this);
+    KAction *inviteToChat = new KAction(KIcon(QLatin1String("user-group-new")), i18n("&Invite to chat"), this);
     connect(inviteToChat, SIGNAL(triggered()), this, SLOT(onInviteToChatTriggered()));
 
-    KAction *videoCallAction = new KAction(KIcon("webcamsend"), i18n("&Video Call"), this);
+    KAction *videoCallAction = new KAction(KIcon(QLatin1String("webcamsend")), i18n("&Video Call"), this);
     connect(videoCallAction, SIGNAL(triggered()), this, SLOT(onVideoCallTriggered()));
 
     // add custom actions to the collection
-    actionCollection()->addAction("separator", separator);
-    actionCollection()->addAction("next-tab", nextTabAction);
-    actionCollection()->addAction("previous-tab", previousTabAction);
-    actionCollection()->addAction("audio-call", audioCallAction);
-    actionCollection()->addAction("send-file", fileTransferAction);
-    actionCollection()->addAction("video-call", videoCallAction);
-    actionCollection()->addAction("invite-to-chat", inviteToChat);
+    actionCollection()->addAction(QLatin1String("separator"), separator);
+    actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
+    actionCollection()->addAction(QLatin1String("previous-tab"), previousTabAction);
+    actionCollection()->addAction(QLatin1String("audio-call"), audioCallAction);
+    actionCollection()->addAction(QLatin1String("send-file"), fileTransferAction);
+    actionCollection()->addAction(QLatin1String("video-call"), videoCallAction);
+    actionCollection()->addAction(QLatin1String("invite-to-chat"), inviteToChat);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
 {
-    QAction *action = actionCollection()->action("audio-call");
+    QAction *action = actionCollection()->action(QLatin1String("audio-call"));
 
     // don't want to segfault. Should never happen
     if (action) {
@@ -506,7 +506,7 @@ void ChatWindow::setAudioCallEnabled(bool enable)
 
 void ChatWindow::setFileTransferEnabled(bool enable)
 {
-    QAction *action = actionCollection()->action("send-file");
+    QAction *action = actionCollection()->action(QLatin1String("send-file"));
 
     if (action) {
         action->setEnabled(enable);
@@ -515,7 +515,7 @@ void ChatWindow::setFileTransferEnabled(bool enable)
 
 void ChatWindow::setInviteToChatEnabled(bool enable)
 {
-    QAction *action = actionCollection()->action("invite-to-chat");
+    QAction *action = actionCollection()->action(QLatin1String("invite-to-chat"));
 
     if (action) {
         action->setEnabled(enable);
@@ -524,7 +524,7 @@ void ChatWindow::setInviteToChatEnabled(bool enable)
 
 void ChatWindow::setVideoCallEnabled(bool enable)
 {
-    QAction *action = actionCollection()->action("video-call");
+    QAction *action = actionCollection()->action(QLatin1String("video-call"));
 
     if (action) {
         action->setEnabled(enable);
@@ -535,7 +535,7 @@ void ChatWindow::startAudioCall(const Tp::AccountPtr& account, const Tp::Contact
 {
     Tp::PendingChannelRequest* channelRequest = account->ensureStreamedMediaAudioCall(contact,
                                                                                       QDateTime::currentDateTime(),
-                                                                                      PREFERRED_AUDIO_VIDEO_HANDLER);
+                                                                                      QLatin1String(PREFERRED_AUDIO_VIDEO_HANDLER));
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 
@@ -566,7 +566,7 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
     Tp::PendingChannelRequest* channelRequest = account->createFileTransfer(contact,
                                                                             fileTransferProperties,
                                                                             QDateTime::currentDateTime(),
-                                                                            PREFERRED_FILETRANSFER_HANDLER);
+                                                                            QLatin1String(PREFERRED_FILETRANSFER_HANDLER));
 
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
@@ -576,7 +576,7 @@ void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::Contact
     Tp::PendingChannelRequest* channelRequest = account->ensureStreamedMediaVideoCall(contact,
                                                                                       true,
                                                                                       QDateTime::currentDateTime(),
-                                                                                      PREFERRED_AUDIO_VIDEO_HANDLER);
+                                                                                      QLatin1String(PREFERRED_AUDIO_VIDEO_HANDLER));
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 

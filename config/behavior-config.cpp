@@ -53,34 +53,34 @@ BehaviorConfig::~BehaviorConfig()
 
 void BehaviorConfig::load()
 {
-    KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
+    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
     KConfigGroup tabConfig = config->group("Behavior");
 
     QString mode = tabConfig.readEntry("tabOpenMode", "NewWindow");
-    if(mode == "NewWindow"){
+    if(mode == QLatin1String("NewWindow")) {
         m_openMode = TelepathyChatUi::NewWindow;
-    } else if (mode == "FirstWindow"){
+    } else if (mode == QLatin1String("FirstWindow")) {
         m_openMode = TelepathyChatUi::FirstWindow;
-    } else if (mode == "LastWindow"){
+    } else if (mode == QLatin1String("LastWindow")) {
         m_openMode = TelepathyChatUi::LastWindow;
     }
 }
 
 void BehaviorConfig::save()
 {
-    KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
+    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
     KConfigGroup tabConfig = config->group("Behavior");
 
     QString mode;
     switch (m_openMode) {
         case TelepathyChatUi::NewWindow :
-            mode = "NewWindow";
+            mode = QLatin1String("NewWindow");
             break;
         case TelepathyChatUi::FirstWindow :
-            mode = "FirstWindow";
+            mode = QLatin1String("FirstWindow");
             break;
         case TelepathyChatUi::LastWindow :
-            mode = "LastWindow";
+            mode = QLatin1String("LastWindow");
             break;
     }
 

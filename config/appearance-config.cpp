@@ -196,7 +196,7 @@ void AppearanceConfig::sendDemoMessages()
     statusMessage.setMessage(i18n("Ted Example has left the chat.")); //FIXME sync this with chat text logic.
     statusMessage.setTime(QDateTime::currentDateTime());
     statusMessage.setService(i18n("Jabber"));
-    statusMessage.setStatus("away");
+    statusMessage.setStatus(QLatin1String("away"));
     ui->chatView->addStatusMessage(statusMessage);
 }
 
@@ -204,7 +204,7 @@ void AppearanceConfig::save()
 {
     kDebug();
 
-    KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
+    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
     KConfigGroup appearanceConfig = config->group("Appearance");
 
     appearanceConfig.writeEntry("styleName", ui->styleComboBox->itemData(ui->styleComboBox->currentIndex()).toString());

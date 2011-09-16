@@ -132,14 +132,14 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
    KArchive *archive = 0L;
 
    QString currentBundleMimeType = KMimeType::findByPath(styleBundlePath, 0, false)->name();
-   if (currentBundleMimeType == "application/zip") {
+   if (currentBundleMimeType == QLatin1String("application/zip")) {
        archive = new KZip(styleBundlePath);
-   } else if (currentBundleMimeType == "application/x-compressed-tar" ||
-              currentBundleMimeType == "application/x-bzip-compressed-tar" ||
-              currentBundleMimeType == "application/x-gzip" ||
-              currentBundleMimeType == "application/x-bzip") {
+   } else if (currentBundleMimeType == QLatin1String("application/x-compressed-tar") ||
+              currentBundleMimeType == QLatin1String("application/x-bzip-compressed-tar") ||
+              currentBundleMimeType == QLatin1String("application/x-gzip") ||
+              currentBundleMimeType == QLatin1String("application/x-bzip")) {
        archive = new KTar(styleBundlePath);
-   } else if (currentBundleMimeType == "application/octet-stream") {
+   } else if (currentBundleMimeType == QLatin1String("application/octet-stream")) {
        archive = new KZip(styleBundlePath);
        if (!archive->open(QIODevice::ReadOnly)) {
            delete archive;
@@ -383,7 +383,7 @@ void ChatWindowStyleManager::slotNewStyles(const KFileItemList &dirList)
                 if (!d->availableStyles.contains(styleId)) {
 
                     //FIXME this code is in two places.. this sucks!!!
-                    ChatStylePlistFileReader plistReader(item.url().path().append("/Contents/Info.plist"));
+                    ChatStylePlistFileReader plistReader(item.url().path().append(QLatin1String("/Contents/Info.plist")));
                     QString styleName = plistReader.CFBundleName();
                     if (plistReader.CFBundleName().isEmpty()) {
                         styleName = styleId;
@@ -391,7 +391,7 @@ void ChatWindowStyleManager::slotNewStyles(const KFileItemList &dirList)
                     d->availableStyles.insert(styleId, styleName);
                 }
             } else {
-                ChatStylePlistFileReader plistReader(item.url().path().append("/Contents/Info.plist"));
+                ChatStylePlistFileReader plistReader(item.url().path().append(QLatin1String("/Contents/Info.plist")));
                 QString styleName = plistReader.CFBundleName();
                 if (plistReader.CFBundleName().isEmpty()) {
                     styleName = styleId;

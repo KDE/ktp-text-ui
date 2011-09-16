@@ -44,16 +44,16 @@ TelepathyChatUi::TelepathyChatUi()
 {
     kDebug();
 
-    KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
+    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
     KConfigGroup tabConfig = config->group("Behavior");
 
     // load the settings for new tab "open mode"
     QString mode = tabConfig.readEntry("tabOpenMode", "FirstWindow");
-    if (mode == "NewWindow") {
+    if (mode == QLatin1String("NewWindow")) {
         m_openMode = NewWindow;
-    } else if (mode == "FirstWindow") {
+    } else if (mode == QLatin1String("FirstWindow")) {
         m_openMode = FirstWindow;
-    } else if (mode == "LastWindow") {
+    } else if (mode == QLatin1String("LastWindow")) {
         m_openMode = LastWindow;
     }
 }
@@ -120,7 +120,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     //find the relevant channelRequest
     foreach(const Tp::ChannelRequestPtr channelRequest, channelRequests) {
         kDebug() << channelRequest->hints().allHints();
-        forceRaiseWindowHint = channelRequest->hints().hint("org.kde.telepathy", "forceRaiseWindow").toBool();
+        forceRaiseWindowHint = channelRequest->hints().hint(QLatin1String("org.kde.telepathy"), QLatin1String("forceRaiseWindow")).toBool();
     }
 
     kDebug() << "force raise window hint set to: " << forceRaiseWindowHint;

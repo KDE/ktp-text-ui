@@ -51,14 +51,14 @@
 AdiumThemeView::AdiumThemeView(QWidget *parent)
         : QWebView(parent),
         // check iconPath docs for minus sign in -KIconLoader::SizeLarge
-        m_defaultAvatar(KIconLoader::global()->iconPath("im-user",-KIconLoader::SizeLarge)),
+        m_defaultAvatar(KIconLoader::global()->iconPath(QLatin1String("im-user"),-KIconLoader::SizeLarge)),
         m_displayHeader(true)
 {
     //blocks QWebView functionality which allows you to change page by dragging a URL onto it.
     setAcceptDrops(false);
 
     //determine the chat window style to use (from the Kopete config file).
-    KSharedConfigPtr config = KSharedConfig::openConfig("ktelepathyrc");
+    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
     KConfigGroup appearanceConfig = config->group("Appearance");
 
     QString chatStyleName = appearanceConfig.readEntry("styleName", "renkoo.AdiumMessageStyle");
@@ -71,16 +71,16 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
 
     QString variant = appearanceConfig.readEntry("styleVariant");
     if (!variant.isEmpty()) {
-        m_variantPath = QString("Variants/%1.css").arg(variant);
+        m_variantPath = QString(QLatin1String("Variants/%1.css")).arg(variant);
         m_variantName = variant;
 
         // keep m_variantPath, m_variantName empty if there is no variant
     } else if (!m_chatStyle->getVariants().isEmpty()) {
         if (m_chatStyle->getVariants().contains(m_chatStyle->defaultVariantName())) {
-            m_variantPath = QString("Variants/%1.css").arg(m_chatStyle->defaultVariantName());
+            m_variantPath = QString(QLatin1String("Variants/%1.css")).arg(m_chatStyle->defaultVariantName());
             m_variantName = m_chatStyle->defaultVariantName();
         } else {
-            m_variantPath = QString("Variants/%1.css").arg(m_chatStyle->getVariants().keys().first());
+            m_variantPath = QString(QLatin1String("Variants/%1.css")).arg(m_chatStyle->getVariants().keys().first());
             m_variantName = m_chatStyle->getVariants().keys().first();
         }
     }
@@ -127,7 +127,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     QString headerHtml;
     QString templateHtml = m_chatStyle->getTemplateHtml();
     QString footerHtml = replaceHeaderKeywords(m_chatStyle->getFooterHtml(), chatInfo);
-    QString extraStyleHtml = "@import url( \"main.css\" );";
+    QString extraStyleHtml = QLatin1String("@import url( \"main.css\" );");
 
     if (templateHtml.isEmpty()) {
         // if templateHtml is empty, we failed to load the fallback template file
@@ -147,7 +147,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
         // since some themes are pretty odd and hardcode fonts to the css we need to override that
         // with some extra css. this may not work for all themes!
         extraStyleHtml.append (
-            QString("\n* {font-family:\"%1\" !important;font-size:%2pt !important};")
+            QString(QLatin1String("\n* {font-family:\"%1\" !important;font-size:%2pt !important};"))
             .arg( m_fontFamily )
             .arg( m_fontSize )
         );
@@ -173,30 +173,30 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     // 4th is header
     // 5th is footer
 
-    templateHtml.replace("%%", "%");
+    templateHtml.replace(QLatin1String("%%"), QLatin1String("%"));
 
-    int numberOfPlaceholders = templateHtml.count("%@");
+    int numberOfPlaceholders = templateHtml.count(QLatin1String("%@"));
 
     int index = 0;
-    index = templateHtml.indexOf("%@", index);
-    templateHtml.replace(index, 2, QString("file:///").append(m_chatStyle->getStyleBaseHref()));
+    index = templateHtml.indexOf(QLatin1String("%@"), index);
+    templateHtml.replace(index, 2, QString(QLatin1String("file:///")).append(m_chatStyle->getStyleBaseHref()));
 
     if (numberOfPlaceholders == 5) {
-        index = templateHtml.indexOf("%@", index);
+        index = templateHtml.indexOf(QLatin1String("%@"), index);
         templateHtml.replace(index, 2, extraStyleHtml);
     }
 
-    index = templateHtml.indexOf("%@", index);
+    index = templateHtml.indexOf(QLatin1String("%@"), index);
     templateHtml.replace(index, 2, m_variantPath);
 
-    index = templateHtml.indexOf("%@", index);
+    index = templateHtml.indexOf(QLatin1String("%@"), index);
     templateHtml.replace(index, 2, headerHtml);
 
-    index = templateHtml.indexOf("%@", index);
+    index = templateHtml.indexOf(QLatin1String("%@"), index);
     templateHtml.replace(index, 2, footerHtml);
 
     setHtml(templateHtml);
-    m_lastSender = "";
+    m_lastSender = QLatin1String("");
 
     //hidden HTML debugging mode. Should have no visible way to turn it on.
     if (m_webInspector) {
@@ -207,7 +207,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 void AdiumThemeView::setVariant(const QString &variant)
 {
     m_variantName = variant;
-    m_variantPath = QString("Variants/%1.css").arg(variant);
+    m_variantPath = QString(QLatin1String("Variants/%1.css")).arg(variant);
 
 }
 
@@ -230,8 +230,8 @@ void AdiumThemeView::setChatStyle(ChatWindowStyle *chatStyle)
         m_variantPath = variants.values().first();
         m_variantName = variants.keys().first();
     } else {
-        m_variantPath = "";
-        m_variantName = "";
+        m_variantPath = QLatin1String("");
+        m_variantName = QLatin1String("");
     }
 }
 
@@ -321,7 +321,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
 void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
 {
     QString styleHtml = m_chatStyle->getStatusHtml();
-    m_lastSender = "";
+    m_lastSender = QLatin1String("");
     replaceStatusKeywords(styleHtml, statusMessage);
     appendNewMessage(styleHtml);
 }
@@ -341,17 +341,17 @@ void AdiumThemeView::onOpenLinkActionTriggered()
 
 QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumThemeHeaderInfo & info)
 {
-    htmlTemplate.replace("%chatName%", info.chatName());
-    htmlTemplate.replace("%sourceName%", info.sourceName());
-    htmlTemplate.replace("%destinationName%", info.destinationName());
-    htmlTemplate.replace("%destinationDisplayName%", info.destinationDisplayName());
-    htmlTemplate.replace("%incomingIconPath%", (!info.incomingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
-    htmlTemplate.replace("%outgoingIconPath%", (!info.outgoingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
-    htmlTemplate.replace("%timeOpened%", KGlobal::locale()->formatDateTime(info.timeOpened()));
+    htmlTemplate.replace(QLatin1String("%chatName%"), info.chatName());
+    htmlTemplate.replace(QLatin1String("%sourceName%"), info.sourceName());
+    htmlTemplate.replace(QLatin1String("%destinationName%"), info.destinationName());
+    htmlTemplate.replace(QLatin1String("%destinationDisplayName%"), info.destinationDisplayName());
+    htmlTemplate.replace(QLatin1String("%incomingIconPath%"), (!info.incomingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
+    htmlTemplate.replace(QLatin1String("%outgoingIconPath%"), (!info.outgoingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
+    htmlTemplate.replace(QLatin1String("%timeOpened%"), KGlobal::locale()->formatDateTime(info.timeOpened()));
 
     //FIXME time fields - remember to do both, steal the complicated one from Kopete code.
     // Look for %timeOpened{X}%
-    QRegExp timeRegExp("%timeOpened\\{([^}]*)\\}%");
+    QRegExp timeRegExp(QLatin1String("%timeOpened\\{([^}]*)\\}%"));
     int pos = 0;
     while ((pos = timeRegExp.indexIn(htmlTemplate , pos)) != -1) {
         QString timeKeyword = formatTime(timeRegExp.cap(1), info.timeOpened());
@@ -363,19 +363,19 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
 QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const AdiumThemeContentInfo& info)
 {
     //userIconPath
-    htmlTemplate.replace("%userIconPath%", !info.userIconPath().isEmpty() ? info.userIconPath() : m_defaultAvatar);
+    htmlTemplate.replace(QLatin1String("%userIconPath%"), !info.userIconPath().isEmpty() ? info.userIconPath() : m_defaultAvatar);
     //senderScreenName
-    htmlTemplate.replace("%senderScreenName%", info.senderScreenName());
+    htmlTemplate.replace(QLatin1String("%senderScreenName%"), info.senderScreenName());
     //sender
-    htmlTemplate.replace("%sender%", info.sender());
+    htmlTemplate.replace(QLatin1String("%sender%"), info.sender());
     //senderColor
-    htmlTemplate.replace("%senderColor%", info.senderColor());
+    htmlTemplate.replace(QLatin1String("%senderColor%"), info.senderColor());
     //senderStatusIcon
-    htmlTemplate.replace("senderStatusIcon", info.senderStatusIcon());
+    htmlTemplate.replace(QLatin1String("senderStatusIcon"), info.senderStatusIcon());
     //messageDirection
-    htmlTemplate.replace("%messageDirection%", info.messageDirection());
+    htmlTemplate.replace(QLatin1String("%messageDirection%"), info.messageDirection());
     //senderDisplayName
-    htmlTemplate.replace("%senderDisplayName%", info.senderDisplayName());
+    htmlTemplate.replace(QLatin1String("%senderDisplayName%"), info.senderDisplayName());
 
     //FIXME %textbackgroundcolor{X}%
     return replaceMessageKeywords(htmlTemplate, info);
@@ -383,7 +383,7 @@ QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const Adiu
 
 QString AdiumThemeView::replaceStatusKeywords(QString &htmlTemplate, const AdiumThemeStatusInfo& info)
 {
-    htmlTemplate.replace("%status%", info.status());
+    htmlTemplate.replace(QLatin1String("%status%"), info.status());
     return replaceMessageKeywords(htmlTemplate, info);
 }
 
@@ -393,7 +393,7 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     QString message = info.message();
 
     // link detection
-    QRegExp linkRegExp("\\b(?:(\\w+)://|(www\\.))([^\\s]+)");
+    QRegExp linkRegExp(QLatin1String("\\b(?:(\\w+)://|(www\\.))([^\\s]+)"));
     int index = 0;
 
     while ((index = linkRegExp.indexIn(message, index)) != -1) {
@@ -410,26 +410,26 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
         if (startsWithWWW || KProtocolInfo::protocols().contains(protocol, Qt::CaseInsensitive)) {
 
             // text not wanted in a link ( <,> )
-            QRegExp unwanted("(&lt;|&gt;)");
+            QRegExp unwanted(QLatin1String("(&lt;|&gt;)"));
 
             if (!realUrl.contains(unwanted)) {
                 // string to show to user
                 QString shownUrl = realUrl;
 
                 // check for newline and cut link when found
-                if (realUrl.contains("<br/>")) {
-                    int findIndex = realUrl.indexOf("<br/>");
+                if (realUrl.contains(QLatin1String(("<br/>")))) {
+                    int findIndex = realUrl.indexOf(QLatin1String("<br/>"));
                     realUrl.truncate(findIndex);
                     shownUrl.truncate(findIndex);
                 }
 
                 // check prefix
                 if (startsWithWWW) {
-                    realUrl.prepend("http://");
+                    realUrl.prepend(QLatin1String("http://"));
                 }
 
                 // if the url is changed, show in chat what the user typed in
-                QString link = "<a href='" + realUrl + "'>" + shownUrl + "</a>";
+                QString link = QLatin1String("<a href='") + realUrl + QLatin1String("'>") + shownUrl + QLatin1String("</a>");
                 message.replace(index, shownUrl.length(), link);
                 // advance position otherwise I end up parsing the same link
                 index += link.length();
@@ -442,16 +442,16 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     }
 
     message = m_emoticons.theme().parseEmoticons(message);
-    htmlTemplate.replace("%message%", message);
+    htmlTemplate.replace(QLatin1String("%message%"), message);
 
     //service
-    htmlTemplate.replace("%service%", info.service());
+    htmlTemplate.replace(QLatin1String("%service%"), info.service());
     //time
-    htmlTemplate.replace("%time%", KGlobal::locale()->formatTime(info.time().time(), true));
+    htmlTemplate.replace(QLatin1String("%time%"), KGlobal::locale()->formatTime(info.time().time(), true));
     //shortTime
-    htmlTemplate.replace("%shortTime%", KGlobal::locale()->formatTime(info.time().time(), false));
+    htmlTemplate.replace(QLatin1String("%shortTime%"), KGlobal::locale()->formatTime(info.time().time(), false));
     //time{X}
-    QRegExp timeRegExp("%time\\{([^}]*)\\}%");
+    QRegExp timeRegExp(QLatin1String("%time\\{([^}]*)\\}%"));
     int pos = 0;
     while ((pos = timeRegExp.indexIn(htmlTemplate , pos)) != -1) {
         QString timeKeyword = formatTime(timeRegExp.cap(1), info.time());
@@ -470,13 +470,15 @@ void AdiumThemeView::appendNewMessage(QString &html)
 {
     //by making the JS return false evaluateJavaScript is a _lot_ faster, as it has nothing to convert to QVariant.
     //escape quotes, and merge HTML onto one line.
-    QString js = QString("appendMessage(\"%1\");false;").arg(html.replace('"', "\\\"").replace('\n', ""));
+    QString js = QString(QLatin1String("appendMessage(\"%1\");false;")).arg(html.replace(QLatin1Char('"'),
+                                                                            QLatin1String("\\\"")).replace(QLatin1Char('\n'), QLatin1String("")));
     page()->mainFrame()->evaluateJavaScript(js);
 }
 
 void AdiumThemeView::appendNextMessage(QString &html)
 {
-    QString js = QString("appendNextMessage(\"%1\");false;").arg(html.replace('"', "\\\"").replace('\n', ""));
+    QString js = QString(QLatin1String("appendNextMessage(\"%1\");false;")).arg(html.replace(QLatin1Char('"'),
+                                                                                QLatin1String("\\\"")).replace(QLatin1Char('\n'), QLatin1String("")));
     page()->mainFrame()->evaluateJavaScript(js);
 }
 
