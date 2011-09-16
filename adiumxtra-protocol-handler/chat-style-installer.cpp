@@ -105,7 +105,7 @@ BundleInstaller::BundleStatus ChatStyleInstaller::install()
 
     m_status = status;
 
-    emit(finished(status));
+    Q_EMIT finished(status);
 
     return status;
 }
@@ -149,12 +149,12 @@ void ChatStyleInstaller::showResult()
 
     notification->sendEvent();
 
-    emit(showedResult());
+    Q_EMIT showedResult();
 }
 
 void ChatStyleInstaller::ignoreRequest()
 {
     kDebug();
 
-    emit(ignoredRequest());
+    Q_EMIT ignoredRequest();
 }

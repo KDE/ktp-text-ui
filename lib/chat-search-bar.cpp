@@ -80,7 +80,7 @@ void ChatSearchBar::enableSearchButtons(bool enable)
 {
     m_nextButton->setEnabled(enable);
     m_previousButton->setEnabled(enable);
-    emit enableSearchButtonsSignal(enable);
+    Q_EMIT enableSearchButtonsSignal(enable);
 }
 
 QWebPage::FindFlags ChatSearchBar::findFlags()
@@ -103,7 +103,7 @@ void ChatSearchBar::onNextButtonClicked()
 {
     // no need to call this if search bar is hidden
     if(isVisible()) {
-        emit(findNextSignal(m_searchInput->text(), findFlags()));
+        Q_EMIT findNextSignal(m_searchInput->text(), findFlags());
     }
 }
 
@@ -111,7 +111,7 @@ void ChatSearchBar::onPreviousButtonClicked()
 {
     // no need to call this if search bar is hidden
     if(isVisible()) {
-        emit(findPreviousSignal(m_searchInput->text(), findFlags()));
+        Q_EMIT findPreviousSignal(m_searchInput->text(), findFlags());
     }
 }
 
@@ -158,13 +158,13 @@ void ChatSearchBar::textChanged(const QString& text)
     } else {
         enableSearchButtons(false);
     }
-    emit(findTextSignal(text, findFlags()));
+    Q_EMIT findTextSignal(text, findFlags());
 }
 
 void ChatSearchBar::toggleCaseSensitive(bool toggle)
 {
     m_caseSensitive = toggle;
-    emit(flagsChangedSignal(m_searchInput->text(), findFlags()));
+    Q_EMIT flagsChangedSignal(m_searchInput->text(), findFlags());
 }
 
 

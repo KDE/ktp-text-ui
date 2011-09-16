@@ -409,7 +409,7 @@ void ChatWindowStyleManager::slotDirectoryFinished()
         kDebug() << "Starting another directory.";
         d->styleDirLister->openUrl(d->styleDirs.pop(), KDirLister::Keep);
     } else {
-        emit loadStylesFinished();
+        Q_EMIT loadStylesFinished();
     }
 }
 

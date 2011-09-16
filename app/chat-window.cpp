@@ -87,7 +87,7 @@ ChatWindow::ChatWindow()
 
 ChatWindow::~ChatWindow()
 {
-    emit aboutToClose(this);
+    Q_EMIT aboutToClose(this);
 }
 
 void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
@@ -115,7 +115,7 @@ void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
     if(result == &close) {
         destroyTab(m_tabWidget->widget(index));
     } else if (result == &dettach) {
-        emit detachRequested(qobject_cast<ChatTab*>(m_tabWidget->widget(index)));
+        Q_EMIT detachRequested(qobject_cast<ChatTab*>(m_tabWidget->widget(index)));
     } else if (result == &moveLeft) {
         m_tabWidget->moveTab(index, index - 1);
     } else if (result == &moveRight) {

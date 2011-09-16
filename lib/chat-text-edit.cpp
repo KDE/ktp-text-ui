@@ -73,12 +73,12 @@ void ChatTextEdit::keyPressEvent(QKeyEvent* e)
     switch (e->key()) {
         case Qt::Key_PageUp :
         case Qt::Key_PageDown :
-            emit scrollEventRecieved(e);
+            Q_EMIT scrollEventRecieved(e);
             break;
 
         default :
             if (e->matches(QKeySequence::Find)) {
-                emit findTextShortcutPressed();
+                Q_EMIT findTextShortcutPressed();
             }
     }
 

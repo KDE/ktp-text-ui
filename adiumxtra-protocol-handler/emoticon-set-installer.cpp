@@ -93,7 +93,7 @@ BundleInstaller::BundleStatus EmoticonSetInstaller::install()
     // we trust in KEmoticons as it gives us no status information
     // installTheme only returns a list of installed themes if we compare the list before and after
     // the style could have been updated and the list would not have changed 
-    emit(finished(BundleInstallOk));
+    Q_EMIT finished(BundleInstallOk);
     return BundleInstallOk;
 }
 
@@ -130,12 +130,12 @@ void EmoticonSetInstaller::showResult()
 
     notification->sendEvent();
 
-    emit(showedResult());
+    Q_EMIT showedResult();
 }
 
 void EmoticonSetInstaller::ignoreRequest()
 {
     kDebug();
 
-    emit(ignoredRequest());
+    Q_EMIT ignoredRequest();
 }

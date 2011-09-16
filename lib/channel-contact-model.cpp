@@ -112,9 +112,9 @@ void ChannelContactModel::onContactPresenceChanged(const Tp::Presence &presence)
     Tp::ContactPtr contact(qobject_cast<Tp::Contact*>(sender()));
 
     QModelIndex index = createIndex(m_contacts.lastIndexOf(contact), 0);
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
 
-    emit contactPresenceChanged(contact, presence);
+    Q_EMIT contactPresenceChanged(contact, presence);
 }
 
 void ChannelContactModel::onContactAliasChanged(const QString &alias)
@@ -122,9 +122,9 @@ void ChannelContactModel::onContactAliasChanged(const QString &alias)
     Tp::ContactPtr contact(qobject_cast<Tp::Contact*>(sender()));
 
     QModelIndex index = createIndex(m_contacts.lastIndexOf(contact), 0);
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
 
-    emit contactAliasChanged(contact, alias);
+    Q_EMIT contactAliasChanged(contact, alias);
 }
 
 void ChannelContactModel::addContacts(const Tp::Contacts &contacts)

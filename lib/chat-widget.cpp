@@ -806,9 +806,9 @@ void ChatWidget::findTextInChat(const QString& text, QWebPage::FindFlags flags)
     d->ui.chatArea->findText(QString(), flags);
 
     if(d->ui.chatArea->findText(text, flags)) {
-        emit(searchTextComplete(true));
+        Q_EMIT searchTextComplete(true);
     } else {
-        emit(searchTextComplete(false));
+        Q_EMIT searchTextComplete(false);
     }
 }
 
