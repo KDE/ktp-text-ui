@@ -123,7 +123,7 @@ public Q_SLOTS:
      */
     ChatWindowStyle *getValidStyleFromPool(const QString &styleName);
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted when all styles finished to list.
      * Used to inform and/or update GUI.

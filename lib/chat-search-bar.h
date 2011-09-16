@@ -61,7 +61,7 @@ private Q_SLOTS:
     /** search criteria toggle: case sensitivity */
     void toggleCaseSensitive(bool toggle);
 
-signals:
+Q_SIGNALS:
     void findTextSignal(const QString &text, QWebPage::FindFlags flags);
     void findNextSignal(const QString &text, QWebPage::FindFlags flags);
     void findPreviousSignal(const QString &text, QWebPage::FindFlags flags);

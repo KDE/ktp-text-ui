@@ -43,7 +43,7 @@ private Q_SLOTS:
     void recalculateSize();
     void updateScrollBar();
 
-signals:
+Q_SIGNALS:
     void findTextShortcutPressed();
     void scrollEventRecieved(QKeyEvent*);
 

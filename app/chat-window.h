@@ -57,7 +57,7 @@ public:
     void addTab(ChatTab* tab);
     void removeTab(ChatTab* tab);
 
-signals:
+Q_SIGNALS:
     /** to emit before closing a window. This signal tells telepathyChatUi to remove the closed
      * window from it's list of open windows */
     void aboutToClose(ChatWindow *window);

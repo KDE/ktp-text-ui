@@ -42,7 +42,7 @@ public:
 
     void setTextChannel(const Tp::TextChannelPtr &channel);
 
-signals:
+Q_SIGNALS:
     void contactPresenceChanged(const Tp::ContactPtr &contact, const Tp::Presence &presence);
     void contactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
 
