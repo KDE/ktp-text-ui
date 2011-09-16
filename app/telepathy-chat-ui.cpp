@@ -101,7 +101,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     Q_UNUSED(handlerInfo);
 
     Tp::TextChannelPtr textChannel;
-    foreach(const Tp::ChannelPtr & channel, channels) {
+    Q_FOREACH(const Tp::ChannelPtr & channel, channels) {
         textChannel = Tp::TextChannelPtr::dynamicCast(channel);
         if (textChannel) {
             break;
@@ -118,7 +118,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     bool forceRaiseWindowHint = false;
 
     //find the relevant channelRequest
-    foreach(const Tp::ChannelRequestPtr channelRequest, channelRequests) {
+    Q_FOREACH(const Tp::ChannelRequestPtr channelRequest, channelRequests) {
         kDebug() << channelRequest->hints().allHints();
         forceRaiseWindowHint = channelRequest->hints().hint(QLatin1String("org.kde.telepathy"), QLatin1String("forceRaiseWindow")).toBool();
     }

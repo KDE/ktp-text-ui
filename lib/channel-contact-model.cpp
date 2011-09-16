@@ -131,7 +131,7 @@ void ChannelContactModel::addContacts(const Tp::Contacts &contacts)
 {
     QList<Tp::ContactPtr> newContacts = contacts.toList();
 
-    foreach(Tp::ContactPtr contact, newContacts) {
+    Q_FOREACH(Tp::ContactPtr contact, newContacts) {
         connect(contact.data(), SIGNAL(aliasChanged(QString)), SLOT(onContactAliasChanged(QString)));
         connect(contact.data(), SIGNAL(presenceChanged(Tp::Presence)), SLOT(onContactPresenceChanged(Tp::Presence)));
     }
@@ -143,7 +143,7 @@ void ChannelContactModel::addContacts(const Tp::Contacts &contacts)
 
 void ChannelContactModel::removeContacts(const Tp::Contacts &contacts)
 {
-    foreach(Tp::ContactPtr contact, contacts) {
+    Q_FOREACH(Tp::ContactPtr contact, contacts) {
 
         //I think this is needed as technically the contact itself hasn't actually been deleted even if we remove our pointers to it
         //and could be used referenced elsewhere in the chat application in a different tab.

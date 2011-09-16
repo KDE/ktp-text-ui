@@ -87,7 +87,7 @@ void ChatWindowStyleManager::loadStyles()
 
     QStringList chatStyles = KGlobal::dirs()->findDirs("data", QLatin1String("ktelepathy/styles"));
 
-    foreach(const QString &styleDir, chatStyles) {
+    Q_FOREACH(const QString &styleDir, chatStyles) {
         kDebug() << styleDir;
         d->styleDirs.push(KUrl(styleDir));
     }
@@ -115,7 +115,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
    KStandardDirs::locateLocal("data", QLatin1String("ktelepathy/styles/"));
    QStringList chatStyles = KGlobal::dirs()->findDirs("data", QLatin1String("ktelepathy/styles"));
    // findDirs returns preferred paths first, let's check if one of them is writable
-   foreach(const QString& styleDir, chatStyles) {
+   Q_FOREACH(const QString& styleDir, chatStyles) {
         kDebug() << styleDir;
        if (QFileInfo(styleDir).isWritable()) {
            localStyleDir = styleDir;
@@ -293,7 +293,7 @@ bool ChatWindowStyleManager::removeStyle(const QString &styleId)
 
 //        // attempt to delete all dirs with this style
 //        int numDeleted = 0;
-//        foreach(const QString& stylePath, styleDirs) {
+//        Q_FOREACH(const QString& stylePath, styleDirs) {
 //            KUrl urlStyle(stylePath);
 //            // Do the actual deletion of the directory style.
 //            if (KIO::NetAccess::del(urlStyle, 0))
@@ -323,7 +323,7 @@ ChatWindowStyle *ChatWindowStyleManager::getValidStyleFromPool(const QString &st
 
     kDebug() << "Trying first valid style";
     // Try first valid style
-    foreach(const QString& name, d->availableStyles) {
+    Q_FOREACH(const QString& name, d->availableStyles) {
         style = getStyleFromPool(name);
         if (style) {
             return style;
@@ -367,7 +367,7 @@ ChatWindowStyle *ChatWindowStyleManager::getStyleFromPool(const QString &styleId
 
 void ChatWindowStyleManager::slotNewStyles(const KFileItemList &dirList)
 {
-    foreach(const KFileItem &item, dirList) {
+    Q_FOREACH(const KFileItem &item, dirList) {
         // Ignore data dir(from deprecated XSLT themes)
         if (!item.url().fileName().contains(QLatin1String("data"))) {
             kDebug() << "Listing: " << item.url().fileName();

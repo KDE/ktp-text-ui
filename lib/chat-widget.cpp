@@ -271,7 +271,7 @@ KIcon ChatWidget::icon() const
         //normal chat - self and one other person.
         if (!d->isGroupChat) {
             //find the other contact which isn't self.
-            foreach(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
+            Q_FOREACH(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
                 if (contact != d->channel->groupSelfContact()) {
                     return iconForPresence(contact->presence().type());
                 }
@@ -377,7 +377,7 @@ QColor ChatWidget::titleColor() const
     //normal chat - self and one other person.
     if (!d->isGroupChat) {
         //find the other contact which isn't self.
-        foreach(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
+        Q_FOREACH(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
             if (contact != d->channel->groupSelfContact()) {
                 if (contact->presence().type() == Tp::ConnectionPresenceTypeOffline ||
                     contact->presence().type() == Tp::ConnectionPresenceTypeHidden) {
@@ -512,10 +512,10 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
             //debug the message parts (looking for HTML etc)
-    //        foreach(Tp::MessagePart part, message.parts())
+    //        Q_FOREACH(Tp::MessagePart part, message.parts())
     //        {
     //            qDebug() << "***";
-    //            foreach(QString key, part.keys())
+    //            Q_FOREACH(QString key, part.keys())
     //            {
     //                qDebug() << key << part.value(key).variant();
     //            }
@@ -628,7 +628,7 @@ void ChatWidget::chatViewReady()
     d->chatviewlInitialised = true;
 
     //process any messages we've 'missed' whilst initialising.
-    foreach(const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
+    Q_FOREACH(const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
         handleIncomingMessage(message);
     }
 }
@@ -678,7 +678,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
     if (!contactIsTyping) {
         //In a multiperson chat just because this user is no longer typing it doesn't mean that no-one is.
         //loop through each contact, check no-one is in composing mode.
-        foreach (const Tp::ContactPtr & contact, d->channel->groupContacts()) {
+        Q_FOREACH (const Tp::ContactPtr & contact, d->channel->groupContacts()) {
             if (contact == d->channel->connection()->selfContact()) {
                 continue;
             }
