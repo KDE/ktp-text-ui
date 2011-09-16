@@ -22,7 +22,7 @@ target_link_libraries(telepathy-kde-text-ui
 configure_file(org.freedesktop.Telepathy.Client.KDE.TextUi.service.in
                ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDE.TextUi.service)
 
-install(TARGETS telepathy-kde-text-ui ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS telepathy-kde-text-ui DESTINATION ${LIBEXEC_INSTALL_DIR})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDE.TextUi.service
         DESTINATION ${DBUS_SERVICES_INSTALL_DIR})
 install(FILES KDE.TextUi.client DESTINATION ${SHARE_INSTALL_PREFIX}/telepathy/clients/)

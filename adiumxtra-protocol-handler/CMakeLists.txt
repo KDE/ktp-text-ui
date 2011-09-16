@@ -24,6 +24,7 @@ target_link_libraries(adiumxtra-protocol-handler
 			ktelepathy_chat_lib)
 
 
-install(TARGETS adiumxtra-protocol-handler ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS adiumxtra-protocol-handler DESTINATION ${LIBEXEC_INSTALL_DIR})
 
-install( FILES adiumxtra.protocol DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(adiumxtra.protocol.in  ${CMAKE_CURRENT_BINARY_DIR}/adiumxtra.protocol)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/adiumxtra.protocol DESTINATION ${SERVICES_INSTALL_DIR})
