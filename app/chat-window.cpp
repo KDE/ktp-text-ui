@@ -583,10 +583,14 @@ void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::Contact
 
 void ChatWindow::onUserTypingChanged(bool typing)
 {
+    ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+    Q_ASSERT(currChat);
+    QString title = currChat->title();
+
     if (typing) {
-        setWindowTitle(i18n("Typing... %1", windowTitle()));
+        setWindowTitle(i18nc("String prepended in window title, arg is contact's name", "Typing... %1", title));
     } else {
-        setWindowTitle(windowTitle().remove(i18n("Typing... ")));
+        setWindowTitle(title);
     }
 }
 
