@@ -454,6 +454,7 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
     connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
     connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
+    connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged(bool)));
     connect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
     connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
@@ -580,7 +581,13 @@ void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::Contact
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 
-
-
+void ChatWindow::onUserTypingChanged(bool typing)
+{
+    if (typing) {
+        setWindowTitle(i18n("Typing... %1", windowTitle()));
+    } else {
+        setWindowTitle(windowTitle().remove(i18n("Typing... ")));
+    }
+}
 
 #include "chat-window.moc"

@@ -84,6 +84,7 @@ private Q_SLOTS:
     void onTabTextChanged(const QString &newTitle);
     void onTabIconChanged(const KIcon &newIcon);
     void onVideoCallTriggered();                                /** start a video call */
+    void onUserTypingChanged(bool typing);
 
 protected Q_SLOTS:
     void showSettingsDialog();
