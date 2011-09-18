@@ -268,10 +268,16 @@ QString ChatWindowStyle::content(InternalIdentifier id) const
     return d->templateContents.value( id );
 }
 
+void ChatWindowStyle::inheritContent(InternalIdentifier subType, InternalIdentifier superType)
+{
+    if (content(subType).isEmpty()) {
+        setContent(subType, content(superType));
+    }
+}
+
 
 void ChatWindowStyle::readStyleFiles()
 {
-
     // load style infos
     QString infoPlistFile = d->baseHref + QLatin1String("../Info.plist");
     ChatStylePlistFileReader plistReader(infoPlistFile);

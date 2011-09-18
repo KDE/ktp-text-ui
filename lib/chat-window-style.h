@@ -193,6 +193,11 @@ private:
      */
     QString content(InternalIdentifier id) const;
 
+    /**
+     * If subType is empty, use the superType
+     */
+    void inheritContent(InternalIdentifier subType, InternalIdentifier superType);
+
 private:
     class Private;
     Private * const d;
