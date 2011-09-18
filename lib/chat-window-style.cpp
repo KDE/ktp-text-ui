@@ -41,23 +41,7 @@ public:
     QString defaultFontFamily;
     int     defaultFontSize;
 
-    QString templateHtml;
-    QString headerHtml;
-    QString footerHtml;
-    QString incomingHtml;
-    QString nextIncomingHtml;
-    QString outgoingHtml;
-    QString nextOutgoingHtml;
-    QString statusHtml;
-    QString actionIncomingHtml;
-    QString actionOutgoingHtml;
-    QString fileTransferIncomingHtml;
-    QString voiceClipIncomingHtml;
-    QString outgoingStateSendingHtml;
-    QString outgoingStateErrorHtml;
-    QString outgoingStateSentHtml;
-    QString outgoingStateUnknownHtml;
-
+    QHash<int, QString> templateContents;
     QHash<QString, bool> compactVariants;
 };
 
@@ -109,12 +93,12 @@ ChatWindowStyle::~ChatWindowStyle()
 bool ChatWindowStyle::isValid() const
 {
     kDebug();
-    bool statusHtml = !d->statusHtml.isEmpty();
-    bool fileTransferIncomingHtml = !d->fileTransferIncomingHtml.isEmpty();
-    bool nextIncomingHtml = !d->nextIncomingHtml.isEmpty();
-    bool incomingHtml = !d->incomingHtml.isEmpty();
-    bool nextOutgoingHtml = !d->nextOutgoingHtml.isEmpty();
-    bool outgoingHtml = !d->outgoingHtml.isEmpty();
+    bool statusHtml = !content(Status).isEmpty();
+    bool fileTransferIncomingHtml = !content(FileTransferIncoming).isEmpty();
+    bool nextIncomingHtml = !content(IncomingNext).isEmpty();
+    bool incomingHtml = !content(Incoming).isEmpty();
+    bool nextOutgoingHtml = !content(OutgoingNext).isEmpty();
+    bool outgoingHtml = !content(Outgoing).isEmpty();
 
     return (statusHtml && fileTransferIncomingHtml && nextIncomingHtml
             && incomingHtml && nextOutgoingHtml  && outgoingHtml);
@@ -157,92 +141,92 @@ QString ChatWindowStyle::getStyleBaseHref() const
 
 bool ChatWindowStyle::hasHeader() const
 {
-    return ! d->headerHtml.isEmpty();
+    return ! content(Header).isEmpty();
 }
 
 QString ChatWindowStyle::getTemplateHtml() const
 {
-    return d->templateHtml;
+    return content(Template);
 }
 
 QString ChatWindowStyle::getHeaderHtml() const
 {
-    return d->headerHtml;
+    return content(Header);
 }
 
 QString ChatWindowStyle::getFooterHtml() const
 {
-    return d->footerHtml;
+    return content(Footer);
 }
 
 QString ChatWindowStyle::getIncomingHtml() const
 {
-    return d->incomingHtml;
+    return content(Incoming);
 }
 
 QString ChatWindowStyle::getNextIncomingHtml() const
 {
-    return d->nextIncomingHtml;
+    return content(IncomingNext);
 }
 
 QString ChatWindowStyle::getOutgoingHtml() const
 {
-    return d->outgoingHtml;
+    return content(Outgoing);
 }
 
 QString ChatWindowStyle::getNextOutgoingHtml() const
 {
-    return d->nextOutgoingHtml;
+    return content(OutgoingNext);
 }
 
 QString ChatWindowStyle::getStatusHtml() const
 {
-    return d->statusHtml;
+    return content(Status);
 }
 
 QString ChatWindowStyle::getActionIncomingHtml() const
 {
-    return d->actionIncomingHtml;
+    return content(ActionIncoming);
 }
 
 QString ChatWindowStyle::getActionOutgoingHtml() const
 {
-    return d->actionOutgoingHtml;
+    return content(ActionOutgoing);
 }
 
 QString ChatWindowStyle::getFileTransferIncomingHtml() const
 {
-    return d->fileTransferIncomingHtml;
+    return content(FileTransferIncoming);
 }
 
 QString ChatWindowStyle::getVoiceClipIncomingHtml() const
 {
-    return d->voiceClipIncomingHtml;
+    return content(VoiceClipIncoming);
 }
 
 QString ChatWindowStyle::getOutgoingStateSendingHtml() const
 {
-    return d->outgoingStateSendingHtml;
+    return content(OutgoingStateSending);
 }
 
 QString ChatWindowStyle::getOutgoingStateSentHtml() const
 {
-    return d->outgoingStateSentHtml;
+    return content(OutgoingStateSent);
 }
 
 QString ChatWindowStyle::getOutgoingStateErrorHtml() const
 {
-    return d->outgoingStateErrorHtml;
+    return content(OutgoingStateError);
 }
 
 QString ChatWindowStyle::getOutgoingStateUnknownHtml() const
 {
-    return d->outgoingStateUnknownHtml;
+    return content(OutgoingStateUnknown);
 }
 
 bool ChatWindowStyle::hasActionTemplate() const
 {
-    return (!d->actionIncomingHtml.isEmpty() && !d->actionOutgoingHtml.isEmpty());
+    return (!content(ActionIncoming).isEmpty() && !content(ActionOutgoing).isEmpty());
 }
 
 void ChatWindowStyle::listVariants()
@@ -274,46 +258,77 @@ void ChatWindowStyle::listVariants()
     }
 }
 
+void ChatWindowStyle::setContent(InternalIdentifier id, const QString& content)
+{
+    d->templateContents.insert( id, content );
+}
+
+QString ChatWindowStyle::content(InternalIdentifier id) const
+{
+    return d->templateContents.value( id );
+}
+
+
 void ChatWindowStyle::readStyleFiles()
 {
-    QString templateFile = d->baseHref + QLatin1String("Template.html");
-    QString headerFile = d->baseHref + QLatin1String("Header.html");
-    QString footerFile = d->baseHref + QLatin1String("Footer.html");
-    QString incomingFile = d->baseHref + QLatin1String("Incoming/Content.html");
-    QString nextIncomingFile = d->baseHref + QLatin1String("Incoming/NextContent.html");
-    QString outgoingFile = d->baseHref + QLatin1String("Outgoing/Content.html");
-    QString nextOutgoingFile = d->baseHref + QLatin1String("Outgoing/NextContent.html");
-    QString statusFile = d->baseHref + QLatin1String("Status.html");
-    QString actionIncomingFile = d->baseHref + QLatin1String("Incoming/Action.html");
-    QString actionOutgoingFile = d->baseHref + QLatin1String("Outgoing/Action.html");
-    QString fileTransferIncomingFile = d->baseHref + QLatin1String("Incoming/FileTransferRequest.html");
-    QString voiceClipIncomingFile = d->baseHref + QLatin1String("Incoming/voiceClipRequest.html");
-    QString outgoingStateUnknownFile = d->baseHref + QLatin1String("Outgoing/StateUnknown.html");
-    QString outgoingStateSendingFile = d->baseHref + QLatin1String("Outgoing/StateSending.html");
-    QString outgoingStateSentFile = d->baseHref + QLatin1String("Outgoing/StateSent.html");
-    QString outgoingStateErrorFile = d->baseHref + QLatin1String("Outgoing/StateError.html");
+
+    // load style infos
     QString infoPlistFile = d->baseHref + QLatin1String("../Info.plist");
-
-
-    QFile fileAccess;
-
     ChatStylePlistFileReader plistReader(infoPlistFile);
     d->defaultVariantName = plistReader.defaultVariant();
     d->defaultFontFamily  = plistReader.defaultFontFamily();
     d->defaultFontSize    = plistReader.defaultFontSize();
 
-    // Load template file
-    if (QFile::exists(templateFile)) {
-        fileAccess.setFileName(templateFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->templateHtml = headerStream.readAll();
-        fileAccess.close();
+
+    QHash<InternalIdentifier, QLatin1String> templateFiles;
+    templateFiles.insert(Template, QLatin1String("Template.html"));
+    templateFiles.insert(Status, QLatin1String("Status.html"));
+
+    templateFiles.insert(Header, QLatin1String("Header.html"));
+    templateFiles.insert(Footer, QLatin1String("Footer.html"));
+
+    templateFiles.insert(Incoming, QLatin1String("Incoming/Content.html"));
+    templateFiles.insert(IncomingNext, QLatin1String("Incoming/NextContent.html"));
+    templateFiles.insert(Outgoing, QLatin1String("Outgoing/Content.html"));
+    templateFiles.insert(OutgoingNext, QLatin1String("Outgoing/NextContent.html"));
+
+    templateFiles.insert(HistoryIncoming, QLatin1String("Incoming/Context.html"));
+    templateFiles.insert(HistoryIncomingNext, QLatin1String("Incoming/NextContext.html"));
+    templateFiles.insert(HistoryOutgoing, QLatin1String("Outgoing/Context.html"));
+    templateFiles.insert(HistoryOutgoingNext, QLatin1String("Outgoing/NextContext.html"));
+
+    templateFiles.insert(ActionIncoming, QLatin1String("Incoming/Action.html"));
+    templateFiles.insert(ActionOutgoing, QLatin1String("Outgoing/Action.html"));
+
+    templateFiles.insert(FileTransferIncoming, QLatin1String("Incoming/FileTransferRequest.html"));
+    templateFiles.insert(VoiceClipIncoming, QLatin1String("Incoming/voiceClipRequest.html"));
+
+    templateFiles.insert(OutgoingStateUnknown, QLatin1String("Outgoing/StateUnknown.html"));
+    templateFiles.insert(OutgoingStateSending, QLatin1String("Outgoing/StateSending.html"));
+    templateFiles.insert(OutgoingStateSent, QLatin1String("Outgoing/StateSent.html"));
+    templateFiles.insert(OutgoingStateError, QLatin1String("Outgoing/StateError.html"));
+    //templateFiles.insert(InfoPlist, "../Info.plist");
+
+
+    // load all files first and then do all sorts of bloody workarounds
+    QFile fileAccess;
+    Q_FOREACH(const QLatin1String &fileName, templateFiles)
+    {
+        QString path = d->baseHref + fileName;
+        // Load template file
+        if (QFile::exists(path)) {
+            fileAccess.setFileName(path);
+            fileAccess.open(QIODevice::ReadOnly);
+            QTextStream headerStream(&fileAccess);
+            headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
+            setContent( templateFiles.key(fileName), headerStream.readAll());
+            //kDebug() << fileName << content(templateFiles.key(fileName));
+            fileAccess.close();
+        }
     }
 
     // Load template file fallback
-    if (d->templateHtml.isEmpty())
+    if (content(Template).isEmpty())
     {
         QString templateFileName(KGlobal::dirs()->findResource("data", QLatin1String("ktelepathy/template.html")));
 
@@ -322,210 +337,62 @@ void ChatWindowStyle::readStyleFiles()
             fileAccess.open(QIODevice::ReadOnly);
             QTextStream headerStream(&fileAccess);
             headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-            d->templateHtml = headerStream.readAll();
+            setContent(Template, headerStream.readAll());
             fileAccess.close();
         }
     }
 
-    // Load header file.
-    if (QFile::exists(headerFile)) {
-        fileAccess.setFileName(headerFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->headerHtml = headerStream.readAll();
-        fileAccess.close();
-    }
-    // Load Footer file
-    if (QFile::exists(footerFile)) {
-        fileAccess.setFileName(footerFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->footerHtml = headerStream.readAll();
-        fileAccess.close();
-    }
-    // Load incoming file
-    if (QFile::exists(incomingFile)) {
-        fileAccess.setFileName(incomingFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->incomingHtml = headerStream.readAll();
-        fileAccess.close();
-    }
-    // Load next Incoming file
-    if (QFile::exists(nextIncomingFile)) {
-        fileAccess.setFileName(nextIncomingFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->nextIncomingHtml = headerStream.readAll();
-        fileAccess.close();
+    if (content(IncomingNext).isEmpty()) {
+        setContent(IncomingNext, content(Incoming));
     }
 
-    if (d->nextIncomingHtml.isEmpty()) {
-        d->nextIncomingHtml = d->incomingHtml;
+    if (content(Outgoing).isEmpty()) {
+        setContent(Outgoing, content(Incoming));
+    }
+
+    if (content(OutgoingNext).isEmpty()) {
+        setContent(OutgoingNext, content(Outgoing));
     }
 
 
-    // Load outgoing file
-    if (QFile::exists(outgoingFile)) {
-        fileAccess.setFileName(outgoingFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->outgoingHtml = headerStream.readAll();
-        fileAccess.close();
-    }
-
-    if (d->outgoingHtml.isEmpty()) {
-        d->outgoingHtml = d->incomingHtml;
-    }
-
-    // Load next outgoing file
-    if (QFile::exists(nextOutgoingFile)) {
-        fileAccess.setFileName(nextOutgoingFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->nextOutgoingHtml = headerStream.readAll();
-        fileAccess.close();
-    }
-
-    if (d->nextOutgoingHtml.isEmpty()) {
-        d->nextOutgoingHtml = d->nextIncomingHtml;
-    }
-
-    // Load status file
-    if (QFile::exists(statusFile)) {
-        fileAccess.setFileName(statusFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->statusHtml = headerStream.readAll();
-        fileAccess.close();
-    }
-
-    // Load Action Incoming file
-    if (QFile::exists(actionIncomingFile)) {
-        fileAccess.setFileName(actionIncomingFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->actionIncomingHtml = headerStream.readAll();
-        fileAccess.close();
-    }
-    // Load Action Outgoing file
-    if (QFile::exists(actionOutgoingFile)) {
-        fileAccess.setFileName(actionOutgoingFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->actionOutgoingHtml = headerStream.readAll();
-        fileAccess.close();
-    }
-    // Load FileTransfer Incoming file
-    if (QFile::exists(fileTransferIncomingFile)) {
-        fileAccess.setFileName(fileTransferIncomingFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->fileTransferIncomingHtml = headerStream.readAll();
-        fileAccess.close();
-    }
-
-    if (d->fileTransferIncomingHtml.isEmpty() ||
-            (!d->fileTransferIncomingHtml.contains(QLatin1String("saveFileHandlerId")) &&
-             !d->fileTransferIncomingHtml.contains(QLatin1String("saveFileAsHandlerId")))) {   // Create default html
-        d->fileTransferIncomingHtml = d->incomingHtml;
+    if (content(FileTransferIncoming).isEmpty() ||
+            (!content(FileTransferIncoming).contains(QLatin1String("saveFileHandlerId")) &&
+             !content(FileTransferIncoming).contains(QLatin1String("saveFileAsHandlerId")))) {   // Create default html
         QString message = QString(QLatin1String("%message%\n"
-                                                "<div>\n"
-                                                " <div style=\"width:37px; float:left;\">\n"
-                                                "  <img src=\"%fileIconPath%\" style=\"width:32px; height:32px; vertical-align:middle;\" />\n"
-                                                " </div>\n"
-                                                " <div>\n"
-                                                "  <span><b>%fileName%</b> (%fileSize%)</span><br>\n"
-                                                "  <span>\n"
-                                                "   <input id=\"%saveFileAsHandlerId%\" type=\"button\" value=\"%1\">\n"
-                                                "   <input id=\"%cancelRequestHandlerId%\" type=\"button\" value=\"%2\">\n"
-                                                "  </span>\n"
-                                                " </div>\n"
-                                                "</div>"))
+                                  "<div>\n"
+                                  " <div style=\"width:37px; float:left;\">\n"
+                                  "  <img src=\"%fileIconPath%\" style=\"width:32px; height:32px; vertical-align:middle;\" />\n"
+                                  " </div>\n"
+                                  " <div>\n"
+                                  "  <span><b>%fileName%</b> (%fileSize%)</span><br>\n"
+                                  "  <span>\n"
+                                  "   <input id=\"%saveFileAsHandlerId%\" type=\"button\" value=\"%1\">\n"
+                                  "   <input id=\"%cancelRequestHandlerId%\" type=\"button\" value=\"%2\">\n"
+                                  "  </span>\n"
+                                  " </div>\n"
+                                  "</div>"))
                           .arg(i18n("Download"), i18n("Cancel"));
-        d->fileTransferIncomingHtml.replace(QLatin1String("%message%"), message);
+        QString incoming = content(Incoming);
+        setContent(FileTransferIncoming, incoming.replace(QLatin1String("%message%"), message));
     }
 
-    // Load VoiceClip Incoming file
-    if (QFile::exists(voiceClipIncomingFile)) {
-        fileAccess.setFileName(voiceClipIncomingFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->voiceClipIncomingHtml = headerStream.readAll();
-        //kDebug() << "voiceClipIncoming HTML: " << d->voiceClipIncomingHtml;
-        fileAccess.close();
-    }
-
-    if (d->voiceClipIncomingHtml.isEmpty() ||
-            (!d->voiceClipIncomingHtml.contains(QLatin1String("playVoiceHandlerId")) &&
-             !d->voiceClipIncomingHtml.contains(QLatin1String("saveAsVoiceHandlerId")))) {   // Create default html
-        d->voiceClipIncomingHtml = d->incomingHtml;
+    if (content(VoiceClipIncoming).isEmpty() ||
+            (!content(VoiceClipIncoming).contains("playVoiceHandlerId") &&
+             !content(VoiceClipIncoming).contains("saveAsVoiceHandlerId"))) {   // Create default html
         QString message = QString(QLatin1String("%message%\n"
-                                                "<div>\n"
-                                                " <div style=\"width:37px; float:left;\">\n"
-                                                "  <img src=\"%fileIconPath%\" style=\"width:32px; height:32px; vertical-align:middle;\" />\n"
-                                                " </div>\n"
-                                                " <div>\n"
-                                                "  <span>\n"
-                                                "   <input id=\"%playVoiceHandlerId%\" type=\"button\" value=\"%1\">\n"
-                                                "   <input id=\"%saveAsVoiceHandlerId%\" type=\"button\" value=\"%2\">\n"
-                                                "  </span>\n"
-                                                " </div>\n"
-                                                "</div>"))
+                                  "<div>\n"
+                                  " <div style=\"width:37px; float:left;\">\n"
+                                  "  <img src=\"%fileIconPath%\" style=\"width:32px; height:32px; vertical-align:middle;\" />\n"
+                                  " </div>\n"
+                                  " <div>\n"
+                                  "  <span>\n"
+                                  "   <input id=\"%playVoiceHandlerId%\" type=\"button\" value=\"%1\">\n"
+                                  "   <input id=\"%saveAsVoiceHandlerId%\" type=\"button\" value=\"%2\">\n"
+                                  "  </span>\n"
+                                  " </div>\n"
+                                  "</div>"))
                           .arg(i18n("Play"), i18n("Save as"));
-        d->voiceClipIncomingHtml.replace(QLatin1String("%message%"), message);
-    }
-
-    // Load outgoing file
-    if (QFile::exists(outgoingStateUnknownFile)) {
-        fileAccess.setFileName(outgoingStateUnknownFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->outgoingStateUnknownHtml = headerStream.readAll();
-        //kDebug() << "Outgoing StateUnknown HTML: " << d->outgoingStateUnknownHtml;
-        fileAccess.close();
-    }
-
-    if (QFile::exists(outgoingStateSendingFile)) {
-        fileAccess.setFileName(outgoingStateSendingFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->outgoingStateSendingHtml = headerStream.readAll();
-        //kDebug() << "Outgoing StateSending HTML: " << d->outgoingStateSendingHtml;
-        fileAccess.close();
-    }
-
-    if (QFile::exists(outgoingStateSentFile)) {
-        fileAccess.setFileName(outgoingStateSentFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->outgoingStateSentHtml = headerStream.readAll();
-        //kDebug() << "Outgoing StateSent HTML: " << d->outgoingStateSentHtml;
-        fileAccess.close();
-    }
-
-    if (QFile::exists(outgoingStateErrorFile)) {
-        fileAccess.setFileName(outgoingStateErrorFile);
-        fileAccess.open(QIODevice::ReadOnly);
-        QTextStream headerStream(&fileAccess);
-        headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-        d->outgoingStateErrorHtml = headerStream.readAll();
-        //kDebug() << "Outgoing StateError HTML: " << d->outgoingStateErrorHtml;
-        fileAccess.close();
+        setContent(VoiceClipIncoming, content(Incoming).replace(QLatin1String("%message%"), message));
     }
 }
 

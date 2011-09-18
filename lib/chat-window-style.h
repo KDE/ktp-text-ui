@@ -158,6 +158,41 @@ private:
      */
     void listVariants();
 
+    enum InternalIdentifier {
+        Template,
+        Status,
+
+        Header,
+        Footer,
+
+        Incoming,
+        IncomingNext,
+        Outgoing,
+        OutgoingNext,
+
+        ActionIncoming,
+        ActionOutgoing,
+
+        FileTransferIncoming,
+        VoiceClipIncoming,
+
+        OutgoingStateUnknown,
+        OutgoingStateSending,
+        OutgoingStateSent,
+        OutgoingStateError
+        //InfoPlist
+    };
+
+    /**
+     * Abbreviate d->templateContents.insert( internalIdentifier, content )
+     */
+    void setContent(InternalIdentifier id, const QString &content);
+
+    /**
+     * Abbreviate d->templateContents.value( internalIdentifier )
+     */
+    QString content(InternalIdentifier id) const;
+
 private:
     class Private;
     Private * const d;
