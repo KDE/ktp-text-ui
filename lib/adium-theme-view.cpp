@@ -57,11 +57,30 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
     //blocks QWebView functionality which allows you to change page by dragging a URL onto it.
     setAcceptDrops(false);
 
-    //determine the chat window style to use (from the Kopete config file).
+    // don't let QWebView handle the links, we do
+    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+
+    QAction *defaultOpenLinkAction = pageAction(QWebPage::OpenLink);
+    m_openLinkAction = new KAction(defaultOpenLinkAction->text(), this);
+    connect(m_openLinkAction, SIGNAL(triggered()),
+            this, SLOT(onOpenLinkActionTriggered()));
+
+    connect(this, SIGNAL(linkClicked(QUrl)), this, SLOT(onLinkClicked(QUrl)));
+}
+
+void AdiumThemeView::load(ChatType chatType) {
+
+    //determine the chat window style to use
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
     KConfigGroup appearanceConfig = config->group("Appearance");
 
-    QString chatStyleName = appearanceConfig.readEntry("styleName", "renkoo.AdiumMessageStyle");
+    QString chatStyleName;
+    if (chatType == AdiumThemeView::SingleUserChat) {
+        chatStyleName = appearanceConfig.readEntry("styleName", "renkoo.AdiumMessageStyle");
+    } else {
+        chatStyleName = QLatin1String("simkete");
+    }
+
     m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
     if (m_chatStyle == 0 || !m_chatStyle->isValid()) {
         KMessageBox::error(this, i18n("Failed to load a valid theme. Please make sure you "
@@ -93,17 +112,8 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
     m_useCustomFont = appearanceConfig.readEntry("useCustomFont", false);
     m_fontFamily = appearanceConfig.readEntry("fontFamily", QWebSettings::globalSettings()->fontFamily(QWebSettings::StandardFont));
     m_fontSize = appearanceConfig.readEntry("fontSize", QWebSettings::globalSettings()->fontSize(QWebSettings::DefaultFontSize));
-
-    // don't let QWebView handle the links, we do
-    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-
-    QAction *defaultOpenLinkAction = pageAction(QWebPage::OpenLink);
-    m_openLinkAction = new KAction(defaultOpenLinkAction->text(), this);
-    connect(m_openLinkAction, SIGNAL(triggered()),
-            this, SLOT(onOpenLinkActionTriggered()));
-
-    connect(this, SIGNAL(linkClicked(QUrl)), this, SLOT(onLinkClicked(QUrl)));
 }
+
 
 void AdiumThemeView::contextMenuEvent(QContextMenuEvent *event)
 {

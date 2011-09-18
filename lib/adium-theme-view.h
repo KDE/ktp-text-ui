@@ -42,7 +42,18 @@ class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public QWebView
 {
     Q_OBJECT
 public:
+
+    enum ChatType {
+        GroupChat,
+        SingleUserChat
+    };
+
     explicit AdiumThemeView(QWidget *parent = 0);
+
+    /** Loads the Theme data*/
+    void load(ChatType chatType);
+
+    /** Starts populating the HTML into the view*/
     void initialise(const AdiumThemeHeaderInfo&);
 
     const QString variantPath() const;

@@ -159,6 +159,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     d->ui.contactsView->setModel(d->contactModel);
 
+    d->ui.chatArea->load((d->isGroupChat?AdiumThemeView::GroupChat:AdiumThemeView::SingleUserChat));
+
     AdiumThemeHeaderInfo info;
 
     //normal chat - self and one other person.
@@ -227,8 +229,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     connect(this, SIGNAL(searchTextComplete(bool)), d->ui.searchBar, SLOT(onSearchTextComplete(bool)));
 
-	// to make PgUp and PgDown keys work properly
-	connect(d->ui.sendMessageBox, SIGNAL(scrollEventRecieved(QKeyEvent*)), d->ui.chatArea, SLOT(onScrollEvent(QKeyEvent*)));
+        // to make PgUp and PgDown keys work properly
+        connect(d->ui.sendMessageBox, SIGNAL(scrollEventRecieved(QKeyEvent*)), d->ui.chatArea, SLOT(onScrollEvent(QKeyEvent*)));
 }
 
 ChatWidget::~ChatWidget()
