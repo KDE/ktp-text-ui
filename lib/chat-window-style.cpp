@@ -184,6 +184,26 @@ QString ChatWindowStyle::getStatusHtml() const
     return content(Status);
 }
 
+QString ChatWindowStyle::getHistoryIncomingHtml() const
+{
+    return content(HistoryIncoming);
+}
+
+QString ChatWindowStyle::getHistoryNextIncomingHtml() const
+{
+    return content(HistoryIncomingNext);
+}
+
+QString ChatWindowStyle::getHistoryOutgoingHtml() const
+{
+    return content(HistoryOutgoing);
+}
+
+QString ChatWindowStyle::getHistoryNextOutgoingHtml() const
+{
+    return content(HistoryOutgoingNext);
+}
+
 QString ChatWindowStyle::getActionIncomingHtml() const
 {
     return content(ActionIncoming);
@@ -285,7 +305,7 @@ void ChatWindowStyle::readStyleFiles()
     d->defaultFontFamily  = plistReader.defaultFontFamily();
     d->defaultFontSize    = plistReader.defaultFontSize();
 
-
+    // specify the files for the identifiers
     QHash<InternalIdentifier, QLatin1String> templateFiles;
     templateFiles.insert(Template, QLatin1String("Template.html"));
     templateFiles.insert(Status, QLatin1String("Status.html"));
@@ -313,10 +333,9 @@ void ChatWindowStyle::readStyleFiles()
     templateFiles.insert(OutgoingStateSending, QLatin1String("Outgoing/StateSending.html"));
     templateFiles.insert(OutgoingStateSent, QLatin1String("Outgoing/StateSent.html"));
     templateFiles.insert(OutgoingStateError, QLatin1String("Outgoing/StateError.html"));
-    //templateFiles.insert(InfoPlist, "../Info.plist");
 
 
-    // load all files first and then do all sorts of bloody workarounds
+    // load all files
     QFile fileAccess;
     Q_FOREACH(const QLatin1String &fileName, templateFiles)
     {
@@ -327,11 +346,29 @@ void ChatWindowStyle::readStyleFiles()
             fileAccess.open(QIODevice::ReadOnly);
             QTextStream headerStream(&fileAccess);
             headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
-            setContent( templateFiles.key(fileName), headerStream.readAll());
+            QString data = headerStream.readAll();
+            if(!data.isEmpty()) {
+                //kDebug() << fileName << "was found!";
+                setContent( templateFiles.key(fileName), data);
+            } else {
+                kDebug() << fileName << "was not found!";
+            }
             //kDebug() << fileName << content(templateFiles.key(fileName));
             fileAccess.close();
         }
     }
+
+    // basic fallbacks
+    inheritContent(IncomingNext, Incoming);
+
+    inheritContent(Outgoing, Incoming);
+    inheritContent(OutgoingNext, Outgoing);
+
+    inheritContent(HistoryIncoming, Incoming);
+    inheritContent(HistoryIncomingNext, HistoryIncoming);
+
+    inheritContent(HistoryOutgoing, HistoryIncoming);
+    inheritContent(HistoryOutgoingNext, HistoryIncomingNext);
 
     // Load template file fallback
     if (content(Template).isEmpty())
@@ -348,19 +385,9 @@ void ChatWindowStyle::readStyleFiles()
         }
     }
 
-    if (content(IncomingNext).isEmpty()) {
-        setContent(IncomingNext, content(Incoming));
-    }
+    //FIXME: do we have anything like this in telepathy?!
 
-    if (content(Outgoing).isEmpty()) {
-        setContent(Outgoing, content(Incoming));
-    }
-
-    if (content(OutgoingNext).isEmpty()) {
-        setContent(OutgoingNext, content(Outgoing));
-    }
-
-
+    // make sure file transfers are displayed correctly
     if (content(FileTransferIncoming).isEmpty() ||
             (!content(FileTransferIncoming).contains(QLatin1String("saveFileHandlerId")) &&
              !content(FileTransferIncoming).contains(QLatin1String("saveFileAsHandlerId")))) {   // Create default html
@@ -382,6 +409,7 @@ void ChatWindowStyle::readStyleFiles()
         setContent(FileTransferIncoming, incoming.replace(QLatin1String("%message%"), message));
     }
 
+    // make sure VoiceClip is displayed correctly
     if (content(VoiceClipIncoming).isEmpty() ||
             (!content(VoiceClipIncoming).contains("playVoiceHandlerId") &&
              !content(VoiceClipIncoming).contains("saveAsVoiceHandlerId"))) {   // Create default html

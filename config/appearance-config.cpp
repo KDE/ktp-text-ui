@@ -176,8 +176,23 @@ void AppearanceConfig::onFontSizeChanged(int fontSize)
 void AppearanceConfig::sendDemoMessages()
 {
     //add a fake message
+    AdiumThemeContentInfo message(AdiumThemeMessageInfo::HistoryRemoteToLocal);
+    message.setMessage(i18n("Bye Bye"));
+    message.setSenderDisplayName(i18n("larry@example.com"));
+    message.setSenderScreenName(i18n("Larry Demo"));
+    message.setService(i18n("Jabber"));
+    message.setTime(QDateTime::currentDateTime());
+    ui->chatView->addContentMessage(message);
 
-    AdiumThemeContentInfo message(AdiumThemeMessageInfo::RemoteToLocal);
+    message = AdiumThemeContentInfo(AdiumThemeMessageInfo::HistoryLocalToRemote);
+    message.setMessage(i18n("cya"));
+    message.setSenderDisplayName(i18n("ted@example.com"));
+    message.setSenderScreenName(i18n("Ted Example"));
+    message.setService(i18n("Jabber"));
+    message.setTime(QDateTime::currentDateTime());
+    ui->chatView->addContentMessage(message);
+
+    message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
     message.setMessage(i18n("Hello"));
     message.setSenderDisplayName(i18n("larry@example.com"));
     message.setSenderScreenName(i18n("Larry Demo"));

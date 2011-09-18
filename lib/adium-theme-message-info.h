@@ -32,7 +32,9 @@ public:
     enum MessageType {
         RemoteToLocal,
         LocalToRemote,
-        Status
+        Status,
+        HistoryRemoteToLocal,
+        HistoryLocalToRemote
     };
 
     explicit AdiumThemeMessageInfo(MessageType);

@@ -315,6 +315,20 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
             styleHtml = m_chatStyle->getOutgoingHtml();
         }
         break;
+    case AdiumThemeMessageInfo::HistoryRemoteToLocal:
+        if (consecutiveMessage) {
+            styleHtml = m_chatStyle->getHistoryNextIncomingHtml();
+        } else {
+            styleHtml = m_chatStyle->getHistoryIncomingHtml();
+        }
+        break;
+    case AdiumThemeMessageInfo::HistoryLocalToRemote:
+        if (consecutiveMessage) {
+            styleHtml = m_chatStyle->getHistoryNextOutgoingHtml();
+        } else {
+            styleHtml = m_chatStyle->getHistoryOutgoingHtml();
+        }
+        break;
     default:
         qWarning() << "Unexpected message type to addContentMessage";
     }
