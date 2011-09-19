@@ -12,6 +12,7 @@ X-KDE-RootOnly=false
 Categories=Qt;KDE;X-KDE-settings-network;
 
 Name=Chat Tab Behavior
+Name[da]=Opførsel af chatfaneblade
 Name[it]=Comportamento della scheda della chat
 Name[nl]=Gedrag van tabblad Chat
 Name[pt]=Comportamento da Página de Conversação
