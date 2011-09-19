@@ -458,6 +458,9 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
         htmlTemplate.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
     }
 
+    htmlTemplate.replace(QLatin1String("%messageClasses%"), info.messageClasses());
+
+
     return htmlTemplate;
 }
 

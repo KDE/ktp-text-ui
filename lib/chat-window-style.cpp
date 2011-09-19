@@ -394,11 +394,7 @@ void ChatWindowStyle::readStyleFiles()
     }
 
     if (d->nextOutgoingHtml.isEmpty()) {
-        if (d->nextIncomingHtml.isEmpty()) {
-            d->nextOutgoingHtml = d->outgoingHtml;
-        } else {
-            d->nextOutgoingHtml = d->nextIncomingHtml;
-        }
+        d->nextOutgoingHtml = d->nextIncomingHtml;
     }
 
     // Load status file
