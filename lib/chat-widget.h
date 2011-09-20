@@ -32,6 +32,7 @@
 
 #include <TelepathyQt4/ReceivedMessage>
 
+class AdiumThemeContentInfo;
 class ChatSearchBar;
 class ChatWidgetPrivate;
 class QShowEvent;
@@ -143,6 +144,7 @@ private Q_SLOTS:
     void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
     void onFormatColorReleased();
     void windowActivated();
+    void onHistoryFetched(const QList<AdiumThemeContentInfo> &messages);
 
 private:
     /** connects necessary signals for the channel */

@@ -25,6 +25,7 @@
 #include "adium-theme-message-info.h"
 #include "adium-theme-status-info.h"
 #include "channel-contact-model.h"
+#include "logmanager.h"
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
@@ -110,6 +111,7 @@ public:
     Tp::AccountPtr account;
     Ui::ChatWidget ui;
     ChannelContactModel *contactModel;
+    LogManager* logManager;
 
     KComponentData telepathyComponentData();
 };
@@ -229,8 +231,16 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     connect(this, SIGNAL(searchTextComplete(bool)), d->ui.searchBar, SLOT(onSearchTextComplete(bool)));
 
-        // to make PgUp and PgDown keys work properly
-        connect(d->ui.sendMessageBox, SIGNAL(scrollEventRecieved(QKeyEvent*)), d->ui.chatArea, SLOT(onScrollEvent(QKeyEvent*)));
+    // to make PgUp and PgDown keys work properly
+    connect(d->ui.sendMessageBox, SIGNAL(scrollEventRecieved(QKeyEvent*)), d->ui.chatArea, SLOT(onScrollEvent(QKeyEvent*)));
+
+    // initialize LogManager
+    d->logManager = new LogManager(account, channel->targetContact());
+    d->logManager->setFetchAmount(3);
+    d->logManager->setTextChannel(channel);
+
+    connect(d->logManager, SIGNAL(fetched(QList<AdiumThemeContentInfo>)), SLOT(onHistoryFetched(QList<AdiumThemeContentInfo>)));
+    d->logManager->fetchLast();
 }
 
 ChatWidget::~ChatWidget()
@@ -452,6 +462,26 @@ void ChatWidget::windowActivated()
     }
 }
 
+void ChatWidget::onHistoryFetched(const QList<AdiumThemeContentInfo> &messages)
+{
+    kDebug() << "found" << messages.count() << "messages in history";
+    Q_FOREACH(const AdiumThemeContentInfo &message, messages)
+    {
+        d->ui.chatArea->addContentMessage(message);
+    }
+
+    d->chatviewlInitialised = true;
+
+    //process any messages we've 'missed' whilst initialising.
+    Q_FOREACH(const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
+        handleIncomingMessage(message);
+    }
+
+    delete d->logManager;
+    d->logManager = 0;
+}
+
+
 void ChatWidget::resetUnreadMessageCount()
 {
     kDebug();
@@ -671,12 +701,6 @@ void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
 
 void ChatWidget::chatViewReady()
 {
-    d->chatviewlInitialised = true;
-
-    //process any messages we've 'missed' whilst initialising.
-    Q_FOREACH(const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
-        handleIncomingMessage(message);
-    }
 }
 
 
