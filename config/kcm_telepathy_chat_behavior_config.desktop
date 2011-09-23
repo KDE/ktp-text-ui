@@ -13,10 +13,12 @@ Categories=Qt;KDE;X-KDE-settings-network;
 
 Name=Chat Tab Behavior
 Name[cs]=Chování karet rozhovoru
+Name[da]=Opførsel af chatfaneblade
 Name[it]=Comportamento della scheda della chat
 Name[nds]=Bedregen vun Klöönpaneels
 Name[nl]=Gedrag van tabblad Chat
 Name[pt]=Comportamento da Página de Conversação
+Name[pt_BR]=Comportamento da aba de bate-papo
 Name[sv]=Chattflikens beteende
 Name[uk]=Поведінка вкладок спілкування
 Name[x-test]=xxChat Tab Behaviorxx
