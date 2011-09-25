@@ -49,6 +49,7 @@ AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList& args)
     m_demoChatHeader.setDestinationName(i18n("BobMarley@yahoo.com"));
     m_demoChatHeader.setDestinationDisplayName(i18n("Bob Marley"));
 
+    ui->chatView->load(AdiumThemeView::SingleUserChat);
     ui->chatView->initialise(m_demoChatHeader);
 
     ui->showHeader->setChecked(ui->chatView->isHeaderDisplayed());
