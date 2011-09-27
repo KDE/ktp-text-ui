@@ -555,6 +555,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
 
             messageInfo.setMessage(text);
             messageInfo.setTime(message.received());
+            messageInfo.setStatus(QLatin1String("error"));
 
             d->ui.chatArea->addStatusMessage(messageInfo);
         } else {
