@@ -472,61 +472,99 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
 {
     kDebug() << title() << message.text();
 
-    if (message.isDeliveryReport()) {
-        ///TODO what to do with this info? For now just output to cli
-        // we don't need to show this in chat
-        Tp::ReceivedMessage::DeliveryDetails reportDetails = message.deliveryDetails();
+    if (d->chatviewlInitialised) {
 
-        switch (reportDetails.status()) {
-            case (Tp::DeliveryStatusAccepted):
-                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusAccepted";
-                break;
-            case (Tp::DeliveryStatusDeleted):
-                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusDeleted";
-                break;
-            case (Tp::DeliveryStatusDelivered):
-                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusDelivered";
-                break;
-            case (Tp::DeliveryStatusPermanentlyFailed):
-                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusPermanentlyFailed";
-                break;
-            case (Tp::DeliveryStatusRead):
-                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusRead";
-                break;
-            case (Tp::DeliveryStatusTemporarilyFailed):
-                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusTemporarilyFailed";
-                break;
-            case (Tp::DeliveryStatusUnknown):
-                kDebug() << "ChatWidget::handleIncomingMessage DeliveryStatusUnknown";
-                break;
-        }
+        //debug the message parts (looking for HTML etc)
+//        Q_FOREACH(Tp::MessagePart part, message.parts())
+//        {
+//            qDebug() << "***";
+//            Q_FOREACH(QString key, part.keys())
+//            {
+//                qDebug() << key << part.value(key).variant();
+//            }
+//        }
+//      turns out we have no HTML, because no CM supports it yet
 
-        if (reportDetails.isError()) {
-            kDebug() << "ChatWidget::handleIncomingMessage ERROR: " << reportDetails.error();
-            kDebug() << "ChatWidget::handleIncomingMessage DBUS ERROR: " << reportDetails.dbusError();
-        }
+        if (message.isDeliveryReport()) {
+            QString text;
+            AdiumThemeStatusInfo messageInfo;
+            Tp::ReceivedMessage::DeliveryDetails reportDetails = message.deliveryDetails();
 
-        if (reportDetails.hasDebugMessage()) {
-            kDebug() << "ChatWidget::handleIncomingMessage DEBUG MESSAGE: " << reportDetails.debugMessage();
-        }
-    } else {
-        if (d->chatviewlInitialised) {
+            if (reportDetails.hasDebugMessage()) {
+                kDebug() << "delivery report debug message: " << reportDetails.debugMessage();
+            }
+
+            if (reportDetails.isError()) {
+                switch (reportDetails.error()) {
+                case Tp::ChannelTextSendErrorOffline:
+                    if (reportDetails.hasEchoedMessage()) {
+                        text = i18n("Delivery of the message \"%1\" "
+                                    "failed because the remote contact is offline",
+                                    reportDetails.echoedMessage().text());
+                    } else {
+                        text = i18n("Delivery of a message failed "
+                                    "because the remote contact is offline");
+                    }
+                    break;
+                case Tp::ChannelTextSendErrorInvalidContact:
+                    if (reportDetails.hasEchoedMessage()) {
+                        text = i18n("Delivery of the message \"%1\" "
+                                    "failed because the remote contact is not valid",
+                                    reportDetails.echoedMessage().text());
+                    } else {
+                        text = i18n("Delivery of a message failed "
+                                    "because the remote contact is not valid");
+                    }
+                    break;
+                case Tp::ChannelTextSendErrorPermissionDenied:
+                    if (reportDetails.hasEchoedMessage()) {
+                        text = i18n("Delivery of the message \"%1\" failed because "
+                                    "you do not have permission to speak in this room",
+                                    reportDetails.echoedMessage().text());
+                    } else {
+                        text = i18n("Delivery of a message failed because "
+                                    "you do not have permission to speak in this room");
+                    }
+                    break;
+                case Tp::ChannelTextSendErrorTooLong:
+                    if (reportDetails.hasEchoedMessage()) {
+                        text = i18n("Delivery of the message \"%1\" "
+                                    "failed because it was too long",
+                                    reportDetails.echoedMessage().text());
+                    } else {
+                        text = i18n("Delivery of a message failed "
+                                    "because it was too long");
+                    }
+                    break;
+                default:
+                    if (reportDetails.hasEchoedMessage()) {
+                        text = i18n("Delivery of the message \"%1\" failed: %2",
+                                    reportDetails.echoedMessage().text(),
+                                    message.text());
+                    } else {
+                        text = i18n("Delivery of a message failed: %1", message.text());
+                    }
+                    break;
+                }
+            } else {
+                //TODO: handle delivery reports properly
+                kWarning() << "Ignoring delivery report";
+                d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
+                return;
+            }
+
+            messageInfo.setMessage(text);
+            messageInfo.setTime(message.received());
+            messageInfo.setStatus(QLatin1String("error"));
+
+            d->ui.chatArea->addStatusMessage(messageInfo);
+        } else {
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
-            //debug the message parts (looking for HTML etc)
-    //        Q_FOREACH(Tp::MessagePart part, message.parts())
-    //        {
-    //            qDebug() << "***";
-    //            Q_FOREACH(QString key, part.keys())
-    //            {
-    //                qDebug() << key << part.value(key).variant();
-    //            }
-    //        }
-    //      turns out we have no HTML, because no CM supports it yet
             messageInfo.setMessage(message.text());
             messageInfo.setTime(message.received());
 
-            if (message.sender() == 0) {
+            if (message.sender().isNull()) {
                 // just need this info
                 messageInfo.setSenderDisplayName(message.senderNickname());
             } else {
@@ -536,14 +574,15 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
             }
 
             d->ui.chatArea->addContentMessage(messageInfo);
-            d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
-
-            if (!isOnTop()) {
-                incrementUnreadMessageCount();
-            }
-
-            Q_EMIT messageReceived();
         }
+
+        d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
+
+        if (!isOnTop()) {
+            incrementUnreadMessageCount();
+        }
+
+        Q_EMIT messageReceived();
     }
 
     //if the window isn't ready, we don't acknowledge the message. We process them as soon as we are ready.
