@@ -532,6 +532,21 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
             messageInfo.setStatus(QLatin1String("error"));
 
             d->ui.chatArea->addStatusMessage(messageInfo);
+        } else if (message.messageType() == Tp::ChannelTextMessageTypeAction) {
+            //a "/me " message
+
+            AdiumThemeStatusInfo statusMessage;
+            statusMessage.setTime(message.received());
+
+            QString senderName;
+            if (message.sender().isNull()) {
+                senderName = message.senderNickname();
+            } else {
+                senderName = message.sender()->alias();
+            }
+
+            statusMessage.setMessage(QString::fromLatin1("%1 %2").arg(senderName, message.text()));
+            d->ui.chatArea->addStatusMessage(statusMessage);
         } else {
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
@@ -543,8 +558,8 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
             }
             messageInfo.setTime(time);
 
+            //sender can have just an ID or be a full contactPtr. Use full contact info if available.
             if (message.sender().isNull()) {
-                // just need this info
                 messageInfo.setSenderDisplayName(message.senderNickname());
             } else {
                 messageInfo.setUserIconPath(message.sender()->avatarData().fileName);
@@ -626,16 +641,24 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
 
 void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
 {
-    AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::LocalToRemote);
-    messageInfo.setMessage(message.text());
-    messageInfo.setTime(message.sent());
-
     Tp::ContactPtr sender = d->channel->connection()->selfContact();
-    messageInfo.setSenderDisplayName(sender->alias());
-    messageInfo.setSenderScreenName(sender->id());
-    messageInfo.setUserIconPath(sender->avatarData().fileName);
-    d->ui.chatArea->addContentMessage(messageInfo);
 
+    if (message.messageType() == Tp::ChannelTextMessageTypeAction) {
+        AdiumThemeStatusInfo statusMessage;
+        statusMessage.setTime(message.sent());
+        statusMessage.setMessage(QString::fromLatin1("%1 %2").arg(sender->alias(), message.text()));
+        d->ui.chatArea->addStatusMessage(statusMessage);
+    }
+    else {
+        AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::LocalToRemote);
+        messageInfo.setMessage(message.text());
+        messageInfo.setTime(message.sent());
+
+        messageInfo.setSenderDisplayName(sender->alias());
+        messageInfo.setSenderScreenName(sender->id());
+        messageInfo.setUserIconPath(sender->avatarData().fileName);
+        d->ui.chatArea->addContentMessage(messageInfo);
+    }
 
     //send the notification that a message has been sent
     KNotification *notification = new KNotification(QLatin1String("kde_telepathy_outgoing"), this);
@@ -658,8 +681,16 @@ void ChatWidget::chatViewReady()
 
 void ChatWidget::sendMessage()
 {
-    if (!d->ui.sendMessageBox->toPlainText().isEmpty()) {
-        d->channel->send(d->ui.sendMessageBox->toPlainText());
+    QString message = d->ui.sendMessageBox->toPlainText();
+
+    if (!message.isEmpty()) {
+        if (d->channel->supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
+            //remove "/me " from the start of the message
+            message.remove(0,4);
+            d->channel->send(message, Tp::ChannelTextMessageTypeAction);
+        } else {
+            d->channel->send(message);
+        }
         d->ui.sendMessageBox->clear();
     }
 }
