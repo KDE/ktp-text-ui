@@ -43,7 +43,8 @@ set(telepathy_chat_handler_lib_PRETTY_HDRS
 )
 
 set(telepathy_chat_handler_lib_UI
-    chat-widget.ui)
+    chat-widget.ui
+)
 
 kde4_add_ui_files(telepathy_chat_handler_lib_SRCS ${telepathy_chat_handler_lib_UI})
 
@@ -54,7 +55,6 @@ SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TELEPATHY_LOGGER_QT4_DEFINITIONS}" )
 include_directories(
     ${TELEPATHY_LOGGER_QT4_INCLUDE_DIRS}
 )
-
 
 target_link_libraries(ktelepathy_chat_lib
     ${TELEPATHY_LOGGER_QT4_LIBRARIES}

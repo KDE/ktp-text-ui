@@ -20,6 +20,7 @@ find_package(TelepathyGlib)
 find_package(GObject)
 find_package(GIO)
 find_package(GLIB2)
+find_package(QtGLib)
 
 list(APPEND TELEPATHY_LOGGER_QT4_LIBRARIES
     ${TELEPATHY_LOGGER_LIBRARIES}
@@ -38,7 +39,7 @@ list(APPEND TELEPATHY_LOGGER_QT4_INCLUDE_DIRS
 include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set LIBXML2_FOUND to TRUE
 # if all listed variables are TRUE
-find_package_handle_standard_args(TelepathyLoggerQt4  DEFAULT_MSG
-                                  TELEPATHY_LOGGER_QT4_LIBRARY TELEPATHY_LOGGER_QT4_INCLUDE_DIR)
+find_package_handle_standard_args(TELEPATHY_LOGGER_QT4  DEFAULT_MSG
+                                  TELEPATHY_LOGGER_QT4_LIBRARY TELEPATHY_LOGGER_QT4_INCLUDE_DIRS)
 
-mark_as_advanced(TELEPATHY_LOGGER_QT4_INCLUDE_DIR TELEPATHY_LOGGER_QT4_LIBRARY )
+mark_as_advanced(TELEPATHY_LOGGER_QT4_INCLUDE_DIRS TELEPATHY_LOGGER_QT4_LIBRARY )
