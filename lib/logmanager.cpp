@@ -24,6 +24,8 @@
 
 #include <KDebug>
 
+
+#ifdef TELEPATHY_LOGGER_QT4_FOUND
 #include <TelepathyLoggerQt4/Init>
 #include <TelepathyLoggerQt4/Entity>
 #include <TelepathyLoggerQt4/PendingDates>
@@ -35,6 +37,7 @@
 
 #include <glib-object.h>
 #include <QGlib/Init>
+#endif
 
 #include <TelepathyQt4/Types>
 #include <TelepathyQt4/AvatarData>
@@ -46,6 +49,8 @@ LogManager::LogManager(const Tp::AccountPtr &account, const Tp::ContactPtr &cont
     , m_contact(contact)
     , m_fetchAmount(10)
 {
+
+#ifdef TELEPATHY_LOGGER_QT4_FOUND
     g_type_init();
     QGlib::init();
     Tpl::init();
@@ -60,6 +65,9 @@ LogManager::LogManager(const Tp::AccountPtr &account, const Tp::ContactPtr &cont
                                             Tpl::EntityTypeContact,
                                             NULL,
                                             NULL);
+#else
+    kWarning() << "text-ui was built without log support";
+#endif
 }
 
 LogManager::~LogManager()
@@ -69,7 +77,11 @@ LogManager::~LogManager()
 
 bool LogManager::exists() const
 {
+#ifdef TELEPATHY_LOGGER_QT4_FOUND
     return m_logManager->exists(m_account, m_contactEntity, Tpl::EventTypeMaskText);
+#else
+    return false;
+#endif
 }
 
 void LogManager::setTextChannel(const Tp::TextChannelPtr& textChannel)
@@ -84,12 +96,18 @@ void LogManager::setFetchAmount(int n)
 
 void LogManager::fetchLast()
 {
-    kDebug() << "get log for: " << m_contactEntity->identifier();
-
+    kDebug();
+#ifdef TELEPATHY_LOGGER_QT4_FOUND
     Tpl::PendingDates* dates = m_logManager->queryDates( m_account, m_contactEntity, Tpl::EventTypeMaskText);
     connect(dates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
+#else
+    QList<AdiumThemeContentInfo> messages;
+    emit fetched(messages);
+#endif
+
 }
 
+#ifdef TELEPATHY_LOGGER_QT4_FOUND
 void LogManager::onDatesFinished(Tpl::PendingOperation* po)
 {
     Tpl::PendingDates *pd = (Tpl::PendingDates*) po;
@@ -182,3 +200,4 @@ void LogManager::onEventsFinished(Tpl::PendingOperation* po)
     kDebug() << "emit all messages" << messages.count();
     emit fetched(messages);
 }
+#endif
