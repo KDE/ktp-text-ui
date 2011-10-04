@@ -61,7 +61,7 @@ LogManager::LogManager(const Tp::AccountPtr &account, const Tp::ContactPtr &cont
         Q_ASSERT(false);
     }
 
-    m_contactEntity = Tpl::Entity::create(m_contact->id().toStdString().c_str(),
+    m_contactEntity = Tpl::Entity::create(m_contact->id().toLatin1().data(),
                                             Tpl::EntityTypeContact,
                                             NULL,
                                             NULL);
@@ -102,7 +102,7 @@ void LogManager::fetchLast()
     connect(dates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
 #else
     QList<AdiumThemeContentInfo> messages;
-    emit fetched(messages);
+    Q_EMIT fetched(messages);
 #endif
 
 }
@@ -130,7 +130,7 @@ void LogManager::onDatesFinished(Tpl::PendingOperation* po)
         connect(events, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsFinished(Tpl::PendingOperation*)));
     } else {
         QList<AdiumThemeContentInfo> messages;
-        emit fetched(messages);
+        Q_EMIT fetched(messages);
     }
 }
 
@@ -198,6 +198,6 @@ void LogManager::onEventsFinished(Tpl::PendingOperation* po)
     }
 
     kDebug() << "emit all messages" << messages.count();
-    emit fetched(messages);
+    Q_EMIT fetched(messages);
 }
 #endif

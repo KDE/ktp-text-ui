@@ -411,8 +411,8 @@ void ChatWindowStyle::readStyleFiles()
 
     // make sure VoiceClip is displayed correctly
     if (content(VoiceClipIncoming).isEmpty() ||
-            (!content(VoiceClipIncoming).contains("playVoiceHandlerId") &&
-             !content(VoiceClipIncoming).contains("saveAsVoiceHandlerId"))) {   // Create default html
+            (!content(VoiceClipIncoming).contains(QLatin1String("playVoiceHandlerId")) &&
+             !content(VoiceClipIncoming).contains(QLatin1String("saveAsVoiceHandlerId")))) {   // Create default html
         QString message = QString(QLatin1String("%message%\n"
                                   "<div>\n"
                                   " <div style=\"width:37px; float:left;\">\n"
