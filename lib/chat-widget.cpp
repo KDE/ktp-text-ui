@@ -246,6 +246,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 ChatWidget::~ChatWidget()
 {
     d->channel->requestClose(); // ensure closing; does nothing, if already closed
+    delete d->logManager;
     delete d;
 }
 
