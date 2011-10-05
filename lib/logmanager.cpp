@@ -140,7 +140,6 @@ void LogManager::onEventsFinished(Tpl::PendingOperation* po)
 
     if (pe->isError()) {
         qWarning() << "error in PendingEvents" << pe->errorMessage();
-        ::exit(-1);
         return;
     }
 
