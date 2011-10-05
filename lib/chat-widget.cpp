@@ -238,9 +238,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->logManager = new LogManager(account, channel->targetContact());
     d->logManager->setFetchAmount(3);
     d->logManager->setTextChannel(channel);
-
-    connect(d->logManager, SIGNAL(fetched(QList<AdiumThemeContentInfo>)), SLOT(onHistoryFetched(QList<AdiumThemeContentInfo>)));
-    d->logManager->fetchLast();
 }
 
 ChatWidget::~ChatWidget()
@@ -702,6 +699,8 @@ void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
 
 void ChatWidget::chatViewReady()
 {
+    connect(d->logManager, SIGNAL(fetched(QList<AdiumThemeContentInfo>)), SLOT(onHistoryFetched(QList<AdiumThemeContentInfo>)));
+    d->logManager->fetchLast();
 }
 
 
