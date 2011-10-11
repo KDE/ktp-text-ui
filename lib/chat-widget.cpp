@@ -129,6 +129,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->channel = channel;
     d->account = account;
 
+    //load translations for this library. keep this before any i18n() calls in library code
+    KGlobal::locale()->insertCatalog(QLatin1String("ktelepathy_chat_lib"));
+
     d->chatviewlInitialised = false;
     d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
     d->isGroupChat = (channel->targetHandleType() == Tp::HandleTypeContact ? false : true);
