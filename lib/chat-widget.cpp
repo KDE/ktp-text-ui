@@ -562,7 +562,12 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
             messageInfo.setMessage(message.text());
-            messageInfo.setTime(message.received());
+
+            QDateTime time = message.sent();
+            if (!time.isValid()) {
+                time = message.received();
+            }
+            messageInfo.setTime(time);
 
             if (message.sender().isNull()) {
                 // just need this info
