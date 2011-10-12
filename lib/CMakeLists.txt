@@ -61,7 +61,6 @@ include_directories(
 
 target_link_libraries(ktelepathy_chat_lib
     ${TELEPATHY_LOGGER_QT4_LIBRARIES}
-
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KDEUI_LIBS}
