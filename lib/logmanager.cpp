@@ -45,7 +45,8 @@
 #include <TelepathyQt4/ReceivedMessage>
 
 LogManager::LogManager(const Tp::AccountPtr &account, const Tp::ContactPtr &contact, QObject *parent)
-    : m_account(account)
+    : QObject(parent)
+    , m_account(account)
     , m_contact(contact)
     , m_fetchAmount(10)
 {

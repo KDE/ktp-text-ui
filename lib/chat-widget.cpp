@@ -235,7 +235,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(d->ui.sendMessageBox, SIGNAL(scrollEventRecieved(QKeyEvent*)), d->ui.chatArea, SLOT(onScrollEvent(QKeyEvent*)));
 
     // initialize LogManager
-    d->logManager = new LogManager(account, channel->targetContact());
+    d->logManager = new LogManager(account, channel->targetContact(), this);
     d->logManager->setFetchAmount(3);
     d->logManager->setTextChannel(channel);
 }
