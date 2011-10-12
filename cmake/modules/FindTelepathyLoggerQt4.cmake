@@ -5,6 +5,10 @@
 #  TELEPATHY_LOGGER_QT4_LIBRARIES - The libraries needed to use TelepathyLoggerQt4
 #  TELEPATHY_LOGGER_QT4_DEFINITIONS - Compiler switches required for using TelepathyLoggerQt4
 
+# Copyright (c) 2010 Dominik Schmidt <kde@dominik-schmidt.de>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 set(TELEPATHY_LOGGER_QT4_DEFINITIONS "-fexceptions")
 
