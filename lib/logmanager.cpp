@@ -1,5 +1,4 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
     Copyright (C) 2011  Dominik Schmidt <kde@dominik-schmidt.de>
 
     This library is free software; you can redistribute it and/or
@@ -45,10 +44,10 @@
 #include <TelepathyQt4/ReceivedMessage>
 
 LogManager::LogManager(const Tp::AccountPtr &account, const Tp::ContactPtr &contact, QObject *parent)
-    : QObject(parent)
-    , m_account(account)
-    , m_contact(contact)
-    , m_fetchAmount(10)
+    : QObject(parent),
+    m_account(account),
+    m_contact(contact),
+    m_fetchAmount(10)
 {
 
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
@@ -124,9 +123,6 @@ void LogManager::onDatesFinished(Tpl::PendingOperation* po)
         QDate date = dates.last();
 
         kDebug() << pd->account()->uniqueIdentifier() << pd->entity()->identifier() << dates;
-
-        kWarning() << "requesting log for" << pd->account()->uniqueIdentifier() << pd->entity()->identifier() << "on" << date;
-        Tpl::PendingEvents* events = m_logManager->queryEvents( pd->account(), pd->entity(), Tpl::EventTypeMaskAny, date);
 
         connect(events, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsFinished(Tpl::PendingOperation*)));
     } else {

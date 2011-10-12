@@ -1,5 +1,4 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
     Copyright (C) 2011  Dominik Schmidt <kde@dominik-schmidt.de>
 
     This library is free software; you can redistribute it and/or

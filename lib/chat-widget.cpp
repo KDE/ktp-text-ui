@@ -111,7 +111,7 @@ public:
     Tp::AccountPtr account;
     Ui::ChatWidget ui;
     ChannelContactModel *contactModel;
-    LogManager* logManager;
+    LogManager *logManager;
 
     KComponentData telepathyComponentData();
 };
@@ -463,8 +463,7 @@ void ChatWidget::windowActivated()
 void ChatWidget::onHistoryFetched(const QList<AdiumThemeContentInfo> &messages)
 {
     kDebug() << "found" << messages.count() << "messages in history";
-    Q_FOREACH(const AdiumThemeContentInfo &message, messages)
-    {
+    Q_FOREACH(const AdiumThemeContentInfo &message, messages) {
         d->ui.chatArea->addContentMessage(message);
     }
 

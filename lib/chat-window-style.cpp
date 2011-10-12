@@ -337,8 +337,7 @@ void ChatWindowStyle::readStyleFiles()
 
     // load all files
     QFile fileAccess;
-    Q_FOREACH(const QLatin1String &fileName, templateFiles)
-    {
+    Q_FOREACH(const QLatin1String &fileName, templateFiles) {
         QString path = d->baseHref + fileName;
         // Load template file
         if (QFile::exists(path)) {
