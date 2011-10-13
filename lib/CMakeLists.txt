@@ -54,13 +54,19 @@ kde4_add_ui_files(telepathy_chat_handler_lib_SRCS ${telepathy_chat_handler_lib_U
 kde4_add_library(ktelepathy_chat_lib SHARED ${telepathy_chat_handler_lib_SRCS})
 
 # telepathy-logger-qt4 related stuff
-SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TELEPATHY_LOGGER_QT4_DEFINITIONS}" )
-include_directories(
-    ${TELEPATHY_LOGGER_QT4_INCLUDE_DIRS}
-)
+if(TELEPATHY_LOGGER_QT4_FOUND)
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TELEPATHY_LOGGER_QT4_DEFINITIONS}" )
+
+    include_directories(
+        ${TELEPATHY_LOGGER_QT4_INCLUDE_DIRS}
+    )
+
+    target_link_libraries(ktelepathy_chat_lib
+        ${TELEPATHY_LOGGER_QT4_LIBRARIES}
+    )
+endif()
 
 target_link_libraries(ktelepathy_chat_lib
-    ${TELEPATHY_LOGGER_QT4_LIBRARIES}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KDEUI_LIBS}
