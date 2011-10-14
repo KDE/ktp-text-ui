@@ -206,7 +206,6 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     templateHtml.replace(index, 2, footerHtml);
 
     setHtml(templateHtml);
-    m_lastSender = QLatin1String("");
 
     //hidden HTML debugging mode. Should have no visible way to turn it on.
     if (m_webInspector) {
@@ -294,10 +293,12 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
     QString styleHtml;
     bool consecutiveMessage = false;
 
-    if (m_lastSender == contentMessage.senderScreenName()) {
+    if (m_lastContent.senderScreenName() == contentMessage.senderScreenName()
+        && m_lastContent.type() == contentMessage.type() )
+    {
         consecutiveMessage = true;
     } else {
-        m_lastSender = contentMessage.senderScreenName();
+        m_lastContent.senderScreenName() = contentMessage.senderScreenName();
     }
 
     switch (contentMessage.type()) {
@@ -345,7 +346,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
 void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
 {
     QString styleHtml = m_chatStyle->getStatusHtml();
-    m_lastSender = QLatin1String("");
+    m_lastContent = AdiumThemeContentInfo();
     replaceStatusKeywords(styleHtml, statusMessage);
     appendNewMessage(styleHtml);
 }

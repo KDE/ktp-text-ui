@@ -23,6 +23,7 @@
 #include <QtWebKit/QWebView>
 
 #include "adium-theme-header-info.h"
+#include "adium-theme-content-info.h"
 
 #include <KEmoticons>
 
@@ -30,7 +31,6 @@
 
 class AdiumThemeContentInfo;
 class AdiumThemeHeaderInfo;
-class AdiumThemeMessageInfo;
 class AdiumThemeStatusInfo;
 class ChatWindowStyle;
 
@@ -101,7 +101,7 @@ private:
     QString formatTime(const QString&, const QDateTime&);
 
     QString m_defaultAvatar;
-    QString m_lastSender;
+    AdiumThemeContentInfo m_lastContent;
     bool m_displayHeader;
     KAction *m_openLinkAction;
 

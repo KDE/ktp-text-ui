@@ -34,9 +34,11 @@ public:
         LocalToRemote,
         Status,
         HistoryRemoteToLocal,
-        HistoryLocalToRemote
+        HistoryLocalToRemote,
+        Invalid
     };
 
+    AdiumThemeMessageInfo();
     explicit AdiumThemeMessageInfo(MessageType);
     explicit AdiumThemeMessageInfo(const AdiumThemeMessageInfo &other);
     virtual ~AdiumThemeMessageInfo();

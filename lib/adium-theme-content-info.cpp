@@ -32,6 +32,14 @@ public:
     QString textbackgroundcolor;
 };
 
+AdiumThemeContentInfo::AdiumThemeContentInfo()
+    : AdiumThemeMessageInfo(),
+    d(new AdiumThemeContentInfoPrivate)
+{
+
+}
+
+
 AdiumThemeContentInfo::AdiumThemeContentInfo(AdiumThemeMessageInfo::MessageType type)
     : AdiumThemeMessageInfo(type),
       d(new AdiumThemeContentInfoPrivate)

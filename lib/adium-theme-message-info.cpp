@@ -34,6 +34,13 @@ public:
     AdiumThemeMessageInfo::MessageType type;
 };
 
+AdiumThemeMessageInfo::AdiumThemeMessageInfo()
+    : d(new AdiumThemeMessageInfoPrivate())
+{
+    d->type = Invalid;
+}
+
+
 AdiumThemeMessageInfo::AdiumThemeMessageInfo(MessageType type)
     : d(new AdiumThemeMessageInfoPrivate())
 {
