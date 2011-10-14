@@ -471,9 +471,9 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     //service
     htmlTemplate.replace(QLatin1String("%service%"), info.service());
     //time
-    htmlTemplate.replace(QLatin1String("%time%"), KGlobal::locale()->formatTime(info.time().time(), true));
+    htmlTemplate.replace(QLatin1String("%time%"), KGlobal::locale()->formatLocaleTime(info.time().time()));
     //shortTime
-    htmlTemplate.replace(QLatin1String("%shortTime%"), KGlobal::locale()->formatTime(info.time().time(), false));
+    htmlTemplate.replace(QLatin1String("%shortTime%"), KGlobal::locale()->formatLocaleTime(info.time().time(), KLocale::TimeWithoutSeconds | KLocale::TimeWithoutAmPm));
     //time{X}
     QRegExp timeRegExp(QLatin1String("%time\\{([^}]*)\\}%"));
     int pos = 0;
