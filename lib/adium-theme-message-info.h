@@ -38,7 +38,7 @@ public:
         Invalid
     };
 
-    AdiumThemeMessageInfo();
+    explicit AdiumThemeMessageInfo();
     explicit AdiumThemeMessageInfo(MessageType);
     explicit AdiumThemeMessageInfo(const AdiumThemeMessageInfo &other);
     virtual ~AdiumThemeMessageInfo();

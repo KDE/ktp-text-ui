@@ -33,8 +33,8 @@ class AdiumThemeHeaderInfoPrivate;
 class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeHeaderInfo
 {
 public:
-    AdiumThemeHeaderInfo();
-    AdiumThemeHeaderInfo(const AdiumThemeHeaderInfo &other);
+    explicit AdiumThemeHeaderInfo();
+    explicit AdiumThemeHeaderInfo(const AdiumThemeHeaderInfo &other);
     virtual ~AdiumThemeHeaderInfo();
     AdiumThemeHeaderInfo &operator=(const AdiumThemeHeaderInfo &other);
 

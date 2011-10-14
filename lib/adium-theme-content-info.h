@@ -31,7 +31,7 @@ class AdiumThemeContentInfoPrivate;
 class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeContentInfo : public AdiumThemeMessageInfo
 {
 public:
-    AdiumThemeContentInfo();
+    explicit AdiumThemeContentInfo();
     explicit AdiumThemeContentInfo(AdiumThemeMessageInfo::MessageType);
     explicit AdiumThemeContentInfo(const AdiumThemeContentInfo &other);
     virtual ~AdiumThemeContentInfo();
