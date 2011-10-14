@@ -297,9 +297,8 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
         && m_lastContent.type() == contentMessage.type() )
     {
         consecutiveMessage = true;
-    } else {
-        m_lastContent.senderScreenName() = contentMessage.senderScreenName();
     }
+    m_lastContent = contentMessage;
 
     switch (contentMessage.type()) {
     case AdiumThemeMessageInfo::RemoteToLocal:
