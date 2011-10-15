@@ -741,7 +741,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
         contactIsTyping = true;
         break;
     default:
-        qDebug() << "Unknown case" << state;
+        kWarning() << "Unknown channel chat case" << state;
     }
 
     if (!contactIsTyping) {
