@@ -66,6 +66,10 @@ Q_SIGNALS:
 public Q_SLOTS:
     void destroyTab(QWidget *chatWidget);
 
+protected:
+    virtual bool event(QEvent *e);
+
+
 private Q_SLOTS:
     void tabBarContextMenu(int  index, const QPoint &  globalPos);
     void closeCurrentTab();

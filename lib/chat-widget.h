@@ -81,10 +81,16 @@ public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
 
+    /** Clear the list of unread messages
+        call this when the widget is activated by the user.
+      */
+    void resetUnreadMessageCount();
+
+
+
 protected:
     void changeEvent(QEvent *e);
     void resizeEvent(QResizeEvent *);
-    void showEvent(QShowEvent *e);
     void keyPressEvent(QKeyEvent *e);
 
 protected Q_SLOTS:
@@ -143,7 +149,6 @@ private Q_SLOTS:
     void findNextTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
     void onFormatColorReleased();
-    void windowActivated();
     void onHistoryFetched(const QList<AdiumThemeContentInfo> &messages);
 
 private:
@@ -154,7 +159,6 @@ private:
     void setupContactModelSignals();
 
     void incrementUnreadMessageCount();
-    void resetUnreadMessageCount();
     virtual bool isOnTop() const;
 
     //FIXME this should be in the ktelepathy lib

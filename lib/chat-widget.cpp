@@ -72,25 +72,6 @@ Q_SIGNALS:
     void returnKeyPressed();
 };
 
-class WindowEventFilter : public QObject
-{
-    Q_OBJECT
-public:
-    WindowEventFilter(QObject* parent = 0) : QObject(parent) {}
-
-protected:
-    virtual bool eventFilter(QObject *obj, QEvent *event)
-    {
-        if (event->type() == QEvent::ActivationChange) {
-            Q_EMIT windowActivated();
-        }
-        return QObject::eventFilter(obj, event);
-    }
-
-Q_SIGNALS:
-    void windowActivated();
-};
-
 class ChatWidgetPrivate
 {
 public:
@@ -218,10 +199,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
     connect(d->ui.sendButton, SIGNAL(clicked()), SLOT(sendMessage()));
 
-    WindowEventFilter *windowEventFilter = new WindowEventFilter(this);
-    this->window()->installEventFilter(windowEventFilter);
-    connect(windowEventFilter, SIGNAL(windowActivated()), SLOT(windowActivated()));
-
     // find text in chat
     connect(d->ui.sendMessageBox, SIGNAL(findTextShortcutPressed()), this, SLOT(toggleSearchBar()));
     connect(d->ui.searchBar, SIGNAL(findTextSignal(QString,QWebPage::FindFlags)), this, SLOT(findTextInChat(QString,QWebPage::FindFlags)));
@@ -339,15 +316,6 @@ Tp::TextChannelPtr ChatWidget::textChannel() const
     return d->channel;
 }
 
-void ChatWidget::showEvent(QShowEvent* e)
-{
-    kDebug();
-
-    resetUnreadMessageCount();
-
-    QWidget::showEvent(e);
-}
-
 void ChatWidget::keyPressEvent(QKeyEvent* e)
 {
     if (e->key() == Qt::Key_Escape && d->ui.searchBar->isVisible()) {
@@ -450,14 +418,6 @@ void ChatWidget::incrementUnreadMessageCount()
 
     kDebug() << "emit" << d->unreadMessages;
     Q_EMIT unreadMessagesChanged(d->unreadMessages);
-}
-
-void ChatWidget::windowActivated()
-{
-    kDebug();
-    if (isOnTop()) {
-        resetUnreadMessageCount();
-    }
 }
 
 void ChatWidget::onHistoryFetched(const QList<AdiumThemeContentInfo> &messages)

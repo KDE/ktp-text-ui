@@ -39,12 +39,14 @@
 #include <KNotifyConfigWidget>
 #include <KMenuBar>
 #include <KLineEdit>
+#include <KMenu>
+
+#include <QEvent>
 
 #include <TelepathyQt4/Account>
 #include <TelepathyQt4/ContactCapabilities>
 #include <TelepathyQt4/PendingChannelRequest>
 #include <TelepathyQt4/TextChannel>
-#include <KMenu>
 
 #define PREFERRED_TEXTCHAT_HANDLER "org.freedesktop.Telepathy.Client.KDE.TextUi"
 #define PREFERRED_FILETRANSFER_HANDLER "org.freedesktop.Telepathy.Client.KDE.FileTransfer"
@@ -248,6 +250,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
     }
 
     ChatTab* currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    currentChatTab->resetUnreadMessageCount();
     setWindowTitle(currentChatTab->title());
     setWindowIcon(currentChatTab->icon());
 
@@ -592,6 +595,18 @@ void ChatWindow::onUserTypingChanged(bool typing)
     } else {
         setWindowTitle(title);
     }
+}
+
+bool ChatWindow::event(QEvent *e)
+{
+    if (e->type() == QEvent::WindowActivate) {
+        //when the window is activated reset the message count on the active tab.
+        ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+        Q_ASSERT(currChat);
+        currChat->resetUnreadMessageCount();
+    }
+
+    return KXmlGuiWindow::event(e);
 }
 
 #include "chat-window.moc"
