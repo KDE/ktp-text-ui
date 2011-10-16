@@ -257,7 +257,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
        archive->close();
        delete archive;
 
-       kDebug("style not valid");
+       kDebug() << "style not valid";
        return StyleNotValid;
    }
 
