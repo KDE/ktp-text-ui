@@ -44,6 +44,7 @@ private Q_SLOTS:
     void updateScrollBar();
 
 Q_SIGNALS:
+    void returnKeyPressed();
     void findTextShortcutPressed();
     void scrollEventRecieved(QKeyEvent*);
 

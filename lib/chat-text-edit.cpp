@@ -70,16 +70,17 @@ QSize ChatTextEdit::sizeHint() const
 
 void ChatTextEdit::keyPressEvent(QKeyEvent* e)
 {
-    switch (e->key()) {
-        case Qt::Key_PageUp :
-        case Qt::Key_PageDown :
-            Q_EMIT scrollEventRecieved(e);
-            break;
+    if (e->key()==Qt::Key_Enter && !e->modifiers()) {
+        Q_EMIT returnKeyPressed();
+    }
 
-        default :
-            if (e->matches(QKeySequence::Find)) {
-                Q_EMIT findTextShortcutPressed();
-            }
+    if (e->key() == Qt::Key_PageUp ||
+        e->key() == Qt::Key_PageDown) {
+        Q_EMIT scrollEventRecieved(e);
+    }
+
+    if (e->matches(QKeySequence::Find)) {
+        Q_EMIT findTextShortcutPressed();
     }
 
     KTextEdit::keyPressEvent(e);
@@ -88,7 +89,7 @@ void ChatTextEdit::keyPressEvent(QKeyEvent* e)
 void ChatTextEdit::resizeEvent(QResizeEvent* e)
 {
     KTextEdit::resizeEvent(e);
-    QTimer::singleShot(0, this, SLOT(updateScrollBar()));
+    QTimer::singleShot(0, this, SLOT(updmessageBoxEventFilterateScrollBar()));
 }
 
 void ChatTextEdit::recalculateSize()

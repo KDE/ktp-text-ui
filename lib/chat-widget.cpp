@@ -45,33 +45,6 @@
 #include <TelepathyQt4/Connection>
 #include <TelepathyQt4/Presence>
 
-
-class MessageBoxEventFilter : public QObject
-{
-    Q_OBJECT
-public:
-    MessageBoxEventFilter(QObject* parent = 0) : QObject(parent) {}
-
-protected:
-    virtual bool eventFilter(QObject *obj, QEvent *event)
-    {
-        if (event->type() == QEvent::KeyPress) {
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
-                if (!keyEvent->modifiers()) {
-                    Q_EMIT returnKeyPressed();
-                    return true;
-                }
-            }
-        }
-        // standard event processing
-        return QObject::eventFilter(obj, event);
-    }
-
-Q_SIGNALS:
-    void returnKeyPressed();
-};
-
 class ChatWidgetPrivate
 {
 public:
@@ -194,9 +167,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     // make the sendMessageBox a focus proxy for the chatview
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
 
-    MessageBoxEventFilter *messageBoxEventFilter = new MessageBoxEventFilter(this);
-    d->ui.sendMessageBox->installEventFilter(messageBoxEventFilter);
-    connect(messageBoxEventFilter, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
+    connect(d->ui.sendMessageBox, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
     connect(d->ui.sendButton, SIGNAL(clicked()), SLOT(sendMessage()));
 
     // find text in chat
@@ -320,7 +291,8 @@ void ChatWidget::keyPressEvent(QKeyEvent* e)
 {
     if (e->key() == Qt::Key_Escape && d->ui.searchBar->isVisible()) {
         d->ui.searchBar->toggleView(false);
-    } else {
+    }
+    else {
         QWidget::keyPressEvent(e);
     }
 }
