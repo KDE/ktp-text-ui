@@ -87,7 +87,6 @@ public Q_SLOTS:
     void resetUnreadMessageCount();
 
 
-
 protected:
     void changeEvent(QEvent *e);
     void resizeEvent(QResizeEvent *);

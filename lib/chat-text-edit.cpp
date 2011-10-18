@@ -24,6 +24,8 @@
 #include <QtGui/QAction>
 #include <QtCore/QTimer>
 
+#include <KStandardShortcut>
+
 ChatTextEdit::ChatTextEdit(QWidget *parent) :
         KTextEdit(parent)
 {
@@ -70,20 +72,42 @@ QSize ChatTextEdit::sizeHint() const
 
 void ChatTextEdit::keyPressEvent(QKeyEvent* e)
 {
-    if (e->key()==Qt::Key_Enter && !e->modifiers()) {
+    if (e->key()==Qt::Key_Return && !e->modifiers()) {
         Q_EMIT returnKeyPressed();
+        return;
+    }
+
+    if (e->matches(QKeySequence::Copy)) {
+        if (!textCursor().hasSelection()) {
+            QWidget::keyReleaseEvent(e); //skip internal trapping, and pass to parent.
+            return;
+        }
     }
 
     if (e->key() == Qt::Key_PageUp ||
         e->key() == Qt::Key_PageDown) {
-        Q_EMIT scrollEventRecieved(e);
-    }
-
-    if (e->matches(QKeySequence::Find)) {
-        Q_EMIT findTextShortcutPressed();
+        QWidget::keyPressEvent(e); //pass to parent.
+        return;
     }
 
     KTextEdit::keyPressEvent(e);
+}
+
+bool ChatTextEdit::event(QEvent *e)
+{
+    if (e->type() == QEvent::ShortcutOverride) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(e);
+        const int key = keyEvent->key() | keyEvent->modifiers();
+        if (KStandardShortcut::find().contains(key)) {
+            return false; //never catch "find" sequence.
+        }
+        if (KStandardShortcut::copy().contains(key)) {
+            if (!textCursor().hasSelection()) {
+                return false; //don't catch "copy" sequence if there is no selected text.
+            }
+        }
+    }
+    return KTextEdit::event(e);
 }
 
 void ChatTextEdit::resizeEvent(QResizeEvent* e)

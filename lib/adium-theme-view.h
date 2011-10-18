@@ -80,7 +80,6 @@ public Q_SLOTS:
     void addStatusMessage(const AdiumThemeStatusInfo&);
     void onLinkClicked(const QUrl &);
     void onOpenLinkActionTriggered();
-    void onScrollEvent(QKeyEvent*);
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);

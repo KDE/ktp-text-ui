@@ -170,17 +170,12 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(d->ui.sendMessageBox, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
     connect(d->ui.sendButton, SIGNAL(clicked()), SLOT(sendMessage()));
 
-    // find text in chat
-    connect(d->ui.sendMessageBox, SIGNAL(findTextShortcutPressed()), this, SLOT(toggleSearchBar()));
     connect(d->ui.searchBar, SIGNAL(findTextSignal(QString,QWebPage::FindFlags)), this, SLOT(findTextInChat(QString,QWebPage::FindFlags)));
     connect(d->ui.searchBar, SIGNAL(findNextSignal(QString,QWebPage::FindFlags)), this, SLOT(findNextTextInChat(QString,QWebPage::FindFlags)));
     connect(d->ui.searchBar, SIGNAL(findPreviousSignal(QString,QWebPage::FindFlags)), this, SLOT(findPreviousTextInChat(QString,QWebPage::FindFlags)));
     connect(d->ui.searchBar, SIGNAL(flagsChangedSignal(QString,QWebPage::FindFlags)), this, SLOT(findTextInChat(QString,QWebPage::FindFlags)));
 
     connect(this, SIGNAL(searchTextComplete(bool)), d->ui.searchBar, SLOT(onSearchTextComplete(bool)));
-
-    // to make PgUp and PgDown keys work properly
-    connect(d->ui.sendMessageBox, SIGNAL(scrollEventRecieved(QKeyEvent*)), d->ui.chatArea, SLOT(onScrollEvent(QKeyEvent*)));
 
     // initialize LogManager
     d->logManager = new LogManager(account, channel->targetContact(), this);
@@ -289,12 +284,23 @@ Tp::TextChannelPtr ChatWidget::textChannel() const
 
 void ChatWidget::keyPressEvent(QKeyEvent* e)
 {
+    if (e->matches(QKeySequence::Copy)) {
+        d->ui.chatArea->triggerPageAction(QWebPage::Copy);
+        return;
+    }
+
     if (e->key() == Qt::Key_Escape && d->ui.searchBar->isVisible()) {
         d->ui.searchBar->toggleView(false);
+        return;
     }
-    else {
-        QWidget::keyPressEvent(e);
+
+    if (e->key() == Qt::Key_PageUp ||
+        e->key() == Qt::Key_PageDown) {
+        d->ui.chatArea->event(e);
+        return;
     }
+
+    QWidget::keyPressEvent(e);
 }
 
 QString ChatWidget::title() const
@@ -860,5 +866,4 @@ KIcon ChatWidget::iconForPresence(Tp::ConnectionPresenceType presence)
     return KIcon(iconName);
 }
 
-#include "chat-widget.moc" //for MessageBoxEventFilter
-#include "moc_chat-widget.cpp" //for ChatWidget
+#include "chat-widget.moc"

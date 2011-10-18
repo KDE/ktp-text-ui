@@ -488,11 +488,6 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     return htmlTemplate;
 }
 
-void AdiumThemeView::onScrollEvent(QKeyEvent* e)
-{
-    keyPressEvent(e);
-}
-
 void AdiumThemeView::appendNewMessage(QString &html)
 {
     //by making the JS return false evaluateJavaScript is a _lot_ faster, as it has nothing to convert to QVariant.
