@@ -73,7 +73,7 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
     } else {
         KNotification *notification = new KNotification(QLatin1String("packagenotrecognized"), NULL, KNotification::Persistent);
         notification->setText( i18n("Package type not recognized or not supported") );
-        notification->setActions( QStringList() << i18n("Ok") );
+        notification->setActions( QStringList() << i18n("OK") );
         QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));
         QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
 
@@ -122,7 +122,7 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
 
             QObject::connect(notification, SIGNAL(ignored()), this, SLOT(ignoreRequest()));
             QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
-            notification->setActions( QStringList() << i18n("Ok") );
+            notification->setActions( QStringList() << i18n("OK") );
             notification->sendEvent();
             kDebug() << "sent error";
 
