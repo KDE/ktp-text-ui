@@ -866,4 +866,9 @@ KIcon ChatWidget::iconForPresence(Tp::ConnectionPresenceType presence)
     return KIcon(iconName);
 }
 
+bool ChatWidget::isUserTyping() const
+{
+    return d->remoteContactIsTyping;
+}
+
 #include "chat-widget.moc"

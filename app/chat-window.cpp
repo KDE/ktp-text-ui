@@ -254,6 +254,9 @@ void ChatWindow::onCurrentIndexChanged(int index)
     setWindowTitle(currentChatTab->title());
     setWindowIcon(currentChatTab->icon());
 
+    //call this to update the "Typing.." in window title
+    onUserTypingChanged();
+
     // when the tab changes I need to "refresh" the window's findNext and findPrev actions
     if (currentChatTab->chatSearchBar()->searchBar()->text().isEmpty()) {
         onEnableSearchActions(false);
@@ -457,7 +460,7 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
     connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
     connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
-    connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged(bool)));
+    connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged()));
     connect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
     connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
@@ -584,13 +587,13 @@ void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::Contact
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 
-void ChatWindow::onUserTypingChanged(bool typing)
+void ChatWindow::onUserTypingChanged()
 {
     ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
     Q_ASSERT(currChat);
     QString title = currChat->title();
 
-    if (typing) {
+    if (currChat->isUserTyping()) {
         setWindowTitle(i18nc("String prepended in window title, arg is contact's name", "Typing... %1", title));
     } else {
         setWindowTitle(title);

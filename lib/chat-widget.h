@@ -77,6 +77,9 @@ public:
 
     int unreadMessageCount() const;
 
+    /** Returns true if the user is currently typing or not */
+    bool isUserTyping() const;
+
 public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
