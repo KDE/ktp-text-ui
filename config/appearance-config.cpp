@@ -31,7 +31,7 @@
 #include <KPluginFactory>
 
 K_PLUGIN_FACTORY(KCMTelepathyChatAppearanceConfigFactory, registerPlugin<AppearanceConfig>();)
-K_EXPORT_PLUGIN(KCMTelepathyChatAppearanceConfigFactory("telepathy_chat_appearance_config", "kcm_telepathy_chat_appearance_config"))
+K_EXPORT_PLUGIN(KCMTelepathyChatAppearanceConfigFactory("telepathy_chat_appearance_config", "telepathy-chat-window-config"))
 
 AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList& args)
     : KCModule(KCMTelepathyChatAppearanceConfigFactory::componentData(), parent, args),

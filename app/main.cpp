@@ -31,14 +31,14 @@
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData("telepathy-kde-text-ui",
-                         0,
-                         ki18n("Telepathy Chat Handler"),
+    KAboutData aboutData("telepathy-kde-text-ui", 0,
+                         ki18n("Telepathy Text Ui"),
                          "0.1");
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "david@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
     aboutData.addAuthor(ki18n("Francesco Nwokeka"), ki18n("Developer"), "francesco.nwokeka@gmail.com");
     aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
+    aboutData.setLicense(KAboutData::License_GPL_V2);
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 
