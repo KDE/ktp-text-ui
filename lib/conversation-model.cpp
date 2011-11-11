@@ -23,7 +23,8 @@
 #include <KDebug>
 #include <TelepathyQt4/ReceivedMessage>
 
-struct MessageItem {
+class MessageItem {
+public:
 	QString user;
 	QString text;
 	QDateTime time;
