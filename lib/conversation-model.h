@@ -18,19 +18,53 @@
 */
 
 
-#ifndef CONVERSATIONMODEL_H
-#define CONVERSATIONMODEL_H
+#ifndef CONVERSATION_MODEL_H
+#define CONVERSATION_MODEL_H
+
+#include "kdetelepathychat_export.h"
 
 #include <QAbstractItemModel>
+#include <TelepathyQt4/TextChannel>
 
 
-class ConversationModel : public QAbstractListModel
+class KDE_TELEPATHY_CHAT_EXPORT ConversationModel : public QAbstractListModel
 {
+Q_OBJECT
+// Q_PROPERTY(Tp::TextChannelPtr textChannel
+// 			READ textChannel
+// 			WRITE setTextChannel
+// 			NOTIFY textChannelChanged
+// 		  )
 
 public:
-    explicit ConversationModel(QObject* parent = 0);
+    ConversationModel(QObject* parent = 0);
+
+	enum Roles {
+		UserRole = Qt::UserRole,
+		TextRole,
+		TypeRole,
+		TimeRole
+	};
+
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+
+	Tp::TextChannelPtr textChannel();
+	void setTextChannel(Tp::TextChannelPtr channel);
+
+Q_SIGNALS:
+	void textChannelChanged(Tp::TextChannelPtr newChannel);
+
+private Q_SLOTS:
+    void onMessageReceived(Tp::ReceivedMessage);
+    void onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString);
+
+private:
+	void setupChannelSignals(Tp::TextChannelPtr channel);
+	void removeChannelSignals(Tp::TextChannelPtr channel);
+
+	class ConversationModelPrivate;
+	ConversationModelPrivate *d;
 };
 
-#endif // CONVERSATIONMODEL_H
+#endif // CONVERSATION_MODEL_H
