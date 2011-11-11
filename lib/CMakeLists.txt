@@ -2,8 +2,9 @@ set(ktpchat_SRCS
         chat-widget.cpp
         chat-window-style.cpp
         chat-window-style-manager.cpp
-        conversation-model.cpp
         conversation.cpp
+        conversation-model.cpp
+        conversation-watcher.cpp
         adium-theme-view.cpp
         adium-theme-header-info.cpp
         adium-theme-message-info.cpp
@@ -26,8 +27,9 @@ set(ktpchat_HDRS
     chat-widget.h
     chat-window-style.h
     chat-window-style-manager.h
-    conversation-model.h
     conversation.h
+    conversation-model.h
+    conversation-watcher.h
 )
 
 set(ktpchat_PRETTY_HDRS

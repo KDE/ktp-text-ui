@@ -1,6 +1,6 @@
 /*
     <one line to give the library's name and an idea of what it does.>
-    Copyright (C) 2011  Lasath Fernando <kde@lasath.org>
+    Copyright (C) 2011  <copyright holder> <email>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -18,32 +18,31 @@
 */
 
 
-#ifndef CONVERSATION_H
-#define CONVERSATION_H
+#ifndef CONVERSATION_WATCHER_H
+#define CONVERSATION_WATCHER_H
 
-#include <QObject>
-#include <TelepathyQt4/Account>
-#include <TelepathyQt4/TextChannel>
-#include "conversation-model.h"
+#include <TelepathyQt4/AbstractClient>
 
-class ConversationModel;
-class Conversation : public QObject
+class Conversation;
+
+class ConversationWatcher : public Tp::AbstractClientObserver , public QObject
 {
 Q_OBJECT
-Q_PROPERTY(const ConversationModel* model READ model NOTIFY modelChanged)
 
 public:
-    Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account);
-    virtual ~Conversation();
-
-	const ConversationModel* model() const;
+    virtual void observeChannels(const Tp::MethodInvocationContextPtr<>& context,
+								 const Tp::AccountPtr& account,
+								 const Tp::ConnectionPtr& connection,
+								 const QList< Tp::ChannelPtr >& channels,
+								 const Tp::ChannelDispatchOperationPtr& dispatchOperation,
+								 const QList< Tp::ChannelRequestPtr >& requestsSatisfied,
+								 const Tp::AbstractClientObserver::ObserverInfo& observerInfo
+								);
+    ConversationWatcher();
+    virtual ~ConversationWatcher();
 
 Q_SIGNALS:
-	void modelChanged(ConversationModel* newModel);
-
-private:
-	class ConversationPrivate;
-	ConversationPrivate *d;
+	void newConversation(Conversation&);
 };
 
-#endif // CONVERSATION_H
+#endif // CONVERSATION_WATCHER_H

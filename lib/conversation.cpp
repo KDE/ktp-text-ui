@@ -21,7 +21,8 @@
 #include "conversation.h"
 
 #include "conversation-model.h"
-#include <TelepathyQt4/Account>
+
+#include <TelepathyQt4/TextChannel>
 
 class Conversation::ConversationPrivate {
 public:
