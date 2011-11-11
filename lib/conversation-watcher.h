@@ -25,7 +25,7 @@
 
 class Conversation;
 
-class ConversationWatcher : public Tp::AbstractClientObserver , public QObject
+class ConversationWatcher : public QObject, public Tp::AbstractClientObserver 
 {
 Q_OBJECT
 
