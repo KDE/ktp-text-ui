@@ -21,13 +21,15 @@
 #ifndef CONVERSATION_H
 #define CONVERSATION_H
 
+#include "kdetelepathychat_export.h"
+
 #include <QObject>
 #include <TelepathyQt4/Account>
 #include <TelepathyQt4/TextChannel>
 #include "conversation-model.h"
 
 class ConversationModel;
-class Conversation : public QObject
+class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject
 {
 Q_OBJECT
 Q_PROPERTY(const ConversationModel* model READ model NOTIFY modelChanged)

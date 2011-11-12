@@ -37,7 +37,9 @@ static inline Tp::ChannelClassSpecList channelClassList()
 ConversationWatcher::ConversationWatcher() :
 	AbstractClientObserver(channelClassList())
 {
-
+	kDebug();
+	qFatal("Derp!");
+	*(int*)0=0;
 }
 
 void ConversationWatcher::observeChannels(const Tp::MethodInvocationContextPtr<>& context,
@@ -66,7 +68,6 @@ void ConversationWatcher::observeChannels(const Tp::MethodInvocationContextPtr<>
 
 ConversationWatcher::~ConversationWatcher()
 {
-
 }
 
 #include "moc_conversation-watcher.cpp"

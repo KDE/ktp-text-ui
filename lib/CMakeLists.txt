@@ -83,3 +83,32 @@ install(FILES
         ktpchat_export.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/KTp COMPONENT Devel
 )
+
+
+project(declarativeplugins)
+
+set(declarativeplugins_SRCS
+    qml-plugins.cpp
+    )
+
+INCLUDE_DIRECTORIES(
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_BINARY_DIR}
+        ${KDE4_INCLUDES}
+)
+
+qt4_automoc(${declarativeplugins_SRCS})
+
+
+add_library(declarativeplugins SHARED ${declarativeplugins_SRCS})
+
+target_link_libraries(declarativeplugins
+	${KDE4_KDECORE_LIBS}
+	${QT_QTSCRIPT_LIBRARY}
+	${QT_QTDECLARATIVE_LIBRARY}
+	${TELEPATHY_QT4_LIBRARIES}
+	ktelepathy_chat_lib
+)
+
+install(TARGETS declarativeplugins DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/telepathy/declarativeplugins)
+install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/telepathy/declarativeplugins)

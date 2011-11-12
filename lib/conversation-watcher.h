@@ -21,11 +21,12 @@
 #ifndef CONVERSATION_WATCHER_H
 #define CONVERSATION_WATCHER_H
 
+#include "kdetelepathychat_export.h"
 #include <TelepathyQt4/AbstractClient>
 
 class Conversation;
 
-class ConversationWatcher : public QObject, public Tp::AbstractClientObserver 
+class KDE_TELEPATHY_CHAT_EXPORT ConversationWatcher : public QObject, public Tp::AbstractClientObserver 
 {
 Q_OBJECT
 
@@ -39,7 +40,7 @@ public:
 								 const Tp::AbstractClientObserver::ObserverInfo& observerInfo
 								);
     ConversationWatcher();
-    virtual ~ConversationWatcher();
+    ~ConversationWatcher();
 
 Q_SIGNALS:
 	void newConversation(Conversation&);
