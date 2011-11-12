@@ -1,0 +1,23 @@
+[Desktop Entry]
+Name=Chat Widget Mockup
+Comment=This is sort of me learning QML, you can have a conversation with a hardcoded contact
+Icon=kde-telepathy
+
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=ui/main.qml
+X-Plasma-DefaultSize=300,200
+# X-Plasma-RequiredExtensions=LaunchApp
+
+X-KDE-PluginInfo-Author=Frederik Gladhorn
+X-KDE-PluginInfo-Email=gladhorn@kde.org
+X-KDE-PluginInfo-Website=http://plasma.kde.org/
+X-KDE-PluginInfo-Category=Examples
+X-KDE-PluginInfo-Name=org.kde.telepathy.chat
+X-KDE-PluginInfo-Version=0.0
+
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
+#X-KDE-ServiceTypes=Plasma/PopupApplet
+X-KDE-ServiceTypes=Plasma/Applet
+Type=Service

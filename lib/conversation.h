@@ -36,16 +36,17 @@ Q_PROPERTY(const ConversationModel* model READ model NOTIFY modelChanged)
 
 public:
     Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account);
+    Conversation(QObject* parent = 0);
     virtual ~Conversation();
 
-	const ConversationModel* model() const;
+    const ConversationModel* model() const;
 
 Q_SIGNALS:
-	void modelChanged(ConversationModel* newModel);
+    void modelChanged(ConversationModel* newModel);
 
 private:
-	class ConversationPrivate;
-	ConversationPrivate *d;
+    class ConversationPrivate;
+    ConversationPrivate *d;
 };
 
 #endif // CONVERSATION_H

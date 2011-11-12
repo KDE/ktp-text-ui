@@ -19,33 +19,39 @@
 
 
 #include "conversation.h"
-
 #include "conversation-model.h"
 
 #include <TelepathyQt4/TextChannel>
+#include <KDebug>
 
-class Conversation::ConversationPrivate {
+class Conversation::ConversationPrivate
+{
 public:
-	ConversationModel* model;
-	Tp::AccountPtr account;
+    ConversationModel* model;
+    Tp::AccountPtr account;
 };
 
-Conversation::Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account) :
-	d(new ConversationPrivate)
+Conversation::Conversation ( Tp::TextChannelPtr channel, Tp::AccountPtr account ) :
+        d ( new ConversationPrivate )
 {
-	d->model = new ConversationModel();
-	d->model->setTextChannel(channel);
+    d->model = new ConversationModel();
+    d->model->setTextChannel ( channel );
 
-	d->account = account;
+    d->account = account;
+}
+
+Conversation::Conversation ( QObject* parent ) : QObject ( parent )
+{
+    kError() << "Conversation should not be created directly. Use ConversationWater instead.";
 }
 
 const ConversationModel* Conversation::model() const
 {
-	return d->model;
+    return d->model;
 }
 
 Conversation::~Conversation()
 {
-	delete d->model;
+    delete d->model;
 }
 

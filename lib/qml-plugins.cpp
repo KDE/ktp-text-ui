@@ -18,27 +18,17 @@
 */
 
 
-#ifndef CONVERSATION_WATCHER_H
-#define CONVERSATION_WATCHER_H
+#include "qml-plugins.h"
 
-#include "kdetelepathychat_export.h"
-#include <TelepathyQt4/AbstractClient>
+#include <QtDeclarative/QDeclarativeItem>
+#include "conversation.h"
+#include "conversation-watcher.h"
 
-class Conversation;
-
-class KDE_TELEPATHY_CHAT_EXPORT ConversationWatcher : public QObject
+void QmlPlugins::registerTypes ( const char* uri )
 {
-Q_OBJECT
+    qmlRegisterType<ConversationWatcher> ( uri, 0, 1, "ConversationWatcher" );
+    qmlRegisterType<Conversation>(uri, 0, 1, "Conversation");
+    qmlRegisterType<ConversationModel> ( uri, 0, 1, "ConversationModel" );
+}
 
-public:
-    ConversationWatcher();
-    ~ConversationWatcher();
-
-Q_SIGNALS:
-	void newConversation(Conversation *con);
-private:
-	class ConversationClientObserver;
-	Tp::SharedPtr<ConversationClientObserver> d;
-};
-
-#endif // CONVERSATION_WATCHER_H
+Q_EXPORT_PLUGIN2 ( conversation, QmlPlugins );

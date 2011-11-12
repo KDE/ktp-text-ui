@@ -25,6 +25,7 @@
 #include <TelepathyQt4/ChannelClassSpec>
 #include <TelepathyQt4/TextChannel>
 #include "conversation.h"
+#include <TelepathyQt4/ClientRegistrar>
 
 
 static inline Tp::ChannelClassSpecList channelClassList()
@@ -34,37 +35,84 @@ static inline Tp::ChannelClassSpecList channelClassList()
                                       << Tp::ChannelClassSpec::textChatroom();
 }
 
-ConversationWatcher::ConversationWatcher() :
-	AbstractClientObserver(channelClassList())
+class ConversationWatcher::ConversationClientObserver :
+    public Tp::AbstractClientObserver
 {
-	kDebug();
-	qFatal("Derp!");
-	*(int*)0=0;
-}
+public:
+    virtual void observeChannels(
+        const Tp::MethodInvocationContextPtr<>& context,
+        const Tp::AccountPtr& account,
+        const Tp::ConnectionPtr& connection,
+        const QList< Tp::ChannelPtr >& channels,
+        const Tp::ChannelDispatchOperationPtr& dispatchOperation,
+        const QList< Tp::ChannelRequestPtr >& requestsSatisfied,
+        const Tp::AbstractClientObserver::ObserverInfo& observerInfo)
+    {
+        kDebug();
 
-void ConversationWatcher::observeChannels(const Tp::MethodInvocationContextPtr<>& context,
-										  const Tp::AccountPtr& account,
-										  const Tp::ConnectionPtr& connection,
-										  const QList< Tp::ChannelPtr >& channels,
-										  const Tp::ChannelDispatchOperationPtr& dispatchOperation,
-										  const QList< Tp::ChannelRequestPtr >& requestsSatisfied,
-										  const Tp::AbstractClientObserver::ObserverInfo& observerInfo)
-{
-    kDebug();
-
-    Tp::TextChannelPtr textChannel;
-    Q_FOREACH(const Tp::ChannelPtr & channel, channels) {
-        textChannel = Tp::TextChannelPtr::dynamicCast(channel);
-        if (textChannel) {
-            break;
+        Tp::TextChannelPtr textChannel;
+        Q_FOREACH(const Tp::ChannelPtr & channel, channels) {
+            textChannel = Tp::TextChannelPtr::dynamicCast(channel);
+            if (textChannel) {
+                break;
+            }
         }
+
+        Q_ASSERT(textChannel);
+
+        Conversation con(textChannel, account);
+        m_parent->newConversation(&con);
     }
 
-    Q_ASSERT(textChannel);
+    ConversationClientObserver(ConversationWatcher *parent) :
+        AbstractClientObserver(channelClassList()),
+        m_parent(parent)
+    {
+    }
 
-	Conversation con(textChannel, account);
-	newConversation(con);
+    ConversationWatcher *m_parent;
+    Tp::ClientRegistrarPtr registrar;
+};
+
+ConversationWatcher::ConversationWatcher() :
+    d(new ConversationClientObserver(this))
+{
+    kDebug();
+    Tp::registerTypes();
+    Tp::AccountFactoryPtr accountFactory = Tp::AccountFactory::create(QDBusConnection::sessionBus(),
+                                                                      Tp::Account::FeatureCore);
+
+    Tp::ConnectionFactoryPtr  connectionFactory = Tp::ConnectionFactory::create(
+        QDBusConnection::sessionBus(),
+        Tp::Features() << Tp::Connection::FeatureSelfContact
+                       << Tp::Connection::FeatureCore
+    );
+
+    Tp::ChannelFactoryPtr channelFactory = Tp::ChannelFactory::create(QDBusConnection::sessionBus());
+    channelFactory->addCommonFeatures(Tp::Channel::FeatureCore);
+
+    Tp::Features textFeatures = Tp::Features() << Tp::TextChannel::FeatureMessageQueue
+                                               << Tp::TextChannel::FeatureMessageSentSignal
+                                               << Tp::TextChannel::FeatureChatState
+                                               << Tp::TextChannel::FeatureMessageCapabilities;
+    channelFactory->addFeaturesForTextChats(textFeatures);
+    channelFactory->addFeaturesForTextChatrooms(textFeatures);
+
+    Tp::ContactFactoryPtr contactFactory = Tp::ContactFactory::create(
+        Tp::Features() << Tp::Contact::FeatureAlias
+                       << Tp::Contact::FeatureAvatarToken
+                       << Tp::Contact::FeatureAvatarData
+                       << Tp::Contact::FeatureCapabilities
+                       << Tp::Contact::FeatureSimplePresence
+    );
+
+    d->registrar = Tp::ClientRegistrar::create(accountFactory, connectionFactory,
+                                               channelFactory, contactFactory);
+
+    d->registrar->registerClient(d, QLatin1String("KDE.TextUi.ConversationWatcher"));
 }
+
+
 
 ConversationWatcher::~ConversationWatcher()
 {
