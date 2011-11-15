@@ -23,6 +23,7 @@
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QAction>
 #include <QtCore/QTimer>
+#include <QtCore/QDebug>
 
 #include <KStandardShortcut>
 
@@ -87,6 +88,11 @@ void ChatTextEdit::keyPressEvent(QKeyEvent* e)
     if (e->key() == Qt::Key_PageUp ||
         e->key() == Qt::Key_PageDown) {
         QWidget::keyPressEvent(e); //pass to parent.
+        return;
+    }
+
+    if (e->key() == Qt::Key_Tab && e->modifiers() & Qt::ControlModifier) {
+        QWidget::keyPressEvent(e);
         return;
     }
 
