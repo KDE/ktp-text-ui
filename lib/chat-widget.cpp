@@ -723,7 +723,7 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const T
         if (!isYou) {
             message = i18n("%1 is offline", contact->alias());
         } else {
-            message = i18n("You are now marked as offline");
+            message = i18n("You went offline");
         }
         break;
     case Tp::ConnectionPresenceTypeAvailable:
@@ -741,16 +741,26 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const T
         }
         break;
     case Tp::ConnectionPresenceTypeAway:
-    case Tp::ConnectionPresenceTypeExtendedAway:
         if (!isYou) {
             message = i18n("%1 is away", contact->alias());
         } else {
             message = i18n("You are now marked as away");
         }
         break;
+    case Tp::ConnectionPresenceTypeExtendedAway:
+        if (!isYou) {
+            message = i18n("%1 is not available", contact->alias());
+        } else {
+            message = i18n("You are now marked as not available");
+        }
+        break;
     default:
         /*Do nothing*/
         ;
+    }
+
+    if (!isYou && !presence.statusMessage().isEmpty()) {
+        message = QString::fromUtf8("%1 - \"%2\"").arg(message, presence.statusMessage());
     }
 
     if (!message.isNull()) {
