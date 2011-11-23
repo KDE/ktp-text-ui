@@ -7,8 +7,19 @@
                          http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd" >
 
   <MenuBar>
-    <Menu name="file" >
-    </Menu>
+    <Menu name="file" />
   </MenuBar>
+
+ <ToolBar noMerge="1" name="mainToolBar">
+  <text>Main Toolbar</text>
+  <Action name="edit_find"/>
+  <Separator name="separator_0"/>
+  <Action name="invite-to-chat"/>
+  <Action name="audio-call"/>
+  <Action name="video-call"/>
+  <Separator name="separator_1"/>
+  <Action name="send-file"/>
+  <Action name="share-desktop"/>
+ </ToolBar>
 
 </gui>
