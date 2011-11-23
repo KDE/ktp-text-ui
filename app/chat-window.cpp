@@ -51,6 +51,7 @@
 #define PREFERRED_TEXTCHAT_HANDLER "org.freedesktop.Telepathy.Client.KDE.TextUi"
 #define PREFERRED_FILETRANSFER_HANDLER "org.freedesktop.Telepathy.Client.KDE.FileTransfer"
 #define PREFERRED_AUDIO_VIDEO_HANDLER "org.freedesktop.Telepathy.Client.KDE.CallUi"
+#define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
 ChatWindow::ChatWindow()
 {
@@ -63,6 +64,7 @@ ChatWindow::ChatWindow()
 
     // keyboard shortcuts for the search bar
     KStandardAction::find(this, SLOT(onSearchActionToggled()), actionCollection());
+    
     // start disabled
     KStandardAction::findNext(this, SLOT(onFindNextText()), actionCollection())->setEnabled(false);
     KStandardAction::findPrev(this, SLOT(onFindPreviousText()), actionCollection())->setEnabled(false);
@@ -274,14 +276,19 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setAudioCallEnabled(selfCapabilities.streamedMediaAudioCalls() && contactCapabilites.streamedMediaAudioCalls());
         setFileTransferEnabled(selfCapabilities.fileTransfers() && contactCapabilites.fileTransfers());
         setVideoCallEnabled(selfCapabilities.streamedMediaVideoCalls() && contactCapabilites.streamedMediaVideoCalls());
+        /// TODO this shall be activated/deactivated according to capabilities. The code is already in common
+        setShareDesktopEnabled(true);
         /// TODO re-activate check when invitation to chat has been sorted out
         setInviteToChatEnabled(false);
+        
     } else {
         setAudioCallEnabled(false);
         setFileTransferEnabled(false);
         setVideoCallEnabled(false);
+        setShareDesktopEnabled(false);
         /// TODO re-activate check when invitation to chat has been sorted out
         setInviteToChatEnabled(false);
+        
     }
 }
 
@@ -412,6 +419,19 @@ void ChatWindow::onVideoCallTriggered()
     startVideoCall(currChat->account(), currChat->textChannel()->targetContact());
 }
 
+void ChatWindow::onShareDesktopTriggered()
+{
+    ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+
+    // This should never happen
+    if (!currChat) {
+        return;
+    }
+
+    startShareDesktop(currChat->account(), currChat->textChannel()->targetContact());
+}
+
+
 void ChatWindow::showSettingsDialog()
 {
     kDebug();
@@ -485,12 +505,15 @@ void ChatWindow::setupCustomActions()
     KAction *fileTransferAction = new KAction(KIcon(QLatin1String("mail-attachment")), i18n("&Send File"), this);
     connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
 
-    KAction *inviteToChat = new KAction(KIcon(QLatin1String("user-group-new")), i18n("&Invite to chat"), this);
+    KAction *inviteToChat = new KAction(KIcon(QLatin1String("user-group-new")), i18n("&Invite to Chat"), this);
     connect(inviteToChat, SIGNAL(triggered()), this, SLOT(onInviteToChatTriggered()));
 
     KAction *videoCallAction = new KAction(KIcon(QLatin1String("webcamsend")), i18n("&Video Call"), this);
     connect(videoCallAction, SIGNAL(triggered()), this, SLOT(onVideoCallTriggered()));
 
+    KAction *shareDesktopAction = new KAction(KIcon(QLatin1String("krfb")), i18n("Share My &Desktop"), this);
+    connect(shareDesktopAction, SIGNAL(triggered()), this, SLOT(onShareDesktopTriggered()));
+    
     // add custom actions to the collection
     actionCollection()->addAction(QLatin1String("separator"), separator);
     actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
@@ -499,6 +522,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("send-file"), fileTransferAction);
     actionCollection()->addAction(QLatin1String("video-call"), videoCallAction);
     actionCollection()->addAction(QLatin1String("invite-to-chat"), inviteToChat);
+    actionCollection()->addAction(QLatin1String("share-desktop"), shareDesktopAction);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
@@ -532,6 +556,15 @@ void ChatWindow::setInviteToChatEnabled(bool enable)
 void ChatWindow::setVideoCallEnabled(bool enable)
 {
     QAction *action = actionCollection()->action(QLatin1String("video-call"));
+
+    if (action) {
+        action->setEnabled(enable);
+    }
+}
+
+void ChatWindow::setShareDesktopEnabled(bool enable)
+{
+    QAction *action = actionCollection()->action(QLatin1String("share-desktop"));
 
     if (action) {
         action->setEnabled(enable);
@@ -584,6 +617,17 @@ void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::Contact
                                                                                       true,
                                                                                       QDateTime::currentDateTime(),
                                                                                       QLatin1String(PREFERRED_AUDIO_VIDEO_HANDLER));
+    
+    connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
+}
+
+void ChatWindow::startShareDesktop(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
+{
+    Tp::PendingChannelRequest* channelRequest = account->createStreamTube(contact,
+                                                                          QLatin1String("rfb"), 
+                                                                          QDateTime::currentDateTime(), 
+                                                                          QLatin1String(PREFERRED_RFB_HANDLER));
+    
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 

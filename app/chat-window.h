@@ -89,6 +89,7 @@ private Q_SLOTS:
     void onTabIconChanged(const KIcon &newIcon);
     void onVideoCallTriggered();                                /** start a video call */
     void onUserTypingChanged();
+    void onShareDesktopTriggered();                                /** start a desktop share */
 
 protected Q_SLOTS:
     void showSettingsDialog();
@@ -119,6 +120,7 @@ private:
     void setFileTransferEnabled(bool enable);
     void setInviteToChatEnabled(bool enable);
     void setVideoCallEnabled(bool enable);
+    void setShareDesktopEnabled(bool enable);
 
     /** starts audio call with given contact
      * @param account account sending the audio call request
@@ -133,10 +135,16 @@ private:
     void startFileTransfer(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
 
     /** starts a video call with given contact
-     * @param account account starting the file transfer
-     * @param contact contact with whom to start file transfer
+     * @param account account starting the video call
+     * @param contact contact with whom to start the video call
      */
     void startVideoCall(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
+    
+    /** starts a desktop sharing session with given contact
+     * @param account account starting the desktop share
+     * @param contact contact with whom to start desktop share
+     */
+    void startShareDesktop(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
 
     KTabWidget *m_tabWidget;
 };
