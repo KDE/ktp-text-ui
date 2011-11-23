@@ -280,7 +280,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setShareDesktopEnabled(true);
         /// TODO re-activate check when invitation to chat has been sorted out
         setInviteToChatEnabled(false);
-        
+
     } else {
         setAudioCallEnabled(false);
         setFileTransferEnabled(false);
@@ -288,7 +288,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setShareDesktopEnabled(false);
         /// TODO re-activate check when invitation to chat has been sorted out
         setInviteToChatEnabled(false);
-        
+
     }
 }
 
@@ -513,7 +513,7 @@ void ChatWindow::setupCustomActions()
 
     KAction *shareDesktopAction = new KAction(KIcon(QLatin1String("krfb")), i18n("Share My &Desktop"), this);
     connect(shareDesktopAction, SIGNAL(triggered()), this, SLOT(onShareDesktopTriggered()));
-    
+
     // add custom actions to the collection
     actionCollection()->addAction(QLatin1String("separator"), separator);
     actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
@@ -617,17 +617,17 @@ void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::Contact
                                                                                       true,
                                                                                       QDateTime::currentDateTime(),
                                                                                       QLatin1String(PREFERRED_AUDIO_VIDEO_HANDLER));
-    
+
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 
 void ChatWindow::startShareDesktop(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
 {
     Tp::PendingChannelRequest* channelRequest = account->createStreamTube(contact,
-                                                                          QLatin1String("rfb"), 
-                                                                          QDateTime::currentDateTime(), 
+                                                                          QLatin1String("rfb"),
+                                                                          QDateTime::currentDateTime(),
                                                                           QLatin1String(PREFERRED_RFB_HANDLER));
-    
+
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 

@@ -139,7 +139,7 @@ private:
      * @param contact contact with whom to start the video call
      */
     void startVideoCall(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
-    
+
     /** starts a desktop sharing session with given contact
      * @param account account starting the desktop share
      * @param contact contact with whom to start desktop share
