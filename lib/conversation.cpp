@@ -34,6 +34,8 @@ public:
 Conversation::Conversation ( Tp::TextChannelPtr channel, Tp::AccountPtr account ) :
         d ( new ConversationPrivate )
 {
+    kDebug();
+
     d->model = new ConversationModel();
     d->model->setTextChannel ( channel );
 
@@ -45,13 +47,14 @@ Conversation::Conversation ( QObject* parent ) : QObject ( parent )
     kError() << "Conversation should not be created directly. Use ConversationWater instead.";
 }
 
-const ConversationModel* Conversation::model() const
+ConversationModel* Conversation::model() const
 {
     return d->model;
 }
 
 Conversation::~Conversation()
 {
+    kDebug();
     delete d->model;
 }
 

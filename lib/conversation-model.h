@@ -38,6 +38,7 @@ Q_OBJECT
 
 public:
     ConversationModel(QObject* parent = 0);
+    virtual ~ConversationModel();
 
 	enum Roles {
 		UserRole = Qt::UserRole,

@@ -60,8 +60,8 @@ public:
 
         Q_ASSERT(textChannel);
 
-        Conversation con(textChannel, account);
-        m_parent->newConversation(&con);
+        Conversation *con = new Conversation(textChannel, account);
+        m_parent->newConversation(con);
     }
 
     ConversationClientObserver(ConversationWatcher *parent) :
@@ -111,7 +111,6 @@ ConversationWatcher::ConversationWatcher() :
 
     d->registrar->registerClient(d, QLatin1String("KDE.TextUi.ConversationWatcher"));
 }
-
 
 
 ConversationWatcher::~ConversationWatcher()

@@ -47,6 +47,14 @@ ConversationModel::ConversationModel(QObject* parent):
     QAbstractListModel(parent),
     d(new ConversationModelPrivate)
 {
+    kDebug();
+
+    QHash<int, QByteArray> roles;
+    roles[UserRole] = "user";
+    roles[TextRole] = "text";
+    roles[TimeRole] = "time";
+    roles[TypeRole] = "type";
+    setRoleNames(roles);
 }
 
 Tp::TextChannelPtr ConversationModel::textChannel()
@@ -58,19 +66,20 @@ void ConversationModel::setupChannelSignals(Tp::TextChannelPtr channel)
 {
     QObject::connect(channel.constData(),
                     SIGNAL(messageReceived(Tp::ReceivedMessage)),
-                    SLOT(messageReceived(Tp::ReceivedMessage)));
+                    SLOT(onMessageReceived(Tp::ReceivedMessage)));
     QObject::connect(channel.constData(),
                     SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
-                    SLOT(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
+                    SLOT(onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
 }
 
 void ConversationModel::setTextChannel(Tp::TextChannelPtr channel)
 {
+    kDebug();
     setupChannelSignals(channel);
+
     if(d->textChannel) {
         removeChannelSignals(channel);
     }
-
     d->textChannel = channel;
 
     textChannelChanged(channel);
@@ -78,12 +87,13 @@ void ConversationModel::setTextChannel(Tp::TextChannelPtr channel)
 
 void ConversationModel::onMessageReceived(Tp::ReceivedMessage message)
 {
+    kDebug();
     beginInsertRows(QModelIndex(), d->messages.count(), d->messages.count());
 
     MessageItem newMessage = {
         message.sender()->alias(),
         message.text(),
-        message.sent(),
+        message.received(),
         MessageItem::Incoming
     };
 
@@ -110,6 +120,7 @@ void ConversationModel::onMessageSent(Tp::Message message, Tp::MessageSendingFla
 
 QVariant ConversationModel::data(const QModelIndex& index, int role) const
 {
+    kDebug();
     QVariant result;
 
     if(!index.isValid()) {
@@ -138,8 +149,10 @@ QVariant ConversationModel::data(const QModelIndex& index, int role) const
 
 int ConversationModel::rowCount(const QModelIndex& parent) const
 {
+    kDebug() << "size =" << d->messages.size();
     Q_UNUSED(parent);
-    return d->messages.count();
+
+    return d->messages.size();
 }
 
 void ConversationModel::removeChannelSignals(Tp::TextChannelPtr channel)
@@ -154,6 +167,12 @@ void ConversationModel::removeChannelSignals(Tp::TextChannelPtr channel)
                         this,
                         SLOT(onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString))
                     );
+}
+
+ConversationModel::~ConversationModel()
+{
+    kDebug();
+    delete d;
 }
 
 #include "moc_conversation-model.cpp"

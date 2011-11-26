@@ -32,14 +32,14 @@ class ConversationModel;
 class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject
 {
 Q_OBJECT
-Q_PROPERTY(const ConversationModel* model READ model NOTIFY modelChanged)
+Q_PROPERTY(ConversationModel* model READ model NOTIFY modelChanged)
 
 public:
     Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account);
     Conversation(QObject* parent = 0);
     virtual ~Conversation();
 
-    const ConversationModel* model() const;
+    ConversationModel* model() const;
 
 Q_SIGNALS:
     void modelChanged(ConversationModel* newModel);
