@@ -27,12 +27,18 @@
 #include <TelepathyQt4/Account>
 #include <TelepathyQt4/TextChannel>
 #include "conversation-model.h"
+#include <KIcon>
 
 class ConversationModel;
 class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject
 {
 Q_OBJECT
+
 Q_PROPERTY(ConversationModel* model READ model NOTIFY modelChanged)
+
+Q_PROPERTY(KIcon avatar READ avatar NOTIFY avatarChanged);
+Q_PROPERTY(QString nick READ nick NOTIFY nickChanged);
+Q_PROPERTY(KIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
 
 public:
     Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account);
@@ -41,8 +47,21 @@ public:
 
     ConversationModel* model() const;
 
+    KIcon avatar() const;
+    QString nick() const;
+    KIcon presenceIcon() const;
+
 Q_SIGNALS:
     void modelChanged(ConversationModel* newModel);
+
+    void avatarChanged(QIcon avatar);
+    void nickChanged(QString nick);
+    void presenceIconChanged(QIcon icon);
+
+private Q_SLOTS:
+    void onAvatarDataChanged ( Tp::AvatarData );
+    void onPresenceChanged ( Tp::Presence );
+    void onAliasChanged ( Tp::AvatarData );
 
 private:
     class ConversationPrivate;

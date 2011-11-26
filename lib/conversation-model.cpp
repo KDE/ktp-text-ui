@@ -62,6 +62,15 @@ Tp::TextChannelPtr ConversationModel::textChannel()
     return d->textChannel;
 }
 
+bool ConversationModel::verifyPendingOperation ( Tp::PendingOperation* op )
+{
+    bool success = !op->isError();
+    if(!success) {
+        kWarning() << op->errorName() + QLatin1Char(':') + op->errorMessage();
+    }
+    return success;
+}
+
 void ConversationModel::setupChannelSignals(Tp::TextChannelPtr channel)
 {
     QObject::connect(channel.constData(),
@@ -80,7 +89,7 @@ void ConversationModel::setTextChannel(Tp::TextChannelPtr channel)
     if(d->textChannel) {
         removeChannelSignals(channel);
     }
-    d->textChannel = channel;
+    d->textChannel = channel;   //FIXME: check if channel is valid
 
     textChannelChanged(channel);
 }
@@ -153,6 +162,19 @@ int ConversationModel::rowCount(const QModelIndex& parent) const
     Q_UNUSED(parent);
 
     return d->messages.size();
+}
+
+Tp::PendingSendMessage* ConversationModel::sendNewMessage ( QString message )
+{
+    Tp::PendingSendMessage* msg = 0;
+    if(message.isEmpty()) {
+        kWarning() << "Attempting to send empty string";
+    } else {
+        msg = d->textChannel->send(message);
+        connect(msg, SIGNAL(finished(Tp::PendingOperation*)), SLOT(verifyPendingOperation(Tp::PendingOperation*)));
+    }
+
+    return msg;
 }
 
 void ConversationModel::removeChannelSignals(Tp::TextChannelPtr channel)

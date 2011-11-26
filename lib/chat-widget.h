@@ -85,6 +85,9 @@ public:
     QString spellDictionary() const;
 
     void setSpellDictionary(const QString &dict);
+    //FIXME this should be in the ktelepathy lib
+    static KIcon iconForPresence(Tp::ConnectionPresenceType presence);
+
 
 public Q_SLOTS:
     /** toggle the search bar visibility */

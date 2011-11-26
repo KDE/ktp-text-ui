@@ -56,9 +56,13 @@ public:
 Q_SIGNALS:
 	void textChannelChanged(Tp::TextChannelPtr newChannel);
 
+public Q_SLOTS:
+    Tp::PendingSendMessage* sendNewMessage(QString message);
+
 private Q_SLOTS:
     void onMessageReceived(Tp::ReceivedMessage);
     void onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString);
+    bool verifyPendingOperation(Tp::PendingOperation* op);
 
 private:
 	void setupChannelSignals(Tp::TextChannelPtr channel);

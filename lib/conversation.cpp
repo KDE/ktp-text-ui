@@ -23,12 +23,14 @@
 
 #include <TelepathyQt4/TextChannel>
 #include <KDebug>
+#include "chat-widget.h"
 
 class Conversation::ConversationPrivate
 {
 public:
     ConversationModel* model;
     Tp::AccountPtr account;
+    Tp::ContactPtr contact;
 };
 
 Conversation::Conversation ( Tp::TextChannelPtr channel, Tp::AccountPtr account ) :
@@ -40,16 +42,36 @@ Conversation::Conversation ( Tp::TextChannelPtr channel, Tp::AccountPtr account 
     d->model->setTextChannel ( channel );
 
     d->account = account;
+    d->contact = channel->targetContact();
+
+    connect(d->contact.constData(), SIGNAL(aliasChanged(QString)), SIGNAL(onNickChanged(QString)));
+    connect(d->contact.constData(), SIGNAL(avatarDataChanged(Tp::AvatarData)), SLOT(onAvatarDataChanged(Tp::AvatarData)));
+    connect(d->contact.constData(), SIGNAL(presenceChanged(Tp::Presence)), SLOT(onPresenceChanged(Tp::Presence)));
 }
 
 Conversation::Conversation ( QObject* parent ) : QObject ( parent )
 {
-    kError() << "Conversation should not be created directly. Use ConversationWater instead.";
+    kError() << "Conversation should not be created directly. Use ConversationWatcher instead.";
 }
 
 ConversationModel* Conversation::model() const
 {
     return d->model;
+}
+
+KIcon Conversation::avatar() const
+{
+    return KIcon(d->contact->avatarData().fileName);
+}
+
+QString Conversation::nick() const
+{
+    return d->contact->alias();
+}
+
+KIcon Conversation::presenceIcon() const
+{
+    return ChatWidget::iconForPresence(d->contact->presence().type());
 }
 
 Conversation::~Conversation()
