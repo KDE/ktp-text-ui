@@ -18,21 +18,21 @@
 */
 
 
-#ifndef CONVERSATION_WATCHER_H
-#define CONVERSATION_WATCHER_H
+#ifndef TELEPATHY_TEXT_OBSERVER_H
+#define TELEPATHY_TEXT_OBSERVER_H
 
 #include "kdetelepathychat_export.h"
 #include <TelepathyQt4/AbstractClient>
 
 class Conversation;
 
-class KDE_TELEPATHY_CHAT_EXPORT ConversationWatcher : public QObject
+class KDE_TELEPATHY_CHAT_EXPORT TelepathyTextObserver : public QObject
 {
 Q_OBJECT
 
 public:
-    ConversationWatcher();
-    ~ConversationWatcher();
+    TelepathyTextObserver();
+    ~TelepathyTextObserver();
 
 Q_SIGNALS:
 	void newConversation(Conversation *con);

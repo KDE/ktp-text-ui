@@ -15,11 +15,11 @@ Item {
                 elementID: "widgets/frame.svg"
                 anchors.fill: parent
             }
-                PlasmaWidgets.IconWidget {
-                    text: model.conversation.nick
-                    icon: model.conversation.presenceIcon
-                    anchors.fill: parent
-                }
+            PlasmaWidgets.IconWidget {
+                text: model.conversation.target.nick
+                icon: model.conversation.target.presenceIcon
+                anchors.fill: parent
+            }
         }
     }
 

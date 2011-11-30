@@ -18,13 +18,13 @@
 */
 
 
-#include "conversation-watcher.h"
+#include "telepathy-text-observer.h"
+#include "conversation.h"
 
 #include <KDebug>
 
 #include <TelepathyQt4/ChannelClassSpec>
 #include <TelepathyQt4/TextChannel>
-#include "conversation.h"
 #include <TelepathyQt4/ClientRegistrar>
 
 
@@ -35,7 +35,7 @@ static inline Tp::ChannelClassSpecList channelClassList()
                                       << Tp::ChannelClassSpec::textChatroom();
 }
 
-class ConversationWatcher::ConversationClientObserver :
+class TelepathyTextObserver::ConversationClientObserver :
     public Tp::AbstractClientObserver
 {
 public:
@@ -64,17 +64,21 @@ public:
         m_parent->newConversation(con);
     }
 
-    ConversationClientObserver(ConversationWatcher *parent) :
+    ConversationClientObserver(TelepathyTextObserver
+ *parent) :
         AbstractClientObserver(channelClassList()),
         m_parent(parent)
     {
     }
 
-    ConversationWatcher *m_parent;
+    TelepathyTextObserver
+ *m_parent;
     Tp::ClientRegistrarPtr registrar;
 };
 
-ConversationWatcher::ConversationWatcher() :
+TelepathyTextObserver
+::TelepathyTextObserver
+() :
     d(new ConversationClientObserver(this))
 {
     kDebug();
@@ -113,8 +117,10 @@ ConversationWatcher::ConversationWatcher() :
 }
 
 
-ConversationWatcher::~ConversationWatcher()
+TelepathyTextObserver
+::~TelepathyTextObserver
+()
 {
 }
 
-#include "moc_conversation-watcher.cpp"
+// #include "moc_conversation-watcher.cpp"

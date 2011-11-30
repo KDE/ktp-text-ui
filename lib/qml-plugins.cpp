@@ -21,15 +21,18 @@
 #include "qml-plugins.h"
 
 #include <QtDeclarative/QDeclarativeItem>
+#include "messages-model.h"
 #include "conversation.h"
-#include "conversation-watcher.h"
+#include "telepathy-text-observer.h"
 #include "conversations-model.h"
+#include "conversation-target.h"
 
 void QmlPlugins::registerTypes ( const char* uri )
 {
-    qmlRegisterType<ConversationWatcher> ( uri, 0, 1, "ConversationWatcher" );
+    qmlRegisterType<TelepathyTextObserver> ( uri, 0, 1, "TelepathyTextObserver" );
+    qmlRegisterType<ConversationTarget>(uri, 0, 1, "ConversationTarget");
     qmlRegisterType<Conversation>(uri, 0, 1, "Conversation");
-    qmlRegisterType<ConversationModel> ( uri, 0, 1, "ConversationModel" );
+    qmlRegisterType<MessagesModel> ( uri, 0, 1, "MessagesModel" );
     qmlRegisterType<ConversationsModel>(uri, 0, 1, "ConversationsModel");
 }
 

@@ -18,7 +18,7 @@
 */
 
 
-#include "conversation-model.h"
+#include "messages-model.h"
 
 #include <KDebug>
 #include <TelepathyQt4/ReceivedMessage>
@@ -37,13 +37,13 @@ public:
     } type;
 };
 
-class ConversationModel::ConversationModelPrivate {
+class MessagesModel::ConversationModelPrivate {
 public:
     Tp::TextChannelPtr textChannel;
     QList<MessageItem> messages;
 };
 
-ConversationModel::ConversationModel(QObject* parent):
+MessagesModel::MessagesModel(QObject* parent):
     QAbstractListModel(parent),
     d(new ConversationModelPrivate)
 {
@@ -57,12 +57,12 @@ ConversationModel::ConversationModel(QObject* parent):
     setRoleNames(roles);
 }
 
-Tp::TextChannelPtr ConversationModel::textChannel()
+Tp::TextChannelPtr MessagesModel::textChannel()
 {
     return d->textChannel;
 }
 
-bool ConversationModel::verifyPendingOperation ( Tp::PendingOperation* op )
+bool MessagesModel::verifyPendingOperation ( Tp::PendingOperation* op )
 {
     bool success = !op->isError();
     if(!success) {
@@ -71,7 +71,7 @@ bool ConversationModel::verifyPendingOperation ( Tp::PendingOperation* op )
     return success;
 }
 
-void ConversationModel::setupChannelSignals(Tp::TextChannelPtr channel)
+void MessagesModel::setupChannelSignals(Tp::TextChannelPtr channel)
 {
     QObject::connect(channel.constData(),
                     SIGNAL(messageReceived(Tp::ReceivedMessage)),
@@ -81,7 +81,7 @@ void ConversationModel::setupChannelSignals(Tp::TextChannelPtr channel)
                     SLOT(onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
 }
 
-void ConversationModel::setTextChannel(Tp::TextChannelPtr channel)
+void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
 {
     kDebug();
     setupChannelSignals(channel);
@@ -94,7 +94,7 @@ void ConversationModel::setTextChannel(Tp::TextChannelPtr channel)
     textChannelChanged(channel);
 }
 
-void ConversationModel::onMessageReceived(Tp::ReceivedMessage message)
+void MessagesModel::onMessageReceived(Tp::ReceivedMessage message)
 {
     kDebug();
     beginInsertRows(QModelIndex(), d->messages.count(), d->messages.count());
@@ -110,7 +110,7 @@ void ConversationModel::onMessageReceived(Tp::ReceivedMessage message)
     endInsertRows();
 }
 
-void ConversationModel::onMessageSent(Tp::Message message, Tp::MessageSendingFlags flags, QString token)
+void MessagesModel::onMessageSent(Tp::Message message, Tp::MessageSendingFlags flags, QString token)
 {
     Q_UNUSED(flags);
     Q_UNUSED(token);
@@ -127,7 +127,7 @@ void ConversationModel::onMessageSent(Tp::Message message, Tp::MessageSendingFla
     endInsertRows();
 }
 
-QVariant ConversationModel::data(const QModelIndex& index, int role) const
+QVariant MessagesModel::data(const QModelIndex& index, int role) const
 {
     kDebug();
     QVariant result;
@@ -156,7 +156,7 @@ QVariant ConversationModel::data(const QModelIndex& index, int role) const
     return result;
 }
 
-int ConversationModel::rowCount(const QModelIndex& parent) const
+int MessagesModel::rowCount(const QModelIndex& parent) const
 {
     kDebug() << "size =" << d->messages.size();
     Q_UNUSED(parent);
@@ -164,7 +164,7 @@ int ConversationModel::rowCount(const QModelIndex& parent) const
     return d->messages.size();
 }
 
-Tp::PendingSendMessage* ConversationModel::sendNewMessage ( QString message )
+Tp::PendingSendMessage* MessagesModel::sendNewMessage ( QString message )
 {
     Tp::PendingSendMessage* msg = 0;
     if(message.isEmpty()) {
@@ -177,7 +177,7 @@ Tp::PendingSendMessage* ConversationModel::sendNewMessage ( QString message )
     return msg;
 }
 
-void ConversationModel::removeChannelSignals(Tp::TextChannelPtr channel)
+void MessagesModel::removeChannelSignals(Tp::TextChannelPtr channel)
 {
     QObject::disconnect(channel.constData(),
                         SIGNAL(messageReceived(Tp::ReceivedMessage)),
@@ -191,10 +191,10 @@ void ConversationModel::removeChannelSignals(Tp::TextChannelPtr channel)
                     );
 }
 
-ConversationModel::~ConversationModel()
+MessagesModel::~MessagesModel()
 {
     kDebug();
     delete d;
 }
 
-#include "moc_conversation-model.cpp"
+#include "moc_messages-model.cpp"

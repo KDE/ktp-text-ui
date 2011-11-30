@@ -19,73 +19,53 @@
 
 
 #include "conversation.h"
-#include "conversation-model.h"
+#include "messages-model.h"
 
 #include <TelepathyQt4/TextChannel>
 #include <KDebug>
-#include "chat-widget.h"
+#include "conversation-target.h"
 
 class Conversation::ConversationPrivate
 {
 public:
-    ConversationModel* model;
+    MessagesModel* model;
+    ConversationTarget* target;
     Tp::AccountPtr account;
-    Tp::ContactPtr contact;
 };
 
-Conversation::Conversation ( Tp::TextChannelPtr channel, Tp::AccountPtr account ) :
-        d ( new ConversationPrivate )
+Conversation::Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account) :
+        d (new ConversationPrivate)
 {
     kDebug();
 
-    d->model = new ConversationModel();
-    d->model->setTextChannel ( channel );
+    d->model = new MessagesModel();
+    d->model->setTextChannel(channel);
+
+    d->target = new ConversationTarget(channel->targetContact());
 
     d->account = account;
-    d->contact = channel->targetContact();
-
-    connect(d->contact.constData(), SIGNAL(aliasChanged(QString)), SIGNAL(nickChanged(QString)));
-    connect(d->contact.constData(), SIGNAL(avatarDataChanged(Tp::AvatarData)), SLOT(onAvatarDataChanged(Tp::AvatarData)));
-    connect(d->contact.constData(), SIGNAL(presenceChanged(Tp::Presence)), SLOT(onPresenceChanged(Tp::Presence)));
 }
 
-Conversation::Conversation ( QObject* parent ) : QObject ( parent )
+Conversation::Conversation(QObject* parent) : QObject(parent)
 {
     kError() << "Conversation should not be created directly. Use ConversationWatcher instead.";
+    Q_ASSERT(false);
 }
 
-ConversationModel* Conversation::model() const
+MessagesModel* Conversation::model() const
 {
     return d->model;
 }
 
-QIcon Conversation::avatar() const
+ConversationTarget* Conversation::target() const
 {
-    return QIcon(d->contact->avatarData().fileName);
-}
-
-QString Conversation::nick() const
-{
-    return d->contact->alias();
-}
-
-QIcon Conversation::presenceIcon() const
-{
-    return ChatWidget::iconForPresence(d->contact->presence().type());
+    return d->target;
 }
 
 Conversation::~Conversation()
 {
     kDebug();
     delete d->model;
-}
-
-void Conversation::onPresenceChanged ( Tp::Presence )
-{
-    Q_EMIT presenceIconChanged(presenceIcon());
-}
-
-void Conversation::onAvatarDataChanged ( Tp::AvatarData )
-{
-    Q_EMIT avatarChanged(avatar());
+    delete d->target;
+    delete d;
 }

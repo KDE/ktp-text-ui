@@ -3,8 +3,7 @@ set(ktpchat_SRCS
         chat-window-style.cpp
         chat-window-style-manager.cpp
         conversation.cpp
-        conversation-model.cpp
-        conversation-watcher.cpp
+        conversation-target.cpp
         conversations-model.cpp
         adium-theme-view.cpp
         adium-theme-header-info.cpp
@@ -16,6 +15,8 @@ set(ktpchat_SRCS
         chat-text-edit.cpp
         chat-search-bar.cpp
         logmanager.cpp
+        messages-model.cpp
+        telepathy-text-observer.cpp
 )
 
 set(ktpchat_HDRS
@@ -29,9 +30,10 @@ set(ktpchat_HDRS
     chat-window-style.h
     chat-window-style-manager.h
     conversation.h
-    conversation-model.h
-    conversation-watcher.h
+    conversation-target.h
     conversations-model.h
+    messages-model.h
+    telepathy-text-observer.h
 )
 
 set(ktpchat_PRETTY_HDRS

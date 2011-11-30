@@ -19,22 +19,24 @@
 
 
 #include "conversations-model.h"
-#include "conversation-watcher.h"
 #include "conversation.h"
+#include "telepathy-text-observer.h"
+#include <KDebug>
 
 class ConversationsModel::ConversationsModelPrivate
 {
 public:
-    ConversationWatcher watcher;
+    TelepathyTextObserver watcher;
     QList<Conversation*> data;
 };
 
 QVariant ConversationsModel::data ( const QModelIndex& index, int role ) const
 {
-    QVariant result();
+    QVariant result;
     if(index.row() >= 0 && index.row() < d->data.count()) {
         Q_ASSERT(role == ConversationRole);
-        return QVariant::fromValue<QObject*>(d->data[index.row()]);
+        result = QVariant::fromValue<QObject*>(d->data[index.row()]);
+        kDebug() << "returning value " << result;
     }
     return result;
 }

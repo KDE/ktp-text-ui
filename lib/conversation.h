@@ -26,42 +26,31 @@
 #include <QObject>
 #include <TelepathyQt4/Account>
 #include <TelepathyQt4/TextChannel>
-#include "conversation-model.h"
+// #include "conversation-model.h"
 #include <KIcon>
+#include "conversation-target.h"
 
-class ConversationModel;
+class ConversationTarget;
+class MessagesModel;
 class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject
 {
 Q_OBJECT
 
-Q_PROPERTY(ConversationModel* model READ model NOTIFY modelChanged)
+Q_PROPERTY(MessagesModel* model READ model NOTIFY modelChanged);
+Q_PROPERTY(ConversationTarget* target READ target NOTIFY targetChanged);
 
-Q_PROPERTY(QIcon avatar READ avatar NOTIFY avatarChanged);
-Q_PROPERTY(QString nick READ nick NOTIFY nickChanged);
-Q_PROPERTY(QIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
 
 public:
     Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account);
     Conversation(QObject* parent = 0);
     virtual ~Conversation();
 
-    ConversationModel* model() const;
-
-    QIcon avatar() const;
-    QString nick() const;
-    QIcon presenceIcon() const;
+    MessagesModel* model() const;
+    ConversationTarget* target() const;
 
 Q_SIGNALS:
-    void modelChanged(ConversationModel* newModel);
-
-    void avatarChanged(QIcon avatar);
-    void nickChanged(QString nick);
-    void presenceIconChanged(QIcon icon);
-
-private Q_SLOTS:
-    void onAvatarDataChanged ( Tp::AvatarData );
-    void onPresenceChanged ( Tp::Presence );
-//     void onAliasChanged ( Tp::AvatarData );
+    void modelChanged(MessagesModel* newModel);
+    void targetChanged(ConversationTarget* target);
 
 private:
     class ConversationPrivate;
