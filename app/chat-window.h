@@ -26,6 +26,10 @@
 #include <KXmlGuiWindow>
 #include <KTabWidget>
 
+namespace Sonnet {
+    class DictionaryComboBox;
+}
+
 class KIcon;
 class ChatTab;
 
@@ -89,7 +93,8 @@ private Q_SLOTS:
     void onTabIconChanged(const KIcon &newIcon);
     void onVideoCallTriggered();                                /** start a video call */
     void onUserTypingChanged();
-    void onShareDesktopTriggered();                                /** start a desktop share */
+    void onShareDesktopTriggered();                             /** start a desktop share */
+    void setTabSpellDictionary(const QString &dict);            /** set the spelling language for the current chat tab*/
 
 protected Q_SLOTS:
     void showSettingsDialog();
@@ -147,6 +152,8 @@ private:
     void startShareDesktop(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
 
     KTabWidget *m_tabWidget;
+
+    Sonnet::DictionaryComboBox *m_spellDictCombo;
 };
 
 #endif // CHATWINDOW_H

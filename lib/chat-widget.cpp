@@ -161,6 +161,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->ui.formatToolbar->setVisible(formatToolbarIsVisible);
     d->showFormatToolbarAction->setChecked(formatToolbarIsVisible);
 
+    d->ui.sendMessageBox->setSpellCheckingLanguage(KGlobal::locale()->language());
+
     //connect signals/slots from format toolbar
     connect(d->ui.formatColor, SIGNAL(released()), SLOT(onFormatColorReleased()));
     connect(d->ui.formatBold, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontBold(bool)));
@@ -169,7 +171,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     // make the sendMessageBox a focus proxy for the chatview
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
-
     connect(d->ui.sendMessageBox, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
     connect(d->ui.sendButton, SIGNAL(clicked()), SLOT(sendMessage()));
 
@@ -889,5 +890,16 @@ bool ChatWidget::isUserTyping() const
 {
     return d->remoteContactIsTyping;
 }
+
+void ChatWidget::setSpellDictionary(const QString &dict)
+{
+    d->ui.sendMessageBox->setSpellCheckingLanguage(dict);
+}
+
+QString ChatWidget::spellDictionary() const
+{
+    return d->ui.sendMessageBox->spellCheckingLanguage();
+}
+
 
 #include "chat-widget.moc"

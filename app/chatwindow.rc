@@ -20,6 +20,8 @@
   <Separator name="separator_1"/>
   <Action name="send-file"/>
   <Action name="share-desktop"/>
+  <Separator name="separator_2"/>
+  <Action name="language"/>
  </ToolBar>
 
 </gui>

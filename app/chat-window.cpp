@@ -22,6 +22,7 @@
 
 #include "chat-search-bar.h"
 #include "chat-tab.h"
+#include "chat-widget.h"
 
 #include <KStandardAction>
 #include <KIcon>
@@ -42,11 +43,14 @@
 #include <KMenu>
 
 #include <QEvent>
+#include <QWidgetAction>
 
 #include <TelepathyQt4/Account>
 #include <TelepathyQt4/ContactCapabilities>
 #include <TelepathyQt4/PendingChannelRequest>
 #include <TelepathyQt4/TextChannel>
+
+#include <Sonnet/DictionaryComboBox>
 
 #define PREFERRED_TEXTCHAT_HANDLER "org.freedesktop.Telepathy.Client.KDE.TextUi"
 #define PREFERRED_FILETRANSFER_HANDLER "org.freedesktop.Telepathy.Client.KDE.FileTransfer"
@@ -64,7 +68,7 @@ ChatWindow::ChatWindow()
 
     // keyboard shortcuts for the search bar
     KStandardAction::find(this, SLOT(onSearchActionToggled()), actionCollection());
-    
+
     // start disabled
     KStandardAction::findNext(this, SLOT(onFindNextText()), actionCollection())->setEnabled(false);
     KStandardAction::findPrev(this, SLOT(onFindPreviousText()), actionCollection())->setEnabled(false);
@@ -258,6 +262,9 @@ void ChatWindow::onCurrentIndexChanged(int index)
 
     //call this to update the "Typing.." in window title
     onUserTypingChanged();
+
+    kDebug() << "Current spell dictionary is" << currentChatTab->spellDictionary();
+    m_spellDictCombo->setCurrentByDictionary(currentChatTab->spellDictionary());
 
     // when the tab changes I need to "refresh" the window's findNext and findPrev actions
     if (currentChatTab->chatSearchBar()->searchBar()->text().isEmpty()) {
@@ -514,6 +521,16 @@ void ChatWindow::setupCustomActions()
     KAction *shareDesktopAction = new KAction(KIcon(QLatin1String("krfb")), i18n("Share My &Desktop"), this);
     connect(shareDesktopAction, SIGNAL(triggered()), this, SLOT(onShareDesktopTriggered()));
 
+    m_spellDictCombo = new Sonnet::DictionaryComboBox();
+    connect(m_spellDictCombo, SIGNAL(dictionaryChanged(QString)),
+            this, SLOT(setTabSpellDictionary(QString)));
+
+    QWidgetAction *spellDictComboAction = new QWidgetAction(this);
+    spellDictComboAction->setDefaultWidget(m_spellDictCombo);
+    spellDictComboAction->defaultWidget()->setFocusPolicy(Qt::ClickFocus);
+    spellDictComboAction->setIcon(KIcon(QLatin1String("tools-check-spelling")));
+    spellDictComboAction->setIconText(i18n("Choose Spelling Language"));
+
     // add custom actions to the collection
     actionCollection()->addAction(QLatin1String("separator"), separator);
     actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
@@ -523,6 +540,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("video-call"), videoCallAction);
     actionCollection()->addAction(QLatin1String("invite-to-chat"), inviteToChat);
     actionCollection()->addAction(QLatin1String("share-desktop"), shareDesktopAction);
+    actionCollection()->addAction(QLatin1String("language"), spellDictComboAction);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
@@ -655,5 +673,13 @@ bool ChatWindow::event(QEvent *e)
 
     return KXmlGuiWindow::event(e);
 }
+
+void ChatWindow::setTabSpellDictionary(const QString &dict)
+{
+    int index = m_tabWidget->currentIndex();
+    ChatTab* currentChatTab=qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    currentChatTab->setSpellDictionary(dict);
+}
+
 
 #include "chat-window.moc"

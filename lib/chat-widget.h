@@ -80,6 +80,10 @@ public:
     /** Returns true if the user is currently typing or not */
     bool isUserTyping() const;
 
+    QString spellDictionary() const;
+
+    void setSpellDictionary(const QString &dict);
+
 public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
@@ -88,7 +92,6 @@ public Q_SLOTS:
         call this when the widget is activated by the user.
       */
     void resetUnreadMessageCount();
-
 
 protected:
     void changeEvent(QEvent *e);
