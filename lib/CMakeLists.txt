@@ -5,6 +5,7 @@ set(ktpchat_SRCS
         conversation.cpp
         conversation-model.cpp
         conversation-watcher.cpp
+        conversations-model.cpp
         adium-theme-view.cpp
         adium-theme-header-info.cpp
         adium-theme-message-info.cpp
@@ -30,6 +31,7 @@ set(ktpchat_HDRS
     conversation.h
     conversation-model.h
     conversation-watcher.h
+    conversations-model.h
 )
 
 set(ktpchat_PRETTY_HDRS

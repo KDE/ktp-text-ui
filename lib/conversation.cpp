@@ -44,7 +44,7 @@ Conversation::Conversation ( Tp::TextChannelPtr channel, Tp::AccountPtr account 
     d->account = account;
     d->contact = channel->targetContact();
 
-    connect(d->contact.constData(), SIGNAL(aliasChanged(QString)), SIGNAL(onNickChanged(QString)));
+    connect(d->contact.constData(), SIGNAL(aliasChanged(QString)), SIGNAL(nickChanged(QString)));
     connect(d->contact.constData(), SIGNAL(avatarDataChanged(Tp::AvatarData)), SLOT(onAvatarDataChanged(Tp::AvatarData)));
     connect(d->contact.constData(), SIGNAL(presenceChanged(Tp::Presence)), SLOT(onPresenceChanged(Tp::Presence)));
 }
@@ -59,9 +59,9 @@ ConversationModel* Conversation::model() const
     return d->model;
 }
 
-KIcon Conversation::avatar() const
+QIcon Conversation::avatar() const
 {
-    return KIcon(d->contact->avatarData().fileName);
+    return QIcon(d->contact->avatarData().fileName);
 }
 
 QString Conversation::nick() const
@@ -69,7 +69,7 @@ QString Conversation::nick() const
     return d->contact->alias();
 }
 
-KIcon Conversation::presenceIcon() const
+QIcon Conversation::presenceIcon() const
 {
     return ChatWidget::iconForPresence(d->contact->presence().type());
 }
@@ -80,3 +80,12 @@ Conversation::~Conversation()
     delete d->model;
 }
 
+void Conversation::onPresenceChanged ( Tp::Presence )
+{
+    Q_EMIT presenceIconChanged(presenceIcon());
+}
+
+void Conversation::onAvatarDataChanged ( Tp::AvatarData )
+{
+    Q_EMIT avatarChanged(avatar());
+}

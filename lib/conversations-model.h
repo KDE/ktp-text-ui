@@ -18,19 +18,34 @@
 */
 
 
-#include "qml-plugins.h"
+#ifndef CONVERSATIONS_MODEL_H
+#define CONVERSATIONS_MODEL_H
 
-#include <QtDeclarative/QDeclarativeItem>
-#include "conversation.h"
-#include "conversation-watcher.h"
-#include "conversations-model.h"
+#include <QAbstractListModel>
+#include "kdetelepathychat_export.h"
 
-void QmlPlugins::registerTypes ( const char* uri )
+class Conversation;
+
+class KDE_TELEPATHY_CHAT_EXPORT ConversationsModel : public QAbstractListModel
 {
-    qmlRegisterType<ConversationWatcher> ( uri, 0, 1, "ConversationWatcher" );
-    qmlRegisterType<Conversation>(uri, 0, 1, "Conversation");
-    qmlRegisterType<ConversationModel> ( uri, 0, 1, "ConversationModel" );
-    qmlRegisterType<ConversationsModel>(uri, 0, 1, "ConversationsModel");
-}
+Q_OBJECT
+public:
+    ConversationsModel();
+    virtual ~ConversationsModel();
 
-Q_EXPORT_PLUGIN2 ( conversation, QmlPlugins );
+    virtual QVariant data ( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+    virtual int rowCount ( const QModelIndex& parent = QModelIndex() ) const;
+
+    enum role {
+        ConversationRole = Qt::UserRole
+    };
+
+private:
+    class ConversationsModelPrivate;
+    ConversationsModelPrivate* d;
+
+private Q_SLOTS:
+    void onInconmingConversation(Conversation *convo);
+};
+
+#endif // CONVERSATIONS_MODEL_H

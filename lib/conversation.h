@@ -36,9 +36,9 @@ Q_OBJECT
 
 Q_PROPERTY(ConversationModel* model READ model NOTIFY modelChanged)
 
-Q_PROPERTY(KIcon avatar READ avatar NOTIFY avatarChanged);
+Q_PROPERTY(QIcon avatar READ avatar NOTIFY avatarChanged);
 Q_PROPERTY(QString nick READ nick NOTIFY nickChanged);
-Q_PROPERTY(KIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
+Q_PROPERTY(QIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
 
 public:
     Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account);
@@ -47,9 +47,9 @@ public:
 
     ConversationModel* model() const;
 
-    KIcon avatar() const;
+    QIcon avatar() const;
     QString nick() const;
-    KIcon presenceIcon() const;
+    QIcon presenceIcon() const;
 
 Q_SIGNALS:
     void modelChanged(ConversationModel* newModel);
@@ -61,7 +61,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void onAvatarDataChanged ( Tp::AvatarData );
     void onPresenceChanged ( Tp::Presence );
-    void onAliasChanged ( Tp::AvatarData );
+//     void onAliasChanged ( Tp::AvatarData );
 
 private:
     class ConversationPrivate;
