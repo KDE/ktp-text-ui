@@ -63,21 +63,17 @@ public:
         m_parent->newConversation(con);
     }
 
-    ConversationClientObserver(TelepathyTextObserver
- *parent) :
+    ConversationClientObserver(TelepathyTextObserver *parent) :
         AbstractClientObserver(channelClassList()),
         m_parent(parent)
     {
     }
 
-    TelepathyTextObserver
- *m_parent;
+    TelepathyTextObserver *m_parent;
     Tp::ClientRegistrarPtr registrar;
 };
 
-TelepathyTextObserver
-::TelepathyTextObserver
-() :
+TelepathyTextObserver::TelepathyTextObserver() :
     d(new ConversationClientObserver(this))
 {
     kDebug();
@@ -117,9 +113,7 @@ TelepathyTextObserver
 }
 
 
-TelepathyTextObserver
-::~TelepathyTextObserver
-()
+TelepathyTextObserver::~TelepathyTextObserver()
 {
 }
 
