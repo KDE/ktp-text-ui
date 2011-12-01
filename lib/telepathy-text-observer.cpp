@@ -1,6 +1,5 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) 2011  <copyright holder> <email>
+    Copyright (C) 2011  Lasath Fernando <kde@lasath.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -110,6 +109,7 @@ TelepathyTextObserver
                        << Tp::Contact::FeatureSimplePresence
     );
 
+    //TODO: check these to make sure I'm only requesting features I actually use.
     d->registrar = Tp::ClientRegistrar::create(accountFactory, connectionFactory,
                                                channelFactory, contactFactory);
 
