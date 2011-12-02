@@ -65,7 +65,7 @@ bool MessagesModel::verifyPendingOperation ( Tp::PendingOperation* op )
 {
     bool success = !op->isError();
     if(!success) {
-        kWarning() << op->errorName() + QLatin1Char(':') + op->errorMessage();
+        kWarning() << op->errorName() << "+" << op->errorMessage();
     }
     return success;
 }
@@ -96,7 +96,8 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
 void MessagesModel::onMessageReceived(Tp::ReceivedMessage message)
 {
     kDebug();
-    beginInsertRows(QModelIndex(), d->messages.count(), d->messages.count());
+    int length = rowCount();
+    beginInsertRows(QModelIndex(), length, length);
 
     MessageItem newMessage = {
         message.sender()->alias(),
@@ -113,7 +114,8 @@ void MessagesModel::onMessageSent(Tp::Message message, Tp::MessageSendingFlags f
 {
     Q_UNUSED(flags);
     Q_UNUSED(token);
-    beginInsertRows(QModelIndex(), d->messages.count(), d->messages.count());
+    int length = rowCount();
+    beginInsertRows(QModelIndex(), length, length);
 
     MessageItem newMessage = {
         tr("Me"),   //FIXME : use actual nickname from Tp::AccountPtr
@@ -157,20 +159,20 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 
 int MessagesModel::rowCount(const QModelIndex& parent) const
 {
-    kDebug() << "size =" << d->messages.size();
     Q_UNUSED(parent);
-
     return d->messages.size();
 }
 
 Tp::PendingSendMessage* MessagesModel::sendNewMessage ( QString message )
 {
     Tp::PendingSendMessage* msg = 0;
+
     if(message.isEmpty()) {
         kWarning() << "Attempting to send empty string";
     } else {
         msg = d->textChannel->send(message);
-        connect(msg, SIGNAL(finished(Tp::PendingOperation*)), SLOT(verifyPendingOperation(Tp::PendingOperation*)));
+        connect(msg, SIGNAL(finished(Tp::PendingOperation*)),
+                SLOT(verifyPendingOperation(Tp::PendingOperation*)));
     }
 
     return msg;

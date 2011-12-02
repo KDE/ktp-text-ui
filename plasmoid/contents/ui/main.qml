@@ -11,14 +11,37 @@ Item {
 
         model: convos
         delegate : Item {
-            PlasmaWidgets.SvgWidget {
-                elementID: "widgets/frame.svg"
-                anchors.fill: parent
-            }
+//             PlasmaWidgets.SvgWidget {
+//                 elementID: "widgets/frame.svg"
+//                 anchors.fill: parent
+//             }
             PlasmaWidgets.IconWidget {
+                id: icon
                 text: model.conversation.target.nick
                 icon: model.conversation.target.presenceIcon
                 anchors.fill: parent
+
+//                 Component {
+//                     id: chatComp
+
+//                 }
+                property Component popout: PlasmaCore.Dialog {
+                        mainItem: ChatWidget {
+                            width: 200
+                            height: 400
+                            conv: model.conversation
+                        }
+                    }
+
+                onClicked: {
+                    var dialog = popout.createObject(base, {});
+                    console.log(dialog);
+                    var point = dialog.popupPosition(icon, Qt.AlignTop);
+                    console.log("Showing dialog at (" + point.x + "," + point.y + ")");
+                    dialog.x = point.x;
+                    dialog.y = point.y;
+                    dialog.animatedShow(PlasmaCore.Up);
+                }
             }
         }
     }
