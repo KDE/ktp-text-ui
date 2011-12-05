@@ -20,11 +20,11 @@
 #ifndef CONVERSATION_H
 #define CONVERSATION_H
 
-#include "kdetelepathychat_export.h"
+#include "ktpchat_export.h"
 
 #include <QObject>
-#include <TelepathyQt4/Account>
-#include <TelepathyQt4/TextChannel>
+#include <TelepathyQt/Account>
+#include <TelepathyQt/TextChannel>
 // #include "conversation-model.h"
 #include <KIcon>
 #include "conversation-target.h"

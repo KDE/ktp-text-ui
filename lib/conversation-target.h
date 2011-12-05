@@ -21,10 +21,12 @@
 #define CONVERSATION_TARGET_H
 
 #include <QObject>
-#include <TelepathyQt4/Contact>
+#include <TelepathyQt/Contact>
 
 #include "chat-widget.h"
-#include "kdetelepathychat_export.h"
+
+#include "ktpchat_export.h"
+
 
 class KDE_TELEPATHY_CHAT_EXPORT ConversationTarget : public QObject
 {
@@ -33,6 +35,7 @@ Q_OBJECT
 Q_PROPERTY(QIcon avatar READ avatar NOTIFY avatarChanged);
 Q_PROPERTY(QString nick READ nick NOTIFY nickChanged);
 Q_PROPERTY(QIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
+Q_PROPERTY(QString presenceIconSource READ presenceIconSource NOTIFY presenceIconSourceChanged);
 
 //turns out you can't have non QObjects as properties
 // Q_PROPERTY(Tp::ContactPtr contact READ contact WRITE setContact NOTIFY contactChanged);
@@ -41,17 +44,22 @@ public:
     ConversationTarget( Tp::ContactPtr contact = Tp::ContactPtr());
     virtual ~ConversationTarget();
 
-    QIcon avatar() const;
+    QIcon   avatar() const;
     QString nick() const;
-    QIcon presenceIcon() const;
+    QIcon   presenceIcon() const;
+    QString presenceIconSource() const;
 
     Tp::ContactPtr contact() const;
     void setContact(Tp::ContactPtr contact);
+  
+    static QString iconSourceForPresence(Tp::ConnectionPresenceType presence);
 
+    
 Q_SIGNALS:
     void avatarChanged(QIcon avatar);
     void nickChanged(QString nick);
     void presenceIconChanged(QIcon icon);
+    void presenceIconSourceChanged(QString source);
 
     void contactChanged(Tp::ContactPtr contact);
 

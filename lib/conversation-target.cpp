@@ -50,6 +50,7 @@ void ConversationTarget::setupContactSignals(Tp::ContactPtr contact)
 
 QIcon ConversationTarget::avatar() const
 {
+    //FIXME: return KIcon("im-user") if avatar is unavailable
     return QIcon(d->contact->avatarData().fileName);
 }
 
@@ -60,11 +61,46 @@ QString ConversationTarget::nick() const
 
 QIcon ConversationTarget::presenceIcon() const
 {
-    return ChatWidget::iconForPresence(d->contact->presence().type());
+    return KIcon(presenceIconSource());
 }
+
+QString ConversationTarget::presenceIconSource() const
+{
+    return iconSourceForPresence(d->contact->presence().type());
+}
+
+QString ConversationTarget::iconSourceForPresence(Tp::ConnectionPresenceType presence)
+{
+    QString iconName;
+
+    switch (presence) {
+        case Tp::ConnectionPresenceTypeAvailable:
+            iconName = QLatin1String("user-online");
+            break;
+        case Tp::ConnectionPresenceTypeAway:
+            iconName = QLatin1String("user-away");
+            break;
+        case Tp::ConnectionPresenceTypeExtendedAway:
+            iconName = QLatin1String("user-away-extended");
+            break;
+        case Tp::ConnectionPresenceTypeHidden:
+            iconName = QLatin1String("user-invisible");
+            break;
+        case Tp::ConnectionPresenceTypeBusy:
+            iconName = QLatin1String("user-busy");
+            break;
+        default:
+            iconName = QLatin1String("user-offline");
+            break;
+    }
+
+    return iconName;
+}
+
 
 void ConversationTarget::onPresenceChanged(Tp::Presence)
 {
+    Q_EMIT presenceIconSourceChanged(presenceIconSource());
     Q_EMIT presenceIconChanged(presenceIcon());
 }
 

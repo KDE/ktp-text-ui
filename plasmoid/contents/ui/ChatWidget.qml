@@ -2,98 +2,158 @@ import Qt 4.7
 import org.kde.telepathy.declarativeplugins 0.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
-/*PlasmaCore.Dialog {
-    id:main
-
-    function derp() {
-        console.log("deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeerp!");
-        return true;
-    }
-
-
-    mainItem: */
 Item {
     property Conversation conv
 
-        PlasmaWidgets.IconWidget {
-            id: title
+    signal closeRequested
+    signal conversationEndRequested
+
+    Item {
+        id: titleArea
+        anchors {
+            margins: 5
+            top: parent.top
+            left: parent.left; right: parent.right
+        }
+        height: 24
+
+        PlasmaComponents.ToolButton {
+            id: contactButton
+
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: closeButton.left
+                bottom: parent.bottom
+            }
+
             text: conv.target.nick
-            icon: conv.target.avatar
-            anchors.top: parent.top
-            anchors.left: parent.left; anchors.right: parent.right
-    //         anchors.bottom: chatArea.top
-            height: 12
-            orientation: Qt.Horizontal
+            iconSource: conv.target.presenceIconSource
+
+            onClicked: closeRequested()
         }
 
-        Item {
-            id:chatArea
+        PlasmaComponents.ToolButton {
+            id: closeButton
 
-    //         anchors.top: parent.top
-            anchors.top: title.bottom
-            anchors.left: parent.left; anchors.right: parent.right
-            anchors.bottom: input.top
-            anchors.margins: 5
-
-            Rectangle {
-                anchors.fill: chatArea
+            anchors {
+                top: parent.top
+                right: parent.right
+                bottom: parent.bottom
             }
 
-            ListView {
-                id: view
+            iconSource: "dialog-close"
 
-                anchors.fill: parent
-                clip: true
-
-                delegate: TextDelegate {}
-                model: conv.model
-                ListView.onAdd: {
-                    derp();
-                }
-            }
-
-            //used states here because it'll make a scrollbar (dis)appear later on
-            states: [
-                State {
-                    name: "static"
-                },
-                State {
-                    name: "auto-scrolling"
-                    PropertyChanges {
-                        target: view.model
-                        restoreEntryValues: true
-                        onRowsInserted: {
-                            view.positionViewAtEnd();
-                        }
-                    }
-                }
-            ]
-
-        }
-
-        PlasmaWidgets.LineEdit {
-            id: input
-
-    //         anchors.top: view.bottom
-            anchors.left: parent.left; anchors.right: parent.right
-            anchors.bottom: parent.bottom
-
-            onReturnPressed: {
-                view.model.sendNewMessage(text);
-                text = "";
-            }
+            onClicked: conversationEndRequested()
         }
     }
 
-//     ConversationWatcher {
-//         id:watcher
-//         onNewConversation: {
-//             console.log("New Convo!");
-//             conv = con;
-// //             conv.model = con.model;
-// //             view.model.rowsInserted.connect(view.positionViewAtEnd);
-//             chatArea.state = "auto-scrolling";
-//         }
-//     }
-// }
+    PlasmaWidgets.Separator {
+        id: space
+        anchors {
+            top: titleArea.bottom
+            left: parent.left
+            right: parent.right
+        }
+        orientation: Qt.Horizontal
+    }
+
+
+    Item {
+        id:chatArea
+
+        anchors.top: space.bottom
+        anchors.left: parent.left; anchors.right: parent.right
+        anchors.bottom: input.top
+        anchors.margins: 5
+
+//         PlasmaComponents.Highlight { anchors.fill: chatArea }
+
+        ListView {
+            id: view
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+                right: viewScrollBar.left
+            }
+            boundsBehavior: Flickable.StopAtBounds
+            clip: true
+
+            delegate: TextDelegate {}
+            model: conv.model
+        }
+
+        PlasmaComponents.ScrollBar {
+            id: viewScrollBar
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+            }
+
+            flickableItem: view
+            width: 16
+            opacity: 1
+            orientation: Qt.Vertical
+        }
+
+
+        //used states here to make the scroll bar (dis)appear
+        states: [
+            State {
+                name: "auto-scrolling"
+                when: view.atYEnd
+                PropertyChanges {
+                    target: view.model
+                    restoreEntryValues: true
+                    onRowsInserted: {
+                        view.positionViewAtEnd();
+                    }
+                }
+                PropertyChanges {
+                    target: viewScrollBar
+                    restoreEntryValues: true
+                    width: 0
+                    opacity: 0
+                }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                from: "*"
+                to: "auto-scrolling"
+
+                PropertyAnimation {
+                    properties: "width,opacity"
+                    duration: 250
+                }
+            },
+            Transition {
+                from: "auto-scrolling"
+                to: "*"
+
+                PropertyAnimation {
+                    properties: "width,opacity"
+                    duration: 250
+                }
+            }
+        ]
+    }
+
+    PlasmaWidgets.LineEdit {
+        id: input
+
+
+        anchors.left: parent.left; anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        onReturnPressed: {
+            view.model.sendNewMessage(text);
+            text = "";
+        }
+    }
+}

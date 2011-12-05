@@ -20,10 +20,10 @@
 #ifndef MESSAGES_MODEL_H
 #define MESSAGES_MODEL_H
 
-#include "kdetelepathychat_export.h"
+#include "ktpchat_export.h"
 
 #include <QAbstractItemModel>
-#include <TelepathyQt4/TextChannel>
+#include <TelepathyQt/TextChannel>
 
 
 class KDE_TELEPATHY_CHAT_EXPORT MessagesModel : public QAbstractListModel

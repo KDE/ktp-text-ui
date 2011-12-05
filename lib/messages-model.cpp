@@ -88,7 +88,8 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
     if(d->textChannel) {
         removeChannelSignals(channel);
     }
-    d->textChannel = channel;   //FIXME: check if channel is valid
+    //FIXME: check messageQue for any lost messages
+    d->textChannel = channel;
 
     textChannelChanged(channel);
 }

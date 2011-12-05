@@ -20,8 +20,9 @@
 #ifndef TELEPATHY_TEXT_OBSERVER_H
 #define TELEPATHY_TEXT_OBSERVER_H
 
-#include "kdetelepathychat_export.h"
-#include <TelepathyQt4/AbstractClient>
+#include "ktpchat_export.h"
+
+#include <TelepathyQt/AbstractClient>
 
 class Conversation;
 
