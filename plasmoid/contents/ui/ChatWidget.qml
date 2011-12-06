@@ -95,6 +95,7 @@ Item {
             }
 
             flickableItem: view
+            interactive: true
             width: 16
             opacity: 1
             orientation: Qt.Vertical

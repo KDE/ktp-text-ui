@@ -15,7 +15,8 @@ Item {
 //         anchors.margins: 5
     }
 //     height: icon.height + 10
-    width: icon.width + 10
+//     width: icon.width + 10
+    width: height
 
     PlasmaCore.Dialog {
         id: dialog
@@ -36,17 +37,23 @@ Item {
         icon: model.conversation.target.presenceIcon
 //         anchors {
 //             top: parent.top
-//             left: parent.left
+//             bottom: parent.bottom
+// //             left: parent.left
 //         }
         anchors.fill: parent
         anchors.margins: 5
+//         width: height
 
 //         size: "32x32"
-        size: {
-            console.log("height = " + parent.height);
-            console.log("width = " + parent.width);
-            return Qt.size(parent.height, parent.height);
-        }
+//         size: {
+//             console.log("height = " + parent.height);
+//             console.log("width = " + parent.width);
+//             return Qt.size(icon.height, icon.height);
+//         }
+//         Component.onCompleted: {
+//             console.log("height = " + parent.height);
+//             console.log("width = " + parent.width);
+//         }
     }
 
     MouseArea {

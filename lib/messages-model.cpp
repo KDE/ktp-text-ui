@@ -96,7 +96,7 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
 
 void MessagesModel::onMessageReceived(Tp::ReceivedMessage message)
 {
-    kDebug();
+    kDebug() << "unreadMessagesCount = " << d->textChannel->messageQueue().size();
     int length = rowCount();
     beginInsertRows(QModelIndex(), length, length);
 
@@ -131,12 +131,9 @@ void MessagesModel::onMessageSent(Tp::Message message, Tp::MessageSendingFlags f
 
 QVariant MessagesModel::data(const QModelIndex& index, int role) const
 {
-    kDebug();
     QVariant result;
 
-    if(!index.isValid()) {
-        kError() << "Attempting to access data at invalid index (" << index << ")";
-    } else {
+    if(index.row() < d->messages.size()) {
         MessageItem* requestedData = &d->messages[index.row()];
 
         switch(role) {
@@ -153,6 +150,8 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
                 result = requestedData->time;
                 break;
         };
+    } else {
+        kError() << "Attempting to access data at invalid index (" << index << ")";
     }
 
     return result;
