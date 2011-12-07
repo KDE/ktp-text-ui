@@ -61,6 +61,8 @@ public:
     bool isGroupChat;
     int unreadMessages;
     QString title;
+    QString contactName;
+    QString yourName;
     Tp::TextChannelPtr channel;
     Tp::AccountPtr account;
     Ui::ChatWidget ui;
@@ -117,6 +119,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     setupContactModelSignals();
 
     d->ui.contactsView->setModel(d->contactModel);
+
+    d->yourName = channel->groupSelfContact()->alias();
+    d->contactName = channel->targetContact()->alias();
 
     d->ui.chatArea->load((d->isGroupChat?AdiumThemeView::GroupChat:AdiumThemeView::SingleUserChat));
 
@@ -786,12 +791,18 @@ void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QSt
     bool isYou = (contact == d->channel->groupSelfContact());
 
     if (isYou) {
-        message = i18n("You are now known as %1", alias);
+        if (d->yourName != alias) {
+            message = i18n("You are now known as %1", alias);
+            d->yourName = alias;
+        }
     } else if (!d->isGroupChat) {
         //HACK the title is the contact alias on non-groupchats,
         //but we should have a better way of keeping the previous
         //aliases of all contacts
-        message = i18n("%1 is now known as %2", d->title, alias);
+        if (d->contactName != alias) {
+            message = i18n("%1 is now known as %2", d->contactName, alias);
+            d->contactName = alias;
+        }
     }
 
     if (!message.isEmpty()) {
