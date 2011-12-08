@@ -141,10 +141,10 @@ ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
 {
     ChatTab* match = 0;
 
-    // if targetHandle is None, targetId is also ""
+    // if targetHandle is None, targetId is also "", therefore we won't be able to find it.
     if (!incomingTextChannel->targetHandleType() == Tp::HandleTypeNone) {
 
-        // check that the tab requested isn't already open
+        //loop through all tabs checking for matches
         for (int index = 0; index < m_tabWidget->count() && !match; ++index) {
 
             // get chatWidget object
@@ -152,7 +152,7 @@ ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
 
             Q_ASSERT(auxChatTab);
 
-            // check for 1on1 duplicate chat
+            // check for duplicate chat
             if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
             && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
                 match = auxChatTab;
