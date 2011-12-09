@@ -271,6 +271,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
 
 bool ChatWindowStyleManager::removeStyle(const QString &styleId)
 {
+    Q_UNUSED(styleId)
 //    kDebug() << styleId;
 //    // Find for the current style in avaiableStyles map.
 //    int foundStyleIdx = d->availableStyles.indexOf(styleId);
