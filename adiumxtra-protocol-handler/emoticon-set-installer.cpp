@@ -54,7 +54,7 @@ BundleInstaller::BundleStatus EmoticonSetInstaller::validate()
     const KArchiveDirectory* rootDir = m_archive->directory();
     const QStringList entries = rootDir->entries();
     // Will be reused later.
-    QStringList::ConstIterator entriesIt, entriesItEnd = entries.end();
+    QStringList::ConstIterator entriesIt;
     for (entriesIt = entries.begin(); entriesIt != entries.end(); ++entriesIt) {
         currentEntry = const_cast<KArchiveEntry*>(rootDir->entry(*entriesIt));
         kDebug() << "Current entry name: " << currentEntry->name();
