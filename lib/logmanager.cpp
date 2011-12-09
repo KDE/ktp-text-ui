@@ -179,7 +179,7 @@ void LogManager::onEventsFinished(Tpl::PendingOperation* po)
         }
         iconPath = targetContact->avatarData().fileName;
 
-        AdiumThemeContentInfo message(AdiumThemeMessageInfo::HistoryLocalToRemote);
+        AdiumThemeContentInfo message(type);
         message.setMessage(event->message());
         message.setService(m_account->serviceName());
         message.setSenderDisplayName(event->sender()->alias());
