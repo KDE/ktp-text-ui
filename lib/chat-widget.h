@@ -30,7 +30,7 @@
 #include <KIcon>
 #include <KColorScheme>
 
-#include <TelepathyQt4/ReceivedMessage>
+#include <TelepathyQt/ReceivedMessage>
 
 class AdiumThemeContentInfo;
 class ChatSearchBar;

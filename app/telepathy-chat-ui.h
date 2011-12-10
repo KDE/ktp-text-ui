@@ -21,7 +21,7 @@
 #ifndef TELEPATHYCHATUI_H
 #define TELEPATHYCHATUI_H
 
-#include <TelepathyQt4/AbstractClientHandler>
+#include <TelepathyQt/AbstractClientHandler>
 #include <KApplication>
 
 class ChatTab;

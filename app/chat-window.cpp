@@ -45,10 +45,10 @@
 #include <QEvent>
 #include <QWidgetAction>
 
-#include <TelepathyQt4/Account>
-#include <TelepathyQt4/ContactCapabilities>
-#include <TelepathyQt4/PendingChannelRequest>
-#include <TelepathyQt4/TextChannel>
+#include <TelepathyQt/Account>
+#include <TelepathyQt/ContactCapabilities>
+#include <TelepathyQt/PendingChannelRequest>
+#include <TelepathyQt/TextChannel>
 
 #include <Sonnet/DictionaryComboBox>
 

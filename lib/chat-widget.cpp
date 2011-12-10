@@ -38,12 +38,12 @@
 #include <KColorScheme>
 #include <KLineEdit>
 
-#include <TelepathyQt4/Account>
-#include <TelepathyQt4/Message>
-#include <TelepathyQt4/Types>
-#include <TelepathyQt4/AvatarData>
-#include <TelepathyQt4/Connection>
-#include <TelepathyQt4/Presence>
+#include <TelepathyQt/Account>
+#include <TelepathyQt/Message>
+#include <TelepathyQt/Types>
+#include <TelepathyQt/AvatarData>
+#include <TelepathyQt/Connection>
+#include <TelepathyQt/Presence>
 
 class ChatWidgetPrivate
 {

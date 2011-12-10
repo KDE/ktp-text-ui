@@ -25,10 +25,10 @@
 #include <KConfigGroup>
 #include <KWindowSystem>
 
-#include <TelepathyQt4/ChannelClassSpec>
-#include <TelepathyQt4/TextChannel>
-#include <TelepathyQt4/ChannelRequest>
-#include <TelepathyQt4/ChannelRequestHints>
+#include <TelepathyQt/ChannelClassSpec>
+#include <TelepathyQt/TextChannel>
+#include <TelepathyQt/ChannelRequest>
+#include <TelepathyQt/ChannelRequestHints>
 
 
 inline Tp::ChannelClassSpecList channelClassList()

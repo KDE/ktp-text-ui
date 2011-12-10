@@ -19,12 +19,12 @@
 #include "chat-window.h"
 #include "telepathy-chat-ui.h"
 
-#include <TelepathyQt4/ClientRegistrar>
-#include <TelepathyQt4/AccountFactory>
-#include <TelepathyQt4/ConnectionFactory>
-#include <TelepathyQt4/ChannelFactory>
-#include <TelepathyQt4/ContactFactory>
-#include <TelepathyQt4/TextChannel>
+#include <TelepathyQt/ClientRegistrar>
+#include <TelepathyQt/AccountFactory>
+#include <TelepathyQt/ConnectionFactory>
+#include <TelepathyQt/ChannelFactory>
+#include <TelepathyQt/ContactFactory>
+#include <TelepathyQt/TextChannel>
 
 #include <KAboutData>
 #include <KCmdLineArgs>
