@@ -26,8 +26,8 @@
 #include <QStackedWidget>
 #include <KDE/KColorScheme>
 
-#include <TelepathyQt4/Account>
-#include <TelepathyQt4/TextChannel>
+#include <TelepathyQt/Account>
+#include <TelepathyQt/TextChannel>
 #include "chat-window.h"
 
 ChatTab::ChatTab(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, QWidget* parent)

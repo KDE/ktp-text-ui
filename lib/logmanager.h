@@ -27,9 +27,9 @@
 #include <TelepathyLoggerQt4/Entity>
 #endif
 
-#include <TelepathyQt4/Types>
-#include <TelepathyQt4/Account>
-#include <TelepathyQt4/Contact>
+#include <TelepathyQt/Types>
+#include <TelepathyQt/Account>
+#include <TelepathyQt/Contact>
 
 
 namespace Tpl {

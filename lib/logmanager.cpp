@@ -38,10 +38,10 @@
 #include <QGlib/Init>
 #endif
 
-#include <TelepathyQt4/Types>
-#include <TelepathyQt4/AvatarData>
-#include <TelepathyQt4/TextChannel>
-#include <TelepathyQt4/ReceivedMessage>
+#include <TelepathyQt/Types>
+#include <TelepathyQt/AvatarData>
+#include <TelepathyQt/TextChannel>
+#include <TelepathyQt/ReceivedMessage>
 
 LogManager::LogManager(const Tp::AccountPtr &account, const Tp::ContactPtr &contact, QObject *parent)
     : QObject(parent),

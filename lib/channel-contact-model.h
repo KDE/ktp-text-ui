@@ -22,11 +22,11 @@
 
 #include <QtCore/QAbstractListModel>
 
-#include <TelepathyQt4/TextChannel>
-#include <TelepathyQt4/Contact>
-#include <TelepathyQt4/Types>
-#include <TelepathyQt4/Channel>
-#include <TelepathyQt4/Presence>
+#include <TelepathyQt/TextChannel>
+#include <TelepathyQt/Contact>
+#include <TelepathyQt/Types>
+#include <TelepathyQt/Channel>
+#include <TelepathyQt/Presence>
 
 /** A model of all users in the channel.
   Also acts as a proxy for emiting presence and alias changes of any contacts in the channel
