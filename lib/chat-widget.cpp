@@ -121,7 +121,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->ui.contactsView->setModel(d->contactModel);
 
     d->yourName = channel->groupSelfContact()->alias();
-    d->contactName = channel->targetContact()->alias();
 
     d->ui.chatArea->load((d->isGroupChat?AdiumThemeView::GroupChat:AdiumThemeView::SingleUserChat));
 
@@ -137,6 +136,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
         Q_ASSERT(otherContact);
 
+        d->contactName = otherContact->alias();
         info.setDestinationDisplayName(otherContact->alias());
         info.setDestinationName(otherContact->id());
         info.setChatName(otherContact->alias());
