@@ -606,7 +606,7 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
     QStringList fileNames = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///FileTransferLastDirectory"),
                                                           QString(),
                                                           this,
-                                                          i18n("Choose files to send to %1").arg(contact->alias()));
+                                                          i18n("Choose files to send to %1", contact->alias()));
 
     // User hit cancel button
     if (fileNames.isEmpty()) {
