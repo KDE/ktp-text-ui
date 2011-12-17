@@ -603,30 +603,32 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
     Q_ASSERT(contact);
 
     // use the keyword "FileTransferLastDirectory" for setting last used dir for file transfer
-    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///FileTransferLastDirectory"),
-                                                    QString(),
-                                                    this,
-                                                    i18n("Choose a file"));
+    QStringList fileNames = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///FileTransferLastDirectory"),
+                                                          QString(),
+                                                          this,
+                                                          i18n("Choose files to send to %1").arg(contact->alias()));
 
     // User hit cancel button
-    if (fileName.isEmpty()) {
+    if (fileNames.isEmpty()) {
         return;
     }
 
-    QFileInfo fileinfo(fileName);
+    QDateTime now = QDateTime::currentDateTime();
+    Q_FOREACH(QString fileName, fileNames) {
+        QFileInfo fileinfo(fileName);
 
-    kDebug() << "Filename:" << fileName;
-    kDebug() << "Content type:" << KMimeType::findByFileContent(fileName)->name();
-    // TODO Let the user set a description?
+        kDebug() << "Filename:" << fileName;
+        kDebug() << "Content type:" << KMimeType::findByFileContent(fileName)->name();
 
-    Tp::FileTransferChannelCreationProperties fileTransferProperties(fileName, KMimeType::findByFileContent(fileName)->name());
+        Tp::FileTransferChannelCreationProperties fileTransferProperties(fileName, KMimeType::findByFileContent(fileName)->name());
 
-    Tp::PendingChannelRequest* channelRequest = account->createFileTransfer(contact,
-                                                                            fileTransferProperties,
-                                                                            QDateTime::currentDateTime(),
-                                                                            QLatin1String(PREFERRED_FILETRANSFER_HANDLER));
+        Tp::PendingChannelRequest* channelRequest = account->createFileTransfer(contact,
+                                                                                fileTransferProperties,
+                                                                                QDateTime::currentDateTime(),
+                                                                                QLatin1String(PREFERRED_FILETRANSFER_HANDLER));
 
-    connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
+        connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
+    }
 }
 
 void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
