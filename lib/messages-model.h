@@ -29,6 +29,9 @@
 class KDE_TELEPATHY_CHAT_EXPORT MessagesModel : public QAbstractListModel
 {
 Q_OBJECT
+Q_PROPERTY(bool visibleToUser READ isVisibleToUser WRITE setVisibleToUser NOTIFY visibleToUserChanged);
+Q_PROPERTY(int unreadCount READ unreadCount NOTIFY unreadCountChanged);
+//turns out you can't have a non QObject as a property
 // Q_PROPERTY(Tp::TextChannelPtr textChannel
 // 			READ textChannel
 // 			WRITE setTextChannel
@@ -52,8 +55,17 @@ public:
 	Tp::TextChannelPtr textChannel();
 	void setTextChannel(Tp::TextChannelPtr channel);
 
+    bool isVisibleToUser() const;
+    void setVisibleToUser(bool visible);
+
+    void acknowledgeAllMessages();
+    int unreadCount() const;
+
+    Q_INVOKABLE void printallmessages();
 Q_SIGNALS:
-	void textChannelChanged(Tp::TextChannelPtr newChannel);
+    void textChannelChanged(Tp::TextChannelPtr newChannel);
+    void visibleToUserChanged(bool visible);
+    void unreadCountChanged(int unreadMesssagesCount);
 
 public Q_SLOTS:
     Tp::PendingSendMessage* sendNewMessage(QString message);

@@ -27,7 +27,6 @@
 #include <TelepathyQt/TextChannel>
 // #include "conversation-model.h"
 #include <KIcon>
-#include "conversation-target.h"
 
 class ConversationTarget;
 class MessagesModel;
@@ -38,12 +37,12 @@ Q_OBJECT
 Q_PROPERTY(MessagesModel* model READ model NOTIFY modelChanged);
 Q_PROPERTY(ConversationTarget* target READ target NOTIFY targetChanged);
 
-
 public:
     Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account);
     Conversation(QObject* parent = 0);
     virtual ~Conversation();
 
+    //FIXME: rename model to messages
     MessagesModel* model() const;
     ConversationTarget* target() const;
 

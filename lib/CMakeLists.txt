@@ -16,6 +16,7 @@ set(ktpchat_SRCS
         chat-search-bar.cpp
         logmanager.cpp
         messages-model.cpp
+#         static-conversation.cpp
         telepathy-text-observer.cpp
 )
 
@@ -33,6 +34,7 @@ set(ktpchat_HDRS
     conversation-target.h
     conversations-model.h
     messages-model.h
+#     static-conversation.h
     telepathy-text-observer.h
 )
 

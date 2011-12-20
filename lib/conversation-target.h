@@ -36,6 +36,7 @@ Q_PROPERTY(QIcon avatar READ avatar NOTIFY avatarChanged);
 Q_PROPERTY(QString nick READ nick NOTIFY nickChanged);
 Q_PROPERTY(QIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
 Q_PROPERTY(QString presenceIconSource READ presenceIconSource NOTIFY presenceIconSourceChanged);
+Q_PROPERTY(QString id READ id)
 
 //turns out you can't have non QObjects as properties
 // Q_PROPERTY(Tp::ContactPtr contact READ contact WRITE setContact NOTIFY contactChanged);
@@ -45,6 +46,7 @@ public:
     virtual ~ConversationTarget();
 
     QIcon   avatar() const;
+    QString id() const;
     QString nick() const;
     QIcon   presenceIcon() const;
     QString presenceIconSource() const;

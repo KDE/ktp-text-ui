@@ -67,6 +67,7 @@ public:
         AbstractClientObserver(channelClassList()),
         m_parent(parent)
     {
+
     }
 
     TelepathyTextObserver *m_parent;
@@ -79,42 +80,38 @@ TelepathyTextObserver::TelepathyTextObserver() :
     kDebug();
     Tp::registerTypes();
     Tp::AccountFactoryPtr accountFactory = Tp::AccountFactory::create(QDBusConnection::sessionBus(),
-                                                                      Tp::Account::FeatureCore);
+                                                                    Tp::Account::FeatureCore);
 
     Tp::ConnectionFactoryPtr  connectionFactory = Tp::ConnectionFactory::create(
         QDBusConnection::sessionBus(),
         Tp::Features() << Tp::Connection::FeatureSelfContact
-                       << Tp::Connection::FeatureCore
+                    << Tp::Connection::FeatureCore
     );
 
     Tp::ChannelFactoryPtr channelFactory = Tp::ChannelFactory::create(QDBusConnection::sessionBus());
     channelFactory->addCommonFeatures(Tp::Channel::FeatureCore);
 
     Tp::Features textFeatures = Tp::Features() << Tp::TextChannel::FeatureMessageQueue
-                                               << Tp::TextChannel::FeatureMessageSentSignal
-                                               << Tp::TextChannel::FeatureChatState
-                                               << Tp::TextChannel::FeatureMessageCapabilities;
+                                            << Tp::TextChannel::FeatureMessageSentSignal
+                                            << Tp::TextChannel::FeatureChatState
+                                            << Tp::TextChannel::FeatureMessageCapabilities;
     channelFactory->addFeaturesForTextChats(textFeatures);
     channelFactory->addFeaturesForTextChatrooms(textFeatures);
 
     Tp::ContactFactoryPtr contactFactory = Tp::ContactFactory::create(
         Tp::Features() << Tp::Contact::FeatureAlias
-                       << Tp::Contact::FeatureAvatarToken
-                       << Tp::Contact::FeatureAvatarData
-                       << Tp::Contact::FeatureCapabilities
-                       << Tp::Contact::FeatureSimplePresence
+                    << Tp::Contact::FeatureAvatarToken
+                    << Tp::Contact::FeatureAvatarData
+                    << Tp::Contact::FeatureCapabilities
+                    << Tp::Contact::FeatureSimplePresence
     );
 
     //TODO: check these to make sure I'm only requesting features I actually use.
     d->registrar = Tp::ClientRegistrar::create(accountFactory, connectionFactory,
-                                               channelFactory, contactFactory);
-
+                                            channelFactory, contactFactory);
     d->registrar->registerClient(d, QLatin1String("KDE.TextUi.ConversationWatcher"));
 }
-
 
 TelepathyTextObserver::~TelepathyTextObserver()
 {
 }
-
-// #include "moc_conversation-watcher.cpp"

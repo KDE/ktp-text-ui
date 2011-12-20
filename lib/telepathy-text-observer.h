@@ -38,7 +38,7 @@ Q_SIGNALS:
 	void newConversation(Conversation *con);
 private:
 	class ConversationClientObserver;
-	Tp::SharedPtr<ConversationClientObserver> d;
+	Tp::SharedPtr<ConversationClientObserver> d /*= Tp::SharedPtr<ConversationClientObserver>()*/;
 };
 
 #endif // CONVERSATION_WATCHER_H

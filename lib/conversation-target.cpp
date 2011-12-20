@@ -22,6 +22,7 @@
 #include <TelepathyQt4/AvatarData>
 #include <TelepathyQt4/Presence>
 #include <KDebug>
+#include <KIconLoader>
 
 class  ConversationTarget::ConversationTargetPrivate
 {
@@ -50,8 +51,17 @@ void ConversationTarget::setupContactSignals(Tp::ContactPtr contact)
 
 QIcon ConversationTarget::avatar() const
 {
-    //FIXME: return KIcon("im-user") if avatar is unavailable
-    return QIcon(d->contact->avatarData().fileName);
+    QString path = d->contact->avatarData().fileName;
+
+    if(path.isEmpty()) {
+        return KIcon(QLatin1String("im-user"));
+    } else {
+        return QIcon(path);
+    }
+}
+QString ConversationTarget::id() const
+{
+    return d->contact->id();
 }
 
 QString ConversationTarget::nick() const

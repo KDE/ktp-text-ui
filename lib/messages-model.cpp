@@ -27,6 +27,7 @@ public:
     QString user;
     QString text;
     QDateTime time;
+    QString id;
 
     //FIXME : replace with Tp::ChannelTextMessageType
     enum MessageType {
@@ -34,12 +35,21 @@ public:
         Outgoing,
         Status
     } type;
+
+    MessageItem(QString user, QString text, QDateTime time, MessageType type, QString messageId)
+     : user(user), text(text), time(time), type(type), id(messageId)
+    {
+        if(this->text.endsWith(QLatin1String("\n"))) {
+            this->text.chop(1);
+        }
+    }
 };
 
 class MessagesModel::ConversationModelPrivate {
 public:
     Tp::TextChannelPtr textChannel;
     QList<MessageItem> messages;
+    bool visible;
 };
 
 MessagesModel::MessagesModel(QObject* parent):
@@ -54,6 +64,8 @@ MessagesModel::MessagesModel(QObject* parent):
     roles[TimeRole] = "time";
     roles[TypeRole] = "type";
     setRoleNames(roles);
+
+    d->visible = false;
 }
 
 Tp::TextChannelPtr MessagesModel::textChannel()
@@ -63,11 +75,11 @@ Tp::TextChannelPtr MessagesModel::textChannel()
 
 bool MessagesModel::verifyPendingOperation ( Tp::PendingOperation* op )
 {
-    bool success = !op->isError();
-    if(!success) {
+    if(op->isError()) {
         kWarning() << op->errorName() << "+" << op->errorMessage();
+        return false;
     }
-    return success;
+    return true;
 }
 
 void MessagesModel::setupChannelSignals(Tp::TextChannelPtr channel)
@@ -91,41 +103,68 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
     //FIXME: check messageQue for any lost messages
     d->textChannel = channel;
 
-    textChannelChanged(channel);
+    Q_EMIT textChannelChanged(channel);
+
+    QList<Tp::ReceivedMessage> que = channel->messageQueue();
+    Q_FOREACH(Tp::ReceivedMessage message, que) {
+        bool messageAlreadyInModel = false;
+        Q_FOREACH(MessageItem current, d->messages) {
+            if(current.id == message.messageToken()) {
+                messageAlreadyInModel = true;
+            }
+        }
+        if(!messageAlreadyInModel) {
+            onMessageReceived(message);
+        }
+    }
 }
 
 void MessagesModel::onMessageReceived(Tp::ReceivedMessage message)
 {
-    kDebug() << "unreadMessagesCount = " << d->textChannel->messageQueue().size();
-    int length = rowCount();
-    beginInsertRows(QModelIndex(), length, length);
+    int unreadCount = d->textChannel->messageQueue().size();
+    kDebug() << "unreadMessagesCount =" << unreadCount;
+    kDebug() << "text =" << message.text();
 
-    MessageItem newMessage = {
-        message.sender()->alias(),
-        message.text(),
-        message.received(),
-        MessageItem::Incoming
-    };
+    if(message.messageType() == Tp::ChannelTextMessageTypeNormal) {
+        int length = rowCount();
+        beginInsertRows(QModelIndex(), length, length);
 
-    d->messages.append(newMessage);
-    endInsertRows();
+        d->messages.append(MessageItem(
+                message.sender()->alias(),
+                message.text(),
+                message.received(),
+                MessageItem::Incoming,
+                message.messageToken()
+        ));
+
+        endInsertRows();
+
+        if(d->visible) {
+            acknowledgeAllMessages();
+        } else {
+            Q_EMIT unreadCountChanged(unreadCount);
+        }
+    }
+
 }
 
 void MessagesModel::onMessageSent(Tp::Message message, Tp::MessageSendingFlags flags, QString token)
 {
     Q_UNUSED(flags);
     Q_UNUSED(token);
+
     int length = rowCount();
     beginInsertRows(QModelIndex(), length, length);
+    kDebug() << "text =" << message.text();
 
-    MessageItem newMessage = {
+    d->messages.append(MessageItem(
         tr("Me"),   //FIXME : use actual nickname from Tp::AccountPtr
         message.text(),
         message.sent(),
-        MessageItem::Outgoing
-    };
+        MessageItem::Outgoing,
+        message.messageToken()
+    ));
 
-    d->messages.append(newMessage);
     endInsertRows();
 }
 
@@ -192,10 +231,51 @@ void MessagesModel::removeChannelSignals(Tp::TextChannelPtr channel)
                     );
 }
 
+int MessagesModel::unreadCount() const
+{
+    return d->textChannel->messageQueue().size();
+}
+
+void MessagesModel::acknowledgeAllMessages()
+{
+    QList<Tp::ReceivedMessage> que = d->textChannel->messageQueue();
+
+    kDebug() << "Conversation Visible, Acknowledging " << que.size() << " messages.";
+
+    d->textChannel->acknowledge(que);
+    Q_EMIT unreadCountChanged(que.size());
+}
+
+void MessagesModel::setVisibleToUser(bool visible)
+{
+    kDebug() << visible;
+
+    if(d->visible != visible) {
+        d->visible = visible;
+        Q_EMIT visibleToUserChanged(visible);
+    }
+
+    if(visible) {
+        acknowledgeAllMessages();
+    }
+}
+
+bool MessagesModel::isVisibleToUser() const
+{
+    return d->visible;
+}
+
 MessagesModel::~MessagesModel()
 {
     kDebug();
     delete d;
+}
+
+void MessagesModel::printallmessages()
+{
+    Q_FOREACH(MessageItem msg, d->messages) {
+        kDebug() << msg.text;
+    }
 }
 
 #include "moc_messages-model.cpp"

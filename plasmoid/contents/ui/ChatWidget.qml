@@ -64,10 +64,15 @@ Item {
     Item {
         id:chatArea
 
-        anchors.top: space.bottom
-        anchors.left: parent.left; anchors.right: parent.right
-        anchors.bottom: input.top
-        anchors.margins: 5
+        anchors {
+            top: space.bottom
+            left: parent.left
+            right: parent.right
+            bottom: input.top
+
+            leftMargin: 5
+            rightMargin: leftMargin
+        }
 
 //         PlasmaComponents.Highlight { anchors.fill: chatArea }
 

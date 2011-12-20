@@ -6,31 +6,7 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 // import "createDialog.js" as MyScript
 
 Item {
-//     PlasmaCore.SvgItem {
-//         elementId: "horizzontal-line"
-//         anchors.fill:parent
-//         svg: PlasmaCore.Svg {
-//             id: mySvg
-//             imagePath: "widgets/line"
-//         }
-//     }
 
-//     PlasmaCore.FrameSvgItem {
-//         id: surface
-// 
-//         anchors.fill: parent
-// //         prefix: (internal.userPressed || checked) ? "pressed" : "normal"
-//         //internal: if there is no hover status, don't paint on mouse over in touchscreens
-// //         opacity: (internal.userPressed || checked || !flat || (shadow.hasOverState && mouse.containsMouse)) ? 1 : 0
-// //         Behavior on opacity {
-// //             PropertyAnimation { duration: 100 }
-// //         }
-//     }
-//     PlasmaComponents.ListItem {
-//         anchors.fill: parent
-//         enabled: true
-//         sectionDelegate: true
-//     }
     ListView {
         id: base
         anchors.fill: parent
@@ -40,10 +16,50 @@ Item {
         }
 
         delegate : ConversationDelegate {
+            id:conv
             anchors.top: parent.top
-//             height: 60
             anchors.bottom: parent.bottom
-//             anchors.margins: 5
+
+            image: model.conversation.target.avatar
+//             text: model.conversation.target.nick
+            overlayText: model.conversation.model.unreadCount
+
+            pressed: dialog.visible
+            onClicked: popupApplet();
+
+            //FIXME: put in a loader to not slow down the model
+            PlasmaCore.Dialog {
+                id: dialog
+                windowFlags: Qt.Dialog
+                mainItem: ChatWidget {
+                    width: 250
+                    height: 350
+                    conv: model.conversation
+
+                    onCloseRequested: conv.popupApplet()
+                    onConversationEndRequested: {
+                        model.conversation.model.printallmessages();
+                    }
+                }
+            }
+
+            function popupApplet() {
+                if(dialog.visible == false) {
+                    var point = dialog.popupPosition(conv, Qt.AlignBottom);
+                    console.log("Showing dialog at (" + point.x + "," + point.y + ")");
+
+                    dialog.x = point.x;
+                    dialog.y = point.y;
+
+                    dialog.visible = true;
+                    model.conversation.model.visibleToUser = true;
+                } else {
+                    console.log("height = " + dialog.height);
+                    console.log("width = " + dialog.width);
+                    dialog.visible = false;
+                    model.conversation.model.visibleToUser = false;
+                }
+            }
         }
     }
 

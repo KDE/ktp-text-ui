@@ -21,6 +21,8 @@
 #include "conversation.h"
 #include "telepathy-text-observer.h"
 #include <KDebug>
+#include "conversation-target.h"
+#include "messages-model.h"
 
 class ConversationsModel::ConversationsModelPrivate
 {
@@ -57,10 +59,19 @@ ConversationsModel::ConversationsModel() :
 
 void ConversationsModel::onInconmingConversation ( Conversation* convo )
 {
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    bool found = false;
+    Q_FOREACH(Conversation *con, d->data) {
+        if(con->target()->id() == convo->target()->id()) {
+            con->model()->setTextChannel(convo->model()->textChannel());
+            found = true;
+        }
+    }
 
-    d->data.append(convo);
-    endInsertRows();
+    if(!found) {
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        d->data.append(convo);
+        endInsertRows();
+    }
 }
 
 ConversationsModel::~ConversationsModel()
