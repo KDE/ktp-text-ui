@@ -298,7 +298,7 @@ void ChatWindowStyle::inheritContent(InternalIdentifier subType, InternalIdentif
 
 void ChatWindowStyle::readStyleFiles()
 {
-    // load style infos
+    // load style info
     QString infoPlistFile = d->baseHref + QLatin1String("../Info.plist");
     ChatStylePlistFileReader plistReader(infoPlistFile);
     d->defaultVariantName = plistReader.defaultVariant();
