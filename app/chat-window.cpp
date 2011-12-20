@@ -32,7 +32,6 @@
 #include <KActionCollection>
 #include <KDebug>
 #include <KFileDialog>
-#include <KIcon>
 #include <KColorScheme>
 #include <KTabBar>
 #include <KSettings/Dialog>
