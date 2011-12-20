@@ -613,7 +613,7 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
     }
 
     QDateTime now = QDateTime::currentDateTime();
-    Q_FOREACH(QString fileName, fileNames) {
+    Q_FOREACH(const QString& fileName, fileNames) {
         QFileInfo fileinfo(fileName);
 
         kDebug() << "Filename:" << fileName;
