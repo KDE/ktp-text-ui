@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef CHANNELCONTACTLIST_H
-#define CHANNELCONTACTLIST_H
+#ifndef CHANNEL_CONTACT_MODEL_H
+#define CHANNEL_CONTACT_MODEL_H
 
 #include <QtCore/QAbstractListModel>
 
@@ -66,4 +66,4 @@ private:
     QList<Tp::ContactPtr> m_contacts;
 };
 
-#endif // CHANNELCONTACTLIST_H
+#endif // CHANNEL_CONTACT_MODEL_H

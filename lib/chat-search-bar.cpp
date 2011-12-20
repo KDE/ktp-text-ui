@@ -33,8 +33,8 @@ ChatSearchBar::ChatSearchBar(QWidget* parent)
     : QWidget(parent)
     , m_searchInput(new KLineEdit(this))
     , m_closeButton(new KPushButton(this))
-    , m_nextButton(new KPushButton(KIcon(QLatin1String("go-down-search")), i18n("&Next"), this))
-    , m_previousButton(new KPushButton(KIcon(QLatin1String("go-up-search")), i18n("&Previous"), this))
+    , m_nextButton(new KPushButton(KIcon(QLatin1String("go-down-search")), i18nc("Next search result" ,"&Next"), this))
+    , m_previousButton(new KPushButton(KIcon(QLatin1String("go-up-search")), i18nc("Previous search result" ,"&Previous"), this))
     , m_caseSensitive(false)
 {
     // close button setup

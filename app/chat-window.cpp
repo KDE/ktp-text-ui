@@ -32,7 +32,6 @@
 #include <KActionCollection>
 #include <KDebug>
 #include <KFileDialog>
-#include <KIcon>
 #include <KColorScheme>
 #include <KTabBar>
 #include <KSettings/Dialog>
@@ -86,7 +85,7 @@ ChatWindow::ChatWindow()
     connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(destroyTab(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
     connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)),m_tabWidget, SLOT(removeTab(int)));
-    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int, QPoint)), SLOT(tabBarContextMenu(int, QPoint)));
+    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int,QPoint)), SLOT(tabBarContextMenu(int,QPoint)));
 
     setCentralWidget(m_tabWidget);
 
@@ -614,7 +613,7 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
     }
 
     QDateTime now = QDateTime::currentDateTime();
-    Q_FOREACH(QString fileName, fileNames) {
+    Q_FOREACH(const QString& fileName, fileNames) {
         QFileInfo fileinfo(fileName);
 
         kDebug() << "Filename:" << fileName;

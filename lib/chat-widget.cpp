@@ -268,7 +268,7 @@ void ChatWidget::setChatEnabled(bool enable)
     if (!enable) {
         statusMessage.setMessage(i18n("Connection closed"));
     } else {
-        statusMessage.setMessage(i18n("Connected"));
+        statusMessage.setMessage(i18nc("Connected to IM service", "Connected"));
     }
     statusMessage.setService(d->channel->connection()->protocolName());
     statusMessage.setTime(QDateTime::currentDateTime());
@@ -634,7 +634,7 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
     //TODO notification->addContext("group",... Requires KDE Telepathy Contact to work out which group they are in.
 
     notification->setActions(QStringList(i18n("View")));
-    connect(notification, SIGNAL(activated(unsigned int)), this, SIGNAL(notificationClicked()));
+    connect(notification, SIGNAL(activated(uint)), this, SIGNAL(notificationClicked()));
 
     notification->sendEvent();
 }
