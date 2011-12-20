@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef APPEARANCE_CONFIG_H
+#define APPEARANCE_CONFIG_H
 
 #include "adium-theme-header-info.h"
 
@@ -60,7 +60,7 @@ private Q_SLOTS:
 private:
     Ui::ChatWindowConfig *ui;
     AdiumThemeHeaderInfo m_demoChatHeader;
-    
+
 };
 
-#endif // MAINWINDOW_H
+#endif // APPEARANCE_CONFIG_H
