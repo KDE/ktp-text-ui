@@ -268,7 +268,7 @@ void ChatWidget::setChatEnabled(bool enable)
     if (!enable) {
         statusMessage.setMessage(i18n("Connection closed"));
     } else {
-        statusMessage.setMessage(i18n("Connected"));
+        statusMessage.setMessage(i18nc("Connected to IM service", "Connected"));
     }
     statusMessage.setService(d->channel->connection()->protocolName());
     statusMessage.setTime(QDateTime::currentDateTime());
