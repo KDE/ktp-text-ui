@@ -45,6 +45,8 @@
 #include <TelepathyQt/Connection>
 #include <TelepathyQt/Presence>
 
+#include <KTelepathy/presence.h>
+
 class ChatWidgetPrivate
 {
 public:
@@ -235,16 +237,16 @@ KIcon ChatWidget::icon() const
             //find the other contact which isn't self.
             Q_FOREACH(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
                 if (contact != d->channel->groupSelfContact()) {
-                    return iconForPresence(contact->presence().type());
+                    return KTp::Presence(contact->presence()).icon();
                 }
             }
         }
-
-        //group chat
-        return iconForPresence(Tp::ConnectionPresenceTypeAvailable);
-    } else {
-        return iconForPresence(Tp::ConnectionPresenceTypeOffline);
+        else {
+            //group chat
+            return KTp::Presence(Tp::Presence::available()).icon();
+        }
     }
+    return KTp::Presence(Tp::Presence::offline()).icon();
 }
 
 bool ChatWidget::isGroupChat() const
@@ -391,8 +393,8 @@ void ChatWidget::setupChannelSignals()
 
 void ChatWidget::setupContactModelSignals()
 {
-    connect(d->contactModel, SIGNAL(contactPresenceChanged(Tp::ContactPtr,Tp::Presence)),
-            SLOT(onContactPresenceChange(Tp::ContactPtr,Tp::Presence)));
+    connect(d->contactModel, SIGNAL(contactPresenceChanged(Tp::ContactPtr,KTp::Presence)),
+            SLOT(onContactPresenceChange(Tp::ContactPtr,KTp::Presence)));
     connect(d->contactModel, SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)),
             SLOT(onContactAliasChanged(Tp::ContactPtr,QString)));
 }
@@ -750,56 +752,25 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
 
 
 
-void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const Tp::Presence & presence)
+void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const KTp::Presence &presence)
 {
     QString message;
     bool isYou = (contact == d->channel->groupSelfContact());
 
-    switch (presence.type()) {
-    case Tp::ConnectionPresenceTypeOffline:
-        if (!isYou) {
-            message = i18n("%1 is offline", contact->alias());
-        } else {
-            message = i18n("You went offline");
-        }
-        break;
-    case Tp::ConnectionPresenceTypeAvailable:
-        if (!isYou) {
-            message = i18n("%1 is online", contact->alias());
-        } else {
-            message = i18n("You are now marked as online");
-        }
-        break;
-    case Tp::ConnectionPresenceTypeBusy:
-        if (!isYou) {
-            message = i18n("%1 is busy", contact->alias());
-        } else {
-            message = i18n("You are now marked as busy");
-        }
-        break;
-    case Tp::ConnectionPresenceTypeAway:
-        if (!isYou) {
-            message = i18n("%1 is away", contact->alias());
-        } else {
-            message = i18n("You are now marked as away");
-        }
-        break;
-    case Tp::ConnectionPresenceTypeExtendedAway:
-        if (!isYou) {
-            message = i18n("%1 is not available", contact->alias());
-        } else {
-            message = i18n("You are now marked as not available");
-        }
-        break;
-    default:
-        /*Do nothing*/
-        ;
+    if (isYou) {
+        message = i18n("You are now marked as %1", presence.displayString());
     }
-
-    if (!isYou && !presence.statusMessage().isEmpty()) {
-        message = QString::fromUtf8("%1 - \"%2\"").arg(message, presence.statusMessage());
+    else {
+        if (presence.statusMessage().isEmpty()) {
+            message = i18nc("User's name, with their new presence status (i.e online/away)","%1 is %2", contact->alias(), presence.displayString());
+        } else {
+            message = i18nc("User's name, with their new presence status (i.e online/away) and a sepecified presence message","%1 is %2 - %3",
+                            contact->alias(),
+                            presence.displayString(),
+                            presence.statusMessage());
+        }
     }
-
+    
     if (!message.isNull()) {
         AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(message);
@@ -810,7 +781,7 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const T
 
     //if in a non-group chat situation, and the other contact has changed state...
     if (!d->isGroupChat && !isYou) {
-        Q_EMIT iconChanged(iconForPresence(presence.type()));
+        Q_EMIT iconChanged(presence.icon());
     }
 
     Q_EMIT contactPresenceChanged(presence);
@@ -898,34 +869,6 @@ void ChatWidget::onFormatColorReleased()
     QColor color;
     KColorDialog::getColor(color,this);
     d->ui.sendMessageBox->setTextColor(color);
-}
-
-KIcon ChatWidget::iconForPresence(Tp::ConnectionPresenceType presence)
-{
-    QString iconName;
-
-    switch (presence) {
-        case Tp::ConnectionPresenceTypeAvailable:
-            iconName = QLatin1String("user-online");
-            break;
-        case Tp::ConnectionPresenceTypeAway:
-            iconName = QLatin1String("user-away");
-            break;
-        case Tp::ConnectionPresenceTypeExtendedAway:
-            iconName = QLatin1String("user-away-extended");
-            break;
-        case Tp::ConnectionPresenceTypeHidden:
-            iconName = QLatin1String("user-invisible");
-            break;
-        case Tp::ConnectionPresenceTypeBusy:
-            iconName = QLatin1String("user-busy");
-            break;
-        default:
-            iconName = QLatin1String("user-offline");
-            break;
-    }
-
-    return KIcon(iconName);
 }
 
 bool ChatWidget::isUserTyping() const

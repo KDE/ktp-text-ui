@@ -32,6 +32,8 @@
 
 #include <TelepathyQt/ReceivedMessage>
 
+#include <KTelepathy/presence.h>
+
 class AdiumThemeContentInfo;
 class ChatSearchBar;
 class ChatWidgetPrivate;
@@ -115,7 +117,7 @@ protected Q_SLOTS:
 
     void onChatStatusChanged(const Tp::ContactPtr &contact, Tp::ChannelChatState state);
 
-    void onContactPresenceChange(const Tp::ContactPtr &contact, const Tp::Presence &presence);
+    void onContactPresenceChange(const Tp::ContactPtr &contact, const KTp::Presence &presence);
 
     void onContactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
 
@@ -141,7 +143,7 @@ Q_SIGNALS:
     /** Emitted when another contact in the channel starts/stops typing (if supported by the protocol)*/
     void userTypingChanged(bool);
 
-    void contactPresenceChanged(Tp::Presence presence);
+    void contactPresenceChanged(KTp::Presence presence);
 
     void unreadMessagesChanged(int messages);
 
@@ -165,9 +167,6 @@ private:
 
     void incrementUnreadMessageCount();
     virtual bool isOnTop() const;
-
-    //FIXME this should be in the ktelepathy lib
-    static KIcon iconForPresence(Tp::ConnectionPresenceType presence);
 
     ChatWidgetPrivate * const d;
 };

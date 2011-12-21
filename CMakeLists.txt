@@ -1,5 +1,7 @@
 project(ktp-text-ui)
 
+set(IS_TELEPATHY_KDE_INTERNAL_MODULE TRUE)
+
 # Include our extra FindFoo.cmake files.
 set (CMAKE_MODULE_PATH
      "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules"
@@ -9,6 +11,7 @@ set (CMAKE_MODULE_PATH
 set(KDE_MIN_VERSION "4.4.75")
 find_package (KDE4 ${KDE_MIN_VERSION} REQUIRED)
 find_package (TelepathyQt4 0.8.9 REQUIRED)
+find_package (KTelepathy REQUIRED)
 
 include (CheckIncludeFiles)
 include (KDE4Defaults)
@@ -16,8 +19,8 @@ include (MacroLibrary)
 
 include_directories (${KDE4_INCLUDES}
                      ${TELEPATHY_QT4_INCLUDE_DIR}
-                     ${NEPOMUK_INCLUDES}
                      ${QT_QTWEBKIT_INCLUDES}
+                     ${KTELEPATHY_INCLUDE_DIR}
 )
 
 add_definitions (${KDE4_DEFINITIONS}

@@ -28,6 +28,8 @@
 #include <TelepathyQt/Channel>
 #include <TelepathyQt/Presence>
 
+#include <KTelepathy/presence.h>
+
 /** A model of all users in the channel.
   Also acts as a proxy for emiting presence and alias changes of any contacts in the channel
   so that the main class doesn't need to monitor this and keep connection/disconnecting to alias change/presence
@@ -43,7 +45,7 @@ public:
     void setTextChannel(const Tp::TextChannelPtr &channel);
 
 Q_SIGNALS:
-    void contactPresenceChanged(const Tp::ContactPtr &contact, const Tp::Presence &presence);
+    void contactPresenceChanged(const Tp::ContactPtr &contact, const KTp::Presence &presence);
     void contactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
 
 protected:
