@@ -31,7 +31,7 @@
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData("telepathy-kde-text-ui", 0,
+    KAboutData aboutData("ktp-text-ui", 0,
                          ki18n("Telepathy Text Ui"),
                          "0.2.60");
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "david@davidedmundson.co.uk");
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
     Tp::SharedPtr<TelepathyChatUi> app = Tp::SharedPtr<TelepathyChatUi>(new TelepathyChatUi);
     Tp::AbstractClientPtr handler = Tp::AbstractClientPtr(app);
-    registrar->registerClient(handler, QLatin1String("KDE.TextUi"));
+    registrar->registerClient(handler, QLatin1String("KTp.TextUi"));
 
     return app->exec();
 }

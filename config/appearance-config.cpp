@@ -20,18 +20,18 @@
 #include "appearance-config.h"
 #include "ui_appearance-config.h"
 
-#include <KDETelepathy/ChatWindowStyleManager>
-#include <KDETelepathy/ChatWindowStyle>
-#include <KDETelepathy/AdiumThemeHeaderInfo>
-#include <KDETelepathy/AdiumThemeContentInfo>
-#include <KDETelepathy/AdiumThemeStatusInfo>
+#include <KTp/ChatWindowStyleManager>
+#include <KTp/ChatWindowStyle>
+#include <KTp/AdiumThemeHeaderInfo>
+#include <KTp/AdiumThemeContentInfo>
+#include <KTp/AdiumThemeStatusInfo>
 
 #include <KDebug>
 #include <KLocalizedString>
 #include <KPluginFactory>
 
 K_PLUGIN_FACTORY(KCMTelepathyChatAppearanceConfigFactory, registerPlugin<AppearanceConfig>();)
-K_EXPORT_PLUGIN(KCMTelepathyChatAppearanceConfigFactory("telepathy_chat_appearance_config", "telepathy-chat-window-config"))
+K_EXPORT_PLUGIN(KCMTelepathyChatAppearanceConfigFactory("ktp_chat_appearance", "kcm_ktp_chat_appearance"))
 
 AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList& args)
     : KCModule(KCMTelepathyChatAppearanceConfigFactory::componentData(), parent, args),

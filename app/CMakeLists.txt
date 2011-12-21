@@ -1,15 +1,15 @@
-include_directories(${TELEPATHY_KDE_TEXT_UI_SOURCE_DIR}/lib)
+include_directories(${CMAKE_SOURCE_DIR}/lib)
 
-set(telepathy_kde_text_ui_SRCS
+set(ktp-text-ui_SRCS
         main.cpp
         telepathy-chat-ui.cpp
         chat-window.cpp
         chat-tab.cpp
 )
 
-kde4_add_executable(telepathy-kde-text-ui ${telepathy_kde_text_ui_SRCS})
+kde4_add_executable(ktp-text-ui ${ktp-text-ui_SRCS})
 
-target_link_libraries(telepathy-kde-text-ui
+target_link_libraries(ktp-text-ui
             ${KDE4_KDECORE_LIBS}
             ${KDE4_KDEUI_LIBS}
             ${KDE4_KIO_LIBS}
@@ -17,14 +17,14 @@ target_link_libraries(telepathy-kde-text-ui
             ${QT_QTWEBKIT_LIBRARY}
             ${KDE4_KNOTIFYCONFIG_LIBS}
 	    ${KDE4_KCMUTILS_LIBS}
-            ktelepathy_chat_lib)
+            ktpchat)
 
-configure_file(org.freedesktop.Telepathy.Client.KDE.TextUi.service.in
-               ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDE.TextUi.service)
+configure_file(org.freedesktop.Telepathy.Client.KTp.TextUi.service.in
+               ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KTp.TextUi.service)
 
-install(TARGETS telepathy-kde-text-ui DESTINATION ${LIBEXEC_INSTALL_DIR})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KDE.TextUi.service
+install(TARGETS ktp-text-ui DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KTp.TextUi.service
         DESTINATION ${DBUS_SERVICES_INSTALL_DIR})
-install(FILES KDE.TextUi.client DESTINATION ${SHARE_INSTALL_PREFIX}/telepathy/clients/)
+install(FILES KTp.TextUi.client DESTINATION ${SHARE_INSTALL_PREFIX}/telepathy/clients/)
 install(FILES chatwindow.rc
-        DESTINATION  ${DATA_INSTALL_DIR}/telepathy-kde-text-ui/)
+        DESTINATION  ${DATA_INSTALL_DIR}/ktp-text-ui/)

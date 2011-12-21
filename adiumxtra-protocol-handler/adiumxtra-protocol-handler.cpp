@@ -20,7 +20,7 @@
 #include "chat-style-installer.h"
 #include "emoticon-set-installer.h"
 
-#include <KDETelepathy/ChatWindowStyleManager>
+#include <KTp/ChatWindowStyleManager>
 
 #include <KDebug>
 #include <KZip>

@@ -21,7 +21,7 @@
 #ifndef CHATWIDGET_H
 #define CHATWIDGET_H
 
-#include "kdetelepathychat_export.h"
+#include "ktpchat_export.h"
 
 #include <QtCore/QString>
 #include <QtGui/QWidget>

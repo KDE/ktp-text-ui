@@ -20,7 +20,7 @@
 #define CHATWINDOWSTYLE_H
 
 #include <QtCore/QHash>
-#include <kdetelepathychat_export.h>
+#include <ktpchat_export.h>
 
 /**
 * This class represent a single chat window style.

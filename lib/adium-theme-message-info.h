@@ -20,7 +20,7 @@
 #ifndef ADIUMTHEMEMESSAGEINFO_H
 #define ADIUMTHEMEMESSAGEINFO_H
 
-#include "kdetelepathychat_export.h"
+#include "ktpchat_export.h"
 
 class QString;
 class QDateTime;

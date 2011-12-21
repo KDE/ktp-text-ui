@@ -22,7 +22,7 @@
 #define ADIUMTHEMESTATUSINFO_H
 
 #include "adium-theme-message-info.h"
-#include "kdetelepathychat_export.h"
+#include "ktpchat_export.h"
 
 class QString;
 class AdiumThemeStatusInfoPrivate;

@@ -88,7 +88,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->account = account;
 
     //load translations for this library. keep this before any i18n() calls in library code
-    KGlobal::locale()->insertCatalog(QLatin1String("ktelepathy_chat_lib"));
+    KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
 
     d->chatviewlInitialised = false;
     d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
