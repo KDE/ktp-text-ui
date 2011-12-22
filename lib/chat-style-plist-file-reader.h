@@ -22,7 +22,7 @@
 
 
 #include <QtCore/QMap>
-#include "kdetelepathychat_export.h"
+#include "ktpchat_export.h"
 
 class QString;
 class QFile;

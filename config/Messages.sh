@@ -1,4 +1,8 @@
 #! /usr/bin/env bash
-$EXTRACTRC `find . -name "*.ui"` >> rc.cpp || exit 11
-$XGETTEXT `find . -name "*.cpp"` -o $podir/telepathy-chat-window-config.pot
+$EXTRACTRC appearance-config.ui >> rc.cpp || exit 11
+$XGETTEXT appearance-config.cpp rc.cpp -o $podir/kcm_ktp_chat_appearance.pot
+rm -f rc.cpp
+
+$EXTRACTRC behavior-config.ui >> rc.cpp || exit 11
+$XGETTEXT behavior-config.cpp rc.cpp -o $podir/kcm_ktp_chat_behavior.pot
 rm -f rc.cpp

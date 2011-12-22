@@ -27,7 +27,7 @@
 
 #include <KEmoticons>
 
-#include "kdetelepathychat_export.h"
+#include "ktpchat_export.h"
 
 class AdiumThemeContentInfo;
 class AdiumThemeHeaderInfo;

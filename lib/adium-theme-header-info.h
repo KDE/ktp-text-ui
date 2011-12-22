@@ -24,7 +24,7 @@
 #include <QtCore/QUrl>
 #include <QtCore/QDateTime>
 
-#include "kdetelepathychat_export.h"
+#include "ktpchat_export.h"
 
 /** Containts all the information needed for the header generation from the Adium/Kopete templates */
 

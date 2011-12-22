@@ -5,7 +5,7 @@ if(TELEPATHY_LOGGER_QT4_FOUND)
     add_definitions( -DTELEPATHY_LOGGER_QT4_FOUND )
 endif()
 
-set(telepathy_chat_handler_lib_SRCS
+set(ktpchat_SRCS
         chat-widget.cpp
         chat-window-style.cpp
         chat-window-style-manager.cpp
@@ -21,7 +21,7 @@ set(telepathy_chat_handler_lib_SRCS
         logmanager.cpp
 )
 
-set(telepathy_chat_handler_lib_HDRS
+set(ktpchat_HDRS
     adium-theme-content-info.h
     adium-theme-header-info.h
     adium-theme-message-info.h
@@ -33,25 +33,25 @@ set(telepathy_chat_handler_lib_HDRS
     chat-window-style-manager.h
 )
 
-set(telepathy_chat_handler_lib_PRETTY_HDRS
-    KDETelepathy/AdiumThemeContentInfo
-    KDETelepathy/AdiumThemeHeaderInfo
-    KDETelepathy/AdiumThemeMessageInfo
-    KDETelepathy/AdiumThemeStatusInfo
-    KDETelepathy/AdiumThemeView
-    KDETelepathy/ChatStylePlistFileReader
-    KDETelepathy/ChatWidget
-    KDETelepathy/ChatWindowStyle
-    KDETelepathy/ChatWindowStyleManager
+set(ktpchat_PRETTY_HDRS
+    KTp/AdiumThemeContentInfo
+    KTp/AdiumThemeHeaderInfo
+    KTp/AdiumThemeMessageInfo
+    KTp/AdiumThemeStatusInfo
+    KTp/AdiumThemeView
+    KTp/ChatStylePlistFileReader
+    KTp/ChatWidget
+    KTp/ChatWindowStyle
+    KTp/ChatWindowStyleManager
 )
 
-set(telepathy_chat_handler_lib_UI
+set(ktpchat_UI
     chat-widget.ui
 )
 
-kde4_add_ui_files(telepathy_chat_handler_lib_SRCS ${telepathy_chat_handler_lib_UI})
+kde4_add_ui_files(ktpchat_SRCS ${ktpchat_UI})
 
-kde4_add_library(ktelepathy_chat_lib SHARED ${telepathy_chat_handler_lib_SRCS})
+kde4_add_library(ktpchat SHARED ${ktpchat_SRCS})
 
 # telepathy-logger-qt4 related stuff
 if(TELEPATHY_LOGGER_QT4_FOUND)
@@ -61,12 +61,12 @@ if(TELEPATHY_LOGGER_QT4_FOUND)
         ${TELEPATHY_LOGGER_QT4_INCLUDE_DIRS}
     )
 
-    target_link_libraries(ktelepathy_chat_lib
+    target_link_libraries(ktpchat
         ${TELEPATHY_LOGGER_QT4_LIBRARIES}
     )
 endif()
 
-target_link_libraries(ktelepathy_chat_lib
+target_link_libraries(ktpchat
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KDEUI_LIBS}
@@ -75,11 +75,11 @@ target_link_libraries(ktelepathy_chat_lib
     ${KDE4_KEMOTICONS_LIBS}
     ${KDE4_KCMUTILS_LIBS}
 )
-install(TARGETS ktelepathy_chat_lib ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
-        ${telepathy_chat_handler_lib_HDRS}
-        ${telepathy_chat_handler_lib_PRETTY_HDRS}
-        kdetelepathychat_export.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/KDETelepathy COMPONENT Devel
+        ${ktpchat_HDRS}
+        ${ktpchat_PRETTY_HDRS}
+        ktpchat_export.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}/KTp COMPONENT Devel
 )

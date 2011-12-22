@@ -20,7 +20,7 @@
 #ifndef CHATSEARCHBAR_H
 #define CHATSEARCHBAR_H
 
-#include "kdetelepathychat_export.h"
+#include "ktpchat_export.h"
 
 #include <QtWebKit/QWebPage>
 #include <QtGui/QWidget>

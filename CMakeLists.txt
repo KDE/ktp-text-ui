@@ -1,4 +1,4 @@
-project (TELEPATHY_KDE_TEXT_UI)
+project(ktp-text-ui)
 
 # Include our extra FindFoo.cmake files.
 set (CMAKE_MODULE_PATH

@@ -18,8 +18,8 @@
 
 #include "chat-style-installer.h"
 
-#include <KDETelepathy/ChatWindowStyleManager>
-#include <KDETelepathy/ChatStylePlistFileReader>
+#include <KTp/ChatWindowStyleManager>
+#include <KTp/ChatStylePlistFileReader>
 
 #include <KDebug>
 #include <KTemporaryFile>

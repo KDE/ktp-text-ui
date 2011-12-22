@@ -25,7 +25,7 @@
 #include <KPluginFactory>
 
 K_PLUGIN_FACTORY(KCMTelepathyChatBehaviorConfigFactory, registerPlugin<BehaviorConfig>();)
-K_EXPORT_PLUGIN(KCMTelepathyChatBehaviorConfigFactory("telepathy_chat_behavior_config", "telepathy-chat-window-config"))
+K_EXPORT_PLUGIN(KCMTelepathyChatBehaviorConfigFactory("ktp_chat_behavior", "kcm_ktp_chat_behavior"))
 
 
 BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
