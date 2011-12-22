@@ -32,7 +32,7 @@
 
 #include <TelepathyQt/ReceivedMessage>
 
-#include <KTelepathy/presence.h>
+#include <KTp/presence.h>
 
 class AdiumThemeContentInfo;
 class ChatSearchBar;

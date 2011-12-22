@@ -45,7 +45,7 @@
 #include <TelepathyQt/Connection>
 #include <TelepathyQt/Presence>
 
-#include <KTelepathy/presence.h>
+#include <KTp/presence.h>
 
 class ChatWidgetPrivate
 {

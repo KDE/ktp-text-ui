@@ -28,7 +28,7 @@
 #include <TelepathyQt/Channel>
 #include <TelepathyQt/Presence>
 
-#include <KTelepathy/presence.h>
+#include <KTp/presence.h>
 
 /** A model of all users in the channel.
   Also acts as a proxy for emiting presence and alias changes of any contacts in the channel
