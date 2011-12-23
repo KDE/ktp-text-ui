@@ -54,14 +54,12 @@ public:
     {
         isGroupChat = false;
         remoteContactIsTyping = false;
-        unreadMessages = 0;
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
     bool chatviewlInitialised;
     bool remoteContactIsTyping;
     QAction *showFormatToolbarAction;
     bool isGroupChat;
-    int unreadMessages;
     QString title;
     QString contactName;
     QString yourName;
@@ -322,7 +320,6 @@ QString ChatWidget::title() const
 QColor ChatWidget::titleColor() const
 {
     /*return a color to set the tab text as in order of importance
-
     typing
     unread messages
     user offline
@@ -336,7 +333,7 @@ QColor ChatWidget::titleColor() const
         return scheme.foreground(KColorScheme::PositiveText).color();
     }
 
-    if (d->unreadMessages > 0 && !isOnTop()) {
+    if (unreadMessageCount() > 0 && !isOnTop()) {
         kDebug() << "unread messages";
         return scheme.foreground(KColorScheme::ActiveText).color();
     }
@@ -357,13 +354,6 @@ QColor ChatWidget::titleColor() const
     return scheme.foreground(KColorScheme::NormalText).color();
 }
 
-int ChatWidget::unreadMessageCount() const
-{
-    kDebug() << title() << d->unreadMessages;
-
-    return d->unreadMessages;
-}
-
 void ChatWidget::toggleSearchBar() const
 {
     if(d->ui.searchBar->isVisible()) {
@@ -379,6 +369,8 @@ void ChatWidget::setupChannelSignals()
             SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
     connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
             SLOT(notifyAboutIncomingMessage(Tp::ReceivedMessage)));
+    connect(d->channel.data(), SIGNAL(pendingMessageRemoved(Tp::ReceivedMessage)),
+            SIGNAL(unreadMessagesChanged()));
     connect(d->channel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
             SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
     connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
@@ -399,15 +391,6 @@ void ChatWidget::setupContactModelSignals()
             SLOT(onContactAliasChanged(Tp::ContactPtr,QString)));
 }
 
-void ChatWidget::incrementUnreadMessageCount()
-{
-    kDebug();
-
-    d->unreadMessages++;
-
-    kDebug() << "emit" << d->unreadMessages;
-    Q_EMIT unreadMessagesChanged(d->unreadMessages);
-}
 
 void ChatWidget::onHistoryFetched(const QList<AdiumThemeContentInfo> &messages)
 {
@@ -427,14 +410,18 @@ void ChatWidget::onHistoryFetched(const QList<AdiumThemeContentInfo> &messages)
     d->logManager = 0;
 }
 
+int ChatWidget::unreadMessageCount() const
+{
+    return d->channel->messageQueue().size();
+}
 
-void ChatWidget::resetUnreadMessageCount()
+void ChatWidget::acknowledgeMessages()
 {
     kDebug();
-
-    if(d->unreadMessages > 0) {
-        d->unreadMessages = 0;
-        Q_EMIT unreadMessagesChanged(d->unreadMessages);
+    //if we're not initialised we can't have shown anything, even if we are on top, therefore ignore all requests to do so
+    if (d->chatviewlInitialised) {
+        //acknowledge everything in the message queue.
+        d->channel->acknowledge(d->channel->messageQueue());
     }
 }
 
@@ -572,16 +559,14 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
             d->ui.chatArea->addContentMessage(messageInfo);
         }
 
-        d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
-
-        if (!isOnTop()) {
-            incrementUnreadMessageCount();
+        //if the window is on top, ack straight away. Otherwise they stay in the message queue for acking when activated..
+        if (isOnTop()) {
+            d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
+        } else {
+            Q_EMIT unreadMessagesChanged();
         }
-
-        Q_EMIT messageReceived();
     }
 
-    //if the window isn't ready, we don't acknowledge the message. We process them as soon as we are ready.
 }
 
 void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)

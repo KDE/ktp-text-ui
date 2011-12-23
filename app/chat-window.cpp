@@ -255,7 +255,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
     }
 
     ChatTab* currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
-    currentChatTab->resetUnreadMessageCount();
+    currentChatTab->acknowledgeMessages();
     setWindowTitle(currentChatTab->title());
     setWindowIcon(currentChatTab->icon());
 
@@ -461,7 +461,7 @@ void ChatWindow::removeChatTabSignals(ChatTab* chatTab)
     disconnect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
     disconnect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
     disconnect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
-    disconnect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
+    disconnect(chatTab, SIGNAL(unreadMessagesChanged()), this, SLOT(onTabStateChanged()));
     disconnect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
     disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
 }
@@ -487,8 +487,8 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
     connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onTabStateChanged()));
     connect(chatTab, SIGNAL(userTypingChanged(bool)), this, SLOT(onUserTypingChanged()));
-    connect(chatTab, SIGNAL(unreadMessagesChanged(int)), this, SLOT(onTabStateChanged()));
-    connect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
+    connect(chatTab, SIGNAL(unreadMessagesChanged()), this, SLOT(onTabStateChanged()));
+    connect(chatTab, SIGNAL(contactPresenceChanged(KTp::Presence)), this, SLOT(onTabStateChanged()));
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
 }
 
@@ -669,7 +669,7 @@ bool ChatWindow::event(QEvent *e)
         //when the window is activated reset the message count on the active tab.
         ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
         Q_ASSERT(currChat);
-        currChat->resetUnreadMessageCount();
+        currChat->acknowledgeMessages();
     }
 
     return KXmlGuiWindow::event(e);

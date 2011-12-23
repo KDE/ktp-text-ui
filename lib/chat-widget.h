@@ -90,10 +90,9 @@ public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
 
-    /** Clear the list of unread messages
-        call this when the widget is activated by the user.
+    /** Mark that the following messages have been seen by the user.
       */
-    void resetUnreadMessageCount();
+    void acknowledgeMessages();
 
 protected:
     void changeEvent(QEvent *e);
@@ -134,8 +133,8 @@ Q_SIGNALS:
     /** Emmitted if the icon for this channel changes*/
     void iconChanged(const KIcon &icon);
 
-    /** Emmited whenever a message is received in this channel*/
-    void messageReceived();
+    /** Emmited whenever a message is received in this channel. It is up to the parent application to acknowledge these messages*/
+    void messageReceived(const Tp::ReceivedMessage &message);
 
     /** emitted when searching for text */
     void searchTextComplete(bool found);
@@ -145,7 +144,7 @@ Q_SIGNALS:
 
     void contactPresenceChanged(KTp::Presence presence);
 
-    void unreadMessagesChanged(int messages);
+    void unreadMessagesChanged();
 
     /** Emitted when a notification for the chat window has been activated*/
     void notificationClicked();
@@ -165,7 +164,6 @@ private:
     /** connects necessary signals for the contactModel */
     void setupContactModelSignals();
 
-    void incrementUnreadMessageCount();
     virtual bool isOnTop() const;
 
     ChatWidgetPrivate * const d;
