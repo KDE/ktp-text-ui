@@ -113,7 +113,7 @@ target_link_libraries(declarativeplugins
 	${QT_QTSCRIPT_LIBRARY}
 	${QT_QTDECLARATIVE_LIBRARY}
 	${TELEPATHY_QT4_LIBRARIES}
-	ktelepathy_chat_lib
+	ktpchat
 )
 
 install(TARGETS declarativeplugins DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/telepathy/declarativeplugins)

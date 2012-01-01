@@ -22,9 +22,9 @@
 
 #include <KDebug>
 
-#include <TelepathyQt4/ChannelClassSpec>
-#include <TelepathyQt4/TextChannel>
-#include <TelepathyQt4/ClientRegistrar>
+#include <TelepathyQt/ChannelClassSpec>
+#include <TelepathyQt/TextChannel>
+#include <TelepathyQt/ClientRegistrar>
 
 
 static inline Tp::ChannelClassSpecList channelClassList()

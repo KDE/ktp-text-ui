@@ -16,11 +16,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "kdetelepathychat_export.h"
-
 #include "conversation-target.h"
-#include <TelepathyQt4/AvatarData>
-#include <TelepathyQt4/Presence>
+#include <TelepathyQt/AvatarData>
+#include <TelepathyQt/Presence>
 #include <KDebug>
 #include <KIconLoader>
 

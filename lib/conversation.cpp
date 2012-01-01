@@ -20,7 +20,7 @@
 #include "conversation.h"
 #include "messages-model.h"
 
-#include <TelepathyQt4/TextChannel>
+#include <TelepathyQt/TextChannel>
 #include <KDebug>
 #include "conversation-target.h"
 

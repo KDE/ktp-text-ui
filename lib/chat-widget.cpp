@@ -855,13 +855,6 @@ void ChatWidget::onFormatColorReleased()
     d->ui.sendMessageBox->setTextColor(color);
 }
 
-
-KIcon ChatWidget::iconForPresence(Tp::ConnectionPresenceType presence)
-{
-
-    return KIcon(iconSourceForPresence(presence));
-}
-
 bool ChatWidget::isUserTyping() const
 {
     return d->remoteContactIsTyping;

@@ -20,7 +20,7 @@
 #include "messages-model.h"
 
 #include <KDebug>
-#include <TelepathyQt4/ReceivedMessage>
+#include <TelepathyQt/ReceivedMessage>
 
 class MessageItem {
 public:
