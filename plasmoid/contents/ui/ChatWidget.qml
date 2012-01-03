@@ -71,7 +71,7 @@ Item {
             bottom: input.top
 
             leftMargin: 5
-            rightMargin: leftMargin
+            rightMargin: chatArea.anchors.leftMargin
         }
 
 //         PlasmaComponents.Highlight { anchors.fill: chatArea }

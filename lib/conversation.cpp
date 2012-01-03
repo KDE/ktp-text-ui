@@ -29,10 +29,11 @@ class Conversation::ConversationPrivate
 public:
     MessagesModel* model;
     ConversationTarget* target;
-    Tp::AccountPtr account;
+//     Tp::AccountPtr account;
 };
 
 Conversation::Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account) :
+        Queable(),
         d (new ConversationPrivate)
 {
     kDebug();
@@ -42,7 +43,8 @@ Conversation::Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account) :
 
     d->target = new ConversationTarget(channel->targetContact());
 
-    d->account = account;
+    connect(model(), SIGNAL(unreadCountChanged(int)), SLOT(onUnreadMessagesChanged()));
+//     d->account = account;
 }
 
 Conversation::Conversation(QObject* parent) : QObject(parent)
@@ -59,6 +61,16 @@ MessagesModel* Conversation::model() const
 ConversationTarget* Conversation::target() const
 {
     return d->target;
+}
+
+void Conversation::onUnreadMessagesChanged()
+{
+    push();
+}
+
+void Conversation::pop()
+{
+    Q_EMIT popoutRequested();
 }
 
 Conversation::~Conversation()

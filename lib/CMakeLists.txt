@@ -5,6 +5,7 @@ set(ktpchat_SRCS
         conversation.cpp
         conversation-target.cpp
         conversations-model.cpp
+        conversation-que-manager.cpp
         adium-theme-view.cpp
         adium-theme-header-info.cpp
         adium-theme-message-info.cpp
@@ -32,6 +33,7 @@ set(ktpchat_HDRS
     chat-window-style-manager.h
     conversation.h
     conversation-target.h
+    conversation-que-manager.h
     conversations-model.h
     messages-model.h
 #     static-conversation.h

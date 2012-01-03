@@ -1,6 +1,5 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) 2012  <copyright holder> <email>
+    Copyright (C) 2011  Lasath Fernando <kde@lasath.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -24,21 +23,24 @@
 #include <QtCore/QObject>
 #include <KAction>
 
+class ConversationQueManager;
 class Queable {
     friend class ConversationQueManager;
 public:
-    explicit Queable(ConversationQueManager* que = 0);
-
+    Queable(ConversationQueManager* que = 0);
 private:
     ConversationQueManager* m_queManager;
 
 protected:
+    virtual ~Queable();
+
     void push();
     virtual void pop() = 0;
 };
 
 class ConversationQueManager : public QObject
 {
+Q_OBJECT
     friend class Queable;
 public:
     static ConversationQueManager* instance();

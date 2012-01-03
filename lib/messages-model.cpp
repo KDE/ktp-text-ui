@@ -37,7 +37,7 @@ public:
     } type;
 
     MessageItem(QString user, QString text, QDateTime time, MessageType type, QString messageId)
-     : user(user), text(text), time(time), type(type), id(messageId)
+     : user(user), text(text), time(time), id(messageId), type(type)
     {
         if(this->text.endsWith(QLatin1String("\n"))) {
             this->text.chop(1);
@@ -252,7 +252,7 @@ void MessagesModel::setVisibleToUser(bool visible)
 
     if(d->visible != visible) {
         d->visible = visible;
-        Q_EMIT visibleToUserChanged(visible);
+        Q_EMIT visibleToUserChanged(d->visible);
     }
 
     if(visible) {
@@ -276,6 +276,9 @@ void MessagesModel::printallmessages()
     Q_FOREACH(MessageItem msg, d->messages) {
         kDebug() << msg.text;
     }
+    beginResetModel();
+    d->messages.clear();
+    endResetModel();
 }
 
 #include "moc_messages-model.cpp"

@@ -27,10 +27,11 @@
 #include <TelepathyQt/TextChannel>
 // #include "conversation-model.h"
 #include <KIcon>
+#include "conversation-que-manager.h"
 
 class ConversationTarget;
 class MessagesModel;
-class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject
+class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject, public Queable
 {
 Q_OBJECT
 
@@ -49,6 +50,11 @@ public:
 Q_SIGNALS:
     void modelChanged(MessagesModel* newModel);
     void targetChanged(ConversationTarget* target);
+    void popoutRequested();
+
+private Q_SLOTS:
+    virtual void pop();
+    void onUnreadMessagesChanged();
 
 private:
     class ConversationPrivate;

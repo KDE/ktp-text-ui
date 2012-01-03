@@ -36,11 +36,18 @@ Item {
                     height: 350
                     conv: model.conversation
 
+                    visible: model.conversation.model.visibleToUser
+
                     onCloseRequested: conv.popupApplet()
                     onConversationEndRequested: {
                         model.conversation.model.printallmessages();
                     }
                 }
+            }
+
+            Connections {
+                target: model.conversation
+                onPopoutRequested: popupApplet();
             }
 
             function popupApplet() {
@@ -61,6 +68,10 @@ Item {
                 }
             }
         }
+    }
+
+    function derp() {
+        console.log("deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrp!");
     }
 
 //     height: parent.height

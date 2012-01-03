@@ -1,6 +1,5 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) 2012  <copyright holder> <email>
+    Copyright (C) 2011  Lasath Fernando <kde@lasath.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -19,17 +18,7 @@
 
 
 #include "conversation-que-manager.h"
-
-
-
-Queable::Queable(ConversationQueManager* que)
-{
-    if(que) {
-        m_queManager = que;
-    } else {
-        m_queManager = ConversationQueManager::instance();
-    }
-}
+#include <KDebug>
 
 void Queable::push()
 {
@@ -38,12 +27,25 @@ void Queable::push()
     }
 }
 
+Queable::~Queable()
+{
+
+}
+
+Queable::Queable(ConversationQueManager* que)
+    : m_queManager(que)
+{
+    if(!que) {
+        m_queManager = ConversationQueManager::instance();
+    }
+}
+
 ConversationQueManager* ConversationQueManager::instance()
 {
     static ConversationQueManager* m_instance = 0;
 
     if(!m_instance) {
-        m_instance = ConversationQueManager();
+        m_instance = new ConversationQueManager();
     }
 
     return m_instance;
@@ -51,15 +53,20 @@ ConversationQueManager* ConversationQueManager::instance()
 
 ConversationQueManager::ConversationQueManager(QObject* parent): QObject(parent)
 {
+    kDebug();
+
     //FIXME: think of a good name for this. What did Kopete call it?
-    m_gloablAction = new KAction("cycle-unread-conversations");
-    m_gloablAction->setGlobalShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_I);
+    m_gloablAction = new KAction(this);
+    m_gloablAction->setObjectName(QLatin1String("next-unread-conversation"));
+    m_gloablAction->setGlobalShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_J), KAction::ActiveShortcut | KAction::DefaultShortcut, KAction::NoAutoloading);
 
     connect(m_gloablAction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), SLOT(popConversation()));
 }
 
 void ConversationQueManager::popConversation()
 {
+    kDebug();
+
     if(!que.isEmpty()) {
         que.takeLast()->pop();
     }
