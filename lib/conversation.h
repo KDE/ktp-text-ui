@@ -31,12 +31,13 @@
 
 class ConversationTarget;
 class MessagesModel;
-class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject, public Queable
+class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject
 {
 Q_OBJECT
 
-Q_PROPERTY(MessagesModel* model READ model NOTIFY modelChanged);
 Q_PROPERTY(ConversationTarget* target READ target NOTIFY targetChanged);
+//TODO: rename this to messages
+Q_PROPERTY(MessagesModel* model READ model NOTIFY modelChanged);
 
 public:
     Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account);
@@ -50,11 +51,6 @@ public:
 Q_SIGNALS:
     void modelChanged(MessagesModel* newModel);
     void targetChanged(ConversationTarget* target);
-    void popoutRequested();
-
-private Q_SLOTS:
-    virtual void pop();
-    void onUnreadMessagesChanged();
 
 private:
     class ConversationPrivate;

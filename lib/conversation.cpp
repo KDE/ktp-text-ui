@@ -33,7 +33,6 @@ public:
 };
 
 Conversation::Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account) :
-        Queable(),
         d (new ConversationPrivate)
 {
     kDebug();
@@ -43,7 +42,7 @@ Conversation::Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account) :
 
     d->target = new ConversationTarget(channel->targetContact());
 
-    connect(model(), SIGNAL(unreadCountChanged(int)), SLOT(onUnreadMessagesChanged()));
+//     connect(model(), SIGNAL(unreadCountChanged(int)), SLOT(onUnreadMessagesChanged()));
 //     d->account = account;
 }
 
@@ -63,15 +62,15 @@ ConversationTarget* Conversation::target() const
     return d->target;
 }
 
-void Conversation::onUnreadMessagesChanged()
-{
-    push();
-}
-
-void Conversation::pop()
-{
-    Q_EMIT popoutRequested();
-}
+// void Conversation::onUnreadMessagesChanged()
+// {
+//     enqueSelf();
+// }
+// 
+// void Conversation::selfDequed()
+// {
+//     Q_EMIT popoutRequested();
+// }
 
 Conversation::~Conversation()
 {

@@ -13,7 +13,7 @@ Item {
     property bool pressed: false
     property string overlayText: "0"
 
-    signal clicked
+    signal toggled
 
 //     Rectangle {
 //         anchors.fill: parent
@@ -80,15 +80,20 @@ Item {
         hoverEnabled: true
 
         //move le onClicked into main
-        onClicked: base.clicked()
+        onClicked: toggle();
 
         preventStealing: true
     }
 
+    function toggle() {
+        base.pressed = !base.pressed;
+        base.toggled();
+    }
+
     states: [
         State {
-            name: "focus"
-            when: pressed
+            name: "pressed"
+            when: base.pressed
             PropertyChanges {
                 target: canvas
                 prefix: "focus"

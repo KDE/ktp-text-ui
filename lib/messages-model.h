@@ -24,9 +24,10 @@
 
 #include <QAbstractItemModel>
 #include <TelepathyQt/TextChannel>
+#include "conversation-que-manager.h"
 
 
-class KDE_TELEPATHY_CHAT_EXPORT MessagesModel : public QAbstractListModel
+class KDE_TELEPATHY_CHAT_EXPORT MessagesModel : public QAbstractListModel, public Queable
 {
 Q_OBJECT
 Q_PROPERTY(bool visibleToUser READ isVisibleToUser WRITE setVisibleToUser NOTIFY visibleToUserChanged);
@@ -65,7 +66,9 @@ public:
 Q_SIGNALS:
     void textChannelChanged(Tp::TextChannelPtr newChannel);
     void visibleToUserChanged(bool visible);
+    //TODO: figure out how to check if unread messages have been acknowledged by something else 
     void unreadCountChanged(int unreadMesssagesCount);
+    void popoutRequested();
 
 public Q_SLOTS:
     Tp::PendingSendMessage* sendNewMessage(QString message);
@@ -78,6 +81,7 @@ private Q_SLOTS:
 private:
 	void setupChannelSignals(Tp::TextChannelPtr channel);
 	void removeChannelSignals(Tp::TextChannelPtr channel);
+    virtual void selfDequed();
 
 	class ConversationModelPrivate;
 	ConversationModelPrivate *d;

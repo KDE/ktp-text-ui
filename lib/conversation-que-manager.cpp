@@ -20,16 +20,24 @@
 #include "conversation-que-manager.h"
 #include <KDebug>
 
-void Queable::push()
+class ConversationQueManager::ConversationQueManagerPrivate {
+public:
+    QList<Queable*> que;
+    KAction* gloablAction;
+};
+
+void Queable::enqueSelf()
 {
-    if(!m_queManager->que.contains(this)) {
-        m_queManager->que.append(this);
-    }
+    m_queManager->enque(this);
+}
+
+void Queable::removeSelfFromQue()
+{
+    m_queManager->remove(this);
 }
 
 Queable::~Queable()
 {
-
 }
 
 Queable::Queable(ConversationQueManager* que)
@@ -51,23 +59,44 @@ ConversationQueManager* ConversationQueManager::instance()
     return m_instance;
 }
 
-ConversationQueManager::ConversationQueManager(QObject* parent): QObject(parent)
+ConversationQueManager::ConversationQueManager(QObject* parent):
+    QObject(parent),
+    d(new ConversationQueManagerPrivate)
 {
     kDebug();
 
     //FIXME: think of a good name for this. What did Kopete call it?
-    m_gloablAction = new KAction(this);
-    m_gloablAction->setObjectName(QLatin1String("next-unread-conversation"));
-    m_gloablAction->setGlobalShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_J), KAction::ActiveShortcut | KAction::DefaultShortcut, KAction::NoAutoloading);
+    d->gloablAction = new KAction(this);
+    d->gloablAction->setObjectName(QLatin1String("next-unread-conversation"));
+    d->gloablAction->setGlobalShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_I)/*, KAction::ActiveShortcut | KAction::DefaultShortcut, KAction::NoAutoloading*/);
 
-    connect(m_gloablAction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), SLOT(popConversation()));
+    connect(d->gloablAction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), SLOT(dequeNext()));
 }
 
-void ConversationQueManager::popConversation()
+void ConversationQueManager::dequeNext()
 {
     kDebug();
 
-    if(!que.isEmpty()) {
-        que.takeLast()->pop();
+    if(!d->que.isEmpty()) {
+        d->que.takeLast()->selfDequed();
     }
+}
+
+void ConversationQueManager::enque(Queable* item)
+{
+    if(!d->que.contains(item)) {
+        d->que.append(item);
+    }
+}
+
+void ConversationQueManager::remove(Queable* item)
+{
+    if(d->que.contains(item)) {
+        d->que.removeAll(item);
+    }
+}
+
+ConversationQueManager::~ConversationQueManager()
+{
+    delete d;
 }

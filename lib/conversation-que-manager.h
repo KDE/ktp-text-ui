@@ -24,32 +24,41 @@
 #include <KAction>
 
 class ConversationQueManager;
-class Queable {
-    friend class ConversationQueManager;
-public:
-    Queable(ConversationQueManager* que = 0);
-private:
-    ConversationQueManager* m_queManager;
+class Queable
+{
+friend class ConversationQueManager;
 
 protected:
+    Queable(ConversationQueManager* que = 0);
     virtual ~Queable();
 
-    void push();
-    virtual void pop() = 0;
+    void enqueSelf();
+    void removeSelfFromQue();
+    virtual void selfDequed() = 0;
+
+private:
+    ConversationQueManager* m_queManager;
 };
+
 
 class ConversationQueManager : public QObject
 {
 Q_OBJECT
-    friend class Queable;
+
 public:
     static ConversationQueManager* instance();
+    void enque(Queable* item);
+    void remove(Queable* item);
+
+public Q_SLOTS:
+    void dequeNext();
+
 private:
-    QList<Queable*> que;
-    KAction* m_gloablAction;
     explicit ConversationQueManager(QObject* parent = 0);
-private Q_SLOTS:
-    void popConversation();
+    virtual ~ConversationQueManager();
+
+    class ConversationQueManagerPrivate;
+    ConversationQueManagerPrivate *d;
 };
 
 #endif // CONVERSATION_QUE_MANAGER_H

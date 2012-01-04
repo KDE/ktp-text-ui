@@ -6,7 +6,7 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 // import "createDialog.js" as MyScript
 
 Item {
-
+    id: top
     ListView {
         id: base
         anchors.fill: parent
@@ -24,49 +24,70 @@ Item {
 //             text: model.conversation.target.nick
             overlayText: model.conversation.model.unreadCount
 
-            pressed: dialog.visible
-            onClicked: popupApplet();
+//             pressed: model.conversation.model.visibleToUser
+//             onClicked: popupApplet();
 
             //FIXME: put in a loader to not slow down the model
             PlasmaCore.Dialog {
                 id: dialog
                 windowFlags: Qt.Dialog
+                visible: conv.pressed
+
                 mainItem: ChatWidget {
                     width: 250
                     height: 350
                     conv: model.conversation
 
-                    visible: model.conversation.model.visibleToUser
-
-                    onCloseRequested: conv.popupApplet()
+                    onCloseRequested: {
+                        conv.pressed = false;
+                    }
                     onConversationEndRequested: {
                         model.conversation.model.printallmessages();
                     }
+                    Binding {
+                        target: model.conversation.model
+                        property: "visibleToUser"
+                        value: dialog.visible
+                    }
                 }
+
+//                 x: top.x == top.y ? popupPosition()
             }
 
             Connections {
-                target: model.conversation
-                onPopoutRequested: popupApplet();
+                target: model.conversation.model
+                onPopoutRequested: {
+                    conv.pressed = true;
+                }
             }
 
-            function popupApplet() {
-                if(dialog.visible == false) {
+            onToggled: {
+                if(pressed) {
                     var point = dialog.popupPosition(conv, Qt.AlignBottom);
                     console.log("Showing dialog at (" + point.x + "," + point.y + ")");
 
                     dialog.x = point.x;
                     dialog.y = point.y;
-
-                    dialog.visible = true;
-                    model.conversation.model.visibleToUser = true;
-                } else {
-                    console.log("height = " + dialog.height);
-                    console.log("width = " + dialog.width);
-                    dialog.visible = false;
-                    model.conversation.model.visibleToUser = false;
                 }
             }
+
+//             function popupApplet() {
+//                 if(model.conversation.model.visibleToUser == false) {
+//                     var point = dialog.popupPosition(conv, Qt.AlignBottom);
+//                     console.log("Showing dialog at (" + point.x + "," + point.y + ")");
+// 
+//                     dialog.x = point.x;
+//                     dialog.y = point.y;
+// 
+// //                     dialog.visible = true;
+//                     model.conversation.model.visibleToUser = true;
+//                 } else {
+//                     console.log("height = " + dialog.height);
+//                     console.log("width = " + dialog.width);
+// //                     dialog.visible = false;
+//                     model.conversation.model.visibleToUser = false;
+//                 }
+//             }
         }
     }
 

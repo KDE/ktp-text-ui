@@ -142,6 +142,7 @@ void MessagesModel::onMessageReceived(Tp::ReceivedMessage message)
         if(d->visible) {
             acknowledgeAllMessages();
         } else {
+            enqueSelf();
             Q_EMIT unreadCountChanged(unreadCount);
         }
     }
@@ -243,7 +244,13 @@ void MessagesModel::acknowledgeAllMessages()
     kDebug() << "Conversation Visible, Acknowledging " << que.size() << " messages.";
 
     d->textChannel->acknowledge(que);
+    removeSelfFromQue();
     Q_EMIT unreadCountChanged(que.size());
+}
+
+void MessagesModel::selfDequed()
+{
+    Q_EMIT popoutRequested();
 }
 
 void MessagesModel::setVisibleToUser(bool visible)
