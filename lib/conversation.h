@@ -35,9 +35,9 @@ class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject
 {
 Q_OBJECT
 
-Q_PROPERTY(ConversationTarget* target READ target NOTIFY targetChanged);
+Q_PROPERTY(ConversationTarget* target READ target CONSTANT);
 //TODO: rename this to messages
-Q_PROPERTY(MessagesModel* model READ model NOTIFY modelChanged);
+Q_PROPERTY(MessagesModel* model READ model CONSTANT);
 
 public:
     Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account);
@@ -47,10 +47,6 @@ public:
     //FIXME: rename model to messages
     MessagesModel* model() const;
     ConversationTarget* target() const;
-
-Q_SIGNALS:
-    void modelChanged(MessagesModel* newModel);
-    void targetChanged(ConversationTarget* target);
 
 private:
     class ConversationPrivate;

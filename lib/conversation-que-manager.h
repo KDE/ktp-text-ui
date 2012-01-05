@@ -29,7 +29,7 @@ class Queable
 friend class ConversationQueManager;
 
 protected:
-    Queable(ConversationQueManager* que = 0);
+    Queable(ConversationQueManager* queue = 0);
     virtual ~Queable();
 
     void enqueSelf();

@@ -30,33 +30,29 @@
 
 class KDE_TELEPATHY_CHAT_EXPORT ConversationTarget : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-Q_PROPERTY(QIcon avatar READ avatar NOTIFY avatarChanged);
-Q_PROPERTY(QString nick READ nick NOTIFY nickChanged);
-Q_PROPERTY(QIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
-Q_PROPERTY(QString presenceIconSource READ presenceIconSource NOTIFY presenceIconSourceChanged);
-Q_PROPERTY(QString id READ id)
-
-//turns out you can't have non QObjects as properties
-// Q_PROPERTY(Tp::ContactPtr contact READ contact WRITE setContact NOTIFY contactChanged);
+    Q_PROPERTY(QIcon avatar READ avatar NOTIFY avatarChanged);
+    Q_PROPERTY(QString nick READ nick NOTIFY nickChanged);
+    Q_PROPERTY(KIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
+    Q_PROPERTY(QString presenceIconSource READ presenceIconSource NOTIFY presenceIconSourceChanged);
+    Q_PROPERTY(QString id READ id)
 
 public:
-    ConversationTarget( Tp::ContactPtr contact = Tp::ContactPtr());
+    ConversationTarget(Tp::ContactPtr contact = Tp::ContactPtr());
     virtual ~ConversationTarget();
 
     QIcon   avatar() const;
     QString id() const;
     QString nick() const;
-    QIcon   presenceIcon() const;
+    KIcon   presenceIcon() const;
     QString presenceIconSource() const;
 
     Tp::ContactPtr contact() const;
-    void setContact(Tp::ContactPtr contact);
-  
+    void setContact(const Tp::ContactPtr &contact);
+
     static QString iconSourceForPresence(Tp::ConnectionPresenceType presence);
 
-    
 Q_SIGNALS:
     void avatarChanged(QIcon avatar);
     void nickChanged(QString nick);
@@ -66,8 +62,8 @@ Q_SIGNALS:
     void contactChanged(Tp::ContactPtr contact);
 
 private Q_SLOTS:
-    void onAvatarDataChanged ( Tp::AvatarData );
-    void onPresenceChanged ( Tp::Presence );
+    void onAvatarDataChanged(const Tp::AvatarData&);
+    void onPresenceChanged(const Tp::Presence&);
 
 private:
     void setupContactSignals(Tp::ContactPtr contact);
@@ -78,3 +74,4 @@ private:
 };
 
 #endif // CONVERSATION_TARGET_H
+// kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on; 

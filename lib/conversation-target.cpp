@@ -67,7 +67,7 @@ QString ConversationTarget::nick() const
     return d->contact->alias();
 }
 
-QIcon ConversationTarget::presenceIcon() const
+KIcon ConversationTarget::presenceIcon() const
 {
     return KIcon(presenceIconSource());
 }
@@ -106,13 +106,13 @@ QString ConversationTarget::iconSourceForPresence(Tp::ConnectionPresenceType pre
 }
 
 
-void ConversationTarget::onPresenceChanged(Tp::Presence)
+void ConversationTarget::onPresenceChanged(const Tp::Presence&)
 {
     Q_EMIT presenceIconSourceChanged(presenceIconSource());
     Q_EMIT presenceIconChanged(presenceIcon());
 }
 
-void ConversationTarget::onAvatarDataChanged(Tp::AvatarData)
+void ConversationTarget::onAvatarDataChanged(const Tp::AvatarData&)
 {
     Q_EMIT avatarChanged(avatar());
 }
@@ -122,7 +122,7 @@ Tp::ContactPtr ConversationTarget::contact() const
     return d->contact;
 }
 
-void ConversationTarget::setContact(Tp::ContactPtr contact)
+void ConversationTarget::setContact(const Tp::ContactPtr &contact)
 {
     if (d->contact) {
         removeContactSignals(d->contact);

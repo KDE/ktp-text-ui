@@ -28,15 +28,15 @@ class ConversationsModel::ConversationsModelPrivate
 {
 public:
     TelepathyTextObserver watcher;
-    QList<Conversation*> data;
+    QList<Conversation*> conversations;
 };
 
 QVariant ConversationsModel::data ( const QModelIndex& index, int role ) const
 {
     QVariant result;
-    if(index.row() >= 0 && index.row() < d->data.count()) {
+    if(index.row() >= 0 && index.row() < d->conversations.count()) {
         Q_ASSERT(role == ConversationRole);
-        result = QVariant::fromValue<QObject*>(d->data[index.row()]);
+        result = QVariant::fromValue<QObject*>(d->conversations[index.row()]);
         kDebug() << "returning value " << result;
     }
     return result;
@@ -44,7 +44,7 @@ QVariant ConversationsModel::data ( const QModelIndex& index, int role ) const
 
 int ConversationsModel::rowCount ( const QModelIndex& parent ) const
 {
-    return d->data.count();
+    return d->conversations.count();
 }
 
 ConversationsModel::ConversationsModel() :
@@ -57,19 +57,25 @@ ConversationsModel::ConversationsModel() :
     QObject::connect(&d->watcher, SIGNAL(newConversation(Conversation*)), SLOT(onInconmingConversation(Conversation*)));
 }
 
-void ConversationsModel::onInconmingConversation ( Conversation* convo )
+void ConversationsModel::onInconmingConversation ( Conversation* newConvo )
 {
     bool found = false;
-    Q_FOREACH(Conversation *con, d->data) {
-        if(con->target()->id() == convo->target()->id()) {
-            con->model()->setTextChannel(convo->model()->textChannel());
-            found = true;
+    Tp::TextChannelPtr newChannel = newConvo->model()->textChannel();
+    if (!newChannel->targetHandleType() == Tp::HandleTypeNone) {
+
+        //loop through all tabs checking for matches
+        Q_FOREACH(Conversation *convo, d->conversations) {
+            if (convo->target()->id() == newChannel->targetId()
+            && convo->model()->textChannel()->targetHandleType() == newChannel->targetHandleType()) {
+                found = true;
+                break;
+            }
         }
     }
 
     if(!found) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
-        d->data.append(convo);
+        d->conversations.append(newConvo);
         endInsertRows();
     }
 }

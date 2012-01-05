@@ -22,7 +22,8 @@
 #include <KDebug>
 #include <TelepathyQt/ReceivedMessage>
 
-class MessageItem {
+class MessageItem
+{
 public:
     QString user;
     QString text;
@@ -37,15 +38,15 @@ public:
     } type;
 
     MessageItem(QString user, QString text, QDateTime time, MessageType type, QString messageId)
-     : user(user), text(text), time(time), id(messageId), type(type)
-    {
-        if(this->text.endsWith(QLatin1String("\n"))) {
+            : user(user), text(text), time(time), id(messageId), type(type) {
+        if (this->text.endsWith(QLatin1String("\n"))) {
             this->text.chop(1);
         }
     }
 };
 
-class MessagesModel::ConversationModelPrivate {
+class MessagesModel::ConversationModelPrivate
+{
 public:
     Tp::TextChannelPtr textChannel;
     QList<MessageItem> messages;
@@ -53,8 +54,8 @@ public:
 };
 
 MessagesModel::MessagesModel(QObject* parent):
-    QAbstractListModel(parent),
-    d(new ConversationModelPrivate)
+        QAbstractListModel(parent),
+        d(new ConversationModelPrivate)
 {
     kDebug();
 
@@ -73,9 +74,9 @@ Tp::TextChannelPtr MessagesModel::textChannel()
     return d->textChannel;
 }
 
-bool MessagesModel::verifyPendingOperation ( Tp::PendingOperation* op )
+bool MessagesModel::verifyPendingOperation(Tp::PendingOperation* op)
 {
-    if(op->isError()) {
+    if (op->isError()) {
         kWarning() << op->errorName() << "+" << op->errorMessage();
         return false;
     }
@@ -85,11 +86,11 @@ bool MessagesModel::verifyPendingOperation ( Tp::PendingOperation* op )
 void MessagesModel::setupChannelSignals(Tp::TextChannelPtr channel)
 {
     QObject::connect(channel.constData(),
-                    SIGNAL(messageReceived(Tp::ReceivedMessage)),
-                    SLOT(onMessageReceived(Tp::ReceivedMessage)));
+                     SIGNAL(messageReceived(Tp::ReceivedMessage)),
+                     SLOT(onMessageReceived(Tp::ReceivedMessage)));
     QObject::connect(channel.constData(),
-                    SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
-                    SLOT(onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
+                     SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
+                     SLOT(onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
 }
 
 void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
@@ -97,7 +98,7 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
     kDebug();
     setupChannelSignals(channel);
 
-    if(d->textChannel) {
+    if (d->textChannel) {
         removeChannelSignals(channel);
     }
     //FIXME: check messageQue for any lost messages
@@ -105,15 +106,17 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
 
     Q_EMIT textChannelChanged(channel);
 
-    QList<Tp::ReceivedMessage> que = channel->messageQueue();
-    Q_FOREACH(Tp::ReceivedMessage message, que) {
+    QList<Tp::ReceivedMessage> queue
+    = channel->messageQueue();
+    Q_FOREACH(Tp::ReceivedMessage message, queue
+             ) {
         bool messageAlreadyInModel = false;
         Q_FOREACH(MessageItem current, d->messages) {
-            if(current.id == message.messageToken()) {
+            if (current.id == message.messageToken()) {
                 messageAlreadyInModel = true;
             }
         }
-        if(!messageAlreadyInModel) {
+        if (!messageAlreadyInModel) {
             onMessageReceived(message);
         }
     }
@@ -125,21 +128,21 @@ void MessagesModel::onMessageReceived(Tp::ReceivedMessage message)
     kDebug() << "unreadMessagesCount =" << unreadCount;
     kDebug() << "text =" << message.text();
 
-    if(message.messageType() == Tp::ChannelTextMessageTypeNormal) {
+    if (message.messageType() == Tp::ChannelTextMessageTypeNormal) {
         int length = rowCount();
         beginInsertRows(QModelIndex(), length, length);
 
         d->messages.append(MessageItem(
-                message.sender()->alias(),
-                message.text(),
-                message.received(),
-                MessageItem::Incoming,
-                message.messageToken()
-        ));
+                               message.sender()->alias(),
+                               message.text(),
+                               message.received(),
+                               MessageItem::Incoming,
+                               message.messageToken()
+                           ));
 
         endInsertRows();
 
-        if(d->visible) {
+        if (d->visible) {
             acknowledgeAllMessages();
         } else {
             enqueSelf();
@@ -159,12 +162,12 @@ void MessagesModel::onMessageSent(Tp::Message message, Tp::MessageSendingFlags f
     kDebug() << "text =" << message.text();
 
     d->messages.append(MessageItem(
-        tr("Me"),   //FIXME : use actual nickname from Tp::AccountPtr
-        message.text(),
-        message.sent(),
-        MessageItem::Outgoing,
-        message.messageToken()
-    ));
+                           tr("Me"),   //FIXME : use actual nickname from Tp::AccountPtr
+                           message.text(),
+                           message.sent(),
+                           MessageItem::Outgoing,
+                           message.messageToken()
+                       ));
 
     endInsertRows();
 }
@@ -173,22 +176,22 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 {
     QVariant result;
 
-    if(index.row() < d->messages.size()) {
+    if (index.row() < d->messages.size()) {
         MessageItem* requestedData = &d->messages[index.row()];
 
-        switch(role) {
-            case UserRole:
-                result = requestedData->user;
-                break;
-            case TextRole:
-                result = requestedData->text;
-                break;
-            case TypeRole:
-                result = requestedData->type;
-                break;
-            case TimeRole:
-                result = requestedData->time;
-                break;
+        switch (role) {
+        case UserRole:
+            result = requestedData->user;
+            break;
+        case TextRole:
+            result = requestedData->text;
+            break;
+        case TypeRole:
+            result = requestedData->type;
+            break;
+        case TimeRole:
+            result = requestedData->time;
+            break;
         };
     } else {
         kError() << "Attempting to access data at invalid index (" << index << ")";
@@ -203,19 +206,15 @@ int MessagesModel::rowCount(const QModelIndex& parent) const
     return d->messages.size();
 }
 
-Tp::PendingSendMessage* MessagesModel::sendNewMessage ( QString message )
+void MessagesModel::sendNewMessage(QString message)
 {
-    Tp::PendingSendMessage* msg = 0;
-
-    if(message.isEmpty()) {
+    if (message.isEmpty()) {
         kWarning() << "Attempting to send empty string";
     } else {
-        msg = d->textChannel->send(message);
-        connect(msg, SIGNAL(finished(Tp::PendingOperation*)),
+        connect(d->textChannel->send(message),
+                SIGNAL(finished(Tp::PendingOperation*)),
                 SLOT(verifyPendingOperation(Tp::PendingOperation*)));
     }
-
-    return msg;
 }
 
 void MessagesModel::removeChannelSignals(Tp::TextChannelPtr channel)
@@ -224,12 +223,12 @@ void MessagesModel::removeChannelSignals(Tp::TextChannelPtr channel)
                         SIGNAL(messageReceived(Tp::ReceivedMessage)),
                         this,
                         SLOT(onMessageReceived(Tp::ReceivedMessage))
-                    );
+                       );
     QObject::disconnect(channel.constData(),
                         SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
                         this,
                         SLOT(onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString))
-                    );
+                       );
 }
 
 int MessagesModel::unreadCount() const
@@ -239,13 +238,17 @@ int MessagesModel::unreadCount() const
 
 void MessagesModel::acknowledgeAllMessages()
 {
-    QList<Tp::ReceivedMessage> que = d->textChannel->messageQueue();
+    QList<Tp::ReceivedMessage> queue
+    = d->textChannel->messageQueue();
 
-    kDebug() << "Conversation Visible, Acknowledging " << que.size() << " messages.";
+    kDebug() << "Conversation Visible, Acknowledging " << queue
+    .size() << " messages.";
 
-    d->textChannel->acknowledge(que);
+    d->textChannel->acknowledge(queue
+                               );
     removeSelfFromQue();
-    Q_EMIT unreadCountChanged(que.size());
+    Q_EMIT unreadCountChanged(queue
+                              .size());
 }
 
 void MessagesModel::selfDequed()
@@ -257,12 +260,12 @@ void MessagesModel::setVisibleToUser(bool visible)
 {
     kDebug() << visible;
 
-    if(d->visible != visible) {
+    if (d->visible != visible) {
         d->visible = visible;
         Q_EMIT visibleToUserChanged(d->visible);
     }
 
-    if(visible) {
+    if (visible) {
         acknowledgeAllMessages();
     }
 }
@@ -289,3 +292,4 @@ void MessagesModel::printallmessages()
 }
 
 #include "moc_messages-model.cpp"
+// kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on; 
