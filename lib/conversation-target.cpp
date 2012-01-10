@@ -145,4 +145,3 @@ ConversationTarget::~ConversationTarget()
 {
     delete d;
 }
-

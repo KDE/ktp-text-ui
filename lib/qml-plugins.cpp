@@ -29,7 +29,6 @@
 void QmlPlugins::registerTypes ( const char* uri )
 {
     qmlRegisterType<TelepathyTextObserver> ( uri, 0, 1, "TelepathyTextObserver" );
-    qmlRegisterType<ConversationTarget>(uri, 0, 1, "ConversationTarget");
     qmlRegisterType<Conversation>(uri, 0, 1, "Conversation");
     qmlRegisterType<MessagesModel> ( uri, 0, 1, "MessagesModel" );
     qmlRegisterType<ConversationsModel>(uri, 0, 1, "ConversationsModel");

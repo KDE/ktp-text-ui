@@ -73,5 +73,6 @@ private:
     ConversationTargetPrivate *d;
 };
 
+Q_DECLARE_METATYPE(ConversationTarget*)
+
 #endif // CONVERSATION_TARGET_H
-// kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on; 
