@@ -70,7 +70,7 @@ QString ConversationTarget::nick() const
 
 KIcon ConversationTarget::presenceIcon() const
 {
-    return KIcon(presenceIconSource());
+    return KTp::Presence(d->contact->presence()).icon();
 }
 
 QString ConversationTarget::presenceIconSource() const
