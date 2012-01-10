@@ -99,19 +99,18 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
     setupChannelSignals(channel);
 
     if (d->textChannel) {
-        removeChannelSignals(channel);
+        removeChannelSignals(d->textChannel);
     }
-    //FIXME: check messageQue for any lost messages
+
     d->textChannel = channel;
+    Q_EMIT textChannelChanged(d->textChannel);
 
-    Q_EMIT textChannelChanged(channel);
-
-    QList<Tp::ReceivedMessage> queue
-    = channel->messageQueue();
-    Q_FOREACH(Tp::ReceivedMessage message, queue
-             ) {
+    QList<Tp::ReceivedMessage> messageQueue = channel->messageQueue();
+    Q_FOREACH(Tp::ReceivedMessage message, messageQueue) {
         bool messageAlreadyInModel = false;
         Q_FOREACH(MessageItem current, d->messages) {
+            //FIXME: docs say messageToken can return an empty string. What to do if that happens?
+            //Tp::Message has an == operator. maybe I can use that?
             if (current.id == message.messageToken()) {
                 messageAlreadyInModel = true;
             }
@@ -127,6 +126,7 @@ void MessagesModel::onMessageReceived(Tp::ReceivedMessage message)
     int unreadCount = d->textChannel->messageQueue().size();
     kDebug() << "unreadMessagesCount =" << unreadCount;
     kDebug() << "text =" << message.text();
+    kDebug() << "messageToken =" << message.messageToken();
 
     if (message.messageType() == Tp::ChannelTextMessageTypeNormal) {
         int length = rowCount();
@@ -287,9 +287,8 @@ void MessagesModel::printallmessages()
         kDebug() << msg.text;
     }
     beginResetModel();
-    d->messages.clear();
+//     d->messages.clear();
     endResetModel();
 }
 
 #include "moc_messages-model.cpp"
-// kate: indent-mode cstyle; space-indent on; indent-width 4; replace-tabs on; 

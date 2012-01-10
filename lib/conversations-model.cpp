@@ -59,21 +59,25 @@ ConversationsModel::ConversationsModel() :
 
 void ConversationsModel::onInconmingConversation ( Conversation* newConvo )
 {
-    bool found = false;
+    //check if conversation's channel is already being handled, if so replace it
+    bool handled = false;
     Tp::TextChannelPtr newChannel = newConvo->model()->textChannel();
     if (!newChannel->targetHandleType() == Tp::HandleTypeNone) {
 
-        //loop through all tabs checking for matches
+        //loop through all conversations checking for matches
         Q_FOREACH(Conversation *convo, d->conversations) {
-            if (convo->target()->id() == newChannel->targetId()
-            && convo->model()->textChannel()->targetHandleType() == newChannel->targetHandleType()) {
-                found = true;
+            if (convo->target()->id() == newChannel->targetId() &&
+                convo->model()->textChannel()->targetHandleType() == newChannel->targetHandleType()) {
+
+                convo->model()->setTextChannel(newChannel);
+                newConvo->deleteLater();
+                handled = true;
                 break;
             }
         }
     }
 
-    if(!found) {
+    if(!handled) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
         d->conversations.append(newConvo);
         endInsertRows();
