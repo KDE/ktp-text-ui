@@ -32,7 +32,7 @@ public:
 //     Tp::AccountPtr account;
 };
 
-Conversation::Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account, QObject* parent) :
+Conversation::Conversation(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, QObject* parent) :
         QObject(parent),
         d (new ConversationPrivate)
 {

@@ -47,7 +47,8 @@ int ConversationsModel::rowCount(const QModelIndex& parent) const
     return d->conversations.count();
 }
 
-ConversationsModel::ConversationsModel() :
+ConversationsModel::ConversationsModel(QObject* parent) :
+        QAbstractListModel(parent),
         d(new ConversationsModelPrivate)
 {
     QHash<int, QByteArray> roles;
