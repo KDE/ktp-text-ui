@@ -52,7 +52,7 @@ public:
     Tp::AccountPtr account() const;
 
     /** Returns a pointer to the Chatwidget's search bar */
-    ChatSearchBar *chatSearchBar() const;
+    ChatSearchBar* chatSearchBar() const;
 
     /** Returns the icon of this chat window */
     KIcon icon() const;

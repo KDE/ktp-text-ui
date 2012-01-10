@@ -26,7 +26,7 @@
 #include "conversations-model.h"
 #include "conversation-target.h"
 
-void QmlPlugins::registerTypes ( const char* uri )
+void QmlPlugins::registerTypes ( const char *uri )
 {
     qmlRegisterType<TelepathyTextObserver> ( uri, 0, 1, "TelepathyTextObserver" );
     qmlRegisterType<Conversation>(uri, 0, 1, "Conversation");

@@ -29,7 +29,7 @@ public:
     KIcon avatar;
 };
 
-ConversationTarget::ConversationTarget(Tp::ContactPtr contact, QObject* parent) :
+ConversationTarget::ConversationTarget(Tp::ContactPtr contact, QObject *parent) :
     QObject(parent),
     d(new ConversationTargetPrivate)
 {

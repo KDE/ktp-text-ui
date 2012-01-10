@@ -71,7 +71,7 @@ QSize ChatTextEdit::sizeHint() const
     return sh;
 }
 
-void ChatTextEdit::keyPressEvent(QKeyEvent* e)
+void ChatTextEdit::keyPressEvent(QKeyEvent *e)
 {
     if (e->key()==Qt::Key_Return && !e->modifiers()) {
         Q_EMIT returnKeyPressed();
@@ -116,7 +116,7 @@ bool ChatTextEdit::event(QEvent *e)
     return KTextEdit::event(e);
 }
 
-void ChatTextEdit::resizeEvent(QResizeEvent* e)
+void ChatTextEdit::resizeEvent(QResizeEvent *e)
 {
     KTextEdit::resizeEvent(e);
     QTimer::singleShot(0, this, SLOT(updmessageBoxEventFilterateScrollBar()));

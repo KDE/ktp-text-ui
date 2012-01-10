@@ -111,7 +111,7 @@ void LogManager::fetchLast()
 }
 
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
-void LogManager::onDatesFinished(Tpl::PendingOperation* po)
+void LogManager::onDatesFinished(Tpl::PendingOperation *po)
 {
     Tpl::PendingDates *pd = (Tpl::PendingDates*) po;
 
@@ -127,7 +127,7 @@ void LogManager::onDatesFinished(Tpl::PendingOperation* po)
 
         kDebug() << pd->account()->uniqueIdentifier() << pd->entity()->identifier() << dates;
 
-        Tpl::PendingEvents* events = m_logManager->queryEvents( pd->account(), pd->entity(), Tpl::EventTypeMaskAny, date);
+        Tpl::PendingEvents *events = m_logManager->queryEvents( pd->account(), pd->entity(), Tpl::EventTypeMaskAny, date);
         connect(events, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsFinished(Tpl::PendingOperation*)));
     } else {
         QList<AdiumThemeContentInfo> messages;
@@ -135,7 +135,7 @@ void LogManager::onDatesFinished(Tpl::PendingOperation* po)
     }
 }
 
-void LogManager::onEventsFinished(Tpl::PendingOperation* po)
+void LogManager::onEventsFinished(Tpl::PendingOperation *po)
 {
     Tpl::PendingEvents *pe = (Tpl::PendingEvents*) po;
 

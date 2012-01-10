@@ -68,7 +68,7 @@ public:
     //textBackgroundColor
 
 private:
-    AdiumThemeContentInfoPrivate* d;
+    AdiumThemeContentInfoPrivate *d;
 };
 
 #endif // ADIUMTHEMECONTENTINFO_H

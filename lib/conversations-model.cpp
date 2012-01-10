@@ -47,7 +47,7 @@ int ConversationsModel::rowCount(const QModelIndex& parent) const
     return d->conversations.count();
 }
 
-ConversationsModel::ConversationsModel(QObject* parent) :
+ConversationsModel::ConversationsModel(QObject *parent) :
         QAbstractListModel(parent),
         d(new ConversationsModelPrivate)
 {
@@ -58,7 +58,7 @@ ConversationsModel::ConversationsModel(QObject* parent) :
     QObject::connect(&d->watcher, SIGNAL(newConversation(Conversation*)), SLOT(onInconmingConversation(Conversation*)));
 }
 
-void ConversationsModel::onInconmingConversation(Conversation* newConvo)
+void ConversationsModel::onInconmingConversation(Conversation *newConvo)
 {
     //check if conversation's channel is already being handled, if so replace it
     bool handled = false;

@@ -25,7 +25,7 @@
 class QmlPlugins : public QDeclarativeExtensionPlugin
 {
 public:
-    virtual void registerTypes(const char* uri);
+    virtual void registerTypes(const char *uri);
 };
 
 #endif // QML_PLUGINS_H

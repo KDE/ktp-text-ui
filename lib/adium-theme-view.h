@@ -59,10 +59,10 @@ public:
     const QString variantPath() const;
     const QString variantName() const;
     void setVariant(const QString& variant);
-    ChatWindowStyle *chatStyle() const;
+    ChatWindowStyle* chatStyle() const;
 
     /** Set the theme to use. Display will only change once initialise() is called.*/
-    void setChatStyle(ChatWindowStyle* chatStyle);
+    void setChatStyle(ChatWindowStyle *chatStyle);
     void setUseCustomFont(bool);
     QString fontFamily();
     int fontSize();

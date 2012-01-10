@@ -74,7 +74,7 @@ public:
     void setTimeOpened(const QDateTime &timeOpened);
 
 private:
-    AdiumThemeHeaderInfoPrivate* const d;
+    AdiumThemeHeaderInfoPrivate *const d;
 
 };
 

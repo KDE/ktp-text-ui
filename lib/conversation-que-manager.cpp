@@ -23,7 +23,7 @@
 class ConversationQueManager::ConversationQueManagerPrivate {
 public:
     QList<Queable*> que;
-    KAction* gloablAction;
+    KAction *gloablAction;
 };
 
 void Queable::enqueSelf()
@@ -40,7 +40,7 @@ Queable::~Queable()
 {
 }
 
-Queable::Queable(ConversationQueManager* que)
+Queable::Queable(ConversationQueManager *que)
     : m_queManager(que)
 {
     if(!que) {
@@ -48,9 +48,9 @@ Queable::Queable(ConversationQueManager* que)
     }
 }
 
-ConversationQueManager* ConversationQueManager::instance()
+ConversationQueManager *ConversationQueManager::instance()
 {
-    static ConversationQueManager* m_instance = 0;
+    static ConversationQueManager *m_instance = 0;
 
     if(!m_instance) {
         m_instance = new ConversationQueManager();
@@ -59,7 +59,7 @@ ConversationQueManager* ConversationQueManager::instance()
     return m_instance;
 }
 
-ConversationQueManager::ConversationQueManager(QObject* parent):
+ConversationQueManager::ConversationQueManager(QObject *parent):
     QObject(parent),
     d(new ConversationQueManagerPrivate)
 {
@@ -82,14 +82,14 @@ void ConversationQueManager::dequeNext()
     }
 }
 
-void ConversationQueManager::enque(Queable* item)
+void ConversationQueManager::enque(Queable *item)
 {
     if(!d->que.contains(item)) {
         d->que.append(item);
     }
 }
 
-void ConversationQueManager::remove(Queable* item)
+void ConversationQueManager::remove(Queable *item)
 {
     if(d->que.contains(item)) {
         d->que.removeAll(item);

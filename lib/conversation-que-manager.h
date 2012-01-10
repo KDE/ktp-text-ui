@@ -29,7 +29,7 @@ class Queable
 friend class ConversationQueManager;
 
 protected:
-    Queable(ConversationQueManager* queue = 0);
+    Queable(ConversationQueManager *queue = 0);
     virtual ~Queable();
 
     void enqueSelf();
@@ -37,7 +37,7 @@ protected:
     virtual void selfDequed() = 0;
 
 private:
-    ConversationQueManager* m_queManager;
+    ConversationQueManager *m_queManager;
 };
 
 
@@ -47,14 +47,14 @@ Q_OBJECT
 
 public:
     static ConversationQueManager* instance();
-    void enque(Queable* item);
-    void remove(Queable* item);
+    void enque(Queable *item);
+    void remove(Queable *item);
 
 public Q_SLOTS:
     void dequeNext();
 
 private:
-    explicit ConversationQueManager(QObject* parent = 0);
+    explicit ConversationQueManager(QObject *parent = 0);
     virtual ~ConversationQueManager();
 
     class ConversationQueManagerPrivate;

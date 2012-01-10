@@ -36,14 +36,14 @@ class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject
 {
 Q_OBJECT
 
-// Q_PROPERTY(ConversationTarget* target READ target CONSTANT);
-Q_PROPERTY(ConversationTarget* target READ target CONSTANT);
+// Q_PROPERTY(ConversationTarget *target READ target CONSTANT);
+Q_PROPERTY(ConversationTarget *target READ target CONSTANT);
 //TODO: rename this to messages
-Q_PROPERTY(MessagesModel* model READ model CONSTANT);
+Q_PROPERTY(MessagesModel *model READ model CONSTANT);
 
 public:
-    Conversation(const Tp::TextChannelPtr &channel, const Tp::AccountPtr &account, QObject* parent = 0);
-    Conversation(QObject* parent = 0);
+    Conversation(const Tp::TextChannelPtr &channel, const Tp::AccountPtr &account, QObject *parent = 0);
+    Conversation(QObject *parent = 0);
     virtual ~Conversation();
 
     //FIXME: rename model to messages

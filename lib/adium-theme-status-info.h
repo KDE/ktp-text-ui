@@ -41,7 +41,7 @@ public:
     void setStatus(const QString& status);
 
 private:
-    AdiumThemeStatusInfoPrivate* d;
+    AdiumThemeStatusInfoPrivate *d;
 };
 
 #endif // ADIUMTHEMESTATUSINFO_H

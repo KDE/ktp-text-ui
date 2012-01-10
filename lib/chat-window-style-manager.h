@@ -67,7 +67,7 @@ public:
      * Singleton access to this class.
      * @return the single instance of this class.
      */
-    static ChatWindowStyleManager *self();
+    static ChatWindowStyleManager* self();
 
     /**
      * List all availables styles.
@@ -108,7 +108,7 @@ public Q_SLOTS:
      * @return the instance of ChatWindow for the specified style or 0 if valid style
      *         wasn't found. DO NOT DELETE IT.
      */
-    ChatWindowStyle *getStyleFromPool(const QString &styleName);
+    ChatWindowStyle* getStyleFromPool(const QString &styleName);
 
     /**
      * Get a instance of a ChatWindowStyle from the pool.
@@ -121,7 +121,7 @@ public Q_SLOTS:
      * @return the instance of ChatWindow for the specified style or 0 if valid style
      *         wasn't found. DO NOT DELETE IT.
      */
-    ChatWindowStyle *getValidStyleFromPool(const QString &styleName);
+    ChatWindowStyle* getValidStyleFromPool(const QString &styleName);
 
 Q_SIGNALS:
     /**

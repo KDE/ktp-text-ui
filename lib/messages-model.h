@@ -34,7 +34,7 @@ class KDE_TELEPATHY_CHAT_EXPORT MessagesModel : public QAbstractListModel, publi
     Q_PROPERTY(int unreadCount READ unreadCount NOTIFY unreadCountChanged);
 
 public:
-    MessagesModel(QObject* parent = 0);
+    MessagesModel(QObject *parent = 0);
     virtual ~MessagesModel();
 
     enum Roles {
@@ -71,7 +71,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void onMessageReceived(Tp::ReceivedMessage);
     void onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString);
-    bool verifyPendingOperation(Tp::PendingOperation* op);
+    bool verifyPendingOperation(Tp::PendingOperation *op);
 
 private:
     void setupChannelSignals(Tp::TextChannelPtr channel);

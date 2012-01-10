@@ -53,7 +53,7 @@ public:
     bool visible;
 };
 
-MessagesModel::MessagesModel(QObject* parent):
+MessagesModel::MessagesModel(QObject *parent):
         QAbstractListModel(parent),
         d(new MessagesModelPrivate)
 {
@@ -74,7 +74,7 @@ Tp::TextChannelPtr MessagesModel::textChannel()
     return d->textChannel;
 }
 
-bool MessagesModel::verifyPendingOperation(Tp::PendingOperation* op)
+bool MessagesModel::verifyPendingOperation(Tp::PendingOperation *op)
 {
     bool operationSucceeded = true;
 
@@ -181,7 +181,7 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
     QVariant result;
 
     if (index.isValid()) {
-        MessageItem* requestedData = &d->messages[index.row()];
+        MessageItem *requestedData = &d->messages[index.row()];
 
         switch (role) {
         case UserRole:

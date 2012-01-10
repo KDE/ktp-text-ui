@@ -254,7 +254,7 @@ bool ChatWidget::isGroupChat() const
     return d->isGroupChat;
 }
 
-ChatSearchBar* ChatWidget::chatSearchBar() const
+ChatSearchBar *ChatWidget::chatSearchBar() const
 {
     return d->ui.searchBar;
 }
@@ -293,7 +293,7 @@ Tp::TextChannelPtr ChatWidget::textChannel() const
     return d->channel;
 }
 
-void ChatWidget::keyPressEvent(QKeyEvent* e)
+void ChatWidget::keyPressEvent(QKeyEvent *e)
 {
     if (e->matches(QKeySequence::Copy)) {
         d->ui.chatArea->triggerPageAction(QWebPage::Copy);

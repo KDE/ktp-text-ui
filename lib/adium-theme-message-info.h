@@ -65,7 +65,7 @@ public:
     void appendMessageClass(const QString& messageClass);
 
 private:
-    AdiumThemeMessageInfoPrivate* d;
+    AdiumThemeMessageInfoPrivate *d;
 };
 
 #endif // ADIUMTHEMEMESSAGEINFO_H

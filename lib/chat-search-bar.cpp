@@ -29,7 +29,7 @@
 #include <QDebug>
 #include <QHBoxLayout>
 
-ChatSearchBar::ChatSearchBar(QWidget* parent)
+ChatSearchBar::ChatSearchBar(QWidget *parent)
     : QWidget(parent)
     , m_searchInput(new KLineEdit(this))
     , m_closeButton(new KPushButton(this))
@@ -94,7 +94,7 @@ QWebPage::FindFlags ChatSearchBar::findFlags()
     return flags;
 }
 
-KLineEdit* ChatSearchBar::searchBar() const
+KLineEdit *ChatSearchBar::searchBar() const
 {
     return m_searchInput;
 }

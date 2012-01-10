@@ -56,8 +56,8 @@ Q_SIGNALS:
 
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
 private Q_SLOTS:
-    void onDatesFinished(Tpl::PendingOperation* po);
-    void onEventsFinished(Tpl::PendingOperation* po);
+    void onDatesFinished(Tpl::PendingOperation *po);
+    void onEventsFinished(Tpl::PendingOperation *po);
 #endif
 
 private:

@@ -128,7 +128,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
    }
 
    KArchiveEntry *currentEntry = 0L;
-   KArchiveDirectory* currentDir = 0L;
+   KArchiveDirectory *currentDir = 0L;
    KArchive *archive = 0L;
 
    QString currentBundleMimeType = KMimeType::findByPath(styleBundlePath, 0, false)->name();
@@ -164,7 +164,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
        return StyleCannotOpen;
    }
 
-   const KArchiveDirectory* rootDir = archive->directory();
+   const KArchiveDirectory *rootDir = archive->directory();
 
    // Ok where we go to check if the archive is valid.
    // Each time we found a correspondance to a theme bundle, we add a point to validResult.

@@ -27,12 +27,12 @@
 class Conversation::ConversationPrivate
 {
 public:
-    MessagesModel* model;
-    ConversationTarget* target;
+    MessagesModel *model;
+    ConversationTarget *target;
 //     Tp::AccountPtr account;
 };
 
-Conversation::Conversation(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, QObject* parent) :
+Conversation::Conversation(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, QObject *parent) :
         QObject(parent),
         d (new ConversationPrivate)
 {
@@ -47,18 +47,18 @@ Conversation::Conversation(const Tp::TextChannelPtr& channel, const Tp::AccountP
 //     d->account = account;
 }
 
-Conversation::Conversation(QObject* parent) : QObject(parent)
+Conversation::Conversation(QObject *parent) : QObject(parent)
 {
     kError() << "Conversation should not be created directly. Use ConversationWatcher instead.";
     Q_ASSERT(false);
 }
 
-MessagesModel* Conversation::model() const
+MessagesModel *Conversation::model() const
 {
     return d->model;
 }
 
-ConversationTarget* Conversation::target() const
+ConversationTarget *Conversation::target() const
 {
     return d->target;
 }

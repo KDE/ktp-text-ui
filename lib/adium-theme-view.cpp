@@ -219,7 +219,7 @@ void AdiumThemeView::setVariant(const QString &variant)
 
 }
 
-ChatWindowStyle* AdiumThemeView::chatStyle() const
+ChatWindowStyle *AdiumThemeView::chatStyle() const
 {
     return m_chatStyle;
 }

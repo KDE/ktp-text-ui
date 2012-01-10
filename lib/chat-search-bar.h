@@ -40,7 +40,7 @@ public:
     ChatSearchBar(QWidget *parent = 0);
     virtual ~ChatSearchBar();
 
-    KLineEdit *searchBar() const;
+    KLineEdit* searchBar() const;
 
 public Q_SLOTS:
     void onNextButtonClicked();
