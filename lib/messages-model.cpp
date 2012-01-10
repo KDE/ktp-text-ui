@@ -76,19 +76,22 @@ Tp::TextChannelPtr MessagesModel::textChannel()
 
 bool MessagesModel::verifyPendingOperation(Tp::PendingOperation* op)
 {
+    bool operationSucceeded = true;
+
     if (op->isError()) {
         kWarning() << op->errorName() << "+" << op->errorMessage();
-        return false;
+        operationSucceeded = false;
     }
-    return true;
+
+    return operationSucceeded;
 }
 
 void MessagesModel::setupChannelSignals(Tp::TextChannelPtr channel)
 {
-    QObject::connect(channel.constData(),
+    QObject::connect(channel.data(),
                      SIGNAL(messageReceived(Tp::ReceivedMessage)),
                      SLOT(onMessageReceived(Tp::ReceivedMessage)));
-    QObject::connect(channel.constData(),
+    QObject::connect(channel.data(),
                      SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
                      SLOT(onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
 }
@@ -219,12 +222,12 @@ void MessagesModel::sendNewMessage(QString message)
 
 void MessagesModel::removeChannelSignals(Tp::TextChannelPtr channel)
 {
-    QObject::disconnect(channel.constData(),
+    QObject::disconnect(channel.data(),
                         SIGNAL(messageReceived(Tp::ReceivedMessage)),
                         this,
                         SLOT(onMessageReceived(Tp::ReceivedMessage))
                        );
-    QObject::disconnect(channel.constData(),
+    QObject::disconnect(channel.data(),
                         SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
                         this,
                         SLOT(onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString))
@@ -241,14 +244,11 @@ void MessagesModel::acknowledgeAllMessages()
     QList<Tp::ReceivedMessage> queue
     = d->textChannel->messageQueue();
 
-    kDebug() << "Conversation Visible, Acknowledging " << queue
-    .size() << " messages.";
+    kDebug() << "Conversation Visible, Acknowledging " << queue.size() << " messages.";
 
-    d->textChannel->acknowledge(queue
-                               );
+    d->textChannel->acknowledge(queue);
     removeSelfFromQue();
-    Q_EMIT unreadCountChanged(queue
-                              .size());
+    Q_EMIT unreadCountChanged(queue.size());
 }
 
 void MessagesModel::selfDequed()

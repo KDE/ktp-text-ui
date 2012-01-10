@@ -49,6 +49,7 @@ public:
     {
         kDebug();
 
+        //check that the channel is of type text
         Tp::TextChannelPtr textChannel;
         Q_FOREACH(const Tp::ChannelPtr & channel, channels) {
             textChannel = Tp::TextChannelPtr::dynamicCast(channel);
