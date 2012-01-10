@@ -31,10 +31,10 @@ public:
     QList<Conversation*> conversations;
 };
 
-QVariant ConversationsModel::data ( const QModelIndex& index, int role ) const
+QVariant ConversationsModel::data(const QModelIndex& index, int role) const
 {
     QVariant result;
-    if(index.row() >= 0 && index.row() < d->conversations.count()) {
+    if (index.row() >= 0 && index.row() < d->conversations.count()) {
         Q_ASSERT(role == ConversationRole);
         result = QVariant::fromValue<Conversation*>(d->conversations[index.row()]);
         kDebug() << "returning value " << result;
@@ -42,13 +42,13 @@ QVariant ConversationsModel::data ( const QModelIndex& index, int role ) const
     return result;
 }
 
-int ConversationsModel::rowCount ( const QModelIndex& parent ) const
+int ConversationsModel::rowCount(const QModelIndex& parent) const
 {
     return d->conversations.count();
 }
 
 ConversationsModel::ConversationsModel() :
-    d(new ConversationsModelPrivate)
+        d(new ConversationsModelPrivate)
 {
     QHash<int, QByteArray> roles;
     roles[ConversationRole] = "conversation";
@@ -57,7 +57,7 @@ ConversationsModel::ConversationsModel() :
     QObject::connect(&d->watcher, SIGNAL(newConversation(Conversation*)), SLOT(onInconmingConversation(Conversation*)));
 }
 
-void ConversationsModel::onInconmingConversation ( Conversation* newConvo )
+void ConversationsModel::onInconmingConversation(Conversation* newConvo)
 {
     //check if conversation's channel is already being handled, if so replace it
     bool handled = false;
@@ -67,7 +67,7 @@ void ConversationsModel::onInconmingConversation ( Conversation* newConvo )
         //loop through all conversations checking for matches
         Q_FOREACH(Conversation *convo, d->conversations) {
             if (convo->target()->id() == newChannel->targetId() &&
-                convo->model()->textChannel()->targetHandleType() == newChannel->targetHandleType()) {
+                    convo->model()->textChannel()->targetHandleType() == newChannel->targetHandleType()) {
 
                 convo->model()->setTextChannel(newChannel);
                 newConvo->deleteLater();
@@ -77,7 +77,7 @@ void ConversationsModel::onInconmingConversation ( Conversation* newConvo )
         }
     }
 
-    if(!handled) {
+    if (!handled) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
         d->conversations.append(newConvo);
         endInsertRows();
