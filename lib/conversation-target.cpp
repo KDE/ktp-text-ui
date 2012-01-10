@@ -52,7 +52,7 @@ QIcon ConversationTarget::avatar() const
 {
     QString path = d->contact->avatarData().fileName;
 
-    if(path.isEmpty()) {
+    if (path.isEmpty()) {
         return KIcon(QLatin1String("im-user"));
     } else {
         return QIcon(path);

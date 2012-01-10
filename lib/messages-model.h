@@ -29,26 +29,26 @@
 
 class KDE_TELEPATHY_CHAT_EXPORT MessagesModel : public QAbstractListModel, public Queable
 {
-Q_OBJECT
-Q_PROPERTY(bool visibleToUser READ isVisibleToUser WRITE setVisibleToUser NOTIFY visibleToUserChanged);
-Q_PROPERTY(int unreadCount READ unreadCount NOTIFY unreadCountChanged);
+    Q_OBJECT
+    Q_PROPERTY(bool visibleToUser READ isVisibleToUser WRITE setVisibleToUser NOTIFY visibleToUserChanged);
+    Q_PROPERTY(int unreadCount READ unreadCount NOTIFY unreadCountChanged);
 
 public:
     MessagesModel(QObject* parent = 0);
     virtual ~MessagesModel();
 
-	enum Roles {
-		UserRole = Qt::UserRole,
-		TextRole,
-		TypeRole,
-		TimeRole
-	};
+    enum Roles {
+        UserRole = Qt::UserRole,
+        TextRole,
+        TypeRole,
+        TimeRole
+    };
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
-	Tp::TextChannelPtr textChannel();
-	void setTextChannel(Tp::TextChannelPtr channel);
+    Tp::TextChannelPtr textChannel();
+    void setTextChannel(Tp::TextChannelPtr channel);
 
     bool isVisibleToUser() const;
     void setVisibleToUser(bool visible);
@@ -61,7 +61,7 @@ public:
 Q_SIGNALS:
     void textChannelChanged(Tp::TextChannelPtr newChannel);
     void visibleToUserChanged(bool visible);
-    //TODO: figure out how to check if unread messages have been acknowledged by something else 
+    //TODO: figure out how to check if unread messages have been acknowledged by something else
     void unreadCountChanged(int unreadMesssagesCount);
     void popoutRequested();
 
@@ -74,12 +74,12 @@ private Q_SLOTS:
     bool verifyPendingOperation(Tp::PendingOperation* op);
 
 private:
-	void setupChannelSignals(Tp::TextChannelPtr channel);
-	void removeChannelSignals(Tp::TextChannelPtr channel);
+    void setupChannelSignals(Tp::TextChannelPtr channel);
+    void removeChannelSignals(Tp::TextChannelPtr channel);
     virtual void selfDequed();
 
-	class ConversationModelPrivate;
-	ConversationModelPrivate *d;
+    class ConversationModelPrivate;
+    ConversationModelPrivate *d;
 };
 
 #endif // CONVERSATION_MODEL_H
