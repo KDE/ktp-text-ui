@@ -39,7 +39,7 @@ class KDE_TELEPATHY_CHAT_EXPORT ConversationTarget : public QObject
     Q_PROPERTY(QString id READ id)
 
 public:
-    ConversationTarget(Tp::ContactPtr contact = Tp::ContactPtr());
+    ConversationTarget(Tp::ContactPtr contact, QObject* parent = 0);
     virtual ~ConversationTarget();
 
     QIcon   avatar() const;

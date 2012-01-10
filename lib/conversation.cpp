@@ -32,15 +32,16 @@ public:
 //     Tp::AccountPtr account;
 };
 
-Conversation::Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account) :
+Conversation::Conversation(Tp::TextChannelPtr channel, Tp::AccountPtr account, QObject* parent) :
+        QObject(parent),
         d (new ConversationPrivate)
 {
     kDebug();
 
-    d->model = new MessagesModel();
+    d->model = new MessagesModel(this);
     d->model->setTextChannel(channel);
 
-    d->target = new ConversationTarget(channel->targetContact());
+    d->target = new ConversationTarget(channel->targetContact(), this);
 
 //     connect(model(), SIGNAL(unreadCountChanged(int)), SLOT(onUnreadMessagesChanged()));
 //     d->account = account;
@@ -75,7 +76,5 @@ ConversationTarget* Conversation::target() const
 Conversation::~Conversation()
 {
     kDebug();
-    delete d->model;
-    delete d->target;
     delete d;
 }

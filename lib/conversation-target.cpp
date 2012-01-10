@@ -28,8 +28,9 @@ public:
     Tp::ContactPtr contact;
 };
 
-ConversationTarget::ConversationTarget(Tp::ContactPtr contact) :
-        d(new ConversationTargetPrivate)
+ConversationTarget::ConversationTarget(Tp::ContactPtr contact, QObject* parent) :
+    QObject(parent),
+    d(new ConversationTargetPrivate)
 {
     kDebug();
 
