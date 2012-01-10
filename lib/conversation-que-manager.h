@@ -33,7 +33,7 @@ protected:
     virtual ~Queable();
 
     void enqueSelf();
-    void removeSelfFromQue();
+    void removeSelfFromQueue();
     virtual void selfDequed() = 0;
 
 private:

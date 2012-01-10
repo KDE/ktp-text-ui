@@ -78,8 +78,8 @@ private:
     void removeChannelSignals(Tp::TextChannelPtr channel);
     virtual void selfDequed();
 
-    class ConversationModelPrivate;
-    ConversationModelPrivate *d;
+    class MessagesModelPrivate;
+    MessagesModelPrivate *d;
 };
 
 #endif // CONVERSATION_MODEL_H

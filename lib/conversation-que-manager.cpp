@@ -31,7 +31,7 @@ void Queable::enqueSelf()
     m_queManager->enque(this);
 }
 
-void Queable::removeSelfFromQue()
+void Queable::removeSelfFromQueue()
 {
     m_queManager->remove(this);
 }

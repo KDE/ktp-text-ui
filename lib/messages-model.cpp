@@ -45,7 +45,7 @@ public:
     }
 };
 
-class MessagesModel::ConversationModelPrivate
+class MessagesModel::MessagesModelPrivate
 {
 public:
     Tp::TextChannelPtr textChannel;
@@ -55,7 +55,7 @@ public:
 
 MessagesModel::MessagesModel(QObject* parent):
         QAbstractListModel(parent),
-        d(new ConversationModelPrivate)
+        d(new MessagesModelPrivate)
 {
     kDebug();
 
@@ -116,6 +116,7 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
             //Tp::Message has an == operator. maybe I can use that?
             if (current.id == message.messageToken()) {
                 messageAlreadyInModel = true;
+                break;
             }
         }
         if (!messageAlreadyInModel) {
@@ -247,7 +248,7 @@ void MessagesModel::acknowledgeAllMessages()
     kDebug() << "Conversation Visible, Acknowledging " << queue.size() << " messages.";
 
     d->textChannel->acknowledge(queue);
-    removeSelfFromQue();
+    removeSelfFromQueue();
     Q_EMIT unreadCountChanged(queue.size());
 }
 
