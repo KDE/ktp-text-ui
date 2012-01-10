@@ -180,7 +180,7 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 {
     QVariant result;
 
-    if (index.row() < d->messages.size()) {
+    if (index.isValid()) {
         MessageItem* requestedData = &d->messages[index.row()];
 
         switch (role) {
