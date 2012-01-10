@@ -68,6 +68,7 @@ private Q_SLOTS:
 private:
     void setupContactSignals(Tp::ContactPtr contact);
     void removeContactSignals(Tp::ContactPtr contact);
+    void updateAvatar();
 
     class ConversationTargetPrivate;
     ConversationTargetPrivate *d;
