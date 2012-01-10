@@ -209,7 +209,7 @@ int MessagesModel::rowCount(const QModelIndex& parent) const
     return d->messages.size();
 }
 
-void MessagesModel::sendNewMessage(QString message)
+void MessagesModel::sendNewMessage(const QString &message)
 {
     if (message.isEmpty()) {
         kWarning() << "Attempting to send empty string";

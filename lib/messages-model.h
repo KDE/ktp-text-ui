@@ -66,7 +66,7 @@ Q_SIGNALS:
     void popoutRequested();
 
 public Q_SLOTS:
-    void sendNewMessage(QString message);
+    void sendNewMessage(const QString& message);
 
 private Q_SLOTS:
     void onMessageReceived(Tp::ReceivedMessage);
