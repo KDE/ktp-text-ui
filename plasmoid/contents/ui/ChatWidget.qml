@@ -30,7 +30,7 @@ Item {
             }
 
             text: conv.target.nick
-            iconSource: conv.target.presenceIconSource
+            iconSource: conv.target.presenceIcon
 
             onClicked: closeRequested()
         }

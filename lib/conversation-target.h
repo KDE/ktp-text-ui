@@ -34,8 +34,7 @@ class KDE_TELEPATHY_CHAT_EXPORT ConversationTarget : public QObject
 
     Q_PROPERTY(QIcon avatar READ avatar NOTIFY avatarChanged);
     Q_PROPERTY(QString nick READ nick NOTIFY nickChanged);
-    Q_PROPERTY(KIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
-    Q_PROPERTY(QString presenceIconSource READ presenceIconSource NOTIFY presenceIconSourceChanged);
+    Q_PROPERTY(QIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
     Q_PROPERTY(QString id READ id)
 
 public:
@@ -45,19 +44,15 @@ public:
     QIcon   avatar() const;
     QString id() const;
     QString nick() const;
-    KIcon   presenceIcon() const;
-    QString presenceIconSource() const;
+    QIcon   presenceIcon() const;
 
     Tp::ContactPtr contact() const;
     void setContact(const Tp::ContactPtr &contact);
-
-    static QString iconSourceForPresence(Tp::ConnectionPresenceType presence);
 
 Q_SIGNALS:
     void avatarChanged(QIcon avatar);
     void nickChanged(QString nick);
     void presenceIconChanged(QIcon icon);
-    void presenceIconSourceChanged(QString source);
 
     void contactChanged(Tp::ContactPtr contact);
 
