@@ -15,11 +15,6 @@ Item {
 
     signal toggled
 
-//     Rectangle {
-//         anchors.fill: parent
-//         color: "blue"
-//     }
-
     PlasmaCore.FrameSvgItem {
         id: canvas
 
@@ -29,11 +24,8 @@ Item {
         anchors.fill: parent
     }
 
-    //ise listitem?
     PlasmaWidgets.IconWidget {
         id: icon
-//         text: model.conversation.target.nick
-//         icon: model.conversation.target.presenceIcon
 
         anchors.fill: parent
         anchors.margins: 5
@@ -78,11 +70,9 @@ Item {
         anchors.fill: parent
 
         hoverEnabled: true
-
-        //move le onClicked into main
-        onClicked: toggle();
-
         preventStealing: true
+
+        onClicked: toggle();
     }
 
     function toggle() {

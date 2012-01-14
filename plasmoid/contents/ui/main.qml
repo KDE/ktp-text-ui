@@ -21,11 +21,7 @@ Item {
             anchors.bottom: parent.bottom
 
             image: model.conversation.target.avatar
-//             text: model.conversation.target.nick
-            overlayText: model.conversation.model.unreadCount
-
-//             pressed: model.conversation.model.visibleToUser
-//             onClicked: popupApplet();
+            overlayText: model.conversation.messages.unreadCount
 
             //FIXME: put in a loader to not slow down the model
             PlasmaCore.Dialog {
@@ -42,20 +38,19 @@ Item {
                         conv.pressed = false;
                     }
                     onConversationEndRequested: {
-                        model.conversation.model.printallmessages();
+                        model.conversation.messages.printallmessages();
                     }
                     Binding {
-                        target: model.conversation.model
+                        target: model.conversation.messages
                         property: "visibleToUser"
                         value: dialog.visible
                     }
                 }
 
-//                 x: top.x == top.y ? popupPosition()
             }
 
             Connections {
-                target: model.conversation.model
+                target: model.conversation.messages
                 onPopoutRequested: {
                     conv.pressed = true;
                 }
@@ -72,7 +67,7 @@ Item {
             }
 
 //             function popupApplet() {
-//                 if(model.conversation.model.visibleToUser == false) {
+//                 if(model.conversation.messages.visibleToUser == false) {
 //                     var point = dialog.popupPosition(conv, Qt.AlignBottom);
 //                     console.log("Showing dialog at (" + point.x + "," + point.y + ")");
 // 
@@ -80,12 +75,12 @@ Item {
 //                     dialog.y = point.y;
 // 
 // //                     dialog.visible = true;
-//                     model.conversation.model.visibleToUser = true;
+//                     model.conversation.messages.visibleToUser = true;
 //                 } else {
 //                     console.log("height = " + dialog.height);
 //                     console.log("width = " + dialog.width);
 // //                     dialog.visible = false;
-//                     model.conversation.model.visibleToUser = false;
+//                     model.conversation.messages.visibleToUser = false;
 //                 }
 //             }
         }

@@ -74,6 +74,7 @@ Item {
             rightMargin: chatArea.anchors.leftMargin
         }
 
+//         contemplating if this makes it look better or worse
 //         PlasmaComponents.Highlight { anchors.fill: chatArea }
 
         ListView {
@@ -88,7 +89,7 @@ Item {
             clip: true
 
             delegate: TextDelegate {}
-            model: conv.model
+            model: conv.messages
         }
 
         PlasmaComponents.ScrollBar {

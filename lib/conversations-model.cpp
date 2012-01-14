@@ -62,15 +62,15 @@ void ConversationsModel::onInconmingConversation(Conversation *newConvo)
 {
     //check if conversation's channel is already being handled, if so replace it
     bool handled = false;
-    Tp::TextChannelPtr newChannel = newConvo->model()->textChannel();
+    Tp::TextChannelPtr newChannel = newConvo->messages()->textChannel();
     if (!newChannel->targetHandleType() == Tp::HandleTypeNone) {
 
         //loop through all conversations checking for matches
         Q_FOREACH(Conversation *convo, d->conversations) {
             if (convo->target()->id() == newChannel->targetId() &&
-                    convo->model()->textChannel()->targetHandleType() == newChannel->targetHandleType()) {
+                    convo->messages()->textChannel()->targetHandleType() == newChannel->targetHandleType()) {
 
-                convo->model()->setTextChannel(newChannel);
+                convo->messages()->setTextChannel(newChannel);
                 newConvo->deleteLater();
                 handled = true;
                 break;

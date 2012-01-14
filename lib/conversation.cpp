@@ -27,9 +27,8 @@
 class Conversation::ConversationPrivate
 {
 public:
-    MessagesModel *model;
+    MessagesModel *messages;
     ConversationTarget *target;
-//     Tp::AccountPtr account;
 };
 
 Conversation::Conversation(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, QObject *parent) :
@@ -38,13 +37,10 @@ Conversation::Conversation(const Tp::TextChannelPtr& channel, const Tp::AccountP
 {
     kDebug();
 
-    d->model = new MessagesModel(this);
-    d->model->setTextChannel(channel);
+    d->messages = new MessagesModel(this);
+    d->messages->setTextChannel(channel);
 
     d->target = new ConversationTarget(channel->targetContact(), this);
-
-//     connect(model(), SIGNAL(unreadCountChanged(int)), SLOT(onUnreadMessagesChanged()));
-//     d->account = account;
 }
 
 Conversation::Conversation(QObject *parent) : QObject(parent)
@@ -53,25 +49,15 @@ Conversation::Conversation(QObject *parent) : QObject(parent)
     Q_ASSERT(false);
 }
 
-MessagesModel *Conversation::model() const
+MessagesModel* Conversation::messages() const
 {
-    return d->model;
+    return d->messages;
 }
 
-ConversationTarget *Conversation::target() const
+ConversationTarget* Conversation::target() const
 {
     return d->target;
 }
-
-// void Conversation::onUnreadMessagesChanged()
-// {
-//     enqueSelf();
-// }
-// 
-// void Conversation::selfDequed()
-// {
-//     Q_EMIT popoutRequested();
-// }
 
 Conversation::~Conversation()
 {
