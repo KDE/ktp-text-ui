@@ -20,19 +20,29 @@
 #include "qml-plugins.h"
 
 #include <QtDeclarative/QDeclarativeItem>
+
 #include "messages-model.h"
 #include "conversation.h"
 #include "telepathy-text-observer.h"
 #include "conversations-model.h"
 #include "conversation-target.h"
 
-void QmlPlugins::registerTypes ( const char *uri )
+void QmlPlugins::registerTypes(const char *uri)
 {
-    qmlRegisterType<TelepathyTextObserver> ( uri, 0, 1, "TelepathyTextObserver" );
-    qmlRegisterType<Conversation>(uri, 0, 1, "Conversation");
-    qmlRegisterType<ConversationTarget>();
-    qmlRegisterType<MessagesModel> ( uri, 0, 1, "MessagesModel" );
+    // this can be used in QML because it spits out Conversations which
+    // can be given to ChatWidget.qml
+    qmlRegisterType<TelepathyTextObserver> (uri, 0, 1, "TelepathyTextObserver");
+    // is currently instanitized and used by the multi-user plasmoid
     qmlRegisterType<ConversationsModel>(uri, 0, 1, "ConversationsModel");
+    // isn't instanitized directly, but need to be registered,
+    // because ChatWidget has a property of type Conversation
+    qmlRegisterType<Conversation>(uri, 0, 1, "Conversation");
+
+    // these two are used, but not instanitized within QML
+    // and it turns out calling qmlRegisterType with no arguments
+    // allows exactly that
+    qmlRegisterType<ConversationTarget>();
+    qmlRegisterType<MessagesModel> ();
 }
 
-Q_EXPORT_PLUGIN2 ( conversation, QmlPlugins );
+Q_EXPORT_PLUGIN2(conversation, QmlPlugins);
