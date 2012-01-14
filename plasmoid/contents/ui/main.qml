@@ -3,7 +3,7 @@ import org.kde.telepathy.declarativeplugins 0.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 import org.kde.plasma.components 0.1 as PlasmaComponents
-// import "createDialog.js" as MyScript
+
 
 Item {
     id: top
@@ -65,27 +65,7 @@ Item {
                     dialog.y = point.y;
                 }
             }
-
-//             function popupApplet() {
-//                 if(model.conversation.messages.visibleToUser == false) {
-//                     var point = dialog.popupPosition(conv, Qt.AlignBottom);
-//                     console.log("Showing dialog at (" + point.x + "," + point.y + ")");
-// 
-//                     dialog.x = point.x;
-//                     dialog.y = point.y;
-// 
-// //                     dialog.visible = true;
-//                     model.conversation.messages.visibleToUser = true;
-//                 } else {
-//                     console.log("height = " + dialog.height);
-//                     console.log("width = " + dialog.width);
-// //                     dialog.visible = false;
-//                     model.conversation.messages.visibleToUser = false;
-//                 }
-//             }
         }
     }
 
-//     height: parent.height
-//     width: 60
 }
