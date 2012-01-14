@@ -31,6 +31,17 @@ public:
     QList<Conversation*> conversations;
 };
 
+ConversationsModel::ConversationsModel(QObject *parent) :
+        QAbstractListModel(parent),
+        d(new ConversationsModelPrivate)
+{
+    QHash<int, QByteArray> roles;
+    roles[ConversationRole] = "conversation";
+    setRoleNames(roles);
+
+    QObject::connect(&d->watcher, SIGNAL(newConversation(Conversation*)), SLOT(onInconmingConversation(Conversation*)));
+}
+
 QVariant ConversationsModel::data(const QModelIndex& index, int role) const
 {
     QVariant result;
@@ -45,17 +56,6 @@ QVariant ConversationsModel::data(const QModelIndex& index, int role) const
 int ConversationsModel::rowCount(const QModelIndex& parent) const
 {
     return d->conversations.count();
-}
-
-ConversationsModel::ConversationsModel(QObject *parent) :
-        QAbstractListModel(parent),
-        d(new ConversationsModelPrivate)
-{
-    QHash<int, QByteArray> roles;
-    roles[ConversationRole] = "conversation";
-    setRoleNames(roles);
-
-    QObject::connect(&d->watcher, SIGNAL(newConversation(Conversation*)), SLOT(onInconmingConversation(Conversation*)));
 }
 
 void ConversationsModel::onInconmingConversation(Conversation *newConvo)
