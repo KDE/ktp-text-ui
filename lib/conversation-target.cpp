@@ -18,9 +18,8 @@
 
 #include "conversation-target.h"
 #include <TelepathyQt/AvatarData>
-#include <TelepathyQt/Presence>
 #include <KDebug>
-#include <KIconLoader>
+#include <KTp/presence.h>
 
 class  ConversationTarget::ConversationTargetPrivate
 {
