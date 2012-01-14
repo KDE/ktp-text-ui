@@ -96,24 +96,6 @@ Tp::ContactPtr ConversationTarget::contact() const
     return d->contact;
 }
 
-void ConversationTarget::setContact(const Tp::ContactPtr &contact)
-{
-    if (d->contact) {
-        removeContactSignals(d->contact);
-    }
-
-    d->contact = contact;
-    setupContactSignals(d->contact);
-    Q_EMIT contactChanged(contact);
-}
-
-void ConversationTarget::removeContactSignals(Tp::ContactPtr contact)
-{
-    disconnect(contact.constData(), SIGNAL(aliasChanged(QString)), this, SIGNAL(nickChanged(QString)));
-    disconnect(contact.constData(), SIGNAL(avatarDataChanged(Tp::AvatarData)), this, SLOT(onAvatarDataChanged(Tp::AvatarData)));
-    disconnect(contact.constData(), SIGNAL(presenceChanged(Tp::Presence)), this, SLOT(onPresenceChanged(Tp::Presence)));
-}
-
 ConversationTarget::~ConversationTarget()
 {
     delete d;

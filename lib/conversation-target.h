@@ -47,14 +47,12 @@ public:
     QIcon   presenceIcon() const;
 
     Tp::ContactPtr contact() const;
-    void setContact(const Tp::ContactPtr &contact);
 
 Q_SIGNALS:
     void avatarChanged(QIcon avatar);
     void nickChanged(QString nick);
     void presenceIconChanged(QIcon icon);
 
-    void contactChanged(Tp::ContactPtr contact);
 
 private Q_SLOTS:
     void onAvatarDataChanged(const Tp::AvatarData&);
@@ -62,7 +60,6 @@ private Q_SLOTS:
 
 private:
     void setupContactSignals(Tp::ContactPtr contact);
-    void removeContactSignals(Tp::ContactPtr contact);
     void updateAvatar();
 
     class ConversationTargetPrivate;
