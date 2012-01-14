@@ -91,10 +91,6 @@ Item {
         }
     }
 
-    function derp() {
-        console.log("deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrp!");
-    }
-
 //     height: parent.height
 //     width: 60
 }
