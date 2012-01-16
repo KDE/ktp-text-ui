@@ -21,6 +21,8 @@
 
 #include "chat-widget.h"
 
+#include "defines.h"
+
 #include <KTabWidget>
 #include <KDebug>
 #include <QStackedWidget>
@@ -80,6 +82,14 @@ void ChatTab::onConnectionStatusChanged(Tp::ConnectionStatus status)
 {
     // request a new text channel for the chat
     if (status == Tp::ConnectionStatusConnected) {
-        account()->ensureTextChat(textChannel()->targetId(), QDateTime::currentDateTime(), QLatin1String("org.freedesktop.Telepathy.Client.KTp.TextUi"));
+        if (textChannel()->targetHandleType() == Tp::HandleTypeContact) {
+            account()->ensureTextChat(textChannel()->targetId(),
+                                      QDateTime::currentDateTime(),
+                                      QLatin1String(KTP_TEXTUI_CLIENT_PATH));
+        } else if (textChannel()->targetHandleType() == Tp::HandleTypeRoom) {
+            account()->ensureTextChatroom(textChannel()->targetId(),
+                                                   QDateTime::currentDateTime(),
+                                                   QLatin1String(KTP_TEXTUI_CLIENT_PATH));
+        }
     }
 }

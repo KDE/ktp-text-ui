@@ -19,6 +19,8 @@
 #include "chat-window.h"
 #include "telepathy-chat-ui.h"
 
+#include "defines.h"
+
 #include <TelepathyQt/ClientRegistrar>
 #include <TelepathyQt/AccountFactory>
 #include <TelepathyQt/ConnectionFactory>
@@ -76,7 +78,7 @@ int main(int argc, char *argv[])
 
     Tp::SharedPtr<TelepathyChatUi> app = Tp::SharedPtr<TelepathyChatUi>(new TelepathyChatUi);
     Tp::AbstractClientPtr handler = Tp::AbstractClientPtr(app);
-    registrar->registerClient(handler, QLatin1String("KTp.TextUi"));
+    registrar->registerClient(handler, QLatin1String(KTP_TEXTUI_CLIENT_NAME));
 
     return app->exec();
 }
