@@ -34,6 +34,7 @@ LogViewer::LogViewer(QWidget *parent) :
 
     connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
     connect(ui->entityList, SIGNAL(activated(QModelIndex)), SLOT(onEntitySelected(QModelIndex)));
+    connect(ui->datePicker, SIGNAL(dateChanged(QDate)), SLOT(onDateSelected()));
 }
 
 LogViewer::~LogViewer()
@@ -50,15 +51,25 @@ void LogViewer::onAccountManagerReady()
 
 void LogViewer::onEntitySelected(const QModelIndex &index)
 {
-    //calendar needs to get pendingDates
-    Tpl::EntityPtr entity = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
-    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-    ui->messageView->loadLog(account, entity, QDate::currentDate());
+    //TODO, update calendar needs to get pendingDates
 
-    //main view needs to show pendingEvents
+    updateMainView();
 }
 
 void LogViewer::onDateSelected()
 {
-    //update main view
+    updateMainView();
+}
+
+void LogViewer::updateMainView()
+{
+    QModelIndex currentIndex = ui->entityList->currentIndex();
+
+    if (!currentIndex.isValid()) {
+        return;
+    }
+
+    Tpl::EntityPtr entity = currentIndex.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
+    Tp::AccountPtr account = currentIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+    ui->messageView->loadLog(account, entity, ui->datePicker->date());
 }
