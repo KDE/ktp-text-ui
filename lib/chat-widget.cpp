@@ -187,9 +187,11 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(this, SIGNAL(searchTextComplete(bool)), d->ui.searchBar, SLOT(onSearchTextComplete(bool)));
 
     // initialize LogManager
-    d->logManager = new LogManager(account, channel->targetContact(), this);
-    d->logManager->setFetchAmount(3);
-    d->logManager->setTextChannel(channel);
+    if (!d->isGroupChat) {
+        d->logManager = new LogManager(account, channel->targetContact(), this);
+        d->logManager->setFetchAmount(3);
+        d->logManager->setTextChannel(channel);
+    }
 }
 
 ChatWidget::~ChatWidget()
