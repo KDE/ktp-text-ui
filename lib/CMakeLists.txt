@@ -12,6 +12,8 @@ set(ktpchat_SRCS
         chat-text-edit.cpp
         chat-search-bar.cpp
         logmanager.cpp
+        message.cpp
+        message-processor.cpp
 )
 
 set(ktpchat_HDRS

@@ -17,37 +17,30 @@
 */
 
 
+#ifndef MESSAGE_PROCESSOR_H
+#define MESSAGE_PROCESSOR_H
+
 #include "message.h"
+#include <QList>
 
-using namespace KTp;
+class AbstractMessageFilter {
+public:
+    virtual void filterMessage(KTp::Message) = 0;
+    virtual ~AbstractMessageFilter();
+};
 
-Message::Message(Tp::Message &original)
-    : originalMessage(original),
-      content(originalMessage.text())
+//each thing that displays message will have an instance of this
+class MessageProcessor
 {
-}
 
-QString Message::mainMessagePart() const
-{
-    return content.operator[](Message::MainMessage);
-}
+public:
+    MessageProcessor();
+    ~MessageProcessor();
 
-void Message::setMainMessagePart(const QString& message)
-{
-    content[Message::MainMessage] = message;
-}
+    //text-ui will call this somewhere in handleIncommingMessage just before displaying it
+    KTp::Message processIncommingMessage(Tp::ReceivedMessage);
+private:
+    static QList<AbstractMessageFilter*> m_filters;
+};
 
-void Message::appendMessagePart(const QString& part)
-{
-    content << part;
-}
-
-QString Message::finalizedMessage() const
-{
-    return content.join(QLatin1String("\n"));
-}
-
-QVariantMap& Message::miscData()
-{
-    return m_miscData;
-}
+#endif // MESSAGE_PROCESSOR_H

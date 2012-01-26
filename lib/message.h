@@ -1,6 +1,5 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) 2012  Lasath Fernando <email>
+    Copyright (C) 2012  Lasath Fernando <kde@lasath.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -26,18 +25,20 @@
 namespace KTp {
 
 class Message {
+
+public:
     Message(Tp::Message& original);
 
     QString mainMessagePart() const;
-    void setMainMessagePart(const QString&);
-    void appendMessagePart(const QString&);
+    void setMainMessagePart(const QString& message);
+    void appendMessagePart(const QString& part);
 
     QString finalizedMessage() const;
 
     QVariantMap& miscData();
 private:
     Tp::Message originalMessage;
-    QVariantMap miscData;
+    QVariantMap m_miscData;
     QStringList content;
 
     enum MessageParts {

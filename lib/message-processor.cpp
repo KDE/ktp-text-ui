@@ -17,37 +17,25 @@
 */
 
 
-#include "message.h"
+#include "message-processor.h"
 
-using namespace KTp;
+QList<AbstractMessageFilter*> MessageProcessor::m_filters;
 
-Message::Message(Tp::Message &original)
-    : originalMessage(original),
-      content(originalMessage.text())
+MessageProcessor::MessageProcessor()
 {
 }
 
-QString Message::mainMessagePart() const
+KTp::Message MessageProcessor::processIncommingMessage(Tp::ReceivedMessage receivedMessage)
 {
-    return content.operator[](Message::MainMessage);
+    KTp::Message message(receivedMessage);
+    Q_FOREACH(AbstractMessageFilter *filter, MessageProcessor::m_filters) {
+        filter->filterMessage(message);
+    }
+    return message;
 }
 
-void Message::setMainMessagePart(const QString& message)
+MessageProcessor::~MessageProcessor()
 {
-    content[Message::MainMessage] = message;
+
 }
 
-void Message::appendMessagePart(const QString& part)
-{
-    content << part;
-}
-
-QString Message::finalizedMessage() const
-{
-    return content.join(QLatin1String("\n"));
-}
-
-QVariantMap& Message::miscData()
-{
-    return m_miscData;
-}
