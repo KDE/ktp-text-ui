@@ -757,7 +757,7 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const K
                             presence.statusMessage());
         }
     }
-    
+
     if (!message.isNull()) {
         AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(message);
