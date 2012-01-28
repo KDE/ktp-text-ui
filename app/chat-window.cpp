@@ -24,6 +24,8 @@
 #include "chat-tab.h"
 #include "chat-widget.h"
 
+#include <KTp/service-availability-checker.h>
+
 #include <KStandardAction>
 #include <KIcon>
 #include <KLocale>
@@ -56,8 +58,16 @@
 #define PREFERRED_AUDIO_VIDEO_HANDLER "org.freedesktop.Telepathy.Client.KTp.CallUi"
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
+K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
+                          (QLatin1String(PREFERRED_RFB_HANDLER)));
+
 ChatWindow::ChatWindow()
 {
+    //This effectively constructs the s_krfbAvailableChecker object the first
+    //time that this code is executed. This is to start the d-bus query early, so
+    //that data are available when we need them later in desktopSharingCapability()
+    (void) s_krfbAvailableChecker.operator->();
+
     //setup actions
     KStandardAction::close(this,SLOT(closeCurrentTab()),actionCollection());
     KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
@@ -282,8 +292,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setAudioCallEnabled(selfCapabilities.streamedMediaAudioCalls() && contactCapabilites.streamedMediaAudioCalls());
         setFileTransferEnabled(selfCapabilities.fileTransfers() && contactCapabilites.fileTransfers());
         setVideoCallEnabled(selfCapabilities.streamedMediaVideoCalls() && contactCapabilites.streamedMediaVideoCalls());
-        /// TODO this shall be activated/deactivated according to capabilities. The code is already in common
-        setShareDesktopEnabled(true);
+        setShareDesktopEnabled(s_krfbAvailableChecker->isAvailable() && contactCapabilites.streamTubes(QLatin1String("rfb")));
         /// TODO re-activate check when invitation to chat has been sorted out
         setInviteToChatEnabled(false);
 
