@@ -59,7 +59,7 @@
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
 K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
-                          (QLatin1String("org.freedesktop.Telepathy.Client.krfb_rfb_handler")));
+                          (QLatin1String(PREFERRED_RFB_HANDLER)));
 
 ChatWindow::ChatWindow()
 {
