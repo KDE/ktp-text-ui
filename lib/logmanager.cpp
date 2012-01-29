@@ -43,13 +43,10 @@
 #include <TelepathyQt/TextChannel>
 #include <TelepathyQt/ReceivedMessage>
 
-LogManager::LogManager(const Tp::AccountPtr &account, const Tp::ContactPtr &contact, QObject *parent)
+LogManager::LogManager(QObject *parent)
     : QObject(parent),
-    m_account(account),
-    m_contact(contact),
     m_fetchAmount(10)
 {
-
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
     g_type_init();
     QGlib::init();
@@ -61,10 +58,6 @@ LogManager::LogManager(const Tp::AccountPtr &account, const Tp::ContactPtr &cont
         Q_ASSERT(false);
     }
 
-    m_contactEntity = Tpl::Entity::create(m_contact->id().toLatin1().data(),
-                                            Tpl::EntityTypeContact,
-                                            NULL,
-                                            NULL);
 #else
     kWarning() << "text-ui was built without log support";
 #endif
@@ -84,9 +77,10 @@ bool LogManager::exists() const
 #endif
 }
 
-void LogManager::setTextChannel(const Tp::TextChannelPtr& textChannel)
+void LogManager::setTextChannel(const Tp::AccountPtr &account, const Tp::TextChannelPtr &textChannel)
 {
     m_textChannel = textChannel;
+    m_account = account;
 }
 
 void LogManager::setFetchAmount(int n)
@@ -98,8 +92,17 @@ void LogManager::fetchLast()
 {
     kDebug();
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
-    Tpl::PendingDates* dates = m_logManager->queryDates( m_account, m_contactEntity, Tpl::EventTypeMaskText);
-    connect(dates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
+    if (!m_account.isNull() && !m_textChannel.isNull() && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
+        Tpl::EntityPtr contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
+                                                Tpl::EntityTypeContact,
+                                                NULL,
+                                                NULL);
+
+        Tpl::PendingDates* dates = m_logManager->queryDates( m_account, contactEntity, Tpl::EventTypeMaskText);
+        connect(dates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
+        return;
+    }
+    //in all other cases finish immediately.
 #else
     QList<AdiumThemeContentInfo> messages;
     Q_EMIT fetched(messages);
@@ -143,8 +146,7 @@ void LogManager::onEventsFinished(Tpl::PendingOperation* po)
 
     QStringList queuedMessageTokens;
     if(!m_textChannel.isNull()) {
-        Q_FOREACH(const Tp::ReceivedMessage &message, m_textChannel->messageQueue())
-        {
+        Q_FOREACH(const Tp::ReceivedMessage &message, m_textChannel->messageQueue()) {
             queuedMessageTokens.append(message.messageToken());
         }
     }
@@ -169,15 +171,17 @@ void LogManager::onEventsFinished(Tpl::PendingOperation* po)
     Q_FOREACH(const Tpl::TextEventPtr& event, events) {
         AdiumThemeMessageInfo::MessageType type;
         QString iconPath;
-        Tp::ContactPtr targetContact;
+        Tp::ContactPtr contact;
         if(event->sender()->identifier() == m_account->normalizedName()) {
             type = AdiumThemeMessageInfo::HistoryLocalToRemote;
-            targetContact = m_account->connection()->selfContact();
+            if (m_account->connection()) {
+                contact = m_account->connection()->selfContact();
+            }
         } else {
             type = AdiumThemeMessageInfo::HistoryRemoteToLocal;
-            targetContact = m_contact;
+            contact = m_textChannel->targetContact();
         }
-        iconPath = targetContact->avatarData().fileName;
+        iconPath = contact->avatarData().fileName;
 
         AdiumThemeContentInfo message(type);
         message.setMessage(event->message());

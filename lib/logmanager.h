@@ -42,12 +42,12 @@ class LogManager : public QObject
     Q_OBJECT
 
 public:
-    explicit LogManager(const Tp::AccountPtr &account, const Tp::ContactPtr &contact, QObject *parent = 0);
+    explicit LogManager(QObject *parent = 0);
     virtual ~LogManager();
 
     bool exists() const;
 
-    void setTextChannel(const Tp::TextChannelPtr &textChannel);
+    void setTextChannel(const Tp::AccountPtr &account, const Tp::TextChannelPtr &textChannel);
     void setFetchAmount(int n);
     void fetchLast();
 
@@ -62,7 +62,6 @@ private Q_SLOTS:
 
 private:
     Tp::AccountPtr m_account;
-    Tp::ContactPtr m_contact;
     Tp::TextChannelPtr m_textChannel;
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
     Tpl::EntityPtr m_contactEntity;

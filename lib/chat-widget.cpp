@@ -86,6 +86,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 {
     d->channel = channel;
     d->account = account;
+    d->logManager = new LogManager(this);
+
 
     //load translations for this library. keep this before any i18n() calls in library code
     KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
@@ -188,16 +190,14 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     // initialize LogManager
     if (!d->isGroupChat) {
-        d->logManager = new LogManager(account, channel->targetContact(), this);
         d->logManager->setFetchAmount(3);
-        d->logManager->setTextChannel(channel);
+        d->logManager->setTextChannel(d->account, d->channel);
     }
 }
 
 ChatWidget::~ChatWidget()
 {
     d->channel->requestClose(); // ensure closing; does nothing, if already closed
-    delete d->logManager;
     delete d;
 }
 
@@ -407,9 +407,6 @@ void ChatWidget::onHistoryFetched(const QList<AdiumThemeContentInfo> &messages)
     Q_FOREACH(const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
         handleIncomingMessage(message);
     }
-
-    delete d->logManager;
-    d->logManager = 0;
 }
 
 int ChatWidget::unreadMessageCount() const
