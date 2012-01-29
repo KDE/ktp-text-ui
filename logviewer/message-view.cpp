@@ -22,21 +22,20 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
     m_entity = entity;
     m_date = date;
 
-    //FIXME check entity type
+    //FIXME check entity type, set as appropriately.
     load(AdiumThemeView::SingleUserChat);
 
 
     AdiumThemeHeaderInfo headerInfo;
     headerInfo.setDestinationDisplayName(m_entity->alias());
     headerInfo.setChatName(m_entity->alias());
-//  other headerInfo here.
+    //  TODO set up other headerInfo here.
     initialise(headerInfo);
 }
 
 void MessageView::onLoadFinished()
 {
     //load stuff here.
-    qDebug() << "load stuff";
     Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
     Tpl::PendingEvents *pendingEvents  = logManager->queryEvents(m_account, m_entity, Tpl::EventTypeMaskText, m_date);
     connect(pendingEvents, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsLoaded(Tpl::PendingOperation*)));
@@ -47,8 +46,6 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
     Tpl::PendingEvents *pe = qobject_cast<Tpl::PendingEvents*>(po);
 
     QList<AdiumThemeContentInfo> messages;
-
-    qDebug() << "showing " << pe->events().size() << "messages";
 
     Q_FOREACH(const Tpl::EventPtr &event, pe->events()) {
         const Tpl::TextEventPtr textEvent(event.staticCast<Tpl::TextEvent>());
@@ -67,7 +64,7 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
         message.setMessage(textEvent->message());
         message.setService(m_account->serviceName());
         message.setSenderDisplayName(textEvent->sender()->alias());
-        message.setSenderScreenName(textEvent->sender()->alias());
+        message.setSenderScreenName(textEvent->sender()->identifier());
         message.setTime(textEvent->timestamp());
         message.setUserIconPath(iconPath);
         kDebug()    << textEvent->timestamp()

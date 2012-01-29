@@ -25,10 +25,7 @@ private Q_SLOTS:
 
     void updateMainView();
 
-
 private:
-
-
     Ui::LogViewer *ui;
     Tp::AccountManagerPtr m_accountManager;
     EntityModel *m_entityModel;

@@ -30,8 +30,7 @@ int EntityModel::rowCount(const QModelIndex &parent) const
 {
     if (parent == QModelIndex()) {
         return m_entities.size();
-    }
-    else {
+    } else {
         return 0;
     }
 }
@@ -73,8 +72,6 @@ void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
             EntityModelItem item;
             item.account = pendingEntities->account();
             item.entity = entity;
-
-            qDebug() << entity->alias();
 
             m_entities.append(item);
         }

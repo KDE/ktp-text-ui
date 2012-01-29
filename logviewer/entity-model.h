@@ -49,10 +49,6 @@ public:
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
 
-Q_SIGNALS:
-
-public Q_SLOTS:
-
 private Q_SLOTS:
     void onEntitiesSearchFinished(Tpl::PendingOperation*);
 

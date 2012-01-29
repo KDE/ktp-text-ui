@@ -30,7 +30,7 @@ LogViewer::LogViewer(QWidget *parent) :
 
     ui->entityList->setModel(m_entityModel);
 
-    //TODO parse args and update all views as appropriate
+    //TODO parse command line args and update all views as appropriate
 
     connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
     connect(ui->entityList, SIGNAL(activated(QModelIndex)), SLOT(onEntitySelected(QModelIndex)));
