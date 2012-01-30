@@ -23,8 +23,6 @@
 #include <QObject>
 #include <TelepathyQt/Contact>
 
-#include "chat-widget.h"
-
 #include "ktpchat_export.h"
 
 

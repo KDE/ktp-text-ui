@@ -2,10 +2,6 @@ set(ktpchat_SRCS
         chat-widget.cpp
         chat-window-style.cpp
         chat-window-style-manager.cpp
-        conversation.cpp
-        conversation-target.cpp
-        conversations-model.cpp
-        conversation-que-manager.cpp
         adium-theme-view.cpp
         adium-theme-header-info.cpp
         adium-theme-message-info.cpp
@@ -16,7 +12,6 @@ set(ktpchat_SRCS
         chat-text-edit.cpp
         chat-search-bar.cpp
         logmanager.cpp
-        telepathy-text-observer.cpp
 )
 
 set(ktpchat_HDRS
@@ -29,10 +24,6 @@ set(ktpchat_HDRS
     chat-widget.h
     chat-window-style.h
     chat-window-style-manager.h
-    conversation.h
-    conversation-target.h
-    conversation-que-manager.h
-    conversations-model.h
     telepathy-text-observer.h
 )
 
@@ -88,31 +79,3 @@ install(FILES
         DESTINATION ${INCLUDE_INSTALL_DIR}/KTp COMPONENT Devel
 )
 
-
-project(declarativeplugins)
-
-set(declarativeplugins_SRCS
-    qml-plugins.cpp
-    )
-
-INCLUDE_DIRECTORIES(
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_BINARY_DIR}
-        ${KDE4_INCLUDES}
-)
-
-qt4_automoc(${declarativeplugins_SRCS})
-
-
-add_library(declarativeplugins SHARED ${declarativeplugins_SRCS})
-
-target_link_libraries(declarativeplugins
-	${KDE4_KDECORE_LIBS}
-	${QT_QTSCRIPT_LIBRARY}
-	${QT_QTDECLARATIVE_LIBRARY}
-	${TELEPATHY_QT4_LIBRARIES}
-	ktpchat
-)
-
-install(TARGETS declarativeplugins DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/telepathy/declarativeplugins)
-install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/telepathy/declarativeplugins)
