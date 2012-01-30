@@ -25,16 +25,16 @@
 
 class AbstractMessageFilter {
 public:
-    virtual void filterMessage(KTp::Message) = 0;
+    virtual void filterMessage(KTp::Message&) = 0;
     virtual ~AbstractMessageFilter();
 };
 
 //each thing that displays message will have an instance of this
-class MessageProcessor
+class MessageProcessor : public QObject
 {
 
 public:
-    MessageProcessor();
+    explicit MessageProcessor(QObject* parent = 0);
     ~MessageProcessor();
 
     //text-ui will call this somewhere in handleIncommingMessage just before displaying it

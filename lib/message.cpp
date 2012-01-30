@@ -18,6 +18,7 @@
 
 
 #include "message.h"
+#include <KDebug>
 
 using namespace KTp;
 
@@ -44,7 +45,9 @@ void Message::appendMessagePart(const QString& part)
 
 QString Message::finalizedMessage() const
 {
-    return content.join(QLatin1String("\n"));
+    QString msg = content.join(QLatin1String("\n"));
+    kDebug() << msg;
+    return msg;
 }
 
 QVariantMap& Message::miscData()

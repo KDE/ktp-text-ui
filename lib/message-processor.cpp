@@ -18,11 +18,19 @@
 
 
 #include "message-processor.h"
+#include "filters.h"
 
 QList<AbstractMessageFilter*> MessageProcessor::m_filters;
 
-MessageProcessor::MessageProcessor()
+AbstractMessageFilter::~AbstractMessageFilter()
 {
+
+}
+
+
+MessageProcessor::MessageProcessor(QObject* parent): QObject(parent)
+{
+    m_filters << new UrlFilter();
 }
 
 KTp::Message MessageProcessor::processIncommingMessage(Tp::ReceivedMessage receivedMessage)
