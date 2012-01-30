@@ -1,4 +1,4 @@
-project(ktpchatqmlplugin)
+# project(ktpchatqmlplugin)
 
 set(ktpchatqmlplugin_SRCS
         qml-plugins.cpp
@@ -16,16 +16,18 @@ include_directories(
         ${KDE4_INCLUDES}
 )
 
-qt4_automoc(${ktpchatqmlplugin_SRCS})
+# qt4_automoc(${ktpchatqmlplugin_SRCS})
 
 
-add_library(ktpchatqmlplugin SHARED ${ktpchatqmlplugin_SRCS})
+kde4_add_library(ktpchatqmlplugin SHARED ${ktpchatqmlplugin_SRCS})
 
 target_link_libraries(ktpchatqmlplugin
         ${KDE4_KDECORE_LIBS}
         ${QT_QTSCRIPT_LIBRARY}
         ${QT_QTDECLARATIVE_LIBRARY}
         ${TELEPATHY_QT4_LIBRARIES}
+        ${KTP_LIBRARIES}
+        ${KDE4_KDEUI_LIBS}
         ktpchat
 )
 
