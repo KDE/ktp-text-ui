@@ -83,8 +83,7 @@ void AdiumThemeView::load(ChatType chatType) {
 
     m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
     if (m_chatStyle == 0 || !m_chatStyle->isValid()) {
-        KMessageBox::error(this, i18n("Failed to load a valid theme. Please make sure you "
-                                      "run the chat window configuration program first. "
+        KMessageBox::error(this, i18n("Failed to load a valid theme. Your installation is broken. Check your kde path"
                                       "Will now crash."));
     }
 
