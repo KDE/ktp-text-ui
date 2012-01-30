@@ -24,7 +24,6 @@ set(ktpchat_HDRS
     chat-widget.h
     chat-window-style.h
     chat-window-style-manager.h
-    telepathy-text-observer.h
 )
 
 set(ktpchat_PRETTY_HDRS
