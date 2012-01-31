@@ -46,15 +46,17 @@ QVariant ConversationsModel::data(const QModelIndex& index, int role) const
 {
     QVariant result;
     if (index.isValid()) {
-        Q_ASSERT(role == ConversationRole);
-        result = QVariant::fromValue<Conversation*>(d->conversations[index.row()]);
-        kDebug() << "returning value " << result;
+        if (role == ConversationRole) {
+            result = QVariant::fromValue<Conversation*>(d->conversations[index.row()]);
+            kDebug() << "returning value " << result;
+        }
     }
     return result;
 }
 
 int ConversationsModel::rowCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     return d->conversations.count();
 }
 
