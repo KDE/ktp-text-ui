@@ -21,6 +21,8 @@
 #define CONVERSATION_TARGET_H
 
 #include <QObject>
+#include <QIcon>
+
 #include <TelepathyQt/Contact>
 
 #include "ktpchat_export.h"
