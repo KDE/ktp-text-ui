@@ -71,13 +71,6 @@ AdiumThemeMessageInfo::MessageType AdiumThemeMessageInfo::type() const
 
 QString AdiumThemeMessageInfo::message() const
 {
-//     QString htmlMessage= Qt::escape(d->message);
-//     htmlMessage.replace(QLatin1String("\n "), QLatin1String("<br/>&nbsp;")); //keep leading whitespaces
-//     htmlMessage.replace(QLatin1Char('\n'), QLatin1String("<br/>"));
-//     htmlMessage.replace(QLatin1Char('\t'), QLatin1String("&nbsp; &nbsp; ")); // replace tabs by 4 spaces
-//     htmlMessage.replace(QLatin1String("  "), QLatin1String(" &nbsp;")); // keep multiple whitespaces
-//     htmlMessage.replace(QLatin1Char('\\'), QLatin1String("\\\\")); //replace a single backslash with two backslashes.
-
     return d->message;
 }
 
