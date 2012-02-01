@@ -27,7 +27,7 @@ namespace KTp {
 class Message {
 
 public:
-    Message(Tp::Message& original);
+    Message(const Tp::Message& original);
 
     QString mainMessagePart() const;
     void setMainMessagePart(const QString& message);
@@ -35,11 +35,13 @@ public:
 
     QString finalizedMessage() const;
 
-    QVariantMap& miscData();
+    QVariant property(const QString &name) const;
+    void setProperty(const QString &name, const QVariant &value);
+
 private:
-    Tp::Message originalMessage;
-    QVariantMap m_miscData;
-    QStringList content;
+    Tp::Message m_originalMessage;
+    QVariantMap m_properties;
+    QStringList m_content;
 
     enum MessageParts {
         MainMessage = 0

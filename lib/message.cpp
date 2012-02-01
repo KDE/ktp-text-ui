@@ -20,12 +20,15 @@
 #include "message.h"
 #include <KDebug>
 
+#include <QtGui/QTextDocument> //needed for Qt::escape
+
+
 using namespace KTp;
 
-Message::Message(Tp::Message &original)
-    : originalMessage(original)
+Message::Message(const Tp::Message &original)
+    : m_originalMessage(original)
 {
-    QString htmlMessage= Qt::escape(originalMessage.text());
+    QString htmlMessage= Qt::escape(m_originalMessage.text());
     htmlMessage.replace(QLatin1String("\n "), QLatin1String("<br/>&nbsp;")); //keep leading whitespaces
     htmlMessage.replace(QLatin1Char('\n'), QLatin1String("<br/>"));
     htmlMessage.replace(QLatin1Char('\t'), QLatin1String("&nbsp; &nbsp; ")); // replace tabs by 4 spaces
@@ -37,27 +40,32 @@ Message::Message(Tp::Message &original)
 
 QString Message::mainMessagePart() const
 {
-    return content[Message::MainMessage];
+    return m_content[Message::MainMessage];
 }
 
 void Message::setMainMessagePart(const QString& message)
 {
-    content[Message::MainMessage] = message;
+    m_content[Message::MainMessage] = message;
 }
 
 void Message::appendMessagePart(const QString& part)
 {
-    content << part;
+    m_content << part;
 }
 
 QString Message::finalizedMessage() const
 {
-    QString msg = content.join(QLatin1String("\n"));
+    QString msg = m_content.join(QLatin1String("\n"));
     kDebug() << msg;
     return msg;
 }
 
-QVariantMap& Message::miscData()
+QVariant Message::property(const QString &name) const
 {
-    return m_miscData;
+    return m_properties[name];
+}
+
+void KTp::Message::setProperty(const QString &name, const QVariant &value)
+{
+    m_properties[name]=value;
 }
