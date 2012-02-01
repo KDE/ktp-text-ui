@@ -43,7 +43,13 @@ QString Message::mainMessagePart() const
 
 void Message::setMainMessagePart(const QString& message)
 {
-    m_content[Message::MainMessage] = message;
+    //FIXME there must be a better way to do this.
+    if (m_content.size() > 0) {
+        m_content[Message::MainMessage] = message;
+    }
+    else {
+        m_content.append(message);
+    }
 }
 
 void Message::appendMessagePart(const QString& part)
