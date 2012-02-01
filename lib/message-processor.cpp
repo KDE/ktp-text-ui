@@ -20,15 +20,28 @@
 #include "message-processor.h"
 #include "filters.h"
 
-QList<AbstractMessageFilter*> MessageProcessor::m_filters;
+MessageProcessor* MessageProcessor::s_instance = 0;
 
 AbstractMessageFilter::~AbstractMessageFilter()
 {
+}
 
+MessageProcessor* MessageProcessor::instance()
+{
+    static QMutex mutex;
+    if (!s_instance)
+    {
+        mutex.lock();
+        if (!s_instance) {
+            s_instance = new MessageProcessor;
+        }
+        mutex.unlock();
+    }
+    return s_instance;
 }
 
 
-MessageProcessor::MessageProcessor(QObject* parent): QObject(parent)
+MessageProcessor::MessageProcessor()
 {
     m_filters << new UrlFilter();
 }

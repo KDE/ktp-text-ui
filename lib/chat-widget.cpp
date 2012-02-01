@@ -69,7 +69,6 @@ public:
     Ui::ChatWidget ui;
     ChannelContactModel *contactModel;
     LogManager *logManager;
-    MessageProcessor *messageProcessor;
 
     KComponentData telepathyComponentData();
 };
@@ -195,9 +194,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
         d->logManager->setFetchAmount(3);
         d->logManager->setTextChannel(d->account, d->channel);
     }
-
-    //initialise message processor
-    d->messageProcessor = new MessageProcessor(this);
 }
 
 ChatWidget::~ChatWidget()
@@ -543,7 +539,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
         } else {
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
-            messageInfo.setMessage(d->messageProcessor->processIncommingMessage(message).finalizedMessage());
+            messageInfo.setMessage(MessageProcessor::instance()->processIncommingMessage(message).finalizedMessage());
 
             QDateTime time = message.sent();
             if (!time.isValid()) {

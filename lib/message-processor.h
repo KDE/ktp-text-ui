@@ -34,13 +34,21 @@ class MessageProcessor : public QObject
 {
 
 public:
-    explicit MessageProcessor(QObject* parent = 0);
+    static MessageProcessor* instance();
+
     ~MessageProcessor();
 
     //text-ui will call this somewhere in handleIncommingMessage just before displaying it
     KTp::Message processIncommingMessage(Tp::ReceivedMessage);
+
+protected:
+    explicit MessageProcessor();
+
+
 private:
-    static QList<AbstractMessageFilter*> m_filters;
+    static MessageProcessor* s_instance;
+    QList<AbstractMessageFilter*> m_filters;
+
 };
 
 #endif // MESSAGE_PROCESSOR_H
