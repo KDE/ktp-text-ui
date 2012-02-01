@@ -539,7 +539,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
         } else {
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
-            messageInfo.setMessage(MessageProcessor::instance()->processIncommingMessage(message).finalizedMessage());
+            messageInfo.setMessage(MessageProcessor::instance()->processIncomingMessage(message).finalizedMessage());
 
             QDateTime time = message.sent();
             if (!time.isValid()) {

@@ -39,7 +39,7 @@ public:
     ~MessageProcessor();
 
     //text-ui will call this somewhere in handleIncommingMessage just before displaying it
-    KTp::Message processIncommingMessage(Tp::ReceivedMessage);
+    KTp::Message processIncomingMessage(Tp::ReceivedMessage);
 
 protected:
     explicit MessageProcessor();

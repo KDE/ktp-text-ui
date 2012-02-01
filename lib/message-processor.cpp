@@ -46,7 +46,7 @@ MessageProcessor::MessageProcessor()
     m_filters << new UrlFilter();
 }
 
-KTp::Message MessageProcessor::processIncommingMessage(Tp::ReceivedMessage receivedMessage)
+KTp::Message MessageProcessor::processIncomingMessage(Tp::ReceivedMessage receivedMessage)
 {
     KTp::Message message(receivedMessage);
     Q_FOREACH(AbstractMessageFilter *filter, MessageProcessor::m_filters) {
