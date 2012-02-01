@@ -22,8 +22,6 @@
 
 #include <TelepathyQt/Message>
 
-namespace KTp {
-
 class Message {
 
 public:
@@ -48,6 +46,5 @@ private:
     };
 };
 
-}
 
 #endif // KTP_MESSAGE_H

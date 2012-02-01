@@ -23,8 +23,6 @@
 #include <QtGui/QTextDocument> //needed for Qt::escape
 
 
-using namespace KTp;
-
 Message::Message(const Tp::Message &original)
     : m_originalMessage(original)
 {
@@ -65,7 +63,7 @@ QVariant Message::property(const QString &name) const
     return m_properties[name];
 }
 
-void KTp::Message::setProperty(const QString &name, const QVariant &value)
+void Message::setProperty(const QString &name, const QVariant &value)
 {
     m_properties[name]=value;
 }

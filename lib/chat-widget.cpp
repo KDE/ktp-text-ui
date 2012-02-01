@@ -638,7 +638,8 @@ void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     }
     else {
         AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::LocalToRemote);
-        messageInfo.setMessage(message.text());
+        messageInfo.setMessage(MessageProcessor::instance()->processOutgoingMessage(message).finalizedMessage());
+
         messageInfo.setTime(message.sent());
 
         messageInfo.setSenderDisplayName(sender->alias());

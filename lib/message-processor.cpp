@@ -46,17 +46,27 @@ MessageProcessor::MessageProcessor()
     m_filters << new UrlFilter();
 }
 
-KTp::Message MessageProcessor::processIncomingMessage(Tp::ReceivedMessage receivedMessage)
+
+MessageProcessor::~MessageProcessor()
 {
-    KTp::Message message(receivedMessage);
+}
+
+Message MessageProcessor::processIncomingMessage(const Tp::ReceivedMessage &receivedMessage)
+{
+    Message message(receivedMessage);
     Q_FOREACH(AbstractMessageFilter *filter, MessageProcessor::m_filters) {
         filter->filterMessage(message);
     }
     return message;
 }
 
-MessageProcessor::~MessageProcessor()
+Message MessageProcessor::processOutgoingMessage(const Tp::Message &sentMessage)
 {
-
+    Message message(sentMessage);
+    Q_FOREACH(AbstractMessageFilter *filter, MessageProcessor::m_filters) {
+        filter->filterMessage(message);
+    }
+    return message;
 }
+
 

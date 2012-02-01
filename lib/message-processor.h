@@ -25,7 +25,7 @@
 
 class AbstractMessageFilter {
 public:
-    virtual void filterMessage(KTp::Message&) = 0;
+    virtual void filterMessage(Message &message) = 0;
     virtual ~AbstractMessageFilter();
 };
 
@@ -39,7 +39,10 @@ public:
     ~MessageProcessor();
 
     //text-ui will call this somewhere in handleIncommingMessage just before displaying it
-    KTp::Message processIncomingMessage(Tp::ReceivedMessage);
+    Message processIncomingMessage(const Tp::ReceivedMessage &message);
+    Message processOutgoingMessage(const Tp::Message &message);
+
+
 
 protected:
     explicit MessageProcessor();

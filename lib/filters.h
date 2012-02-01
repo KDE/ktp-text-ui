@@ -8,7 +8,7 @@
 
 class UrlFilter : public AbstractMessageFilter
 {
-    virtual void filterMessage(KTp::Message &info) {
+    virtual void filterMessage(Message &info) {
         QString message = info.mainMessagePart();
 
         // link detection
