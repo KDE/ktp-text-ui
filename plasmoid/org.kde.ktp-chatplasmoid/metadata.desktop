@@ -1,7 +1,19 @@
 [Desktop Entry]
 #FIXME: come up with a better name.
 Name=Multi-Chat Widget
+Name[hu]=Többchates widget
+Name[it]=Oggetto per chat diverse
+Name[pt]=Item Multi-Conversa
+Name[pt_BR]=Widget multi-conversa
+Name[uk]=Віджет спілкування з декількома співрозмовниками
+Name[x-test]=xxMulti-Chat Widgetxx
 Comment=This is a plasmoid that behaves like facebook chat or google talk.
+Comment[hu]=Ez a plazmoid úgy működik, mint a Facebook chat vagy a Google Talk.
+Comment[it]=Questo oggetto di Plasma si comporta come la chat di Facebook o di Google Talk.
+Comment[pt]=Isto é um plasmóide que se comporta como na conversa do Facebook ou do Google Talk.
+Comment[pt_BR]=Isto é um plasmoide que se comporta como o bate-papo do Facebook ou do Google Talk.
+Comment[uk]=Плазмоїд, який працює у спосіб, подібний до вікон спілкування Facebook або Google.
+Comment[x-test]=xxThis is a plasmoid that behaves like facebook chat or google talk.xx
 Icon=kde-telepathy
 
 X-Plasma-API=declarativeappletscript
