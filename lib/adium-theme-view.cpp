@@ -464,7 +464,6 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
 //         }
 //     }
 
-    message = m_emoticons.theme().parseEmoticons(message);
     htmlTemplate.replace(QLatin1String("%message%"), message);
 
     //service

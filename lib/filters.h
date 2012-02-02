@@ -1,17 +1,21 @@
 
 #include "message-processor.h"
 
+#include <KEmoticons>
+
 class UrlFilter : public AbstractMessageFilter
 {
-    virtual void filterMessage(Message& message);
+    void filterMessage(Message& message);
 };
 
 class ImageFilter : public AbstractMessageFilter
 {
-    virtual void filterMessage(Message& message);
+    void filterMessage(Message& message);
 };
 
 class EmoticonFilter : public AbstractMessageFilter
 {
-    virtual void filterMessage(Message& message);
+    void filterMessage(Message& message);
+private:
+    KEmoticons m_emoticons;
 };
