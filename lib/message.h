@@ -33,8 +33,8 @@ public:
 
     QString finalizedMessage() const;
 
-    QVariant property(const QString &name) const;
-    void setProperty(const QString &name, const QVariant &value);
+    QVariant property(const char *name) const;
+    void setProperty(const char *name, const QVariant &value);
 
 private:
     Tp::Message m_originalMessage;

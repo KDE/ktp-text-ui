@@ -64,12 +64,12 @@ QString Message::finalizedMessage() const
     return msg;
 }
 
-QVariant Message::property(const QString &name) const
+QVariant Message::property(const char *name) const
 {
-    return m_properties[name];
+    return m_properties[QLatin1String(name)];
 }
 
-void Message::setProperty(const QString &name, const QVariant &value)
+void Message::setProperty(const char *name, const QVariant& value)
 {
-    m_properties[name]=value;
+    m_properties[QLatin1String(name)] = value;
 }
