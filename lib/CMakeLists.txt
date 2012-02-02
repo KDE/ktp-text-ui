@@ -14,6 +14,7 @@ set(ktpchat_SRCS
         logmanager.cpp
         message.cpp
         message-processor.cpp
+        url-filter.cpp
 )
 
 set(ktpchat_HDRS
