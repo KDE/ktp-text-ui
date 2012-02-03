@@ -88,7 +88,6 @@ private:
     ChatWindowStyle *m_chatStyle;
     QString m_variantPath;
     QString m_variantName;
-    KEmoticons m_emoticons;
     bool m_useCustomFont;
     QString m_fontFamily;
     int m_fontSize;
