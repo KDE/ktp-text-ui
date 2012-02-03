@@ -16,34 +16,26 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "message-processor.h"
+#include "filters.h"
 
-#include <QObject>
-
-#include <KEmoticons>
-
-class UrlFilter : public AbstractMessageFilter
+class EmoticonFilter::Private
 {
 public:
-    explicit UrlFilter(QObject* parent = 0);
-    void filterMessage(Message& message);
+    KEmoticons emoticons;
 };
 
-class ImageFilter : public AbstractMessageFilter
+EmoticonFilter::EmoticonFilter(QObject *parent)
+    : AbstractMessageFilter(parent),
+      d(new Private)
 {
-public:
-    explicit ImageFilter(QObject* parent = 0);
-    void filterMessage(Message& message);
-};
+}
 
-class EmoticonFilter : public AbstractMessageFilter
+void EmoticonFilter::filterMessage(Message& message)
 {
-public:
-    explicit EmoticonFilter(QObject* parent = 0);
-    virtual ~EmoticonFilter();
+    message.setMainMessagePart(d->emoticons.theme().parseEmoticons(message.mainMessagePart()));
+}
 
-    void filterMessage(Message& message);
-private:
-    class Private;
-    Private *d;
-};
+EmoticonFilter::~EmoticonFilter()
+{
+    delete d;
+}
