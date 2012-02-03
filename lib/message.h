@@ -39,11 +39,8 @@ public:
 private:
     Tp::Message m_originalMessage;
     QVariantMap m_properties;
-    QStringList m_content;
-
-    enum MessageParts {
-        MainMessage = 0
-    };
+    QString     m_mainPart;
+    QStringList m_parts;
 };
 
 

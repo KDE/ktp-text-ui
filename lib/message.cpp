@@ -38,28 +38,24 @@ Message::Message(const Tp::Message &original)
 
 QString Message::mainMessagePart() const
 {
-    return m_content[Message::MainMessage];
+    return m_mainPart;
 }
 
 void Message::setMainMessagePart(const QString& message)
 {
-    //FIXME there must be a better way to do this.
-    if (m_content.size() > 0) {
-        m_content[Message::MainMessage] = message;
-    }
-    else {
-        m_content.append(message);
-    }
+    m_mainPart = message;
 }
 
 void Message::appendMessagePart(const QString& part)
 {
-    m_content << part;
+    m_parts << part;
 }
 
 QString Message::finalizedMessage() const
 {
-    QString msg = m_content.join(QLatin1String("\n"));
+    QString msg = m_mainPart + QLatin1String("\n") +
+        m_parts.join(QLatin1String("\n"));
+
     kDebug() << msg;
     return msg;
 }
