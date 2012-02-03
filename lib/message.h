@@ -17,8 +17,8 @@
 */
 
 
-#ifndef KTP_MESSAGE_H
-#define KTP_MESSAGE_H
+#ifndef MESSAGE_H
+#define MESSAGE_H
 
 #include <TelepathyQt/Message>
 
@@ -47,4 +47,4 @@ private:
 };
 
 
-#endif // KTP_MESSAGE_H
+#endif // MESSAGE_H
