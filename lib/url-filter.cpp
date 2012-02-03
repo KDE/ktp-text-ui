@@ -21,6 +21,7 @@
 
 #include <QImageReader>
 
+#include <KUrl>
 #include <KProtocolInfo>
 #include <KDebug>
 
@@ -32,7 +33,7 @@ UrlFilter::UrlFilter(QObject *parent)
 void UrlFilter::filterMessage(Message &info) {
     QString message = info.mainMessagePart();
     //FIXME: make "Urls" into a constant
-    QStringList urls = info.property("Urls").toStringList();
+    QVariantList urls = info.property("Urls").toList();
 
     // link detection
     QRegExp link(QLatin1String("\\b(?:(\\w+)://|(www\\.))([^\\s]+)"));
@@ -80,7 +81,7 @@ void UrlFilter::filterMessage(Message &info) {
                 fromIndex += realUrl.length();
             }
 
-            urls.append(realUrl);
+            urls.append(KUrl(realUrl));
         } else {
             fromIndex += link.matchedLength();
         }
