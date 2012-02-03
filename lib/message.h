@@ -36,6 +36,10 @@ public:
     QVariant property(const char *name) const;
     void setProperty(const char *name, const QVariant &value);
 
+    QDateTime time() const;
+    QString   token() const;
+    Tp::ChannelTextMessageType type() const;
+
 private:
     Tp::Message m_originalMessage;
     QVariantMap m_properties;

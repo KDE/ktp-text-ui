@@ -59,3 +59,18 @@ void Message::setProperty(const char *name, const QVariant& value)
 {
     m_properties[QLatin1String(name)] = value;
 }
+
+QDateTime Message::time() const
+{
+    return m_originalMessage.sent();
+}
+
+QString Message::token() const
+{
+    return m_originalMessage.messageToken();
+}
+
+Tp::ChannelTextMessageType Message::type() const
+{
+    return m_originalMessage.messageType();
+}
