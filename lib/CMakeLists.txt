@@ -16,6 +16,7 @@ set(ktpchat_SRCS
         message-processor.cpp
         url-filter.cpp
         emoticon-filter.cpp
+        escape-filter.cpp
 )
 
 set(ktpchat_HDRS

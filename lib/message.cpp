@@ -20,20 +20,10 @@
 #include "message.h"
 #include <KDebug>
 
-#include <QtGui/QTextDocument> //needed for Qt::escape
-
-
 Message::Message(const Tp::Message &original)
     : m_originalMessage(original)
 {
-    QString htmlMessage= Qt::escape(m_originalMessage.text());
-    htmlMessage.replace(QLatin1String("\n "), QLatin1String("<br/>&nbsp;")); //keep leading whitespaces
-    htmlMessage.replace(QLatin1Char('\n'), QLatin1String("<br/>"));
-    htmlMessage.replace(QLatin1Char('\t'), QLatin1String("&nbsp; &nbsp; ")); // replace tabs by 4 spaces
-    htmlMessage.replace(QLatin1String("  "), QLatin1String(" &nbsp;")); // keep multiple whitespaces
-    htmlMessage.replace(QLatin1Char('\\'), QLatin1String("\\\\")); //replace a single backslash with two backslashes.
-
-    setMainMessagePart(htmlMessage);
+    setMainMessagePart(original.text());
 }
 
 QString Message::mainMessagePart() const
