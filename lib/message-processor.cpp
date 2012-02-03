@@ -22,6 +22,11 @@
 
 MessageProcessor* MessageProcessor::s_instance = 0;
 
+AbstractMessageFilter::AbstractMessageFilter(QObject* parent)
+    : QObject(parent)
+{
+}
+
 AbstractMessageFilter::~AbstractMessageFilter()
 {
 }
@@ -43,7 +48,7 @@ MessageProcessor* MessageProcessor::instance()
 
 MessageProcessor::MessageProcessor()
 {
-    m_filters << new UrlFilter() << new EmoticonFilter();
+    m_filters << new UrlFilter(this) << new EmoticonFilter(this) << new ImageFilter(this);
 }
 
 

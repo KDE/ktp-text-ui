@@ -23,6 +23,11 @@
 #include <KProtocolInfo>
 #include <KDebug>
 
+UrlFilter::UrlFilter(QObject *parent)
+    : AbstractMessageFilter(parent)
+{
+}
+
 void UrlFilter::filterMessage(Message &info) {
     QString message = info.mainMessagePart();
     //FIXME: make "Urls" into a constant
@@ -83,3 +88,5 @@ void UrlFilter::filterMessage(Message &info) {
     info.setProperty("Urls", urls);
     info.setMainMessagePart(message);
 }
+
+

@@ -18,20 +18,28 @@
 
 #include "message-processor.h"
 
+#include <QObject>
+
 #include <KEmoticons>
 
 class UrlFilter : public AbstractMessageFilter
 {
+public:
+    explicit UrlFilter(QObject* parent = 0);
     void filterMessage(Message& message);
 };
 
 class ImageFilter : public AbstractMessageFilter
 {
+public:
+    explicit ImageFilter(QObject* parent = 0);
     void filterMessage(Message& message);
 };
 
 class EmoticonFilter : public AbstractMessageFilter
 {
+public:
+    explicit EmoticonFilter(QObject* parent = 0);
     void filterMessage(Message& message);
 private:
     KEmoticons m_emoticons;

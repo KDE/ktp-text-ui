@@ -23,10 +23,14 @@
 #include "message.h"
 #include <QList>
 
-class AbstractMessageFilter {
+class AbstractMessageFilter : public QObject
+{
+Q_OBJECT
 public:
-    virtual void filterMessage(Message &message) = 0;
+    explicit AbstractMessageFilter(QObject* parent = 0);
     virtual ~AbstractMessageFilter();
+
+    virtual void filterMessage(Message &message) = 0;
 };
 
 //each thing that displays message will have an instance of this
