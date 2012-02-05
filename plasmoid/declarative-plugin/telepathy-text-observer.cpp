@@ -72,7 +72,6 @@ public:
     }
 
     TelepathyTextObserver *m_parent;
-    Tp::ClientRegistrarPtr registrar;
 };
 
 TelepathyTextObserver::TelepathyTextObserver() :
@@ -108,12 +107,9 @@ TelepathyTextObserver::TelepathyTextObserver() :
     );
 
     //TODO: check these to make sure I'm only requesting features I actually use.
-    observer
-->registrar = Tp::ClientRegistrar::create(accountFactory, connectionFactory,
+    m_registrar = Tp::ClientRegistrar::create(accountFactory, connectionFactory,
                                             channelFactory, contactFactory);
-    observer
-->registrar->registerClient(observer
-, QLatin1String("KDE.TextUi.ConversationWatcher"));
+    m_registrar->registerClient(observer, QLatin1String("KDE.TextUi.ConversationWatcher"));
 }
 
 TelepathyTextObserver::~TelepathyTextObserver()

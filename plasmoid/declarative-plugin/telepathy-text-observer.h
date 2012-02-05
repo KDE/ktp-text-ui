@@ -35,10 +35,11 @@ public:
     ~TelepathyTextObserver();
 
 Q_SIGNALS:
-	void newConversation(Conversation *con);
+    void newConversation(Conversation *con);
 private:
-	class ConversationClientObserver;
-	Tp::SharedPtr<ConversationClientObserver> observer;
+    class ConversationClientObserver;
+    Tp::SharedPtr<ConversationClientObserver> observer;
+    Tp::ClientRegistrarPtr m_registrar;
 };
 
 #endif // CONVERSATION_WATCHER_H
