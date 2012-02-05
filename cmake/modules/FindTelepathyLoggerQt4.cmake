@@ -44,6 +44,6 @@ include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set LIBXML2_FOUND to TRUE
 # if all listed variables are TRUE
 find_package_handle_standard_args(TELEPATHY_LOGGER_QT4  DEFAULT_MSG
-                                  TELEPATHY_LOGGER_QT4_LIBRARY TELEPATHY_LOGGER_QT4_INCLUDE_DIRS)
+                                  TELEPATHY_LOGGER_QT4_LIBRARY TELEPATHY_LOGGER_QT4_INCLUDE_DIR)
 
 mark_as_advanced(TELEPATHY_LOGGER_QT4_INCLUDE_DIRS TELEPATHY_LOGGER_QT4_LIBRARY )
