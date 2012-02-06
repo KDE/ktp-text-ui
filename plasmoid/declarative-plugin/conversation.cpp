@@ -47,7 +47,7 @@ Conversation::Conversation(const Tp::TextChannelPtr& channel,
 
     d->valid = channel->isValid();
     connect(channel.data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
-            SLOT(invalidate(Tp::DBusProxy*,QString,QString)));
+            SLOT(onChannelInvalidated(Tp::DBusProxy*,QString,QString)));
 }
 
 Conversation::Conversation(QObject *parent) : QObject(parent)
@@ -71,7 +71,7 @@ bool Conversation::isValid()
     return d->valid;
 }
 
-void Conversation::invalidate(Tp::DBusProxy* proxy, const QString& errorName, const QString& errorMessage)
+void Conversation::onChannelInvalidated(Tp::DBusProxy* proxy, const QString& errorName, const QString& errorMessage)
 {
     kDebug() << proxy << errorName << ":" << errorMessage;
 

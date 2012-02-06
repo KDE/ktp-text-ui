@@ -57,7 +57,7 @@ public Q_SLOTS:
     void requestClose();
 
 private Q_SLOTS:
-    void invalidate(Tp::DBusProxy *proxy, const QString &errorName, const QString &errorMessage);
+    void onChannelInvalidated(Tp::DBusProxy *proxy, const QString &errorName, const QString &errorMessage);
 
 private:
     class ConversationPrivate;
