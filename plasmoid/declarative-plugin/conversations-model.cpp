@@ -93,11 +93,15 @@ void ConversationsModel::handleValidityChange(bool valid)
     if(!valid) {
         Conversation* sender = qobject_cast<Conversation*>(QObject::sender());
         int index = d->conversations.indexOf(sender);
-        beginRemoveRows(QModelIndex(), index, index);
+        if(index != -1) {
+            beginRemoveRows(QModelIndex(), index, index);
 
-        d->conversations.removeAt(index);
-        sender->deleteLater();
-        endRemoveRows();
+            d->conversations.removeAt(index);
+            sender->deleteLater();
+            endRemoveRows();
+        } else {
+            kError() << "attempting to delete non-existant conversation";
+        }
     }
 }
 
