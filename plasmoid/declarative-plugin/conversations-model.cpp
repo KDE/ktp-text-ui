@@ -83,7 +83,21 @@ void ConversationsModel::onInconmingConversation(Conversation *newConvo)
     if (!handled) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
         d->conversations.append(newConvo);
+        connect(newConvo, SIGNAL(validityChanged(bool)), SLOT(handleValidityChange(bool)));
         endInsertRows();
+    }
+}
+
+void ConversationsModel::handleValidityChange(bool valid)
+{
+    if(!valid) {
+        Conversation* sender = qobject_cast<Conversation*>(QObject::sender());
+        int index = d->conversations.indexOf(sender);
+        beginRemoveRows(QModelIndex(), index, index);
+
+        d->conversations.removeAt(index);
+        sender->deleteLater();
+        endRemoveRows();
     }
 }
 

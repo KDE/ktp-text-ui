@@ -38,6 +38,7 @@ Q_OBJECT
 
 Q_PROPERTY(ConversationTarget* target READ target CONSTANT);
 Q_PROPERTY(MessagesModel* messages READ messages CONSTANT);
+Q_PROPERTY(bool valid READ isValid NOTIFY validityChanged);
 
 public:
     Conversation(const Tp::TextChannelPtr &channel, const Tp::AccountPtr &account, QObject *parent = 0);
@@ -46,6 +47,17 @@ public:
 
     MessagesModel* messages() const;
     ConversationTarget* target() const;
+
+    bool isValid();
+
+Q_SIGNALS:
+    void validityChanged(bool isValid);
+
+public Q_SLOTS:
+    void requestClose();
+
+private Q_SLOTS:
+    void invalidate(Tp::DBusProxy *proxy, const QString &errorName, const QString &errorMessage);
 
 private:
     class ConversationPrivate;

@@ -51,8 +51,10 @@ public:
     bool isVisibleToUser() const;
     void setVisibleToUser(bool visible);
 
+    int  unreadCount() const;
     void acknowledgeAllMessages();
-    int unreadCount() const;
+
+    void requestClose();
 
     //debug function. will do whatever I feel like at the time ;-)
     Q_INVOKABLE void printallmessages();

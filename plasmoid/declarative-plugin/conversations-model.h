@@ -47,6 +47,7 @@ private:
 
 private Q_SLOTS:
     void onInconmingConversation(Conversation *convo);
+    void handleValidityChange(bool);
 };
 
 #endif // CONVERSATIONS_MODEL_H

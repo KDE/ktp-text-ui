@@ -29,9 +29,12 @@ class Conversation::ConversationPrivate
 public:
     MessagesModel *messages;
     ConversationTarget *target;
+    bool valid;
 };
 
-Conversation::Conversation(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, QObject *parent) :
+Conversation::Conversation(const Tp::TextChannelPtr& channel,
+                           const Tp::AccountPtr& account,
+                           QObject *parent) :
         QObject(parent),
         d (new ConversationPrivate)
 {
@@ -41,6 +44,10 @@ Conversation::Conversation(const Tp::TextChannelPtr& channel, const Tp::AccountP
     d->messages->setTextChannel(channel);
 
     d->target = new ConversationTarget(channel->targetContact(), this);
+
+    d->valid = channel->isValid();
+    connect(channel.data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
+            SLOT(invalidate(Tp::DBusProxy*,QString,QString)));
 }
 
 Conversation::Conversation(QObject *parent) : QObject(parent)
@@ -57,6 +64,26 @@ MessagesModel* Conversation::messages() const
 ConversationTarget* Conversation::target() const
 {
     return d->target;
+}
+
+bool Conversation::isValid()
+{
+    return d->valid;
+}
+
+void Conversation::invalidate(Tp::DBusProxy* proxy, const QString& errorName, const QString& errorMessage)
+{
+    kDebug() << proxy << errorName << ":" << errorMessage;
+
+    d->valid = false;
+
+    Q_EMIT validityChanged(d->valid);
+}
+
+void Conversation::requestClose()
+{
+    kDebug();
+    d->messages->requestClose();
 }
 
 Conversation::~Conversation()

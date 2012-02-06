@@ -37,9 +37,7 @@ Item {
                     onCloseRequested: {
                         conv.pressed = false;
                     }
-                    onConversationEndRequested: {
-                        model.conversation.messages.printallmessages();
-                    }
+                    onConversationEndRequested: model.conversation.requestClose()
                     Binding {
                         target: model.conversation.messages
                         property: "visibleToUser"
