@@ -12,6 +12,7 @@ X-KDE-RootOnly=false
 Categories=Qt;KDE;X-KDE-settings-network;
 
 Name=Chat Window Appearance
+Name[ca]=Aparença de la finestra de xat
 Name[cs]=Vzhled okna rozhovoru
 Name[da]=Chatvinduets udseende
 Name[de]=Erscheinungsbild des Chatfensters
@@ -34,6 +35,7 @@ Name[x-test]=xxChat Window Appearancexx
 Name[zh_CN]=聊天窗口外观
 Name[zh_TW]=聊天視窗外觀
 Comment=Choose a Style for your Chat Window and customize it
+Comment[ca]=Seleccioneu un estil per la finestra de xat i personalitzeu-la
 Comment[cs]=Vyberte styl pro okno rozhovoru a upravte jej
 Comment[da]=Vælg chatvinduestil og tilpas den
 Comment[de]=Wählen Sie einen Stil für Ihr Chatfenster und passen Sie ihn an
