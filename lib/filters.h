@@ -29,13 +29,6 @@ public:
     void filterMessage(Message& message);
 };
 
-class ImageFilter : public AbstractMessageFilter
-{
-public:
-    explicit ImageFilter(QObject* parent = 0);
-    void filterMessage(Message& message);
-};
-
 class EmoticonFilter : public AbstractMessageFilter
 {
 public:

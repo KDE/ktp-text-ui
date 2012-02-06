@@ -48,7 +48,7 @@ MessageProcessor* MessageProcessor::instance()
 
 MessageProcessor::MessageProcessor()
 {
-    m_filters << new UrlFilter(this) << new EmoticonFilter(this) << new ImageFilter(this) << new EscapeFilter(this);
+    m_filters << new EscapeFilter(this) << new EmoticonFilter(this) << new UrlFilter(this);
 }
 
 
