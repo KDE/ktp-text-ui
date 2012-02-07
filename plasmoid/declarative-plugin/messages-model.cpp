@@ -20,6 +20,8 @@
 #include "messages-model.h"
 
 #include <KDebug>
+#include <KLocalizedString>
+
 #include <TelepathyQt/ReceivedMessage>
 
 class MessageItem
