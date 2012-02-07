@@ -166,7 +166,7 @@ void MessagesModel::onMessageSent(Tp::Message message, Tp::MessageSendingFlags f
     kDebug() << "text =" << message.text();
 
     d->messages.append(MessageItem(
-                           tr("Me"),   //FIXME : use actual nickname from Tp::AccountPtr
+                           i18n("Me"),   //FIXME : use actual nickname from Tp::AccountPtr
                            message.text(),
                            message.sent(),
                            MessageItem::Outgoing,
