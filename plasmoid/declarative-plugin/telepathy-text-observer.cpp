@@ -29,9 +29,7 @@
 
 static inline Tp::ChannelClassSpecList channelClassList()
 {
-    return Tp::ChannelClassSpecList() << Tp::ChannelClassSpec::textChat()
-                                      << Tp::ChannelClassSpec::unnamedTextChat()
-                                      << Tp::ChannelClassSpec::textChatroom();
+    return Tp::ChannelClassSpecList() << Tp::ChannelClassSpec::textChat();
 }
 
 class TelepathyTextObserver::ConversationClientObserver :
