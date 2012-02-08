@@ -88,14 +88,17 @@ bool MessagesModel::verifyPendingOperation(Tp::PendingOperation *op)
     return operationSucceeded;
 }
 
-void MessagesModel::setupChannelSignals(Tp::TextChannelPtr channel)
+void MessagesModel::setupChannelSignals(const Tp::TextChannelPtr &channel)
 {
-    QObject::connect(channel.data(),
-                     SIGNAL(messageReceived(Tp::ReceivedMessage)),
-                     SLOT(onMessageReceived(Tp::ReceivedMessage)));
-    QObject::connect(channel.data(),
-                     SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
-                     SLOT(onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
+    connect(channel.data(),
+            SIGNAL(messageReceived(Tp::ReceivedMessage)),
+            SLOT(onMessageReceived(Tp::ReceivedMessage)));
+    connect(channel.data(),
+            SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
+            SLOT(onMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
+    connect(channel.data(),
+            SIGNAL(pendingMessageRemoved(Tp::ReceivedMessage)),
+            SLOT(onPendingMessageRemoved()));
 }
 
 void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
@@ -127,7 +130,7 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
     }
 }
 
-void MessagesModel::onMessageReceived(Tp::ReceivedMessage message)
+void MessagesModel::onMessageReceived(const Tp::ReceivedMessage &message)
 {
     int unreadCount = d->textChannel->messageQueue().size();
     kDebug() << "unreadMessagesCount =" << unreadCount;
@@ -158,10 +161,10 @@ void MessagesModel::onMessageReceived(Tp::ReceivedMessage message)
 
 }
 
-void MessagesModel::onMessageSent(Tp::Message message, Tp::MessageSendingFlags flags, QString token)
+void MessagesModel::onMessageSent(const Tp::Message &message, Tp::MessageSendingFlags flags, const QString &messageToken)
 {
     Q_UNUSED(flags);
-    Q_UNUSED(token);
+    Q_UNUSED(messageToken);
 
     int length = rowCount();
     beginInsertRows(QModelIndex(), length, length);
@@ -176,6 +179,11 @@ void MessagesModel::onMessageSent(Tp::Message message, Tp::MessageSendingFlags f
                        ));
 
     endInsertRows();
+}
+
+void MessagesModel::onPendingMessageRemoved()
+{
+    Q_EMIT unreadCountChanged(unreadCount());
 }
 
 QVariant MessagesModel::data(const QModelIndex& index, int role) const
@@ -223,7 +231,7 @@ void MessagesModel::sendNewMessage(const QString &message)
     }
 }
 
-void MessagesModel::removeChannelSignals(Tp::TextChannelPtr channel)
+void MessagesModel::removeChannelSignals(const Tp::TextChannelPtr &channel)
 {
     QObject::disconnect(channel.data(),
                         SIGNAL(messageReceived(Tp::ReceivedMessage)),
@@ -298,9 +306,8 @@ void MessagesModel::printallmessages()
     Q_FOREACH(MessageItem msg, d->messages) {
         kDebug() << msg.text;
     }
-    beginResetModel();
-//     d->messages.clear();
-    endResetModel();
 }
+
+
 
 #include "moc_messages-model.cpp"
