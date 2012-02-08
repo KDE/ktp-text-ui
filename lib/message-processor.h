@@ -21,7 +21,11 @@
 #define MESSAGE_PROCESSOR_H
 
 #include "message.h"
+
 #include <QList>
+
+#include <ktpchat_export.h>
+
 
 class AbstractMessageFilter : public QObject
 {
@@ -34,7 +38,7 @@ public:
 };
 
 //each thing that displays message will have an instance of this
-class MessageProcessor : public QObject
+class KDE_TELEPATHY_CHAT_EXPORT MessageProcessor : public QObject
 {
 
 public:

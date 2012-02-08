@@ -24,6 +24,8 @@
 
 #include <TelepathyQt/ReceivedMessage>
 
+#include "lib/message-processor.h"
+
 class MessageItem
 {
 public:
@@ -143,7 +145,7 @@ void MessagesModel::onMessageReceived(const Tp::ReceivedMessage &message)
 
         d->messages.append(MessageItem(
                                message.sender()->alias(),
-                               message.text(),
+                               MessageProcessor::instance()->processIncomingMessage(message).finalizedMessage(),
                                message.received(),
                                MessageItem::Incoming,
                                message.messageToken()
@@ -172,7 +174,7 @@ void MessagesModel::onMessageSent(const Tp::Message &message, Tp::MessageSending
 
     d->messages.append(MessageItem(
                            i18n("Me"),   //FIXME : use actual nickname from Tp::AccountPtr
-                           message.text(),
+                           MessageProcessor::instance()->processOutgoingMessage(message).finalizedMessage(),
                            message.sent(),
                            MessageItem::Outgoing,
                            message.messageToken()

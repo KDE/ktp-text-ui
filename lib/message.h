@@ -22,7 +22,9 @@
 
 #include <TelepathyQt/Message>
 
-class Message {
+#include <ktpchat_export.h>
+
+class KDE_TELEPATHY_CHAT_EXPORT Message {
 
 public:
     Message(const Tp::Message& original);
