@@ -45,7 +45,7 @@ public:
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
-    Tp::TextChannelPtr textChannel();
+    Tp::TextChannelPtr textChannel() const;
     void setTextChannel(Tp::TextChannelPtr channel);
 
     bool isVisibleToUser() const;

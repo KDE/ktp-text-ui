@@ -71,7 +71,7 @@ MessagesModel::MessagesModel(QObject *parent):
     d->visible = false;
 }
 
-Tp::TextChannelPtr MessagesModel::textChannel()
+Tp::TextChannelPtr MessagesModel::textChannel() const
 {
     return d->textChannel;
 }
