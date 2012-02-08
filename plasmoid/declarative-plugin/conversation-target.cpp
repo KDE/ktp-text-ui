@@ -28,7 +28,7 @@ public:
     KIcon avatar;
 };
 
-ConversationTarget::ConversationTarget(Tp::ContactPtr contact, QObject *parent) :
+ConversationTarget::ConversationTarget(const Tp::ContactPtr &contact, QObject *parent) :
     QObject(parent),
     d(new ConversationTargetPrivate)
 {
@@ -51,22 +51,38 @@ void ConversationTarget::setupContactSignals(Tp::ContactPtr contact)
 
 QIcon ConversationTarget::avatar() const
 {
-    return d->avatar;
+    if (d->contact) {
+        return d->avatar;
+    } else {
+        return QIcon();
+    }
 }
 
 QString ConversationTarget::id() const
 {
-    return d->contact->id();
+    if (d->contact) {
+        return d->contact->id();
+    } else {
+        return QString();
+    }
 }
 
 QString ConversationTarget::nick() const
 {
-    return d->contact->alias();
+    if (d->contact) {
+        return d->contact->alias();
+    } else {
+        return QString();
+    }
 }
 
 QIcon ConversationTarget::presenceIcon() const
 {
-    return KTp::Presence(d->contact->presence()).icon();
+    if (d->contact) {
+        return KTp::Presence(d->contact->presence()).icon();
+    } else {
+        return QIcon();
+    }
 }
 
 void ConversationTarget::onPresenceChanged(const Tp::Presence&)
@@ -82,7 +98,10 @@ void ConversationTarget::onAvatarDataChanged(const Tp::AvatarData&)
 
 void ConversationTarget::updateAvatar()
 {
-    QString path = d->contact->avatarData().fileName;
+    QString path;
+    if (d->contact) {
+        path = d->contact->avatarData().fileName;
+    }
 
     if(path.isEmpty()) {
         path = QLatin1String("im-user");
