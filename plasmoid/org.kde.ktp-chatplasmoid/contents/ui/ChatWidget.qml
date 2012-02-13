@@ -33,7 +33,7 @@ Item {
 
             onClicked: closeRequested()
         }
-        
+
         PlasmaComponents.ToolButton {
             id: popoutButton
 
@@ -50,7 +50,6 @@ Item {
                 closeRequested();
             }
         }
-        
 
         PlasmaComponents.ToolButton {
             id: closeButton

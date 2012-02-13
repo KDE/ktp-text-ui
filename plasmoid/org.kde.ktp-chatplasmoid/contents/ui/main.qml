@@ -6,12 +6,11 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 
 
 Item {
-    
+
     TelepathyTextObserver {
         id: main
     }
 
-    
     id: top
     ListView {
         id: base
@@ -31,7 +30,7 @@ Item {
             //FIXME: put in a loader to not slow down the model
             PlasmaCore.Dialog {
                 id: dialog
-                windowFlags: Qt.Dialog
+                windowFlags: Qt.Popup
                 visible: conv.pressed
 
                 mainItem: ChatWidget {
@@ -50,6 +49,14 @@ Item {
                 onPopoutRequested: {
                     conv.pressed = true;
                 }
+            }
+
+            // needed to let MessageModel know when messages are visible
+            // so that it can acknowledge them properly
+            Binding {
+                target: model.conversation.messages
+                property: "visibleToUser"
+                value: conv.pressed
             }
 
             onToggled: {
