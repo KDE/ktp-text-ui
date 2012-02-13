@@ -68,7 +68,7 @@ TelepathyTextObserver::TelepathyTextObserver(QObject* parent) :
 
 TelepathyTextObserver::~TelepathyTextObserver()
 {
-    qDebug() << "deleting text observer";
+    kDebug() << "deleting text observer";
 }
 
 QAbstractListModel * TelepathyTextObserver::conversationModel()
