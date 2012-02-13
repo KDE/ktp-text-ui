@@ -8,7 +8,7 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 Item {
 
     TelepathyTextObserver {
-        id: main
+        id: handler
     }
 
     id: top
@@ -17,9 +17,10 @@ Item {
         anchors.fill: parent
         orientation: Qt.Horizontal
 
-        model: main.conversations
+        model: handler.conversations
 
         delegate : ConversationDelegate {
+            //FIXME: rename the two variables named 'conv' as it's confusing
             id:conv
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -30,7 +31,8 @@ Item {
             //FIXME: put in a loader to not slow down the model
             PlasmaCore.Dialog {
                 id: dialog
-                windowFlags: Qt.Popup
+                //Set as a Tool window to bypass the taskbar
+                windowFlags: Qt.Tool
                 visible: conv.pressed
 
                 mainItem: ChatWidget {
