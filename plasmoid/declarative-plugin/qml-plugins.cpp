@@ -34,6 +34,9 @@ void QmlPlugins::registerTypes(const char *uri)
     qmlRegisterType<TelepathyTextObserver> (uri, 0, 1, "TelepathyTextObserver");
     qmlRegisterType<Conversation>(uri, 0, 1, "Conversation");
 
+    //needed for MessageType enum
+    qmlRegisterUncreatableType<MessagesModel>(uri, 0, 1, "MessagesModel",
+        QLatin1String("MessagesModel can not be instanitized directly. Use a TelepathyTextObserver instead"));
 }
 
 Q_EXPORT_PLUGIN2(conversation, QmlPlugins);
