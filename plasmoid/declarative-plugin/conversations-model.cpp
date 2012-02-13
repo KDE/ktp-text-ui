@@ -126,7 +126,7 @@ void ConversationsModel::handleChannels(const Tp::MethodInvocationContextPtr<> &
 
     if (!handled && !shouldDelegate) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
-        Conversation* newConvo = new Conversation(textChannel, account);
+        Conversation* newConvo = new Conversation(textChannel, account, this);
         d->conversations.append(newConvo);
         connect(newConvo, SIGNAL(validityChanged(bool)), SLOT(handleValidityChange(bool)));
         endInsertRows();
