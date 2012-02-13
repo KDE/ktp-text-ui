@@ -8,12 +8,13 @@ Item {
     PlasmaComponents.Label {
         id: header
 
-        height: paintedHeight
         width: view.width
         wrapMode: Text.Wrap
 
         color: textColor
         text: "<b>[" + Qt.formatTime(model.time) + "] " + model.user + " :</b>"
+
+        verticalAlignment: Text.AlignBottom
     }
     PlasmaComponents.Label {
         id: body
@@ -25,6 +26,7 @@ Item {
         color: textColor
         text: model.text
         textFormat: Text.RichText
+        verticalAlignment: Text.AlignTop
     }
 
     height: header.height + body.height
