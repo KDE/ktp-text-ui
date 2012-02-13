@@ -23,6 +23,7 @@ Item {
 
         color: textColor
         text: model.text
+        textFormat: Text.RichText
     }
 
     height: header.height + body.height
