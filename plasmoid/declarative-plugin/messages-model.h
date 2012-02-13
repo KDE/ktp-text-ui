@@ -28,6 +28,7 @@
 class MessagesModel : public QAbstractListModel, public Queable
 {
     Q_OBJECT
+    Q_ENUMS(MessageType)
     Q_PROPERTY(bool visibleToUser READ isVisibleToUser WRITE setVisibleToUser NOTIFY visibleToUserChanged);
     Q_PROPERTY(int unreadCount READ unreadCount NOTIFY unreadCountChanged);
 
@@ -40,6 +41,13 @@ public:
         TextRole,
         TypeRole,
         TimeRole
+    };
+
+    enum MessageType {
+        MessageTypeIncoming,
+        MessageTypeOutgoing,
+        MessageTypeAction,
+        MessageTypeNotice
     };
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

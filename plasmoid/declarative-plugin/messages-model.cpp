@@ -33,15 +33,9 @@ public:
     QString text;
     QDateTime time;
     QString id;
+    MessagesModel::MessageType type;
 
-    //FIXME : replace with Tp::ChannelTextMessageType
-    enum MessageType {
-        Incoming,
-        Outgoing,
-        Status
-    } type;
-
-    MessageItem(QString user, QString text, QDateTime time, MessageType type, QString messageId)
+    MessageItem(QString user, QString text, QDateTime time, MessagesModel::MessageType type, QString messageId)
             : user(user), text(text), time(time), id(messageId), type(type) {
         if (this->text.endsWith(QLatin1String("\n"))) {
             this->text.chop(1);
@@ -146,7 +140,7 @@ void MessagesModel::onMessageReceived(const Tp::ReceivedMessage &message)
                                message.sender()->alias(),
                                MessageProcessor::instance()->processIncomingMessage(message).finalizedMessage(),
                                message.received(),
-                               MessageItem::Incoming,
+                               MessagesModel::MessageTypeIncoming,
                                message.messageToken()
                            ));
 
@@ -175,7 +169,7 @@ void MessagesModel::onMessageSent(const Tp::Message &message, Tp::MessageSending
                            i18n("Me"),   //FIXME : use actual nickname from Tp::AccountPtr
                            MessageProcessor::instance()->processOutgoingMessage(message).finalizedMessage(),
                            message.sent(),
-                           MessageItem::Outgoing,
+                           MessagesModel::MessageTypeOutgoing,
                            message.messageToken()
                        ));
 
