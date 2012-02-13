@@ -115,15 +115,15 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
      * If the special hint org.kde.telepathy forceRaiseWindow is set to true, then we use KWindowSystem::forceActiveWindow
      * to claim focus.
      */
-    bool forceRaiseWindowHint = false;
+    bool windowRaise = true;
 
     //find the relevant channelRequest
     Q_FOREACH(const Tp::ChannelRequestPtr channelRequest, channelRequests) {
         kDebug() << channelRequest->hints().allHints();
-        forceRaiseWindowHint = channelRequest->hints().hint(QLatin1String("org.kde.telepathy"), QLatin1String("forceRaiseWindow")).toBool();
+        windowRaise = !channelRequest->hints().hint(QLatin1String("org.kde.telepathy"), QLatin1String("suppressWindowRaise")).toBool();
     }
 
-    kDebug() << "force raise window hint set to: " << forceRaiseWindowHint;
+    kDebug() << "raise window hint set to: " << windowRaise;
 
     bool tabFound = false;
 
@@ -134,7 +134,10 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
 
         if (tab) {
             tabFound = true;
-            window->focusChat(tab);                 // set focus on selected tab
+            if (windowRaise) {
+                window->focusChat(tab);                 // set focus on selected tab
+                KWindowSystem::forceActiveWindow(window->winId());
+            }
 
             // check if channel is invalid. Replace only if invalid
             // You get this status if user goes offline and then back on without closing the chat
@@ -143,11 +146,6 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
                 tab->setChatEnabled(true);           // re-enable chat
             }
         }
-
-        if (forceRaiseWindowHint) {
-            KWindowSystem::forceActiveWindow(window->winId());
-        }
-
     }
 
     //if there is currently no tab containing the incoming channel.
@@ -169,7 +167,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
         tab->setChatWindow(window);
         window->show();
 
-        if (forceRaiseWindowHint) {
+        if (windowRaise) {
             KWindowSystem::forceActiveWindow(window->winId());
         }
     }

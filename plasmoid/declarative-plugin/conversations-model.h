@@ -22,16 +22,18 @@
 
 #include <QAbstractListModel>
 
+#include <TelepathyQt/AbstractClientApprover>
+
 #include "ktpchat_export.h"
 
 
 class Conversation;
 
-class KDE_TELEPATHY_CHAT_EXPORT ConversationsModel : public QAbstractListModel
+class KDE_TELEPATHY_CHAT_EXPORT ConversationsModel : public QAbstractListModel, public Tp::AbstractClientHandler
 {
 Q_OBJECT
 public:
-    explicit ConversationsModel(QObject *parent = 0);
+    explicit ConversationsModel();
     virtual ~ConversationsModel();
 
     virtual QVariant data ( const QModelIndex& index, int role = Qt::DisplayRole ) const;
@@ -41,12 +43,20 @@ public:
         ConversationRole = Qt::UserRole
     };
 
+    void handleChannels(const Tp::MethodInvocationContextPtr<> &context,
+                        const Tp::AccountPtr &account,
+                        const Tp::ConnectionPtr &connection,
+                        const QList<Tp::ChannelPtr> &channels,
+                        const QList<Tp::ChannelRequestPtr> &channelRequests,
+                        const QDateTime &userActionTime,
+                        const HandlerInfo &handlerInfo);
+    bool bypassApproval() const;
+
 private:
     class ConversationsModelPrivate;
     ConversationsModelPrivate *d;
 
 private Q_SLOTS:
-    void onInconmingConversation(Conversation *convo);
     void handleValidityChange(bool);
 };
 

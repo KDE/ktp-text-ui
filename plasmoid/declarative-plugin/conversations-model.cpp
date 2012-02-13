@@ -19,27 +19,35 @@
 
 #include "conversations-model.h"
 #include "conversation.h"
-#include "telepathy-text-observer.h"
-#include <KDebug>
 #include "conversation-target.h"
 #include "messages-model.h"
+#include "channel-delegator.h"
+
+#include <KDebug>
+
+#include <TelepathyQt/ChannelClassSpec>
+#include <TelepathyQt/TextChannel>
+#include <TelepathyQt/ClientRegistrar>
+
+static inline Tp::ChannelClassSpecList channelClassList()
+{
+    return Tp::ChannelClassSpecList() << Tp::ChannelClassSpec::textChat();
+}
 
 class ConversationsModel::ConversationsModelPrivate
 {
 public:
-    TelepathyTextObserver watcher;
     QList<Conversation*> conversations;
 };
 
-ConversationsModel::ConversationsModel(QObject *parent) :
-        QAbstractListModel(parent),
+ConversationsModel::ConversationsModel() :
+        QAbstractListModel(),
+        Tp::AbstractClientHandler(channelClassList()),
         d(new ConversationsModelPrivate)
 {
     QHash<int, QByteArray> roles;
     roles[ConversationRole] = "conversation";
     setRoleNames(roles);
-
-    QObject::connect(&d->watcher, SIGNAL(newConversation(Conversation*)), SLOT(onInconmingConversation(Conversation*)));
 }
 
 QVariant ConversationsModel::data(const QModelIndex& index, int role) const
@@ -60,32 +68,76 @@ int ConversationsModel::rowCount(const QModelIndex& parent) const
     return d->conversations.count();
 }
 
-void ConversationsModel::onInconmingConversation(Conversation *newConvo)
+void ConversationsModel::handleChannels(const Tp::MethodInvocationContextPtr<> &context,
+                                        const Tp::AccountPtr &account,
+                                        const Tp::ConnectionPtr &connection,
+                                        const QList<Tp::ChannelPtr> &channels,
+                                        const QList<Tp::ChannelRequestPtr> &channelRequests,
+                                        const QDateTime &userActionTime,
+                                        const HandlerInfo &handlerInfo)
 {
-    //check if conversation's channel is already being handled, if so replace it
+    Q_UNUSED(connection);
+    Q_UNUSED(handlerInfo);
+
     bool handled = false;
-    Tp::TextChannelPtr newChannel = newConvo->messages()->textChannel();
-    if (!newChannel->targetHandleType() == Tp::HandleTypeNone) {
+    bool shouldDelegate = false;
 
-        //loop through all conversations checking for matches
-        Q_FOREACH(Conversation *convo, d->conversations) {
-            if (convo->target()->id() == newChannel->targetId() &&
-                    convo->messages()->textChannel()->targetHandleType() == newChannel->targetHandleType()) {
-
-                convo->messages()->setTextChannel(newChannel);
-                newConvo->deleteLater();
-                handled = true;
-                break;
-            }
+    //check that the channel is of type text
+    Tp::TextChannelPtr textChannel;
+    Q_FOREACH(const Tp::ChannelPtr & channel, channels) {
+        textChannel = Tp::TextChannelPtr::dynamicCast(channel);
+        if (textChannel) {
+            break;
         }
     }
 
-    if (!handled) {
+    Q_ASSERT(textChannel);
+
+
+    //find the relevant channelRequest
+    Q_FOREACH(const Tp::ChannelRequestPtr channelRequest, channelRequests) {
+        kDebug() << channelRequest->hints().allHints();
+        shouldDelegate = channelRequest->hints().hint(QLatin1String("org.freedesktop.Telepathy.ChannelRequest"), QLatin1String("DelegateToPreferredHandler")).toBool();
+    }
+
+
+    //loop through all conversations checking for matches
+
+    //if we are handling and we're not told to delegate it, update the text channel
+    //if we are handling but should delegate, call delegate channel
+    Q_FOREACH(Conversation *convo, d->conversations) {
+        if (convo->target()->id() == textChannel->targetId() &&
+                convo->messages()->textChannel()->targetHandleType() == textChannel->targetHandleType())
+        {
+            if (!shouldDelegate) {
+                convo->messages()->setTextChannel(textChannel);
+            } else {
+                if (convo->messages()->textChannel() == textChannel) {
+                    ChannelDelegator::delegateChannel(account, textChannel, userActionTime);
+                }
+            }
+            handled = true;
+            break;
+        }
+    }
+
+    //if we are not handling channel already and should not delegate, add the conversation
+    //if we not handling the channel but should delegate it, do nothing.
+
+    if (!handled && !shouldDelegate) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        Conversation* newConvo = new Conversation(textChannel, account);
         d->conversations.append(newConvo);
         connect(newConvo, SIGNAL(validityChanged(bool)), SLOT(handleValidityChange(bool)));
         endInsertRows();
+        context->setFinished();
     }
+
+}
+
+bool ConversationsModel::bypassApproval() const
+{
+    return true;
 }
 
 void ConversationsModel::handleValidityChange(bool valid)

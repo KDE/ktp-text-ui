@@ -22,23 +22,25 @@
 
 #include "ktpchat_export.h"
 
-#include <TelepathyQt/AbstractClient>
+#include "conversations-model.h"
 
-class Conversation;
+#include <TelepathyQt/AbstractClientHandler>
+
 
 class KDE_TELEPATHY_CHAT_EXPORT TelepathyTextObserver : public QObject
 {
 Q_OBJECT
 
+Q_PROPERTY(QObject* conversations READ conversationModel CONSTANT)
+
 public:
-    TelepathyTextObserver();
+    TelepathyTextObserver(QObject* parent=0);
     ~TelepathyTextObserver();
 
-Q_SIGNALS:
-    void newConversation(Conversation *con);
+    QAbstractListModel* conversationModel();
+
 private:
-    class ConversationClientObserver;
-    Tp::SharedPtr<ConversationClientObserver> observer;
+    Tp::SharedPtr<ConversationsModel> m_handler;
     Tp::ClientRegistrarPtr m_registrar;
 };
 

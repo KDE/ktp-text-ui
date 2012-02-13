@@ -6,14 +6,19 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 
 
 Item {
+    
+    TelepathyTextObserver {
+        id: main
+    }
+
+    
     id: top
     ListView {
         id: base
         anchors.fill: parent
         orientation: Qt.Horizontal
 
-        model: ConversationsModel {
-        }
+        model: main.conversations
 
         delegate : ConversationDelegate {
             id:conv
@@ -37,14 +42,7 @@ Item {
                     onCloseRequested: {
                         conv.pressed = false;
                     }
-                    onConversationEndRequested: model.conversation.requestClose()
-                    Binding {
-                        target: model.conversation.messages
-                        property: "visibleToUser"
-                        value: dialog.visible
-                    }
                 }
-
             }
 
             Connections {

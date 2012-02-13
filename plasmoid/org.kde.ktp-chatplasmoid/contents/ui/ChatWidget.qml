@@ -8,7 +8,6 @@ Item {
     property Conversation conv
 
     signal closeRequested
-    signal conversationEndRequested
 
     Item {
         id: titleArea
@@ -25,7 +24,7 @@ Item {
             anchors {
                 top: parent.top
                 left: parent.left
-                right: closeButton.left
+                right: popoutButton.left
                 bottom: parent.bottom
             }
 
@@ -34,6 +33,24 @@ Item {
 
             onClicked: closeRequested()
         }
+        
+        PlasmaComponents.ToolButton {
+            id: popoutButton
+
+            anchors {
+                top: parent.top
+                right: closeButton.left
+                bottom: parent.bottom
+            }
+
+            iconSource: "view-conversation-balloon"
+
+            onClicked: {
+                conv.delegateToProperClient();
+                closeRequested();
+            }
+        }
+        
 
         PlasmaComponents.ToolButton {
             id: closeButton
@@ -46,7 +63,7 @@ Item {
 
             iconSource: "dialog-close"
 
-            onClicked: conversationEndRequested()
+            onClicked: conv.requestClose()
         }
     }
 

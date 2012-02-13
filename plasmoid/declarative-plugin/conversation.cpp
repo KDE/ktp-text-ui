@@ -24,12 +24,16 @@
 #include <KDebug>
 #include "conversation-target.h"
 
+#include "channel-delegator.h"
+
+
 class Conversation::ConversationPrivate
 {
 public:
     MessagesModel *messages;
     ConversationTarget *target;
     bool valid;
+    Tp::AccountPtr account;
 };
 
 Conversation::Conversation(const Tp::TextChannelPtr& channel,
@@ -39,6 +43,8 @@ Conversation::Conversation(const Tp::TextChannelPtr& channel,
         d (new ConversationPrivate)
 {
     kDebug();
+
+    d->account = account;
 
     d->messages = new MessagesModel(this);
     d->messages->setTextChannel(channel);
@@ -80,10 +86,15 @@ void Conversation::onChannelInvalidated(Tp::DBusProxy* proxy, const QString& err
     Q_EMIT validityChanged(d->valid);
 }
 
+void Conversation::delegateToProperClient()
+{
+    ChannelDelegator::delegateChannel(d->account, d->messages->textChannel());
+}
+
 void Conversation::requestClose()
 {
     kDebug();
-    d->messages->requestClose();
+    d->messages->textChannel()->requestClose();
 }
 
 Conversation::~Conversation()
@@ -91,3 +102,4 @@ Conversation::~Conversation()
     kDebug();
     delete d;
 }
+

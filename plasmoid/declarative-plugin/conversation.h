@@ -27,8 +27,10 @@
 #include <TelepathyQt/TextChannel>
 
 #include <KIcon>
-#include "conversation-que-manager.h"
 
+#include "conversation-que-manager.h"
+#include "conversation-target.h"
+#include "messages-model.h"
 
 class ConversationTarget;
 class MessagesModel;
@@ -36,8 +38,8 @@ class KDE_TELEPATHY_CHAT_EXPORT Conversation : public QObject
 {
 Q_OBJECT
 
-Q_PROPERTY(ConversationTarget* target READ target CONSTANT);
-Q_PROPERTY(MessagesModel* messages READ messages CONSTANT);
+Q_PROPERTY(QObject* target READ target CONSTANT);
+Q_PROPERTY(QObject* messages READ messages CONSTANT);
 Q_PROPERTY(bool valid READ isValid NOTIFY validityChanged);
 
 public:
@@ -54,6 +56,7 @@ Q_SIGNALS:
     void validityChanged(bool isValid);
 
 public Q_SLOTS:
+    void delegateToProperClient();
     void requestClose();
 
 private Q_SLOTS:

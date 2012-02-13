@@ -113,7 +113,6 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
     }
 
     d->textChannel = channel;
-    Q_EMIT textChannelChanged(d->textChannel);
 
     QList<Tp::ReceivedMessage> messageQueue = channel->messageQueue();
     Q_FOREACH(Tp::ReceivedMessage message, messageQueue) {
@@ -292,15 +291,6 @@ MessagesModel::~MessagesModel()
 {
     kDebug();
     delete d;
-}
-
-void MessagesModel::requestClose()
-{
-    kDebug();
-
-    Tp::PendingOperation *op = d->textChannel->requestClose();
-    connect(op, SIGNAL(finished(Tp::PendingOperation*)),
-            SLOT(verifyPendingOperation(Tp::PendingOperation*)));
 }
 
 void MessagesModel::printallmessages()

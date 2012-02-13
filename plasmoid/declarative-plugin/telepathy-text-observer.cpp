@@ -22,58 +22,14 @@
 
 #include <KDebug>
 
-#include <TelepathyQt/ChannelClassSpec>
-#include <TelepathyQt/TextChannel>
+#include <TelepathyQt/AccountFactory>
+#include <TelepathyQt/ConnectionFactory>
 #include <TelepathyQt/ClientRegistrar>
 
 
-static inline Tp::ChannelClassSpecList channelClassList()
-{
-    return Tp::ChannelClassSpecList() << Tp::ChannelClassSpec::textChat();
-}
-
-class TelepathyTextObserver::ConversationClientObserver :
-    public Tp::AbstractClientObserver
-{
-public:
-    virtual void observeChannels(
-        const Tp::MethodInvocationContextPtr<>& context,
-        const Tp::AccountPtr& account,
-        const Tp::ConnectionPtr& connection,
-        const QList< Tp::ChannelPtr >& channels,
-        const Tp::ChannelDispatchOperationPtr& dispatchOperation,
-        const QList< Tp::ChannelRequestPtr >& requestsSatisfied,
-        const Tp::AbstractClientObserver::ObserverInfo& observerInfo)
-    {
-        kDebug();
-
-        //check that the channel is of type text
-        Tp::TextChannelPtr textChannel;
-        Q_FOREACH(const Tp::ChannelPtr & channel, channels) {
-            textChannel = Tp::TextChannelPtr::dynamicCast(channel);
-            if (textChannel) {
-                break;
-            }
-        }
-
-        Q_ASSERT(textChannel);
-
-        Conversation *con = new Conversation(textChannel, account);
-        m_parent->newConversation(con);
-    }
-
-    ConversationClientObserver(TelepathyTextObserver *parent) :
-        AbstractClientObserver(channelClassList()),
-        m_parent(parent)
-    {
-
-    }
-
-    TelepathyTextObserver *m_parent;
-};
-
-TelepathyTextObserver::TelepathyTextObserver() :
-    observer(new ConversationClientObserver(this))
+TelepathyTextObserver::TelepathyTextObserver(QObject* parent) :
+    QObject(parent),
+    m_handler(new ConversationsModel())
 {
     kDebug();
     Tp::registerTypes();
@@ -107,9 +63,16 @@ TelepathyTextObserver::TelepathyTextObserver() :
     //TODO: check these to make sure I'm only requesting features I actually use.
     m_registrar = Tp::ClientRegistrar::create(accountFactory, connectionFactory,
                                             channelFactory, contactFactory);
-    m_registrar->registerClient(observer, QLatin1String("KDE.TextUi.ConversationWatcher"));
+    m_registrar->registerClient(m_handler, QLatin1String("KDE.TextUi.ConversationWatcher")); //KTp.ChatPlasmoid
 }
 
 TelepathyTextObserver::~TelepathyTextObserver()
 {
+    qDebug() << "deleting text observer";
+}
+
+QAbstractListModel * TelepathyTextObserver::conversationModel()
+{
+    Q_ASSERT(!m_handler.isNull());
+    return m_handler.data();
 }

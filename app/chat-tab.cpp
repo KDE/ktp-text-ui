@@ -81,15 +81,22 @@ void ChatTab::showOnTop()
 void ChatTab::onConnectionStatusChanged(Tp::ConnectionStatus status)
 {
     // request a new text channel for the chat
+
+    Tp::ChannelRequestHints hints;
+    hints.setHint(QLatin1String("org.kde.telepathy"),QLatin1String("suppressWindowRaise"), QVariant(true));
+
     if (status == Tp::ConnectionStatusConnected) {
         if (textChannel()->targetHandleType() == Tp::HandleTypeContact) {
             account()->ensureTextChat(textChannel()->targetId(),
                                       QDateTime::currentDateTime(),
-                                      QLatin1String(KTP_TEXTUI_CLIENT_PATH));
+                                      QLatin1String(KTP_TEXTUI_CLIENT_PATH),
+                                      hints);
         } else if (textChannel()->targetHandleType() == Tp::HandleTypeRoom) {
+
             account()->ensureTextChatroom(textChannel()->targetId(),
-                                                   QDateTime::currentDateTime(),
-                                                   QLatin1String(KTP_TEXTUI_CLIENT_PATH));
+                                          QDateTime::currentDateTime(),
+                                          QLatin1String(KTP_TEXTUI_CLIENT_PATH),
+                                          hints);
         }
     }
 }

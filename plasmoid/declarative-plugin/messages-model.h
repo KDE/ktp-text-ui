@@ -54,12 +54,9 @@ public:
     int  unreadCount() const;
     void acknowledgeAllMessages();
 
-    void requestClose();
-
     //debug function. will do whatever I feel like at the time ;-)
     Q_INVOKABLE void printallmessages();
 Q_SIGNALS:
-    void textChannelChanged(Tp::TextChannelPtr newChannel);
     void visibleToUserChanged(bool visible);
 
     void unreadCountChanged(int unreadMesssagesCount);
