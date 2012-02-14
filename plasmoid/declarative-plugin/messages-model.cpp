@@ -62,6 +62,7 @@ MessagesModel::MessagesModel(QObject *parent):
     roles[TextRole] = "text";
     roles[TimeRole] = "time";
     roles[TypeRole] = "type";
+    roles[ContinuingRole] = "continuing";
     setRoleNames(roles);
 
     d->visible = false;
@@ -200,6 +201,14 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
             break;
         case TimeRole:
             result = requestedData->time;
+            break;
+        case ContinuingRole:
+            if(index.row() > 0 &&
+                d->messages[index.row() - 1].user == requestedData->user) {
+                    result = true;
+            } else {
+                result = false;
+            }
             break;
         };
     } else {

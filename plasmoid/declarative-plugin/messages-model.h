@@ -40,7 +40,8 @@ public:
         UserRole = Qt::UserRole,
         TextRole,
         TypeRole,
-        TimeRole
+        TimeRole,
+        ContinuingRole //FIXME: Come up with a better name for this
     };
 
     enum MessageType {
