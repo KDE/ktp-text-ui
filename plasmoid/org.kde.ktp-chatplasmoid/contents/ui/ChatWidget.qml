@@ -191,7 +191,8 @@ Item {
 
     PlasmaWidgets.LineEdit {
         id: input
-
+        //FIXME: replace with Plasma Component and focus
+//         focus: true
 
         anchors.left: parent.left; anchors.right: parent.right
         anchors.bottom: parent.bottom
