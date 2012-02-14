@@ -28,6 +28,13 @@ Item {
         text: "<b>[" + Qt.formatTime(model.time) + "] " + model.user + " :</b>"
 
         verticalAlignment: Text.AlignBottom
+
+        visible: !model.continuing
+        Component.onCompleted: {
+            if(model.continuing) {
+                height = 0;
+            }
+        }
     }
     PlasmaComponents.Label {
         id: body
@@ -39,7 +46,7 @@ Item {
         color: textColor
         text: model.text
         textFormat: Text.RichText
-        verticalAlignment: Text.AlignTop
+        height: paintedHeight
     }
 
     height: header.height + body.height
