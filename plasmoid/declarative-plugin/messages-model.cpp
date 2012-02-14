@@ -133,7 +133,9 @@ void MessagesModel::onMessageReceived(const Tp::ReceivedMessage &message)
     kDebug() << "text =" << message.text();
     kDebug() << "messageToken =" << message.messageToken();
 
-    if (message.messageType() == Tp::ChannelTextMessageTypeNormal) {
+    if (message.messageType() == Tp::ChannelTextMessageTypeNormal ||
+        message.messageType() == Tp::ChannelTextMessageTypeAction) {
+
         int length = rowCount();
         beginInsertRows(QModelIndex(), length, length);
 
@@ -141,7 +143,7 @@ void MessagesModel::onMessageReceived(const Tp::ReceivedMessage &message)
                                message.sender()->alias(),
                                MessageProcessor::instance()->processIncomingMessage(message).finalizedMessage(),
                                message.received(),
-                               MessagesModel::MessageTypeIncoming,
+                               message.messageType() == Tp::ChannelTextMessageTypeAction ? MessageTypeAction : MessageTypeIncoming,
                                message.messageToken()
                            ));
 
@@ -170,7 +172,7 @@ void MessagesModel::onMessageSent(const Tp::Message &message, Tp::MessageSending
                            i18n("Me"),   //FIXME : use actual nickname from Tp::AccountPtr
                            MessageProcessor::instance()->processOutgoingMessage(message).finalizedMessage(),
                            message.sent(),
-                           MessagesModel::MessageTypeOutgoing,
+                           message.messageType() == Tp::ChannelTextMessageTypeAction ? MessageTypeAction : MessageTypeOutgoing,
                            message.messageToken()
                        ));
 
@@ -229,7 +231,17 @@ void MessagesModel::sendNewMessage(const QString &message)
     if (message.isEmpty()) {
         kWarning() << "Attempting to send empty string";
     } else {
-        connect(d->textChannel->send(message),
+        Tp::PendingOperation *op;
+        QString modifiedMessage = message;
+        if (d->textChannel->supportsMessageType(Tp::ChannelTextMessageTypeAction)
+                && modifiedMessage.startsWith(QLatin1String("/me "))) {
+            //remove "/me " from the start of the message
+            modifiedMessage.remove(0,4);
+            op = d->textChannel->send(modifiedMessage, Tp::ChannelTextMessageTypeAction);
+        } else {
+            op = d->textChannel->send(modifiedMessage);
+        }
+        connect(op,
                 SIGNAL(finished(Tp::PendingOperation*)),
                 SLOT(verifyPendingOperation(Tp::PendingOperation*)));
     }
