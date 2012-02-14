@@ -104,7 +104,29 @@ Item {
             boundsBehavior: Flickable.StopAtBounds
             clip: true
 
-            delegate: TextDelegate {}
+            delegate: Loader {
+                Component.onCompleted: {
+                    console.log(model.type);
+                    switch(model.type) {
+                        case MessagesModel.MessageTypeIncoming:
+//                             console.log("Type: MessagesModel::MessageTypeIncoming");
+                            source = "IncomingDelegate.qml";
+                            break;
+                        case MessagesModel.MessageTypeOutgoing:
+//                             console.log("Type: MessagesModel::MessageTypeOutgoing");
+                            source = "OutgoingDelegate.qml"
+                            break;
+                        case MessagesModel.MessageTypeAction:
+//                             console.log("Type: MessagesModel::MessageTypeAction");
+                            source = "ActionDelegate.qml";
+                            break;
+                        default:
+//                             console.log("ERROR: UNKNOWN MESSAGE TYPE! Defaulting to fallback handler");
+                            source = "TextDelegate.qml";
+                    }
+                }
+            }
+
             model: conv.messages
         }
 
