@@ -35,6 +35,11 @@ Item {
         text: model.text
         textFormat: Text.RichText
         height: paintedHeight
+
+        onLinkActivated: {
+            console.log("opening link: " + link);
+            plasmoid.openUrl(link);
+        }
     }
 
     height: header.height + body.height
