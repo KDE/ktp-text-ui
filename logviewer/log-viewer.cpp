@@ -70,7 +70,10 @@ void LogViewer::onAccountManagerReady()
 
 void LogViewer::onEntitySelected(const QModelIndex &index)
 {
-    //TODO, update calendar needs to get pendingDates
+    Tpl::EntityPtr entity = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
+    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+
+    ui->datePicker->setEntity(account, entity);
 
     updateMainView();
 }

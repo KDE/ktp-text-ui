@@ -49,9 +49,9 @@
       </widget>
      </item>
      <item>
-      <widget class="KDatePicker" name="datePicker">
+      <widget class="ConversationDatePicker" name="datePicker" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -68,11 +68,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KDatePicker</class>
-   <extends>QFrame</extends>
-   <header>kdatepicker.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
@@ -86,6 +81,12 @@
    <class>MessageView</class>
    <extends>QWidget</extends>
    <header>message-view.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ConversationDatePicker</class>
+   <extends>QWidget</extends>
+   <header>conversation-date-picker.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
