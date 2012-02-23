@@ -137,6 +137,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     QString templateHtml = m_chatStyle->getTemplateHtml();
     QString footerHtml = replaceHeaderKeywords(m_chatStyle->getFooterHtml(), chatInfo);
     QString extraStyleHtml = QLatin1String("@import url( \"main.css\" );");
+    m_lastContent = AdiumThemeContentInfo();
 
     if (templateHtml.isEmpty()) {
         // if templateHtml is empty, we failed to load the fallback template file
