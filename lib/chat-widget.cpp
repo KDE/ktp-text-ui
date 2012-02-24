@@ -583,7 +583,7 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
         return;
     }
     // don't notify of messages sent by self from another computer
-    if (message.sender() == d->channel->connection()->selfContact()) {
+    if (message.sender() == d->channel->groupSelfContact()) {
         return;
     }
     // kde_telepathy_contact_highlight (contains your name)
@@ -591,7 +591,7 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
 
     //if the message text contains sender name, it's a "highlighted message"
     //TODO DrDanz suggested this could be a configurable list of words that make it highlighted.(seems like a good idea to me)
-    if(message.text().contains(d->channel->connection()->selfContact()->alias())) {
+    if(message.text().contains(d->channel->groupSelfContact()->alias())) {
         notificationType = QLatin1String("kde_telepathy_contact_highlight");
     } else if(message.messageType() == Tp::ChannelTextMessageTypeNotice) {
         notificationType = QLatin1String("kde_telepathy_info_event");
@@ -628,7 +628,7 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
 
 void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
 {
-    Tp::ContactPtr sender = d->channel->connection()->selfContact();
+    Tp::ContactPtr sender = d->channel->groupSelfContact();
 
     if (message.messageType() == Tp::ChannelTextMessageTypeAction) {
         AdiumThemeStatusInfo statusMessage;
@@ -686,7 +686,7 @@ void ChatWidget::sendMessage()
 void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state)
 {
     //don't show our own status changes.
-    if (contact == d->channel->connection()->selfContact()) {
+    if (contact == d->channel->groupSelfContact()) {
         return;
     }
 
@@ -720,7 +720,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
         //In a multiperson chat just because this user is no longer typing it doesn't mean that no-one is.
         //loop through each contact, check no-one is in composing mode.
         Q_FOREACH (const Tp::ContactPtr & contact, d->channel->groupContacts()) {
-            if (contact == d->channel->connection()->selfContact()) {
+            if (contact == d->channel->groupSelfContact()) {
                 continue;
             }
 
