@@ -144,9 +144,9 @@ public:
      */
     void reload();
 
-    QString defaultVariantName();
-    QString defaultFontFamily();
-    int defaultFontSize();
+    QString defaultVariantName() const;
+    QString defaultFontFamily() const;
+    int defaultFontSize() const;
 private:
     /**
      * Read style HTML files from disk

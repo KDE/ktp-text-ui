@@ -118,17 +118,17 @@ QString ChatWindowStyle::id() const
     return d->styleId;
 }
 
-QString ChatWindowStyle::defaultVariantName()
+QString ChatWindowStyle::defaultVariantName() const
 {
     return d->defaultVariantName;
 }
 
-QString ChatWindowStyle::defaultFontFamily()
+QString ChatWindowStyle::defaultFontFamily() const
 {
     return d->defaultFontFamily;
 }
 
-int ChatWindowStyle::defaultFontSize()
+int ChatWindowStyle::defaultFontSize() const
 {
     return d->defaultFontSize;
 }
