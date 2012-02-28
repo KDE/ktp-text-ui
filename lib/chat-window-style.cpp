@@ -364,7 +364,7 @@ void ChatWindowStyle::readStyleFiles()
     inheritContent(OutgoingNext, Outgoing);
 
     inheritContent(HistoryIncoming, Incoming);
-    inheritContent(HistoryIncomingNext, HistoryIncoming);
+    inheritContent(HistoryIncomingNext, IncomingNext);
 
     inheritContent(HistoryOutgoing, HistoryIncoming);
     inheritContent(HistoryOutgoingNext, HistoryIncomingNext);
