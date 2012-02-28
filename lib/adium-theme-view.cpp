@@ -330,7 +330,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
         }
         break;
     default:
-        qWarning() << "Unexpected message type to addContentMessage";
+        kWarning() << "Unexpected message type to addContentMessage";
     }
 
     replaceContentKeywords(styleHtml, contentMessage);
