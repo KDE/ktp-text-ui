@@ -326,8 +326,8 @@ void ChatWindowStyle::readStyleFiles()
     templateFiles.insert(ActionIncoming, QLatin1String("Incoming/Action.html"));
     templateFiles.insert(ActionOutgoing, QLatin1String("Outgoing/Action.html"));
 
-    templateFiles.insert(FileTransferIncoming, QLatin1String("Incoming/FileTransferRequest.html"));
-    templateFiles.insert(VoiceClipIncoming, QLatin1String("Incoming/voiceClipRequest.html"));
+    templateFiles.insert(FileTransferIncoming, QLatin1String("FileTransferRequest.html"));
+    templateFiles.insert(VoiceClipIncoming, QLatin1String("voiceClipRequest.html"));
 
     templateFiles.insert(OutgoingStateUnknown, QLatin1String("Outgoing/StateUnknown.html"));
     templateFiles.insert(OutgoingStateSending, QLatin1String("Outgoing/StateSending.html"));
