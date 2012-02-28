@@ -517,10 +517,13 @@ QString AdiumThemeView::formatTime(const QString &timeFormat, const QDateTime &d
     QString format = timeFormat;
     format.replace(QLatin1String("%a"), QLatin1String("ddd"));
     format.replace(QLatin1String("%b"), QLatin1String("MMM"));
-    format.replace(QLatin1String("%d"), QLatin1String("dd"));
+    format.replace(QLatin1String("%B"), QLatin1String("MMMM"));
+    format.replace(QLatin1String("%d"), QLatin1String("d"));
+    format.replace(QLatin1String("%e"), QLatin1String("dd"));
     format.replace(QLatin1String("%H"), QLatin1String("HH"));
     format.replace(QLatin1String("%M"), QLatin1String("MM"));
     format.replace(QLatin1String("%S"), QLatin1String("ss"));
+    format.replace(QLatin1String("%Y"), QLatin1String("yyyy"));
     return dateTime.toString(format);
 }
 
