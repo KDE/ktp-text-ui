@@ -509,7 +509,14 @@ void AdiumThemeView::appendNextMessage(QString &html)
 //taken from Kopete code
 QString AdiumThemeView::formatTime(const QString &timeFormat, const QDateTime &dateTime)
 {
-    return dateTime.toString(timeFormat);
+    QString format = timeFormat;
+    format.replace(QLatin1String("%a"), QLatin1String("ddd"));
+    format.replace(QLatin1String("%b"), QLatin1String("MMM"));
+    format.replace(QLatin1String("%d"), QLatin1String("dd"));
+    format.replace(QLatin1String("%H"), QLatin1String("HH"));
+    format.replace(QLatin1String("%M"), QLatin1String("MM"));
+    format.replace(QLatin1String("%S"), QLatin1String("ss"));
+    return dateTime.toString(format);
 }
 
 const QString AdiumThemeView::variantName() const
