@@ -136,6 +136,11 @@ QString AdiumThemeMessageInfo::messageClasses() const {
         classes.append(QLatin1String("message"));
     }
 
+    if (d->type == HistoryStatus) {
+        classes.append(QLatin1String("history"));
+        classes.append(QLatin1String("status"));
+    }
+
     classes << d->messageClasses;
 
     return classes.join(QLatin1String(" "));

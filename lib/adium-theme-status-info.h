@@ -30,7 +30,7 @@ class AdiumThemeStatusInfoPrivate;
 class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeStatusInfo : public AdiumThemeMessageInfo
 {
 public:
-    explicit AdiumThemeStatusInfo();
+    explicit AdiumThemeStatusInfo(bool isHistory = false);
     explicit AdiumThemeStatusInfo(const AdiumThemeStatusInfo &other);
     virtual ~AdiumThemeStatusInfo();
     AdiumThemeStatusInfo &operator=(const AdiumThemeStatusInfo &other);

@@ -111,6 +111,7 @@ public:
     QString getHistoryNextIncomingHtml() const;
     QString getHistoryOutgoingHtml() const;
     QString getHistoryNextOutgoingHtml() const;
+    QString getHistoryStatusHtml() const;
 
     QString getActionIncomingHtml() const;
     QString getActionOutgoingHtml() const;
@@ -184,6 +185,7 @@ private:
         HistoryIncomingNext,
         HistoryOutgoing,
         HistoryOutgoingNext,
+        HistoryStatus,
 
         ActionIncoming,
         ActionOutgoing,

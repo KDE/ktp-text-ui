@@ -215,6 +215,11 @@ QString ChatWindowStyle::getHistoryNextOutgoingHtml() const
     return content(HistoryOutgoingNext);
 }
 
+QString ChatWindowStyle::getHistoryStatusHtml() const
+{
+    return content(HistoryStatus);
+}
+
 QString ChatWindowStyle::getActionIncomingHtml() const
 {
     return content(ActionIncoming);
@@ -393,6 +398,7 @@ void ChatWindowStyle::readStyleFiles()
     inheritContent(HistoryOutgoingNext, OutgoingNext);
 
     inheritContent(Status, Content);
+    inheritContent(HistoryStatus, Status);
 
     // Load template file fallback
     if (content(Template).isEmpty())
