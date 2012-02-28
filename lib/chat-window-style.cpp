@@ -165,6 +165,11 @@ QString ChatWindowStyle::getFooterHtml() const
     return content(Footer);
 }
 
+QString ChatWindowStyle::getTopicHtml() const
+{
+    return content(Topic);
+}
+
 QString ChatWindowStyle::getIncomingHtml() const
 {
     return content(Incoming);
@@ -319,6 +324,7 @@ void ChatWindowStyle::readStyleFiles()
     templateFiles.insert(Header, QLatin1String("Header.html"));
     templateFiles.insert(Content, QLatin1String("Content.html"));
     templateFiles.insert(Footer, QLatin1String("Footer.html"));
+    templateFiles.insert(Topic, QLatin1String("Topic.html"));
 
     templateFiles.insert(Incoming, QLatin1String("Incoming/Content.html"));
     templateFiles.insert(IncomingNext, QLatin1String("Incoming/NextContent.html"));
@@ -366,6 +372,8 @@ void ChatWindowStyle::readStyleFiles()
     }
 
     // basic fallbacks
+    inheritContent(Topic, Header);
+
     inheritContent(Incoming, Content);
     inheritContent(Outgoing, Content);
 

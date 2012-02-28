@@ -145,7 +145,12 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     }
 
     if (m_displayHeader) {
-        headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(), chatInfo);
+        if (chatInfo.isGroupChat()) {
+            // In group chats header should be replaced by topic
+            headerHtml = replaceHeaderKeywords(m_chatStyle->getTopicHtml(), chatInfo);
+        } else {
+            headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(), chatInfo);
+        }
     } //otherwise leave as blank.
 
     // set fontFamily and fontSize

@@ -99,6 +99,8 @@ public:
     QString getTemplateHtml() const;
     QString getHeaderHtml() const;
     QString getFooterHtml() const;
+    QString getTopicHtml() const;
+
     QString getIncomingHtml() const;
     QString getNextIncomingHtml() const;
     QString getOutgoingHtml() const;
@@ -170,6 +172,7 @@ private:
         Header,
         Content,
         Footer,
+        Topic,
 
         Incoming,
         IncomingNext,
