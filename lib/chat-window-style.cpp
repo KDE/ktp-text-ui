@@ -360,16 +360,22 @@ void ChatWindowStyle::readStyleFiles()
 
     // basic fallbacks
     inheritContent(Incoming, Content);
-    inheritContent(IncomingNext, Incoming);
+    inheritContent(Outgoing, Content);
 
     inheritContent(Outgoing, Incoming);
+    inheritContent(Incoming, Outgoing);
+
+    inheritContent(OutgoingNext, IncomingNext);
+    inheritContent(IncomingNext, Incoming);
     inheritContent(OutgoingNext, Outgoing);
 
-    inheritContent(HistoryIncoming, Incoming);
-    inheritContent(HistoryIncomingNext, IncomingNext);
-
     inheritContent(HistoryOutgoing, HistoryIncoming);
+    inheritContent(HistoryIncoming, Incoming);
+    inheritContent(HistoryOutgoing, Outgoing);
+
     inheritContent(HistoryOutgoingNext, HistoryIncomingNext);
+    inheritContent(HistoryIncomingNext, IncomingNext);
+    inheritContent(HistoryOutgoingNext, OutgoingNext);
 
     // Load template file fallback
     if (content(Template).isEmpty())
