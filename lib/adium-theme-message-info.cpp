@@ -133,13 +133,15 @@ QString AdiumThemeMessageInfo::messageClasses() const {
     }
 
     if (d->type == HistoryLocalToRemote) {
-        // Should we be adding outgoing and message classes as well?
         classes.append(QLatin1String("history"));
+        classes.append(QLatin1String("incoming"));
+        classes.append(QLatin1String("message"));
     }
 
     if (d->type == HistoryRemoteToLocal) {
-        // Should we be adding incoming and message classes as well?
         classes.append(QLatin1String("history"));
+        classes.append(QLatin1String("outgoing"));
+        classes.append(QLatin1String("message"));
     }
 
     return classes.join(QLatin1String(" "));
