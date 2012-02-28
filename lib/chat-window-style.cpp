@@ -311,6 +311,7 @@ void ChatWindowStyle::readStyleFiles()
     templateFiles.insert(Status, QLatin1String("Status.html"));
 
     templateFiles.insert(Header, QLatin1String("Header.html"));
+    templateFiles.insert(Content, QLatin1String("Content.html"));
     templateFiles.insert(Footer, QLatin1String("Footer.html"));
 
     templateFiles.insert(Incoming, QLatin1String("Incoming/Content.html"));
@@ -326,8 +327,8 @@ void ChatWindowStyle::readStyleFiles()
     templateFiles.insert(ActionIncoming, QLatin1String("Incoming/Action.html"));
     templateFiles.insert(ActionOutgoing, QLatin1String("Outgoing/Action.html"));
 
-    templateFiles.insert(FileTransferIncoming, QLatin1String("Incoming/FileTransferRequest.html"));
-    templateFiles.insert(VoiceClipIncoming, QLatin1String("Incoming/voiceClipRequest.html"));
+    templateFiles.insert(FileTransferIncoming, QLatin1String("FileTransferRequest.html"));
+    templateFiles.insert(VoiceClipIncoming, QLatin1String("voiceClipRequest.html"));
 
     templateFiles.insert(OutgoingStateUnknown, QLatin1String("Outgoing/StateUnknown.html"));
     templateFiles.insert(OutgoingStateSending, QLatin1String("Outgoing/StateSending.html"));
@@ -358,13 +359,14 @@ void ChatWindowStyle::readStyleFiles()
     }
 
     // basic fallbacks
+    inheritContent(Incoming, Content);
     inheritContent(IncomingNext, Incoming);
 
     inheritContent(Outgoing, Incoming);
     inheritContent(OutgoingNext, Outgoing);
 
     inheritContent(HistoryIncoming, Incoming);
-    inheritContent(HistoryIncomingNext, HistoryIncoming);
+    inheritContent(HistoryIncomingNext, IncomingNext);
 
     inheritContent(HistoryOutgoing, HistoryIncoming);
     inheritContent(HistoryOutgoingNext, HistoryIncomingNext);

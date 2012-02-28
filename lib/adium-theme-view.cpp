@@ -371,7 +371,8 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
     htmlTemplate.replace(QLatin1String("%destinationDisplayName%"), info.destinationDisplayName());
     htmlTemplate.replace(QLatin1String("%incomingIconPath%"), (!info.incomingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
     htmlTemplate.replace(QLatin1String("%outgoingIconPath%"), (!info.outgoingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
-    htmlTemplate.replace(QLatin1String("%timeOpened%"), KGlobal::locale()->formatDateTime(info.timeOpened()));
+    htmlTemplate.replace(QLatin1String("%timeOpened%"), KGlobal::locale()->formatTime(info.timeOpened().time()));
+    htmlTemplate.replace(QLatin1String("%dateOpened%"), KGlobal::locale()->formatDate(info.timeOpened().date(), KLocale::LongDate));
 
     //FIXME time fields - remember to do both, steal the complicated one from Kopete code.
     // Look for %timeOpened{X}%
@@ -508,7 +509,14 @@ void AdiumThemeView::appendNextMessage(QString &html)
 //taken from Kopete code
 QString AdiumThemeView::formatTime(const QString &timeFormat, const QDateTime &dateTime)
 {
-    return dateTime.toString(timeFormat);
+    QString format = timeFormat;
+    format.replace(QLatin1String("%a"), QLatin1String("ddd"));
+    format.replace(QLatin1String("%b"), QLatin1String("MMM"));
+    format.replace(QLatin1String("%d"), QLatin1String("dd"));
+    format.replace(QLatin1String("%H"), QLatin1String("HH"));
+    format.replace(QLatin1String("%M"), QLatin1String("MM"));
+    format.replace(QLatin1String("%S"), QLatin1String("ss"));
+    return dateTime.toString(format);
 }
 
 const QString AdiumThemeView::variantName() const
