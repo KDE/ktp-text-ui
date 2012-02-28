@@ -40,6 +40,7 @@ public:
     QString defaultVariantName;
     QString defaultFontFamily;
     int     defaultFontSize;
+    bool    disableCombineConsecutive;
 
     QHash<int, QString> templateContents;
     QHash<QString, bool> compactVariants;
@@ -131,6 +132,11 @@ QString ChatWindowStyle::defaultFontFamily() const
 int ChatWindowStyle::defaultFontSize() const
 {
     return d->defaultFontSize;
+}
+
+bool ChatWindowStyle::disableCombineConsecutive() const
+{
+    return d->disableCombineConsecutive;
 }
 
 QString ChatWindowStyle::getStyleBaseHref() const
@@ -304,6 +310,7 @@ void ChatWindowStyle::readStyleFiles()
     d->defaultVariantName = plistReader.defaultVariant();
     d->defaultFontFamily  = plistReader.defaultFontFamily();
     d->defaultFontSize    = plistReader.defaultFontSize();
+    d->disableCombineConsecutive = plistReader.disableCombineConsecutive();
 
     // specify the files for the identifiers
     QHash<InternalIdentifier, QLatin1String> templateFiles;

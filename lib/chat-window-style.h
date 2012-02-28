@@ -147,6 +147,7 @@ public:
     QString defaultVariantName() const;
     QString defaultFontFamily() const;
     int defaultFontSize() const;
+    bool disableCombineConsecutive() const;
 private:
     /**
      * Read style HTML files from disk

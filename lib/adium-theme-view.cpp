@@ -340,7 +340,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
 
     replaceContentKeywords(styleHtml, message);
 
-    if (consecutiveMessage) {
+    if (consecutiveMessage && !m_chatStyle->disableCombineConsecutive()) {
         appendNextMessage(styleHtml);
     } else {
         appendNewMessage(styleHtml);
