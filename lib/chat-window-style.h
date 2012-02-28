@@ -168,6 +168,7 @@ private:
         Status,
 
         Header,
+        Content,
         Footer,
 
         Incoming,

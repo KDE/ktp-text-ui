@@ -311,6 +311,7 @@ void ChatWindowStyle::readStyleFiles()
     templateFiles.insert(Status, QLatin1String("Status.html"));
 
     templateFiles.insert(Header, QLatin1String("Header.html"));
+    templateFiles.insert(Content, QLatin1String("Content.html"));
     templateFiles.insert(Footer, QLatin1String("Footer.html"));
 
     templateFiles.insert(Incoming, QLatin1String("Incoming/Content.html"));
@@ -358,6 +359,7 @@ void ChatWindowStyle::readStyleFiles()
     }
 
     // basic fallbacks
+    inheritContent(Incoming, Content);
     inheritContent(IncomingNext, Incoming);
 
     inheritContent(Outgoing, Incoming);
