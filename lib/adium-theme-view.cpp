@@ -292,15 +292,20 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
 {
     QString styleHtml;
     bool consecutiveMessage = false;
+    // contentMessage is const, we need a non-const one to append message classes
+    AdiumThemeContentInfo message(contentMessage);
 
-    if (m_lastContent.senderScreenName() == contentMessage.senderScreenName()
-        && m_lastContent.type() == contentMessage.type() )
+    if (m_lastContent.senderScreenName() == message.senderScreenName()
+        && m_lastContent.type() == message.type() )
     {
+        // TODO check if adding the "consecutive" class is a problem for themes
+        // with disableCombineConsecutive = true
         consecutiveMessage = true;
+        message.appendMessageClass(QLatin1String("consecutive"));
     }
-    m_lastContent = contentMessage;
+    m_lastContent = message;
 
-    switch (contentMessage.type()) {
+    switch (message.type()) {
     case AdiumThemeMessageInfo::RemoteToLocal:
         if (consecutiveMessage) {
             styleHtml = m_chatStyle->getNextIncomingHtml();
@@ -333,7 +338,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
         kWarning() << "Unexpected message type to addContentMessage";
     }
 
-    replaceContentKeywords(styleHtml, contentMessage);
+    replaceContentKeywords(styleHtml, message);
 
     if (consecutiveMessage) {
         appendNextMessage(styleHtml);
