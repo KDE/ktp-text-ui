@@ -31,6 +31,7 @@ public:
     QUrl incomingIconPath;
     QUrl outgoingIconPath;
     QDateTime timeOpened;
+    QString serviceIconImg;
 };
 
 AdiumThemeHeaderInfo::AdiumThemeHeaderInfo()
@@ -123,3 +124,13 @@ void AdiumThemeHeaderInfo::setTimeOpened(const QDateTime& timeOpened)
 {
     d->timeOpened = timeOpened;
 };
+
+QString AdiumThemeHeaderInfo::serviceIconImg() const
+{
+    return d->serviceIconImg;
+}
+
+void AdiumThemeHeaderInfo::setServiceIconImage(const QString& serviceIconImg)
+{
+    d->serviceIconImg = serviceIconImg;
+}

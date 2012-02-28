@@ -382,6 +382,8 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
         QString timeKeyword = formatTime(timeRegExp.cap(1), info.timeOpened());
         htmlTemplate.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
     }
+    htmlTemplate.replace(QLatin1String("%serviceIconImg%"),
+                         QString::fromLatin1("<img src=\"%1\" class=\"serviceIcon\" />").arg(info.serviceIconImg()));
     return htmlTemplate;
 }
 

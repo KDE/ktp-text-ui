@@ -73,6 +73,10 @@ public:
     QDateTime timeOpened() const;
     void setTimeOpened(const QDateTime &timeOpened);
 
+    /** The protocol image of the service */
+    QString serviceIconImg() const;
+    void setServiceIconImage(const QString &serviceIconImg);
+
 private:
     AdiumThemeHeaderInfoPrivate *const d;
 
