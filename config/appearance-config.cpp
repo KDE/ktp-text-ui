@@ -209,6 +209,12 @@ void AppearanceConfig::sendDemoMessages()
     ui->chatView->addContentMessage(message);
 
     AdiumThemeStatusInfo statusMessage(true);
+    statusMessage.setMessage(i18n("Ted Example waves."));
+    statusMessage.setTime(QDateTime::currentDateTime());
+    statusMessage.setService(i18n("Jabber"));
+    ui->chatView->addStatusMessage(statusMessage);
+
+    statusMessage = AdiumThemeStatusInfo(true);
     statusMessage.setMessage(i18n("Ted Example has left the chat.")); //FIXME sync this with chat text logic.
     statusMessage.setTime(QDateTime::currentDateTime());
     statusMessage.setService(i18n("Jabber"));
@@ -247,7 +253,14 @@ void AppearanceConfig::sendDemoMessages()
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
 
-    statusMessage = AdiumThemeStatusInfo(false);
+    statusMessage = AdiumThemeStatusInfo();
+    statusMessage.setMessage(i18n("Ted Example is now Away.")); //FIXME sync this with chat text logic.
+    statusMessage.setTime(QDateTime::currentDateTime());
+    statusMessage.setService(i18n("Jabber"));
+    statusMessage.setStatus(QLatin1String("away"));
+    ui->chatView->addStatusMessage(statusMessage);
+
+    statusMessage = AdiumThemeStatusInfo();
     statusMessage.setMessage(i18n("Ted Example has left the chat.")); //FIXME sync this with chat text logic.
     statusMessage.setTime(QDateTime::currentDateTime());
     statusMessage.setService(i18n("Jabber"));
