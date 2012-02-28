@@ -308,7 +308,6 @@ void ChatWindowStyle::readStyleFiles()
     // specify the files for the identifiers
     QHash<InternalIdentifier, QLatin1String> templateFiles;
     templateFiles.insert(Template, QLatin1String("Template.html"));
-    templateFiles.insert(Status, QLatin1String("Status.html"));
 
     templateFiles.insert(Header, QLatin1String("Header.html"));
     templateFiles.insert(Content, QLatin1String("Content.html"));
@@ -318,6 +317,7 @@ void ChatWindowStyle::readStyleFiles()
     templateFiles.insert(IncomingNext, QLatin1String("Incoming/NextContent.html"));
     templateFiles.insert(Outgoing, QLatin1String("Outgoing/Content.html"));
     templateFiles.insert(OutgoingNext, QLatin1String("Outgoing/NextContent.html"));
+    templateFiles.insert(Status, QLatin1String("Status.html"));
 
     templateFiles.insert(HistoryIncoming, QLatin1String("Incoming/Context.html"));
     templateFiles.insert(HistoryIncomingNext, QLatin1String("Incoming/NextContext.html"));
@@ -376,6 +376,8 @@ void ChatWindowStyle::readStyleFiles()
     inheritContent(HistoryOutgoingNext, HistoryIncomingNext);
     inheritContent(HistoryIncomingNext, IncomingNext);
     inheritContent(HistoryOutgoingNext, OutgoingNext);
+
+    inheritContent(Status, Content);
 
     // Load template file fallback
     if (content(Template).isEmpty())
