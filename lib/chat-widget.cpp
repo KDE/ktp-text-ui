@@ -129,6 +129,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     AdiumThemeHeaderInfo info;
 
+    info.setGroupChat(d->isGroupChat);
     //normal chat - self and one other person.
     if (d->isGroupChat) {
         info.setChatName(d->channel->targetId());

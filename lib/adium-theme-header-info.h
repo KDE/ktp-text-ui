@@ -77,6 +77,10 @@ public:
     QString serviceIconImg() const;
     void setServiceIconImage(const QString &serviceIconImg);
 
+    /** The chat is a group chat */
+    bool isGroupChat() const;
+    void setGroupChat(bool isGroupChat);
+
 private:
     AdiumThemeHeaderInfoPrivate *const d;
 

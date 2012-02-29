@@ -40,6 +40,7 @@ public:
     QString defaultVariantName;
     QString defaultFontFamily;
     int     defaultFontSize;
+    bool    disableCombineConsecutive;
 
     QHash<int, QString> templateContents;
     QHash<QString, bool> compactVariants;
@@ -118,19 +119,24 @@ QString ChatWindowStyle::id() const
     return d->styleId;
 }
 
-QString ChatWindowStyle::defaultVariantName()
+QString ChatWindowStyle::defaultVariantName() const
 {
     return d->defaultVariantName;
 }
 
-QString ChatWindowStyle::defaultFontFamily()
+QString ChatWindowStyle::defaultFontFamily() const
 {
     return d->defaultFontFamily;
 }
 
-int ChatWindowStyle::defaultFontSize()
+int ChatWindowStyle::defaultFontSize() const
 {
     return d->defaultFontSize;
+}
+
+bool ChatWindowStyle::disableCombineConsecutive() const
+{
+    return d->disableCombineConsecutive;
 }
 
 QString ChatWindowStyle::getStyleBaseHref() const
@@ -157,6 +163,11 @@ QString ChatWindowStyle::getHeaderHtml() const
 QString ChatWindowStyle::getFooterHtml() const
 {
     return content(Footer);
+}
+
+QString ChatWindowStyle::getTopicHtml() const
+{
+    return content(Topic);
 }
 
 QString ChatWindowStyle::getIncomingHtml() const
@@ -202,6 +213,11 @@ QString ChatWindowStyle::getHistoryOutgoingHtml() const
 QString ChatWindowStyle::getHistoryNextOutgoingHtml() const
 {
     return content(HistoryOutgoingNext);
+}
+
+QString ChatWindowStyle::getHistoryStatusHtml() const
+{
+    return content(HistoryStatus);
 }
 
 QString ChatWindowStyle::getActionIncomingHtml() const
@@ -304,6 +320,7 @@ void ChatWindowStyle::readStyleFiles()
     d->defaultVariantName = plistReader.defaultVariant();
     d->defaultFontFamily  = plistReader.defaultFontFamily();
     d->defaultFontSize    = plistReader.defaultFontSize();
+    d->disableCombineConsecutive = plistReader.disableCombineConsecutive();
 
     // specify the files for the identifiers
     QHash<InternalIdentifier, QLatin1String> templateFiles;
@@ -312,6 +329,7 @@ void ChatWindowStyle::readStyleFiles()
     templateFiles.insert(Header, QLatin1String("Header.html"));
     templateFiles.insert(Content, QLatin1String("Content.html"));
     templateFiles.insert(Footer, QLatin1String("Footer.html"));
+    templateFiles.insert(Topic, QLatin1String("Topic.html"));
 
     templateFiles.insert(Incoming, QLatin1String("Incoming/Content.html"));
     templateFiles.insert(IncomingNext, QLatin1String("Incoming/NextContent.html"));
@@ -359,6 +377,8 @@ void ChatWindowStyle::readStyleFiles()
     }
 
     // basic fallbacks
+    inheritContent(Topic, Header);
+
     inheritContent(Incoming, Content);
     inheritContent(Outgoing, Content);
 
@@ -378,6 +398,7 @@ void ChatWindowStyle::readStyleFiles()
     inheritContent(HistoryOutgoingNext, OutgoingNext);
 
     inheritContent(Status, Content);
+    inheritContent(HistoryStatus, Status);
 
     // Load template file fallback
     if (content(Template).isEmpty())

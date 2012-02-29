@@ -26,8 +26,8 @@ public:
     QString status;
 };
 
-AdiumThemeStatusInfo::AdiumThemeStatusInfo()
-    : AdiumThemeMessageInfo(AdiumThemeMessageInfo::Status),
+AdiumThemeStatusInfo::AdiumThemeStatusInfo(bool isHistory)
+    : AdiumThemeMessageInfo(isHistory ? AdiumThemeMessageInfo::HistoryStatus : AdiumThemeMessageInfo::Status),
       d(new AdiumThemeStatusInfoPrivate)
 {
 }

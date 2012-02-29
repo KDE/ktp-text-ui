@@ -145,7 +145,12 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     }
 
     if (m_displayHeader) {
-        headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(), chatInfo);
+        if (chatInfo.isGroupChat()) {
+            // In group chats header should be replaced by topic
+            headerHtml = replaceHeaderKeywords(m_chatStyle->getTopicHtml(), chatInfo);
+        } else {
+            headerHtml = replaceHeaderKeywords(m_chatStyle->getHeaderHtml(), chatInfo);
+        }
     } //otherwise leave as blank.
 
     // set fontFamily and fontSize
@@ -340,7 +345,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
 
     replaceContentKeywords(styleHtml, message);
 
-    if (consecutiveMessage) {
+    if (consecutiveMessage && !m_chatStyle->disableCombineConsecutive()) {
         appendNextMessage(styleHtml);
     } else {
         appendNewMessage(styleHtml);
@@ -349,10 +354,38 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
 
 void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
 {
-    QString styleHtml = m_chatStyle->getStatusHtml();
-    m_lastContent = AdiumThemeContentInfo();
-    replaceStatusKeywords(styleHtml, statusMessage);
-    appendNewMessage(styleHtml);
+    QString styleHtml;
+    bool consecutiveMessage = false;
+    // statusMessage is const, we need a non-const one to append message classes
+    AdiumThemeStatusInfo message(statusMessage);
+
+    if (m_lastContent.type() == message.type())
+    {
+        consecutiveMessage = true;
+        // TODO check if adding the "consecutive" class is a problem for themes
+        // with disableCombineConsecutive = true
+        message.appendMessageClass(QLatin1String("consecutive"));
+    }
+    m_lastContent = AdiumThemeContentInfo(statusMessage.type());
+
+    switch (message.type()) {
+    case AdiumThemeMessageInfo::Status:
+        styleHtml = m_chatStyle->getStatusHtml();
+        break;
+    case AdiumThemeMessageInfo::HistoryStatus:
+        styleHtml = m_chatStyle->getHistoryStatusHtml();
+        break;
+    default:
+        kWarning() << "Unexpected message type to addStatusMessage";
+    }
+
+    replaceStatusKeywords(styleHtml, message);
+
+    if (consecutiveMessage && !m_chatStyle->disableCombineConsecutive()) {
+        appendNextMessage(styleHtml);
+    } else {
+        appendNewMessage(styleHtml);
+    }
 }
 
 void AdiumThemeView::onLinkClicked(const QUrl &url)

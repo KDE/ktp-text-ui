@@ -35,6 +35,7 @@ public:
         Status,
         HistoryRemoteToLocal,
         HistoryLocalToRemote,
+        HistoryStatus,
         Invalid
     };
 

@@ -48,6 +48,7 @@ AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList& args)
     m_demoChatHeader.setTimeOpened(QDateTime::currentDateTime());
     m_demoChatHeader.setDestinationName(i18n("BobMarley@yahoo.com"));
     m_demoChatHeader.setDestinationDisplayName(i18n("Bob Marley"));
+    m_demoChatHeader.setGroupChat(false);
 
     ui->chatView->load(AdiumThemeView::SingleUserChat);
     ui->chatView->initialise(m_demoChatHeader);

@@ -99,6 +99,8 @@ public:
     QString getTemplateHtml() const;
     QString getHeaderHtml() const;
     QString getFooterHtml() const;
+    QString getTopicHtml() const;
+
     QString getIncomingHtml() const;
     QString getNextIncomingHtml() const;
     QString getOutgoingHtml() const;
@@ -109,6 +111,7 @@ public:
     QString getHistoryNextIncomingHtml() const;
     QString getHistoryOutgoingHtml() const;
     QString getHistoryNextOutgoingHtml() const;
+    QString getHistoryStatusHtml() const;
 
     QString getActionIncomingHtml() const;
     QString getActionOutgoingHtml() const;
@@ -144,9 +147,10 @@ public:
      */
     void reload();
 
-    QString defaultVariantName();
-    QString defaultFontFamily();
-    int defaultFontSize();
+    QString defaultVariantName() const;
+    QString defaultFontFamily() const;
+    int defaultFontSize() const;
+    bool disableCombineConsecutive() const;
 private:
     /**
      * Read style HTML files from disk
@@ -169,6 +173,7 @@ private:
         Header,
         Content,
         Footer,
+        Topic,
 
         Incoming,
         IncomingNext,
@@ -180,6 +185,7 @@ private:
         HistoryIncomingNext,
         HistoryOutgoing,
         HistoryOutgoingNext,
+        HistoryStatus,
 
         ActionIncoming,
         ActionOutgoing,
