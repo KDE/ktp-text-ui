@@ -208,13 +208,13 @@ void AppearanceConfig::sendDemoMessages()
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
 
-    AdiumThemeStatusInfo statusMessage(true);
+    AdiumThemeStatusInfo statusMessage;
     statusMessage.setMessage(i18n("Ted Example waves."));
     statusMessage.setTime(QDateTime::currentDateTime());
     statusMessage.setService(i18n("Jabber"));
     ui->chatView->addStatusMessage(statusMessage);
 
-    statusMessage = AdiumThemeStatusInfo(true);
+    statusMessage = AdiumThemeStatusInfo();
     statusMessage.setMessage(i18n("Ted Example has left the chat.")); //FIXME sync this with chat text logic.
     statusMessage.setTime(QDateTime::currentDateTime());
     statusMessage.setService(i18n("Jabber"));
