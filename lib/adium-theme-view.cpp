@@ -292,15 +292,20 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
 {
     QString styleHtml;
     bool consecutiveMessage = false;
+    // contentMessage is const, we need a non-const one to append message classes
+    AdiumThemeContentInfo message(contentMessage);
 
-    if (m_lastContent.senderScreenName() == contentMessage.senderScreenName()
-        && m_lastContent.type() == contentMessage.type() )
+    if (m_lastContent.senderScreenName() == message.senderScreenName()
+        && m_lastContent.type() == message.type() )
     {
+        // TODO check if adding the "consecutive" class is a problem for themes
+        // with disableCombineConsecutive = true
         consecutiveMessage = true;
+        message.appendMessageClass(QLatin1String("consecutive"));
     }
-    m_lastContent = contentMessage;
+    m_lastContent = message;
 
-    switch (contentMessage.type()) {
+    switch (message.type()) {
     case AdiumThemeMessageInfo::RemoteToLocal:
         if (consecutiveMessage) {
             styleHtml = m_chatStyle->getNextIncomingHtml();
@@ -330,10 +335,10 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
         }
         break;
     default:
-        qWarning() << "Unexpected message type to addContentMessage";
+        kWarning() << "Unexpected message type to addContentMessage";
     }
 
-    replaceContentKeywords(styleHtml, contentMessage);
+    replaceContentKeywords(styleHtml, message);
 
     if (consecutiveMessage) {
         appendNextMessage(styleHtml);
@@ -512,10 +517,13 @@ QString AdiumThemeView::formatTime(const QString &timeFormat, const QDateTime &d
     QString format = timeFormat;
     format.replace(QLatin1String("%a"), QLatin1String("ddd"));
     format.replace(QLatin1String("%b"), QLatin1String("MMM"));
-    format.replace(QLatin1String("%d"), QLatin1String("dd"));
+    format.replace(QLatin1String("%B"), QLatin1String("MMMM"));
+    format.replace(QLatin1String("%d"), QLatin1String("d"));
+    format.replace(QLatin1String("%e"), QLatin1String("dd"));
     format.replace(QLatin1String("%H"), QLatin1String("HH"));
     format.replace(QLatin1String("%M"), QLatin1String("MM"));
     format.replace(QLatin1String("%S"), QLatin1String("ss"));
+    format.replace(QLatin1String("%Y"), QLatin1String("yyyy"));
     return dateTime.toString(format);
 }
 

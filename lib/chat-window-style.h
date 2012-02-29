@@ -165,7 +165,6 @@ private:
 
     enum InternalIdentifier {
         Template,
-        Status,
 
         Header,
         Content,
@@ -175,6 +174,7 @@ private:
         IncomingNext,
         Outgoing,
         OutgoingNext,
+        Status,
 
         HistoryIncoming,
         HistoryIncomingNext,
