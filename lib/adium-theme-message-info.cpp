@@ -108,7 +108,7 @@ QString AdiumThemeMessageInfo::messageClasses() const {
     //in the future this will also contain history, consecutive, autoreply, status, event
     //these will be stored internally as flags
 
-    QStringList classes = d->messageClasses;
+    QStringList classes;
 
     if (d->type == RemoteToLocal) {
         classes.append(QLatin1String("incoming"));
@@ -125,14 +125,18 @@ QString AdiumThemeMessageInfo::messageClasses() const {
     }
 
     if (d->type == HistoryLocalToRemote) {
-        // Should we be adding outgoing and message classes as well?
         classes.append(QLatin1String("history"));
+        classes.append(QLatin1String("incoming"));
+        classes.append(QLatin1String("message"));
     }
 
     if (d->type == HistoryRemoteToLocal) {
-        // Should we be adding incoming and message classes as well?
         classes.append(QLatin1String("history"));
+        classes.append(QLatin1String("outgoing"));
+        classes.append(QLatin1String("message"));
     }
+
+    classes << d->messageClasses;
 
     return classes.join(QLatin1String(" "));
 }
