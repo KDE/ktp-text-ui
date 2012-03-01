@@ -401,7 +401,7 @@ QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const Adiu
     //senderColor
     htmlTemplate.replace(QLatin1String("%senderColor%"), info.senderColor());
     //senderStatusIcon
-    htmlTemplate.replace(QLatin1String("senderStatusIcon"), info.senderStatusIcon());
+    htmlTemplate.replace(QLatin1String("%senderStatusIcon%"), info.senderStatusIcon());
     //messageDirection
     htmlTemplate.replace(QLatin1String("%messageDirection%"), info.messageDirection());
     //senderDisplayName
