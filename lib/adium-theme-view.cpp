@@ -436,7 +436,7 @@ QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const Adiu
     //senderColor
     htmlTemplate.replace(QLatin1String("%senderColor%"), info.senderColor());
     //senderStatusIcon
-    htmlTemplate.replace(QLatin1String("senderStatusIcon"), info.senderStatusIcon());
+    htmlTemplate.replace(QLatin1String("%senderStatusIcon%"), info.senderStatusIcon());
     //messageDirection
     htmlTemplate.replace(QLatin1String("%messageDirection%"), info.messageDirection());
     //senderDisplayName
@@ -500,15 +500,65 @@ void AdiumThemeView::appendNextMessage(QString &html)
 QString AdiumThemeView::formatTime(const QString &timeFormat, const QDateTime &dateTime)
 {
     QString format = timeFormat;
-    format.replace(QLatin1String("%a"), QLatin1String("ddd"));
-    format.replace(QLatin1String("%b"), QLatin1String("MMM"));
-    format.replace(QLatin1String("%B"), QLatin1String("MMMM"));
-    format.replace(QLatin1String("%d"), QLatin1String("d"));
-    format.replace(QLatin1String("%e"), QLatin1String("dd"));
-    format.replace(QLatin1String("%H"), QLatin1String("HH"));
-    format.replace(QLatin1String("%M"), QLatin1String("MM"));
-    format.replace(QLatin1String("%S"), QLatin1String("ss"));
-    format.replace(QLatin1String("%Y"), QLatin1String("yyyy"));
+
+    // see "man date"
+
+    // Just discard the modifiers
+    format.replace(QLatin1String("%-"), QLatin1String("%")); // (hyphen) do not pad the field
+    format.replace(QLatin1String("%_"), QLatin1String("%")); // (underscore) pad with spaces
+    format.replace(QLatin1String("%0"), QLatin1String("%")); // (zero) pad with zeros
+    format.replace(QLatin1String("%^"), QLatin1String("%")); // use upper case if possible
+    format.replace(QLatin1String("%#"), QLatin1String("%")); // use opposite case if possible
+
+    // Now do the real replacement
+    format.replace(QLatin1String("%a"), QLatin1String("ddd"));        // locale's abbreviated weekday name (e.g., Sun)
+    format.replace(QLatin1String("%A"), QLatin1String("dddd"));       // locale's full weekday name (e.g., Sunday)
+    format.replace(QLatin1String("%b"), QLatin1String("MMM"));        // locale's abbreviated month name (e.g., Jan)
+    format.replace(QLatin1String("%B"), QLatin1String("MMMM"));       // locale's full month name (e.g., January)
+    format.replace(QLatin1String("%c"), QLatin1String("ddd MMM d hh:mm:ss yyyy")); // FIXME locale's date and time (e.g., Thu Mar  3 23:05:25 2005)
+    format.replace(QLatin1String("%C"), QLatin1String(""));           // FIXME century; like %Y, except omit last two digits (e.g., 20)
+    format.replace(QLatin1String("%d"), QLatin1String("dd"));         // day of month (e.g., 01)
+    format.replace(QLatin1String("%D"), QLatin1String("MM/dd/yy"));   // date; same as %m/%d/%y
+    format.replace(QLatin1String("%e"), QLatin1String("d"));          // FIXME day of month, space padded; same as %_d
+    format.replace(QLatin1String("%F"), QLatin1String("yyyy-MM-dd")); // full date; same as %Y-%m-%d
+    format.replace(QLatin1String("%g"), QLatin1String(""));           // FIXME last two digits of year of ISO week number (see %G)
+    format.replace(QLatin1String("%G"), QLatin1String(""));           // year of ISO week number (see %V); normally useful only with %V
+    format.replace(QLatin1String("%h"), QLatin1String("MMM"));        // same as %b
+    format.replace(QLatin1String("%H"), QLatin1String("HH"));         // hour (00..23)
+    format.replace(QLatin1String("%I"), QLatin1String("hh"));         // FIXME hour (01..12)
+    format.replace(QLatin1String("%j"), QLatin1String(""));           // FIXME day of year (001..366)
+    format.replace(QLatin1String("%k"), QLatin1String("H"));          // hour, space padded ( 0..23); same as %_H
+    format.replace(QLatin1String("%l"), QLatin1String("h"));          // hour, space padded ( 0..23); same as %_H
+    format.replace(QLatin1String("%m"), QLatin1String("MM"));         // month (01..12)
+    format.replace(QLatin1String("%M"), QLatin1String("mm"));         // minute (00..59)
+    format.replace(QLatin1String("%n"), QLatin1String("\n"));         // a newline
+    format.replace(QLatin1String("%N"), QLatin1String("zzz"));        // FIXME nanoseconds (000000000..999999999)
+    format.replace(QLatin1String("%p"), QLatin1String("AP"));         // locale's equivalent of either AM or PM; blank if not known
+    format.replace(QLatin1String("%P"), QLatin1String("ap"));         // like %p, but lower case
+    format.replace(QLatin1String("%r"), QLatin1String("hh:mm:ss AP")); // FIXME locale's 12-hour clock time (e.g., 11:11:04 PM)
+    format.replace(QLatin1String("%R"), QLatin1String("HH:mm"));      // 24-hour hour and minute; same as %H:%M
+    format.replace(QLatin1String("%S"), QLatin1String(""));           // FIXME seconds since 1970-01-01 00:00:00 UTC
+    format.replace(QLatin1String("%S"), QLatin1String("ss"));         // second (00..60)
+    format.replace(QLatin1String("%t"), QLatin1String("\t"));         // a tab
+    format.replace(QLatin1String("%T"), QLatin1String("HH:mm:ss"));   // time; same as %H:%M:%S
+    format.replace(QLatin1String("%u"), QLatin1String(""));           // FIXME day of week (1..7); 1 is Monday
+    format.replace(QLatin1String("%U"), QLatin1String(""));           // FIXME week number of year, with Sunday as first day of week (00..53)
+    format.replace(QLatin1String("%V"), QLatin1String(""));           // FIXME ISO week number, with Monday as first day of week (01..53)
+    format.replace(QLatin1String("%w"), QLatin1String(""));           // FIXME day of week (0..6); 0 is Sunday
+    format.replace(QLatin1String("%W"), QLatin1String(""));           // FIXME week number of year, with Monday as first day of week (00..53)
+    format.replace(QLatin1String("%x"), QLatin1String("MM/dd/yy"));   // FIXME locale's date representation (e.g., 12/31/99)
+    format.replace(QLatin1String("%x"), QLatin1String("HH:mm:ss"));   // FIXME locale's time representation (e.g., 23:13:48)
+    format.replace(QLatin1String("%y"), QLatin1String("yy"));         // last two digits of year (00..99)
+    format.replace(QLatin1String("%Y"), QLatin1String("yyyy"));       // year
+    format.replace(QLatin1String("%z"), QLatin1String(""));           // FIXME +hhmm numeric time zone (e.g., -0400)
+    format.replace(QLatin1String("%:z"), QLatin1String(""));          // FIXME +hh:mm numeric time zone (e.g., -04:00)
+    format.replace(QLatin1String("%::z"), QLatin1String(""));         // FIXME +hh:mm::ss numeric time zone (e.g., -04:00:00)
+    format.replace(QLatin1String("%:::z"), QLatin1String(""));        // FIXME numeric time zone with : to necessary precision (e.g., -04, +05:30)
+    format.replace(QLatin1String("%Z"), QLatin1String(""));           // FIXME alphabetic time zone abbreviation (e.g., EDT)
+
+    // Last is the literal %
+    format.replace(QLatin1String("%%"), QLatin1String("%"));          // a literal %
+
     return dateTime.toString(format);
 }
 
