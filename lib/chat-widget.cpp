@@ -258,6 +258,11 @@ KIcon ChatWidget::icon() const
     return KTp::Presence(Tp::Presence::offline()).icon();
 }
 
+KIcon ChatWidget::accountIcon() const
+{
+    return KIcon(d->account->iconName());
+}
+
 bool ChatWidget::isGroupChat() const
 {
     return d->isGroupChat;
