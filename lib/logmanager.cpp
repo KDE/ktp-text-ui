@@ -102,12 +102,10 @@ void LogManager::fetchLast()
         connect(dates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
         return;
     }
+#endif
     //in all other cases finish immediately.
-#else
     QList<AdiumThemeContentInfo> messages;
     Q_EMIT fetched(messages);
-#endif
-
 }
 
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
