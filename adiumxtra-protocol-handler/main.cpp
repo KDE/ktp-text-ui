@@ -25,8 +25,6 @@
 
 int main(int argc, char *argv[])
 {
-    kDebug();
-
     KAboutData aboutData("ktp-adiumxtra-protocol-handler",
                          0,
                          ki18n("AdiumXtra Protocol Handler"),
