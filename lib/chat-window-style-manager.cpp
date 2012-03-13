@@ -190,44 +190,12 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
                   kDebug() << "Contents/Resources found";
                    validResult += 1;
                }
-               if (currentDir->entry(QLatin1String("Contents/Resources/Incoming"))) {
-                  kDebug() << "Contents/Resources/Incoming found";
-                   validResult += 1;
-               }
-               if (currentDir->entry(QLatin1String("Contents/Resources/Outgoing"))) {
-                  kDebug() << "Contents/Resources/Outgoing found";
-                   validResult += 1;
-               }
-               if (currentDir->entry(QLatin1String("Contents/Resources/main.css"))) {
-                  kDebug() << "Contents/Resources/main.css found";
-                   validResult += 1;
-               }
-               if (currentDir->entry(QLatin1String("Contents/Resources/Footer.html"))) {
-                  kDebug() << "Contents/Resources/Footer.html found";
-                   validResult += 1;
-               }
-               if (currentDir->entry(QLatin1String("Contents/Resources/Status.html"))) {
-                  kDebug() << "Contents/Resources/Status.html found";
-                   validResult += 1;
-               }
-               if (currentDir->entry(QLatin1String("Contents/Resources/Header.html"))) {
-                  kDebug() << "Contents/Resources/Header.html found";
-                   validResult += 1;
-               }
-               if (currentDir->entry(QLatin1String("Contents/Resources/Incoming/Content.html"))) {
-                  kDebug() << "Contents/Resources/Incoming/Content.html found";
-                   validResult += 1;
-               }
-               if (currentDir->entry(QLatin1String("Contents/Resources/Outgoing/Content.html"))) {
-                  kDebug() << "Contents/Resources/Outgoing/Content.html found";
-                   validResult += 1;
-               }
            }
        }
    }
   kDebug() << "Valid result: " << QString::number(validResult);
    // The archive is a valid style bundle.
-   if (validResult >= 8) {
+   if (validResult >= 2) {
        bool installOk = false;
        for (entriesIt = entries.begin(); entriesIt != entries.end(); ++entriesIt) {
            currentEntry = const_cast<KArchiveEntry*>(rootDir->entry(*entriesIt));
