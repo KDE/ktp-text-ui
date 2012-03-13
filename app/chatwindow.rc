@@ -24,4 +24,9 @@
   <Action name="language"/>
  </ToolBar>
 
+ <ToolBar noMerge="1" name="accountIconToolBar">
+  <text>Account Icon Toolbar</text>
+  <Action name="account-icon" />
+ </ToolBar>
+
 </gui>

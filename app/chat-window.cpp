@@ -42,9 +42,11 @@
 #include <KMenuBar>
 #include <KLineEdit>
 #include <KMenu>
+#include <KToolBar>
 
 #include <QEvent>
 #include <QWidgetAction>
+#include <QLabel>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/ContactCapabilities>
@@ -305,6 +307,8 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setInviteToChatEnabled(false);
 
     }
+
+    setAccountIcon(currentChatTab->accountIcon());
 }
 
 void ChatWindow::onEnableSearchActions(bool enable)
@@ -536,6 +540,10 @@ void ChatWindow::setupCustomActions()
     spellDictComboAction->setIcon(KIcon(QLatin1String("tools-check-spelling")));
     spellDictComboAction->setIconText(i18n("Choose Spelling Language"));
 
+    KAction *accountIconAction = new KAction(KIcon(QLatin1String("telepathy-kde")), i18n("Account Icon"), this);
+    m_accountIconLabel = new QLabel(this);
+    accountIconAction->setDefaultWidget(m_accountIconLabel);
+
     // add custom actions to the collection
     actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
     actionCollection()->addAction(QLatin1String("previous-tab"), previousTabAction);
@@ -545,6 +553,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("invite-to-chat"), inviteToChat);
     actionCollection()->addAction(QLatin1String("share-desktop"), shareDesktopAction);
     actionCollection()->addAction(QLatin1String("language"), spellDictComboAction);
+    actionCollection()->addAction(QLatin1String("account-icon"), accountIconAction);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
@@ -591,6 +600,11 @@ void ChatWindow::setShareDesktopEnabled(bool enable)
     if (action) {
         action->setEnabled(enable);
     }
+}
+
+void ChatWindow::setAccountIcon(const QIcon &icon)
+{
+    m_accountIconLabel->setPixmap(icon.pixmap(toolBar()->iconSize()));
 }
 
 void ChatWindow::startAudioCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
