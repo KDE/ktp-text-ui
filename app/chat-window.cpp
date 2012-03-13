@@ -503,9 +503,6 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
 
 void ChatWindow::setupCustomActions()
 {
-    KAction *separator = new KAction(this);
-    separator->setSeparator(true);
-
     KAction *nextTabAction = new KAction(KIcon(QLatin1String("go-next-view")), i18n("&Next Tab"), this);
     nextTabAction->setShortcuts(KStandardShortcut::tabNext());
     connect(nextTabAction, SIGNAL(triggered()), this, SLOT(onNextTabActionTriggered()));
@@ -540,7 +537,6 @@ void ChatWindow::setupCustomActions()
     spellDictComboAction->setIconText(i18n("Choose Spelling Language"));
 
     // add custom actions to the collection
-    actionCollection()->addAction(QLatin1String("separator"), separator);
     actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
     actionCollection()->addAction(QLatin1String("previous-tab"), previousTabAction);
     actionCollection()->addAction(QLatin1String("audio-call"), audioCallAction);
