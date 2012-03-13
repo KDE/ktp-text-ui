@@ -32,7 +32,7 @@ Item {
             PlasmaCore.Dialog {
                 id: dialog
                 //Set as a Tool window to bypass the taskbar
-                windowFlags: Qt.Tool | Qt.WindowStaysOnTopHint | Qt.X11BypassWindowManagerHint
+                windowFlags: Qt.WindowStaysOnTopHint | Qt.Tool
                 visible: conv.pressed
 
                 mainItem: ChatWidget {
