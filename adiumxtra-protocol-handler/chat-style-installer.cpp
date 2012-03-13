@@ -59,11 +59,13 @@ BundleInstaller::BundleStatus ChatStyleInstaller::validate()
         if (currentEntry->isDirectory()) {
             currentDir = dynamic_cast<KArchiveDirectory*>(currentEntry);
             if (currentDir) {
-                if (currentDir->entry(QLatin1String("Contents"))) {
+                if (currentDir->entry(QLatin1String("Contents")) &&
+                    currentDir->entry(QLatin1String("Contents"))->isDirectory()) {
                     kDebug() << "Contents found";
                     validResult += 1;
                 }
-                if (currentDir->entry(QLatin1String("Contents/Info.plist"))) {
+                if (currentDir->entry(QLatin1String("Contents/Info.plist")) &&
+                    currentDir->entry(QLatin1String("Contents/Info.plist"))->isFile()) {
                     kDebug() << "Contents/Info.plist found";
                     KArchiveFile const *info = dynamic_cast<KArchiveFile const *>(
                         currentDir->entry(QLatin1String("Contents/Info.plist"))
