@@ -20,8 +20,6 @@
 #include "chat-style-installer.h"
 #include "emoticon-set-installer.h"
 
-#include <KTp/ChatWindowStyleManager>
-
 #include <KDebug>
 #include <KZip>
 #include <KTar>
@@ -31,6 +29,7 @@
 #include <KIO/NetAccess>
 #include <KNotification>
 #include <KIcon>
+#include <KMimeType>
 
 AdiumxtraProtocolHandler::AdiumxtraProtocolHandler()
 {
