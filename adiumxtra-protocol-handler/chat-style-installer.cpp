@@ -80,8 +80,10 @@ BundleInstaller::BundleStatus ChatStyleInstaller::validate()
     }
 
     if(validResult >= 2) {
+        kDebug() << "Bundle is valid";
         return BundleValid;
     } else {
+        kDebug() << "Bundle is not valid";
         return BundleNotValid;
     }
 }
