@@ -100,6 +100,9 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
         QObject::connect(chatStyleInstaller, SIGNAL(showedResult()), this, SLOT(quit()));
         QObject::connect(chatStyleInstaller, SIGNAL(ignoredRequest()), this, SLOT(quit()));
 
+        kDebug() << "Starting installation";
+        chatStyleInstaller->install();
+
         return BundleInstaller::BundleValid;
     }
 
@@ -112,6 +115,9 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
                          emoticonSetInstaller, SLOT(showResult()));
         QObject::connect(emoticonSetInstaller, SIGNAL(showedResult()), this, SLOT(quit()));
         QObject::connect(emoticonSetInstaller, SIGNAL(ignoredRequest()), this, SLOT(quit()));
+
+        kDebug() << "Starting installation";
+        emoticonSetInstaller->install();
 
         return BundleInstaller::BundleValid;
     }
