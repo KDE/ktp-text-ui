@@ -29,6 +29,9 @@ int main(int argc, char *argv[])
                          0,
                          ki18n("AdiumXtra Protocol Handler"),
                          "0.3");
+    aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
+    aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
+    aboutData.setLicense(KAboutData::License_GPL_V2);
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineOptions options;
     options.add("!+install-chatstyles", ki18n("Install Adium packages"));
