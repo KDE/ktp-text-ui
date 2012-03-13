@@ -91,44 +91,44 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
         return BundleInstaller::BundleCannotOpen;
     }
 
-    BundleInstaller *installer = new ChatStyleInstaller(archive, tmpFile);
-    if(installer->validate() == BundleInstaller::BundleValid) {
-        installer->showRequest();
+    ChatStyleInstaller *chatStyleInstaller = new ChatStyleInstaller(archive, tmpFile);
+    if (chatStyleInstaller->validate() == BundleInstaller::BundleValid) {
+        chatStyleInstaller->showRequest();
 
-        QObject::connect(installer, SIGNAL(finished(BundleInstaller::BundleStatus)),
-                         installer, SLOT(showResult()));
-        QObject::connect(installer, SIGNAL(showedResult()), this, SLOT(quit()));
-        QObject::connect(installer, SIGNAL(ignoredRequest()), this, SLOT(quit()));
+        QObject::connect(chatStyleInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
+                         chatStyleInstaller, SLOT(showResult()));
+        QObject::connect(chatStyleInstaller, SIGNAL(showedResult()), this, SLOT(quit()));
+        QObject::connect(chatStyleInstaller, SIGNAL(ignoredRequest()), this, SLOT(quit()));
 
         kDebug() << "sent messagestyle request";
-    } else {
-        delete installer;
-        installer = new EmoticonSetInstaller(archive, tmpFile);
-        if(installer->validate() == BundleInstaller::BundleValid) {
-            installer->showRequest();
-
-            QObject::connect(installer, SIGNAL(finished(BundleInstaller::BundleStatus)),
-                             installer, SLOT(showResult()));
-            QObject::connect(installer, SIGNAL(showedResult()), this, SLOT(quit()));
-            QObject::connect(installer, SIGNAL(ignoredRequest()), this, SLOT(quit()));
-
-            kDebug() << "sent emoticonset request";
-        } else {
-            KNotification *notification = new KNotification(QLatin1String("packagenotrecognized"), NULL,
-                                                            KNotification::Persistent);
-            notification->setText( i18n("Package type not recognized or not supported") );
-            QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));
-            QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
-
-            QObject::connect(notification, SIGNAL(ignored()), this, SLOT(ignoreRequest()));
-            QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
-            notification->setActions( QStringList() << i18n("OK") );
-            notification->sendEvent();
-            kDebug() << "sent error";
-
-            return BundleInstaller::BundleUnknownError;
-        }
+        return BundleInstaller::BundleValid;
     }
 
-    return BundleInstaller::BundleValid;
+    EmoticonSetInstaller *emoticonSetInstaller = new EmoticonSetInstaller(archive, tmpFile);
+    if(emoticonSetInstaller->validate() == BundleInstaller::BundleValid) {
+        emoticonSetInstaller->showRequest();
+
+        QObject::connect(emoticonSetInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
+                         emoticonSetInstaller, SLOT(showResult()));
+        QObject::connect(emoticonSetInstaller, SIGNAL(showedResult()), this, SLOT(quit()));
+        QObject::connect(emoticonSetInstaller, SIGNAL(ignoredRequest()), this, SLOT(quit()));
+
+        kDebug() << "sent emoticonset request";
+        return BundleInstaller::BundleValid;
+    }
+
+    KNotification *notification = new KNotification(QLatin1String("packagenotrecognized"),
+                                                    NULL,
+                                                    KNotification::Persistent);
+    notification->setText( i18n("Package type not recognized or not supported") );
+    QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));
+    QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
+
+    QObject::connect(notification, SIGNAL(ignored()), this, SLOT(ignoreRequest()));
+    QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
+    notification->setActions( QStringList() << i18n("OK") );
+    notification->sendEvent();
+    kDebug() << "sent error";
+
+    return BundleInstaller::BundleUnknownError;
 }
