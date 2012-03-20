@@ -79,12 +79,12 @@ public:
 
     int unreadMessageCount() const;
 
-    /** Returns true if the user is currently typing or not */
-    bool isUserTyping() const;
-
     QString spellDictionary() const;
 
     void setSpellDictionary(const QString &dict);
+
+    /** Returns the chat state of remote contact */
+    Tp::ChannelChatState remoteChatState();
 
 public Q_SLOTS:
     /** toggle the search bar visibility */
@@ -140,7 +140,7 @@ Q_SIGNALS:
     void searchTextComplete(bool found);
 
     /** Emitted when another contact in the channel starts/stops typing (if supported by the protocol)*/
-    void userTypingChanged(bool);
+    void userTypingChanged(Tp::ChannelChatState);
 
     void contactPresenceChanged(KTp::Presence presence);
 

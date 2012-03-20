@@ -54,11 +54,11 @@ public:
     ChatWidgetPrivate()
     {
         isGroupChat = false;
-        remoteContactIsTyping = false;
+        remoteContactChatState = Tp::ChannelChatStateInactive;
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
     bool chatviewlInitialised;
-    bool remoteContactIsTyping;
+    Tp::ChannelChatState remoteContactChatState;
     QAction *showFormatToolbarAction;
     bool isGroupChat;
     QString title;
@@ -333,7 +333,7 @@ QColor ChatWidget::titleColor() const
 
     KColorScheme scheme(QPalette::Active, KColorScheme::Window);
 
-    if (d->remoteContactIsTyping) {
+    if (d->remoteContactChatState == Tp::ChannelChatStateComposing) {
         kDebug() << "remote is typing";
         return scheme.foreground(KColorScheme::PositiveText).color();
     }
@@ -692,49 +692,39 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
         return;
     }
 
-    bool contactIsTyping = false;
-
-    switch (state) {
-    case Tp::ChannelChatStateGone:
-      {
+    if (state == Tp::ChannelChatStateGone) {
         AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(i18n("%1 has left the chat", contact->alias()));
         statusMessage.setService(d->channel->connection()->protocolName());
         statusMessage.setStatus(QLatin1String("away"));
         statusMessage.setTime(QDateTime::currentDateTime());
         d->ui.chatArea->addStatusMessage(statusMessage);
-        break;
-      }
-    case Tp::ChannelChatStateInactive:
-        //FIXME send a 'chat timed out' message to chatview
-        break;
-    case Tp::ChannelChatStateActive:
-    case Tp::ChannelChatStatePaused:
-        break;
-    case Tp::ChannelChatStateComposing:
-        contactIsTyping = true;
-        break;
-    default:
-        kWarning() << "Unknown channel chat case" << state;
     }
 
-    if (!contactIsTyping) {
+    if (state != Tp::ChannelChatStateComposing) {
         //In a multiperson chat just because this user is no longer typing it doesn't mean that no-one is.
         //loop through each contact, check no-one is in composing mode.
+
+        Tp::ChannelChatState tempState = Tp::ChannelChatStateInactive;
+
         Q_FOREACH (const Tp::ContactPtr & contact, d->channel->groupContacts()) {
             if (contact == d->channel->groupSelfContact()) {
                 continue;
             }
 
-            if (d->channel->chatState(contact) == Tp::ChannelChatStateComposing) {
-                contactIsTyping = true;
+            tempState = d->channel->chatState(contact);
+
+            if (tempState == Tp::ChannelChatStateComposing) {
+                d->remoteContactChatState = tempState;
+            } else if (tempState == Tp::ChannelChatStatePaused) {
+                d->remoteContactChatState = tempState;
             }
         }
     }
 
-    if (contactIsTyping != d->remoteContactIsTyping) {
-        d->remoteContactIsTyping = contactIsTyping;
-        Q_EMIT userTypingChanged(contactIsTyping);
+    if (state != d->remoteContactChatState) {
+        d->remoteContactChatState = state;
+        Q_EMIT userTypingChanged(state);
     }
 }
 
@@ -859,11 +849,6 @@ void ChatWidget::onFormatColorReleased()
     d->ui.sendMessageBox->setTextColor(color);
 }
 
-bool ChatWidget::isUserTyping() const
-{
-    return d->remoteContactIsTyping;
-}
-
 void ChatWidget::setSpellDictionary(const QString &dict)
 {
     d->ui.sendMessageBox->setSpellCheckingLanguage(dict);
@@ -872,6 +857,11 @@ void ChatWidget::setSpellDictionary(const QString &dict)
 QString ChatWidget::spellDictionary() const
 {
     return d->ui.sendMessageBox->spellCheckingLanguage();
+}
+
+Tp::ChannelChatState ChatWidget::remoteChatState()
+{
+    return d->remoteContactChatState;
 }
 
 

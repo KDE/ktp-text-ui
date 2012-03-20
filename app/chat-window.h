@@ -92,7 +92,7 @@ private Q_SLOTS:
     void onTabTextChanged(const QString &newTitle);
     void onTabIconChanged(const KIcon &newIcon);
     void onVideoCallTriggered();                                /** start a video call */
-    void onUserTypingChanged();
+    void onUserTypingChanged(Tp::ChannelChatState state);
     void onShareDesktopTriggered();                             /** start a desktop share */
     void setTabSpellDictionary(const QString &dict);            /** set the spelling language for the current chat tab*/
 
