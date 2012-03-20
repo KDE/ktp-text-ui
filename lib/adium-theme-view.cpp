@@ -603,7 +603,7 @@ QString AdiumThemeView::formatTime(const QString &timeFormat, const QDateTime &d
     format.replace(QLatin1String("%P"), QLatin1String("ap"));         // like %p, but lower case
     format.replace(QLatin1String("%r"), QLatin1String("hh:mm:ss AP")); // FIXME locale's 12-hour clock time (e.g., 11:11:04 PM)
     format.replace(QLatin1String("%R"), QLatin1String("HH:mm"));      // 24-hour hour and minute; same as %H:%M
-    format.replace(QLatin1String("%S"), QLatin1String(""));           // FIXME seconds since 1970-01-01 00:00:00 UTC
+    format.replace(QLatin1String("%s"), QLatin1String(""));           // FIXME seconds since 1970-01-01 00:00:00 UTC
     format.replace(QLatin1String("%S"), QLatin1String("ss"));         // second (00..60)
     format.replace(QLatin1String("%t"), QLatin1String("\t"));         // a tab
     format.replace(QLatin1String("%T"), QLatin1String("HH:mm:ss"));   // time; same as %H:%M:%S
