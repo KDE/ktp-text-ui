@@ -41,6 +41,7 @@ public:
     QString defaultFontFamily;
     int     defaultFontSize;
     bool    disableCombineConsecutive;
+    int     messageViewVersion;
 
     QHash<int, QString> templateContents;
     QHash<QString, bool> compactVariants;
@@ -137,6 +138,11 @@ int ChatWindowStyle::defaultFontSize() const
 bool ChatWindowStyle::disableCombineConsecutive() const
 {
     return d->disableCombineConsecutive;
+}
+
+int ChatWindowStyle::messageViewVersion() const
+{
+    return d->messageViewVersion;
 }
 
 QString ChatWindowStyle::getStyleBaseHref() const
@@ -321,9 +327,11 @@ void ChatWindowStyle::readStyleFiles()
     d->defaultFontFamily  = plistReader.defaultFontFamily();
     d->defaultFontSize    = plistReader.defaultFontSize();
     d->disableCombineConsecutive = plistReader.disableCombineConsecutive();
+    d->messageViewVersion = plistReader.messageViewVersion();
 
     // specify the files for the identifiers
     QHash<InternalIdentifier, QLatin1String> templateFiles;
+
     templateFiles.insert(Template, QLatin1String("Template.html"));
 
     templateFiles.insert(Header, QLatin1String("Header.html"));

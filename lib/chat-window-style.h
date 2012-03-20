@@ -151,6 +151,7 @@ public:
     QString defaultFontFamily() const;
     int defaultFontSize() const;
     bool disableCombineConsecutive() const;
+    int messageViewVersion() const;
 private:
     /**
      * Read style HTML files from disk
