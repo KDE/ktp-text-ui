@@ -126,6 +126,11 @@ public:
     QString getOutgoingStateUnknownHtml() const;
 
     /**
+     * Check if the style is using a custom Template.html file
+     */
+    bool hasCustomTemplateHtml() const;
+
+    /**
      * Check if the style has the support for Kopete Action template (Kopete extension)
      * @return true if the style has Action template.
      */

@@ -42,6 +42,7 @@ public:
     int     defaultFontSize;
     bool    disableCombineConsecutive;
     int     messageViewVersion;
+    bool    hasCustomTemplateHtml;
 
     QHash<int, QString> templateContents;
     QHash<QString, bool> compactVariants;
@@ -266,6 +267,11 @@ QString ChatWindowStyle::getOutgoingStateUnknownHtml() const
     return content(OutgoingStateUnknown);
 }
 
+bool ChatWindowStyle::hasCustomTemplateHtml() const
+{
+    return d->hasCustomTemplateHtml;
+}
+
 bool ChatWindowStyle::hasActionTemplate() const
 {
     return (!content(ActionIncoming).isEmpty() && !content(ActionOutgoing).isEmpty());
@@ -415,9 +421,10 @@ void ChatWindowStyle::readStyleFiles()
     // Load template file fallback
     if (content(Template).isEmpty())
     {
+        d->hasCustomTemplateHtml = false;
         QString templateFileName(KGlobal::dirs()->findResource("data", QLatin1String("ktelepathy/template.html")));
 
-        if (! templateFileName.isEmpty() && QFile::exists(templateFileName)) {
+        if (!templateFileName.isEmpty() && QFile::exists(templateFileName)) {
             fileAccess.setFileName(templateFileName);
             fileAccess.open(QIODevice::ReadOnly);
             QTextStream headerStream(&fileAccess);
@@ -425,6 +432,8 @@ void ChatWindowStyle::readStyleFiles()
             setContent(Template, headerStream.readAll());
             fileAccess.close();
         }
+    } else {
+        d->hasCustomTemplateHtml = true;
     }
 
     //FIXME: do we have anything like this in telepathy?!
