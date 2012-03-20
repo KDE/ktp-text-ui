@@ -121,6 +121,11 @@ QString ChatStylePlistFileReader::defaultVariant() const
     return d->data.value(QLatin1String("DefaultVariant")).toString();
 }
 
+QString ChatStylePlistFileReader::displayNameForNoVariant() const
+{
+    return d->data.value(QLatin1String("DisplayNameForNoVariant")).toString();
+}
+
 int ChatStylePlistFileReader::messageViewVersion() const
 {
     return d->data.value(QLatin1String("MessageViewVersion")).toInt();

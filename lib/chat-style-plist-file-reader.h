@@ -44,6 +44,7 @@ public:
     QString defaultFontFamily() const;
     int defaultFontSize() const;
     QString defaultVariant() const;
+    QString displayNameForNoVariant() const;
     int messageViewVersion() const;
     bool showUserIcons() const;
     bool showUserIcons(const QString &variantName) const;
