@@ -313,30 +313,30 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
     switch (message.type()) {
     case AdiumThemeMessageInfo::RemoteToLocal:
         if (consecutiveMessage) {
-            styleHtml = m_chatStyle->getNextIncomingHtml();
+            styleHtml = m_chatStyle->getIncomingNextContentHtml();
         } else {
-            styleHtml = m_chatStyle->getIncomingHtml();
+            styleHtml = m_chatStyle->getIncomingContentHtml();
         }
         break;
     case AdiumThemeMessageInfo::LocalToRemote:
         if (consecutiveMessage) {
-            styleHtml = m_chatStyle->getNextOutgoingHtml();
+            styleHtml = m_chatStyle->getOutgoingNextContentHtml();
         } else {
-            styleHtml = m_chatStyle->getOutgoingHtml();
+            styleHtml = m_chatStyle->getOutgoingContentHtml();
         }
         break;
     case AdiumThemeMessageInfo::HistoryRemoteToLocal:
         if (consecutiveMessage) {
-            styleHtml = m_chatStyle->getHistoryNextIncomingHtml();
+            styleHtml = m_chatStyle->getIncomingNextHistoryHtml();
         } else {
-            styleHtml = m_chatStyle->getHistoryIncomingHtml();
+            styleHtml = m_chatStyle->getIncomingHistoryHtml();
         }
         break;
     case AdiumThemeMessageInfo::HistoryLocalToRemote:
         if (consecutiveMessage) {
-            styleHtml = m_chatStyle->getHistoryNextOutgoingHtml();
+            styleHtml = m_chatStyle->getOutgoingNextHistoryHtml();
         } else {
-            styleHtml = m_chatStyle->getHistoryOutgoingHtml();
+            styleHtml = m_chatStyle->getOutgoingHistoryHtml();
         }
         break;
     default:
@@ -373,7 +373,7 @@ void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
         styleHtml = m_chatStyle->getStatusHtml();
         break;
     case AdiumThemeMessageInfo::HistoryStatus:
-        styleHtml = m_chatStyle->getHistoryStatusHtml();
+        styleHtml = m_chatStyle->getStatusHistoryHtml();
         break;
     default:
         kWarning() << "Unexpected message type to addStatusMessage";

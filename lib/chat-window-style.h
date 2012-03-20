@@ -101,17 +101,17 @@ public:
     QString getFooterHtml() const;
     QString getTopicHtml() const;
 
-    QString getIncomingHtml() const;
-    QString getNextIncomingHtml() const;
-    QString getOutgoingHtml() const;
-    QString getNextOutgoingHtml() const;
+    QString getIncomingContentHtml() const;
+    QString getIncomingNextContentHtml() const;
+    QString getOutgoingContentHtml() const;
+    QString getOutgoingNextContentHtml() const;
     QString getStatusHtml() const;
 
-    QString getHistoryIncomingHtml() const;
-    QString getHistoryNextIncomingHtml() const;
-    QString getHistoryOutgoingHtml() const;
-    QString getHistoryNextOutgoingHtml() const;
-    QString getHistoryStatusHtml() const;
+    QString getIncomingHistoryHtml() const;
+    QString getIncomingNextHistoryHtml() const;
+    QString getOutgoingHistoryHtml() const;
+    QString getOutgoingNextHistoryHtml() const;
+    QString getStatusHistoryHtml() const;
 
     QString getActionIncomingHtml() const;
     QString getActionOutgoingHtml() const;
@@ -171,21 +171,30 @@ private:
         Template,
 
         Header,
-        Content,
         Footer,
         Topic,
 
-        Incoming,
-        IncomingNext,
-        Outgoing,
-        OutgoingNext,
+        Content,
+        NextContent,
+        History,
+        NextHistory,
         Status,
 
-        HistoryIncoming,
-        HistoryIncomingNext,
-        HistoryOutgoing,
-        HistoryOutgoingNext,
-        HistoryStatus,
+        IncomingContent,
+        IncomingNextContent,
+        IncomingContext,
+        IncomingNextContext,
+        IncomingHistory,
+        IncomingNextHistory,
+
+        OutgoingContent,
+        OutgoingNextContent,
+        OutgoingContext,
+        OutgoingNextContext,
+        OutgoingHistory,
+        OutgoingNextHistory,
+
+        StatusHistory,
 
         ActionIncoming,
         ActionOutgoing,
