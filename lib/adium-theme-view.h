@@ -48,6 +48,17 @@ public:
         SingleUserChat
     };
 
+    enum AppendMode {
+        AppendModeError = 0,
+        AppendMessageWithScroll,
+        AppendNextMessageWithScroll,
+        AppendMessage,
+        AppendNextMessage,
+        AppendMessageNoScroll,
+        AppendNextMessageNoScroll,
+        ReplaceLastMessage
+    };
+
     explicit AdiumThemeView(QWidget *parent = 0);
 
     /** Loads the Theme data*/
@@ -91,6 +102,14 @@ private:
     bool m_useCustomFont;
     QString m_fontFamily;
     int m_fontSize;
+
+    QString appendScript(AppendMode mode);
+    AppendMode appendMode(const AdiumThemeMessageInfo &message,
+                          bool consecutive,
+                          bool willAddMoreContentObjects,
+                          bool replaceLastContent);
+    void appendMessage(QString&, AppendMode mode);
+
     QString replaceHeaderKeywords(QString htmlTemplate, const AdiumThemeHeaderInfo&);
     QString replaceContentKeywords(QString& htmlTemplate, const AdiumThemeContentInfo&);
     QString replaceStatusKeywords(QString& htmlTemplate, const AdiumThemeStatusInfo&);
@@ -103,8 +122,6 @@ private:
     bool m_displayHeader;
     KAction *m_openLinkAction;
 
-    void appendNewMessage(QString&);
-    void appendNextMessage(QString&);
 
     bool m_webInspector;
 };
