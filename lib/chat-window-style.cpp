@@ -52,6 +52,15 @@ ChatWindowStyle::ChatWindowStyle(const QString &styleId, StyleBuildMode styleBui
     : QObject(), d(new Private)
 {
     init(styleId, styleBuildMode);
+
+    kDebug() << "Style" << styleId << ":";
+    kDebug() << "messageViewVersion is" << d->messageViewVersion;
+    kDebug() << "disableCombineConsecutive is" << d->disableCombineConsecutive;
+    kDebug() << "hasCustomTemplateHtml is" << d->hasCustomTemplateHtml;
+    if (d->messageViewVersion < 3) {
+        kWarning() << "Style" << styleId << "is legacy";
+    }
+
 }
 
 ChatWindowStyle::ChatWindowStyle(const QString &styleId, const QString &variantPath,
@@ -89,13 +98,11 @@ void ChatWindowStyle::init(const QString &styleId, StyleBuildMode styleBuildMode
 
 ChatWindowStyle::~ChatWindowStyle()
 {
-    kDebug() ;
     delete d;
 }
 
 bool ChatWindowStyle::isValid() const
 {
-    kDebug();
     bool statusHtml = !content(Status).isEmpty();
     bool fileTransferIncomingHtml = !content(FileTransferIncoming).isEmpty();
     bool nextIncomingHtml = !content(IncomingNextContent).isEmpty();
