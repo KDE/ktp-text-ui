@@ -404,6 +404,7 @@ void AdiumThemeView::onOpenLinkActionTriggered()
 QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumThemeHeaderInfo & info)
 {
     htmlTemplate.replace(QLatin1String("%chatName%"), info.chatName());
+    htmlTemplate.replace(QLatin1String("%topic%"), info.chatName());
     htmlTemplate.replace(QLatin1String("%sourceName%"), info.sourceName());
     htmlTemplate.replace(QLatin1String("%destinationName%"), info.destinationName());
     htmlTemplate.replace(QLatin1String("%destinationDisplayName%"), info.destinationDisplayName());
