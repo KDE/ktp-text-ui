@@ -136,7 +136,8 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     QString headerHtml;
     QString templateHtml = m_chatStyle->getTemplateHtml();
     QString footerHtml = replaceHeaderKeywords(m_chatStyle->getFooterHtml(), chatInfo);
-    QString extraStyleHtml = QLatin1String("@import url( \"main.css\" );");
+    QString extraStyleHtml = m_chatStyle->messageViewVersion() < 3 ? QLatin1String("")
+                                                                   : QLatin1String("@import url( \"main.css\" );");
     m_lastContent = AdiumThemeContentInfo();
 
     if (templateHtml.isEmpty()) {
