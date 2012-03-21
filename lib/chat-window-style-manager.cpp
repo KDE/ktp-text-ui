@@ -41,17 +41,20 @@
 class ChatWindowStyleManager::Private
 {
 public:
-    Private()
-            : styleDirLister(0) {}
+    Private(ChatWindowStyleManager *parent)
+            : q(parent), styleDirLister(0) {}
 
     ~Private() {
         if (styleDirLister) {
+            q->disconnect(styleDirLister, SIGNAL(newItems(KFileItemList)), q, SLOT(slotNewStyles(KFileItemList)));
+            q->disconnect(styleDirLister, SIGNAL(completed()), q, SLOT(slotDirectoryFinished()));
             styleDirLister->deleteLater();
         }
 
         qDeleteAll(stylePool);
     }
 
+    ChatWindowStyleManager *q;
     KDirLister *styleDirLister;
     QMap <QString, QString > availableStyles;
 
@@ -68,7 +71,7 @@ ChatWindowStyleManager *ChatWindowStyleManager::self()
 }
 
 ChatWindowStyleManager::ChatWindowStyleManager(QObject *parent)
-        : QObject(parent), d(new Private())
+        : QObject(parent), d(new Private(this))
 {
     kDebug() ;
     loadStyles();
