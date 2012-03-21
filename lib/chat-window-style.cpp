@@ -311,6 +311,9 @@ void ChatWindowStyle::listVariants()
         variantPath = QString(QLatin1String("Variants/%1")).arg(*it);
         d->variantsList.insert(variantName, variantPath);
     }
+    if (d->variantsList.isEmpty()) {
+        d->variantsList.insert(d->defaultVariantName, QLatin1String("main.css"));
+    }
 }
 
 void ChatWindowStyle::setContent(InternalIdentifier id, const QString& content)
@@ -337,6 +340,15 @@ void ChatWindowStyle::readStyleFiles()
     QString infoPlistFile = d->baseHref + QLatin1String("../Info.plist");
     ChatStylePlistFileReader plistReader(infoPlistFile);
     d->defaultVariantName = plistReader.defaultVariant();
+    if (d->defaultVariantName.isEmpty()) {
+        // older themes use this
+        d->defaultVariantName = plistReader.displayNameForNoVariant();
+    }
+    if (d->defaultVariantName.isEmpty()) {
+        // If name is still empty we use "Normal"
+        d->defaultVariantName = i18nc("Normal style variant menu item", "Normal");
+    }
+    kDebug() << "defaultVariantName = " << d->defaultVariantName;
     d->defaultFontFamily  = plistReader.defaultFontFamily();
     d->defaultFontSize    = plistReader.defaultFontSize();
     d->disableCombineConsecutive = plistReader.disableCombineConsecutive();
