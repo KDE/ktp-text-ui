@@ -156,6 +156,7 @@ private Q_SLOTS:
     void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
     void onFormatColorReleased();
     void onHistoryFetched(const QList<AdiumThemeContentInfo> &messages);
+    void onChatPausedTimerExpired();
 
 private:
     /** connects necessary signals for the channel */

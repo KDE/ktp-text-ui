@@ -69,6 +69,7 @@ public:
     Ui::ChatWidget ui;
     ChannelContactModel *contactModel;
     LogManager *logManager;
+    QTimer *pausedStateTimer;
 
     KComponentData telepathyComponentData();
 };
@@ -173,6 +174,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     d->ui.sendMessageBox->setSpellCheckingLanguage(KGlobal::locale()->language());
 
+    d->pausedStateTimer = new QTimer(this);
+    d->pausedStateTimer->setSingleShot(true);
+
     //connect signals/slots from format toolbar
     connect(d->ui.formatColor, SIGNAL(released()), SLOT(onFormatColorReleased()));
     connect(d->ui.formatBold, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontBold(bool)));
@@ -190,6 +194,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(d->ui.searchBar, SIGNAL(flagsChangedSignal(QString,QWebPage::FindFlags)), this, SLOT(findTextInChat(QString,QWebPage::FindFlags)));
 
     connect(this, SIGNAL(searchTextComplete(bool)), d->ui.searchBar, SLOT(onSearchTextComplete(bool)));
+
+    connect(d->pausedStateTimer, SIGNAL(timeout()), this, SLOT(onChatPausedTimerExpired()));
 
     // initialize LogManager
     if (!d->isGroupChat) {
@@ -807,14 +813,15 @@ void ChatWidget::onChannelInvalidated()
 void ChatWidget::onInputBoxChanged()
 {
     //if the box is empty
-    bool currentlyTyping = !d->ui.sendMessageBox->toPlainText().isEmpty();
+    bool textBoxEmpty = !d->ui.sendMessageBox->toPlainText().isEmpty();
 
     //FIXME buffer what we've sent to telepathy, make this more efficient.
-    //FIXME check spec (with olly) as to whether we have to handle idle state etc.
-    if(currentlyTyping) {
+    if(textBoxEmpty) {
         d->channel->requestChatState(Tp::ChannelChatStateComposing);
+        d->pausedStateTimer->start(5000);
     } else {
         d->channel->requestChatState(Tp::ChannelChatStateActive);
+        d->pausedStateTimer->stop();
     }
 }
 
@@ -864,5 +871,9 @@ Tp::ChannelChatState ChatWidget::remoteChatState()
     return d->remoteContactChatState;
 }
 
+void ChatWidget::onChatPausedTimerExpired()
+{
+        d->channel->requestChatState(Tp::ChannelChatStatePaused);
+}
 
 #include "chat-widget.moc"
