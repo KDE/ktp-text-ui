@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     aboutData.setLicense(KAboutData::License_GPL_V2);
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineOptions options;
-    options.add("!+install-chatstyles", ki18n("Install Adium packages"));
+    options.add("!+adium-bundle", ki18n("Adium package to install"));
     KCmdLineArgs::addCmdLineOptions(options);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
