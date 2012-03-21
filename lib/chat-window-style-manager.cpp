@@ -170,7 +170,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
     // A valid style bundle must have:
     // -a Contents, Contents/Resources, Co/Res/Incoming, Co/Res/Outgoing dirs
     // main.css, Footer.html, Header.html, Status.html files in Contents/Resources.
-    // So for a style bundle to be valid, it must have a result greather than 8, because we test for 8 required entry.
+    // So for a style bundle to be valid, it must have a result greather than 2, because we test for 2 required entry.
     int validResult = 0;
     const QStringList entries = rootDir->entries();
     // Will be reused later.
