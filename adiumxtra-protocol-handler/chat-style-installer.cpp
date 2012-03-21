@@ -27,6 +27,7 @@
 #include <KLocale>
 #include <KNotification>
 #include <KApplication>
+#include <QTimer>
 
 
 ChatStyleInstaller::ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFile)
