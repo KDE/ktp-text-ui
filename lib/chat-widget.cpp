@@ -701,7 +701,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
         d->ui.chatArea->addStatusMessage(statusMessage);
     }
 
-    if (state != Tp::ChannelChatStateComposing) {
+    if (d->isGroupChat) {
         //In a multiperson chat just because this user is no longer typing it doesn't mean that no-one is.
         //loop through each contact, check no-one is in composing mode.
 
@@ -715,9 +715,9 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
             tempState = d->channel->chatState(contact);
 
             if (tempState == Tp::ChannelChatStateComposing) {
-                d->remoteContactChatState = tempState;
-            } else if (tempState == Tp::ChannelChatStatePaused) {
-                d->remoteContactChatState = tempState;
+                state = tempState;
+            } else if (tempState == Tp::ChannelChatStatePaused && state != Tp::ChannelChatStateComposing) {
+                state = tempState;
             }
         }
     }
