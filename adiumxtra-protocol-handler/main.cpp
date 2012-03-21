@@ -45,11 +45,11 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    AdiumxtraProtocolHandler *handler = new AdiumxtraProtocolHandler;
-    handler->setUrl(KCmdLineArgs::parsedArgs()->arg(0));
+    AdiumxtraProtocolHandler handler;
+    handler.setUrl(KCmdLineArgs::parsedArgs()->arg(0));
 
-    app.connect(handler, SIGNAL(finished()), SLOT(quit()));
-    QTimer::singleShot(0, handler, SLOT(install()));
+    app.connect(&handler, SIGNAL(finished()), SLOT(quit()));
+    QTimer::singleShot(0, &handler, SLOT(install()));
 
     return app.exec();
 }

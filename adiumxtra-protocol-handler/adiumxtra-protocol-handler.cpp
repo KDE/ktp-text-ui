@@ -100,38 +100,42 @@ void AdiumxtraProtocolHandler::install()
         return;// BundleInstaller::BundleCannotOpen;
     }
 
-    ChatStyleInstaller *chatStyleInstaller = new ChatStyleInstaller(archive, tmpFile);
-    if (chatStyleInstaller->validate() == BundleInstaller::BundleValid) {
-        chatStyleInstaller->showRequest();
+    ChatStyleInstaller chatStyleInstaller(archive, tmpFile);
+    if (chatStyleInstaller.validate() == BundleInstaller::BundleValid) {
+        chatStyleInstaller.showRequest();
         kDebug() << "Sent messagestyle request";
 
-        QObject::connect(chatStyleInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
-                         chatStyleInstaller, SLOT(showResult()));
-        QObject::connect(chatStyleInstaller, SIGNAL(showedResult()), this, SIGNAL(finished()));
-        QObject::connect(chatStyleInstaller, SIGNAL(showedResult()), chatStyleInstaller, SLOT(deleteLater()));
-        QObject::connect(chatStyleInstaller, SIGNAL(ignoredRequest()), this, SIGNAL(finished()));
-        QObject::connect(chatStyleInstaller, SIGNAL(ignoredRequest()), chatStyleInstaller, SLOT(deleteLater()));
+        QObject::connect(&chatStyleInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
+                         &chatStyleInstaller, SLOT(showResult()));
+        QObject::connect(&chatStyleInstaller, SIGNAL(showedResult()), this, SIGNAL(finished()));
+        QObject::connect(&chatStyleInstaller, SIGNAL(showedResult()),
+                         &chatStyleInstaller, SLOT(deleteLater()));
+        QObject::connect(&chatStyleInstaller, SIGNAL(ignoredRequest()), this, SIGNAL(finished()));
+        QObject::connect(&chatStyleInstaller, SIGNAL(ignoredRequest()),
+                         &chatStyleInstaller, SLOT(deleteLater()));
 
         kDebug() << "Starting installation";
-        chatStyleInstaller->install();
+        chatStyleInstaller.install();
 
         return;// BundleInstaller::BundleValid;
     }
 
-    EmoticonSetInstaller *emoticonSetInstaller = new EmoticonSetInstaller(archive, tmpFile);
-    if(emoticonSetInstaller->validate() == BundleInstaller::BundleValid) {
-        emoticonSetInstaller->showRequest();
+    EmoticonSetInstaller emoticonSetInstaller(archive, tmpFile);
+    if(emoticonSetInstaller.validate() == BundleInstaller::BundleValid) {
+        emoticonSetInstaller.showRequest();
         kDebug() << "Sent emoticonset request";
 
-        QObject::connect(emoticonSetInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
-                         emoticonSetInstaller, SLOT(showResult()));
-        QObject::connect(emoticonSetInstaller, SIGNAL(showedResult()), this, SIGNAL(finished()));
-        QObject::connect(emoticonSetInstaller, SIGNAL(showedResult()), chatStyleInstaller, SLOT(deleteLater()));
-        QObject::connect(emoticonSetInstaller, SIGNAL(ignoredRequest()), this, SIGNAL(finished()));
-        QObject::connect(emoticonSetInstaller, SIGNAL(ignoredRequest()), chatStyleInstaller, SLOT(deleteLater()));
+        QObject::connect(&emoticonSetInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
+                         &emoticonSetInstaller, SLOT(showResult()));
+        QObject::connect(&emoticonSetInstaller, SIGNAL(showedResult()), this, SIGNAL(finished()));
+        QObject::connect(&emoticonSetInstaller, SIGNAL(showedResult()),
+                         &emoticonSetInstaller, SLOT(deleteLater()));
+        QObject::connect(&emoticonSetInstaller, SIGNAL(ignoredRequest()), this, SIGNAL(finished()));
+        QObject::connect(&emoticonSetInstaller, SIGNAL(ignoredRequest()),
+                         &emoticonSetInstaller, SLOT(deleteLater()));
 
         kDebug() << "Starting installation";
-        emoticonSetInstaller->install();
+        emoticonSetInstaller.install();
 
         return;// BundleInstaller::BundleValid;
     }
