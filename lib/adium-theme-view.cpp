@@ -142,7 +142,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 
     if (templateHtml.isEmpty()) {
         // if templateHtml is empty, we failed to load the fallback template file
-        KMessageBox::error(this, i18n("Missing required file template.html - check your installation."));
+        KMessageBox::error(this, i18n("Missing required file Template.html - check your installation."));
     }
 
     if (m_displayHeader) {
@@ -452,7 +452,7 @@ AdiumThemeView::AppendMode AdiumThemeView::appendMode(const AdiumThemeMessageInf
         mode = (consecutive ? AppendNextMessage : AppendMessage);
     } else if (m_chatStyle->hasCustomTemplateHtml() && (message.type() == AdiumThemeContentInfo::Status ||
                                                         message.type() == AdiumThemeContentInfo::HistoryStatus)) {
-        // Old styles with a custom template.html had Status.html files without 'insert' divs coupled
+        // Old styles with a custom Template.html had Status.html files without 'insert' divs coupled
         // with a APPEND_NEXT_MESSAGE_WITH_SCROLL script which assumes one exists.
         mode = AppendMessageWithScroll;
     } else {

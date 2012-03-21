@@ -441,7 +441,7 @@ void ChatWindowStyle::readStyleFiles()
     if (content(Template).isEmpty())
     {
         d->hasCustomTemplateHtml = false;
-        QString templateFileName(KGlobal::dirs()->findResource("data", QLatin1String("ktelepathy/template.html")));
+        QString templateFileName(KGlobal::dirs()->findResource("data", QLatin1String("ktelepathy/Template.html")));
 
         if (!templateFileName.isEmpty() && QFile::exists(templateFileName)) {
             fileAccess.setFileName(templateFileName);
