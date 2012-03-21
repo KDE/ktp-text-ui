@@ -136,12 +136,13 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     QString headerHtml;
     QString templateHtml = m_chatStyle->getTemplateHtml();
     QString footerHtml = replaceHeaderKeywords(m_chatStyle->getFooterHtml(), chatInfo);
-    QString extraStyleHtml = QLatin1String("@import url( \"main.css\" );");
+    QString extraStyleHtml = m_chatStyle->messageViewVersion() < 3 ? QLatin1String("")
+                                                                   : QLatin1String("@import url( \"main.css\" );");
     m_lastContent = AdiumThemeContentInfo();
 
     if (templateHtml.isEmpty()) {
         // if templateHtml is empty, we failed to load the fallback template file
-        KMessageBox::error(this, i18n("Missing required file template.html - check your installation."));
+        KMessageBox::error(this, i18n("Missing required file Template.html - check your installation."));
     }
 
     if (m_displayHeader) {
@@ -297,46 +298,48 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
 {
     QString styleHtml;
     bool consecutiveMessage = false;
+    bool willAddMoreContentObjects = false; // TODO Find out how this is used in Adium
+    bool replaceLastContent = false; // TODO use this
+
     // contentMessage is const, we need a non-const one to append message classes
     AdiumThemeContentInfo message(contentMessage);
 
     if (m_lastContent.senderScreenName() == message.senderScreenName()
-        && m_lastContent.type() == message.type() )
-    {
-        // TODO check if adding the "consecutive" class is a problem for themes
-        // with disableCombineConsecutive = true
+        && m_lastContent.type() == message.type()
+        && !m_chatStyle->disableCombineConsecutive()) {
         consecutiveMessage = true;
         message.appendMessageClass(QLatin1String("consecutive"));
     }
+
     m_lastContent = message;
 
     switch (message.type()) {
     case AdiumThemeMessageInfo::RemoteToLocal:
         if (consecutiveMessage) {
-            styleHtml = m_chatStyle->getNextIncomingHtml();
+            styleHtml = m_chatStyle->getIncomingNextContentHtml();
         } else {
-            styleHtml = m_chatStyle->getIncomingHtml();
+            styleHtml = m_chatStyle->getIncomingContentHtml();
         }
         break;
     case AdiumThemeMessageInfo::LocalToRemote:
         if (consecutiveMessage) {
-            styleHtml = m_chatStyle->getNextOutgoingHtml();
+            styleHtml = m_chatStyle->getOutgoingNextContentHtml();
         } else {
-            styleHtml = m_chatStyle->getOutgoingHtml();
+            styleHtml = m_chatStyle->getOutgoingContentHtml();
         }
         break;
     case AdiumThemeMessageInfo::HistoryRemoteToLocal:
         if (consecutiveMessage) {
-            styleHtml = m_chatStyle->getHistoryNextIncomingHtml();
+            styleHtml = m_chatStyle->getIncomingNextHistoryHtml();
         } else {
-            styleHtml = m_chatStyle->getHistoryIncomingHtml();
+            styleHtml = m_chatStyle->getIncomingHistoryHtml();
         }
         break;
     case AdiumThemeMessageInfo::HistoryLocalToRemote:
         if (consecutiveMessage) {
-            styleHtml = m_chatStyle->getHistoryNextOutgoingHtml();
+            styleHtml = m_chatStyle->getOutgoingNextHistoryHtml();
         } else {
-            styleHtml = m_chatStyle->getHistoryOutgoingHtml();
+            styleHtml = m_chatStyle->getOutgoingHistoryHtml();
         }
         break;
     default:
@@ -345,27 +348,29 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
 
     replaceContentKeywords(styleHtml, message);
 
-    if (consecutiveMessage && !m_chatStyle->disableCombineConsecutive()) {
-        appendNextMessage(styleHtml);
-    } else {
-        appendNewMessage(styleHtml);
-    }
+    AppendMode mode = appendMode(message,
+                                 consecutiveMessage,
+                                 willAddMoreContentObjects,
+                                 replaceLastContent);
+
+    appendMessage(styleHtml, mode);
 }
 
 void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
 {
     QString styleHtml;
     bool consecutiveMessage = false;
+    bool willAddMoreContentObjects = false; // TODO Find out how this is used in Adium
+    bool replaceLastContent = false; // TODO use this
+
     // statusMessage is const, we need a non-const one to append message classes
     AdiumThemeStatusInfo message(statusMessage);
 
-    if (m_lastContent.type() == message.type())
-    {
+    if (m_lastContent.type() == message.type() && !m_chatStyle->disableCombineConsecutive()) {
         consecutiveMessage = true;
-        // TODO check if adding the "consecutive" class is a problem for themes
-        // with disableCombineConsecutive = true
         message.appendMessageClass(QLatin1String("consecutive"));
     }
+
     m_lastContent = AdiumThemeContentInfo(statusMessage.type());
 
     switch (message.type()) {
@@ -373,7 +378,7 @@ void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
         styleHtml = m_chatStyle->getStatusHtml();
         break;
     case AdiumThemeMessageInfo::HistoryStatus:
-        styleHtml = m_chatStyle->getHistoryStatusHtml();
+        styleHtml = m_chatStyle->getStatusHistoryHtml();
         break;
     default:
         kWarning() << "Unexpected message type to addStatusMessage";
@@ -381,11 +386,89 @@ void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
 
     replaceStatusKeywords(styleHtml, message);
 
-    if (consecutiveMessage && !m_chatStyle->disableCombineConsecutive()) {
-        appendNextMessage(styleHtml);
-    } else {
-        appendNewMessage(styleHtml);
+    AppendMode mode = appendMode(message,
+                                 consecutiveMessage,
+                                 willAddMoreContentObjects,
+                                 replaceLastContent);
+
+    appendMessage(styleHtml, mode);
+}
+
+QString AdiumThemeView::appendScript(AdiumThemeView::AppendMode mode)
+{
+    //by making the JS return false evaluateJavaScript is a _lot_ faster, as it has nothing to convert to QVariant.
+    //escape quotes, and merge HTML onto one line.
+    switch (mode) {
+    case AppendMessageWithScroll:
+        kDebug() << "AppendMessageWithScroll";
+        return QLatin1String("checkIfScrollToBottomIsNeeded(); appendMessage(\"%1\"); scrollToBottomIfNeeded(); false;");
+    case AppendNextMessageWithScroll:
+        kDebug() << "AppendNextMessageWithScroll";
+        return QLatin1String("checkIfScrollToBottomIsNeeded(); appendNextMessage(\"%1\"); scrollToBottomIfNeeded(); false;");
+    case AppendMessage:
+        kDebug() << "AppendMessage";
+        return QLatin1String("appendMessage(\"%1\"); false;");
+    case AppendNextMessage:
+        kDebug() << "AppendNextMessage";
+        return QLatin1String("appendNextMessage(\"%1\"); false;");
+    case AppendMessageNoScroll:
+        kDebug() << "AppendMessageNoScroll";
+        return QLatin1String("appendMessageNoScroll(\"%1\"); false;");
+    case AppendNextMessageNoScroll:
+        kDebug() << "AppendNextMessageNoScroll";
+        return QLatin1String("appendNextMessageNoScroll(\"%1\"); false;");
+    case ReplaceLastMessage:
+        kDebug() << "ReplaceLastMessage";
+        return QLatin1String("replaceLastMessage(\"%1\"); false");
+    default:
+        kWarning() << "Unhandled append mode!";
+        return QLatin1String("%1");
     }
+}
+
+AdiumThemeView::AppendMode AdiumThemeView::appendMode(const AdiumThemeMessageInfo &message,
+                                                      bool consecutive,
+                                                      bool willAddMoreContentObjects, // TODO Find out how this is used in Adium
+                                                      bool replaceLastContent)
+{
+    AdiumThemeView::AppendMode mode = AppendModeError;
+    // scripts vary by style version
+    if (!m_chatStyle->hasCustomTemplateHtml() && m_chatStyle->messageViewVersion() >= 4) {
+        // If we're using the built-in template HTML, we know that it supports our most modern scripts
+        if (replaceLastContent)
+            mode = ReplaceLastMessage;
+        else if (willAddMoreContentObjects) {
+            mode = (consecutive ? AppendNextMessageNoScroll : AppendMessageNoScroll);
+        } else {
+            mode = (consecutive ? AppendNextMessage : AppendMessage);
+        }
+    } else  if (m_chatStyle->messageViewVersion() >= 3) {
+        if (willAddMoreContentObjects) {
+            mode = (consecutive ? AppendNextMessageNoScroll : AppendMessageNoScroll);
+        } else {
+            mode = (consecutive ? AppendNextMessage : AppendMessage);
+        }
+    } else if (m_chatStyle->messageViewVersion() >= 1) {
+        mode = (consecutive ? AppendNextMessage : AppendMessage);
+    } else if (m_chatStyle->hasCustomTemplateHtml() && (message.type() == AdiumThemeContentInfo::Status ||
+                                                        message.type() == AdiumThemeContentInfo::HistoryStatus)) {
+        // Old styles with a custom Template.html had Status.html files without 'insert' divs coupled
+        // with a APPEND_NEXT_MESSAGE_WITH_SCROLL script which assumes one exists.
+        mode = AppendMessageWithScroll;
+    } else {
+        mode = (consecutive ? AppendNextMessageWithScroll : AppendMessageWithScroll);
+    }
+
+    return mode;
+}
+
+void AdiumThemeView::appendMessage(QString &html, AppendMode mode)
+{
+    QString js = appendScript(mode).arg(html.replace(QLatin1Char('\\'), QLatin1String("\\\\"))
+                                            .replace(QLatin1Char('\"'), QLatin1String("\\\""))
+                                            .replace(QLatin1Char('\n'), QLatin1String(""))
+                                            .replace(QLatin1Char('\r'), QLatin1String("<br>")));
+    page()->mainFrame()->evaluateJavaScript(js);
 }
 
 void AdiumThemeView::onLinkClicked(const QUrl &url)
@@ -404,6 +487,7 @@ void AdiumThemeView::onOpenLinkActionTriggered()
 QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumThemeHeaderInfo & info)
 {
     htmlTemplate.replace(QLatin1String("%chatName%"), info.chatName());
+    htmlTemplate.replace(QLatin1String("%topic%"), info.chatName());
     htmlTemplate.replace(QLatin1String("%sourceName%"), info.sourceName());
     htmlTemplate.replace(QLatin1String("%destinationName%"), info.destinationName());
     htmlTemplate.replace(QLatin1String("%destinationDisplayName%"), info.destinationDisplayName());
@@ -479,23 +563,6 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     return htmlTemplate;
 }
 
-void AdiumThemeView::appendNewMessage(QString &html)
-{
-    //by making the JS return false evaluateJavaScript is a _lot_ faster, as it has nothing to convert to QVariant.
-    //escape quotes, and merge HTML onto one line.
-    QString js = QString(QLatin1String("appendMessage(\"%1\");false;")).arg(html.replace(QLatin1Char('"'),
-                                                                            QLatin1String("\\\"")).replace(QLatin1Char('\n'), QLatin1String("")));
-    page()->mainFrame()->evaluateJavaScript(js);
-}
-
-void AdiumThemeView::appendNextMessage(QString &html)
-{
-    QString js = QString(QLatin1String("appendNextMessage(\"%1\");false;")).arg(html.replace(QLatin1Char('"'),
-                                                                                QLatin1String("\\\"")).replace(QLatin1Char('\n'), QLatin1String("")));
-    page()->mainFrame()->evaluateJavaScript(js);
-}
-
-
 //taken from Kopete code
 QString AdiumThemeView::formatTime(const QString &timeFormat, const QDateTime &dateTime)
 {
@@ -537,7 +604,7 @@ QString AdiumThemeView::formatTime(const QString &timeFormat, const QDateTime &d
     format.replace(QLatin1String("%P"), QLatin1String("ap"));         // like %p, but lower case
     format.replace(QLatin1String("%r"), QLatin1String("hh:mm:ss AP")); // FIXME locale's 12-hour clock time (e.g., 11:11:04 PM)
     format.replace(QLatin1String("%R"), QLatin1String("HH:mm"));      // 24-hour hour and minute; same as %H:%M
-    format.replace(QLatin1String("%S"), QLatin1String(""));           // FIXME seconds since 1970-01-01 00:00:00 UTC
+    format.replace(QLatin1String("%s"), QLatin1String(""));           // FIXME seconds since 1970-01-01 00:00:00 UTC
     format.replace(QLatin1String("%S"), QLatin1String("ss"));         // second (00..60)
     format.replace(QLatin1String("%t"), QLatin1String("\t"));         // a tab
     format.replace(QLatin1String("%T"), QLatin1String("HH:mm:ss"));   // time; same as %H:%M:%S

@@ -41,6 +41,8 @@ public:
     QString defaultFontFamily;
     int     defaultFontSize;
     bool    disableCombineConsecutive;
+    int     messageViewVersion;
+    bool    hasCustomTemplateHtml;
 
     QHash<int, QString> templateContents;
     QHash<QString, bool> compactVariants;
@@ -50,6 +52,15 @@ ChatWindowStyle::ChatWindowStyle(const QString &styleId, StyleBuildMode styleBui
     : QObject(), d(new Private)
 {
     init(styleId, styleBuildMode);
+
+    kDebug() << "Style" << styleId << ":";
+    kDebug() << "messageViewVersion is" << d->messageViewVersion;
+    kDebug() << "disableCombineConsecutive is" << d->disableCombineConsecutive;
+    kDebug() << "hasCustomTemplateHtml is" << d->hasCustomTemplateHtml;
+    if (d->messageViewVersion < 3) {
+        kWarning() << "Style" << styleId << "is legacy";
+    }
+
 }
 
 ChatWindowStyle::ChatWindowStyle(const QString &styleId, const QString &variantPath,
@@ -87,19 +98,17 @@ void ChatWindowStyle::init(const QString &styleId, StyleBuildMode styleBuildMode
 
 ChatWindowStyle::~ChatWindowStyle()
 {
-    kDebug() ;
     delete d;
 }
 
 bool ChatWindowStyle::isValid() const
 {
-    kDebug();
     bool statusHtml = !content(Status).isEmpty();
     bool fileTransferIncomingHtml = !content(FileTransferIncoming).isEmpty();
-    bool nextIncomingHtml = !content(IncomingNext).isEmpty();
-    bool incomingHtml = !content(Incoming).isEmpty();
-    bool nextOutgoingHtml = !content(OutgoingNext).isEmpty();
-    bool outgoingHtml = !content(Outgoing).isEmpty();
+    bool nextIncomingHtml = !content(IncomingNextContent).isEmpty();
+    bool incomingHtml = !content(IncomingContent).isEmpty();
+    bool nextOutgoingHtml = !content(OutgoingNextContent).isEmpty();
+    bool outgoingHtml = !content(OutgoingContent).isEmpty();
 
     return (statusHtml && fileTransferIncomingHtml && nextIncomingHtml
             && incomingHtml && nextOutgoingHtml  && outgoingHtml);
@@ -139,6 +148,11 @@ bool ChatWindowStyle::disableCombineConsecutive() const
     return d->disableCombineConsecutive;
 }
 
+int ChatWindowStyle::messageViewVersion() const
+{
+    return d->messageViewVersion;
+}
+
 QString ChatWindowStyle::getStyleBaseHref() const
 {
     return d->baseHref;
@@ -170,24 +184,24 @@ QString ChatWindowStyle::getTopicHtml() const
     return content(Topic);
 }
 
-QString ChatWindowStyle::getIncomingHtml() const
+QString ChatWindowStyle::getIncomingContentHtml() const
 {
-    return content(Incoming);
+    return content(IncomingContent);
 }
 
-QString ChatWindowStyle::getNextIncomingHtml() const
+QString ChatWindowStyle::getIncomingNextContentHtml() const
 {
-    return content(IncomingNext);
+    return content(IncomingNextContent);
 }
 
-QString ChatWindowStyle::getOutgoingHtml() const
+QString ChatWindowStyle::getOutgoingContentHtml() const
 {
-    return content(Outgoing);
+    return content(OutgoingContent);
 }
 
-QString ChatWindowStyle::getNextOutgoingHtml() const
+QString ChatWindowStyle::getOutgoingNextContentHtml() const
 {
-    return content(OutgoingNext);
+    return content(OutgoingNextContent);
 }
 
 QString ChatWindowStyle::getStatusHtml() const
@@ -195,29 +209,29 @@ QString ChatWindowStyle::getStatusHtml() const
     return content(Status);
 }
 
-QString ChatWindowStyle::getHistoryIncomingHtml() const
+QString ChatWindowStyle::getIncomingHistoryHtml() const
 {
-    return content(HistoryIncoming);
+    return content(IncomingHistory);
 }
 
-QString ChatWindowStyle::getHistoryNextIncomingHtml() const
+QString ChatWindowStyle::getIncomingNextHistoryHtml() const
 {
-    return content(HistoryIncomingNext);
+    return content(IncomingNextHistory);
 }
 
-QString ChatWindowStyle::getHistoryOutgoingHtml() const
+QString ChatWindowStyle::getOutgoingHistoryHtml() const
 {
-    return content(HistoryOutgoing);
+    return content(OutgoingHistory);
 }
 
-QString ChatWindowStyle::getHistoryNextOutgoingHtml() const
+QString ChatWindowStyle::getOutgoingNextHistoryHtml() const
 {
-    return content(HistoryOutgoingNext);
+    return content(OutgoingNextHistory);
 }
 
-QString ChatWindowStyle::getHistoryStatusHtml() const
+QString ChatWindowStyle::getStatusHistoryHtml() const
 {
-    return content(HistoryStatus);
+    return content(StatusHistory);
 }
 
 QString ChatWindowStyle::getActionIncomingHtml() const
@@ -260,6 +274,11 @@ QString ChatWindowStyle::getOutgoingStateUnknownHtml() const
     return content(OutgoingStateUnknown);
 }
 
+bool ChatWindowStyle::hasCustomTemplateHtml() const
+{
+    return d->hasCustomTemplateHtml;
+}
+
 bool ChatWindowStyle::hasActionTemplate() const
 {
     return (!content(ActionIncoming).isEmpty() && !content(ActionOutgoing).isEmpty());
@@ -292,6 +311,9 @@ void ChatWindowStyle::listVariants()
         variantPath = QString(QLatin1String("Variants/%1")).arg(*it);
         d->variantsList.insert(variantName, variantPath);
     }
+    if (d->variantsList.isEmpty()) {
+        d->variantsList.insert(d->defaultVariantName, QLatin1String("main.css"));
+    }
 }
 
 void ChatWindowStyle::setContent(InternalIdentifier id, const QString& content)
@@ -318,12 +340,23 @@ void ChatWindowStyle::readStyleFiles()
     QString infoPlistFile = d->baseHref + QLatin1String("../Info.plist");
     ChatStylePlistFileReader plistReader(infoPlistFile);
     d->defaultVariantName = plistReader.defaultVariant();
+    if (d->defaultVariantName.isEmpty()) {
+        // older themes use this
+        d->defaultVariantName = plistReader.displayNameForNoVariant();
+    }
+    if (d->defaultVariantName.isEmpty()) {
+        // If name is still empty we use "Normal"
+        d->defaultVariantName = i18nc("Normal style variant menu item", "Normal");
+    }
+    kDebug() << "defaultVariantName = " << d->defaultVariantName;
     d->defaultFontFamily  = plistReader.defaultFontFamily();
     d->defaultFontSize    = plistReader.defaultFontSize();
     d->disableCombineConsecutive = plistReader.disableCombineConsecutive();
+    d->messageViewVersion = plistReader.messageViewVersion();
 
     // specify the files for the identifiers
     QHash<InternalIdentifier, QLatin1String> templateFiles;
+
     templateFiles.insert(Template, QLatin1String("Template.html"));
 
     templateFiles.insert(Header, QLatin1String("Header.html"));
@@ -331,16 +364,16 @@ void ChatWindowStyle::readStyleFiles()
     templateFiles.insert(Footer, QLatin1String("Footer.html"));
     templateFiles.insert(Topic, QLatin1String("Topic.html"));
 
-    templateFiles.insert(Incoming, QLatin1String("Incoming/Content.html"));
-    templateFiles.insert(IncomingNext, QLatin1String("Incoming/NextContent.html"));
-    templateFiles.insert(Outgoing, QLatin1String("Outgoing/Content.html"));
-    templateFiles.insert(OutgoingNext, QLatin1String("Outgoing/NextContent.html"));
+    templateFiles.insert(IncomingContent, QLatin1String("Incoming/Content.html"));
+    templateFiles.insert(IncomingNextContent, QLatin1String("Incoming/NextContent.html"));
+    templateFiles.insert(OutgoingContent, QLatin1String("Outgoing/Content.html"));
+    templateFiles.insert(OutgoingNextContent, QLatin1String("Outgoing/NextContent.html"));
     templateFiles.insert(Status, QLatin1String("Status.html"));
 
-    templateFiles.insert(HistoryIncoming, QLatin1String("Incoming/Context.html"));
-    templateFiles.insert(HistoryIncomingNext, QLatin1String("Incoming/NextContext.html"));
-    templateFiles.insert(HistoryOutgoing, QLatin1String("Outgoing/Context.html"));
-    templateFiles.insert(HistoryOutgoingNext, QLatin1String("Outgoing/NextContext.html"));
+    templateFiles.insert(IncomingHistory, QLatin1String("Incoming/Context.html"));
+    templateFiles.insert(IncomingNextHistory, QLatin1String("Incoming/NextContext.html"));
+    templateFiles.insert(OutgoingHistory, QLatin1String("Outgoing/Context.html"));
+    templateFiles.insert(OutgoingNextHistory, QLatin1String("Outgoing/NextContext.html"));
 
     templateFiles.insert(ActionIncoming, QLatin1String("Incoming/Action.html"));
     templateFiles.insert(ActionOutgoing, QLatin1String("Outgoing/Action.html"));
@@ -379,33 +412,38 @@ void ChatWindowStyle::readStyleFiles()
     // basic fallbacks
     inheritContent(Topic, Header);
 
-    inheritContent(Incoming, Content);
-    inheritContent(Outgoing, Content);
+    //Fall back to Resources/Content.html if Incoming isn't present
+    inheritContent(IncomingContent, Content);
 
-    inheritContent(Outgoing, Incoming);
-    inheritContent(Incoming, Outgoing);
+    //Fall back to Content if NextContent doesn't need to use different HTML
+    inheritContent(IncomingNextContent, IncomingContent);
 
-    inheritContent(OutgoingNext, IncomingNext);
-    inheritContent(IncomingNext, Incoming);
-    inheritContent(OutgoingNext, Outgoing);
+    //Fall back to Content if History isn't present
+    inheritContent(IncomingNextHistory, IncomingNextContent);
+    inheritContent(IncomingHistory, IncomingContent);
 
-    inheritContent(HistoryOutgoing, HistoryIncoming);
-    inheritContent(HistoryIncoming, Incoming);
-    inheritContent(HistoryOutgoing, Outgoing);
+    //Fall back to Content if History isn't present
+    inheritContent(OutgoingNextHistory, OutgoingNextContent);
+    inheritContent(OutgoingHistory, OutgoingContent);
 
-    inheritContent(HistoryOutgoingNext, HistoryIncomingNext);
-    inheritContent(HistoryIncomingNext, IncomingNext);
-    inheritContent(HistoryOutgoingNext, OutgoingNext);
+    //Fall back to Content if History isn't present
+    inheritContent(OutgoingNextHistory, IncomingNextHistory);
+    inheritContent(OutgoingHistory, IncomingHistory);
+
+    //Fall back to Incoming if Outgoing doesn't need to be different
+    inheritContent(OutgoingContent, IncomingContent);
+    inheritContent(OutgoingNextContent, IncomingNextContent);
 
     inheritContent(Status, Content);
-    inheritContent(HistoryStatus, Status);
+    inheritContent(StatusHistory, Status);
 
     // Load template file fallback
     if (content(Template).isEmpty())
     {
-        QString templateFileName(KGlobal::dirs()->findResource("data", QLatin1String("ktelepathy/template.html")));
+        d->hasCustomTemplateHtml = false;
+        QString templateFileName(KGlobal::dirs()->findResource("data", QLatin1String("ktelepathy/Template.html")));
 
-        if (! templateFileName.isEmpty() && QFile::exists(templateFileName)) {
+        if (!templateFileName.isEmpty() && QFile::exists(templateFileName)) {
             fileAccess.setFileName(templateFileName);
             fileAccess.open(QIODevice::ReadOnly);
             QTextStream headerStream(&fileAccess);
@@ -413,6 +451,8 @@ void ChatWindowStyle::readStyleFiles()
             setContent(Template, headerStream.readAll());
             fileAccess.close();
         }
+    } else {
+        d->hasCustomTemplateHtml = true;
     }
 
     //FIXME: do we have anything like this in telepathy?!
@@ -435,7 +475,7 @@ void ChatWindowStyle::readStyleFiles()
                                   " </div>\n"
                                   "</div>"))
                           .arg(i18n("Download"), i18n("Cancel"));
-        QString incoming = content(Incoming);
+        QString incoming = content(IncomingContent);
         setContent(FileTransferIncoming, incoming.replace(QLatin1String("%message%"), message));
     }
 
@@ -456,7 +496,7 @@ void ChatWindowStyle::readStyleFiles()
                                   " </div>\n"
                                   "</div>"))
                           .arg(i18n("Play"), i18n("Save as"));
-        setContent(VoiceClipIncoming, content(Incoming).replace(QLatin1String("%message%"), message));
+        setContent(VoiceClipIncoming, content(IncomingContent).replace(QLatin1String("%message%"), message));
     }
 }
 

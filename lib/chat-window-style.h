@@ -101,17 +101,17 @@ public:
     QString getFooterHtml() const;
     QString getTopicHtml() const;
 
-    QString getIncomingHtml() const;
-    QString getNextIncomingHtml() const;
-    QString getOutgoingHtml() const;
-    QString getNextOutgoingHtml() const;
+    QString getIncomingContentHtml() const;
+    QString getIncomingNextContentHtml() const;
+    QString getOutgoingContentHtml() const;
+    QString getOutgoingNextContentHtml() const;
     QString getStatusHtml() const;
 
-    QString getHistoryIncomingHtml() const;
-    QString getHistoryNextIncomingHtml() const;
-    QString getHistoryOutgoingHtml() const;
-    QString getHistoryNextOutgoingHtml() const;
-    QString getHistoryStatusHtml() const;
+    QString getIncomingHistoryHtml() const;
+    QString getIncomingNextHistoryHtml() const;
+    QString getOutgoingHistoryHtml() const;
+    QString getOutgoingNextHistoryHtml() const;
+    QString getStatusHistoryHtml() const;
 
     QString getActionIncomingHtml() const;
     QString getActionOutgoingHtml() const;
@@ -124,6 +124,11 @@ public:
     QString getOutgoingStateSentHtml() const;
     QString getOutgoingStateErrorHtml() const;
     QString getOutgoingStateUnknownHtml() const;
+
+    /**
+     * Check if the style is using a custom Template.html file
+     */
+    bool hasCustomTemplateHtml() const;
 
     /**
      * Check if the style has the support for Kopete Action template (Kopete extension)
@@ -151,6 +156,7 @@ public:
     QString defaultFontFamily() const;
     int defaultFontSize() const;
     bool disableCombineConsecutive() const;
+    int messageViewVersion() const;
 private:
     /**
      * Read style HTML files from disk
@@ -171,21 +177,30 @@ private:
         Template,
 
         Header,
-        Content,
         Footer,
         Topic,
 
-        Incoming,
-        IncomingNext,
-        Outgoing,
-        OutgoingNext,
+        Content,
+        NextContent,
+        History,
+        NextHistory,
         Status,
 
-        HistoryIncoming,
-        HistoryIncomingNext,
-        HistoryOutgoing,
-        HistoryOutgoingNext,
-        HistoryStatus,
+        IncomingContent,
+        IncomingNextContent,
+        IncomingContext,
+        IncomingNextContext,
+        IncomingHistory,
+        IncomingNextHistory,
+
+        OutgoingContent,
+        OutgoingNextContent,
+        OutgoingContext,
+        OutgoingNextContext,
+        OutgoingHistory,
+        OutgoingNextHistory,
+
+        StatusHistory,
 
         ActionIncoming,
         ActionOutgoing,

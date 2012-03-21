@@ -20,7 +20,7 @@
         <integer>4</integer>
 	<key>ShowsUserIcons</key>
         <false/>
-    <key>DisableCombineConsecutive</key>
-        <true/>
+	<key>DisableCombineConsecutive</key>
+        <false/>
 </dict>
 </plist>
