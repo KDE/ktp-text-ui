@@ -27,6 +27,7 @@
 #include <KLocale>
 #include <KNotification>
 #include <KApplication>
+#include <QTimer>
 
 
 ChatStyleInstaller::ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFile)
@@ -59,11 +60,13 @@ BundleInstaller::BundleStatus ChatStyleInstaller::validate()
         if (currentEntry->isDirectory()) {
             currentDir = dynamic_cast<KArchiveDirectory*>(currentEntry);
             if (currentDir) {
-                if (currentDir->entry(QLatin1String("Contents"))) {
+                if (currentDir->entry(QLatin1String("Contents")) &&
+                    currentDir->entry(QLatin1String("Contents"))->isDirectory()) {
                     kDebug() << "Contents found";
                     validResult += 1;
                 }
-                if (currentDir->entry(QLatin1String("Contents/Info.plist"))) {
+                if (currentDir->entry(QLatin1String("Contents/Info.plist")) &&
+                    currentDir->entry(QLatin1String("Contents/Info.plist"))->isFile()) {
                     kDebug() << "Contents/Info.plist found";
                     KArchiveFile const *info = dynamic_cast<KArchiveFile const *>(
                         currentDir->entry(QLatin1String("Contents/Info.plist"))
@@ -80,8 +83,10 @@ BundleInstaller::BundleStatus ChatStyleInstaller::validate()
     }
 
     if(validResult >= 2) {
+        kDebug() << "Bundle is valid";
         return BundleValid;
     } else {
+        kDebug() << "Bundle is not valid";
         return BundleNotValid;
     }
 }
@@ -136,9 +141,11 @@ void ChatStyleInstaller::showResult()
 
     KNotification *notification;
     if(m_status == BundleInstaller::BundleInstallOk) {
+        kDebug() << "Installed Chatstyle" << this->bundleName() << "successfully";
         notification = new KNotification(QLatin1String("chatstyleSuccess"), NULL, KNotification::Persistent);
         notification->setText( i18n("Installed Chatstyle %1 successfully.", this->bundleName()) );
     } else {
+        kDebug() << "Installation of Chatstyle" << this->bundleName() << "failed";
         notification = new KNotification(QLatin1String("chatstyleFailure"), NULL, KNotification::Persistent);
         notification->setText( i18n("Installation of Chatstyle %1 failed.", this->bundleName()) );
     }

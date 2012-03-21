@@ -18,7 +18,6 @@
 
 #include "emoticon-set-installer.h"
 
-#include <KTp/ChatWindowStyleManager>
 #include <KTp/ChatStylePlistFileReader>
 
 #include <KDebug>

@@ -21,31 +21,35 @@
 #include <KApplication>
 #include <KAboutData>
 #include <KCmdLineArgs>
-#include <KDebug>
+#include <QTimer>
 
 int main(int argc, char *argv[])
 {
     KAboutData aboutData("ktp-adiumxtra-protocol-handler",
                          0,
                          ki18n("AdiumXtra Protocol Handler"),
-                         "0.3");
+                         "0.3.60");
     aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
+    aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
     aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
     aboutData.setLicense(KAboutData::License_GPL_V2);
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineOptions options;
-    options.add("!+install-chatstyles", ki18n("Install Adium packages"));
+    options.add("!+adium-bundle", ki18n("Adium package to install"));
     KCmdLineArgs::addCmdLineOptions(options);
 
-
-    AdiumxtraProtocolHandler app;
-
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    for(int i = 0; i < args->count(); i++) {
-        kDebug() << "install: " << args->arg(i);
-        app.install(args->arg(i));
+    KApplication app;
+
+    if (args->count() == 0) {
+        return -1;
     }
-    args->clear();
+
+    AdiumxtraProtocolHandler handler;
+    handler.setUrl(KCmdLineArgs::parsedArgs()->arg(0));
+
+    app.connect(&handler, SIGNAL(finished()), SLOT(quit()));
+    QTimer::singleShot(0, &handler, SLOT(install()));
 
     return app.exec();
 }

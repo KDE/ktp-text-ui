@@ -21,15 +21,25 @@
 
 #include "bundle-installer.h"
 
-#include <KApplication>
+#include <QtCore/QObject>
 
-class AdiumxtraProtocolHandler : public KApplication
+class AdiumxtraProtocolHandler : public QObject
 {
+    Q_OBJECT
 public:
     AdiumxtraProtocolHandler();
     virtual ~AdiumxtraProtocolHandler();
 
-    BundleInstaller::BundleStatus install(const QString& path);
+    void setUrl(const QString &url);
+
+public Q_SLOTS:
+    void install();
+
+Q_SIGNALS:
+    void finished();
+
+private:
+    QString m_url;
 };
 
 #endif // ADIUMXTRAPROTOCOLHANDLER_H
