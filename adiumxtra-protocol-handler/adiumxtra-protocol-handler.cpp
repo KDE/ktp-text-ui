@@ -32,6 +32,7 @@
 #include <KMimeType>
 
 AdiumxtraProtocolHandler::AdiumxtraProtocolHandler()
+    : QObject()
 {
     kDebug();
 }
@@ -41,11 +42,16 @@ AdiumxtraProtocolHandler::~AdiumxtraProtocolHandler()
     kDebug();
 }
 
-BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &path)
+void AdiumxtraProtocolHandler::install()
 {
     kDebug();
 
-    KUrl url(path);
+    if (m_url.isEmpty()) {
+        Q_EMIT finished();
+        return; // BundleInstaller:: xxxxx
+    }
+
+    KUrl url(m_url);
     if(url.protocol() == QLatin1String("adiumxtra")) {
         url.setProtocol(QLatin1String("http"));
     }
@@ -55,8 +61,10 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
         KIO::Job* getJob = KIO::file_copy(url.prettyUrl(), KUrl(tmpFile->fileName()), -1, KIO::Overwrite);
         if (!KIO::NetAccess::synchronousRun(getJob, 0)) {
             kDebug() << "Download failed";
-            return BundleInstaller::BundleCannotOpen;
+            Q_EMIT finished();
+            return; // BundleInstaller::BundleCannotOpen;
         }
+        getJob->deleteLater();
     }
 
     KArchive *archive = 0L;
@@ -81,13 +89,15 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
         notification->sendEvent();
         kDebug() << "Unsupported file type" << currentBundleMimeType;
         kDebug() << tmpFile->fileName();
-        return BundleInstaller::BundleNotValid;
+        Q_EMIT finished();
+        return;// BundleInstaller::BundleNotValid;
     }
 
     if (!archive->open(QIODevice::ReadOnly)) {
         delete archive;
         kDebug() << "Cannot open theme file";
-        return BundleInstaller::BundleCannotOpen;
+        Q_EMIT finished();
+        return;// BundleInstaller::BundleCannotOpen;
     }
 
     ChatStyleInstaller *chatStyleInstaller = new ChatStyleInstaller(archive, tmpFile);
@@ -97,13 +107,15 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
 
         QObject::connect(chatStyleInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
                          chatStyleInstaller, SLOT(showResult()));
-        QObject::connect(chatStyleInstaller, SIGNAL(showedResult()), this, SLOT(quit()));
-        QObject::connect(chatStyleInstaller, SIGNAL(ignoredRequest()), this, SLOT(quit()));
+        QObject::connect(chatStyleInstaller, SIGNAL(showedResult()), this, SIGNAL(finished()));
+        QObject::connect(chatStyleInstaller, SIGNAL(showedResult()), chatStyleInstaller, SLOT(deleteLater()));
+        QObject::connect(chatStyleInstaller, SIGNAL(ignoredRequest()), this, SIGNAL(finished()));
+        QObject::connect(chatStyleInstaller, SIGNAL(ignoredRequest()), chatStyleInstaller, SLOT(deleteLater()));
 
         kDebug() << "Starting installation";
         chatStyleInstaller->install();
 
-        return BundleInstaller::BundleValid;
+        return;// BundleInstaller::BundleValid;
     }
 
     EmoticonSetInstaller *emoticonSetInstaller = new EmoticonSetInstaller(archive, tmpFile);
@@ -113,13 +125,15 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
 
         QObject::connect(emoticonSetInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
                          emoticonSetInstaller, SLOT(showResult()));
-        QObject::connect(emoticonSetInstaller, SIGNAL(showedResult()), this, SLOT(quit()));
-        QObject::connect(emoticonSetInstaller, SIGNAL(ignoredRequest()), this, SLOT(quit()));
+        QObject::connect(emoticonSetInstaller, SIGNAL(showedResult()), this, SIGNAL(finished()));
+        QObject::connect(emoticonSetInstaller, SIGNAL(showedResult()), chatStyleInstaller, SLOT(deleteLater()));
+        QObject::connect(emoticonSetInstaller, SIGNAL(ignoredRequest()), this, SIGNAL(finished()));
+        QObject::connect(emoticonSetInstaller, SIGNAL(ignoredRequest()), chatStyleInstaller, SLOT(deleteLater()));
 
         kDebug() << "Starting installation";
         emoticonSetInstaller->install();
 
-        return BundleInstaller::BundleValid;
+        return;// BundleInstaller::BundleValid;
     }
 
     KNotification *notification = new KNotification(QLatin1String("packagenotrecognized"),
@@ -135,5 +149,11 @@ BundleInstaller::BundleStatus AdiumxtraProtocolHandler::install(const QString &p
     notification->sendEvent();
     kDebug() << "Sent error";
 
-    return BundleInstaller::BundleUnknownError;
+    Q_EMIT finished();
+    return;// BundleInstaller::BundleUnknownError;
+}
+
+void AdiumxtraProtocolHandler::setUrl(const QString& url)
+{
+    m_url = url;
 }

@@ -21,7 +21,7 @@
 #include <KApplication>
 #include <KAboutData>
 #include <KCmdLineArgs>
-#include <KDebug>
+#include <QTimer>
 
 int main(int argc, char *argv[])
 {
@@ -37,15 +37,18 @@ int main(int argc, char *argv[])
     options.add("!+install-chatstyles", ki18n("Install Adium packages"));
     KCmdLineArgs::addCmdLineOptions(options);
 
-
-    AdiumxtraProtocolHandler app;
-
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    for(int i = 0; i < args->count(); i++) {
-        kDebug() << "install: " << args->arg(i);
-        app.install(args->arg(i));
+    KApplication app;
+
+    if (args->count() == 0) {
+        return -1;
     }
-    args->clear();
+
+    AdiumxtraProtocolHandler *handler = new AdiumxtraProtocolHandler;
+    handler->setUrl(KCmdLineArgs::parsedArgs()->arg(0));
+
+    app.connect(handler, SIGNAL(finished()), SLOT(quit()));
+    QTimer::singleShot(0, handler, SLOT(install()));
 
     return app.exec();
 }
