@@ -722,6 +722,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
 
             if (tempState == Tp::ChannelChatStateComposing) {
                 state = tempState;
+                break;
             } else if (tempState == Tp::ChannelChatStatePaused && state != Tp::ChannelChatStateComposing) {
                 state = tempState;
             }
