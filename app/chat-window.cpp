@@ -595,9 +595,11 @@ void ChatWindow::setShareDesktopEnabled(bool enable)
 
 void ChatWindow::startAudioCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
 {
-    Tp::PendingChannelRequest* channelRequest = account->ensureStreamedMediaAudioCall(contact,
-                                                                                      QDateTime::currentDateTime(),
-                                                                                      QLatin1String(PREFERRED_AUDIO_VIDEO_HANDLER));
+    Tp::PendingChannelRequest *channelRequest = account->ensureAudioCall(contact,
+                                                                         QLatin1String("audio"),
+                                                                         QDateTime::currentDateTime(),
+                                                                         QLatin1String(PREFERRED_AUDIO_VIDEO_HANDLER));
+
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 
@@ -637,10 +639,11 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
 
 void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
 {
-    Tp::PendingChannelRequest* channelRequest = account->ensureStreamedMediaVideoCall(contact,
-                                                                                      true,
-                                                                                      QDateTime::currentDateTime(),
-                                                                                      QLatin1String(PREFERRED_AUDIO_VIDEO_HANDLER));
+    Tp::PendingChannelRequest* channelRequest = account->ensureAudioVideoCall(contact,
+                                                                              QLatin1String("audio"),
+                                                                              QLatin1String("video"),
+                                                                              QDateTime::currentDateTime(),
+                                                                              QLatin1String(PREFERRED_AUDIO_VIDEO_HANDLER));
 
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
