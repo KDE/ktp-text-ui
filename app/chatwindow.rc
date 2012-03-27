@@ -24,7 +24,7 @@
   <Action name="language"/>
  </ToolBar>
 
- <ToolBar hidden="true" noMerge="1" name="accountIconToolBar">
+ <ToolBar hidden="true" newline="false" noEdit="true" noMerge="1" name="accountIconToolBar">
   <text>Account Icon Toolbar</text>
   <Action name="account-icon" />
  </ToolBar>
