@@ -57,6 +57,9 @@ public:
     /** Returns the icon of this chat window */
     KIcon icon() const;
 
+    /** Returns the icon for the account used in this chat window */
+    KIcon accountIcon() const;
+
     /** returns whether the chat is considered a group chat */
     bool isGroupChat() const;
 

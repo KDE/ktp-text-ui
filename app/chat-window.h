@@ -32,6 +32,7 @@ namespace Sonnet {
 
 class KIcon;
 class ChatTab;
+class QLabel;
 
 class ChatWindow : public KXmlGuiWindow
 {
@@ -127,6 +128,9 @@ private:
     void setVideoCallEnabled(bool enable);
     void setShareDesktopEnabled(bool enable);
 
+    /** setter for account icon fake action */
+    void setAccountIcon(const QIcon &protocolIcon);
+
     /** starts audio call with given contact
      * @param account account sending the audio call request
      * @param contact contact with whom to start audio call
@@ -154,6 +158,7 @@ private:
     KTabWidget *m_tabWidget;
 
     Sonnet::DictionaryComboBox *m_spellDictCombo;
+    QLabel *m_accountIconLabel;
 };
 
 #endif // CHATWINDOW_H
