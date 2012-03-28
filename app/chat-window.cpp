@@ -515,7 +515,7 @@ void ChatWindow::setupCustomActions()
     previousTabAction->setShortcuts(KStandardShortcut::tabPrev());
     connect(previousTabAction, SIGNAL(triggered()), this, SLOT(onPreviousTabActionTriggered()));
 
-    KAction *audioCallAction = new KAction(KIcon(QLatin1String("voicecall")), i18n("&Audio Call"), this);
+    KAction *audioCallAction = new KAction(KIcon(QLatin1String("audio-headset")), i18n("&Audio Call"), this);
     connect(audioCallAction, SIGNAL(triggered()), this, SLOT(onAudioCallTriggered()));
 
     KAction *fileTransferAction = new KAction(KIcon(QLatin1String("mail-attachment")), i18n("&Send File"), this);
@@ -524,7 +524,7 @@ void ChatWindow::setupCustomActions()
     KAction *inviteToChat = new KAction(KIcon(QLatin1String("user-group-new")), i18n("&Invite to Chat"), this);
     connect(inviteToChat, SIGNAL(triggered()), this, SLOT(onInviteToChatTriggered()));
 
-    KAction *videoCallAction = new KAction(KIcon(QLatin1String("webcamsend")), i18n("&Video Call"), this);
+    KAction *videoCallAction = new KAction(KIcon(QLatin1String("camera-web")), i18n("&Video Call"), this);
     connect(videoCallAction, SIGNAL(triggered()), this, SLOT(onVideoCallTriggered()));
 
     KAction *shareDesktopAction = new KAction(KIcon(QLatin1String("krfb")), i18n("Share My &Desktop"), this);
