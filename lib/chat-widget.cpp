@@ -622,13 +622,16 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
         notification->setPixmap(notificationPixmap);
     }
 
-    if (message.text().length() > 170) {
+    // Remove empty lines from message
+    QString notifyText = msg.text().simplified();
+    if (notifyText.length() > 170) {
         //search for the closest space in text
-        QString truncatedMsg = message.text().left(message.text().indexOf(QLatin1Char(' '), 150)).append(QLatin1String("..."));
+        QString truncatedMsg = notifyText.left(notifyText.indexOf(QLatin1Char(' '), 150)).append(QLatin1String("..."));
         notification->setText(truncatedMsg);
     } else {
-        notification->setText(message.text());
+        notification->setText(notifyText);
     }
+
     //allows per contact notifications
     notification->addContext(QLatin1String("contact"), message.sender()->id());
     //TODO notification->addContext("group",... Requires KDE Telepathy Contact to work out which group they are in.
