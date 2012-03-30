@@ -623,7 +623,7 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
     }
 
     // Remove empty lines from message
-    QString notifyText = msg.text().simplified();
+    QString notifyText = message.text().simplified();
     if (notifyText.length() > 170) {
         //search for the closest space in text
         QString truncatedMsg = notifyText.left(notifyText.indexOf(QLatin1Char(' '), 150)).append(QLatin1String("..."));
