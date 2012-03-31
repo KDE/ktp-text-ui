@@ -79,6 +79,7 @@ private Q_SLOTS:
     void tabBarContextMenu(int  index, const QPoint &  globalPos);
     void closeCurrentTab();
     void onAudioCallTriggered();                                /** start an audio call */
+    void onBlockContactTriggered();                             /** Blocks contact */
     void onCurrentIndexChanged(int index);
     void onEnableSearchActions(bool enable);                    /** enables/disables menu search actions */
     void onFileTransferTriggered();                             /** start a file transfer (to be used only for 1on1 chats!) */
@@ -94,8 +95,10 @@ private Q_SLOTS:
     void onTabIconChanged(const KIcon &newIcon);
     void onVideoCallTriggered();                                /** start a video call */
     void onUserTypingChanged(Tp::ChannelChatState state);
+    void onUnblockContactTriggered();                           /** Unblocks contact when already blocked */
     void onShareDesktopTriggered();                             /** start a desktop share */
     void setTabSpellDictionary(const QString &dict);            /** set the spelling language for the current chat tab*/
+    void toggleBlockButton(bool contactIsBlocked);              /** Toggle block/unblock action according to the flag */
 
 protected Q_SLOTS:
     void showSettingsDialog();

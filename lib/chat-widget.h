@@ -119,6 +119,8 @@ protected Q_SLOTS:
 
     void onChatStatusChanged(const Tp::ContactPtr &contact, Tp::ChannelChatState state);
 
+    void onContactBlockStatusChanged(const Tp::ContactPtr &contact, bool blocked);
+
     void onContactPresenceChange(const Tp::ContactPtr &contact, const KTp::Presence &presence);
 
     void onContactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
@@ -144,6 +146,9 @@ Q_SIGNALS:
 
     /** Emitted when another contact in the channel starts/stops typing (if supported by the protocol)*/
     void userTypingChanged(Tp::ChannelChatState);
+
+    /** Emitted when a contact is blocked or unblocked */
+    void contactBlockStatusChanged(bool blocked);
 
     void contactPresenceChanged(KTp::Presence presence);
 

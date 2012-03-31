@@ -257,6 +257,18 @@ void ChatWindow::onAudioCallTriggered()
     startAudioCall(currChat->account(), currChat->textChannel()->targetContact());
 }
 
+void ChatWindow::onBlockContactTriggered()
+{
+    ChatWidget *currChat = qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+
+    if (!currChat) {
+        return;
+    }
+
+    Tp::ContactPtr contact = currChat->textChannel()->targetContact();
+    contact->block();
+}
+
 void ChatWindow::onCurrentIndexChanged(int index)
 {
     kDebug() << index;
@@ -297,6 +309,8 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setShareDesktopEnabled(s_krfbAvailableChecker->isAvailable() && contactCapabilites.streamTubes(QLatin1String("rfb")));
         /// TODO re-activate check when invitation to chat has been sorted out
         setInviteToChatEnabled(false);
+
+        toggleBlockButton(currentChatTab->textChannel()->targetContact()->isBlocked());
 
     } else {
         setAudioCallEnabled(false);
@@ -438,6 +452,18 @@ void ChatWindow::onVideoCallTriggered()
     startVideoCall(currChat->account(), currChat->textChannel()->targetContact());
 }
 
+void ChatWindow::onUnblockContactTriggered()
+{
+    ChatWidget *currChat = qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+
+    if(!currChat) {
+        return;
+    }
+
+    Tp::ContactPtr contact = currChat->textChannel()->targetContact();
+    contact->unblock();
+}
+
 void ChatWindow::onShareDesktopTriggered()
 {
     ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
@@ -477,6 +503,7 @@ void ChatWindow::removeChatTabSignals(ChatTab* chatTab)
     disconnect(chatTab, SIGNAL(unreadMessagesChanged()), this, SLOT(onTabStateChanged()));
     disconnect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
     disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
+    disconnect(chatTab, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
 }
 
 void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const QString& errorMsg)
@@ -503,6 +530,7 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab, SIGNAL(unreadMessagesChanged()), this, SLOT(onTabStateChanged()));
     connect(chatTab, SIGNAL(contactPresenceChanged(KTp::Presence)), this, SLOT(onTabStateChanged()));
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
+    connect(chatTab, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
 }
 
 void ChatWindow::setupCustomActions()
@@ -517,6 +545,9 @@ void ChatWindow::setupCustomActions()
 
     KAction *audioCallAction = new KAction(KIcon(QLatin1String("audio-headset")), i18n("&Audio Call"), this);
     connect(audioCallAction, SIGNAL(triggered()), this, SLOT(onAudioCallTriggered()));
+
+    KAction *blockContactAction = new KAction(KIcon(QLatin1String("im-ban-kick-user")), i18n("&Block Contact"), this);
+    connect(blockContactAction, SIGNAL(triggered()), this, SLOT(onBlockContactTriggered()));
 
     KAction *fileTransferAction = new KAction(KIcon(QLatin1String("mail-attachment")), i18n("&Send File"), this);
     connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
@@ -554,6 +585,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("share-desktop"), shareDesktopAction);
     actionCollection()->addAction(QLatin1String("language"), spellDictComboAction);
     actionCollection()->addAction(QLatin1String("account-icon"), accountIconAction);
+    actionCollection()->addAction(QLatin1String("block-contact"), blockContactAction);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
@@ -704,6 +736,26 @@ void ChatWindow::setTabSpellDictionary(const QString &dict)
     int index = m_tabWidget->currentIndex();
     ChatTab* currentChatTab=qobject_cast<ChatTab*>(m_tabWidget->widget(index));
     currentChatTab->setSpellDictionary(dict);
+}
+
+void ChatWindow::toggleBlockButton(bool contactIsBlocked)
+{
+    QAction *action = actionCollection()->action(QLatin1String("block-contact"));
+    if(contactIsBlocked) {
+        //Change the name of the action to "Unblock Contact"
+        //and disconnect it with the block slot and reconnect it with unblock slot
+        disconnect(action, SIGNAL(triggered()), this, SLOT(onBlockContactTriggered()));
+        action->setText(i18n("&Unblock Contact"));
+
+        connect(action, SIGNAL(triggered()), this, SLOT(onUnblockContactTriggered()));
+    } else {
+        //Change the name of the action to "Block Contact"
+        //and disconnect it with the unblock slot and reconnect it with block slot
+        disconnect(action, SIGNAL(triggered()), this, SLOT(onUnblockContactTriggered()));
+        action->setText(i18n("&Block Contact"));
+
+        connect(action, SIGNAL(triggered()), this, SLOT(onBlockContactTriggered()));
+    }
 }
 
 

@@ -112,6 +112,16 @@ void ChannelContactModel::onContactAliasChanged(const QString &alias)
     Q_EMIT contactAliasChanged(contact, alias);
 }
 
+void ChannelContactModel::onContactBlockStatusChanged(bool blocked)
+{
+    Tp::ContactPtr contact(qobject_cast<Tp::Contact*>(sender()));
+
+    QModelIndex index = createIndex(m_contacts.lastIndexOf(contact), 0);
+    Q_EMIT dataChanged(index, index);
+
+    Q_EMIT contactBlockStatusChanged(contact, blocked);
+}
+
 void ChannelContactModel::addContacts(const Tp::Contacts &contacts)
 {
     QList<Tp::ContactPtr> newContacts = contacts.toList();
@@ -119,6 +129,7 @@ void ChannelContactModel::addContacts(const Tp::Contacts &contacts)
     Q_FOREACH(Tp::ContactPtr contact, newContacts) {
         connect(contact.data(), SIGNAL(aliasChanged(QString)), SLOT(onContactAliasChanged(QString)));
         connect(contact.data(), SIGNAL(presenceChanged(Tp::Presence)), SLOT(onContactPresenceChanged(Tp::Presence)));
+        connect(contact.data(), SIGNAL(blockStatusChanged(bool)), SLOT(onContactBlockStatusChanged(bool)));
     }
 
     beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size() + newContacts.size());
@@ -135,6 +146,7 @@ void ChannelContactModel::removeContacts(const Tp::Contacts &contacts)
         //if we don't disconnect could we still get notifications here about their status/presence changes even if a contact has left the room
         disconnect(contact.data(), SIGNAL(aliasChanged(QString)), this, SLOT(onContactAliasChanged(QString)));
         disconnect(contact.data(), SIGNAL(presenceChanged(Tp::Presence)), this, SLOT(onContactPresenceChanged(Tp::Presence)));
+        disconnect(contact.data(), SIGNAL(blockStatusChanged(bool)), this, SLOT(onContactBlockStatusChanged(bool)));
 
         beginRemoveRows(QModelIndex(), m_contacts.indexOf(contact), m_contacts.indexOf(contact));
         m_contacts.removeAll(contact);

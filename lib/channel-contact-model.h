@@ -47,6 +47,7 @@ public:
 Q_SIGNALS:
     void contactPresenceChanged(const Tp::ContactPtr &contact, const KTp::Presence &presence);
     void contactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
+    void contactBlockStatusChanged(const Tp::ContactPtr &contact, bool blocked);
 
 protected:
     int rowCount(const QModelIndex &parent) const;
@@ -60,7 +61,7 @@ private Q_SLOTS:
                              const Tp::Channel::GroupMemberChangeDetails &details);
     void onContactPresenceChanged(const Tp::Presence &presence);
     void onContactAliasChanged(const QString &alias);
-
+    void onContactBlockStatusChanged(bool blocked);
 
 private:
     void addContacts(const Tp::Contacts &contacts);

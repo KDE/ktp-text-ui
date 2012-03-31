@@ -405,6 +405,8 @@ void ChatWidget::setupContactModelSignals()
             SLOT(onContactPresenceChange(Tp::ContactPtr,KTp::Presence)));
     connect(d->contactModel, SIGNAL(contactAliasChanged(Tp::ContactPtr,QString)),
             SLOT(onContactAliasChanged(Tp::ContactPtr,QString)));
+    connect(d->contactModel, SIGNAL(contactBlockStatusChanged(Tp::ContactPtr,bool)),
+       SLOT(onContactBlockStatusChanged(Tp::ContactPtr,bool)));
 }
 
 
@@ -812,6 +814,24 @@ void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QSt
     if (!d->isGroupChat && !isYou) {
         Q_EMIT titleChanged(alias);
     }
+}
+
+void ChatWidget::onContactBlockStatusChanged(const Tp::ContactPtr &contact, bool blocked)
+{
+    QString message;
+    if(blocked) {
+        message = i18n("%1 is now blocked.", contact->alias());
+    } else {
+        message = i18n("%1 is now unblocked.", contact->alias());
+    }
+
+    AdiumThemeStatusInfo statusMessage;
+    statusMessage.setMessage(message);
+    statusMessage.setService(d->channel->connection()->protocolName());
+    statusMessage.setTime(QDateTime::currentDateTime());
+    d->ui.chatArea->addStatusMessage(statusMessage);
+
+    Q_EMIT contactBlockStatusChanged(blocked);
 }
 
 void ChatWidget::onChannelInvalidated()
