@@ -476,12 +476,23 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
                 switch (reportDetails.error()) {
                 case Tp::ChannelTextSendErrorOffline:
                     if (reportDetails.hasEchoedMessage()) {
-                        text = i18n("Delivery of the message \"%1\" "
-                                    "failed because the remote contact is offline",
-                                    reportDetails.echoedMessage().text());
+                        if(message.sender()->isBlocked()) {
+                            text = i18n("Delivery of the message \"%1\" "
+                                        "failed because the remote contact is blocked",
+                                        reportDetails.echoedMessage().text());
+                         } else {
+                            text = i18n("Delivery of the message \"%1\" "
+                                        "failed because the remote contact is offline",
+                                        reportDetails.echoedMessage().text());
+                         }
                     } else {
-                        text = i18n("Delivery of a message failed "
-                                    "because the remote contact is offline");
+                        if(message.sender()->isBlocked()) {
+                            text = i18n("Delivery of a message failed "
+                                        "because the remote contact is blocked");
+                        } else {
+                            text = i18n("Delivery of a message failed "
+                                        "because the remote contact is offline");
+                        }
                     }
                     break;
                 case Tp::ChannelTextSendErrorInvalidContact:
