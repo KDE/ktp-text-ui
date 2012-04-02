@@ -768,6 +768,12 @@ void ChatWindow::toggleBlockButton(bool contactIsBlocked)
 
         connect(action, SIGNAL(triggered()), this, SLOT(onBlockContactTriggered()));
     }
+    //Reset the WindowTitle
+    ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+    Q_ASSERT(currChat);
+    setWindowTitle(currChat->title());
+
+    setBlockEnabled(true);
 }
 
 
