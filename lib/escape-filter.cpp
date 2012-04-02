@@ -31,6 +31,7 @@ void EscapeFilter::filterMessage(Message& message)
 
     escapedMessage.replace(QLatin1String("\n "), QLatin1String("<br/>&nbsp;")); //keep leading whitespaces
     escapedMessage.replace(QLatin1Char('\n'), QLatin1String("<br/>"));
+    escapedMessage.replace(QLatin1Char('\r'), QLatin1String("<br/>"));
     escapedMessage.replace(QLatin1Char('\t'), QLatin1String("&nbsp; &nbsp; ")); // replace tabs by 4 spaces
     escapedMessage.replace(QLatin1String("  "), QLatin1String(" &nbsp;")); // keep multiple whitespaces
     escapedMessage.replace(QLatin1Char('\\'), QLatin1String("\\\\")); //replace a single backslash with two backslashes.
