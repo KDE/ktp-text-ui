@@ -464,8 +464,7 @@ AdiumThemeView::AppendMode AdiumThemeView::appendMode(const AdiumThemeMessageInf
 
 void AdiumThemeView::appendMessage(QString &html, AppendMode mode)
 {
-    QString js = appendScript(mode).arg(html.replace(QLatin1Char('\\'), QLatin1String("\\\\"))
-                                            .replace(QLatin1Char('\"'), QLatin1String("\\\""))
+    QString js = appendScript(mode).arg(html.replace(QLatin1Char('\"'), QLatin1String("\\\""))
                                             .replace(QLatin1Char('\n'), QLatin1String(""))
                                             .replace(QLatin1Char('\r'), QLatin1String("<br>")));
     page()->mainFrame()->evaluateJavaScript(js);
