@@ -126,6 +126,7 @@ private:
 
     /** setters for chat actions */
     void setAudioCallEnabled(bool enable);
+    void setBlockEnabled(bool enable);
     void setFileTransferEnabled(bool enable);
     void setInviteToChatEnabled(bool enable);
     void setVideoCallEnabled(bool enable);

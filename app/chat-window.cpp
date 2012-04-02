@@ -266,7 +266,9 @@ void ChatWindow::onBlockContactTriggered()
     }
 
     Tp::ContactPtr contact = currChat->textChannel()->targetContact();
-    contact->block();
+    if(!contact.isNull()) {
+        contact->block();
+    }
 }
 
 void ChatWindow::onCurrentIndexChanged(int index)
@@ -319,6 +321,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setShareDesktopEnabled(false);
         /// TODO re-activate check when invitation to chat has been sorted out
         setInviteToChatEnabled(false);
+        setBlockEnabled(false);
 
     }
 
@@ -593,6 +596,15 @@ void ChatWindow::setAudioCallEnabled(bool enable)
     QAction *action = actionCollection()->action(QLatin1String("audio-call"));
 
     // don't want to segfault. Should never happen
+    if (action) {
+        action->setEnabled(enable);
+    }
+}
+
+void ChatWindow::setBlockEnabled(bool enable)
+{
+    QAction *action = actionCollection()->action(QLatin1String("block-contact"));
+
     if (action) {
         action->setEnabled(enable);
     }
