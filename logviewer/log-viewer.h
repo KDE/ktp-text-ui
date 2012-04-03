@@ -28,6 +28,7 @@ namespace Ui {
 }
 
 class EntityModel;
+class QSortFilterProxyModel;
 
 class LogViewer : public QWidget
 {
@@ -48,6 +49,7 @@ private:
     Ui::LogViewer *ui;
     Tp::AccountManagerPtr m_accountManager;
     EntityModel *m_entityModel;
+    QSortFilterProxyModel *m_filterModel;
 };
 
 #endif // LOGVIEWER_H

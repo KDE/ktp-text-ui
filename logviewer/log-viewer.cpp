@@ -31,6 +31,8 @@
 #include <glib-object.h>
 #include <QGlib/Init>
 
+#include <QSortFilterProxyModel>
+
 #include "entity-model.h"
 
 LogViewer::LogViewer(QWidget *parent) :
@@ -46,8 +48,11 @@ LogViewer::LogViewer(QWidget *parent) :
     m_accountManager = Tp::AccountManager::create();
 
     m_entityModel = new EntityModel(this);
+    m_filterModel = new QSortFilterProxyModel(this);
+    m_filterModel->setSourceModel(m_entityModel);
 
-    ui->entityList->setModel(m_entityModel);
+    ui->entityList->setModel(m_filterModel);
+    ui->entityFilter->setProxy(m_filterModel);
 
     //TODO parse command line args and update all views as appropriate
 

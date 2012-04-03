@@ -17,36 +17,10 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="KComboBox" name="kcombobox">
-       <item>
-        <property name="text">
-         <string>Contact</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Rooms</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>All</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
       <widget class="QListView" name="entityList"/>
      </item>
      <item>
-      <widget class="KLineEdit" name="klineedit">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
+      <widget class="KFilterProxySearchLine" name="entityFilter"/>
      </item>
      <item>
       <widget class="ConversationDatePicker" name="datePicker" native="true">
@@ -68,14 +42,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <class>KFilterProxySearchLine</class>
+   <extends>QWidget</extends>
+   <header>kfilterproxysearchline.h</header>
   </customwidget>
   <customwidget>
    <class>MessageView</class>
