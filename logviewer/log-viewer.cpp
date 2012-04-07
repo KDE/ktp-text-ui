@@ -40,6 +40,7 @@ LogViewer::LogViewer(QWidget *parent) :
     ui(new Ui::LogViewer)
 {
     ui->setupUi(this);
+    setWindowIcon(KIcon(QLatin1String("documentation")));
     Tp::registerTypes();
     g_type_init();
     QGlib::init(); //are these 4 really needed?
