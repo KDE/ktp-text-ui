@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=KDE IM Log Viewer
+GenericName=KDE Instant Messenger Log Viewer
+Comment=Displays your KDE Instant Messenger logs
+Exec=ktp-log-viewer %u
+Type=Application
+Terminal=false
+Icon=documentation
+Categories=Qt;KDE;Network;InstantMessaging;
+X-DBUS-StartupType=Unique
+X-KDE-ServiceTypes=DBUS/InstantMessenger

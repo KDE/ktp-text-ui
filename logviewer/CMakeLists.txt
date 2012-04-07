@@ -34,4 +34,7 @@ target_link_libraries(ktp-log-viewer
             ktpchat)
 
 install(TARGETS ktp-log-viewer DESTINATION ${BIN_INSTALL_DIR})
+install(FILES ktp-log-viewer.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+
 endif()
