@@ -1,6 +1,5 @@
 import QtQuick 1.1
 import org.kde.telepathy.chat 0.1
-import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
@@ -14,7 +13,8 @@ Item {
         anchors {
             margins: 5
             top: parent.top
-            left: parent.left; right: parent.right
+            left: parent.left
+            right: parent.right
         }
         height: 24
 
@@ -76,126 +76,78 @@ Item {
         orientation: Qt.Horizontal
     }
 
-
-    Item {
-        id:chatArea
-
+    ListView {
+        id: view
         anchors {
             top: space.bottom
             left: parent.left
             right: parent.right
             bottom: input.top
-
+            rightMargin: viewScrollBar.width+5
             leftMargin: 5
-            rightMargin: chatArea.anchors.leftMargin
         }
+        boundsBehavior: Flickable.StopAtBounds
+        clip: true
 
-//         contemplating if this makes it look better or worse
-//         PlasmaComponents.Highlight { anchors.fill: chatArea }
-
-        ListView {
-            id: view
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                left: parent.left
-                right: viewScrollBar.left
-            }
-            boundsBehavior: Flickable.StopAtBounds
-            clip: true
-
-            delegate: Loader {
-                Component.onCompleted: {
-                    console.log(model.type);
-                    switch(model.type) {
-                        case MessagesModel.MessageTypeIncoming:
+        delegate: Loader {
+            Component.onCompleted: {
+                console.log(model.type);
+                switch(model.type) {
+                    case MessagesModel.MessageTypeIncoming:
 //                             console.log("Type: MessagesModel::MessageTypeIncoming");
-                            source = "IncomingDelegate.qml";
-                            break;
-                        case MessagesModel.MessageTypeOutgoing:
+                        source = "IncomingDelegate.qml";
+                        break;
+                    case MessagesModel.MessageTypeOutgoing:
 //                             console.log("Type: MessagesModel::MessageTypeOutgoing");
-                            source = "OutgoingDelegate.qml"
-                            break;
-                        case MessagesModel.MessageTypeAction:
+                        source = "OutgoingDelegate.qml"
+                        break;
+                    case MessagesModel.MessageTypeAction:
 //                             console.log("Type: MessagesModel::MessageTypeAction");
-                            source = "ActionDelegate.qml";
-                            break;
-                        default:
+                        source = "ActionDelegate.qml";
+                        break;
+                    default:
 //                             console.log("ERROR: UNKNOWN MESSAGE TYPE! Defaulting to fallback handler");
-                            source = "TextDelegate.qml";
-                    }
+                        source = "TextDelegate.qml";
                 }
             }
-
-            model: conv.messages
         }
 
-        PlasmaComponents.ScrollBar {
-            id: viewScrollBar
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                right: parent.right
-            }
+        model: conv.messages
 
-            flickableItem: view
-            interactive: true
-            width: 16
-            opacity: 1
-            orientation: Qt.Vertical
+        onCountChanged: {
+            if((view.contentHeight-view.contentY)<(1.2*view.height)) {
+                view.positionViewAtEnd()
+            }
+        }
+    }
+
+    PlasmaComponents.ScrollBar {
+        id: viewScrollBar
+        anchors {
+            top: view.top
+            bottom: view.bottom
+            right: parent.right
         }
 
-
-        //used states here to make the scroll bar (dis)appear
-        states: [
-            State {
-                name: "auto-scrolling"
-                when: view.atYEnd
-                PropertyChanges {
-                    target: view.model
-                    restoreEntryValues: true
-                    onRowsInserted: {
-                        view.positionViewAtEnd();
-                    }
-                }
-                PropertyChanges {
-                    target: viewScrollBar
-                    restoreEntryValues: true
-                    width: 0
-                    opacity: 0
-                }
-            }
-        ]
-
-        transitions: [
-            Transition {
-                from: "*"
-                to: "auto-scrolling"
-
-                PropertyAnimation {
-                    properties: "width,opacity"
-                    duration: 250
-                }
-            },
-            Transition {
-                from: "auto-scrolling"
-                to: "*"
-
-                PropertyAnimation {
-                    properties: "width,opacity"
-                    duration: 250
-                }
-            }
-        ]
+        flickableItem: view
+        width: 16
+        orientation: Qt.Vertical
+        opacity: view.atYEnd ? 0.3 : 1
+        
+        Behavior on width { NumberAnimation { duration: 250 } }
+        Behavior on opacity { NumberAnimation { duration: 250 } }
     }
 
     PlasmaWidgets.LineEdit {
         id: input
-        //FIXME: replace with Plasma Component and focus
+        //FIXME: replace with PlasmaComponents.LineEdit and focus, not before KDE 4.9 because it lacks onAccepted
 //         focus: true
 
-        anchors.left: parent.left; anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
 
         onReturnPressed: {
             view.model.sendNewMessage(text);
