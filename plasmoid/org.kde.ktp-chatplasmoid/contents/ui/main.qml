@@ -17,6 +17,7 @@ ListView {
 
     delegate : ConversationDelegate {
         //FIXME: rename the two variables named 'conv' as it's confusing
+        property alias active: conv.checked
         id: conv
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -43,11 +44,15 @@ ListView {
             
             onVisibleChanged: {
                 if(visible) {
+                    //hides the previously visible chat
+                    base.currentItem.active = false
+
                     var point = dialog.popupPosition(conv, Qt.AlignBottom);
                     console.log("Showing dialog at (" + point.x + "," + point.y + ")");
 
                     dialog.x = point.x;
                     dialog.y = point.y;
+                    base.currentIndex = index
                 }
                 conv.checked = visible
             }
