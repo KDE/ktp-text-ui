@@ -1,6 +1,5 @@
 [Desktop Entry]
-#FIXME: come up with a better name.
-Name=Multi-Chat Widget
+Name=Quick Chat
 Name[da]=Multichat-widget
 Name[el]=Γραφικό συστατικό πολυμερούς συνομιλίας
 Name[es]=Elemento multicharla
@@ -19,7 +18,7 @@ Name[sv]=Grafisk komponent för flera chattar
 Name[uk]=Віджет спілкування з декількома співрозмовниками
 Name[x-test]=xxMulti-Chat Widgetxx
 Name[zh_TW]=多重聊天元件
-Comment=This is a plasmoid that behaves like facebook chat or google talk.
+Comment=Simple chats from your workspace
 Comment[da]=Dette er en plasmoid som opfører sig ligesom Facebook-chat eller Google Talk.
 Comment[el]=Αυτό είναι ένα πλασμοειδές που συμπεριφέρεται όπως το facebook chat ή το google talk.
 Comment[es]=Esto es un plasmoide que se comporta como la conversación de Facebook o Google Talk.
