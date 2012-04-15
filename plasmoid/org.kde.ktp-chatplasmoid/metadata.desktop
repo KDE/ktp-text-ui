@@ -1,15 +1,19 @@
 [Desktop Entry]
 Name=Quick Chat
+Name[da]=Kvikchat
 Name[it]=Chat veloce
 Name[nl]=Snelle chat
 Name[pt]=Conversa Rápida
+Name[pt_BR]=Conversa Rápida
 Name[sv]=Snabbchatt
 Name[uk]=Швидке спілкування
 Name[x-test]=xxQuick Chatxx
 Comment=Simple chats from your workspace
+Comment[da]=Simple chats fra dit arbejdsområde
 Comment[it]=Chat semplici per l'ambiente di lavoro
 Comment[nl]=Eenvoudige chats vanaf uw werkplek
 Comment[pt]=Conversas simples a partir do seu ambiente de trabalho
+Comment[pt_BR]=Conversas simples a partir do seu ambiente de trabalho
 Comment[sv]=Enkel chatt från arbetsytan
 Comment[uk]=Прості вікна спілкування з вашого робочого простору
 Comment[x-test]=xxSimple chats from your workspacexx
