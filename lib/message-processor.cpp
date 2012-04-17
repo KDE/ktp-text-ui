@@ -22,15 +22,6 @@
 
 MessageProcessor* MessageProcessor::s_instance = 0;
 
-AbstractMessageFilter::AbstractMessageFilter(QObject* parent)
-    : QObject(parent)
-{
-}
-
-AbstractMessageFilter::~AbstractMessageFilter()
-{
-}
-
 MessageProcessor* MessageProcessor::instance()
 {
     static QMutex mutex;
