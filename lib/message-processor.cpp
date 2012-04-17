@@ -39,7 +39,7 @@ MessageProcessor* MessageProcessor::instance()
 
 MessageProcessor::MessageProcessor()
 {
-    m_filters << new EscapeFilter(this) << new UrlFilter(this) << new EmoticonFilter(this);
+    m_filters << new EscapeFilter(this) << new UrlFilter(this);
 }
 
 

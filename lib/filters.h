@@ -23,25 +23,11 @@
 
 #include <QObject>
 
-#include <KEmoticons>
-
 class UrlFilter : public AbstractMessageFilter
 {
 public:
     explicit UrlFilter(QObject *parent = 0);
     void filterMessage(Message &message);
-};
-
-class EmoticonFilter : public AbstractMessageFilter
-{
-public:
-    explicit EmoticonFilter(QObject *parent = 0);
-    virtual ~EmoticonFilter();
-
-    void filterMessage(Message &message);
-private:
-    class Private;
-    Private *d;
 };
 
 class EscapeFilter : public AbstractMessageFilter

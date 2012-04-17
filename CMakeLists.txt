@@ -42,3 +42,6 @@ add_subdirectory(data)
 add_subdirectory(adiumxtra-protocol-handler)
 add_subdirectory(logviewer)
 add_subdirectory(plasmoid)
+
+
+add_subdirectory(filters)

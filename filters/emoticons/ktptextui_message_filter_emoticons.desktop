@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=//TODO:.
+Type=Service
+ServiceTypes=KTpTextUi/MessageFilter
+
+X-KDE-Library=ktptextui_filter_emoticons
+X-KDE-PluginInfo-Author=Lasath Fernando
+X-KDE-PluginInfo-Email=kde@lasath.org
+X-KDE-PluginInfo-Name=emoticons
+X-KDE-PluginInfo-Version=0.3
+X-KDE-PluginInfo-Website=http://techbase.kde.org/Projects/Telepathy
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
