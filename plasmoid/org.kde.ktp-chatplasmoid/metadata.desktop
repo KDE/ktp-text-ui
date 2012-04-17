@@ -21,7 +21,6 @@ Icon=kde-telepathy
 
 X-Plasma-API=declarativeappletscript
 X-Plasma-MainScript=ui/main.qml
-X-Plasma-DefaultSize=300,68
 X-Plasma-RequiredExtensions=LaunchApp
 
 X-KDE-PluginInfo-Author=Lasath Fernando

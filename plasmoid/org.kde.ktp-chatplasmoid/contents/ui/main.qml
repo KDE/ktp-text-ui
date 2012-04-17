@@ -6,8 +6,10 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 ListView {
     id: base
     anchors.fill: parent
-    orientation: Qt.Horizontal
     spacing: 5
+    property alias minimumHeight: base.contentHeight
+    property alias minimumWidth: base.contentWidth
+    orientation: width>height ? ListView.Horizontal : ListView.Vertical
 
     model: handler.conversations
 
@@ -19,8 +21,7 @@ ListView {
         //FIXME: rename the two variables named 'conv' as it's confusing
         property alias active: conv.checked
         id: conv
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
+        height: Math.min(base.width, base.height)
 
         image: model.conversation.target.avatar
         overlayText: model.conversation.messages.unreadCount
