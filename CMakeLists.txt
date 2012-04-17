@@ -21,6 +21,7 @@ include_directories (${KDE4_INCLUDES}
                      ${TELEPATHY_QT4_INCLUDE_DIR}
                      ${QT_QTWEBKIT_INCLUDES}
                      ${KTP_INCLUDE_DIR}
+                     "${CMAKE_CURRENT_SOURCE_DIR}/lib"
 )
 
 add_definitions (${KDE4_DEFINITIONS}

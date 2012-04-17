@@ -20,8 +20,9 @@
 #define ABSTRACTPLUGIN_H
 
 #include "message.h"
+#include "ktpchat_export.h"
 
-class AbstractMessageFilter : public QObject
+class KDE_TELEPATHY_CHAT_EXPORT AbstractMessageFilter : public QObject
 {
 Q_OBJECT
 public:
