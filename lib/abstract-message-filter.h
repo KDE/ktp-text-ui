@@ -16,26 +16,20 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "filters.h"
+#ifndef ABSTRACTPLUGIN_H
+#define ABSTRACTPLUGIN_H
 
-class EmoticonFilter::Private
+#include "message.h"
+
+class AbstractMessageFilter : public QObject
 {
+Q_OBJECT
 public:
-    KEmoticons emoticons;
+    explicit AbstractMessageFilter(QObject* parent = 0);
+    virtual ~AbstractMessageFilter();
+
+    virtual void filterMessage(Message &message) = 0;
 };
 
-EmoticonFilter::EmoticonFilter(QObject *parent)
-    : AbstractMessageFilter(parent),
-      d(new Private)
-{
-}
+#endif // ABSTRACTPLUGIN_H
 
-void EmoticonFilter::filterMessage(Message& message)
-{
-    message.setMainMessagePart(d->emoticons.theme().parseEmoticons(message.mainMessagePart()));
-}
-
-EmoticonFilter::~EmoticonFilter()
-{
-    delete d;
-}

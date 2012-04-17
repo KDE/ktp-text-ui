@@ -21,21 +21,12 @@
 #define MESSAGE_PROCESSOR_H
 
 #include "message.h"
+#include "abstract-message-filter.h"
 
 #include <QList>
 
 #include <ktpchat_export.h>
 
-
-class AbstractMessageFilter : public QObject
-{
-Q_OBJECT
-public:
-    explicit AbstractMessageFilter(QObject* parent = 0);
-    virtual ~AbstractMessageFilter();
-
-    virtual void filterMessage(Message &message) = 0;
-};
 
 //each thing that displays message will have an instance of this
 class KDE_TELEPATHY_CHAT_EXPORT MessageProcessor : public QObject
