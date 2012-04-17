@@ -87,16 +87,14 @@ Item {
             leftMargin: 5
         }
         boundsBehavior: Flickable.StopAtBounds
+        section.property: "user"
+        section.delegate: PlasmaComponents.Label { text: section; font.bold: true; anchors.right: parent.right}
         clip: true
 
         delegate: Loader {
             Component.onCompleted: {
                 console.log(model.type);
                 switch(model.type) {
-                    case MessagesModel.MessageTypeIncoming:
-//                             console.log("Type: MessagesModel::MessageTypeIncoming");
-                        source = "IncomingDelegate.qml";
-                        break;
                     case MessagesModel.MessageTypeOutgoing:
 //                             console.log("Type: MessagesModel::MessageTypeOutgoing");
                         source = "OutgoingDelegate.qml"
@@ -105,8 +103,8 @@ Item {
 //                             console.log("Type: MessagesModel::MessageTypeAction");
                         source = "ActionDelegate.qml";
                         break;
+                    case MessagesModel.MessageTypeIncoming:
                     default:
-//                             console.log("ERROR: UNKNOWN MESSAGE TYPE! Defaulting to fallback handler");
                         source = "TextDelegate.qml";
                 }
             }

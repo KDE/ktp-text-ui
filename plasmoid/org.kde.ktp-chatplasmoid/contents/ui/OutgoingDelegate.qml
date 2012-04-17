@@ -1,5 +1,10 @@
-import org.kde.plasma.core 0.1 as PlasmaCore
+import QtQuick 1.0
 
 TextDelegate {
-    textColor: theme.highlightColor
+    Rectangle {
+        color: theme.viewBackgroundColor
+        anchors.fill: parent
+        z: parent.z-1
+        opacity: 0.7
+    }
 }

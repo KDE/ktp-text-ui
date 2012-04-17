@@ -1,46 +1,40 @@
-import Qt 4.7
+import QtQuick 1.0
 import org.kde.plasma.components 0.1 as PlasmaComponents
-import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.telepathy.chat 0.1
 
-Item {
-    property color textColor: "black"
+PlasmaComponents.Label {
+    id: body
+    wrapMode: Text.Wrap
+    width: view.width
 
-    PlasmaComponents.Label {
-        id: header
+    text: model.text
+    textFormat: Text.RichText
+    height: paintedHeight
 
-        width: view.width
-        wrapMode: Text.Wrap
-
-        color: textColor
-        text: "<b>[" + Qt.formatTime(model.time) + "] " + model.user + " :</b>"
-
-        verticalAlignment: Text.AlignBottom
-
-        visible: !model.continuing
-        Component.onCompleted: {
-            if(model.continuing) {
-                height = 0;
-            }
-        }
-    }
-    PlasmaComponents.Label {
-        id: body
-
-        anchors.top: header.bottom
-        width: view.width
-        wrapMode: Text.Wrap
-
-        color: textColor
-        text: model.text
-        textFormat: Text.RichText
-        height: paintedHeight
-
-        onLinkActivated: {
-            console.log("opening link: " + link);
-            plasmoid.openUrl(link);
-        }
+    onLinkActivated: {
+        console.log("opening link: " + link);
+        plasmoid.openUrl(link);
     }
 
-    height: header.height + body.height
+    //Hover to display the time when hovering a message
+    PlasmaComponents.Label {
+        text: Qt.formatTime(model.time)
+        anchors {
+            top: parent.top
+            right: parent.right
+        }
+        Rectangle {
+            color: theme.backgroundColor
+            anchors.fill: parent
+            z: parent.z-1
+            opacity: 0.8
+            radius: 5
+        }
+        visible: mouseArea.containsMouse
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+    }
 }
