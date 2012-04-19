@@ -6,7 +6,6 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 ListView {
     id: base
     anchors.fill: parent
-    spacing: 5
     property alias minimumHeight: base.contentHeight
     property alias minimumWidth: base.contentWidth
     orientation: width>height ? ListView.Horizontal : ListView.Vertical
@@ -53,6 +52,7 @@ ListView {
 
                     dialog.x = point.x;
                     dialog.y = point.y;
+                    dialog.activateWindow()
                     base.currentIndex = index
                 }
                 conv.checked = visible

@@ -131,15 +131,14 @@ Item {
         width: 16
         orientation: Qt.Vertical
         opacity: view.atYEnd ? 0.3 : 1
-        
+
         Behavior on width { NumberAnimation { duration: 250 } }
         Behavior on opacity { NumberAnimation { duration: 250 } }
     }
 
-    PlasmaWidgets.LineEdit {
+    PlasmaComponents.TextField {
         id: input
-        //FIXME: replace with PlasmaComponents.LineEdit and focus, not before KDE 4.9 because it lacks onAccepted
-//         focus: true
+        focus: true
 
         anchors {
             left: parent.left
@@ -147,7 +146,7 @@ Item {
             bottom: parent.bottom
         }
 
-        onReturnPressed: {
+        Keys.onReturnPressed: {
             view.model.sendNewMessage(text);
             text = "";
         }
