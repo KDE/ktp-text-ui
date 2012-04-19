@@ -391,7 +391,7 @@ void ChatWidget::setupChannelSignals()
             SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
     connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
             SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
-    connect(d->channel->connection().data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
+    connect(d->channel.data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
             this, SLOT(onChannelInvalidated()));
 
     if (d->channel->hasChatStateInterface()) {
