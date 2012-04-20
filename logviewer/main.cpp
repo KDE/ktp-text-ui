@@ -17,12 +17,25 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include <QtGui/QApplication>
+#include <KUniqueApplication>
+#include <KCmdLineArgs>
+#include <KAboutData>
 #include "log-viewer.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    KAboutData aboutData("ktp-log-viewer",
+                         0,
+                         ki18n("KDE IM Log Viewer"),
+                         "0.3.60");
+    aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "kde@kde@davidedmundson.co.uk");
+    aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
+    aboutData.setProductName("telepathy/logger"); //set the correct name for bug reporting
+    aboutData.setLicense(KAboutData::License_GPL_V2);
+    KCmdLineArgs::init(argc, argv, &aboutData);
+
+    KCmdLineArgs::parsedArgs();
+    KUniqueApplication a;
     LogViewer w;
     w.show();
 
