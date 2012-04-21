@@ -186,7 +186,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     // make the sendMessageBox a focus proxy for the chatview
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
     connect(d->ui.sendMessageBox, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
-    connect(d->ui.sendButton, SIGNAL(clicked()), SLOT(sendMessage()));
 
     connect(d->ui.searchBar, SIGNAL(findTextSignal(QString,QWebPage::FindFlags)), this, SLOT(findTextInChat(QString,QWebPage::FindFlags)));
     connect(d->ui.searchBar, SIGNAL(findNextSignal(QString,QWebPage::FindFlags)), this, SLOT(findNextTextInChat(QString,QWebPage::FindFlags)));
@@ -275,8 +274,7 @@ ChatSearchBar *ChatWidget::chatSearchBar() const
 
 void ChatWidget::setChatEnabled(bool enable)
 {
-    d->ui.sendMessageBox->setEnabled(enable);
-    d->ui.sendButton->setEnabled(enable);
+    d->ui.sendMessageBox->setEnabled(enable);    
 
     // show a message informing the user
     AdiumThemeStatusInfo statusMessage;
