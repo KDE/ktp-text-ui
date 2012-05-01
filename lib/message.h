@@ -24,6 +24,21 @@
 
 #include <ktpchat_export.h>
 
+/*!
+ * \par
+ * An encapsualtion of a Tp::Message that can be procesesd
+ * by many MessageFilters concurrently.
+ *
+ * \par
+ * Contains multiple parts created by plugins, to be displayed by user
+ * interfaces. Also contains internal metadata for use by other plugins.
+ *
+ * \note
+ * All methods in this class are thread safe, though some may cause an
+ * individual plugin do block.
+ *
+ * \author Lasath Fernando <kde@lasath.org>
+ */
 class KDE_TELEPATHY_CHAT_EXPORT Message {
 
 public:
@@ -35,7 +50,7 @@ public:
     QString mainMessagePart() const;
 
     /*! \brief Edit the main component of the message
-     * \note: This operation is thread-safe.
+     *
      * \param message the string to replace the body with. Must be correct HTML
      */
     void setMainMessagePart(const QString& message);
@@ -47,7 +62,6 @@ public:
      * processing is complete. Once a message part is added, it cannot be
      * changed!
      * 
-     * \note: This operation is thread-safe.
      * \param part the content to be added, in valid HTML
      */
     void appendMessagePart(const QString& part);
