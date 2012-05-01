@@ -19,7 +19,7 @@
 #ifndef FILTERS_H
 #define FILTERS_H
 
-#include "message-processor.h"
+#include "abstract-message-filter.h"
 
 #include <QObject>
 

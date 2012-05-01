@@ -20,13 +20,19 @@
 #ifndef MESSAGE_PROCESSOR_H
 #define MESSAGE_PROCESSOR_H
 
-#include "message.h"
-#include "abstract-message-filter.h"
-
+#include <QObject>
 #include <QList>
 
+#include <message.h>
 #include <ktpchat_export.h>
 
+namespace Tp
+{
+class ReceivedMessage;
+class Message;
+}
+
+class AbstractMessageFilter;
 
 //each thing that displays message will have an instance of this
 class KDE_TELEPATHY_CHAT_EXPORT MessageProcessor : public QObject

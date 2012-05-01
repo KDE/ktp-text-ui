@@ -20,6 +20,8 @@
 #include "message-processor.h"
 #include "filters.h"
 
+#include <QMutex>
+
 #include <KDebug>
 #include <KService>
 #include <KServiceTypeTrader>
