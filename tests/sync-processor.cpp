@@ -19,6 +19,8 @@
 #include "sync-processor.h"
 #include <message-processor.h>
 
+#include <QString>
+
 SyncProcessor::SyncProcessor()
 {
     this->instance = MessageProcessor::instance();
@@ -32,4 +34,11 @@ Message SyncProcessor::processIncommingMessage(const Tp::ReceivedMessage &messag
 Message SyncProcessor::processOutGoingMessage(Tp::Message message)
 {
     return this->instance->processOutgoingMessage(message);
+}
+
+QString SyncProcessor::getProcessedMessage(const char* contents)
+{
+    Tp::Message message = Tp::Message(Tp::ChannelTextMessageTypeNormal, QLatin1String(contents));
+    QString processed = processOutGoingMessage(message).finalizedMessage();
+    return processed.trimmed();
 }

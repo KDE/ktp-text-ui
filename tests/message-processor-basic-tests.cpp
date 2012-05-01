@@ -17,6 +17,7 @@
 */
 
 #include "message-processor-basic-tests.h"
+#include <KUrl>
 
 Tp::Message normalMessage(const char* msg) {
     return Tp::Message(Tp::ChannelTextMessageTypeNormal, QLatin1String(msg));
@@ -24,17 +25,68 @@ Tp::Message normalMessage(const char* msg) {
 
 void MessageProcessorBasicTests::testEmoticons()
 {
-    QLatin1String smiley(":)");
-    QLatin1String expected("<img align=\"center\" title=\":)\" alt=\":)\" src=\"/usr/share/emoticons/kde4/smile.png\" width=\"22\" height=\"22\" />\n");
+    QString processed = this->s.getProcessedMessage(":)");
+    QString expected = QLatin1String("<img align=\"center\" title=\":)\" alt=\":)\" src=\"/usr/share/emoticons/kde4/smile.png\" width=\"22\" height=\"22\" />");
 
-    QCOMPARE(s.processOutGoingMessage(Tp::Message(Tp::ChannelTextMessageTypeNormal, smiley)).finalizedMessage(), expected);
+    QCOMPARE(processed, expected);
 }
 
 void MessageProcessorBasicTests::testEscaping()
 {
-    Tp::Message msg = normalMessage("<script type=\"text/javascript>\nalert(\"ha!\");\n</script>");
-    QString expected = QLatin1String("&lt;script type=&quot;text/javascript&gt;<br/>alert(&quot;ha!&quot;);<br/>&lt;/script&gt;\n");
-    QCOMPARE(s.processOutGoingMessage(msg).finalizedMessage(), expected);
+    QString processed = this->s.getProcessedMessage("<script type=\"text/javascript>\nalert(\"ha!\");\n</script>");
+    QString expected = QLatin1String("&lt;script type=&quot;text/javascript&gt;<br/>alert(&quot;ha!&quot;);<br/>&lt;/script&gt;");
+
+    QCOMPARE(processed, expected);
+}
+
+void MessageProcessorBasicTests::testUrlCatching()
+{
+    QString processed = this->s.getProcessedMessage("http://www.google.com.au/");
+    QString href = QLatin1String("<a href='http://www.google.com.au/'>http://www.google.com.au/</a>");
+
+    QCOMPARE(processed, href);
+}
+
+void MessageProcessorBasicTests::testURICatchingSMB() {
+    QString processed = this->s.getProcessedMessage("smb://user@localhost/");
+    QString href = QLatin1String("<a href='smb://user@localhost/'>smb://user@localhost/</a>");
+
+    QCOMPARE(processed, href);
+}
+
+void MessageProcessorBasicTests::testWWWCatching() {
+    QString processed = this->s.getProcessedMessage("www.google.com.au");
+    QString href = QLatin1String("<a href='http://www.google.com.au'>www.google.com.au</a>");
+
+    QCOMPARE(processed, href);
+}
+
+void MessageProcessorBasicTests::testUnsupportedProtocolCatching()
+{
+    QString processed = this->s.getProcessedMessage("fakeprotocol://fakeuser@somefakehost/");
+    QString href = QLatin1String("fakeprotocol://fakeuser@somefakehost/");
+
+    QCOMPARE(processed, href);
+}
+
+void MessageProcessorBasicTests::testMetadataGeneration()
+{
+    Message processed = this->s.processOutGoingMessage(
+        Tp::Message(
+            Tp::ChannelTextMessageTypeNormal,
+            QLatin1String("http://www.google.com.au/")
+        )
+    );
+
+    QVariantList urls = processed.property("Urls").toList();
+    QCOMPARE(urls.length(), 1);
+
+    QCOMPARE(qvariant_cast<KUrl>(urls.at(0)), KUrl("http://www.google.com.au/"));
+}
+
+void MessageProcessorBasicTests::testMultipleURLCatching()
+{
+    QFAIL("not written yet");
 }
 
 QTEST_MAIN(MessageProcessorBasicTests);

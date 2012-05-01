@@ -29,6 +29,7 @@ public:
 
     Message processIncommingMessage(const Tp::ReceivedMessage& message);
     Message processOutGoingMessage ( Tp::Message message );
+    QString getProcessedMessage ( const char* contents );
 
 private:
     MessageProcessor *instance;

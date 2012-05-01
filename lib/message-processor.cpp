@@ -48,8 +48,8 @@ MessageProcessor* MessageProcessor::instance()
 
 MessageProcessor::MessageProcessor()
 {
-    m_filters << new UrlFilter(this);
     loadAllPlugins();
+    m_filters << new UrlFilter(this);
 }
 
 

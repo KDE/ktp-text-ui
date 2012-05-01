@@ -33,6 +33,12 @@ private:
 private Q_SLOTS:
     void testEmoticons();
     void testEscaping();
+    void testUrlCatching();
+    void testWWWCatching();
+    void testURICatchingSMB();
+    void testUnsupportedProtocolCatching();
+    void testMetadataGeneration();
+    void testMultipleURLCatching();
 };
 
 #endif // MESSAGE_PROCESSOR_BASIC_TESTS_H
