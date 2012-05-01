@@ -83,3 +83,9 @@ install(FILES
         DESTINATION ${INCLUDE_INSTALL_DIR}/KTp COMPONENT Devel
 )
 
+install(FILES
+        ktptxtui_message_filter.desktop
+        DESTINATION
+        ${SERVICETYPES_INSTALL_DIR}
+)
+

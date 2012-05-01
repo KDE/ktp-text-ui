@@ -4,7 +4,7 @@ Comment=//TODO:.
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 
-X-KDE-Library=ktptextui_filter_emoticons
+X-KDE-Library=ktptextui_message_filter_emoticons
 X-KDE-PluginInfo-Author=Lasath Fernando
 X-KDE-PluginInfo-Email=kde@lasath.org
 X-KDE-PluginInfo-Name=emoticons
