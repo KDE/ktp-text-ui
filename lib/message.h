@@ -29,17 +29,63 @@ class KDE_TELEPATHY_CHAT_EXPORT Message {
 public:
     Message(const Tp::Message& original);
 
+    /*! \brief The body of the message
+     * \return the contents of the body of the message, as HTML
+     */
     QString mainMessagePart() const;
+
+    /*! \brief Edit the main component of the message
+     * \note: This operation is thread-safe.
+     * \param message the string to replace the body with. Must be correct HTML
+     */
     void setMainMessagePart(const QString& message);
+
+    /*! \brief Add new visual content to the end of the message
+     *
+     * \par
+     * Each plugin that adds visual components should call this once thier
+     * processing is complete. Once a message part is added, it cannot be
+     * changed!
+     * 
+     * \note: This operation is thread-safe.
+     * \param part the content to be added, in valid HTML
+     */
     void appendMessagePart(const QString& part);
 
+    /*! \brief Construct the final procesesd content
+     * \par
+     * This will concatenate all the visual 'parts' of the message into one
+     * (Qt supported) HTML string.
+     *
+     * \note
+     * All user interfaces need only care about this
+     *
+     */
     QString finalizedMessage() const;
 
+    /*! \brief Sets the contents of a property
+     * \par
+     * These messages contain meta-data for plugins in the form of 'properties'.
+     * A property can be set to any QMetaType (i.e type that can stuck in a
+     * QVariant) and is identified by a string (name).
+     *
+     * \par
+     * These are set by plugins for use in other plugins, creating implicit
+     * dependencies between plugins. Since these plugins are (or will be)
+     * run concurrently, calling this method on a property that hasn't been set
+     * yet will block until it has been set by some plugin. If it isn't set when
+     * all plugins are finished, this plugin will be cancelled.
+     *
+     * \param name the identifier of the property 
+     */
     QVariant property(const char *name) const;
     void setProperty(const char *name, const QVariant &value);
 
+    /*! \return the timestamp from the internal Tp::Message */
     QDateTime time() const;
+    /*! \return the unique token from the internal Tp::Message*/
     QString   token() const;
+    /*! \return the type of the internal Tp::Message*/
     Tp::ChannelTextMessageType type() const;
 
 private:
