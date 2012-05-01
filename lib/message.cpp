@@ -46,7 +46,7 @@ QString Message::finalizedMessage() const
     QString msg = m_mainPart + QLatin1String("\n") +
         m_parts.join(QLatin1String("\n"));
 
-    kDebug() << msg;
+//     kDebug() << msg;
     return msg;
 }
 
