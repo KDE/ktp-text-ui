@@ -1,0 +1,6 @@
+#ifndef KTP_TEXT_UI_ABSTRACT_MESSAGE_FILTER
+#define KTP_TEXT_UI_ABSTRACT_MESSAGE_FILTER
+
+#include "abstract-message-filter.h"
+
+#endif
