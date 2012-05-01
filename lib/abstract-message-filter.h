@@ -26,7 +26,7 @@ class KDE_TELEPATHY_CHAT_EXPORT AbstractMessageFilter : public QObject
 {
 Q_OBJECT
 public:
-    explicit AbstractMessageFilter(QObject* parent = 0);
+    AbstractMessageFilter(QObject* parent = 0);
     virtual ~AbstractMessageFilter();
 
     virtual void filterMessage(Message &message) = 0;

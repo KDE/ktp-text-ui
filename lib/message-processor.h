@@ -48,6 +48,7 @@ protected:
 
 
 private:
+    void loadAllPlugins();
     static MessageProcessor* s_instance;
     QList<AbstractMessageFilter*> m_filters;
 

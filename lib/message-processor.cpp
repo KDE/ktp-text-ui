@@ -20,10 +20,17 @@
 #include "message-processor.h"
 #include "filters.h"
 
+#include <KDebug>
+#include <KService>
+#include <KServiceTypeTrader>
+#include <KPluginFactory>
+
 MessageProcessor* MessageProcessor::s_instance = 0;
 
 MessageProcessor* MessageProcessor::instance()
 {
+    kDebug();
+
     static QMutex mutex;
     if (!s_instance)
     {
@@ -40,6 +47,7 @@ MessageProcessor* MessageProcessor::instance()
 MessageProcessor::MessageProcessor()
 {
     m_filters << new EscapeFilter(this) << new UrlFilter(this);
+    loadAllPlugins();
 }
 
 
@@ -51,6 +59,7 @@ Message MessageProcessor::processIncomingMessage(const Tp::ReceivedMessage &rece
 {
     Message message(receivedMessage);
     Q_FOREACH(AbstractMessageFilter *filter, MessageProcessor::m_filters) {
+        kDebug() << "running filter :" << filter->metaObject()->className();
         filter->filterMessage(message);
     }
     return message;
@@ -65,4 +74,24 @@ Message MessageProcessor::processOutgoingMessage(const Tp::Message &sentMessage)
     return message;
 }
 
+void MessageProcessor::loadAllPlugins() {
+    kDebug() << "Starting loading filters...";
 
+    KService::List offers = KServiceTypeTrader::self()->query(QLatin1String("KTpTextUi/MessageFilter"));
+    Q_FOREACH (KService::Ptr service, offers) {
+        kDebug() << "loaded service :" << service;
+        KPluginFactory *factory = KPluginLoader(service->library()).factory();
+
+        if(factory) {
+            kDebug() << "loaded factory :" << factory;
+            AbstractMessageFilter *filter = factory->create<AbstractMessageFilter>(this);
+
+            if(filter) {
+                kDebug() << "loaded message filter : " << filter;
+                m_filters.append(filter);
+            }
+        } else {
+            kError() << "error loading plugin :" << service->library();
+        }
+    }
+}
