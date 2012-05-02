@@ -2,6 +2,7 @@
 Name=Quick Chat
 Name[da]=Kvikchat
 Name[el]=Γρήγορη συνομιλία
+Name[et]=Kiirvestlus
 Name[fr]=Discussion rapide
 Name[it]=Chat veloce
 Name[nl]=Snelle chat
@@ -14,6 +15,7 @@ Name[zh_CN]=快捷聊天
 Comment=Simple chats from your workspace
 Comment[da]=Simple chats fra dit arbejdsområde
 Comment[el]=Απλές συνομιλίες από το χώρο εργασίας σας
+Comment[et]=Lihtne vestlus otse töötsoonist
 Comment[fr]=Discussions simples depuis votre espace de travail
 Comment[it]=Chat semplici per l'ambiente di lavoro
 Comment[nl]=Eenvoudige chats vanaf uw werkplek
