@@ -89,6 +89,39 @@ void MessageProcessorBasicTests::testMultipleURLCatching()
     QFAIL("not written yet");
 }
 
+void MessageProcessorBasicTests::testBold()
+{
+    QString processed = this->s.getProcessedMessage("fakeprotocol://fakeuser@somefakehost/");
+    QString href = QLatin1String("fakeprotocol://fakeuser@somefakehost/");
+
+    QCOMPARE(processed, href);
+}
+
+void MessageProcessorBasicTests::testBold()
+{
+    QFAIL("not written yet");
+}
+
+void MessageProcessorBasicTests::testBoldItalics()
+{
+    QFAIL("not written yet");
+}
+
+void MessageProcessorBasicTests::testMultiWordItalics()
+{
+    QFAIL("not written yet");
+}
+
+void MessageProcessorBasicTests::testSingleWordItalics()
+{
+    QFAIL("not written yet");
+}
+
+void MessageProcessorBasicTests::testStrikethrough()
+{
+    QFAIL("not written yet");
+}
+
 QTEST_MAIN(MessageProcessorBasicTests);
 
 #include "moc_message-processor-basic-tests.cpp"

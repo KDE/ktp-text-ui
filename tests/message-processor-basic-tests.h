@@ -39,6 +39,11 @@ private Q_SLOTS:
     void testUnsupportedProtocolCatching();
     void testMetadataGeneration();
     void testMultipleURLCatching();
+    void testSingleWordItalics();
+    void testMultiWordItalics();
+    void testBold();
+    void testBoldItalics();
+    void testStrikethrough();
 };
 
 #endif // MESSAGE_PROCESSOR_BASIC_TESTS_H
