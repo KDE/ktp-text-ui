@@ -26,6 +26,7 @@ class SyncProcessor
 
 public:
     SyncProcessor();
+    ~SyncProcessor();
 
     Message processIncommingMessage(const Tp::ReceivedMessage& message);
     Message processOutGoingMessage ( Tp::Message message );
