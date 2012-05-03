@@ -34,8 +34,8 @@
  * interfaces. Also contains internal metadata for use by other plugins.
  *
  * \note
- * All methods in this class are thread safe, though some may cause an
- * individual plugin do block.
+ * Methods in this class are currently *not* thread safe. They will be in a
+ * later version. Setting properties concurrently is undefined. 
  *
  * \author Lasath Fernando <kde@lasath.org>
  */
@@ -90,7 +90,7 @@ public:
      * yet will block until it has been set by some plugin. If it isn't set when
      * all plugins are finished, this plugin will be cancelled.
      *
-     * \param name the identifier of the property 
+     * \param name the identifier of the property
      */
     QVariant property(const char *name) const;
     void setProperty(const char *name, const QVariant &value);
