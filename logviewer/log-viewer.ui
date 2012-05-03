@@ -17,7 +17,7 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QListView" name="entityList"/>
+      <widget class="EntityView" name="entityList"/>
      </item>
      <item>
       <widget class="KFilterProxySearchLine" name="entityFilter"/>
@@ -57,6 +57,11 @@
    <extends>QWidget</extends>
    <header>conversation-date-picker.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EntityView</class>
+   <extends>QListView</extends>
+   <header>entity-view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -17,33 +17,45 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include <KUniqueApplication>
+#include "entity-view.h"
+
 #include <KCmdLineArgs>
-#include <KAboutData>
-#include "log-viewer.h"
 
-int main(int argc, char *argv[])
+#include <TelepathyQt/Account>
+#include <TelepathyLoggerQt4/Entity>
+
+#include "entity-model.h"
+
+EntityView::EntityView(QWidget *parent) :
+    QListView(parent)
 {
-    KAboutData aboutData("ktp-log-viewer",
-                         0,
-                         ki18n("KDE IM Log Viewer"),
-                         "0.3.60");
-    aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "kde@kde@davidedmundson.co.uk");
-    aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
-    aboutData.setProductName("telepathy/logger"); //set the correct name for bug reporting
-    aboutData.setLicense(KAboutData::License_GPL_V2);
+}
 
-    KCmdLineArgs::init(argc, argv, &aboutData);
+void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
+{
+    QListView::rowsInserted(parent, start, end);
+    static bool loadedCurrentContact = false;
 
-    KCmdLineOptions options;
-    options.add("+accountID", ki18n("The UID of the account to preselect"));
-    options.add("+contactID", ki18n("The UID of the contact to preselect"));
+    if (loadedCurrentContact) {
+        return;
+    }
 
-    KCmdLineArgs::addCmdLineOptions(options);
+    if (KCmdLineArgs::parsedArgs()->count() == 2) {
+        QString selectAccountId = KCmdLineArgs::parsedArgs()->arg(0);
+        QString selectContactId = KCmdLineArgs::parsedArgs()->arg(1);
 
-    KApplication a;
-    LogViewer w;
-    w.show();
+        for (int i=start; i<end;i++) {
+            QModelIndex index = model()->index(i, 0, parent);
+            QString accountId = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>()->uniqueIdentifier();
+            QString contactId = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>()->identifier();
 
-    return a.exec();
+            if (selectAccountId == accountId && selectContactId == contactId) {
+                setCurrentIndex(index);
+                Q_EMIT activated(index); // this is normally emitted when a user clicks a contact
+                //we emit it here to trigger the same results.
+                loadedCurrentContact = true;
+            }
+
+        }
+    }
 }

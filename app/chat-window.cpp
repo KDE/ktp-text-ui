@@ -43,6 +43,7 @@
 #include <KLineEdit>
 #include <KMenu>
 #include <KToolBar>
+#include <KToolInvocation>
 
 #include <QEvent>
 #include <QWidgetAction>
@@ -479,6 +480,24 @@ void ChatWindow::onShareDesktopTriggered()
     startShareDesktop(currChat->account(), currChat->textChannel()->targetContact());
 }
 
+void ChatWindow::onOpenLogTriggered()
+{
+    int index = m_tabWidget->currentIndex();
+    ChatTab* currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    Q_ASSERT(currentChatTab);
+
+    Tp::AccountPtr account = currentChatTab->account();
+    Tp::ContactPtr contact = currentChatTab->textChannel()->targetContact();
+
+    if (!contact.isNull()) {
+        KToolInvocation::kdeinitExec(QLatin1String("ktp-log-viewer"),
+                                     QStringList() << account->uniqueIdentifier() << contact->id());
+    } else {
+        KToolInvocation::kdeinitExec(QLatin1String("ktp-log-viewer"),
+                                     QStringList() << account->uniqueIdentifier() << currentChatTab->textChannel()->targetId());
+    }
+}
+
 
 void ChatWindow::showSettingsDialog()
 {
@@ -574,6 +593,9 @@ void ChatWindow::setupCustomActions()
     spellDictComboAction->setIcon(KIcon(QLatin1String("tools-check-spelling")));
     spellDictComboAction->setIconText(i18n("Choose Spelling Language"));
 
+    KAction *openLogAction = new KAction(KIcon(QLatin1String("view-pim-journal")), i18nc("Action to open the log viwer with a specified contact","&Previous conversations"), this);
+    connect(openLogAction, SIGNAL(triggered()), SLOT(onOpenLogTriggered()));
+
     KAction *accountIconAction = new KAction(KIcon(QLatin1String("telepathy-kde")), i18n("Account Icon"), this);
     m_accountIconLabel = new QLabel(this);
     accountIconAction->setDefaultWidget(m_accountIconLabel);
@@ -589,6 +611,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("language"), spellDictComboAction);
     actionCollection()->addAction(QLatin1String("account-icon"), accountIconAction);
     actionCollection()->addAction(QLatin1String("block-contact"), blockContactAction);
+    actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)

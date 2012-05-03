@@ -97,6 +97,7 @@ private Q_SLOTS:
     void onUserTypingChanged(Tp::ChannelChatState state);
     void onUnblockContactTriggered();                           /** Unblocks contact when already blocked */
     void onShareDesktopTriggered();                             /** start a desktop share */
+    void onOpenLogTriggered();                                  /** Starts ktp-log-viewer accountId contactId */
     void setTabSpellDictionary(const QString &dict);            /** set the spelling language for the current chat tab*/
     void toggleBlockButton(bool contactIsBlocked);              /** Toggle block/unblock action according to the flag */
 

@@ -17,33 +17,22 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include <KUniqueApplication>
-#include <KCmdLineArgs>
-#include <KAboutData>
-#include "log-viewer.h"
+#ifndef ENTITYVIEW_H
+#define ENTITYVIEW_H
 
-int main(int argc, char *argv[])
+#include <QListView>
+
+//model is loaded asynchronously so we need to select the correct element on each new element
+//this is done in the view to avoid having to be careful with proxy models.
+
+class EntityView : public QListView
 {
-    KAboutData aboutData("ktp-log-viewer",
-                         0,
-                         ki18n("KDE IM Log Viewer"),
-                         "0.3.60");
-    aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "kde@kde@davidedmundson.co.uk");
-    aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
-    aboutData.setProductName("telepathy/logger"); //set the correct name for bug reporting
-    aboutData.setLicense(KAboutData::License_GPL_V2);
+    Q_OBJECT
+public:
+    explicit EntityView(QWidget *parent = 0);
+    
+protected Q_SLOTS:
+    void rowsInserted(const QModelIndex &parent, int start, int end);
+};
 
-    KCmdLineArgs::init(argc, argv, &aboutData);
-
-    KCmdLineOptions options;
-    options.add("+accountID", ki18n("The UID of the account to preselect"));
-    options.add("+contactID", ki18n("The UID of the contact to preselect"));
-
-    KCmdLineArgs::addCmdLineOptions(options);
-
-    KApplication a;
-    LogViewer w;
-    w.show();
-
-    return a.exec();
-}
+#endif // ENTITYVIEW_H
