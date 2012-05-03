@@ -32,7 +32,8 @@ public:
     QString getProcessedMessage ( const char* contents );
 
 private:
-    MessageProcessor *instance;
+    class SyncProcessorPrivate;
+    SyncProcessorPrivate *d;
 };
 
 #endif // SYNC_PROCESSOR_H

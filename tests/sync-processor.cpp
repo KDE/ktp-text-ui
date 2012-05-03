@@ -21,19 +21,24 @@
 
 #include <QString>
 
-SyncProcessor::SyncProcessor()
+struct SyncProcessor::SyncProcessorPrivate {
+    MessageProcessor *actualProcessor;
+};
+
+SyncProcessor::SyncProcessor() :
+    d(new SyncProcessor::SyncProcessorPrivate())
 {
-    this->instance = MessageProcessor::instance();
+    d->actualProcessor = MessageProcessor::instance();
 }
 
 Message SyncProcessor::processIncommingMessage(const Tp::ReceivedMessage &message)
 {
-    return this->instance->processIncomingMessage(message);
+    return d->actualProcessor->processIncomingMessage(message);
 }
 
 Message SyncProcessor::processOutGoingMessage(Tp::Message message)
 {
-    return this->instance->processOutgoingMessage(message);
+    return d->actualProcessor->processOutgoingMessage(message);
 }
 
 QString SyncProcessor::getProcessedMessage(const char* contents)
@@ -41,4 +46,8 @@ QString SyncProcessor::getProcessedMessage(const char* contents)
     Tp::Message message = Tp::Message(Tp::ChannelTextMessageTypeNormal, QLatin1String(contents));
     QString processed = processOutGoingMessage(message).finalizedMessage();
     return processed.trimmed();
+}
+
+SyncProcessor::~SyncProcessor() {
+    delete d;
 }
