@@ -1,3 +1,4 @@
 [Desktop Entry]
 Type=ServiceType
 X-KDE-ServiceType=KTpTextUi/MessageFilter
+Comment=Telepathy Text-Ui Message Filter
