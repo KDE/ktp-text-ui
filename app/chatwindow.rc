@@ -16,6 +16,7 @@
    <Action name="video-call"/>
    <Action name="send-file"/>
    <Action name="share-desktop"/>
+   <Action name="open-log"/>
    <Separator />
    <Action name="block-contact"/>
   </Menu>
@@ -31,6 +32,7 @@
   <Action name="video-call"/>
   <Action name="send-file"/>
   <Action name="share-desktop"/>
+  <Action name="open-log"/>
   <Separator />
   <Action name="edit_find"/>
  </ToolBar>
