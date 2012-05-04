@@ -54,7 +54,7 @@ void ConversationDatePicker::clear()
 void ConversationDatePicker::onDatesFinished(Tpl::PendingOperation *op)
 {
     Tpl::PendingDates *pendingDates = qobject_cast<Tpl::PendingDates*>(op);
-    Q_FOREACH(const QDate date, pendingDates->dates()) {
+    Q_FOREACH(const QDate &date, pendingDates->dates()) {
         dateTable()->setCustomDatePainting(date, Qt::blue);
     }
     m_setDates.append(pendingDates->dates());
