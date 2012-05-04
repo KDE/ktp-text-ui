@@ -109,9 +109,9 @@ void MessagesModel::setTextChannel(Tp::TextChannelPtr channel)
     d->textChannel = channel;
 
     QList<Tp::ReceivedMessage> messageQueue = channel->messageQueue();
-    Q_FOREACH(Tp::ReceivedMessage message, messageQueue) {
+    Q_FOREACH(const Tp::ReceivedMessage &message, messageQueue) {
         bool messageAlreadyInModel = false;
-        Q_FOREACH(MessageItem current, d->messages) {
+        Q_FOREACH(const MessageItem &current, d->messages) {
             //FIXME: docs say messageToken can return an empty string. What to do if that happens?
             //Tp::Message has an == operator. maybe I can use that?
             if (current.id == message.messageToken()) {
@@ -301,7 +301,7 @@ MessagesModel::~MessagesModel()
 
 void MessagesModel::printallmessages()
 {
-    Q_FOREACH(MessageItem msg, d->messages) {
+    Q_FOREACH(const MessageItem &msg, d->messages) {
         kDebug() << msg.text;
     }
 }
