@@ -25,17 +25,17 @@
 class UrlFilter : public AbstractMessageFilter
 {
 public:
-    explicit UrlFilter(QObject* parent = 0);
-    void filterMessage(Message& message);
+    explicit UrlFilter(QObject *parent = 0);
+    void filterMessage(Message &message);
 };
 
 class EmoticonFilter : public AbstractMessageFilter
 {
 public:
-    explicit EmoticonFilter(QObject* parent = 0);
+    explicit EmoticonFilter(QObject *parent = 0);
     virtual ~EmoticonFilter();
 
-    void filterMessage(Message& message);
+    void filterMessage(Message &message);
 private:
     class Private;
     Private *d;
@@ -44,6 +44,6 @@ private:
 class EscapeFilter : public AbstractMessageFilter
 {
 public:
-    explicit EscapeFilter(QObject* parent = 0);
-    virtual void filterMessage(Message& message);
+    explicit EscapeFilter(QObject *parent = 0);
+    virtual void filterMessage(Message &message);
 };
