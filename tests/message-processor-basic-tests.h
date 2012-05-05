@@ -28,6 +28,7 @@ class MessageProcessorBasicTests : public QObject
 Q_OBJECT
 
 private:
+    void compare (const char* arg1, const char* arg2);
     SyncProcessor s;
 
 private Q_SLOTS:

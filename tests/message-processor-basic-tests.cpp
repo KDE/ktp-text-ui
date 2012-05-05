@@ -89,37 +89,40 @@ void MessageProcessorBasicTests::testMultipleURLCatching()
     QFAIL("not written yet");
 }
 
-void MessageProcessorBasicTests::testBold()
-{
-    QString processed = this->s.getProcessedMessage("fakeprotocol://fakeuser@somefakehost/");
-    QString href = QLatin1String("fakeprotocol://fakeuser@somefakehost/");
+void MessageProcessorBasicTests::compare(const char *input, const char *expected) {
+    QString processed = s.getProcessedMessage(input);
+    QString href = QLatin1String(expected);
 
     QCOMPARE(processed, href);
 }
 
 void MessageProcessorBasicTests::testBold()
 {
-    QFAIL("not written yet");
+    compare("**b**", "<b>b</b>");
 }
 
 void MessageProcessorBasicTests::testBoldItalics()
 {
-    QFAIL("not written yet");
+    compare("_*this is bold italics_*", "<i><b>this is bold italics</b></i>");
+    compare("_*this is bold italics*_", "<i><b>this is bold italics</i></b>");
 }
 
 void MessageProcessorBasicTests::testMultiWordItalics()
 {
-    QFAIL("not written yet");
+    compare("_this_ text should _be_ in _italics_", "<i>all _ this _hsould</i> be in italics_");
+    compare("_f f_ fd _f f_", "<i>f f</i> fd <i>f f</i>");
+    compare("_f _f_", "<i>f _f</i>");
+    compare("_dsd _ _ ss_", "<i>dsd _ _ ss</i>");
 }
 
 void MessageProcessorBasicTests::testSingleWordItalics()
 {
-    QFAIL("not written yet");
+    compare("_b_", "<i>b</i>");
 }
 
 void MessageProcessorBasicTests::testStrikethrough()
 {
-    QFAIL("not written yet");
+    compare("-striek through-", "<s>striek through</s>");
 }
 
 QTEST_MAIN(MessageProcessorBasicTests);
