@@ -200,6 +200,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     if (!d->isGroupChat) {
         d->logManager->setFetchAmount(3);
         d->logManager->setTextChannel(d->account, d->channel);
+        m_previousConversationAvailable = d->logManager->exists();
+    } else {
+        m_previousConversationAvailable = false;
     }
 }
 
@@ -274,7 +277,7 @@ ChatSearchBar *ChatWidget::chatSearchBar() const
 
 void ChatWidget::setChatEnabled(bool enable)
 {
-    d->ui.sendMessageBox->setEnabled(enable);    
+    d->ui.sendMessageBox->setEnabled(enable);
 
     // show a message informing the user
     AdiumThemeStatusInfo statusMessage;
@@ -907,6 +910,11 @@ QString ChatWidget::spellDictionary() const
 Tp::ChannelChatState ChatWidget::remoteChatState()
 {
     return d->remoteContactChatState;
+}
+
+bool ChatWidget::previousConversationAvailable()
+{
+    return m_previousConversationAvailable;
 }
 
 void ChatWidget::onChatPausedTimerExpired()

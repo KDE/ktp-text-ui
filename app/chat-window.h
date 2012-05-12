@@ -132,6 +132,7 @@ private:
     void setInviteToChatEnabled(bool enable);
     void setVideoCallEnabled(bool enable);
     void setShareDesktopEnabled(bool enable);
+    void setPreviousConversationsEnabled(bool enable);
 
     /** setter for account icon fake action */
     void setAccountIcon(const QIcon &protocolIcon);

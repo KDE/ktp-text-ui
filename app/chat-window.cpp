@@ -326,6 +326,11 @@ void ChatWindow::onCurrentIndexChanged(int index)
 
     }
 
+    // only show enable the action if there are actually previous converstations
+#ifdef TELEPATHY_LOGGER_QT4_FOUND
+    setPreviousConversationsEnabled(currentChatTab->previousConversationAvailable());
+#endif
+
     setAccountIcon(currentChatTab->accountIcon());
 }
 
@@ -667,6 +672,15 @@ void ChatWindow::setVideoCallEnabled(bool enable)
 void ChatWindow::setShareDesktopEnabled(bool enable)
 {
     QAction *action = actionCollection()->action(QLatin1String("share-desktop"));
+
+    if (action) {
+        action->setEnabled(enable);
+    }
+}
+
+void ChatWindow::setPreviousConversationsEnabled ( bool enable )
+{
+    QAction *action = actionCollection()->action(QLatin1String("open-log"));
 
     if (action) {
         action->setEnabled(enable);

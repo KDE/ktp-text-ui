@@ -71,7 +71,16 @@ LogManager::~LogManager()
 bool LogManager::exists() const
 {
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
-    return m_logManager->exists(m_account, m_contactEntity, Tpl::EventTypeMaskText);
+    if (!m_account.isNull() && !m_textChannel.isNull() && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
+        Tpl::EntityPtr contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
+                                                           Tpl::EntityTypeContact,
+                                                           NULL,
+                                                           NULL);
+
+        return m_logManager->exists(m_account, contactEntity, Tpl::EventTypeMaskText);
+    } else {
+        return false;
+    }
 #else
     return false;
 #endif

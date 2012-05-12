@@ -89,6 +89,8 @@ public:
     /** Returns the chat state of remote contact */
     Tp::ChannelChatState remoteChatState();
 
+    bool previousConversationAvailable();
+
 public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
@@ -174,6 +176,7 @@ private:
     void setupContactModelSignals();
 
     virtual bool isOnTop() const;
+    bool m_previousConversationAvailable;
 
     ChatWidgetPrivate * const d;
 };
