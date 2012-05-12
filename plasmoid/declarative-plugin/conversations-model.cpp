@@ -152,7 +152,7 @@ void ConversationsModel::handleValidityChange(bool valid)
             sender->deleteLater();
             endRemoveRows();
         } else {
-            kError() << "attempting to delete non-existant conversation";
+            kError() << "attempting to delete non-existent conversation";
         }
     }
 }
