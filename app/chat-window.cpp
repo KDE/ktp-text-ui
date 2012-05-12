@@ -593,8 +593,10 @@ void ChatWindow::setupCustomActions()
     spellDictComboAction->setIcon(KIcon(QLatin1String("tools-check-spelling")));
     spellDictComboAction->setIconText(i18n("Choose Spelling Language"));
 
+#ifdef TELEPATHY_LOGGER_QT4_FOUND
     KAction *openLogAction = new KAction(KIcon(QLatin1String("view-pim-journal")), i18nc("Action to open the log viwer with a specified contact","&Previous conversations"), this);
     connect(openLogAction, SIGNAL(triggered()), SLOT(onOpenLogTriggered()));
+#endif
 
     KAction *accountIconAction = new KAction(KIcon(QLatin1String("telepathy-kde")), i18n("Account Icon"), this);
     m_accountIconLabel = new QLabel(this);
@@ -611,7 +613,9 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("language"), spellDictComboAction);
     actionCollection()->addAction(QLatin1String("account-icon"), accountIconAction);
     actionCollection()->addAction(QLatin1String("block-contact"), blockContactAction);
+#ifdef TELEPATHY_LOGGER_QT4_FOUND
     actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
+#endif
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
