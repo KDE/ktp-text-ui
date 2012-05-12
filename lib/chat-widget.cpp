@@ -627,7 +627,10 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
     }
 
 
-    KNotification *notification = new KNotification(notificationType, this);
+    KNotification *notification = new KNotification(notificationType, this,
+                                                    KNotification::RaiseWidgetOnActivation
+                                                    | KNotification::CloseWhenWidgetActivated
+                                                    | KNotification::Persistent);
     notification->setComponentData(d->telepathyComponentData());
     notification->setTitle(i18n("%1 has sent you a message", message.sender()->alias()));
 

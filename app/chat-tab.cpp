@@ -27,6 +27,7 @@
 #include <KDebug>
 #include <QStackedWidget>
 #include <KDE/KColorScheme>
+#include <KDE/KWindowSystem>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/TextChannel>
@@ -75,7 +76,8 @@ void ChatTab::showOnTop()
         kError() << "Attempting to focus chatTab without chatWindow being set!";
     }
 
-    activateWindow();
+    m_chatWindow->raise();
+    KWindowSystem::forceActiveWindow(m_chatWindow->winId());
 }
 
 void ChatTab::onConnectionStatusChanged(Tp::ConnectionStatus status)
