@@ -16,6 +16,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#ifndef FILTERS_H
+#define FILTERS_H
+
 #include "message-processor.h"
 
 #include <QObject>
@@ -47,3 +50,5 @@ public:
     explicit EscapeFilter(QObject *parent = 0);
     virtual void filterMessage(Message &message);
 };
+
+#endif
