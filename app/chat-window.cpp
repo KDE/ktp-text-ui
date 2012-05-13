@@ -571,21 +571,28 @@ void ChatWindow::setupCustomActions()
     connect(previousTabAction, SIGNAL(triggered()), this, SLOT(onPreviousTabActionTriggered()));
 
     KAction *audioCallAction = new KAction(KIcon(QLatin1String("audio-headset")), i18n("&Audio Call"), this);
+    audioCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an audio call with this contact"));
     connect(audioCallAction, SIGNAL(triggered()), this, SLOT(onAudioCallTriggered()));
 
     KAction *blockContactAction = new KAction(KIcon(QLatin1String("im-ban-kick-user")), i18n("&Block Contact"), this);
+    blockContactAction->setToolTip(i18nc("Toolbar icon tooltip",
+                                         "Blocking means that this contact will not see you online and you will not receive any messages from this contact"));
     connect(blockContactAction, SIGNAL(triggered()), this, SLOT(onBlockContactTriggered()));
 
     KAction *fileTransferAction = new KAction(KIcon(QLatin1String("mail-attachment")), i18n("&Send File"), this);
+    fileTransferAction->setToolTip(i18nc("Toolbar icon tooltip", "Send a file to this contact"));
     connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
 
     KAction *inviteToChat = new KAction(KIcon(QLatin1String("user-group-new")), i18n("&Invite to Chat"), this);
+    inviteToChat->setToolTip(i18nc("Toolbar icon tooltip", "Invite any other contacts to join this chat"));
     connect(inviteToChat, SIGNAL(triggered()), this, SLOT(onInviteToChatTriggered()));
 
     KAction *videoCallAction = new KAction(KIcon(QLatin1String("camera-web")), i18n("&Video Call"), this);
+    videoCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start a vido call with this contact"));
     connect(videoCallAction, SIGNAL(triggered()), this, SLOT(onVideoCallTriggered()));
 
     KAction *shareDesktopAction = new KAction(KIcon(QLatin1String("krfb")), i18n("Share My &Desktop"), this);
+    shareDesktopAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an application that allows this contact to see your desktop"));
     connect(shareDesktopAction, SIGNAL(triggered()), this, SLOT(onShareDesktopTriggered()));
 
     m_spellDictCombo = new Sonnet::DictionaryComboBox();
