@@ -588,7 +588,7 @@ void ChatWindow::setupCustomActions()
     connect(inviteToChat, SIGNAL(triggered()), this, SLOT(onInviteToChatTriggered()));
 
     KAction *videoCallAction = new KAction(KIcon(QLatin1String("camera-web")), i18n("&Video Call"), this);
-    videoCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start a vido call with this contact"));
+    videoCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start a video call with this contact"));
     connect(videoCallAction, SIGNAL(triggered()), this, SLOT(onVideoCallTriggered()));
 
     KAction *shareDesktopAction = new KAction(KIcon(QLatin1String("krfb")), i18n("Share My &Desktop"), this);
