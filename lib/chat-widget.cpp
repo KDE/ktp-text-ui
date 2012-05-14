@@ -613,6 +613,11 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
     if (message.sender() == d->channel->groupSelfContact()) {
         return;
     }
+    
+    if (message.isDeliveryReport()) {
+        return;
+    }
+    
     // kde_telepathy_contact_highlight (contains your name)
     // kde_telepathy_info_event
 
