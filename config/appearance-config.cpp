@@ -46,8 +46,8 @@ AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList& args)
     m_demoChatHeader.setChatName(i18n("A demo chat"));
     m_demoChatHeader.setSourceName(i18n("Jabber"));
     m_demoChatHeader.setTimeOpened(QDateTime::currentDateTime());
-    m_demoChatHeader.setDestinationName(i18n("BobMarley@yahoo.com"));
-    m_demoChatHeader.setDestinationDisplayName(i18n("Bob Marley"));
+    m_demoChatHeader.setDestinationName(QString::fromLatin1("ted@example.com"));
+    m_demoChatHeader.setDestinationDisplayName(QString::fromLatin1("Ted"));
     m_demoChatHeader.setGroupChat(false);
 
     ui->chatView->load(AdiumThemeView::SingleUserChat);
@@ -178,39 +178,39 @@ void AppearanceConfig::sendDemoMessages()
 {
     //add a fake message
     AdiumThemeContentInfo message(AdiumThemeMessageInfo::HistoryRemoteToLocal);
-    message.setMessage(i18n("Ok!"));
-    message.setSenderDisplayName(i18n("larry@example.com"));
-    message.setSenderScreenName(i18n("Larry Demo"));
+    message.setMessage(i18nc("Example message in preview conversation","Ok!"));
+    message.setSenderDisplayName(QString::fromLatin1("larry@example.com"));
+    message.setSenderScreenName(QString::fromLatin1("Larry Demo"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::HistoryRemoteToLocal);
     message.setMessage(i18n("Bye Bye"));
-    message.setSenderDisplayName(i18n("larry@example.com"));
-    message.setSenderScreenName(i18n("Larry Demo"));
+    message.setSenderDisplayName(QString::fromLatin1("larry@example.com"));
+    message.setSenderScreenName(QString::fromLatin1("Larry Demo"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::HistoryLocalToRemote);
     message.setMessage(i18n("Have fun!"));
-    message.setSenderDisplayName(i18n("ted@example.com"));
-    message.setSenderScreenName(i18n("Ted Example"));
+    message.setSenderDisplayName(QString::fromLatin1("ted@example.com"));
+    message.setSenderScreenName(QString::fromLatin1("Ted Example"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::HistoryLocalToRemote);
     message.setMessage(i18n("cya"));
-    message.setSenderDisplayName(i18n("ted@example.com"));
-    message.setSenderScreenName(i18n("Ted Example"));
+    message.setSenderDisplayName(QString::fromLatin1("ted@example.com"));
+    message.setSenderScreenName(QString::fromLatin1("Ted Example"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
 
     AdiumThemeStatusInfo statusMessage(true);
-    statusMessage.setMessage(i18n("Ted Example waves."));
+    statusMessage.setMessage(QString::fromLatin1("Ted Example waves."));
     statusMessage.setTime(QDateTime::currentDateTime());
     statusMessage.setService(i18n("Jabber"));
     ui->chatView->addStatusMessage(statusMessage);
@@ -224,16 +224,16 @@ void AppearanceConfig::sendDemoMessages()
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
     message.setMessage(i18n("Hello"));
-    message.setSenderDisplayName(i18n("larry@example.com"));
-    message.setSenderScreenName(i18n("Larry Demo"));
+    message.setSenderDisplayName(QString::fromLatin1("larry@example.com"));
+    message.setSenderScreenName(QString::fromLatin1("Larry Demo"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
     message.setMessage(i18n("What's up?"));
-    message.setSenderDisplayName(i18n("larry@example.com"));
-    message.setSenderScreenName(i18n("Larry Demo"));
+    message.setSenderDisplayName(QString::fromLatin1("larry@example.com"));
+    message.setSenderScreenName(QString::fromLatin1("Larry Demo"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
@@ -250,8 +250,8 @@ void AppearanceConfig::sendDemoMessages()
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::LocalToRemote);
     message.setMessage(i18n("A different example message"));
-    message.setSenderDisplayName(i18n("ted@example.com"));
-    message.setSenderScreenName(i18n("Ted Example"));
+    message.setSenderDisplayName(QString::fromLatin1("ted@example.com"));
+    message.setSenderScreenName(QString::fromLatin1("Ted Example"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
