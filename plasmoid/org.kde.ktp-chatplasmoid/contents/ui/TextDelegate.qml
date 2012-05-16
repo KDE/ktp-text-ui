@@ -55,5 +55,7 @@ PlasmaComponents.Label {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
+        //we just want to know if the mouse is there, otherwise prevents links from being clicked
+        acceptedButtons: Qt.NoButton
     }
 }
