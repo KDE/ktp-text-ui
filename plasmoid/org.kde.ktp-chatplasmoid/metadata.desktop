@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Quick Chat
+Name[ca]=Xat ràpid
 Name[da]=Kvikchat
+Name[de]=Schnell-Chat
 Name[el]=Γρήγορη συνομιλία
 Name[et]=Kiirvestlus
 Name[fr]=Discussion rapide
@@ -15,7 +17,9 @@ Name[x-test]=xxQuick Chatxx
 Name[zh_CN]=快捷聊天
 Name[zh_TW]=快速聊天
 Comment=Simple chats from your workspace
+Comment[ca]=Xats normals des de l'espai de treball
 Comment[da]=Simple chats fra dit arbejdsområde
+Comment[de]=Einfache Chats von Ihrer Arbeitsfläche
 Comment[el]=Απλές συνομιλίες από το χώρο εργασίας σας
 Comment[et]=Lihtne vestlus otse töötsoonist
 Comment[fr]=Discussions simples depuis votre espace de travail
