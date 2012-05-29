@@ -22,12 +22,12 @@
 #define TELEPATHYCHATUI_H
 
 #include <TelepathyQt/AbstractClientHandler>
-#include <KApplication>
+#include <KTp/telepathy-handler-application.h>
 
 class ChatTab;
 class ChatWindow;
 
-class TelepathyChatUi : public KApplication, public Tp::AbstractClientHandler
+class TelepathyChatUi : public KTp::TelepathyHandlerApplication, public Tp::AbstractClientHandler
 {
     Q_OBJECT
 public:
