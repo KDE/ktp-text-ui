@@ -33,7 +33,7 @@ Comment[uk]=Прості вікна спілкування з вашого ро�
 Comment[x-test]=xxSimple chats from your workspacexx
 Comment[zh_CN]=从您的工作区方便进行聊天
 Comment[zh_TW]=從您的工作空間發起聊天
-Icon=kde-telepathy
+Icon=telepathy-kde
 
 X-Plasma-API=declarativeappletscript
 X-Plasma-MainScript=ui/main.qml
@@ -42,9 +42,9 @@ X-Plasma-RequiredExtensions=LaunchApp
 X-KDE-PluginInfo-Author=Lasath Fernando
 X-KDE-PluginInfo-Email=kde@lasath.org
 # X-KDE-PluginInfo-Website=http://plasma.kde.org/
-X-KDE-PluginInfo-Category=Examples
+X-KDE-PluginInfo-Category=Online Services
 X-KDE-PluginInfo-Name=org.kde.ktp-chatplasmoid
-X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Version=0.4
 
 # X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
