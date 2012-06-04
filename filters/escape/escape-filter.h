@@ -22,6 +22,8 @@
 
 class EscapeFilter : public AbstractMessageFilter
 {
+Q_OBJECT
+
 public:
     explicit EscapeFilter(QObject* parent, const QVariantList&);
     virtual void filterMessage(Message& message);
