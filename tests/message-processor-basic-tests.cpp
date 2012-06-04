@@ -109,7 +109,7 @@ void MessageProcessorBasicTests::testBoldItalics()
 
 void MessageProcessorBasicTests::testMultiWordItalics()
 {
-    compare("_this_ text should _be_ in _italics_", "<i>all _ this _hsould</i> be in italics_");
+    compare("_all _ this _hsould_ be in italics_", "<i>all _ this _hsould</i> be in italics_");
     compare("_f f_ fd _f f_", "<i>f f</i> fd <i>f f</i>");
     compare("_f _f_", "<i>f _f</i>");
     compare("_dsd _ _ ss_", "<i>dsd _ _ ss</i>");
