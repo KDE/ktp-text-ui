@@ -16,36 +16,23 @@
  *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 */
 
-#ifndef MESSAGE_PROCESSOR_BASIC_TESTS_H
-#define MESSAGE_PROCESSOR_BASIC_TESTS_H
+#ifndef FORMAT_FILTER_H
+#define FORMAT_FILTER_H
+#include <KTp/AbstractMessageFilter>
 
-#include <QTest>
-#include <QtCore/QObject>
-#include "sync-processor.h"
-
-class MessageProcessorBasicTests : public QObject
+class FormatFilter : public AbstractMessageFilter
 {
 Q_OBJECT
 
-private:
-    void compare (const char* arg1, const char* arg2);
-    SyncProcessor s;
+public:
+    FormatFilter (QObject* parent, const QVariantList &);
+    virtual void filterMessage (Message& message);
 
-private Q_SLOTS:
-    void testEmoticons();
-    void testEscaping();
-    void testUrlCatching();
-    void testWWWCatching();
-    void testURICatchingSMB();
-    void testUnsupportedProtocolCatching();
-    void testMetadataGeneration();
-    void testMultipleURLCatching();
-    void testSingleWordItalics();
-    void testMultiWordItalics();
-    void testSingleCharBold();
-    void testBoldItalics();
-    void testStrikethrough();
-    void testBold();
+private:
+    void addTag (const char *markingCharacter, char htmlTag);
+
+    class Private;
+    Private *d;
 };
 
-#endif // MESSAGE_PROCESSOR_BASIC_TESTS_H
+#endif // FORMAT_FILTER_H

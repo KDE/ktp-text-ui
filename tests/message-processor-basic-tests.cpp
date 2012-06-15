@@ -96,15 +96,20 @@ void MessageProcessorBasicTests::compare(const char *input, const char *expected
     QCOMPARE(processed, href);
 }
 
+void MessageProcessorBasicTests::testSingleCharBold()
+{
+    compare("*b*", "<b>b</b>");
+}
+
 void MessageProcessorBasicTests::testBold()
 {
-    compare("**b**", "<b>b</b>");
+    compare("*this* shoudl *be in bold*", "<b>this</b> shoudl <b>be in bold</b>");
 }
 
 void MessageProcessorBasicTests::testBoldItalics()
 {
-    compare("_*this is bold italics_*", "<i><b>this is bold italics</b></i>");
-    compare("_*this is bold italics*_", "<i><b>this is bold italics</i></b>");
+    compare("_*this is bold italics*_", "<i><b>this is bold italics</b></i>");
+    compare("_*this is bold italics_*", "<i><b>this is bold italics</i></b>");
 }
 
 void MessageProcessorBasicTests::testMultiWordItalics()
