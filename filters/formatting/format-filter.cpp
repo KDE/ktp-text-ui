@@ -72,4 +72,4 @@ void FormatFilter::addTag (const char *markingCharacter, char htmlTag)
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<FormatFilter>();)
-K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_formatting_filter_escape"))
+K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_formatting"))
