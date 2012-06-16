@@ -27,6 +27,10 @@ Q_OBJECT
 public:
     ImagesFilter (QObject* parent, const QVariantList &);
     virtual void filterMessage (Message& message);
+
+private:
+    class Private;
+    Private *d;
 };
 
 #endif // FORMAT_FILTER_H

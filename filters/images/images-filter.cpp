@@ -22,15 +22,43 @@
 
 #include <KPluginFactory>
 #include <KDebug>
+#include <KUrl>
+#include <QImageReader>
+
+class ImagesFilter::Private {
+public:
+    QRegExp imageRegex;
+};
 
 ImagesFilter::ImagesFilter (QObject* parent, const QVariantList&) :
-    AbstractMessageFilter (parent)
+    AbstractMessageFilter (parent), d(new Private)
 {
+    QString imagePattern = QLatin1String("\\.(?:");
+    Q_FOREACH (const QByteArray &format, QImageReader::supportedImageFormats()) {
+        imagePattern += QString::fromAscii(format) + QLatin1String("|");
+    }
+    imagePattern.chop(1);
+    imagePattern += QLatin1String(")$");
+
+    d->imageRegex = QRegExp(imagePattern);
 }
 
 void ImagesFilter::filterMessage (Message& message)
 {
+    kDebug() << message.property("Urls").toList().size();
+    Q_FOREACH (QVariant var, message.property("Urls").toList()) {
+        KUrl url = qvariant_cast<KUrl>(var);
+        QString fileName = url.fileName();
+//         qDebug() << fileName;
 
+        if (!fileName.isNull() && fileName.contains(d->imageRegex)) {
+            message.appendMessagePart(
+                QLatin1String("<img src='") +
+                QString::fromAscii(url.toEncoded()) +
+                QLatin1String("' alt='Link is of an Image'")
+            );
+        }
+    }
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<ImagesFilter>();)
