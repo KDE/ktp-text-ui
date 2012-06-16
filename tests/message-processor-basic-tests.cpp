@@ -86,7 +86,18 @@ void MessageProcessorBasicTests::testMetadataGeneration()
 
 void MessageProcessorBasicTests::testMultipleURLCatching()
 {
-    QFAIL("not written yet");
+    Message processed = this->s.processOutGoingMessage(
+        Tp::Message(
+            Tp::ChannelTextMessageTypeNormal,
+            QLatin1String("You should consider using http://duckduckgo.com/ instead of www.google.com.au")
+        )
+    );
+
+    QVariantList urls = processed.property("Urls").toList();
+    QCOMPARE(urls.length(), 2);
+
+    QCOMPARE(qvariant_cast<KUrl>(urls.at(0)), KUrl("http://duckduckgo.com/"));
+    QCOMPARE(qvariant_cast<KUrl>(urls.at(1)), KUrl("http://www.google.com.au"));
 }
 
 void MessageProcessorBasicTests::compare(const char *input, const char *expected) {
