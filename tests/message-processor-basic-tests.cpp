@@ -141,6 +141,15 @@ void MessageProcessorBasicTests::testStrikethrough()
     compare("-striek through-", "<s>striek through</s>");
 }
 
+void MessageProcessorBasicTests::testImageEmbedGIF()
+{
+    compare(
+        "http://images3.wikia.nocookie.net/__cb20101111210206/central/images/f/fd/Rick_Astley_2.gif",
+        "<a href='http://images3.wikia.nocookie.net/__cb20101111210206/central/images/f/fd/Rick_Astley_2.gif'>http://images3.wikia.nocookie.net/__cb20101111210206/central/images/f/fd/Rick_Astley_2.gif</a>\n"
+        "<img src='http://images3.wikia.nocookie.net/__cb20101111210206/central/images/f/fd/Rick_Astley_2.gif' alt='link is to an image' />"
+    );
+}
+
 QTEST_MAIN(MessageProcessorBasicTests);
 
 #include "moc_message-processor-basic-tests.cpp"

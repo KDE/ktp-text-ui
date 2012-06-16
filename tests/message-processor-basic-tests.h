@@ -46,6 +46,7 @@ private Q_SLOTS:
     void testBoldItalics();
     void testStrikethrough();
     void testBold();
+    void testImageEmbedGIF();
 };
 
 #endif // MESSAGE_PROCESSOR_BASIC_TESTS_H
