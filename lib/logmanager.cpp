@@ -33,9 +33,6 @@
 #include <TelepathyLoggerQt4/TextEvent>
 #include <TelepathyLoggerQt4/CallEvent>
 #include <TelepathyLoggerQt4/LogManager>
-
-#include <glib-object.h>
-#include <QGlib/Init>
 #endif
 
 #include <TelepathyQt/Types>
@@ -48,8 +45,6 @@ LogManager::LogManager(QObject *parent)
     m_fetchAmount(10)
 {
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
-    g_type_init();
-    QGlib::init();
     Tpl::init();
 
     m_logManager = Tpl::LogManager::instance();

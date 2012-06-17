@@ -28,9 +28,6 @@
 #include <TelepathyLoggerQt4/Entity>
 #include <TelepathyLoggerQt4/LogManager>
 
-#include <glib-object.h>
-#include <QGlib/Init>
-
 #include <QSortFilterProxyModel>
 
 #include "entity-model.h"
@@ -42,8 +39,6 @@ LogViewer::LogViewer(QWidget *parent) :
     ui->setupUi(this);
     setWindowIcon(KIcon(QLatin1String("documentation")));
     Tp::registerTypes();
-    g_type_init();
-    QGlib::init(); //are these 4 really needed?
     Tpl::init();
 
     m_accountManager = Tp::AccountManager::create();
