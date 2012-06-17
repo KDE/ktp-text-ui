@@ -71,7 +71,6 @@ target_link_libraries(ktpchat
     ${TELEPATHY_QT4_LIBRARIES}
     ${QT_QTWEBKIT_LIBRARY}
     ${KDE4_KEMOTICONS_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
     ${KTP_LIBRARIES}
 )
 install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})
