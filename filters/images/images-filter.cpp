@@ -18,12 +18,13 @@
 
 #include "images-filter.h"
 
+#include <QStringBuilder>
 #include <QRegExp>
+#include <QImageReader>
 
 #include <KPluginFactory>
 #include <KDebug>
 #include <KUrl>
-#include <QImageReader>
 
 class ImagesFilter::Private {
 public:
@@ -53,9 +54,9 @@ void ImagesFilter::filterMessage (Message& message)
 
         if (!fileName.isNull() && fileName.contains(d->imageRegex)) {
             message.appendMessagePart(
-                QLatin1String("<img src='") +
-                QString::fromAscii(url.toEncoded()) +
-                QLatin1String("' alt='Link is of an Image'")
+                QLatin1String("<img src='") %
+                QString::fromAscii(url.toEncoded()) %
+                QLatin1String("' alt='Link is of an Image' />")
             );
         }
     }
