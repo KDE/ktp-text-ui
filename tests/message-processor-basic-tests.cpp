@@ -143,11 +143,10 @@ void MessageProcessorBasicTests::testStrikethrough()
 
 void MessageProcessorBasicTests::testImageEmbedGIF()
 {
-    compare(
-        "http://images3.wikia.nocookie.net/__cb20101111210206/central/images/f/fd/Rick_Astley_2.gif",
-        "<a href='http://images3.wikia.nocookie.net/__cb20101111210206/central/images/f/fd/Rick_Astley_2.gif'>http://images3.wikia.nocookie.net/__cb20101111210206/central/images/f/fd/Rick_Astley_2.gif</a>\n"
-        "<img src='http://images3.wikia.nocookie.net/__cb20101111210206/central/images/f/fd/Rick_Astley_2.gif' alt='link is to an image' />"
-    );
+    const char* message = "http://kde.org/images/teaser/jointhegame.gif";
+    QString imgTag = QLatin1String("<img src='http://kde.org/images/teaser/jointhegame.gif' style='width:100%;' alt='Link is of an Image' />");
+
+    QVERIFY(s.getProcessedMessage(message).contains(imgTag));
 }
 
 QTEST_MAIN(MessageProcessorBasicTests);
