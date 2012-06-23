@@ -54,7 +54,7 @@ MessageProcessor::MessageProcessor()
     //FIXME: Massive hack to not escape URLs.
     Q_FOREACH (AbstractMessageFilter *filter, m_filters) {
         if (QLatin1String(filter->metaObject()->className()) == QLatin1String("EscapeFilter")) {
-            Q_ASSERT(m_filters.removeOne(filter));
+            m_filters.removeOne(filter);
             m_filters.prepend(filter);
             break;
         }

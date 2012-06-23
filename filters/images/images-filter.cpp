@@ -50,7 +50,6 @@ void ImagesFilter::filterMessage (Message& message)
     Q_FOREACH (QVariant var, message.property("Urls").toList()) {
         KUrl url = qvariant_cast<KUrl>(var);
         QString fileName = url.fileName();
-//         qDebug() << fileName;
 
         if (!fileName.isNull() && fileName.contains(d->imageRegex)) {
             message.appendMessagePart(
