@@ -36,7 +36,7 @@ ImagesFilter::ImagesFilter (QObject* parent, const QVariantList&) :
 {
     QString imagePattern = QLatin1String("\\.(?:");
     Q_FOREACH (const QByteArray &format, QImageReader::supportedImageFormats()) {
-        imagePattern += QString::fromAscii(format) + QLatin1String("|");
+        imagePattern = imagePattern % QString::fromAscii(format) % QLatin1String("|");
     }
     imagePattern.chop(1);
     imagePattern += QLatin1String(")$");
@@ -47,15 +47,18 @@ ImagesFilter::ImagesFilter (QObject* parent, const QVariantList&) :
 void ImagesFilter::filterMessage (Message& message)
 {
     kDebug() << message.property("Urls").toList().size();
-    Q_FOREACH (QVariant var, message.property("Urls").toList()) {
+    Q_FOREACH (const QVariant var, message.property("Urls").toList()) {
         KUrl url = qvariant_cast<KUrl>(var);
         QString fileName = url.fileName();
 
         if (!fileName.isNull() && fileName.contains(d->imageRegex)) {
+            QString href = QString::fromAscii(url.toEncoded());
             message.appendMessagePart(
-                QLatin1String("<img src='") %
-                QString::fromAscii(url.toEncoded()) %
-                QLatin1String("' style='max-width:100%;' alt='Link is of an Image' />")
+                QLatin1Literal("<a href='") % href % QLatin1Literal("'>") %
+                    QLatin1Literal("<img src='") %
+                    href %
+                    QLatin1Literal("' style='max-width:100%;' alt='Click to view in browser' />") %
+                QLatin1Literal("</a>")
             );
         }
     }
