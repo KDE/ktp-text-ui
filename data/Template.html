@@ -274,7 +274,7 @@
 
         function imageToText(node)
         {
-            if (client.zoomImage(node) || !node.alt)
+            if (!node.alt)
                 return;
             var a = document.createElement('a');
             a.setAttribute('onclick', 'imageSwap(this, true)');
