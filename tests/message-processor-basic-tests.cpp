@@ -138,7 +138,7 @@ void MessageProcessorBasicTests::testSingleWordItalics()
 
 void MessageProcessorBasicTests::testStrikethrough()
 {
-    compare("-striek through-", "<s>striek through</s>");
+    compare("-strike through-", "<s>strike through</s>");
 }
 
 void MessageProcessorBasicTests::testImageEmbedGIF()
