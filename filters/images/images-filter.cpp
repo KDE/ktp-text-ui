@@ -56,7 +56,7 @@ void ImagesFilter::filterMessage (Message& message)
             message.appendMessagePart(
                 QLatin1String("<img src='") %
                 QString::fromAscii(url.toEncoded()) %
-                QLatin1String("' style='width:100%;' alt='Link is of an Image' />")
+                QLatin1String("' style='max-width:100%;' alt='Link is of an Image' />")
             );
         }
     }

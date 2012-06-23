@@ -144,7 +144,7 @@ void MessageProcessorBasicTests::testStrikethrough()
 void MessageProcessorBasicTests::testImageEmbedGIF()
 {
     const char* message = "http://kde.org/images/teaser/jointhegame.gif";
-    QString imgTag = QLatin1String("<img src='http://kde.org/images/teaser/jointhegame.gif' style='width:100%;' alt='Link is of an Image' />");
+    QString imgTag = QLatin1String("<img src='http://kde.org/images/teaser/jointhegame.gif' style='max-width:100%;' alt='Link is of an Image' />");
 
     QVERIFY(s.getProcessedMessage(message).contains(imgTag));
 }
