@@ -16,6 +16,7 @@ set(ktpchat_SRCS
         abstract-message-filter.cpp
         message-processor.cpp
         url-filter.cpp
+        escape-filter.cpp
 )
 
 set(ktpchat_HDRS

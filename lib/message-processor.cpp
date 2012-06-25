@@ -48,17 +48,10 @@ MessageProcessor* MessageProcessor::instance()
 
 MessageProcessor::MessageProcessor()
 {
-    loadAllPlugins();
-    m_filters.prepend(new UrlFilter(this));
+    m_filters.append(new EscapeFilter(this));
+    m_filters.append(new UrlFilter(this));
 
-    //FIXME: Massive hack to not escape URLs.
-    Q_FOREACH (AbstractMessageFilter *filter, m_filters) {
-        if (QLatin1String(filter->metaObject()->className()) == QLatin1String("EscapeFilter")) {
-            m_filters.removeOne(filter);
-            m_filters.prepend(filter);
-            break;
-        }
-    }
+    loadAllPlugins();
 }
 
 

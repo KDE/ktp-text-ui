@@ -37,6 +37,7 @@ class AbstractMessageFilter;
 //each thing that displays message will have an instance of this
 class KDE_TELEPATHY_CHAT_EXPORT MessageProcessor : public QObject
 {
+Q_OBJECT
 
 public:
     static MessageProcessor* instance();

@@ -30,4 +30,11 @@ public:
     void filterMessage(Message &message);
 };
 
+class EscapeFilter : public AbstractMessageFilter
+{
+public:
+    explicit EscapeFilter(QObject *parent = 0);
+    virtual void filterMessage(Message& message);
+};
+
 #endif
