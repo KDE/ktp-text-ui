@@ -157,6 +157,11 @@ void MessageProcessorBasicTests::testImageEmbedGIF()
     compare(message, imgTag);
 }
 
+void MessageProcessorBasicTests::testXSS()
+{
+    compare("<script>alert('ha!');</script>", "&lt;script&gt;alert('ha!');&lt;/script&gt;");
+}
+
 QTEST_MAIN(MessageProcessorBasicTests);
 
 #include "moc_message-processor-basic-tests.cpp"
