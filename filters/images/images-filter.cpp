@@ -25,6 +25,7 @@
 #include <KPluginFactory>
 #include <KDebug>
 #include <KUrl>
+#include <KLocalizedString>
 
 class ImagesFilter::Private {
 public:
@@ -57,7 +58,9 @@ void ImagesFilter::filterMessage (Message& message)
                 QLatin1Literal("<a href='") % href % QLatin1Literal("'>") %
                     QLatin1Literal("<img src='") %
                     href %
-                    QLatin1Literal("' style='max-width:100%;' alt='Click to view in browser' />") %
+                    QLatin1Literal("' style='max-width:100%;' alt='") %
+                    i18n("Click to view in browser") %
+                    QLatin1Literal("' />") %
                 QLatin1Literal("</a>")
             );
         }
