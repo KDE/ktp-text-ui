@@ -85,9 +85,19 @@ QIcon ConversationTarget::presenceIcon() const
     }
 }
 
+QString ConversationTarget::presenceIconName() const
+{
+    if (d->contact) {
+       return KTp::Presence(d->contact->presence()).iconName();
+    } else {
+       return QString();                                                                    
+    }                                                                                        
+}
+
 void ConversationTarget::onPresenceChanged(const Tp::Presence&)
 {
     Q_EMIT presenceIconChanged(presenceIcon());
+    Q_EMIT presenceIconNameChanged(presenceIconName());                                      
 }
 
 void ConversationTarget::onAvatarDataChanged(const Tp::AvatarData&)

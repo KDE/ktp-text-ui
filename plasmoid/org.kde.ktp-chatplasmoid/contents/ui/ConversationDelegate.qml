@@ -21,6 +21,7 @@
 import QtQuick 1.1
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.qtextracomponents 0.1 as ExtraComponents
+import org.kde.plasma.core 0.1 as PlasmaCore
 
 PlasmaComponents.ToolButton {
     id: base
@@ -36,6 +37,12 @@ PlasmaComponents.ToolButton {
             fill: parent
             margins: 5
         }
+    }
+    
+    PlasmaCore.ToolTip {
+      target: icon
+      mainText: model.conversation.target.nick
+      image: model.conversation.target.presenceIconName
     }
 
     Rectangle {

@@ -35,6 +35,7 @@ class KDE_TELEPATHY_CHAT_EXPORT ConversationTarget : public QObject
     Q_PROPERTY(QIcon avatar READ avatar NOTIFY avatarChanged);
     Q_PROPERTY(QString nick READ nick NOTIFY nickChanged);
     Q_PROPERTY(QIcon presenceIcon READ presenceIcon NOTIFY presenceIconChanged);
+    Q_PROPERTY(QString presenceIconName READ presenceIconName NOTIFY presenceIconNameChanged)
     Q_PROPERTY(QString id READ id)
 
 public:
@@ -45,6 +46,7 @@ public:
     QString id() const;
     QString nick() const;
     QIcon   presenceIcon() const;
+    QString presenceIconName() const;
 
     Tp::ContactPtr contact() const;
 
@@ -52,6 +54,7 @@ Q_SIGNALS:
     void avatarChanged(QIcon avatar);
     void nickChanged(QString nick);
     void presenceIconChanged(QIcon icon);
+    void presenceIconNameChanged(QString icon);
 
 
 private Q_SLOTS:
