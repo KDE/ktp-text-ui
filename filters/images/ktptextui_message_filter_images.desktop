@@ -1,6 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=//TODO:.
+Comment[hu]=//Tennivaló:.
+Comment[nl]=//TE DOEN:.
+Comment[pt]=//POR FAZER:.
+Comment[sk]=//TODO:.
+Comment[sv]=// ATT GÖRA:.
+Comment[uk]=//ЗАВДАННЯ:.
+Comment[x-test]=xx//TODO:.xx
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 
