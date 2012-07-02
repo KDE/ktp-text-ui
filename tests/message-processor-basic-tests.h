@@ -48,6 +48,9 @@ private Q_SLOTS:
     void testBold();
     void testImageEmbedGIF();
     void testXSS();
+    void testSearchExpansion();
+    void testUsingAColon();
+    void testSearchExpansionWithPadding();
 };
 
 #endif // MESSAGE_PROCESSOR_BASIC_TESTS_H

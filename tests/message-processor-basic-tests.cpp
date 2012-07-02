@@ -162,6 +162,22 @@ void MessageProcessorBasicTests::testXSS()
     compare("<script>alert('ha!');</script>", "&lt;script&gt;alert('ha!');&lt;/script&gt;");
 }
 
+void MessageProcessorBasicTests::testSearchExpansion()
+{
+    //let's assume the user hasn't messed with their web shortcuts
+    compare("gg:kde", "http://www.google.com/search?q=kde&ie=UTF-8&oe=UTF-8");
+}
+
+void MessageProcessorBasicTests::testUsingAColon()
+{
+    compare("It should still leave normal stuff with:acolon alone", "It should still leave normal stuff with:acolon alone");
+}
+
+void MessageProcessorBasicTests::testSearchExpansionWithPadding()
+{
+    compare("  gg:kde\n", "http://www.google.com/search?q=kde&ie=UTF-8&oe=UTF-8");
+}
+
 QTEST_MAIN(MessageProcessorBasicTests);
 
 #include "moc_message-processor-basic-tests.cpp"
