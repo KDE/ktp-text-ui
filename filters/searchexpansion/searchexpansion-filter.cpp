@@ -18,18 +18,13 @@
 
 #include "searchexpansion-filter.h"
 
-#include <QStringBuilder>
-#include <QRegExp>
-#include <QImageReader>
-
 #include <KPluginFactory>
 #include <KDebug>
 #include <KUrl>
-#include <KLocalizedString>
+#include <KUriFilter>
 
 class SearchexpansionFilter::Private {
 public:
-    QRegExp imageRegex;
 };
 
 SearchexpansionFilter::SearchexpansionFilter (QObject* parent, const QVariantList&) :
@@ -39,6 +34,12 @@ SearchexpansionFilter::SearchexpansionFilter (QObject* parent, const QVariantLis
 
 void SearchexpansionFilter::filterMessage (Message& message)
 {
+    KUriFilterData data(message.mainMessagePart());
+    if(KUriFilter::self()->filterSearchUri(data, KUriFilter::WebShortcutFilter)) {
+
+        kDebug() << "Succesfully filtered" << data.typedString() << "to" << data.uri();
+        message.setMainMessagePart(data.uri().url());
+    }
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<SearchexpansionFilter>();)
