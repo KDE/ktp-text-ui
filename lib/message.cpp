@@ -33,7 +33,7 @@ QString Message::mainMessagePart() const
 
 void Message::setMainMessagePart(const QString& message)
 {
-    m_mainPart = message;
+    m_mainPart = message.trimmed();
 }
 
 void Message::appendMessagePart(const QString& part)
