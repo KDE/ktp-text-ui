@@ -242,7 +242,7 @@ Tp::AccountPtr ChatWidget::account() const
 
 KIcon ChatWidget::icon() const
 {
-    if (d->channel->connection()->status() == Tp::ConnectionStatusConnected) {
+    if (d->account->currentPresence() != Tp::Presence::offline()) {
         //normal chat - self and one other person.
         if (!d->isGroupChat) {
             //find the other contact which isn't self.
