@@ -13,6 +13,7 @@ Comment[sk]=//TODO:.
 Comment[sv]=// ATT GÖRA:.
 Comment[uk]=//ЗАВДАННЯ:.
 Comment[x-test]=xx//TODO:.xx
+Comment[zh_TW]=//TODO:.
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 
