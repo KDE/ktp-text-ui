@@ -24,6 +24,8 @@
 class AdiumThemeHeaderInfoPrivate
 {
 public:
+    explicit AdiumThemeHeaderInfoPrivate();
+
     QString chatName;
     QString sourceName;
     QString destinationName;
@@ -34,6 +36,11 @@ public:
     QString serviceIconImg;
     bool isGroupChat;
 };
+
+AdiumThemeHeaderInfoPrivate::AdiumThemeHeaderInfoPrivate():
+    isGroupChat(false)
+{
+}
 
 AdiumThemeHeaderInfo::AdiumThemeHeaderInfo()
     : d(new AdiumThemeHeaderInfoPrivate)
