@@ -22,6 +22,7 @@
 
 #include <TelepathyQt/AccountManager>
 #include <TelepathyQt/PendingReady>
+#include <TelepathyQt/ContactManager>
 
 
 #include <TelepathyLoggerQt4/Init>
@@ -29,8 +30,10 @@
 #include <TelepathyLoggerQt4/LogManager>
 
 #include <QSortFilterProxyModel>
+#include <QWebFrame>
 
 #include "entity-model.h"
+#include "entity-proxy-model.h"
 
 LogViewer::LogViewer(QWidget *parent) :
     QWidget(parent),
@@ -41,13 +44,33 @@ LogViewer::LogViewer(QWidget *parent) :
     Tp::registerTypes();
     Tpl::init();
 
-    m_accountManager = Tp::AccountManager::create();
+    Tp::AccountFactoryPtr  accountFactory = Tp::AccountFactory::create(
+                                                QDBusConnection::sessionBus(),
+                                                Tp::Features() << Tp::Account::FeatureCore);
+
+    Tp::ConnectionFactoryPtr connectionFactory = Tp::ConnectionFactory::create(
+                                                QDBusConnection::sessionBus(),
+                                                Tp::Features() << Tp::Connection::FeatureCore
+                                                    << Tp::Connection::FeatureSelfContact
+                                                    << Tp::Connection::FeatureRoster);
+
+    Tp::ContactFactoryPtr contactFactory = Tp::ContactFactory::create(
+                                                Tp::Features()  << Tp::Contact::FeatureAlias
+                                                    << Tp::Contact::FeatureAvatarData
+                                                    << Tp::Contact::FeatureSimplePresence
+                                                    << Tp::Contact::FeatureCapabilities);
+
+    Tp::ChannelFactoryPtr channelFactory = Tp::ChannelFactory::create(QDBusConnection::sessionBus());
+
+    m_accountManager = Tp::AccountManager::create(accountFactory, connectionFactory, channelFactory, contactFactory);
 
     m_entityModel = new EntityModel(this);
-    m_filterModel = new QSortFilterProxyModel(this);
+    m_filterModel = new EntityProxyModel(this);
     m_filterModel->setSourceModel(m_entityModel);
 
     ui->entityList->setModel(m_filterModel);
+    ui->entityList->setItemsExpandable(true);
+    ui->entityList->setRootIsDecorated(true);
     ui->entityFilter->setProxy(m_filterModel);
 
     //TODO parse command line args and update all views as appropriate
@@ -71,6 +94,12 @@ void LogViewer::onAccountManagerReady()
 
 void LogViewer::onEntitySelected(const QModelIndex &index)
 {
+    /* Ignore account nodes */
+    if (index.parent() == QModelIndex()) {
+        ui->messageView->clear();
+        return;
+    }
+
     Tpl::EntityPtr entity = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
 

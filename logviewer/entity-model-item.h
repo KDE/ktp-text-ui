@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012 by David Edmundson <kde@davidedmundson.co.uk>      *
+ *   Copyright (C) 2012 by Dan Vratil <dan@progdan.cz>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,22 +17,42 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef ENTITYVIEW_H
-#define ENTITYVIEW_H
 
-#include <QTreeView>
+#ifndef ENTITY_MODEL_ITEM_H
+#define ENTITY_MODEL_ITEM_H
 
-//model is loaded asynchronously so we need to select the correct element on each new element
-//this is done in the view to avoid having to be careful with proxy models.
+#include <QVariant>
+#include <QList>
 
-class EntityView : public QTreeView
+#include <TelepathyQt/Types>
+#include <TelepathyLoggerQt4/Entity>
+
+class EntityModelItem
 {
-    Q_OBJECT
+
 public:
-    explicit EntityView(QWidget *parent = 0);
-    
-protected Q_SLOTS:
-    void rowsInserted(const QModelIndex &parent, int start, int end);
+    EntityModelItem(EntityModelItem *parent = 0);
+    virtual ~EntityModelItem();
+
+    void addItem(EntityModelItem *item);
+
+    EntityModelItem* item(int row) const;
+    EntityModelItem* item(const Tp::AccountPtr &account);
+    int itemCount() const;
+
+    QVariant data(int role) const;
+    void setData(const QVariant &data, int role);
+
+    int row() const;
+    EntityModelItem* parent() const;
+
+private:
+    QList< EntityModelItem* > m_items;
+    EntityModelItem *m_parent;
+
+    Tp::AccountPtr m_account;
+    Tpl::EntityPtr m_entity;
+    Tp::ContactPtr m_contact;
 };
 
-#endif // ENTITYVIEW_H
+#endif // ENTITY_MODEL_ITEM_H

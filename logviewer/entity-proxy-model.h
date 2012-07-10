@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012 by David Edmundson <kde@davidedmundson.co.uk>      *
+ *   Copyright (C) 2012 by Dan Vratil <dan@progdan.cz>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,22 +17,24 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef ENTITYVIEW_H
-#define ENTITYVIEW_H
 
-#include <QTreeView>
+#ifndef ENTITY_PROXY_MODEL_H
+#define ENTITY_PROXY_MODEL_H
 
-//model is loaded asynchronously so we need to select the correct element on each new element
-//this is done in the view to avoid having to be careful with proxy models.
+#include <QSortFilterProxyModel>
 
-class EntityView : public QTreeView
+
+class EntityProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
+
 public:
-    explicit EntityView(QWidget *parent = 0);
-    
-protected Q_SLOTS:
-    void rowsInserted(const QModelIndex &parent, int start, int end);
+    explicit EntityProxyModel(QObject *parent = 0);
+    virtual ~EntityProxyModel();
+
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+
 };
 
-#endif // ENTITYVIEW_H
+#endif // ENTITY_PROXY_MODEL_H

@@ -6,36 +6,41 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>477</width>
-    <height>362</height>
+    <width>711</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>LogViewer</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="EntityView" name="entityList"/>
-     </item>
-     <item>
-      <widget class="KFilterProxySearchLine" name="entityFilter"/>
-     </item>
-     <item>
-      <widget class="ConversationDatePicker" name="datePicker" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="MessageView" name="messageView" native="true"/>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="EntityView" name="entityList"/>
+       </item>
+       <item>
+        <widget class="KFilterProxySearchLine" name="entityFilter"/>
+       </item>
+       <item>
+        <widget class="ConversationDatePicker" name="datePicker" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="MessageView" name="messageView" native="true"/>
+    </widget>
    </item>
   </layout>
  </widget>
