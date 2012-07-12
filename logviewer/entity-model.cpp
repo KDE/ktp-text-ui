@@ -145,6 +145,7 @@ void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
                 endInsertRows();
             }
 
+
             QModelIndex parentIndex = index(parent->row(), 0, QModelIndex());
             beginInsertRows(parentIndex, m_rootItem->item(parentIndex.row())->row(), m_rootItem->item(parentIndex.row())->row());
             EntityModelItem *item = new EntityModelItem(parent);
@@ -159,9 +160,9 @@ void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
                 connect(op, SIGNAL(finished(Tp::PendingOperation*)),
                         this, SLOT(onEntityContactRetrieved(Tp::PendingOperation*)));
             }
+            endInsertRows();
         }
 
-        endInsertRows();
     }
 }
 
