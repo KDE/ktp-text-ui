@@ -86,6 +86,8 @@ public:
     void setHeaderDisplayed(bool);
     /* .. font, backgrounds, everything else.*/
 
+    void clear();
+
 public Q_SLOTS:
     void addContentMessage(const AdiumThemeContentInfo&);
     void addStatusMessage(const AdiumThemeStatusInfo&);

@@ -14,8 +14,10 @@ set(ktp-log-viewer_SRCS
         main.cpp
         log-viewer.cpp
         entity-model.cpp
+        entity-model-item.cpp
         message-view.cpp
         entity-view.cpp
+        entity-proxy-model.cpp
         conversation-date-picker.cpp
 )
 

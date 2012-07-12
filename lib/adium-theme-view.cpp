@@ -293,6 +293,12 @@ void AdiumThemeView::setHeaderDisplayed(bool displayHeader)
     m_displayHeader = displayHeader;
 }
 
+void AdiumThemeView::clear()
+{
+    if (!page()->mainFrame()->url().isEmpty()) {
+        page()->mainFrame()->setHtml(QString());
+    }
+}
 
 void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessage)
 {

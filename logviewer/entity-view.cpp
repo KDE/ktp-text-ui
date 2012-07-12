@@ -27,13 +27,14 @@
 #include "entity-model.h"
 
 EntityView::EntityView(QWidget *parent) :
-    QListView(parent)
+    QTreeView(parent)
 {
+    setHeaderHidden(true);
 }
 
 void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
-    QListView::rowsInserted(parent, start, end);
+    QTreeView::rowsInserted(parent, start, end);
     static bool loadedCurrentContact = false;
 
     if (loadedCurrentContact) {
@@ -58,4 +59,6 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
 
         }
     }
+
+    expandAll();
 }

@@ -21,7 +21,7 @@
 #ifndef ENTITYMODEL_H
 #define ENTITYMODEL_H
 
-#include <QAbstractListModel>
+#include <QAbstractItemModel>
 
 #include <TelepathyQt/Types>
 
@@ -44,14 +44,9 @@ namespace Tpl{
     class PendingOperation;
 }
 
+class EntityModelItem;
 
-class EntityModelItem {
-public:
-    Tpl::EntityPtr entity;
-    Tp::AccountPtr account;
-};
-
-class EntityModel : public QAbstractListModel
+class EntityModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
@@ -59,26 +54,34 @@ public:
         IdRole = Qt::UserRole,
         TypeRole,
         EntityRole,
-        AccountRole
+        AccountRole,
+        ContactRole
     };
 
-
     explicit EntityModel(QObject *parent = 0);
+    virtual ~EntityModel();
+
     void setAccountManager(const Tp::AccountManagerPtr &accountManager);
 
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
 
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex &child) const;
+
 private Q_SLOTS:
     void onEntitiesSearchFinished(Tpl::PendingOperation*);
+    void onEntityContactRetrieved(Tp::PendingOperation*);
 
 private:
-    QList<EntityModelItem> m_entities;
+    EntityModelItem *m_rootItem;
 
 };
 
 Q_DECLARE_METATYPE(Tpl::EntityPtr);
 Q_DECLARE_METATYPE(Tp::AccountPtr);
+Q_DECLARE_METATYPE(Tp::ContactPtr);
 
 
 #endif // ENTITYMODEL_H
