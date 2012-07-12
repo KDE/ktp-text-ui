@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Content
+Type=Service
+Exec=kcmshell4 kcm_ktp_message_filters
+Comment=How to deal with extra information obtained from messages
+
+X-KDE-Library=kcm_ktp_chat_messages
+X-KDE-ServiceTypes=KCModule
+X-KDE-HasReadOnlyMode=false
+X-KDE-SubstituteUID=false
+X-KDE-RootOnly=false
+Categories=Qt;KDE;X-KDE-settings-network;
+
+#TODO: Find an Icon
+
