@@ -88,4 +88,3 @@ install(FILES
         DESTINATION
         ${SERVICETYPES_INSTALL_DIR}
 )
-
