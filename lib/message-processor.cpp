@@ -52,7 +52,7 @@ MessageProcessor::MessageProcessor()
     m_filters.append(new EscapeFilter(this));
     m_filters.append(new UrlFilter(this));
 
-    loadAllPlugins();
+    loadPlugins();
 }
 
 
@@ -79,7 +79,7 @@ Message MessageProcessor::processOutgoingMessage(const Tp::Message &sentMessage)
     return message;
 }
 
-void MessageProcessor::loadAllPlugins() {
+void MessageProcessor::loadPlugins() {
     kDebug() << "Starting loading filters...";
 
     Q_FOREACH (const KPluginInfo &plugin, pluginList()) {
