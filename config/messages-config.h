@@ -29,6 +29,9 @@ Q_OBJECT
 public:
     explicit MessagesConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
 
+    virtual void save();
+    virtual void defaults();
+
 private:
     class Private;
     Private* d;

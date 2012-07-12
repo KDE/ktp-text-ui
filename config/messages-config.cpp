@@ -17,10 +17,14 @@
 */
 
 #include "messages-config.h"
+#include "message-processor.h"
 
+#include <QVBoxLayout>
+
+#include <KPluginInfo>
 #include <KPluginFactory>
 #include <KPluginSelector>
-#include <QVBoxLayout>
+#include <KDebug>
 
 K_PLUGIN_FACTORY(KTpMessagesConfigFactory, registerPlugin<MessagesConfig>();)
 K_EXPORT_PLUGIN(KTpMessagesConfigFactory("kcm_ktp_message_filters", "kcm_ktp_chat_messages"))
@@ -39,4 +43,22 @@ MessagesConfig::MessagesConfig(QWidget *parent, const QVariantList &args)
     QLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->selector);
     setLayout(layout);
+
+    KPluginInfo::List plugins = MessageProcessor::pluginList();
+    d->selector->addPlugins(plugins);
+
+    connect(d->selector, SIGNAL(changed(bool)), SIGNAL(changed(bool)));
+}
+
+void MessagesConfig::save()
+{
+    kDebug();
+    d->selector->save();
+    KCModule::save();
+}
+
+void MessagesConfig::defaults()
+{
+    d->selector->defaults();
+    KCModule::defaults();
 }
