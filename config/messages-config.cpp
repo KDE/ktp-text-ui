@@ -29,36 +29,14 @@
 K_PLUGIN_FACTORY(KTpMessagesConfigFactory, registerPlugin<MessagesConfig>();)
 K_EXPORT_PLUGIN(KTpMessagesConfigFactory("kcm_ktp_message_filters", "kcm_ktp_chat_messages"))
 
-class MessagesConfig::Private {
-public:
-    KPluginSelector *selector;
-};
-
 MessagesConfig::MessagesConfig(QWidget *parent, const QVariantList &args)
-    : KCModule(KTpMessagesConfigFactory::componentData(), parent, args),
-        d(new Private)
+    : PluginPage(KTpMessagesConfigFactory::componentData(), parent, args)
 {
-    d->selector = new KPluginSelector();
-
-    QLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(d->selector);
-    setLayout(layout);
-
     KPluginInfo::List plugins = MessageProcessor::pluginList();
-    d->selector->addPlugins(plugins);
+    pluginSelector()->addPlugins(plugins);
 
-    connect(d->selector, SIGNAL(changed(bool)), SIGNAL(changed(bool)));
-}
-
-void MessagesConfig::save()
-{
-    kDebug();
-    d->selector->save();
-    KCModule::save();
-}
-
-void MessagesConfig::defaults()
-{
-    d->selector->defaults();
-    KCModule::defaults();
+    //Am surprised that PluginPage() doesn't do this for me
+    QLayout *layout = new QVBoxLayout();
+    layout->addWidget(pluginSelector());
+    setLayout(layout);
 }
