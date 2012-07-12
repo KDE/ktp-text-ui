@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QList>
+#include <KPluginInfo>
 
 #include <message.h>
 #include <ktpchat_export.h>
@@ -41,18 +42,16 @@ Q_OBJECT
 
 public:
     static MessageProcessor* instance();
-
     ~MessageProcessor();
 
     //text-ui will call this somewhere in handleIncommingMessage just before displaying it
     Message processIncomingMessage(const Tp::ReceivedMessage &message);
     Message processOutgoingMessage(const Tp::Message &message);
 
-
+    static KPluginInfo::List pluginList();
 
 protected:
     explicit MessageProcessor();
-
 
 private:
     void loadAllPlugins();

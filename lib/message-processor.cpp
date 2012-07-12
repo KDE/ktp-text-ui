@@ -28,6 +28,7 @@
 #include <KPluginFactory>
 
 MessageProcessor* MessageProcessor::s_instance = 0;
+static const QString serviceType = QLatin1String("KTpTextUi/MessageFilter");
 
 MessageProcessor* MessageProcessor::instance()
 {
@@ -81,21 +82,33 @@ Message MessageProcessor::processOutgoingMessage(const Tp::Message &sentMessage)
 void MessageProcessor::loadAllPlugins() {
     kDebug() << "Starting loading filters...";
 
-    KService::List offers = KServiceTypeTrader::self()->query(QLatin1String("KTpTextUi/MessageFilter"));
-    Q_FOREACH (KService::Ptr service, offers) {
-        kDebug() << "loaded service :" << service;
-        KPluginFactory *factory = KPluginLoader(service->library()).factory();
+    Q_FOREACH (const KPluginInfo &plugin, pluginList()) {
+        kDebug() << "found filter :" << plugin.pluginName();
 
-        if(factory) {
-            kDebug() << "loaded factory :" << factory;
-            AbstractMessageFilter *filter = factory->create<AbstractMessageFilter>(this);
+        if (plugin.isPluginEnabled()) {
+            kDebug() << "it is enabled";
+            KService::Ptr service = plugin.service();
 
-            if(filter) {
-                kDebug() << "loaded message filter : " << filter;
-                m_filters.append(filter);
+            KPluginFactory *factory = KPluginLoader(service->library()).factory();
+            if(factory) {
+                kDebug() << "loaded factory :" << factory;
+                AbstractMessageFilter *filter = factory->create<AbstractMessageFilter>(this);
+
+                if(filter) {
+                    kDebug() << "loaded message filter : " << filter;
+                    m_filters.append(filter);
+                }
+            } else {
+                kError() << "error loading plugin :" << service->library();
             }
-        } else {
-            kError() << "error loading plugin :" << service->library();
         }
     }
+}
+
+KPluginInfo::List MessageProcessor::pluginList()
+{
+    KService::List offers = KServiceTypeTrader::self()->query(serviceType);
+    KConfigGroup config = KConfig(QLatin1String("ktelepathyrc")).group("Filters");
+
+    return KPluginInfo::fromServices(offers, config);
 }
