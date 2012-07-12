@@ -146,7 +146,7 @@ void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
             }
 
             QModelIndex parentIndex = index(parent->row(), 0, QModelIndex());
-            beginInsertRows(parentIndex, m_rootItem->item(parentIndex.row())->row(), m_rootItem->item(parentIndex.row())->row() + 1);
+            beginInsertRows(parentIndex, m_rootItem->item(parentIndex.row())->row(), m_rootItem->item(parentIndex.row())->row());
             EntityModelItem *item = new EntityModelItem(parent);
             item->setData(QVariant::fromValue(pendingEntities->account()), EntityModel::AccountRole);
             item->setData(QVariant::fromValue(entity), EntityModel::EntityRole);
