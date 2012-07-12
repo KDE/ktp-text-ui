@@ -23,11 +23,11 @@
 
 class SearchexpansionFilter : public AbstractMessageFilter
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    SearchexpansionFilter (QObject* parent, const QVariantList &);
-    virtual void filterMessage (Message& message);
+    SearchexpansionFilter(QObject *parent, const QVariantList &);
+    virtual void filterMessage(Message &message);
 
 private:
     class Private;

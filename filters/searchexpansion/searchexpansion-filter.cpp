@@ -23,21 +23,22 @@
 #include <KUrl>
 #include <KUriFilter>
 
-class SearchexpansionFilter::Private {
+class SearchexpansionFilter::Private
+{
 public:
 };
 
-SearchexpansionFilter::SearchexpansionFilter (QObject* parent, const QVariantList&) :
-    AbstractMessageFilter (parent), d(new Private)
+SearchexpansionFilter::SearchexpansionFilter(QObject *parent, const QVariantList &) :
+    AbstractMessageFilter(parent), d(new Private)
 {
 }
 
-void SearchexpansionFilter::filterMessage (Message& message)
+void SearchexpansionFilter::filterMessage(Message &message)
 {
     KUriFilterData data(message.mainMessagePart());
     if(KUriFilter::self()->filterSearchUri(data, KUriFilter::WebShortcutFilter)) {
 
-        kDebug() << "Succesfully filtered" << data.typedString() << "to" << data.uri();
+//         kDebug() << "Succesfully filtered" << data.typedString() << "to" << data.uri();
         message.setMainMessagePart(data.uri().url());
     }
 }

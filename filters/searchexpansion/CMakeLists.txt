@@ -2,9 +2,6 @@ set (ktptextui_message_filter_searchexpansion_SRCS
      searchexpansion-filter.cpp
 )
 
-kde4_add_ui_files (ktptextui_message_filter_searchexpansion_SRCS
-)
-
 kde4_add_plugin (ktptextui_message_filter_searchexpansion
                  ${ktptextui_message_filter_searchexpansion_SRCS}
 )
