@@ -128,6 +128,16 @@ QVariant EntityModel::data(const QModelIndex &index, int role) const
     return item->data(role);
 }
 
+Qt::ItemFlags EntityModel::flags(const QModelIndex &index) const
+{
+    if (index.parent() == QModelIndex()) {
+        return QAbstractItemModel::flags(index) & ~Qt::ItemIsSelectable;
+    }
+
+    return QAbstractItemModel::flags(index);
+}
+
+
 void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
 {
     Tpl::PendingEntities *pendingEntities = qobject_cast<Tpl::PendingEntities*>(operation);

@@ -76,7 +76,7 @@ LogViewer::LogViewer(QWidget *parent) :
     //TODO parse command line args and update all views as appropriate
 
     connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
-    connect(ui->entityList, SIGNAL(activated(QModelIndex)), SLOT(onEntitySelected(QModelIndex)));
+    connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
     connect(ui->datePicker, SIGNAL(dateChanged(QDate)), SLOT(onDateSelected()));
 }
 
@@ -92,16 +92,17 @@ void LogViewer::onAccountManagerReady()
     m_entityModel->setAccountManager(m_accountManager);
 }
 
-void LogViewer::onEntitySelected(const QModelIndex &index)
+void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &previous)
 {
+    Q_UNUSED(previous);
+
     /* Ignore account nodes */
-    if (index.parent() == QModelIndex()) {
-        ui->messageView->clear();
+    if (current.parent() == QModelIndex()) {
         return;
     }
 
-    Tpl::EntityPtr entity = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
-    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+    Tpl::EntityPtr entity = current.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
+    Tp::AccountPtr account = current.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
 
     ui->datePicker->setEntity(account, entity);
 

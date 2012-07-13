@@ -40,7 +40,7 @@ public:
 private Q_SLOTS:
     void onAccountManagerReady();
 
-    void onEntitySelected(const QModelIndex &index);
+    void onEntitySelected(const QModelIndex &current, const QModelIndex &previous);
     void onDateSelected();
 
     void updateMainView();
