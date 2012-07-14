@@ -18,6 +18,7 @@
 
 #include "messages-config.h"
 #include "message-processor.h"
+#include <plugin-config-manager.h>
 
 #include <QVBoxLayout>
 
@@ -32,13 +33,12 @@ K_EXPORT_PLUGIN(KTpMessagesConfigFactory("kcm_ktp_message_filters", "kcm_ktp_cha
 MessagesConfig::MessagesConfig(QWidget *parent, const QVariantList &args)
     : PluginPage(KTpMessagesConfigFactory::componentData(), parent, args)
 {
-    KPluginInfo::List plugins = MessageProcessor::pluginList();
     pluginSelector()->addPlugins(
-        plugins,
+        PluginConfigManager::self()->allPlugins(),
         KPluginSelector::ReadConfigFile,
         QString(),
         QString(),
-        KSharedConfig::openConfig(QLatin1String("ktelepathyrc"))
+        PluginConfigManager::self()->sharedConfig() //why won't this take a KConfigGroup?
     );
 
     //Am surprised that PluginPage() doesn't do this for me
