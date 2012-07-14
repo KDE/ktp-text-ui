@@ -35,16 +35,14 @@ public:
 
 PluginConfigManager *PluginConfigManager::self()
 {
-    static PluginConfigManager *pcm_instance = new PluginConfigManager();
+    static PluginConfigManager *pcm_instance;
     static QMutex mutex;
-    if (!pcm_instance)
-    {
-        mutex.lock();
-        if (!pcm_instance) {
-            pcm_instance = new PluginConfigManager;
-        }
-        mutex.unlock();
+    mutex.lock();
+    if (!pcm_instance) {
+        pcm_instance = new PluginConfigManager;
     }
+    mutex.unlock();
+
     return pcm_instance;
 }
 

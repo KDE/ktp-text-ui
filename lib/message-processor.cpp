@@ -29,21 +29,18 @@
 #include <KPluginFactory>
 
 MessageProcessor* MessageProcessor::s_instance = 0;
-static const QString serviceType = QLatin1String("KTpTextUi/MessageFilter");
 
 MessageProcessor* MessageProcessor::instance()
 {
     kDebug();
 
     static QMutex mutex;
-    if (!s_instance)
-    {
-        mutex.lock();
-        if (!s_instance) {
-            s_instance = new MessageProcessor;
-        }
-        mutex.unlock();
+    mutex.lock();
+    if (!s_instance) {
+        s_instance = new MessageProcessor;
     }
+    mutex.unlock();
+
     return s_instance;
 }
 

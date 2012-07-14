@@ -28,7 +28,7 @@
 #include <KDebug>
 
 K_PLUGIN_FACTORY(KTpMessagesConfigFactory, registerPlugin<MessagesConfig>();)
-K_EXPORT_PLUGIN(KTpMessagesConfigFactory("kcm_ktp_message_filters", "kcm_ktp_chat_messages"))
+K_EXPORT_PLUGIN(KTpMessagesConfigFactory("ktp_chat_messages", "kcm_ktp_chat_messages"))
 
 MessagesConfig::MessagesConfig(QWidget *parent, const QVariantList &args)
     : PluginPage(KTpMessagesConfigFactory::componentData(), parent, args)
