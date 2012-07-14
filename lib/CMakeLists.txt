@@ -17,6 +17,7 @@ set(ktpchat_SRCS
         message-processor.cpp
         url-filter.cpp
         escape-filter.cpp
+        plugin-config-manager.cpp
 )
 
 set(ktpchat_HDRS
