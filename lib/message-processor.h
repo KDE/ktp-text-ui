@@ -48,17 +48,13 @@ public:
     Message processIncomingMessage(const Tp::ReceivedMessage &message);
     Message processOutgoingMessage(const Tp::Message &message);
 
-    static KPluginInfo::List pluginList();
-    static KSharedConfig::Ptr defaultConfig();
-
 protected:
     explicit MessageProcessor();
 
 private:
-    void loadPlugins();
+    void loadFilters();
     static MessageProcessor* s_instance;
     QList<AbstractMessageFilter*> m_filters;
-
 };
 
 #endif // MESSAGE_PROCESSOR_H

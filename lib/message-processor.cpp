@@ -19,6 +19,7 @@
 
 #include "message-processor.h"
 #include "filters.h"
+#include "plugin-config-manager.h"
 
 #include <QMutex>
 
@@ -52,7 +53,7 @@ MessageProcessor::MessageProcessor()
     m_filters.append(new EscapeFilter(this));
     m_filters.append(new UrlFilter(this));
 
-    loadPlugins();
+    loadFilters();
 }
 
 
@@ -79,39 +80,23 @@ Message MessageProcessor::processOutgoingMessage(const Tp::Message &sentMessage)
     return message;
 }
 
-void MessageProcessor::loadPlugins() {
+void MessageProcessor::loadFilters() {
     kDebug() << "Starting loading filters...";
 
-    KPluginInfo::List plugins = pluginList();
-    for (KPluginInfo::List::Iterator i = plugins.begin(); i != plugins.end(); i++) {
-        KPluginInfo &plugin = *i;
-        kDebug() << "found filter :" << plugin.pluginName();
+    Q_FOREACH (const KPluginInfo &plugin, PluginConfigManager::self()->enabledPlugins()) {
+        KService::Ptr service = plugin.service();
 
-        plugin.load();
-        if (plugin.isPluginEnabled()) {
-            kDebug() << "it is enabled";
-            KService::Ptr service = plugin.service();
+        KPluginFactory *factory = KPluginLoader(service->library()).factory();
+        if(factory) {
+            kDebug() << "loaded factory :" << factory;
+            AbstractMessageFilter *filter = factory->create<AbstractMessageFilter>(this);
 
-            KPluginFactory *factory = KPluginLoader(service->library()).factory();
-            if(factory) {
-                kDebug() << "loaded factory :" << factory;
-                AbstractMessageFilter *filter = factory->create<AbstractMessageFilter>(this);
-
-                if(filter) {
-                    kDebug() << "loaded message filter : " << filter;
-                    m_filters.append(filter);
-                }
-            } else {
-                kError() << "error loading plugin :" << service->library();
+            if(filter) {
+                kDebug() << "loaded message filter : " << filter;
+                m_filters.append(filter);
             }
+        } else {
+            kError() << "error loading plugin :" << service->library();
         }
     }
-}
-
-KPluginInfo::List MessageProcessor::pluginList()
-{
-    KService::List offers = KServiceTypeTrader::self()->query(serviceType);
-    KConfigGroup config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"))->group("Plugins");
-
-    return KPluginInfo::fromServices(offers, config);
 }
