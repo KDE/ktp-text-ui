@@ -49,6 +49,7 @@ public:
     Message processOutgoingMessage(const Tp::Message &message);
 
     static KPluginInfo::List pluginList();
+    static KSharedConfig::Ptr defaultConfig();
 
 protected:
     explicit MessageProcessor();

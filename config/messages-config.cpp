@@ -33,7 +33,13 @@ MessagesConfig::MessagesConfig(QWidget *parent, const QVariantList &args)
     : PluginPage(KTpMessagesConfigFactory::componentData(), parent, args)
 {
     KPluginInfo::List plugins = MessageProcessor::pluginList();
-    pluginSelector()->addPlugins(plugins);
+    pluginSelector()->addPlugins(
+        plugins,
+        KPluginSelector::ReadConfigFile,
+        QString(),
+        QString(),
+        KSharedConfig::openConfig(QLatin1String("ktelepathyrc"))
+    );
 
     //Am surprised that PluginPage() doesn't do this for me
     QLayout *layout = new QVBoxLayout();

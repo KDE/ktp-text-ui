@@ -82,9 +82,12 @@ Message MessageProcessor::processOutgoingMessage(const Tp::Message &sentMessage)
 void MessageProcessor::loadPlugins() {
     kDebug() << "Starting loading filters...";
 
-    Q_FOREACH (const KPluginInfo &plugin, pluginList()) {
+    KPluginInfo::List plugins = pluginList();
+    for (KPluginInfo::List::Iterator i = plugins.begin(); i != plugins.end(); i++) {
+        KPluginInfo &plugin = *i;
         kDebug() << "found filter :" << plugin.pluginName();
 
+        plugin.load();
         if (plugin.isPluginEnabled()) {
             kDebug() << "it is enabled";
             KService::Ptr service = plugin.service();
@@ -108,7 +111,7 @@ void MessageProcessor::loadPlugins() {
 KPluginInfo::List MessageProcessor::pluginList()
 {
     KService::List offers = KServiceTypeTrader::self()->query(serviceType);
-    KConfigGroup config = KConfig(QLatin1String("ktelepathyrc")).group("Filters");
+    KConfigGroup config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"))->group("Plugins");
 
     return KPluginInfo::fromServices(offers, config);
 }
