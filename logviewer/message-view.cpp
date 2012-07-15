@@ -20,6 +20,7 @@
 #include "message-view.h"
 
 #include "adium-theme-view.h"
+#include "adium-theme-status-info.h"
 
 #include <KDebug>
 
@@ -35,11 +36,15 @@ MessageView::MessageView(QWidget *parent) :
     connect(this, SIGNAL(loadFinished(bool)), SLOT(onLoadFinished()));
 }
 
-void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity, const QDate &date)
+
+void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
+                          const QDate &date, const QPair< QDate, QDate > &nearestDates)
 {
     m_account = account;
     m_entity = entity;
     m_date = date;
+    m_prev = nearestDates.first;
+    m_next = nearestDates.second;
 
     //FIXME check entity type, set as appropriately.
     load(AdiumThemeView::SingleUserChat);
@@ -65,6 +70,15 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
     Tpl::PendingEvents *pe = qobject_cast<Tpl::PendingEvents*>(po);
 
     QList<AdiumThemeContentInfo> messages;
+
+    if (m_prev.isValid()) {
+        AdiumThemeStatusInfo message(AdiumThemeMessageInfo::HistoryStatus);
+        message.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Previous conversation")));
+        message.setService(m_account->serviceName());
+        message.setTime(QDateTime(m_prev));
+
+        addStatusMessage(message);
+    }
 
     Q_FOREACH(const Tpl::EventPtr &event, pe->events()) {
         const Tpl::TextEventPtr textEvent(event.staticCast<Tpl::TextEvent>());
@@ -95,4 +109,28 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
 
         addContentMessage(message);
     }
+
+    if (m_next.isValid()) {
+        AdiumThemeStatusInfo message(AdiumThemeMessageInfo::HistoryStatus);
+        message.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Next conversation")));
+        message.setService(m_account->serviceName());
+        message.setTime(QDateTime(m_next));
+
+        addStatusMessage(message);
+    }
+}
+
+void MessageView::onLinkClicked(const QUrl &link)
+{
+    if (link.fragment() == QLatin1String("x-nextConversation")) {
+        Q_EMIT conversationSwitchRequested(m_next);
+        return;
+    }
+
+    if (link.fragment() == QLatin1String("x-prevConversation")) {
+        Q_EMIT conversationSwitchRequested(m_prev);
+        return;
+    }
+
+    AdiumThemeView::onLinkClicked(link);
 }

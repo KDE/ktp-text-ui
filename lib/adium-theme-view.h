@@ -91,8 +91,8 @@ public:
 public Q_SLOTS:
     void addContentMessage(const AdiumThemeContentInfo&);
     void addStatusMessage(const AdiumThemeStatusInfo&);
-    void onLinkClicked(const QUrl &);
     void onOpenLinkActionTriggered();
+    virtual void onLinkClicked(const QUrl &);
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);

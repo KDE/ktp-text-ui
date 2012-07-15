@@ -34,16 +34,25 @@ class MessageView : public AdiumThemeView
 public:
     explicit MessageView(QWidget *parent = 0);
 
-    void loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity, const QDate &date);
+    void loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
+                 const QDate &date, const QPair< QDate, QDate > &nearestDates);
+
+public Q_SLOTS:
+    void onLinkClicked(const QUrl &link);
 
 private Q_SLOTS:
    void onLoadFinished();
    void onEventsLoaded(Tpl::PendingOperation* po);
 
+Q_SIGNALS:
+    void conversationSwitchRequested(const QDate &date);
+
 private:
     Tpl::EntityPtr m_entity;
     Tp::AccountPtr m_account;
     QDate m_date;
+    QDate m_prev;
+    QDate m_next;
 
 };
 

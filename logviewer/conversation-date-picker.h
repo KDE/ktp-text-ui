@@ -38,6 +38,9 @@ public:
     void setEntity(const Tp::AccountPtr &accout, const Tpl::EntityPtr &entity);
     void clear();
 
+    QDate previousDate() const;
+    QDate nextDate() const;
+
 Q_SIGNALS:
 
 private Q_SLOTS:

@@ -51,6 +51,26 @@ void ConversationDatePicker::clear()
     m_setDates.clear();
 }
 
+QDate ConversationDatePicker::nextDate() const
+{
+    int i = m_setDates.indexOf(date());
+    if ((i < m_setDates.count() - 1) && (i > -1)) {
+        return m_setDates.at(i + 1);
+    }
+
+    return QDate();
+}
+
+QDate ConversationDatePicker::previousDate() const
+{
+    int i = m_setDates.indexOf(date());
+    if (i > 0) {
+        return m_setDates.at(i - 1);
+    }
+
+    return QDate();
+}
+
 void ConversationDatePicker::onDatesFinished(Tpl::PendingOperation *op)
 {
     Tpl::PendingDates *pendingDates = qobject_cast<Tpl::PendingDates*>(op);

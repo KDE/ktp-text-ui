@@ -78,6 +78,7 @@ LogViewer::LogViewer(QWidget *parent) :
     connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
     connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
     connect(ui->datePicker, SIGNAL(dateChanged(QDate)), SLOT(onDateSelected()));
+    connect(ui->messageView, SIGNAL(conversationSwitchRequested(QDate)), SLOT(switchConversation(QDate)));
 }
 
 LogViewer::~LogViewer()
@@ -122,7 +123,14 @@ void LogViewer::updateMainView()
         return;
     }
 
+    QPair< QDate, QDate > nearestDates(ui->datePicker->previousDate(), ui->datePicker->nextDate());
+
     Tpl::EntityPtr entity = currentIndex.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::AccountPtr account = currentIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-    ui->messageView->loadLog(account, entity, ui->datePicker->date());
+    ui->messageView->loadLog(account, entity, ui->datePicker->date(), nearestDates);
+}
+
+void LogViewer::switchConversation(const QDate &date)
+{
+    ui->datePicker->setDate(date);
 }

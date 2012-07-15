@@ -44,6 +44,7 @@ private Q_SLOTS:
     void onDateSelected();
 
     void updateMainView();
+    void switchConversation(const QDate &date);
 
 private:
     Ui::LogViewer *ui;
