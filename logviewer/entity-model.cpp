@@ -144,35 +144,31 @@ void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
 
     Tpl::EntityPtrList newEntries = pendingEntities->entities();
 
-    if (newEntries.size() > 0) {
-        Q_FOREACH(const Tpl::EntityPtr &entity, newEntries) {
-            EntityModelItem *parent = m_rootItem->item(pendingEntities->account());
-            if (!parent) {
-                beginInsertRows(QModelIndex(), m_rootItem->itemCount(), m_rootItem->itemCount());
-                parent = new EntityModelItem(m_rootItem);
-                parent->setData(QVariant::fromValue(pendingEntities->account()), EntityModel::AccountRole);
-                m_rootItem->addItem(parent);
-                endInsertRows();
-            }
-
-
-            QModelIndex parentIndex = index(parent->row(), 0, QModelIndex());
-            beginInsertRows(parentIndex, m_rootItem->item(parentIndex.row())->row(), m_rootItem->item(parentIndex.row())->row());
-            EntityModelItem *item = new EntityModelItem(parent);
-            item->setData(QVariant::fromValue(pendingEntities->account()), EntityModel::AccountRole);
-            item->setData(QVariant::fromValue(entity), EntityModel::EntityRole);
-            parent->addItem(item);
-
-            if (pendingEntities->account()->connection()) {
-                Tp::PendingOperation *op =
-                    pendingEntities->account()->connection()->contactManager()->contactsForIdentifiers(
-                                            QStringList() << entity->identifier());
-                connect(op, SIGNAL(finished(Tp::PendingOperation*)),
-                        this, SLOT(onEntityContactRetrieved(Tp::PendingOperation*)));
-            }
+    Q_FOREACH(const Tpl::EntityPtr &entity, newEntries) {
+        EntityModelItem *parent = m_rootItem->item(pendingEntities->account());
+        if (!parent) {
+            beginInsertRows(QModelIndex(), m_rootItem->itemCount(), m_rootItem->itemCount());
+            parent = new EntityModelItem(m_rootItem);
+            parent->setData(QVariant::fromValue(pendingEntities->account()), EntityModel::AccountRole);
+            m_rootItem->addItem(parent);
             endInsertRows();
         }
 
+        QModelIndex parentIndex = index(parent->row(), 0, QModelIndex());
+        beginInsertRows(parentIndex, parent->itemCount() , parent->itemCount());
+        EntityModelItem *item = new EntityModelItem(parent);
+        item->setData(QVariant::fromValue(pendingEntities->account()), EntityModel::AccountRole);
+        item->setData(QVariant::fromValue(entity), EntityModel::EntityRole);
+        parent->addItem(item);
+
+        if (pendingEntities->account()->connection()) {
+            Tp::PendingOperation *op =
+                pendingEntities->account()->connection()->contactManager()->contactsForIdentifiers(
+                                        QStringList() << entity->identifier());
+            connect(op, SIGNAL(finished(Tp::PendingOperation*)),
+                    this, SLOT(onEntityContactRetrieved(Tp::PendingOperation*)));
+        }
+        endInsertRows();
     }
 }
 
