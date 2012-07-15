@@ -37,6 +37,8 @@
 #include <KDebug>
 #include <KColorScheme>
 #include <KLineEdit>
+#include <KMimeType>
+#include <KTemporaryFile>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/Message>
@@ -44,6 +46,8 @@
 #include <TelepathyQt/AvatarData>
 #include <TelepathyQt/Connection>
 #include <TelepathyQt/Presence>
+#include <TelepathyQt/PendingChannelRequest>
+#include <TelepathyQt/OutgoingFileTransferChannel>
 
 #include <KTp/presence.h>
 #include "message-processor.h"
@@ -70,6 +74,8 @@ public:
     ChannelContactModel *contactModel;
     LogManager *logManager;
     QTimer *pausedStateTimer;
+
+    QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
     KComponentData telepathyComponentData();
 };
@@ -127,6 +133,10 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->yourName = channel->groupSelfContact()->alias();
 
     d->ui.chatArea->load((d->isGroupChat?AdiumThemeView::GroupChat:AdiumThemeView::SingleUserChat));
+
+    d->ui.sendMessageBox->setAcceptDrops(false);
+    d->ui.chatArea->setAcceptDrops(false);
+    setAcceptDrops(true);
 
     AdiumThemeHeaderInfo info;
 
@@ -327,6 +337,110 @@ void ChatWidget::keyPressEvent(QKeyEvent *e)
     }
 
     QWidget::keyPressEvent(e);
+}
+
+void ChatWidget::temporaryFileTransferStateChanged(Tp::FileTransferState state, Tp::FileTransferStateChangeReason reason)
+{
+    Q_UNUSED(reason);
+
+    if ((state == Tp::FileTransferStateCompleted) || (state == Tp::FileTransferStateCancelled)) {
+        Tp::OutgoingFileTransferChannel *channel = qobject_cast<Tp::OutgoingFileTransferChannel*>(sender());
+        Q_ASSERT(channel);
+
+        QString localFile = QUrl(channel->uri()).toLocalFile();
+        if (QFile::exists(localFile)) {
+            QFile::remove(localFile);
+            kDebug() << "File" << localFile << "removed";
+        }
+
+        d->tmpFileTransfers.removeAll(Tp::OutgoingFileTransferChannelPtr(channel));
+    }
+}
+
+
+void ChatWidget::temporaryFileTransferChannelCreated(Tp::PendingOperation *operation)
+{
+    Tp::PendingChannelRequest *request = qobject_cast<Tp::PendingChannelRequest*>(operation);
+    Q_ASSERT(request);
+
+    Tp::OutgoingFileTransferChannelPtr transferChannel;
+    transferChannel = Tp::OutgoingFileTransferChannelPtr::qObjectCast<Tp::Channel>(request->channelRequest()->channel());
+    Q_ASSERT(!transferChannel.isNull());
+
+    /* Make sure the pointer lives until the transfer is over
+     * so that the signal connection below lasts until the end */
+    d->tmpFileTransfers << transferChannel;
+
+    connect(transferChannel.data(), SIGNAL(stateChanged(Tp::FileTransferState,Tp::FileTransferStateChangeReason)),
+            this, SLOT(temporaryFileTransferStateChanged(Tp::FileTransferState,Tp::FileTransferStateChangeReason)));
+}
+
+
+void ChatWidget::dropEvent(QDropEvent *e)
+{
+    const QMimeData *data = e->mimeData();
+
+    if (data->hasUrls()) {
+        Q_FOREACH(const QUrl &url, data->urls()) {
+            if (url.isLocalFile()) {
+                Tp::FileTransferChannelCreationProperties properties(
+                        url.toLocalFile(),
+                        KMimeType::findByFileContent(url.toLocalFile())->name());
+                d->account->createFileTransfer(d->channel->targetContact(),
+                        properties, QDateTime::currentDateTime(),
+                        QLatin1String("org.freedesktop.Telepathy.Client.KTp.FileTransfer"));
+            } else {
+                d->ui.sendMessageBox->append(url.toString());
+            }
+        }
+        e->acceptProposedAction();
+    } else if (data->hasText()) {
+        d->ui.sendMessageBox->append(data->text());
+        e->acceptProposedAction();
+    } else if (data->hasHtml()) {
+        d->ui.sendMessageBox->insertHtml(data->html());
+        e->acceptProposedAction();
+    } else if (data->hasImage()) {
+        QImage image = qvariant_cast<QImage>(data->imageData());
+
+        KTemporaryFile tmpFile;
+        tmpFile.setPrefix(d->account->displayName() + QLatin1String("-"));
+        tmpFile.setSuffix(QLatin1String(".png"));
+        tmpFile.setAutoRemove(false);
+        if (!tmpFile.open()) {
+            return;
+        }
+        tmpFile.close();
+
+        if (!image.save(tmpFile.fileName(), "PNG")) {
+            return;
+        }
+
+        Tp::FileTransferChannelCreationProperties properties(
+                    tmpFile.fileName(),
+                    KMimeType::findByFileContent(tmpFile.fileName())->name());
+        Tp::PendingChannelRequest *request;
+        request = d->account->createFileTransfer(d->channel->targetContact(),
+                        properties, QDateTime::currentDateTime(),
+                        QLatin1String("org.freedesktop.Telepathy.Client.KTp.FileTransfer"));
+        connect(request, SIGNAL(finished(Tp::PendingOperation*)),
+                this, SLOT(temporaryFileTransferChannelCreated(Tp::PendingOperation*)));
+
+        kDebug() << "Starting transfer of" << tmpFile.fileName();
+        e->acceptProposedAction();
+    }
+
+    QWidget::dropEvent(e);
+}
+
+void ChatWidget::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (e->mimeData()->hasHtml() || e->mimeData()->hasImage() ||
+        e->mimeData()->hasText() || e->mimeData()->hasUrls()) {
+            e->accept();
+    }
+
+    QWidget::dragEnterEvent(e);
 }
 
 QString ChatWidget::title() const

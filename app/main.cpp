@@ -27,6 +27,7 @@
 #include <TelepathyQt/ChannelFactory>
 #include <TelepathyQt/ContactFactory>
 #include <TelepathyQt/TextChannel>
+#include <TelepathyQt/OutgoingFileTransferChannel>
 
 #include <KAboutData>
 #include <KCmdLineArgs>
@@ -65,6 +66,7 @@ int main(int argc, char *argv[])
                                                << Tp::TextChannel::FeatureMessageCapabilities;
     channelFactory->addFeaturesForTextChats(textFeatures);
     channelFactory->addFeaturesForTextChatrooms(textFeatures);
+    channelFactory->addFeaturesForOutgoingFileTransfers(Tp::OutgoingFileTransferChannel::FeatureCore);
 
     Tp::ContactFactoryPtr contactFactory = Tp::ContactFactory::create(
         Tp::Features() << Tp::Contact::FeatureAlias

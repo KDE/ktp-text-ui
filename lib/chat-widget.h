@@ -103,6 +103,8 @@ protected:
     void changeEvent(QEvent *e);
     void resizeEvent(QResizeEvent *);
     void keyPressEvent(QKeyEvent *e);
+    virtual void dropEvent(QDropEvent *e);
+    virtual void dragEnterEvent(QDragEnterEvent *e);
 
 protected Q_SLOTS:
     /** Show the received message in the chat window*/
@@ -167,6 +169,9 @@ private Q_SLOTS:
     void onFormatColorReleased();
     void onHistoryFetched(const QList<AdiumThemeContentInfo> &messages);
     void onChatPausedTimerExpired();
+
+    void temporaryFileTransferChannelCreated(Tp::PendingOperation *operation);
+    void temporaryFileTransferStateChanged(Tp::FileTransferState, Tp::FileTransferStateChangeReason);
 
 private:
     /** connects necessary signals for the channel */
