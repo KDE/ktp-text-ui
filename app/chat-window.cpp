@@ -56,6 +56,8 @@
 
 #include <Sonnet/DictionaryComboBox>
 
+#include "invite-contact-dialog.h"
+
 #define PREFERRED_TEXTCHAT_HANDLER "org.freedesktop.Telepathy.Client.KTp.TextUi"
 #define PREFERRED_FILETRANSFER_HANDLER "org.freedesktop.Telepathy.Client.KTp.FileTransfer"
 #define PREFERRED_AUDIO_VIDEO_HANDLER "org.freedesktop.Telepathy.Client.KTp.CallUi"
@@ -311,7 +313,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setVideoCallEnabled(selfCapabilities.streamedMediaVideoCalls() && contactCapabilites.streamedMediaVideoCalls());
         setShareDesktopEnabled(s_krfbAvailableChecker->isAvailable() && contactCapabilites.streamTubes(QLatin1String("rfb")));
         /// TODO re-activate check when invitation to chat has been sorted out
-        setInviteToChatEnabled(false);
+        setInviteToChatEnabled(true);
 
         toggleBlockButton(currentChatTab->textChannel()->targetContact()->isBlocked());
 
@@ -386,7 +388,10 @@ void ChatWindow::onGenericOperationFinished(Tp::PendingOperation* op)
 
 void ChatWindow::onInviteToChatTriggered()
 {
-    /// TODO
+    ChatTab *currChat = qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
+    InviteContactDialog *dialog = new InviteContactDialog(currChat->account(), currChat->textChannel(), this);
+    //FIXME delete on close
+    dialog->show();
 }
 
 void ChatWindow::onNextTabActionTriggered()
