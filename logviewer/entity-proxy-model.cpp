@@ -19,8 +19,9 @@
 
 
 #include "entity-proxy-model.h"
+#include "entity-model.h"
 
-#include <QDebug>
+#include <TelepathyQt/Types>
 
 EntityProxyModel::EntityProxyModel(QObject *parent):
     QSortFilterProxyModel(parent)
@@ -33,11 +34,28 @@ EntityProxyModel::~EntityProxyModel()
 
 bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+    /* Always display account node */
     if (source_parent == QModelIndex()) {
         return true;
     }
 
     QModelIndex index = source_parent.child(source_row, 0);
     QString term = filterRegExp().pattern();
-    return index.data(Qt::DisplayRole).toString().contains(term, Qt::CaseInsensitive);
+
+    Tp::ContactPtr contact = index.data(EntityModel::ContactRole).value< Tp::ContactPtr >();
+    Tpl::EntityPtr entity = index.data(EntityModel::EntityRole).value< Tpl::EntityPtr >();
+
+    /* Check if contact's account name matches */
+    if (entity->alias().contains(term, Qt::CaseInsensitive)) {
+        return true;
+    }
+
+    /* If there's information about contact's real name try to match it too */
+    if (!contact.isNull()) {
+        if (contact->alias().contains(term, Qt::CaseInsensitive)) {
+            return true;
+        }
+    }
+
+    return false;
 }
