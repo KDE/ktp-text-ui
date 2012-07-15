@@ -44,7 +44,7 @@ InviteContactDialog::InviteContactDialog(const Tp::AccountPtr &account, const Tp
     resize(500,450);
 
     m_accountsModel = new AccountsModel(this);
-    m_accountsModel->setAccount(account);
+    m_accountsModel->onNewAccount(account);
 
 
     m_contactGridWidget = new KTp::ContactGridWidget(m_accountsModel, this);
