@@ -119,7 +119,7 @@ bool ChatTextEdit::event(QEvent *e)
 void ChatTextEdit::resizeEvent(QResizeEvent *e)
 {
     KTextEdit::resizeEvent(e);
-    QTimer::singleShot(0, this, SLOT(updmessageBoxEventFilterateScrollBar()));
+    QTimer::singleShot(0, this, SLOT(updateScrollBar()));
 }
 
 void ChatTextEdit::recalculateSize()
