@@ -148,6 +148,13 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
         }
     }
 
+    //if it's a group chat, we've been invited to. Join it
+    if (textChannel->isConference() && ! textChannel->groupLocalPendingContacts().contains(textChannel->groupSelfContact())) {
+        textChannel->groupAddContacts(QList<Tp::ContactPtr>() << textChannel->groupSelfContact());
+    }
+
+
+
     //if there is currently no tab containing the incoming channel.
     if (!tabFound) {
         ChatWindow* window = 0;
