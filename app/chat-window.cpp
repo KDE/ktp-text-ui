@@ -312,7 +312,6 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setFileTransferEnabled(selfCapabilities.fileTransfers() && contactCapabilites.fileTransfers());
         setVideoCallEnabled(selfCapabilities.streamedMediaVideoCalls() && contactCapabilites.streamedMediaVideoCalls());
         setShareDesktopEnabled(s_krfbAvailableChecker->isAvailable() && contactCapabilites.streamTubes(QLatin1String("rfb")));
-        /// TODO re-activate check when invitation to chat has been sorted out
         setInviteToChatEnabled(true);
 
         toggleBlockButton(currentChatTab->textChannel()->targetContact()->isBlocked());
@@ -322,8 +321,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setFileTransferEnabled(false);
         setVideoCallEnabled(false);
         setShareDesktopEnabled(false);
-        /// TODO re-activate check when invitation to chat has been sorted out
-        setInviteToChatEnabled(false);
+        setInviteToChatEnabled(true);
         setBlockEnabled(false);
 
     }
