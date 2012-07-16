@@ -21,9 +21,11 @@
 import QtQuick 1.1
 import org.kde.telepathy.chat 0.1
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
+import org.kde.qtextracomponents 0.1 as ExtraComponents
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Item {
+    id: chatWidget
     property Conversation conv
 
     signal closeRequested
@@ -38,19 +40,41 @@ Item {
         }
         height: 24
 
-        PlasmaComponents.ToolButton {
-            id: contactButton
-
+        ExtraComponents.QIconItem {
+            id: contactIcon
             anchors {
                 top: parent.top
                 left: parent.left
+                bottom: parent.bottom
+                margins: 3
+            }
+            width: height
+
+            icon: conv.target.presenceIcon
+        }
+
+        PlasmaComponents.Label {
+            id: contactName
+            anchors {
+                left: contactIcon.right
+                right: minimizeButton.left
+                top: parent.top
+                bottom: parent.bottom
+                leftMargin: 5
+            }
+            text: conv.target.nick
+        }
+
+        PlasmaComponents.ToolButton {
+            id: minimizeButton
+
+            anchors {
+                top: parent.top
                 right: popoutButton.left
                 bottom: parent.bottom
             }
 
-            text: conv.target.nick
-            iconSource: conv.target.presenceIcon
-
+            iconSource: "arrow-down"
             onClicked: closeRequested()
         }
 
@@ -103,6 +127,7 @@ Item {
             left: parent.left
             right: parent.right
             bottom: input.top
+            topMargin: 3
             rightMargin: viewScrollBar.width+5
             leftMargin: 5
         }
