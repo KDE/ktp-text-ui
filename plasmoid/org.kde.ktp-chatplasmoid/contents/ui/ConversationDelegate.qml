@@ -29,7 +29,6 @@ PlasmaComponents.ToolButton {
 
     property alias image: icon.icon
     property alias overlayText: text.text
-    checkable: true
 
     ExtraComponents.QIconItem {
         id: icon
@@ -44,6 +43,7 @@ PlasmaComponents.ToolButton {
       mainText: model.conversation.target.nick
       image: model.conversation.target.presenceIconName
     }
+
 
     Rectangle {
         anchors {

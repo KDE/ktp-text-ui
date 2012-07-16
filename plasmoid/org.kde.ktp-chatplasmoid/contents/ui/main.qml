@@ -22,6 +22,7 @@ import Qt 4.7
 import org.kde.telepathy.chat 0.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.qtextracomponents 0.1 as ExtraComponents
 
 ListView {
     id: base
@@ -31,26 +32,45 @@ ListView {
     orientation: width>height ? ListView.Horizontal : ListView.Vertical
 
     model: handler.conversations
+    currentIndex: -1
 
     TelepathyTextObserver {
         id: handler
     }
 
+    highlight: Item {
+        ExtraComponents.QIconItem {
+            anchors {
+                top: parent.top
+                right: parent.right
+                margins: 5
+            }
+            width: parent.width/3
+            height: parent.height/3
+            icon: "face-surprise"
+            visible: base.chatActive
+        }
+    }
+
     delegate : ConversationDelegate {
-        //FIXME: rename the two variables named 'conv' as it's confusing
-        property alias active: conv.checked
-        id: conv
+        id: convButton
         height: Math.min(base.width, base.height)
 
         image: model.conversation.target.avatar
         overlayText: model.conversation.messages.unreadCount
+        onClicked: {
+            if(base.currentIndex == index)
+                base.currentIndex = -1
+            else
+                base.currentIndex = index
+        }
 
         //FIXME: put in a loader to not slow down the model
         PlasmaCore.Dialog {
             id: dialog
             //Set as a Tool window to bypass the taskbar
             windowFlags: Qt.WindowStaysOnTopHint | Qt.Tool
-            visible: conv.checked
+            visible: base.currentIndex==index
 
             mainItem: ChatWidget {
                 width: 250
@@ -58,31 +78,27 @@ ListView {
                 conv: model.conversation
 
                 onCloseRequested: {
-                    conv.checked = false;
+                     base.currentIndex = -1
                 }
             }
-            
+
             onVisibleChanged: {
                 if(visible) {
-                    //hides the previously visible chat
-                    base.currentItem.active = false
-
-                    var point = dialog.popupPosition(conv, Qt.AlignBottom);
+                    var point = dialog.popupPosition(convButton, Qt.AlignBottom);
                     console.log("Showing dialog at (" + point.x + "," + point.y + ")");
 
                     dialog.x = point.x;
                     dialog.y = point.y;
                     dialog.activateWindow()
-                    base.currentIndex = index
                 }
-                conv.checked = visible
+
             }
         }
 
         Connections {
             target: model.conversation.messages
             onPopoutRequested: {
-                conv.checked = true;
+                base.currentIndex = -1
             }
         }
 
