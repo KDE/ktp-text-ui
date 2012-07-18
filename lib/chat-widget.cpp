@@ -862,13 +862,21 @@ void ChatWidget::onChannelInvalidated()
 void ChatWidget::onInputBoxChanged()
 {
     //if the box is empty
-    bool textBoxEmpty = !d->ui.sendMessageBox->toPlainText().isEmpty();
+    bool textBoxEmpty = d->ui.sendMessageBox->toPlainText().isEmpty();
 
-    //FIXME buffer what we've sent to telepathy, make this more efficient.
-    if(textBoxEmpty) {
+    //if the timer is active, it means the user is continuously typing
+    if (d->pausedStateTimer->isActive()) {
+        //just restart the timer and don't spam with chat state changes
+        d->pausedStateTimer->start(5000);
+        return;
+    }
+
+    if(!textBoxEmpty) {
+        //if the user has typed some text, set state to Composing and start the timer
         d->channel->requestChatState(Tp::ChannelChatStateComposing);
         d->pausedStateTimer->start(5000);
     } else {
+        //if the user typed no text/cleared the input field, set Active and stop the timer
         d->channel->requestChatState(Tp::ChannelChatStateActive);
         d->pausedStateTimer->stop();
     }
