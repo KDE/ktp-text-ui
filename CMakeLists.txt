@@ -46,3 +46,4 @@ add_subdirectory(plasmoid)
 
 add_subdirectory(filters)
 add_subdirectory(tests)
+
