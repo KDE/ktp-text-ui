@@ -39,4 +39,3 @@ void EscapeFilter::filterMessage(Message& message)
     message.setMainMessagePart(escapedMessage);
 }
 
-// #include "moc_escape-filter.cpp"
