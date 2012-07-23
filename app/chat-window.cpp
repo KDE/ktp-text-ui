@@ -606,7 +606,7 @@ void ChatWindow::setupCustomActions()
     spellDictComboAction->setIconText(i18n("Choose Spelling Language"));
 
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
-    KAction *openLogAction = new KAction(KIcon(QLatin1String("view-pim-journal")), i18nc("Action to open the log viwer with a specified contact","&Previous conversations"), this);
+    KAction *openLogAction = new KAction(KIcon(QLatin1String("view-pim-journal")), i18nc("Action to open the log viwer with a specified contact","&Previous Conversations"), this);
     connect(openLogAction, SIGNAL(triggered()), SLOT(onOpenLogTriggered()));
 #endif
 
