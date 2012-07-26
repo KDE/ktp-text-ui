@@ -33,7 +33,7 @@ class KDE_TELEPATHY_CHAT_EXPORT ConversationsModel : public QAbstractListModel, 
 {
 Q_OBJECT
 public:
-    explicit ConversationsModel();
+    explicit ConversationsModel(QObject *parent);
     virtual ~ConversationsModel();
 
     virtual QVariant data ( const QModelIndex& index, int role = Qt::DisplayRole ) const;

@@ -29,7 +29,7 @@
 
 TelepathyTextObserver::TelepathyTextObserver(QObject* parent) :
     QObject(parent),
-    m_handler(new ConversationsModel())
+    m_handler(new ConversationsModel(this))
 {
     kDebug();
     Tp::registerTypes();

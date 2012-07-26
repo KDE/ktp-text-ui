@@ -40,8 +40,8 @@ public:
     QList<Conversation*> conversations;
 };
 
-ConversationsModel::ConversationsModel() :
-        QAbstractListModel(),
+ConversationsModel::ConversationsModel(QObject *parent) :
+        QAbstractListModel(parent),
         Tp::AbstractClientHandler(channelClassList()),
         d(new ConversationsModelPrivate)
 {
