@@ -47,10 +47,14 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
 
         for (int i = start; i <= end; i++) {
             QModelIndex index = model()->index(i, 0, parent);
-            QString accountId = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>()->uniqueIdentifier();
-            QString contactId = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>()->identifier();
+            Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+            Tpl::EntityPtr contact = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
 
-            if (selectAccountId == accountId && selectContactId == contactId) {
+            if (account.isNull() || contact.isNull()) {
+                continue;
+            }
+
+            if (selectAccountId == account->uniqueIdentifier() && selectContactId == contact->identifier()) {
                 setCurrentIndex(index);
                 loadedCurrentContact = true;
             }
