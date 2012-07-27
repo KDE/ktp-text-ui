@@ -14,12 +14,29 @@
    <string>LogViewer</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item row="1" column="0">
+    <widget class="KLineEdit" name="globalSearch">
+     <property name="clickMessage">
+      <string>Search all logs...</string>
+     </property>
+     <property name="showClearButton" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="KPixmapSequenceWidget" name="busyAnimation">
+     <property name="visible">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="EntityView" name="entityList"/>
@@ -52,6 +69,16 @@
    <header>kfilterproxysearchline.h</header>
   </customwidget>
   <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KPixmapSequenceWidget</class>
+   <extends>QWidget</extends>
+   <header>kpixmapsequencewidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>MessageView</class>
    <extends>QWidget</extends>
    <header>message-view.h</header>
@@ -69,6 +96,10 @@
    <header>entity-view.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>entityList</tabstop>
+  <tabstop>globalSearch</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -57,6 +57,16 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
     initialise(headerInfo);
 }
 
+void MessageView::setHighlightText(const QString &text)
+{
+    m_highlightedText = text;
+}
+
+void MessageView::clearHighlightText()
+{
+    setHighlightText(QString());
+}
+
 void MessageView::onLoadFinished()
 {
     //load stuff here.
@@ -118,6 +128,10 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
 
         addStatusMessage(message);
     }
+
+    /* Can't highlight the text directly, we need to wait for the JavaScript in
+     * AdiumThemeView to include the log messages into DOM. */
+    QTimer::singleShot(100, this, SLOT(doHighlightText()));
 }
 
 void MessageView::onLinkClicked(const QUrl &link)
@@ -133,4 +147,10 @@ void MessageView::onLinkClicked(const QUrl &link)
     }
 
     AdiumThemeView::onLinkClicked(link);
+}
+
+void MessageView::doHighlightText()
+{
+    findText(QString());
+    findText(m_highlightedText, QWebPage::HighlightAllOccurrences | QWebPage::FindWrapsAroundDocument);
 }

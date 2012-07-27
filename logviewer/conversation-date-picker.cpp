@@ -23,8 +23,10 @@
 #include <TelepathyLoggerQt4/PendingDates>
 #include <TelepathyLoggerQt4/PendingOperation>
 #include <TelepathyLoggerQt4/Entity>
+#include <TelepathyLoggerQt4/SearchHit>
 
 #include <KDateTable>
+#include <TelepathyQt/Account>
 
 ConversationDatePicker::ConversationDatePicker(QWidget *parent) :
     KDatePicker(parent)
@@ -34,9 +36,18 @@ ConversationDatePicker::ConversationDatePicker(QWidget *parent) :
 void ConversationDatePicker::setEntity(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity)
 {
     clear();
-    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-    Tpl::PendingDates *pendingDates = logManager->queryDates(account, entity, Tpl::EventTypeMaskText);
-    connect(pendingDates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
+
+    m_account = account;
+    m_entity = entity;
+
+    if (!m_searchHits.isEmpty()) {
+        setDatesFromSearchHits();
+        updatePaintedDates();
+    } else {
+        Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
+        Tpl::PendingDates *pendingDates = logManager->queryDates(account, entity, Tpl::EventTypeMaskText);
+        connect(pendingDates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
+    }
 }
 
 void ConversationDatePicker::clear()
@@ -48,8 +59,23 @@ void ConversationDatePicker::clear()
     Q_FOREACH(const QDate &date, m_setDates) {
         dateTable()->unsetCustomDatePainting(date);
     }
-    m_setDates.clear();
 }
+
+void ConversationDatePicker::setSearchHits(const Tpl::SearchHitList &searchHits)
+{
+    m_searchHits = searchHits;
+
+    setDatesFromSearchHits();
+    updatePaintedDates();
+}
+
+
+void ConversationDatePicker::clearSearchHits()
+{
+    m_searchHits.clear();
+    updatePaintedDates();
+}
+
 
 QDate ConversationDatePicker::nextDate() const
 {
@@ -71,11 +97,40 @@ QDate ConversationDatePicker::previousDate() const
     return QDate();
 }
 
+const QList<QDate>& ConversationDatePicker::validDates() const
+{
+    return m_setDates;
+}
+
 void ConversationDatePicker::onDatesFinished(Tpl::PendingOperation *op)
 {
     Tpl::PendingDates *pendingDates = qobject_cast<Tpl::PendingDates*>(op);
-    Q_FOREACH(const QDate &date, pendingDates->dates()) {
+    m_setDates = pendingDates->dates();
+
+    updatePaintedDates();
+}
+
+void ConversationDatePicker::updatePaintedDates()
+{
+    clear();
+
+    Q_FOREACH(const QDate &date, m_setDates) {
         dateTable()->setCustomDatePainting(date, Qt::blue);
     }
-    m_setDates.append(pendingDates->dates());
+}
+
+void ConversationDatePicker::setDatesFromSearchHits()
+{
+    m_setDates.clear();
+
+    if (m_account.isNull() || m_entity.isNull()) {
+        return;
+    }
+
+    Q_FOREACH (const Tpl::SearchHit &searchHit, m_searchHits) {
+        if ((searchHit.account()->uniqueIdentifier() == m_account->uniqueIdentifier()) &&
+            (searchHit.target()->identifier() == m_entity->identifier())) {
+                m_setDates << searchHit.date();
+        }
+    }
 }

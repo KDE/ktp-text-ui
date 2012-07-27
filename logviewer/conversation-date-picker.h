@@ -23,6 +23,7 @@
 #include <KDatePicker>
 
 #include <TelepathyLoggerQt4/Entity>
+#include <TelepathyLoggerQt4/SearchHit>
 #include <TelepathyQt/Types>
 
 namespace Tpl{
@@ -38,17 +39,25 @@ public:
     void setEntity(const Tp::AccountPtr &accout, const Tpl::EntityPtr &entity);
     void clear();
 
+    void setSearchHits(const Tpl::SearchHitList &searchHits);
+    void clearSearchHits();
+
     QDate previousDate() const;
     QDate nextDate() const;
-
-Q_SIGNALS:
+    const QList<QDate>& validDates() const;
 
 private Q_SLOTS:
     void onDatesFinished(Tpl::PendingOperation*);
 
 private:
-    QList<QDate> m_setDates;
+    void updatePaintedDates();
+    void setDatesFromSearchHits();
 
+    Tp::AccountPtr m_account;
+    Tpl::EntityPtr m_entity;
+    Tpl::SearchHitList m_searchHits;
+
+    QList< QDate > m_setDates;
 };
 
 #endif // CONVERSATIONDATEPICKER_H

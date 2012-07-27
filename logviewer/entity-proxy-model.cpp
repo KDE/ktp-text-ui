@@ -22,6 +22,7 @@
 #include "entity-model.h"
 
 #include <TelepathyQt/Types>
+#include <TelepathyLoggerQt4/SearchHit>
 
 EntityProxyModel::EntityProxyModel(QObject *parent):
     QSortFilterProxyModel(parent)
@@ -40,22 +41,55 @@ bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
     }
 
     QModelIndex index = source_parent.child(source_row, 0);
-    QString term = filterRegExp().pattern();
-
-    Tp::ContactPtr contact = index.data(EntityModel::ContactRole).value< Tp::ContactPtr >();
+    Tp::AccountPtr account = source_parent.data(EntityModel::AccountRole).value< Tp::AccountPtr >();
     Tpl::EntityPtr entity = index.data(EntityModel::EntityRole).value< Tpl::EntityPtr >();
 
+    bool matches_filter = false;
+
+    if (!m_searchHits.isEmpty() && !account.isNull() && !entity.isNull()) {
+        Q_FOREACH(const Tpl::SearchHit &searchHit, m_searchHits) {
+            if ((searchHit.account()->uniqueIdentifier() == account->uniqueIdentifier()) &&
+                (searchHit.target()->identifier() == entity->identifier())) {
+                matches_filter = true;
+            }
+        }
+    } else {
+        matches_filter = true;
+    }
+
+    QString term = filterRegExp().pattern();
+    if (term.isEmpty()) {
+        return matches_filter;
+    }
+
+    Tp::ContactPtr contact = index.data(EntityModel::ContactRole).value< Tp::ContactPtr >();
+
     /* Check if contact's account name matches */
-    if (entity->alias().contains(term, Qt::CaseInsensitive)) {
+    if (entity->alias().contains(term, Qt::CaseInsensitive) && matches_filter) {
         return true;
     }
 
     /* If there's information about contact's real name try to match it too */
     if (!contact.isNull()) {
-        if (contact->alias().contains(term, Qt::CaseInsensitive)) {
+        if (contact->alias().contains(term, Qt::CaseInsensitive) && matches_filter) {
             return true;
         }
     }
 
     return false;
+}
+
+void EntityProxyModel::setSearchHits(const Tpl::SearchHitList &searchHits)
+{
+    m_searchHits = searchHits;
+
+    invalidate();
+}
+
+
+void EntityProxyModel::clearSearchHits()
+{
+    m_searchHits.clear();
+
+    invalidate();
 }

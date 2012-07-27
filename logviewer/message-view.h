@@ -37,12 +37,16 @@ public:
     void loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
                  const QDate &date, const QPair< QDate, QDate > &nearestDates);
 
+    void setHighlightText(const QString &text);
+    void clearHighlightText();
+
 public Q_SLOTS:
     void onLinkClicked(const QUrl &link);
 
 private Q_SLOTS:
    void onLoadFinished();
    void onEventsLoaded(Tpl::PendingOperation* po);
+   void doHighlightText();
 
 Q_SIGNALS:
     void conversationSwitchRequested(const QDate &date);
@@ -53,6 +57,8 @@ private:
     QDate m_date;
     QDate m_prev;
     QDate m_next;
+
+    QString m_highlightedText;
 
 };
 

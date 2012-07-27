@@ -28,12 +28,17 @@
 #include <TelepathyLoggerQt4/Init>
 #include <TelepathyLoggerQt4/Entity>
 #include <TelepathyLoggerQt4/LogManager>
+#include <TelepathyLoggerQt4/SearchHit>
+#include <TelepathyLoggerQt4/PendingSearch>
 
 #include <QSortFilterProxyModel>
 #include <QWebFrame>
+#include <KLineEdit>
+#include <KPixmapSequence>
 
 #include "entity-model.h"
 #include "entity-proxy-model.h"
+#include "entity-model-item.h"
 
 LogViewer::LogViewer(QWidget *parent) :
     QWidget(parent),
@@ -72,6 +77,7 @@ LogViewer::LogViewer(QWidget *parent) :
     ui->entityList->setItemsExpandable(true);
     ui->entityList->setRootIsDecorated(true);
     ui->entityFilter->setProxy(m_filterModel);
+    ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
 
     //TODO parse command line args and update all views as appropriate
 
@@ -79,6 +85,8 @@ LogViewer::LogViewer(QWidget *parent) :
     connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
     connect(ui->datePicker, SIGNAL(dateChanged(QDate)), SLOT(onDateSelected()));
     connect(ui->messageView, SIGNAL(conversationSwitchRequested(QDate)), SLOT(switchConversation(QDate)));
+    connect(ui->globalSearch, SIGNAL(returnPressed(QString)), SLOT(startGlobalSearch(QString)));
+    connect(ui->globalSearch, SIGNAL(clearButtonClicked()), SLOT(clearGlobalSearch()));
 }
 
 LogViewer::~LogViewer()
@@ -123,14 +131,65 @@ void LogViewer::updateMainView()
         return;
     }
 
-    QPair< QDate, QDate > nearestDates(ui->datePicker->previousDate(), ui->datePicker->nextDate());
+    QPair< QDate, QDate > nearestDates;
+
+    /* If the selected date is not within valid (highlighted) dates then display empty
+     * conversation (even if there is a chat log for that particular date) */
+    QDate date = ui->datePicker->date();
+    if (!ui->datePicker->validDates().contains(date)) {
+        date = QDate();
+    } else {
+        nearestDates.first = ui->datePicker->previousDate();
+        nearestDates.second = ui->datePicker->nextDate();
+    }
 
     Tpl::EntityPtr entity = currentIndex.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::AccountPtr account = currentIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-    ui->messageView->loadLog(account, entity, ui->datePicker->date(), nearestDates);
+    ui->messageView->loadLog(account, entity, date, nearestDates);
 }
 
 void LogViewer::switchConversation(const QDate &date)
 {
     ui->datePicker->setDate(date);
+}
+
+void LogViewer::startGlobalSearch(const QString &term)
+{
+    if (term.isEmpty()) {
+        ui->messageView->clearHighlightText();
+        m_filterModel->clearSearchHits();
+        ui->datePicker->clearSearchHits();
+        return;
+    }
+
+    ui->busyAnimation->setSequence(KPixmapSequence(QLatin1String("process-working"), KIconLoader::SizeSmallMedium));
+    ui->busyAnimation->setVisible(true);
+    ui->globalSearch->setDisabled(true);
+
+    ui->messageView->setHighlightText(term);
+
+    Tpl::LogManagerPtr manager = Tpl::LogManager::instance();
+    Tpl::PendingSearch *search = manager->search(term, Tpl::EventTypeMaskAny);
+    connect (search, SIGNAL(finished(Tpl::PendingOperation*)),
+             this, SLOT(globalSearchFinished(Tpl::PendingOperation*)));
+}
+
+void LogViewer::globalSearchFinished(Tpl::PendingOperation *operation)
+{
+    Tpl::PendingSearch *search = qobject_cast< Tpl::PendingSearch* >(operation);
+    Q_ASSERT(search);
+
+    m_filterModel->setSearchHits(search->hits());
+    ui->datePicker->setSearchHits(search->hits());
+
+    ui->globalSearch->setEnabled(true);
+    ui->busyAnimation->setSequence(KPixmapSequence());
+    ui->busyAnimation->setVisible(false);
+}
+
+void LogViewer::clearGlobalSearch()
+{
+    m_filterModel->clearSearchHits();
+    ui->datePicker->clearSearchHits();
+    ui->messageView->clearHighlightText();
 }

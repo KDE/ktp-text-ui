@@ -22,7 +22,9 @@
 #define ENTITY_PROXY_MODEL_H
 
 #include <QSortFilterProxyModel>
+#include <TelepathyLoggerQt4/Types>
 
+typedef QPair< Tp::AccountPtr, Tpl::EntityPtr > AccountEntityPair;
 
 class EntityProxyModel : public QSortFilterProxyModel
 {
@@ -32,8 +34,14 @@ public:
     explicit EntityProxyModel(QObject *parent = 0);
     virtual ~EntityProxyModel();
 
+    void setSearchHits(const Tpl::SearchHitList &searchHits);
+    void clearSearchHits();
+
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+
+private:
+    Tpl::SearchHitList m_searchHits;
 
 };
 
