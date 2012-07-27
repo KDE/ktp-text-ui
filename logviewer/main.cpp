@@ -28,9 +28,9 @@ int main(int argc, char *argv[])
                          0,
                          ki18n("KDE IM Log Viewer"),
                          "0.4.1");
-    aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "kde@kde@davidedmundson.co.uk");
+    aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "kde@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
-    aboutData.setProductName("telepathy/logger"); //set the correct name for bug reporting
+    aboutData.setProductName("telepathy/log-viewer"); //set the correct name for bug reporting
     aboutData.setLicense(KAboutData::License_GPL_V2);
 
     KCmdLineArgs::init(argc, argv, &aboutData);
