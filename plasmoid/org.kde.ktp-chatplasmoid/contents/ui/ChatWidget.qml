@@ -122,6 +122,8 @@ Item {
 
     ListView {
         id: view
+        property bool followConversation: true
+
         anchors {
             top: space.bottom
             left: parent.left
@@ -138,7 +140,6 @@ Item {
 
         delegate: Loader {
             Component.onCompleted: {
-                console.log(model.type);
                 switch(model.type) {
                     case MessagesModel.MessageTypeOutgoing:
 //                             console.log("Type: MessagesModel::MessageTypeOutgoing");
@@ -156,9 +157,10 @@ Item {
         }
 
         model: conv.messages
+        onMovementEnded: followConversation = atYEnd //we only follow the conversation if moved to the end
 
         onCountChanged: {
-            if((view.contentHeight-view.contentY)<(1.2*view.height)) {
+            if(!moving && followConversation && contentHeight>height) {
                 view.positionViewAtEnd()
             }
         }
