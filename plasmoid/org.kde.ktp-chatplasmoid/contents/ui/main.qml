@@ -48,7 +48,6 @@ ListView {
             width: parent.width/3
             height: parent.height/3
             icon: "face-surprise"
-            visible: base.chatActive
         }
     }
 
