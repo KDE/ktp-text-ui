@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=KTpTextUi/MessageFilter
 Comment=Telepathy Text-Ui Message Filter
+Comment[cs]=Filtr textových zpráv Telepathy
 Comment[da]=Beskedfilter til tekst-brugerflade til Telepathy
 Comment[el]=Telepathy Text-Ui φίλτρο μηνυμάτων
 Comment[et]=Telepathy teksti kasutajaliidese sõnumifilter
