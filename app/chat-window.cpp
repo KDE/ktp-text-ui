@@ -587,7 +587,7 @@ void ChatWindow::setupCustomActions()
     connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
 
     KAction *inviteToChat = new KAction(KIcon(QLatin1String("user-group-new")), i18n("&Invite to Chat"), this);
-    inviteToChat->setToolTip(i18nc("Toolbar icon tooltip", "Invite any other contacts to join this chat"));
+    inviteToChat->setToolTip(i18nc("Toolbar icon tooltip", "Invite another contact to join this chat"));
     connect(inviteToChat, SIGNAL(triggered()), this, SLOT(onInviteToChatTriggered()));
 
     KAction *videoCallAction = new KAction(KIcon(QLatin1String("camera-web")), i18n("&Video Call"), this);
