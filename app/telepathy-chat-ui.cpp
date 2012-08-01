@@ -153,8 +153,6 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
         textChannel->groupAddContacts(QList<Tp::ContactPtr>() << textChannel->groupSelfContact());
     }
 
-
-
     //if there is currently no tab containing the incoming channel.
     if (!tabFound) {
         ChatWindow* window = 0;
