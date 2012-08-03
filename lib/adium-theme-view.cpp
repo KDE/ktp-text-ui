@@ -78,7 +78,7 @@ void AdiumThemeView::load(ChatType chatType) {
     if (chatType == AdiumThemeView::SingleUserChat) {
         chatStyleName = appearanceConfig.readEntry("styleName", "renkoo.AdiumMessageStyle");
     } else {
-        chatStyleName = QLatin1String("simkete");
+        chatStyleName = QLatin1String("SimKete.AdiumMessageStyle");
     }
 
     m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
