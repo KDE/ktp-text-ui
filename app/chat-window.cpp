@@ -388,7 +388,7 @@ void ChatWindow::onInviteToChatTriggered()
 {
     ChatTab *currChat = qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
     InviteContactDialog *dialog = new InviteContactDialog(currChat->account(), currChat->textChannel(), this);
-    //FIXME delete on close
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 

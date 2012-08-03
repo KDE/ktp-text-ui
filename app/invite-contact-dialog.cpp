@@ -76,7 +76,6 @@ void InviteContactDialog::onOkClicked()
 {
     // don't do anytghing if no contact has been selected
     if (!m_contactGridWidget->hasSelection()) {
-        // show message box?
         return;
     }
 
