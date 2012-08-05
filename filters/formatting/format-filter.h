@@ -26,6 +26,7 @@ Q_OBJECT
 
 public:
     FormatFilter (QObject* parent, const QVariantList &);
+    virtual ~FormatFilter();
     virtual void filterMessage (Message& message);
 
 private:

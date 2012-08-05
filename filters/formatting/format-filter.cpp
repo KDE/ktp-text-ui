@@ -38,6 +38,11 @@ FormatFilter::FormatFilter (QObject* parent, const QVariantList&) :
     addTag("-", 's');
 }
 
+FormatFilter::~FormatFilter()
+{
+    delete d;
+}
+
 void FormatFilter::filterMessage (Message& message)
 {
     Q_FOREACH(FormatTag tag, d->tags) {
