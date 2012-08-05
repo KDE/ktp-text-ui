@@ -1,10 +1,13 @@
 /*
  *    Copyright (C) 2012  Lasath Fernando <kde@lasath.org>
  *
+<<<<<<< HEAD
  *    Copyright (c) 2004 by Duncan Mac-Vicar Prett   <duncan@kde.org>
  *    Copyright (c) 2004-2005 by Olivier Goffart  <ogoffart@kde. org>
  *    Kopete    (c) 2001-2004 by the Kopete developers  <kopete-devel@kde.org>
  *
+=======
+>>>>>>> Implement Latex plugin
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
  *    License as published by the Free Software Foundation; either

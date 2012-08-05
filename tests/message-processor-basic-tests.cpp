@@ -179,6 +179,11 @@ void MessageProcessorBasicTests::testUsingAColon()
 // }
 
 
+void MessageProcessorBasicTests::testBasicLatex()
+{
+    compare("$$herp$$", "$$herp$$");
+}
+
 QTEST_MAIN(MessageProcessorBasicTests);
 
 #include "moc_message-processor-basic-tests.cpp"

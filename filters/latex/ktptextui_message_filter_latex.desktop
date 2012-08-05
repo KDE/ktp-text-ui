@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Latex Renderer
 Comment=If incomming messages contain latex between $$, it will render it directly into the chat.
+Name=Latex
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 
