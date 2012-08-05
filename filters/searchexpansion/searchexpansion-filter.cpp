@@ -33,6 +33,11 @@ SearchexpansionFilter::SearchexpansionFilter(QObject *parent, const QVariantList
 {
 }
 
+SearchexpansionFilter::~SearchexpansionFilter()
+{
+    delete d;
+}
+
 void SearchexpansionFilter::filterMessage(Message &message)
 {
     KUriFilterData data(message.mainMessagePart());
