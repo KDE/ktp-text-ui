@@ -45,6 +45,11 @@ ImagesFilter::ImagesFilter (QObject* parent, const QVariantList&) :
     d->imageRegex = QRegExp(imagePattern);
 }
 
+ImagesFilter::~ImagesFilter()
+{
+    delete d;
+}
+
 void ImagesFilter::filterMessage (Message& message)
 {
     kDebug() << message.property("Urls").toList().size();

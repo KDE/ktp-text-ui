@@ -26,6 +26,7 @@ Q_OBJECT
 
 public:
     ImagesFilter (QObject* parent, const QVariantList &);
+    virtual ~ImagesFilter();
     virtual void filterMessage (Message& message);
 
 private:
