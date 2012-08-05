@@ -178,6 +178,7 @@ void MessageProcessorBasicTests::testUsingAColon()
 //     compare("  gg:kde\n", "http://www.google.com/search?q=kde&ie=UTF-8&oe=UTF-8");
 // }
 
+
 QTEST_MAIN(MessageProcessorBasicTests);
 
 #include "moc_message-processor-basic-tests.cpp"

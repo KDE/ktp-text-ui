@@ -51,6 +51,7 @@ private Q_SLOTS:
 //     void testSearchExpansion();
     void testUsingAColon();
 //     void testSearchExpansionWithPadding();
+    void testBasicLatex();
 };
 
 #endif // MESSAGE_PROCESSOR_BASIC_TESTS_H
