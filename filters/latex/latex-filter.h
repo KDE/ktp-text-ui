@@ -29,6 +29,7 @@ class LatexFilter : public AbstractMessageFilter
 
 public:
     LatexFilter(QObject *parent, const QVariantList &);
+    virtual ~LatexFilter();
     virtual void filterMessage(Message &message);
 
 private:

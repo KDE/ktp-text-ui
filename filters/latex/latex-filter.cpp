@@ -171,5 +171,10 @@ bool LatexFilter::securityCheck(const QString &latexFormula)
 
 }
 
+LatexFilter::~LatexFilter()
+{
+    delete d;
+}
+
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<LatexFilter>();)
 K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_latex"))
