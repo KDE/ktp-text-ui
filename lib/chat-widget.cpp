@@ -288,24 +288,14 @@ ChatSearchBar *ChatWidget::chatSearchBar() const
 void ChatWidget::setChatEnabled(bool enable)
 {
     d->ui.sendMessageBox->setEnabled(enable);
-
-    // show a message informing the user
-    AdiumThemeStatusInfo statusMessage;
-
-    if (!enable) {
-        statusMessage.setMessage(i18n("Connection closed"));
-    } else {
-        statusMessage.setMessage(i18nc("Connected to IM service", "Connected"));
-    }
-    statusMessage.setService(d->channel->connection()->protocolName());
-    statusMessage.setTime(QDateTime::currentDateTime());
-    d->ui.chatArea->addStatusMessage(statusMessage);
-
     Q_EMIT iconChanged(icon());
 }
 
 void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 {
+    if (!d->channel.isNull()) {
+        onChannelConnectionChanged(newTextChannelPtr->connection()->status());
+    }
     d->channel = newTextChannelPtr;     // set the new channel
     d->contactModel->setTextChannel(newTextChannelPtr);
 
@@ -508,6 +498,8 @@ void ChatWidget::setupChannelSignals()
             SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
     connect(d->channel.data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
             this, SLOT(onChannelInvalidated()));
+    connect(d->channel.data()->connection().data(), SIGNAL(statusChanged(Tp::ConnectionStatus)),
+            this, SLOT(onChannelConnectionChanged(Tp::ConnectionStatus)));
 
     if (d->channel->hasChatStateInterface()) {
         connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
@@ -727,11 +719,11 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
     if (message.sender() == d->channel->groupSelfContact()) {
         return;
     }
-    
+
     if (message.isDeliveryReport()) {
         return;
     }
-    
+
     // kde_telepathy_contact_highlight (contains your name)
     // kde_telepathy_info_event
 
@@ -1049,6 +1041,20 @@ bool ChatWidget::previousConversationAvailable()
 void ChatWidget::onChatPausedTimerExpired()
 {
         d->channel->requestChatState(Tp::ChannelChatStatePaused);
+}
+
+void ChatWidget::onChannelConnectionChanged(Tp::ConnectionStatus status)
+{
+    if (status == Tp::ConnectionStatusConnected) {
+        onContactPresenceChange(d->channel->groupSelfContact(), KTp::Presence(d->channel->groupSelfContact()->presence()));
+    } else if (status == Tp::ConnectionStatusDisconnected) {
+        // show a message informing the user
+        AdiumThemeStatusInfo statusMessage;
+        statusMessage.setMessage(i18n("You are now offline"));
+        statusMessage.setService(d->channel->connection()->protocolName());
+        statusMessage.setTime(QDateTime::currentDateTime());
+        d->ui.chatArea->addStatusMessage(statusMessage);
+    }
 }
 
 #include "chat-widget.moc"
