@@ -48,98 +48,77 @@ LatexFilter::LatexFilter(QObject *parent, const QVariantList &) :
 void LatexFilter::filterMessage(Message &message)
 {
     QString mMagick = KStandardDirs::findExe(QLatin1String("convert"));
-    if ( mMagick.isEmpty() )
-    {
-        // show just once
-//         if (  !mMagickNotFoundShown )
-//         {
-//             KMessageBox::queuedMessageBox(
-//                 Kopete::UI::Global::mainWidget(),
-//                 KMessageBox::Error, i18n("Cannot find the Magick 'convert' program.\nconvert is required to render the LaTeX formulae.\nPlease get the software from www.imagemagick.org or from your distribution's package manager.")
-//             );
-//             mMagickNotFoundShown = true;
-//         }
+    if(mMagick.isEmpty()) {
         // don't try to parse if convert is not installed
         kError() << "Cannot find the Magick 'convert' program.\nconvert is required to render the LaTeX formulae.\nPlease get the software from www.imagemagick.org or from your distribution's package manager.";
         return;
     }
     QString messageText = message.mainMessagePart();
-    if(!messageText.contains(QLatin1String("$$")))
+    if(!messageText.contains(QLatin1String("$$"))) {
         return;
+    }
 
-    //kDebug(14317) << " Using converter: " << d->convScript;
-
-    // /\[([^]]).*?\[/$1\]/
-    // \$\$.+?\$\$
-
-    // this searches for $$formula$$
     QRegExp rg(QLatin1String("\\$\\$.+\\$\\$"));
     rg.setMinimal(true);
-    // this searches for [latex]formula[/latex]
-    //QRegExp rg("\\[([^]\]).*?\\[/$1\\]");
-
-    int pos = 0;
 
     QMap<QString, QString> replaceMap;
-    while (pos >= 0 && pos < messageText.length())
-    {
-//      kDebug(14317) << " searching pos: " << pos;
+    int pos = 0;
+    while(pos >= 0 && pos < messageText.length()) {
         pos = rg.indexIn(messageText, pos);
 
-        if (pos >= 0 )
-        {
+        if(pos >= 0) {
             const QString match = rg.cap(0);
             pos += rg.matchedLength();
 
-            QString formul=match;
+            QString formul = match;
             // first remove the $$ delimiters on start and end
             formul.remove(QLatin1String("$$"));
             // then trim the result, so we can skip totally empty/whitespace-only formulas
             formul = formul.trimmed();
-            if (formul.isEmpty() || !securityCheck(formul))
+            if(formul.isEmpty() || !securityCheck(formul)) {
                 continue;
+            }
 
             const QString fileName = handleLatex(formul);
 
             // get the image and encode it with base64
-            #if ENCODED_IMAGE_MODE
-            QImage renderedImage( fileName );
-            imagePxWidth = renderedImage.width();
-            imagePxHeight = renderedImage.height();
-            if ( !renderedImage.isNull() )
-            {
-                QByteArray ba;
-                QBuffer buffer( ba );
-                buffer.open( QIODevice::WriteOnly );
-                renderedImage.save( &buffer, "PNG" );
-                QString imageURL = QString::fromLatin1("data:image/png;base64,%1").arg( KCodecs::base64Encode( ba ) );
-                replaceMap[match] = imageURL;
-            }
-            #else
             replaceMap[match] = fileName;
-            #endif
         }
     }
 
-    if(replaceMap.isEmpty()) //we haven't found any LaTeX strings
+    if(replaceMap.isEmpty()) {
+        //we haven't found any LaTeX strings
         return;
+    }
 
-    int imagePxWidth,imagePxHeight;
-    for (QMap<QString,QString>::ConstIterator it = replaceMap.constBegin(); it != replaceMap.constEnd(); ++it)
-    {
+    int imagePxWidth, imagePxHeight;
+    for(QMap<QString, QString>::ConstIterator it = replaceMap.constBegin(); it != replaceMap.constEnd(); ++it) {
         QImage theImage(*it);
-        if(theImage.isNull())
+        if(theImage.isNull()) {
             continue;
+        }
+
         imagePxWidth = theImage.width();
         imagePxHeight = theImage.height();
-        QString escapedLATEX=Qt::escape(it.key()).replace(QLatin1Char('\"'),QLatin1String("&quot;"));  //we need  the escape quotes because that string will be in a title="" argument, but not the \n
-        message.appendMessagePart(QLatin1String(" <img width=\"") % QString::number(imagePxWidth) % QLatin1String("\" height=\"") % QString::number(imagePxHeight) % QLatin1String("\" align=\"middle\" src=\"") % (*it) + QLatin1String("\"  alt=\"") % escapedLATEX +QLatin1String("\" title=\"") % escapedLATEX +QLatin1String("\"  /> "));
+        QString escapedLATEX = Qt::escape(it.key()).replace(QLatin1Char('\"'), QLatin1String("&quot;"));     //we need  the escape quotes because that string will be in a title="" argument, but not the \n
+        message.appendMessagePart(
+            QLatin1String(" <img width=\"") %
+            QString::number(imagePxWidth) %
+            QLatin1String("\" height=\"") %
+            QString::number(imagePxHeight) %
+            QLatin1String("\" align=\"middle\" src=\"") %
+            (*it) + QLatin1String("\"  alt=\"") %
+            escapedLATEX %
+            QLatin1String("\" title=\"") %
+            escapedLATEX %
+            QLatin1String("\"  /> ")
+        );
     }
 }
 
 QString LatexFilter::handleLatex(const QString &latexFormula)
 {
-    KTemporaryFile *tempFile=new KTemporaryFile();
+    KTemporaryFile *tempFile = new KTemporaryFile();
     tempFile->setPrefix(QLatin1String("kopetelatex-"));
     tempFile->setSuffix(QLatin1String(".png"));
     tempFile->open();
@@ -150,16 +129,12 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
 
     QString argumentRes = QString(QLatin1String("-r %1x%2")).arg(150).arg(150);
     QString argumentOut = QString(QLatin1String("-o %1")).arg(fileName);
-    QString argumentInclude (QLatin1String("-x %1"));
-    //QString argumentFormat = "-fgif";  //we uses gif format because MSN only handle gif
-//     LatexConfig::self()->readConfig();
-//     QString includePath = LatexConfig::latexIncludeFile();
-//     if (!includePath.isNull())
-//         p << d->convScript <<  argumentRes << argumentOut /*<< argumentFormat*/ << argumentInclude.arg(includePath) << latexFormula;
-//     else
+    QString argumentInclude(QLatin1String("-x %1"));
+
+
     p << d->convScript <<  argumentRes << argumentOut /*<< argumentFormat*/ << latexFormula;
 
-    kDebug(14317) << "Rendering" << d->convScript << argumentRes << argumentOut << argumentInclude << latexFormula ;
+    kDebug() << "Rendering" << d->convScript << argumentRes << argumentOut << argumentInclude << latexFormula ;
 
     // FIXME our sucky sync filter API limitations :-)
     p.execute();
@@ -168,10 +143,12 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
 
 bool LatexFilter::securityCheck(const QString &latexFormula)
 {
-    return !latexFormula.contains(QRegExp(QLatin1String("\\\\(def|let|futurelet|newcommand|renewcomment|else|fi|write|input|include"
-            "|chardef|catcode|makeatletter|noexpand|toksdef|every|errhelp|errorstopmode|scrollmode|nonstopmode|batchmode"
-            "|read|csname|newhelp|relax|afterground|afterassignment|expandafter|noexpand|special|command|loop|repeat|toks"
-            "|output|line|mathcode|name|item|section|mbox|DeclareRobustCommand)[^a-zA-Z]")));
+    return !latexFormula.contains(QRegExp(QLatin1String(
+        "\\\\(def|let|futurelet|newcommand|renewcomment|else|fi|write|input|include"
+        "|chardef|catcode|makeatletter|noexpand|toksdef|every|errhelp|errorstopmode|scrollmode|nonstopmode|batchmode"
+        "|read|csname|newhelp|relax|afterground|afterassignment|expandafter|noexpand|special|command|loop|repeat|toks"
+        "|output|line|mathcode|name|item|section|mbox|DeclareRobustCommand)[^a-zA-Z]"
+    )));
 
 }
 
