@@ -181,7 +181,7 @@ void MessageProcessorBasicTests::testUsingAColon()
 
 void MessageProcessorBasicTests::testBasicLatex()
 {
-    compare("$$herp$$", "$$herp$$");
+    compare("$$F{uv} = \\frac{1}{4}CuCv\\sum{x=0}^{7} \\sum{y=0}^{7} f{xy} \\ast \\cos\\left(\\frac{(2x+1)u\\pi}{16}\\right) \\cos\\left(\\frac{(2y+1)v\\pi}{16}\\right)$$", "this will fail regardless (for now)");
 }
 
 QTEST_MAIN(MessageProcessorBasicTests);

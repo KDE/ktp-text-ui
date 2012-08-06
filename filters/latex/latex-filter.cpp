@@ -42,7 +42,8 @@ public:
 LatexFilter::LatexFilter(QObject *parent, const QVariantList &) :
     AbstractMessageFilter(parent), d(new Private)
 {
-    d->convScript = KStandardDirs::findExe(QLatin1String("kopete_latexconvert.sh"));
+//     d->convScript = KStandardDirs::findExe();
+    d->convScript = KGlobal::dirs()->findResource("exe", QLatin1String("ktp_message_filter_latex_converter.sh"));
 }
 
 void LatexFilter::filterMessage(Message &message)

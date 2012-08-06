@@ -24,3 +24,6 @@ install (FILES ktptextui_message_filter_latex.desktop
          DESTINATION ${SERVICES_INSTALL_DIR}
 )
 
+install (PROGRAMS ktp_message_filter_latex_converter.sh
+         DESTINATION ${LIBEXEC_INSTALL_DIR}
+)
