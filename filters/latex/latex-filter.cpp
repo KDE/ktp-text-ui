@@ -173,6 +173,7 @@ bool LatexFilter::securityCheck(const QString &latexFormula)
 
 LatexFilter::~LatexFilter()
 {
+    qDeleteAll(d->tempFiles);
     delete d;
 }
 
