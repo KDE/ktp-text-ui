@@ -86,4 +86,3 @@ Terminal=false
 Icon=documentation
 Categories=Qt;KDE;Network;InstantMessaging;
 X-DBUS-StartupType=Unique
-X-KDE-ServiceTypes=DBUS/InstantMessenger
