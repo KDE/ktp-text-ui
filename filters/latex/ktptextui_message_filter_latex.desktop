@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Latex
+Name=Latex Renderer
+Comment=If incomming messages contain latex between $$, it will render it directly into the chat.
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 
@@ -11,4 +12,4 @@ X-KDE-PluginInfo-Name=latex
 X-KDE-PluginInfo-Version=0.4
 X-KDE-PluginInfo-Website=http://community.kde.org/Real-Time_Communication_and_Collaboration
 X-KDE-PluginInfo-License=GPL
-X-KDE-PluginInfo-EnabledByDefault=true
+X-KDE-PluginInfo-EnabledByDefault=false
