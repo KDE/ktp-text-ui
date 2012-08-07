@@ -1,5 +1,12 @@
 [Desktop Entry]
 Name=Embed Images
+Name[it]=Includi immagini
+Name[nl]=Afbeeldingen inbedden
+Name[pt]=Incorporar as Imagens
+Name[pt_BR]=Imagens incorporadas
+Name[sv]=Inbäddade bilder
+Name[uk]=Вбудовані зображення
+Name[x-test]=xxEmbed Imagesxx
 Encoding=UTF-8
 Comment=//TODO:.
 Comment[da]=//TODO:.
