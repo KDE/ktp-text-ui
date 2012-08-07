@@ -40,7 +40,7 @@ SearchexpansionFilter::~SearchexpansionFilter()
 
 void SearchexpansionFilter::filterMessage(Message &message)
 {
-    KUriFilterData data(message.mainMessagePart());
+    KUriFilterData data(message.mainMessagePart().trimmed());
     if(KUriFilter::self()->filterSearchUri(data, KUriFilter::WebShortcutFilter)) {
 
 //         kDebug() << "Succesfully filtered" << data.typedString() << "to" << data.uri();
