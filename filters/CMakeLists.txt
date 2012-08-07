@@ -1,4 +1,6 @@
-add_subdirectory (emoticons)
-add_subdirectory(formatting)
+add_subdirectory(emoticons)
+#Commented out until https://bugs.kde.org/show_bug.cgi?id=302534 AND https://bugs.kde.org/show_bug.cgi?id=302862
+# add_subdirectory(formatting)
 add_subdirectory(images)
-add_subdirectory(searchexpansion)
+#Commented out until https://bugs.kde.org/show_bug.cgi?id=304740
+# add_subdirectory(searchexpansion)
