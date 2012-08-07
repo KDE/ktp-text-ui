@@ -138,10 +138,10 @@ void LogViewer::updateMainView()
     QDate date = ui->datePicker->date();
     if (!ui->datePicker->validDates().contains(date)) {
         date = QDate();
-    } else {
-        nearestDates.first = ui->datePicker->previousDate();
-        nearestDates.second = ui->datePicker->nextDate();
     }
+
+    nearestDates.first = ui->datePicker->previousDate();
+    nearestDates.second = ui->datePicker->nextDate();
 
     Tpl::EntityPtr entity = currentIndex.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::AccountPtr account = currentIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();

@@ -79,19 +79,19 @@ void ConversationDatePicker::clearSearchHits()
 
 QDate ConversationDatePicker::nextDate() const
 {
-    int i = m_setDates.indexOf(date());
-    if ((i < m_setDates.count() - 1) && (i > -1)) {
-        return m_setDates.at(i + 1);
+    QList<QDate>::ConstIterator iter = qUpperBound(m_setDates, date());
+    if (iter != m_setDates.constEnd()) {
+        return *iter;
     }
 
-    return QDate();
+     return QDate();
 }
 
 QDate ConversationDatePicker::previousDate() const
 {
-    int i = m_setDates.indexOf(date());
-    if (i > 0) {
-        return m_setDates.at(i - 1);
+    QList<QDate>::ConstIterator iter = qLowerBound(m_setDates, date());
+    if (iter != m_setDates.constBegin()) {
+        return *(iter - 1);
     }
 
     return QDate();
@@ -107,6 +107,7 @@ void ConversationDatePicker::onDatesFinished(Tpl::PendingOperation *op)
     Tpl::PendingDates *pendingDates = qobject_cast<Tpl::PendingDates*>(op);
     m_setDates = pendingDates->dates();
 
+    qSort(m_setDates);
     updatePaintedDates();
 }
 
@@ -133,4 +134,6 @@ void ConversationDatePicker::setDatesFromSearchHits()
                 m_setDates << searchHit.date();
         }
     }
+
+    qSort(m_setDates);
 }
