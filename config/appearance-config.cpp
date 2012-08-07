@@ -39,10 +39,6 @@ AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList& args)
 {
     ui->setupUi(this);
 
-    ChatWindowStyleManager *manager = ChatWindowStyleManager::self();
-    manager->loadStyles();
-    connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
-
     m_demoChatHeader.setChatName(i18n("A demo chat"));
     m_demoChatHeader.setSourceName(i18n("Jabber"));
     m_demoChatHeader.setTimeOpened(QDateTime::currentDateTime());
@@ -50,13 +46,11 @@ AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList& args)
     m_demoChatHeader.setDestinationDisplayName(i18nc("Example name", "Ted"));
     m_demoChatHeader.setGroupChat(false);
 
-    ui->chatView->load(AdiumThemeView::SingleUserChat);
-    ui->chatView->initialise(m_demoChatHeader);
+    ChatWindowStyleManager *manager = ChatWindowStyleManager::self();
+    connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
-    ui->showHeader->setChecked(ui->chatView->isHeaderDisplayed());
-    ui->customFontBox->setChecked(ui->chatView->isCustomFont());
-    ui->fontFamily->setCurrentFont(QFont(ui->chatView->fontFamily()));
-    ui->fontSize->setValue(ui->chatView->fontSize());
+    //loading theme settings.
+    +    load();
 
     connect(ui->chatView, SIGNAL(loadFinished(bool)), SLOT(sendDemoMessages()));
     connect(ui->styleComboBox, SIGNAL(activated(int)), SLOT(onStyleSelected(int)));
@@ -270,6 +264,35 @@ void AppearanceConfig::sendDemoMessages()
     statusMessage.setStatus(QLatin1String("away"));
     ui->chatView->addStatusMessage(statusMessage);
 }
+
+void AppearanceConfig::defaults()
+{
+    ChatWindowStyleManager *manager = ChatWindowStyleManager::self();
+    manager->loadStyles();
+
+    onVariantSelected(QLatin1String("renkoo.AdiumMessageStyle"));
+    onStyleSelected(0);
+    ui->showHeader->setChecked(false);
+    ui->customFontBox->setChecked(false);
+    ui->chatView->setUseCustomFont(false);
+    ui->fontFamily->setCurrentFont(KGlobalSettings::generalFont());
+    ui->fontSize->setValue(QWebSettings::DefaultFontSize);
+}
+
+void AppearanceConfig::load()
+{
+    ChatWindowStyleManager *manager = ChatWindowStyleManager::self();
+    manager->loadStyles();
+
+    ui->chatView->load(AdiumThemeView::SingleUserChat);
+    ui->chatView->initialise(m_demoChatHeader);
+
+    ui->showHeader->setChecked(ui->chatView->isHeaderDisplayed());
+    ui->customFontBox->setChecked(ui->chatView->isCustomFont());
+    ui->fontFamily->setCurrentFont(QFont(ui->chatView->fontFamily()));
+    ui->fontSize->setValue(ui->chatView->fontSize());
+}
+
 
 void AppearanceConfig::save()
 {

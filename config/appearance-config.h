@@ -40,7 +40,9 @@ public:
     ~AppearanceConfig();
 
 public Q_SLOTS:
-    void save();
+    virtual void save();
+    virtual void load();
+    virtual void defaults();
 
 protected:
     void changeEvent(QEvent *e);
