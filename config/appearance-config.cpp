@@ -50,7 +50,7 @@ AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList& args)
     connect(manager, SIGNAL(loadStylesFinished()), SLOT(onStylesLoaded()));
 
     //loading theme settings.
-    +    load();
+    load();
 
     connect(ui->chatView, SIGNAL(loadFinished(bool)), SLOT(sendDemoMessages()));
     connect(ui->styleComboBox, SIGNAL(activated(int)), SLOT(onStyleSelected(int)));
