@@ -184,6 +184,11 @@ void MessageProcessorBasicTests::testBasicLatex()
     compare("$$F{uv} = \\frac{1}{4}CuCv\\sum{x=0}^{7} \\sum{y=0}^{7} f{xy} \\ast \\cos\\left(\\frac{(2x+1)u\\pi}{16}\\right) \\cos\\left(\\frac{(2y+1)v\\pi}{16}\\right)$$", "this will fail regardless (for now)");
 }
 
+void MessageProcessorBasicTests::testYoutubePreview()
+{
+    compare("http://www.youtube.com/watch?v=FiARsQSlzDc", "<a href='http://www.youtube.com/watch?v=FiARsQSlzDc'>http://www.youtube.com/watch?v=FiARsQSlzDc</a>\n<iframe class=\"youtube-player\" type=\"text/html\"style=\"max-width:100%;max-height:100%\"src=\"http://www.youtube.com/embed/FiARsQSlzDc\" frameborder=\"0\"></iframe>");
+}
+
 QTEST_MAIN(MessageProcessorBasicTests);
 
 #include "moc_message-processor-basic-tests.cpp"
