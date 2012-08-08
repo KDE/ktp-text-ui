@@ -15,3 +15,4 @@ if(HAS_KTTS)
 endif(HAS_KTTS)
 
 macro_log_feature(HAS_KTTS "KTTSD" "KDE Text to Speech Deamon" "" FALSE "" "Needed for optional tts message plugin")
+add_subdirectory(youtube)
