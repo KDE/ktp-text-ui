@@ -194,6 +194,11 @@ void MessageProcessorBasicTests::testDefaultReplacements()
     compare("Powered by HerpDerp(TM) technologies.", "Powered by HerpDerp™ technologies.");
 }
 
+void MessageProcessorBasicTests::testBugNoInText()
+{
+    compare("So, when are we fixing BUG:231920 ?", "So, when are we fixing https://bugs.kde.org/show_bug.cgi?id=231920 ?");
+}
+
 QTEST_MAIN(MessageProcessorBasicTests);
 
 #include "moc_message-processor-basic-tests.cpp"

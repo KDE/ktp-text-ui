@@ -54,6 +54,7 @@ private Q_SLOTS:
     void testBasicLatex();
     void testYoutubePreview();
     void testDefaultReplacements();
+    void testBugNoInText();
 };
 
 #endif // MESSAGE_PROCESSOR_BASIC_TESTS_H
