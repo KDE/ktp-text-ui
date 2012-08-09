@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Content
+Name=Plugins
 Name[it]=Contenuto
 Name[nl]=Inhoud
 Name[pt]=Conteúdo
@@ -17,6 +17,7 @@ Comment[pt_BR]=Como lidar com informações adicionais obtidas a partir de mensa
 Comment[sv]=Hur extra information som erhålls från meddelande ska hanteras
 Comment[uk]=Спосіб обробки додаткових даних, отриманих з повідомленнями
 Comment[x-test]=xxHow to deal with extra information obtained from messagesxx
+Icon=preferences-plugin
 
 X-KDE-Library=kcm_ktp_chat_messages
 X-KDE-ServiceTypes=KCModule

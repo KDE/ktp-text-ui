@@ -35,7 +35,7 @@ MessagesConfig::MessagesConfig(QWidget *parent, const QVariantList &args)
     pluginSelector()->addPlugins(
         PluginConfigManager::self()->allPlugins(),
         KPluginSelector::ReadConfigFile,
-        QString(),
+        i18n("Plugins"),
         QString(),
         PluginConfigManager::self()->sharedConfig() //why won't this take a KConfigGroup?
     );
