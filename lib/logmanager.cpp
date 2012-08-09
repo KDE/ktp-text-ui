@@ -20,6 +20,7 @@
 #include "logmanager.h"
 
 #include "adium-theme-content-info.h"
+#include "message-processor.h"
 
 #include <KDebug>
 
@@ -170,7 +171,7 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
 
 
     QList<AdiumThemeContentInfo> messages;
-    Q_FOREACH(const Tpl::TextEventPtr& event, events) {
+    Q_FOREACH(const Tpl::TextEventPtr &event, events) {
         AdiumThemeMessageInfo::MessageType type;
         QString iconPath;
         Tp::ContactPtr contact;
@@ -186,10 +187,8 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
         iconPath = contact->avatarData().fileName;
 
         AdiumThemeContentInfo message(type);
-        // "\" characters are replaced with "\\" to match with normal messages
-        // FIXME we should remove this when the history messages are filtered
-        //       through the message processor
-        message.setMessage(event->message().replace(QLatin1Char('\\'), QLatin1String("\\\\")));
+
+        message.setMessage(MessageProcessor::instance()->processIncomingMessage(event).finalizedMessage());
         message.setService(m_account->serviceName());
         message.setSenderDisplayName(event->sender()->alias());
         message.setSenderScreenName(event->sender()->alias());

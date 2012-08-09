@@ -58,23 +58,21 @@ MessageProcessor::~MessageProcessor()
 {
 }
 
-Message MessageProcessor::processIncomingMessage(const Tp::ReceivedMessage &receivedMessage)
+Message MessageProcessor::processIncomingMessage(Message receivedMessage)
 {
-    Message message(receivedMessage);
     Q_FOREACH(AbstractMessageFilter *filter, MessageProcessor::m_filters) {
         kDebug() << "running filter :" << filter->metaObject()->className();
-        filter->filterMessage(message);
+        filter->filterMessage(receivedMessage);
     }
-    return message;
+    return receivedMessage;
 }
 
-Message MessageProcessor::processOutgoingMessage(const Tp::Message &sentMessage)
+Message MessageProcessor::processOutgoingMessage(Message sentMessage)
 {
-    Message message(sentMessage);
     Q_FOREACH(AbstractMessageFilter *filter, MessageProcessor::m_filters) {
-        filter->filterMessage(message);
+        filter->filterMessage(sentMessage);
     }
-    return message;
+    return sentMessage;
 }
 
 void MessageProcessor::loadFilters() {

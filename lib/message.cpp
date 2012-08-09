@@ -20,6 +20,10 @@
 #include "message.h"
 #include <KDebug>
 
+#ifdef TELEPATHY_LOGGER_QT4_FOUND
+#include <TelepathyLoggerQt4/TextEvent>
+#endif
+
 Message::Message(const Tp::Message &original) :
       m_sentTime(original.sent()),
       m_token(original.messageToken()),
@@ -27,6 +31,16 @@ Message::Message(const Tp::Message &original) :
 {
     setMainMessagePart(original.text());
 }
+
+#ifdef TELEPATHY_LOGGER_QT4_FOUND
+Message::Message(const Tpl::TextEventPtr &original) :
+    m_sentTime(original->timestamp()),
+    m_token(original->messageToken()),
+    m_messageType(original->messageType())
+{
+    setMainMessagePart(original->message());
+}
+#endif
 
 QString Message::mainMessagePart() const
 {

@@ -24,7 +24,8 @@
 #include <QList>
 #include <KPluginInfo>
 
-#include <message.h>
+#include "message.h"
+
 #include <ktpchat_export.h>
 
 namespace Tp
@@ -45,13 +46,17 @@ public:
     ~MessageProcessor();
 
     //text-ui will call this somewhere in handleIncommingMessage just before displaying it
-    Message processIncomingMessage(const Tp::ReceivedMessage &message);
-    Message processOutgoingMessage(const Tp::Message &message);
+    Message processIncomingMessage(Message message);
+    Message processOutgoingMessage(Message message);
 
 protected:
     explicit MessageProcessor();
 
 private:
+
+
+
+
     void loadFilters();
     static MessageProcessor* s_instance;
     QList<AbstractMessageFilter*> m_filters;
