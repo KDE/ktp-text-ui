@@ -21,6 +21,7 @@
 
 #include "adium-theme-view.h"
 #include "adium-theme-status-info.h"
+#include "message-processor.h"
 
 #include <KDebug>
 
@@ -104,7 +105,7 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
 
 
         AdiumThemeContentInfo message(type);
-        message.setMessage(textEvent->message());
+        message.setMessage(MessageProcessor::instance()->processIncomingMessage(textEvent).finalizedMessage());
         message.setService(m_account->serviceName());
         message.setSenderDisplayName(textEvent->sender()->alias());
         message.setSenderScreenName(textEvent->sender()->identifier());
