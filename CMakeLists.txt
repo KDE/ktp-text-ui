@@ -33,6 +33,9 @@ macro_log_feature(TELEPATHY_LOGGER_QT4_FOUND "TelepathyLoggerQt4" "Qt4 wrapper a
 macro_display_feature_log()
 if(TELEPATHY_LOGGER_QT4_FOUND)
     add_definitions( -DTELEPATHY_LOGGER_QT4_FOUND )
+    include_directories(
+        ${TELEPATHY_LOGGER_QT4_INCLUDE_DIRS}
+    )
 endif()
 
 add_subdirectory(lib)
