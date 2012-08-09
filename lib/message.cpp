@@ -20,8 +20,10 @@
 #include "message.h"
 #include <KDebug>
 
-Message::Message(const Tp::Message &original)
-    : m_originalMessage(original)
+Message::Message(const Tp::Message &original) :
+      m_sentTime(original.sent()),
+      m_token(original.messageToken()),
+      m_messageType(original.messageType())
 {
     setMainMessagePart(original.text());
 }
@@ -62,15 +64,15 @@ void Message::setProperty(const char *name, const QVariant& value)
 
 QDateTime Message::time() const
 {
-    return m_originalMessage.sent();
+    return m_sentTime;
 }
 
 QString Message::token() const
 {
-    return m_originalMessage.messageToken();
+    return m_token;
 }
 
 Tp::ChannelTextMessageType Message::type() const
 {
-    return m_originalMessage.messageType();
+    return m_messageType;
 }

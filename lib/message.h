@@ -95,15 +95,17 @@ public:
     QVariant property(const char *name) const;
     void setProperty(const char *name, const QVariant &value);
 
-    /*! \return the timestamp from the internal Tp::Message */
+    /*! \return the time the message was sent*/
     QDateTime time() const;
-    /*! \return the unique token from the internal Tp::Message*/
+    /*! \return the unique token from the message*/
     QString   token() const;
-    /*! \return the type of the internal Tp::Message*/
+    /*! \return the type of the message*/
     Tp::ChannelTextMessageType type() const;
 
 private:
-    Tp::Message m_originalMessage;
+    QDateTime   m_sentTime;
+    QString     m_token;
+    Tp::ChannelTextMessageType m_messageType;
     QVariantMap m_properties;
     QString     m_mainPart;
     QStringList m_parts;
