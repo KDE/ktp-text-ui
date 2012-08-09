@@ -17,8 +17,7 @@
 */
 
 #include "messages-config.h"
-#include "message-processor.h"
-#include <plugin-config-manager.h>
+#include "plugin-config-manager.h"
 
 #include <QVBoxLayout>
 
