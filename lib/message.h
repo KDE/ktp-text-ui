@@ -64,7 +64,7 @@ public:
      * 
      * \param part the content to be added, in valid HTML
      */
-    void appendMessagePart(const QString& part);
+    void appendMessagePart(const QString &part);
 
     /*! \brief Construct the final procesesd content
      * \par
@@ -98,7 +98,7 @@ public:
     /*! \return the time the message was sent*/
     QDateTime time() const;
     /*! \return the unique token from the message*/
-    QString   token() const;
+    QString token() const;
     /*! \return the type of the message*/
     Tp::ChannelTextMessageType type() const;
 
