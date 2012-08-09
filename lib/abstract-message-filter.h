@@ -21,6 +21,7 @@
 
 #include "message.h"
 #include "ktpchat_export.h"
+#include <KConfigGroup>
 
 class KDE_TELEPATHY_CHAT_EXPORT AbstractMessageFilter : public QObject
 {
@@ -39,6 +40,9 @@ public:
 
     /** Filter messages in either direction. Base implementation calls this for messages sent/recived in either direction.*/
     virtual void filterMessage(Message &message);
+
+protected:
+    KConfigGroup config();
 };
 
 #endif // ABSTRACTPLUGIN_H

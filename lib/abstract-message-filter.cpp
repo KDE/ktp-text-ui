@@ -17,6 +17,7 @@
 */
 
 #include "abstract-message-filter.h"
+#include <KSharedConfig>
 
 AbstractMessageFilter::AbstractMessageFilter(QObject* parent)
     : QObject(parent)
@@ -39,4 +40,11 @@ void AbstractMessageFilter::filterOutgoingMessage(Message &message)
 
 void AbstractMessageFilter::filterMessage(Message &message)
 {
+}
+
+KConfigGroup AbstractMessageFilter::config()
+{
+    // is there a way to make sure the derived class is a Q_OBJECT,
+    // and therefore have a differenct objectName?
+    return KSharedConfig::openConfig(QLatin1String("ktelepathyrc"))->group("Filters").group(objectName());
 }
