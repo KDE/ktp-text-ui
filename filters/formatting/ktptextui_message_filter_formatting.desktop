@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Google Talk Style Formatting
-Comment=Use _, * and - to make text italic, bold or struckout respectively
+Comment=Use _, * and - to make text italic, bold or strikeout respectively
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 X-KDE-Library=ktptextui_message_filter_formatting
