@@ -53,6 +53,7 @@ private Q_SLOTS:
 //     void testSearchExpansionWithPadding();
     void testBasicLatex();
     void testYoutubePreview();
+    void testDefaultReplacements();
 };
 
 #endif // MESSAGE_PROCESSOR_BASIC_TESTS_H

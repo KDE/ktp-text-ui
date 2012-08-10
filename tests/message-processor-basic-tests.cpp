@@ -189,6 +189,11 @@ void MessageProcessorBasicTests::testYoutubePreview()
     compare("http://www.youtube.com/watch?v=FiARsQSlzDc", "<a href='http://www.youtube.com/watch?v=FiARsQSlzDc'>http://www.youtube.com/watch?v=FiARsQSlzDc</a>\n<iframe class=\"youtube-player\" type=\"text/html\"style=\"max-width:100%;max-height:100%\"src=\"http://www.youtube.com/embed/FiARsQSlzDc\" frameborder=\"0\"></iframe>");
 }
 
+void MessageProcessorBasicTests::testDefaultReplacements()
+{
+    compare("Powered by HerpDerp(TM) technologies.", "Powered by HerpDerp™ technologies.");
+}
+
 QTEST_MAIN(MessageProcessorBasicTests);
 
 #include "moc_message-processor-basic-tests.cpp"
