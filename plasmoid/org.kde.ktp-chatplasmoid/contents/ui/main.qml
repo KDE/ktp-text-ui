@@ -48,9 +48,6 @@ ListView {
     delegate : ConversationDelegate {
         id: convButton
         height: Math.min(base.width, base.height)
-
-        image: model.conversation.target.avatar
-        overlayText: model.conversation.messages.unreadCount
         onClicked: {
             if(base.currentIndex == index)
                 base.currentIndex = -1
