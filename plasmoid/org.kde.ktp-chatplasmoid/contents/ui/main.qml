@@ -44,19 +44,6 @@ ListView {
         id: windowHide
     }
 
-    highlight: Item {
-        ExtraComponents.QIconItem {
-            anchors {
-                top: parent.top
-                right: parent.right
-                margins: 5
-            }
-            width: parent.width/3
-            height: parent.height/3
-            icon: "face-surprise"
-        }
-    }
-
     delegate : ConversationDelegate {
         id: convButton
         height: Math.min(base.width, base.height)
