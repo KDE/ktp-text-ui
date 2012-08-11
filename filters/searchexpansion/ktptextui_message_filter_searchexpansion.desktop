@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Web Shortcuts
+Name[it]=Scorciatoie web
+Name[pt]=Atalhos Web
+Name[pt_BR]=Atalhos da Internet
+Name[uk]=Вебскорочення
+Name[x-test]=xxWeb Shortcutsxx
 Encoding=UTF-8
 Type=Service
 # Comment=
