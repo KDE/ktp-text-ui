@@ -30,8 +30,6 @@ public:
     virtual ~SubstitutionFilter();
     virtual void filterMessage(Message &message);
 
-    void reloadConfig();
-
 private:
     class Private;
     Private *d;

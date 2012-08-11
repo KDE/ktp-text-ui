@@ -26,13 +26,12 @@
 class SubstitutionFilter::Private
 {
 public:
-    QMap<QString, QString> wordList;
+    SubstitutionPrefs prefs;
 };
 
 SubstitutionFilter::SubstitutionFilter(QObject *parent, const QVariantList &) :
     AbstractMessageFilter(parent), d(new Private)
 {
-    reloadConfig();
 }
 
 SubstitutionFilter::~SubstitutionFilter()
@@ -40,23 +39,11 @@ SubstitutionFilter::~SubstitutionFilter()
     delete d;
 }
 
-void SubstitutionFilter::reloadConfig()
-{
-    if (!config().groupList().contains(QLatin1String("Replacements"))) {
-        KConfigGroup g = config().group("Replacements");
-        g.writeEntry("(TM)", "™");
-        g.writeEntry(" dnt ", "don't");
-        g.sync();
-    }
-
-    d->wordList = config().group("Replacements").entryMap();
-}
-
 void SubstitutionFilter::filterMessage(Message &message)
 {
     QString msg = message.mainMessagePart();
-    Q_FOREACH (const QString &src, d->wordList.keys()) {
-        msg.replace(src, d->wordList[src]);
+    Q_FOREACH (const QString &word, d->prefs.wordsToReplace()) {
+        msg.replace(word, d->prefs.replacementFor(src));
     }
     message.setMainMessagePart(msg);
 }
