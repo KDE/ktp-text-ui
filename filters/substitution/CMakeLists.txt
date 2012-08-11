@@ -1,4 +1,5 @@
 set (ktptextui_message_filter_substitution_SRCS
+     substitution-prefs.cpp
      substitution-filter.cpp
 )
 
