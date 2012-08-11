@@ -63,6 +63,7 @@ Item {
                 leftMargin: 5
             }
             text: conv.target.nick
+            elide: Text.ElideRight
         }
 
         PlasmaComponents.ToolButton {
