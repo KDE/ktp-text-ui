@@ -82,6 +82,19 @@ QStringList SubstitutionPrefs::wordsToReplace() const
     return d->wordList.keys();
 }
 
+QVariant SubstitutionPrefs::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole) {
+        switch (section) {
+            case WORD_COLUMN :
+                return QLatin1String("Word");
+            case REPLACEMENT_COLUMN :
+                return QLatin1String("Replacement");
+        }
+    }
+    return QVariant();
+}
+
 int SubstitutionPrefs::columnCount(const QModelIndex &parent) const
 {
     return 2;

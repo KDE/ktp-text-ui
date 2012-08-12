@@ -34,16 +34,17 @@ public:
     QString replacementFor(const QString &word) const;
     QStringList wordsToReplace() const;
 
-    void load();
-    void save();
-
     typedef QMap<QString, QString> List;
     List defaultList();
 
+    void load();
+    void save();
+    void defaults();
+
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void defaults();
 
 protected:
     enum Column {
