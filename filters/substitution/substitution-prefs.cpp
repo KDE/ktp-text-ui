@@ -20,6 +20,9 @@
 
 #include <KSharedConfig>
 #include <KGlobal>
+#include <KConfigGroup>
+#include <KDebug>
+#include <QBuffer>
 
 class SubstitutionPrefs::Private {
 public:
@@ -37,18 +40,35 @@ SubstitutionPrefs::~SubstitutionPrefs()
     delete d;
 }
 
+KConfigGroup SubstitutionPrefs::config()
+{
+    return KSharedConfig::openConfig(QLatin1String("ktelepathyrc"))->group("Replacements");
+}
+
 void SubstitutionPrefs::load()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    d->wordList = config->entryMap(QLatin1String("replacements"));
+    beginResetModel();
+    d->wordList = config().entryMap();
 
     if (d->wordList.isEmpty()) {
         d->wordList = defaultList();
     }
+    endResetModel();
+
+    kDebug() << "loaded" << d->wordList;
 }
 
 void SubstitutionPrefs::save()
 {
+    kDebug() << "writing" << d->wordList;
+
+    KConfigGroup cfg = config();
+    cfg.deleteGroup();
+
+    Q_FOREACH (const QString &word, d->wordList.keys()) {
+        cfg.writeEntry(word, d->wordList[word]);
+    }
+    cfg.sync();
 }
 
 void SubstitutionPrefs::defaults()

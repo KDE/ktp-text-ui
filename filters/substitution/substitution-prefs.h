@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <QAbstractItemModel>
 
+class KConfigGroup;
 class SubstitutionPrefs :
     public QAbstractTableModel
 {
@@ -36,6 +37,7 @@ public:
 
     typedef QMap<QString, QString> List;
     List defaultList();
+    KConfigGroup config();
 
     void load();
     void save();

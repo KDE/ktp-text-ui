@@ -54,12 +54,14 @@ void SubstitutionConfig::load()
 
 void SubstitutionConfig::save()
 {
+    kDebug();
     m_prefs->save();
 }
 
 void SubstitutionConfig::onAddWordPressed()
 {
     m_prefs->addReplacement(m_ui->sourceText->userText(), m_ui->resultText->userText());
+    changed();
 }
 
 void SubstitutionConfig::onRemoveWordPressed()
@@ -68,4 +70,5 @@ void SubstitutionConfig::onRemoveWordPressed()
     kDebug() << "removing" << word;
 
     m_prefs->removeWord(word);
+    changed();
 }
