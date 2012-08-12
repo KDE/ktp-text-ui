@@ -28,7 +28,9 @@ class BugzillaFilter : public AbstractMessageFilter
 public:
     BugzillaFilter(QObject *parent, const QVariantList &);
     virtual ~BugzillaFilter();
+
     virtual void filterMessage(Message &message);
+    void appendSection(Message &msg, const QString &host, const QString &bugId);
 
 private:
     class Private;

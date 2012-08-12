@@ -55,6 +55,7 @@ private Q_SLOTS:
     void testYoutubePreview();
     void testDefaultReplacements();
     void testBugNoInText();
+    void testLinkToBug();
 };
 
 #endif // MESSAGE_PROCESSOR_BASIC_TESTS_H

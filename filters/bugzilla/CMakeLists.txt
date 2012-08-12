@@ -1,8 +1,7 @@
+find_package(QJSON REQUIRED)
+
 set (ktptextui_message_filter_bugzilla_SRCS
      bugzilla-filter.cpp
-)
-
-kde4_add_ui_files (ktptextui_message_filter_bugzilla_SRCS
 )
 
 kde4_add_plugin (ktptextui_message_filter_bugzilla
@@ -12,9 +11,10 @@ kde4_add_plugin (ktptextui_message_filter_bugzilla
 target_link_libraries (ktptextui_message_filter_bugzilla
     ktpchat
     ${QT_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
-    ${TELEPATHY_QT4_LIBRARIES}
-    ${KDE4_KEMOTICONS_LIBS}
+    ${qjson_LIBRARIES}        # for Debian
+    ${QJSON_LIBRARY}          # for Mac OSX
+    ${QJSON_LIBRARIES}
+    ${KDE4_KIO_LIBS}
 )
 
 # Install:

@@ -196,7 +196,12 @@ void MessageProcessorBasicTests::testDefaultReplacements()
 
 void MessageProcessorBasicTests::testBugNoInText()
 {
-    compare("So, when are we fixing BUG:231920 ?", "So, when are we fixing https://bugs.kde.org/show_bug.cgi?id=231920 ?");
+    compare("So, when are we fixing BUG:231920 ?", "So, when are we fixing BUG:231920 ?\nhttps://bugs.kde.org/show_bug.cgi?id=231920");
+}
+
+void MessageProcessorBasicTests::testLinkToBug()
+{
+    compare("Have you looked at https://bugs.kde.org/show_bug.cgi?id=231920 ?", "");
 }
 
 QTEST_MAIN(MessageProcessorBasicTests);
