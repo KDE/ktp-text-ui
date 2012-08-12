@@ -97,6 +97,7 @@ QVariant SubstitutionPrefs::headerData(int section, Qt::Orientation orientation,
 
 int SubstitutionPrefs::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return 2;
 }
 
@@ -119,4 +120,19 @@ QVariant SubstitutionPrefs::data(const QModelIndex &index, int role) const
     }
 
     return QVariant();
+}
+
+void SubstitutionPrefs::addReplacement(const QString &word, const QString &replacement)
+{
+    //since it's a hashmap, I have no idea where it'll put it
+    beginResetModel();
+    d->wordList[word] = replacement;
+    endResetModel();
+}
+
+void SubstitutionPrefs::removeWord(const QString &word)
+{
+    beginResetModel();
+    d->wordList.remove(word);
+    endResetModel();
 }

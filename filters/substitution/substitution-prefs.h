@@ -46,6 +46,9 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
+    void addReplacement(const QString &word, const QString &replacement);
+    void removeWord(const QString &word);
+
 protected:
     enum Column {
         WORD_COLUMN = 0,

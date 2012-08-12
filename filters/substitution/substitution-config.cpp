@@ -20,6 +20,7 @@
 
 #include <KPluginFactory>
 #include <KGlobal>
+#include <KDebug>
 
 K_PLUGIN_FACTORY(SubstitutionConfigFactory, registerPlugin<SubstitutionConfig>();)
 K_EXPORT_PLUGIN(SubstitutionConfigFactory( "kcm_ktp_filter_substitution" ))
@@ -30,6 +31,9 @@ SubstitutionConfig::SubstitutionConfig(QWidget *parent, QVariantList args) :
 {
     m_ui->setupUi(this);
     m_ui->tableView->setModel(m_prefs);
+
+    connect(m_ui->addButton, SIGNAL(clicked(bool)), SLOT(onAddWordPressed()));
+    connect(m_ui->removeButton, SIGNAL(clicked(bool)), SLOT(onRemoveWordPressed()));
 }
 
 SubstitutionConfig::~SubstitutionConfig()
@@ -51,4 +55,17 @@ void SubstitutionConfig::load()
 void SubstitutionConfig::save()
 {
     m_prefs->save();
+}
+
+void SubstitutionConfig::onAddWordPressed()
+{
+    m_prefs->addReplacement(m_ui->sourceText->userText(), m_ui->resultText->userText());
+}
+
+void SubstitutionConfig::onRemoveWordPressed()
+{
+    QString word = qvariant_cast<QString>(m_ui->tableView->currentIndex().data());
+    kDebug() << "removing" << word;
+
+    m_prefs->removeWord(word);
 }

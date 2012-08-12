@@ -37,6 +37,10 @@ public Q_SLOTS:
     virtual void save();
     virtual void defaults();
 
+private Q_SLOTS:
+    void onAddWordPressed();
+    void onRemoveWordPressed();
+
 private:
     SubstitutionPrefs        *m_prefs;
     Ui::SubstitutionConfigUi *m_ui;
