@@ -31,8 +31,8 @@ public:
     SubstitutionPrefs();
     virtual ~SubstitutionPrefs();
 
-    QString replacementFor(const QString &word);
-    QStringList wordsToReplace();
+    QString replacementFor(const QString &word) const;
+    QStringList wordsToReplace() const;
 
     void load();
     void save();
@@ -44,6 +44,12 @@ public:
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     void defaults();
+
+protected:
+    enum Column {
+        WORD_COLUMN = 0,
+        REPLACEMENT_COLUMN
+    };
 
 private:
     class Private;

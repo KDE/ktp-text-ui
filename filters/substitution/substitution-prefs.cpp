@@ -53,7 +53,9 @@ void SubstitutionPrefs::save()
 
 void SubstitutionPrefs::defaults()
 {
-    d->wordList = defaultList();
+    beginResetModel();
+        d->wordList = defaultList();
+    endResetModel();
 }
 
 SubstitutionPrefs::List SubstitutionPrefs::defaultList()
@@ -70,12 +72,12 @@ SubstitutionPrefs::List SubstitutionPrefs::defaultList()
     return def;
 }
 
-QString SubstitutionPrefs::replacementFor(const QString &word)
+QString SubstitutionPrefs::replacementFor(const QString &word) const
 {
     return d->wordList[word];
 }
 
-QStringList SubstitutionPrefs::wordsToReplace()
+QStringList SubstitutionPrefs::wordsToReplace() const
 {
     return d->wordList.keys();
 }
@@ -92,5 +94,16 @@ int SubstitutionPrefs::rowCount(const QModelIndex &parent) const
 
 QVariant SubstitutionPrefs::data(const QModelIndex &index, int role) const
 {
-    return QVariant(QLatin1String("boo"));
+    if (role == Qt::DisplayRole) {
+        switch (index.column()) {
+            case WORD_COLUMN :
+                return wordsToReplace().at(index.row());
+            case REPLACEMENT_COLUMN :
+                return replacementFor(wordsToReplace().at(index.row()));
+            default:
+                Q_ASSERT(false);
+        }
+    }
+
+    return QVariant();
 }
