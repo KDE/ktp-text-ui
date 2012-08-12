@@ -18,8 +18,11 @@
 
 #ifndef SUBSTITUTION_CONFIG_H
 #define SUBSTITUTION_CONFIG_H
-#include <KCModule>
+
 #include "substitution-prefs.h"
+#include "ui_substitution-config.h"
+
+#include <KCModule>
 
 class SubstitutionConfig : public KCModule
 {
@@ -27,6 +30,7 @@ Q_OBJECT
 
 public:
     SubstitutionConfig(QWidget *parent, QVariantList args = QVariantList());
+    virtual ~SubstitutionConfig();
 
 public Q_SLOTS:
     virtual void load();
@@ -34,7 +38,8 @@ public Q_SLOTS:
     virtual void defaults();
 
 private:
-    SubstitutionPrefs m_prefs;
+    SubstitutionPrefs        *m_prefs;
+    Ui::SubstitutionConfigUi *m_ui;
 };
 
 #endif // SUBSTITUTION_CONFIG_H

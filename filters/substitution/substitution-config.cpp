@@ -25,23 +25,30 @@ K_PLUGIN_FACTORY(SubstitutionConfigFactory, registerPlugin<SubstitutionConfig>()
 K_EXPORT_PLUGIN(SubstitutionConfigFactory( "kcm_ktp_filter_substitution" ))
 
 SubstitutionConfig::SubstitutionConfig(QWidget *parent, QVariantList args) :
-    KCModule(SubstitutionConfigFactory::componentData(), parent, args)
+    KCModule(SubstitutionConfigFactory::componentData(), parent, args),
+    m_prefs(new SubstitutionPrefs()), m_ui(new Ui::SubstitutionConfigUi())
 {
-
+    m_ui->setupUi(this);
+    m_ui->tableView->setModel(m_prefs);
 }
 
+SubstitutionConfig::~SubstitutionConfig()
+{
+    delete m_prefs;
+    delete m_ui;
+}
 
 void SubstitutionConfig::defaults()
 {
-    m_prefs.defaults();
+    m_prefs->defaults();
 }
 
 void SubstitutionConfig::load()
 {
-    m_prefs.load();
+    m_prefs->load();
 }
 
 void SubstitutionConfig::save()
 {
-    m_prefs.save();
+    m_prefs->save();
 }
