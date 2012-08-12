@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Emoticons
+Name[da]=Emotikoner
 Name[hu]=Hangulatjelek
 Name[it]=Emoticon
 Name[nl]=Emoticons
@@ -14,7 +15,9 @@ Name[uk]=Емоційки
 Name[x-test]=xxEmoticonsxx
 Encoding=UTF-8
 Comment=Show emoticons (smiley faces) inside the chat
+Comment[da]=Vis emotikoner (smileys) indeni chatten
 Comment[it]=Mostra emoticon (faccine) nella chat
+Comment[nl]=Emoticons tonen (lachende gezichtjes) in de chat
 Comment[pt_BR]=Mostra emoticons (carinhas) no interior do bate-papo
 Comment[uk]=Показувати емоційки (смайлики) у вікні спілкування
 Comment[x-test]=xxShow emoticons (smiley faces) inside the chatxx

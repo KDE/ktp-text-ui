@@ -1,8 +1,15 @@
 [Desktop Entry]
 Name=Plugins
+Name[da]=Plugins
+Name[it]=Estensioni
+Name[pt]='Plugins'
+Name[pt_BR]=Plugins
+Name[uk]=Додатки
+Name[x-test]=xxPluginsxx
 Type=Service
 Exec=kcmshell4 kcm_ktp_message_filters
 Comment=How to deal with extra information obtained from messages
+Comment[da]=Hvordan ekstra information modtaget i beskeder skal håndteres
 Comment[hu]=Hogyan kezelje az üzenetekből kapott extra információkat
 Comment[it]=Come gestire le informazioni aggiuntive ricavate dai messaggi
 Comment[nl]=Hoe te handelen met extra informatie verkregen uit berichten

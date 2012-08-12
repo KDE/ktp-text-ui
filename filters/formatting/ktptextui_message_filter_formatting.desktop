@@ -1,11 +1,19 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Google Talk Style Formatting
+Name[da]=Google Talk-agtig formatering
 Name[it]=Formato stile Google Talk
+Name[nl]=Opmaak volgens de stijl van Google-Talk
 Name[pt_BR]=Formatação no estilo do Google-Talk
 Name[uk]=Форматування у стилі Google-Talk
 Name[x-test]=xxGoogle Talk Style Formattingxx
 Comment=Use _, * and - to make text italic, bold or strikeout respectively
+Comment[da]=Brug _, * og - til at lave hhv. kursiv, fed eller overstreget
+Comment[it]=Usa _, * e - per rendere il testo rispettivamente corsivo, grassetto o barrato
+Comment[nl]=Gebruik _, * and - om tekst respectievelijk cursief, vet of doorgestreept te maken
+Comment[pt_BR]=Use _, * e - para tornar o texto em itálico, negrito ou riscado, respectivamente
+Comment[uk]=Використовувати _, * і - для курсиву, напівжирного та перекресленого тексту, відповідно
+Comment[x-test]=xxUse _, * and - to make text italic, bold or strikeout respectivelyxx
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 X-KDE-Library=ktptextui_message_filter_formatting
