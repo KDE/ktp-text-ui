@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=KCModule
+
+X-KDE-Library=kcm_ktp_filter_config_substitution
+X-KDE-ParentApp=substitution
+X-KDE-ParentComponents=substitution
+
+Name=Substitution

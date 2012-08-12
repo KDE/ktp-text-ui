@@ -16,38 +16,25 @@
  *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 */
 
-#ifndef SUBSTITUTION_PREFS_H
-#define SUBSTITUTION_PREFS_H
+#ifndef SUBSTITUTION_CONFIG_H
+#define SUBSTITUTION_CONFIG_H
+#include <KCModule>
+#include "substitution-prefs.h"
 
-#include <QMap>
-#include <QStringList>
-#include <QAbstractItemModel>
-
-class SubstitutionPrefs :
-    public QAbstractTableModel
+class SubstitutionConfig : public KCModule
 {
+Q_OBJECT
 
 public:
-    SubstitutionPrefs();
-    virtual ~SubstitutionPrefs();
+    SubstitutionConfig(QWidget *parent, QVariantList args = QVariantList());
 
-    QString replacementFor(const QString &word);
-    QStringList wordsToReplace();
-
-    void load();
-    void save();
-
-    typedef QMap<QString, QString> List;
-    List defaultList();
-
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void defaults();
+public Q_SLOTS:
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
 
 private:
-    class Private;
-    Private *d;
+    SubstitutionPrefs m_prefs;
 };
 
-#endif // SUBSTITUTION_PREFS_H
+#endif // SUBSTITUTION_CONFIG_H

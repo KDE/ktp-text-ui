@@ -16,38 +16,32 @@
  *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 */
 
-#ifndef SUBSTITUTION_PREFS_H
-#define SUBSTITUTION_PREFS_H
+#include "substitution-config.h"
 
-#include <QMap>
-#include <QStringList>
-#include <QAbstractItemModel>
+#include <KPluginFactory>
+#include <KGlobal>
 
-class SubstitutionPrefs :
-    public QAbstractTableModel
+K_PLUGIN_FACTORY(SubstitutionConfigFactory, registerPlugin<SubstitutionConfig>();)
+K_EXPORT_PLUGIN(SubstitutionConfigFactory( "kcm_ktp_filter_substitution" ))
+
+SubstitutionConfig::SubstitutionConfig(QWidget *parent, QVariantList args) :
+    KCModule(SubstitutionConfigFactory::componentData(), parent, args)
 {
 
-public:
-    SubstitutionPrefs();
-    virtual ~SubstitutionPrefs();
+}
 
-    QString replacementFor(const QString &word);
-    QStringList wordsToReplace();
 
-    void load();
-    void save();
+void SubstitutionConfig::defaults()
+{
+    m_prefs.defaults();
+}
 
-    typedef QMap<QString, QString> List;
-    List defaultList();
+void SubstitutionConfig::load()
+{
+    m_prefs.load();
+}
 
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void defaults();
-
-private:
-    class Private;
-    Private *d;
-};
-
-#endif // SUBSTITUTION_PREFS_H
+void SubstitutionConfig::save()
+{
+    m_prefs.save();
+}
