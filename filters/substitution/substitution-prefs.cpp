@@ -104,7 +104,7 @@ QStringList SubstitutionPrefs::wordsToReplace() const
 
 QVariant SubstitutionPrefs::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role == Qt::DisplayRole) {
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         switch (section) {
             case WORD_COLUMN :
                 return QLatin1String("Word");
@@ -123,6 +123,7 @@ int SubstitutionPrefs::columnCount(const QModelIndex &parent) const
 
 int SubstitutionPrefs::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return d->wordList.size();
 }
 
@@ -153,6 +154,10 @@ void SubstitutionPrefs::addReplacement(const QString &word, const QString &repla
 void SubstitutionPrefs::removeWord(const QString &word)
 {
     beginResetModel();
-    d->wordList.remove(word);
+    if (d->wordList.contains(word)) {
+        d->wordList.remove(word);
+    } else {
+        d->wordList.remove(d->wordList.key(word));
+    }
     endResetModel();
 }

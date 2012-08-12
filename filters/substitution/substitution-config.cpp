@@ -45,6 +45,7 @@ SubstitutionConfig::~SubstitutionConfig()
 void SubstitutionConfig::defaults()
 {
     m_prefs->defaults();
+    changed();
 }
 
 void SubstitutionConfig::load()
