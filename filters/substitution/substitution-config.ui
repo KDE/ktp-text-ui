@@ -65,13 +65,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="editButton">
-       <property name="text">
-        <string>Edit</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
