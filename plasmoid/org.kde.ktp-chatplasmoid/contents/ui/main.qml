@@ -36,6 +36,7 @@ ListView {
     model: handler.conversations
     currentIndex: -1
     interactive: false
+    spacing: 2
 
     TelepathyTextObserver {
         id: handler

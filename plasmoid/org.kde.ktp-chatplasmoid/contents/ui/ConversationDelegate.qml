@@ -26,6 +26,9 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 PlasmaComponents.ToolButton {
     id: base
     width: height
+    
+    checked: ListView.isCurrentItem
+    
     ExtraComponents.QIconItem {
         id: icon
         icon: model.conversation.target.avatar
