@@ -55,7 +55,7 @@ void ImagesFilter::filterMessage (Message& message)
     kDebug() << message.property("Urls").toList().size();
     Q_FOREACH (const QVariant var, message.property("Urls").toList()) {
         KUrl url = qvariant_cast<KUrl>(var);
-        QString fileName = url.fileName();
+        QString fileName = url.fileName().toLower();
 
         if (!fileName.isNull() && fileName.contains(d->imageRegex)) {
             QString href = QString::fromAscii(url.toEncoded());
