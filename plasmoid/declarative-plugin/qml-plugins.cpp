@@ -26,6 +26,7 @@
 #include "telepathy-text-observer.h"
 #include "conversations-model.h"
 #include "conversation-target.h"
+#include "hidewindowcomponent.h"
 
 void QmlPlugins::registerTypes(const char *uri)
 {
@@ -33,6 +34,7 @@ void QmlPlugins::registerTypes(const char *uri)
     // can be given to ChatWidget.qml
     qmlRegisterType<TelepathyTextObserver> (uri, 0, 1, "TelepathyTextObserver");
     qmlRegisterType<Conversation>(uri, 0, 1, "Conversation");
+    qmlRegisterType<HideWindowComponent>(uri, 0, 1, "HideWindowComponent");
 
     //needed for MessageType enum
     qmlRegisterUncreatableType<MessagesModel>(uri, 0, 1, "MessagesModel",

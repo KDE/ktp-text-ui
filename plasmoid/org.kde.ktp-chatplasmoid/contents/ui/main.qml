@@ -38,6 +38,10 @@ ListView {
         id: handler
     }
 
+    HideWindowComponent {
+        id: windowHide
+    }
+
     highlight: Item {
         ExtraComponents.QIconItem {
             anchors {
@@ -67,8 +71,7 @@ ListView {
         //FIXME: put in a loader to not slow down the model
         PlasmaCore.Dialog {
             id: dialog
-            //Set as a Tool window to bypass the taskbar
-            windowFlags: Qt.WindowStaysOnTopHint | Qt.Tool
+            windowFlags: Qt.WindowStaysOnTopHint
             visible: base.currentIndex==index
 
             mainItem: ChatWidget {
@@ -83,6 +86,7 @@ ListView {
 
             onVisibleChanged: {
                 if(visible) {
+                    windowHide.hideWindowFromTaskbar(dialog.windowId)
                     var point = dialog.popupPosition(convButton, Qt.AlignBottom);
                     console.log("Showing dialog at (" + point.x + "," + point.y + ")");
 

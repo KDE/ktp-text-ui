@@ -8,6 +8,7 @@ set(ktpchatqmlplugin_SRCS
         conversation-target.cpp
         conversations-model.cpp
         conversation-que-manager.cpp
+        hidewindowcomponent.cpp
     )
 
 include_directories(
