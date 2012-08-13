@@ -29,7 +29,9 @@ ListView {
     anchors.fill: parent
     property alias minimumHeight: base.contentHeight
     property alias minimumWidth: base.contentWidth
-    orientation: width>height ? ListView.Horizontal : ListView.Vertical
+    orientation: (plasmoid.formFactor === Vertical ? ListView.Vertical
+                    : plasmoid.formFactor === Horizontal ? ListView.Horizontal
+                    : width>height ? ListView.Horizontal : ListView.Vertical)
 
     model: handler.conversations
     currentIndex: -1
