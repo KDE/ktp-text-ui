@@ -33,9 +33,10 @@ public:
 FormatFilter::FormatFilter (QObject* parent, const QVariantList&) :
     AbstractMessageFilter (parent), d(new Private())
 {
-    addTag("_", 'i');
+    addTag("_", 'u');
     addTag("\\*", 'b');
     addTag("-", 's');
+    addTag("/", 'i');
 }
 
 FormatFilter::~FormatFilter()
