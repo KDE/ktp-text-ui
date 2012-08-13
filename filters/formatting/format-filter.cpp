@@ -57,24 +57,16 @@ void FormatFilter::filterMessage (Message& message)
 
 void FormatFilter::addTag (const char *markingCharacter, char htmlTag)
 {
-    QString pattern = QLatin1String("%1(\\S.*\\S)%1");
+    QString pattern = QLatin1String("(^|\\s)%1(\\S|\\S.*\\S)%1(\\s|$)");
     pattern = pattern.arg(QLatin1String(markingCharacter));
 
-    QString repl = QLatin1String("<%1>\\1</%1>");
-    repl = repl.arg(htmlTag);
+    QString repl = QLatin1String("\\1<%1>%2\\2%2</%1>\\3");
+    repl = repl.arg(htmlTag).arg(QLatin1String(markingCharacter));
 
     QRegExp exp = QRegExp(pattern);
     exp.setMinimal(true);
 
     d->tags.append(FormatTag(exp, repl));
-
-    QString singleCharPattern = QLatin1String("%1(\\S)%1");
-    singleCharPattern = singleCharPattern.arg(QLatin1String(markingCharacter));
-
-    QRegExp singleCharExp = QRegExp(singleCharPattern);
-    singleCharExp.setMinimal(true);
-
-    d->tags.append(FormatTag(singleCharExp, repl));
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<FormatFilter>();)
