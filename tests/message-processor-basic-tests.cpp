@@ -107,40 +107,6 @@ void MessageProcessorBasicTests::compare(const char *input, const char *expected
     QCOMPARE(processed, href);
 }
 
-// void MessageProcessorBasicTests::testSingleCharBold()
-// {
-//     compare("*b*", "<b>b</b>");
-// }
-
-// void MessageProcessorBasicTests::testBold()
-// {
-//     compare("*this* shoudl *be in bold*", "<b>this</b> shoudl <b>be in bold</b>");
-// }
-
-// void MessageProcessorBasicTests::testBoldItalics()
-// {
-//     compare("_*this is bold italics*_", "<i><b>this is bold italics</b></i>");
-//     compare("_*this is bold italics_*", "<i><b>this is bold italics</i></b>");
-// }
-
-// void MessageProcessorBasicTests::testMultiWordItalics()
-// {
-//     compare("_all _ this _hsould_ be in italics_", "<i>all _ this _hsould</i> be in italics_");
-//     compare("_f f_ fd _f f_", "<i>f f</i> fd <i>f f</i>");
-//     compare("_f _f_", "<i>f _f</i>");
-//     compare("_dsd _ _ ss_", "<i>dsd _ _ ss</i>");
-// }
-
-// void MessageProcessorBasicTests::testSingleWordItalics()
-// {
-//     compare("_b_", "<i>b</i>");
-// }
-
-// void MessageProcessorBasicTests::testStrikethrough()
-// {
-//     compare("-strike through-", "<s>strike through</s>");
-// }
-
 void MessageProcessorBasicTests::testImageEmbedGIF()
 {
     const char* message = "http://kde.org/images/teaser/jointhegame.gif";
@@ -177,6 +143,48 @@ void MessageProcessorBasicTests::testUsingAColon()
 // {
 //     compare("  gg:kde\n", "http://www.google.com/search?q=kde&ie=UTF-8&oe=UTF-8");
 // }
+
+void MessageProcessorBasicTests::testBold()
+{
+    compare("*b*", "<b>\\*b\\*</b>");
+    compare("*bold*", "<b>\\*bold\\*</b>");
+    compare("*this* should *be in bold*", "<b>\\*this\\*</b> should <b>\\*be in bold\\*</b>");
+}
+
+void MessageProcessorBasicTests::testItalics()
+{
+    compare("/i/", "<i>/i/</i>");
+    compare(" /this/ should /be in italics/", "<i>/this/</i> should <i>/be in italics/</i>");
+    compare("/all / this /should/ be in italics/", "<i>/all / this /should/</i> be in italics/");
+    compare("/f f/ fd /f f/", "<i>/f f/</i> fd <i>/f f/</i>");
+    compare("/f /f/", "<i>/f /f/</i>");
+    compare("/dsd / / ss/", "<i>/dsd / / ss/</i>");
+}
+
+void MessageProcessorBasicTests::testStrikethrough()
+{
+    compare("-s-", "<s>-s-</s>");
+    compare("-strike through-", "<s>-strike through-</s>");
+}
+
+void MessageProcessorBasicTests::testUnderline()
+{
+    compare("_u_", "<u>_u_</u>");
+    compare("_underlined_", "<u>_underlined_</u>");
+    compare("_this_ should _be underlined_", "<u>_this_</u> should <u>_be underlined_</u>");
+}
+
+void MessageProcessorBasicTests::testBoldItalics()
+{
+    compare("/*this is italics bold*/", "<i>/<b>\\*this is italics bold\\*</b>/</i>");
+    compare("*/this is bold italics/*", "<b>\\*<i>/this is bold italics/</i>\\*</b>");
+
+    compare("/*this is just wrong/*", "/*this is just wrong/*");
+
+    compare("this is /*italics bold*/ , this is */bold italics/*", "this is <i>/<b>\\*italics bold\\*</b>/</i> , this is <b>\\*<i>/bold italics/</i>\\*</b>");
+//    compare("this is /*italics bold*/, this is */bold italics/*", "this is <i>/<b>\\*italics bold\\*</b>/</i>, this is <b>\\*<i>/bold italics/</i>\\*</b>");
+}
+
 
 QTEST_MAIN(MessageProcessorBasicTests);
 
