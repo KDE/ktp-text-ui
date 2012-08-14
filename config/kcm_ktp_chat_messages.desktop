@@ -2,10 +2,12 @@
 Name=Plugins
 Name[cs]=Moduly
 Name[da]=Plugins
+Name[fi]=Liitännäiset
 Name[it]=Estensioni
 Name[nl]=Plug-ins
 Name[pt]='Plugins'
 Name[pt_BR]=Plugins
+Name[sv]=Insticksprogram
 Name[uk]=Додатки
 Name[x-test]=xxPluginsxx
 Type=Service
