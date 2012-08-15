@@ -34,7 +34,7 @@ public:
 //BODGE class to allow delegating channels before I merge into TpQt properly
 class ChannelDelegator {
 public:
-    static void delegateChannel(const Tp::AccountPtr account, const Tp::ChannelPtr channel, QDateTime userActionTime = QDateTime::currentDateTime()) {
+    static void delegateChannel(const Tp::AccountPtr &account, const Tp::ChannelPtr &channel, const QDateTime &userActionTime = QDateTime::currentDateTime()) {
         static_cast<AccountProxy*>(account.data())->dispatcherInterface()->DelegateChannels(Tp::ObjectPathList() << QDBusObjectPath(channel->objectPath()), userActionTime.toTime_t(), QLatin1String("org.freedesktop.Telepathy.Client.KTp.TextUi"));
     }
 };
