@@ -287,6 +287,7 @@ ChatSearchBar *ChatWidget::chatSearchBar() const
 
 void ChatWidget::setChatEnabled(bool enable)
 {
+    d->ui.contactsView->setEnabled(enable);
     d->ui.sendMessageBox->setEnabled(enable);
     Q_EMIT iconChanged(icon());
 }
