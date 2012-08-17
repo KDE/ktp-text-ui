@@ -33,6 +33,13 @@ Message::Message(const Tp::Message &original) :
       m_messageType(original.messageType())
 {
     setMainMessagePart(original.text());
+    setProperty("direction", Outgoing);
+}
+
+Message::Message(const Tp::ReceivedMessage &original)
+{
+    Message((Tp::Message) original);
+    setProperty("direction", Incoming);
 }
 
 Message::Message(const Tp::ReceivedMessage &original)
@@ -111,4 +118,9 @@ const QString Message::senderNickname()
         m_properties[QLatin1String("sender")] = QString();
     }
     return property("sender").toString();
+}
+
+Message::MessageDirection Message::direction()
+{
+    return qvariant_cast<MessageDirection>(property("direction"));
 }

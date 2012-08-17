@@ -45,6 +45,8 @@
  */
 class KDE_TELEPATHY_CHAT_EXPORT Message {
 
+Q_ENUMS (MessageDirection)
+
 public:
     Message(const Tp::Message &original);
     Message(const Tp::ReceivedMessage &original);
@@ -115,6 +117,17 @@ public:
     /* \return the number of appended parts */
     int partsSize() const;
 
+    enum MessageDirection {
+        Unknown  = 0x0, //this is horrible
+
+        Incoming = 0x1,
+        Outgoing = 0x2,
+        Notice
+    };
+
+
+    MessageDirection direction();
+
 private:
     QDateTime   m_sentTime;
     QString     m_token;
@@ -124,5 +137,6 @@ private:
     QStringList m_parts;
 };
 
+Q_DECLARE_METATYPE(Message::MessageDirection)
 
 #endif // MESSAGE_H
