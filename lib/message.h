@@ -46,7 +46,8 @@
 class KDE_TELEPATHY_CHAT_EXPORT Message {
 
 public:
-    Message(const Tp::Message& original);
+    Message(const Tp::Message &original);
+    Message(const Tp::ReceivedMessage &original);
 
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
     Message(const Tpl::TextEventPtr &original);
@@ -109,6 +110,7 @@ public:
     QString token() const;
     /*! \return the type of the message*/
     Tp::ChannelTextMessageType type() const;
+    const QString senderNickname();
 
     /* \return the number of appended parts */
     int partsSize() const;

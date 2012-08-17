@@ -18,7 +18,10 @@
 
 
 #include "message.h"
+
 #include <KDebug>
+
+#include <TelepathyQt/Contact>
 
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
 #include <TelepathyLoggerQt4/TextEvent>
@@ -30,6 +33,12 @@ Message::Message(const Tp::Message &original) :
       m_messageType(original.messageType())
 {
     setMainMessagePart(original.text());
+}
+
+Message::Message(const Tp::ReceivedMessage &original)
+{
+    Message((Tp::Message) original);
+    setProperty("sender", original.senderNickname());
 }
 
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
@@ -94,4 +103,12 @@ Tp::ChannelTextMessageType Message::type() const
 int Message::partsSize() const
 {
     return m_parts.size();
+}
+
+const QString Message::senderNickname()
+{
+    if (!m_properties.contains(QLatin1String("sender"))) {
+        m_properties[QLatin1String("sender")] = QString();
+    }
+    return property("sender").toString();
 }
