@@ -59,6 +59,7 @@ public:
     void save();
 
     PipeList pipeList() const;
+    void reset();
 
     friend class PipesPrefsTest;
 

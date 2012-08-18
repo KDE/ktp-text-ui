@@ -43,3 +43,21 @@ target_link_libraries(ktptextui_message_filter_pipes_tests
     ${QT_QTTEST_LIBRARY}
     ${TELEPATHY_QT4_LIBRARIES}
 )
+
+set (ktptextui_message_filter_pipes_config_SRCS
+    pipes-config.cpp
+    pipes-prefs.cpp
+)
+
+kde4_add_ui_files(${ktptextui_message_filter_pipes_config_SRCS}
+    pipes-config.ui
+)
+
+kde4_add_plugin (ktptextui_message_filter_pipes_config
+    ${ktptextui_message_filter_pipes_config_SRCS}
+)
+
+target_link_libraries (ktptextui_message_filter_pipes_config
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+)
