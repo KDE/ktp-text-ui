@@ -21,6 +21,9 @@
 #include <message.h>
 #include <KConfigGroup>
 
+#include <QVariant>
+
+class PipesPrefsTest;
 class PipesPrefs
 {
 public:
@@ -36,6 +39,13 @@ public:
 
     class Pipe {
     public:
+        Pipe() {}
+        Pipe(const QString &executable, PipeDirection direction, MessageFormat format = FormatPlainText) : executable(executable), direction(direction), format(format) {}
+
+        bool operator==(const Pipe &other) {
+            return other.executable == executable && other.direction == direction && other.format == format;
+        }
+
         QString executable;
         PipeDirection direction;
         MessageFormat format;
@@ -50,11 +60,16 @@ public:
 
     PipeList pipeList() const;
 
+    friend class PipesPrefsTest;
+
 protected:
     KConfigGroup config() const;
 
 private:
     PipeList m_pipeList;
 };
+
+// Q_DECLARE_METATYPE(PipesPrefs::Pipe);
+// Q_DECLARE_METATYPE(PipesPrefs::PipeList);
 
 #endif // PIPES_PREFS_H
