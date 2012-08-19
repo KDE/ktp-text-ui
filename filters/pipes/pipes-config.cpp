@@ -51,6 +51,7 @@ PipesConfig::PipesConfig(QWidget *parent, const QVariantList &args):
         );
     }
     m_ui.tableView->setModel(&m_model);
+    QObject::connect(&m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(changed()));
 }
 
 void PipesConfig::defaults()

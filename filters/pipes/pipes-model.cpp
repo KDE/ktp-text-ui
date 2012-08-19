@@ -35,7 +35,7 @@ QVariant PipesModel::headerData(int section, Qt::Orientation orientation, int ro
 
 QVariant PipesModel::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole && index.isValid()) {
         PipesPrefs::Pipe pipe = m_pipes.at(index.row());
         switch (index.column()) {
             case DirectionColumn :
@@ -67,7 +67,10 @@ bool PipesModel::setData(const QModelIndex &index, const QVariant &value, int ro
         default:
             return false; //shouldn't really happen
     }
+
     m_pipes[index.row()] = pipe;
+    Q_EMIT dataChanged(index, index);
+
     return true;
 }
 
@@ -80,7 +83,7 @@ int PipesModel::columnCount(const QModelIndex &parent) const
 int PipesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED (parent);
-    return m_prefs.pipeList().size();
+    return m_pipes.size();
 }
 
 Qt::ItemFlags PipesModel::flags(const QModelIndex &index) const
@@ -106,6 +109,9 @@ void PipesModel::revert()
 
 bool PipesModel::submit()
 {
+    Q_FOREACH (PipesPrefs::Pipe pipe, m_pipes) {
+        kDebug() << "Pipe(" << pipe.executable << ", " << pipe.direction << ", " << pipe.format << ")";
+    }
     m_prefs.setPipeList(m_pipes);
     m_prefs.save();
     return true;

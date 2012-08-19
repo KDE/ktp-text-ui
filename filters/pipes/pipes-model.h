@@ -25,7 +25,7 @@
 
 class PipesModel : public QAbstractTableModel
 {
-
+Q_OBJECT
 public:
     enum ColoumnRoles {
         ExecutableColumn,

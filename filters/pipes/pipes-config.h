@@ -27,6 +27,7 @@
 
 class PipesConfig : public KCModule
 {
+Q_OBJECT
 public:
     explicit PipesConfig(QWidget *parent, const QVariantList &args);
 
