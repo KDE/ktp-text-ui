@@ -44,17 +44,33 @@ PipesFilter::~PipesFilter()
 void PipesFilter::filterMessage(Message &message)
 {
     Q_FOREACH (PipesPrefs::Pipe pipe, d->prefs.pipeList()) {
+        kDebug() << "processing " << pipe << "for direction" << message.direction() ;
         if (pipe.direction & message.direction()) {
             Q_ASSERT (pipe.format == PipesPrefs::FormatPlainText);
 
-            KProcess process;
-            process.setShellCommand(pipe.executable);
+            QProcess process;
 
-            kDebug() << "running program" << pipe.executable;
-            int ret = process.execute();
-            if (ret) {
-                kError() << "'" << pipe.executable << "'" << "failed to run";
+            kDebug() << "running program : " << pipe.executable;
+            process.start(pipe.executable);
+
+            if (!process.waitForStarted()) {
+                kError() << "Could not start " << pipe.executable << ":" << process.error();
+                continue;
             }
+            if (process.write(message.mainMessagePart().toLatin1()) == -1) {
+                kError() << "Could not write " << message.mainMessagePart() << ":" << process.errorString();
+                continue;
+            }
+            process.closeWriteChannel();
+            process.waitForFinished();
+            if (process.exitCode()) {
+                kError() << pipe.executable << "exited with error code" << process.exitCode();
+                continue;
+            }
+            QByteArray buf = process.readAllStandardOutput();
+//             if (buf.length() > 0) {
+                message.setMainMessagePart(QLatin1String(buf));
+//             }
         }
     }
 }

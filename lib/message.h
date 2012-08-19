@@ -132,6 +132,7 @@ private:
     QDateTime   m_sentTime;
     QString     m_token;
     Tp::ChannelTextMessageType m_messageType;
+    MessageDirection m_direction;
     QVariantMap m_properties;
     QString     m_mainPart;
     QStringList m_parts;

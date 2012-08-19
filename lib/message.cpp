@@ -30,16 +30,16 @@
 Message::Message(const Tp::Message &original) :
       m_sentTime(original.sent()),
       m_token(original.messageToken()),
-      m_messageType(original.messageType())
+      m_messageType(original.messageType()),
+      m_direction(Outgoing)
 {
     setMainMessagePart(original.text());
-    setProperty("direction", Outgoing);
 }
 
 Message::Message(const Tp::ReceivedMessage &original)
 {
     Message((Tp::Message) original);
-    setProperty("direction", Incoming);
+    m_direction = Incoming;
 }
 
 Message::Message(const Tp::ReceivedMessage &original)
@@ -78,7 +78,7 @@ QString Message::finalizedMessage() const
     QString msg = m_mainPart + QLatin1String("\n") +
         m_parts.join(QLatin1String("\n"));
 
-//     kDebug() << msg;
+    kDebug() << msg;
     return msg;
 }
 
@@ -122,5 +122,5 @@ const QString Message::senderNickname()
 
 Message::MessageDirection Message::direction()
 {
-    return qvariant_cast<MessageDirection>(property("direction"));
+    return m_direction;
 }
