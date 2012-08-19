@@ -17,6 +17,7 @@ target_link_libraries (ktptextui_message_filter_pipes
 )
 
 set (kcm_ktp_filter_config_pipes_SRCS
+    pipes-delegate.cpp
     pipes-model.cpp
     pipes-config.cpp
     pipes-prefs.cpp

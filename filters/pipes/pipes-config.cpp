@@ -17,6 +17,7 @@
 */
 
 #include "pipes-config.h"
+#include "pipes-delegate.h"
 
 #include <KPluginFactory>
 
@@ -27,6 +28,28 @@ PipesConfig::PipesConfig(QWidget *parent, const QVariantList &args):
     KCModule(PipesConfigFactory::componentData(), parent, args)
 {
     m_ui.setupUi(this);
+
+    {
+        QHash<int, QString> map;
+        map[PipesPrefs::Incoming] = i18n("Incoming");
+        map[PipesPrefs::Outgoing] = i18n("Outgoing");
+        map[PipesPrefs::Both] = i18n("Both");
+
+        m_ui.tableView->setItemDelegateForColumn(
+            PipesModel::DirectionColumn,
+            new PipesDelegate(map, this)
+        );
+    }
+
+    {
+        QHash<int, QString> map;
+        map[PipesPrefs::FormatPlainText] = i18n("Plain Text");
+
+        m_ui.tableView->setItemDelegateForColumn(
+            PipesModel::FormatColumn,
+            new PipesDelegate(map, this)
+        );
+    }
     m_ui.tableView->setModel(&m_model);
 }
 

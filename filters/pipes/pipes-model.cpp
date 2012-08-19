@@ -20,7 +20,7 @@
 
 PipesModel::PipesModel() : m_pipes(m_prefs.pipeList())
 {
-    m_columnNames << QLatin1String("Command") << QLatin1String("Direction") << QLatin1String("Format");
+    m_columnNames << i18n("Command") << i18n("Direction") << i18n("Format");
 }
 
 QVariant PipesModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -38,15 +38,34 @@ QVariant PipesModel::data(const QModelIndex &index, int role) const
         PipesPrefs::Pipe pipe = m_pipes.at(index.row());
         switch (index.column()) {
             case DirectionColumn :
-                return PipesPrefs::PipeDirectionString(pipe.direction);
+                return pipe.direction;
             case ExecutableColumn :
                 return pipe.executable;
             case FormatColumn :
-                return PipesPrefs::MessageFormatString(pipe.format);
+                return pipe.format;
         }
     }
 
     return QVariant();
+}
+
+bool PipesModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+    PipesPrefs::Pipe pipe = m_pipes.at(index.row());
+    switch (index.column()) {
+        case DirectionColumn :
+            pipe.direction = (PipesPrefs::PipeDirection) value.toInt();
+            break;
+        case FormatColumn :
+            pipe.format = (PipesPrefs::MessageFormat) value.toInt();
+            break;
+        case ExecutableColumn :
+            pipe.executable = value.toString();
+            break;
+        default:
+            return false; //shouldn't really happen
+    }
+    m_pipes[index.row()] = pipe;
+    return true;
 }
 
 int PipesModel::columnCount(const QModelIndex &parent) const
@@ -61,3 +80,8 @@ int PipesModel::rowCount(const QModelIndex &parent) const
     return m_prefs.pipeList().size();
 }
 
+Qt::ItemFlags PipesModel::flags(const QModelIndex &index) const
+{
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    return flags;
+}
