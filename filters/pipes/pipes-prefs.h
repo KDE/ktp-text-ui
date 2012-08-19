@@ -20,6 +20,7 @@
 #define PIPES_PREFS_H
 
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <message.h>
 
 #include <QVariant>
@@ -34,9 +35,27 @@ public:
         Both = Incoming | Outgoing
     };
 
+    static QString PipeDirectionString(PipeDirection d) {
+        switch (d) {
+            case Incoming:
+                return i18n("Incoming");
+            case Outgoing:
+                return i18n("Outgoing");
+            case Both:
+                return i18n("Both");
+            default:
+                return QString();
+        }
+    }
+
     enum MessageFormat {
         FormatPlainText
     };
+
+    static QString MessageFormatString(MessageFormat f) {
+        Q_UNUSED (f);
+        return i18n("Plain Text");
+    }
 
     //perhaps this class should be outside
     class Pipe {
@@ -52,6 +71,7 @@ public:
         PipeDirection direction;
         MessageFormat format;
     };
+
 
     typedef QList<Pipe> PipeList;
 

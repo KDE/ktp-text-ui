@@ -34,7 +34,19 @@ QVariant PipesModel::headerData(int section, Qt::Orientation orientation, int ro
 
 QVariant PipesModel::data(const QModelIndex &index, int role) const
 {
-    return QLatin1String("Yo Mamma");
+    if (role == Qt::DisplayRole) {
+        PipesPrefs::Pipe pipe = m_pipes.at(index.row());
+        switch (index.column()) {
+            case DirectionColumn :
+                return PipesPrefs::PipeDirectionString(pipe.direction);
+            case ExecutableColumn :
+                return pipe.executable;
+            case FormatColumn :
+                return PipesPrefs::MessageFormatString(pipe.format);
+        }
+    }
+
+    return QVariant();
 }
 
 int PipesModel::columnCount(const QModelIndex &parent) const
