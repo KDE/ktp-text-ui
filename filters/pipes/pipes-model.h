@@ -33,7 +33,7 @@ public:
         FormatColumn
     };
 
-    PipesModel(PipesPrefs *prefs);
+    PipesModel();
 
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -42,7 +42,8 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
 private:
-    PipesPrefs *m_prefs;
+    PipesPrefs m_prefs;
+    PipesPrefs::PipeList m_pipes;
     QStringList m_columnNames;
 };
 

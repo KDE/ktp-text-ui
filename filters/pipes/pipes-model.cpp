@@ -18,8 +18,7 @@
 
 #include "pipes-model.h"
 
-PipesModel::PipesModel(PipesPrefs *prefs) :
-    m_prefs(prefs)
+PipesModel::PipesModel() : m_pipes(m_prefs.pipeList())
 {
     m_columnNames << QLatin1String("Command") << QLatin1String("Direction") << QLatin1String("Format");
 }
@@ -47,6 +46,6 @@ int PipesModel::columnCount(const QModelIndex &parent) const
 int PipesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED (parent);
-    return m_prefs->pipeList().size();
+    return m_prefs.pipeList().size();
 }
 

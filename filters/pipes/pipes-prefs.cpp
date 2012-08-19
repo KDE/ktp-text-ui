@@ -21,6 +21,7 @@
 
 PipesPrefs::PipesPrefs()
 {
+    load();
 }
 
 KConfigGroup PipesPrefs::config() const

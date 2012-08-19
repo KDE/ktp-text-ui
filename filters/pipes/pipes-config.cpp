@@ -24,9 +24,10 @@ K_PLUGIN_FACTORY(PipesConfigFactory, registerPlugin<PipesConfig>();)
 K_EXPORT_PLUGIN(PipesConfigFactory( "kcm_ktp_filter_pipes" ))
 
 PipesConfig::PipesConfig(QWidget *parent, const QVariantList &args):
-    KCModule(PipesConfigFactory::componentData(), parent, args), m_model(&m_prefs)
+    KCModule(PipesConfigFactory::componentData(), parent, args)
 {
     m_ui.setupUi(this);
+    m_ui.tableView->setModel(&m_model);
 }
 
 void PipesConfig::defaults()
