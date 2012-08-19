@@ -21,7 +21,13 @@
 
 PipesModel::PipesModel() : m_pipes(m_prefs.pipeList())
 {
+    kDebug();
     m_columnNames << i18n("Command") << i18n("Direction") << i18n("Format");
+}
+
+PipesModel::~PipesModel()
+{
+    kDebug();
 }
 
 QVariant PipesModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -110,9 +116,33 @@ void PipesModel::revert()
 bool PipesModel::submit()
 {
     Q_FOREACH (PipesPrefs::Pipe pipe, m_pipes) {
-        kDebug() << "Pipe(" << pipe.executable << ", " << pipe.direction << ", " << pipe.format << ")";
+        kDebug() << pipe;
     }
     m_prefs.setPipeList(m_pipes);
     m_prefs.save();
     return true;
+}
+
+bool PipesModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    Q_ASSERT (count == 1);
+    Q_UNUSED (parent)
+
+    beginInsertRows(parent, row, row);
+    m_pipes.insert(row, PipesPrefs::Pipe());
+    endInsertRows();
+
+    return true;
+}
+
+bool PipesModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    Q_ASSERT (count == 1);
+    Q_UNUSED (parent)
+
+    beginRemoveRows(parent, row, row);
+    m_pipes.removeAt(row);
+    endRemoveRows();
+
+    return false;
 }

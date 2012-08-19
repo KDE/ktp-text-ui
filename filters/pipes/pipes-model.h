@@ -34,6 +34,7 @@ public:
     };
 
     PipesModel();
+    virtual ~PipesModel();
 
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -47,6 +48,9 @@ public:
     virtual void revert();
     virtual bool submit();
     virtual void clear();
+
+    virtual bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
 private:
     PipesPrefs m_prefs;

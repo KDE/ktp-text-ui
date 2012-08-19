@@ -51,7 +51,10 @@ PipesConfig::PipesConfig(QWidget *parent, const QVariantList &args):
         );
     }
     m_ui.tableView->setModel(&m_model);
-    QObject::connect(&m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(changed()));
+    connect(&m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(changed()));
+
+    connect(m_ui.addButton, SIGNAL(clicked(bool)), SLOT(addButtonPressed()));
+    connect(m_ui.removeButton, SIGNAL(clicked(bool)), SLOT(removeButtonPressed()));
 }
 
 void PipesConfig::defaults()
@@ -65,4 +68,15 @@ void PipesConfig::load() {
 
 void PipesConfig::save() {
     m_model.submit();
+}
+
+void PipesConfig::addButtonPressed()
+{
+    m_model.insertRow(m_model.rowCount());
+}
+
+void PipesConfig::removeButtonPressed()
+{
+    m_model.removeRow(m_ui.tableView->currentIndex().row());
+    changed();
 }

@@ -75,6 +75,8 @@ private:
     PipeList m_pipeList;
 };
 
+QDebug operator<<(QDebug io, PipesPrefs::Pipe &p);
+
 // Q_DECLARE_METATYPE(PipesPrefs::Pipe);
 // Q_DECLARE_METATYPE(PipesPrefs::PipeList);
 

@@ -35,6 +35,10 @@ public:
     virtual void load();
     virtual void defaults();
 
+public Q_SLOTS:
+    void addButtonPressed();
+    void removeButtonPressed();
+
 private:
     PipesModel m_model;
     Ui::PipesConfigUi m_ui;
