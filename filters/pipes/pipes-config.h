@@ -27,7 +27,7 @@
 class PipesConfig : public KCModule
 {
 public:
-    explicit PipesConfig(const KComponentData &componentData, QWidget *parent = 0, const QVariantList &args = QVariantList());
+    explicit PipesConfig(QWidget *parent, const QVariantList &args);
 
     virtual void save();
     virtual void load();

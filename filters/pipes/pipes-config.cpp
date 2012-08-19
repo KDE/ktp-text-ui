@@ -18,8 +18,13 @@
 
 #include "pipes-config.h"
 
-PipesConfig::PipesConfig(const KComponentData &componentData, QWidget *parent, const QVariantList &args):
-    KCModule(componentData, parent, args)
+#include <KPluginFactory>
+
+K_PLUGIN_FACTORY(PipesConfigFactory, registerPlugin<PipesConfig>();)
+K_EXPORT_PLUGIN(PipesConfigFactory( "kcm_ktp_filter_pipes" ))
+
+PipesConfig::PipesConfig(QWidget *parent, const QVariantList &args):
+    KCModule(PipesConfigFactory::componentData(), parent, args)
 {
 }
 

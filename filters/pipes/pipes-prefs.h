@@ -18,8 +18,9 @@
 
 #ifndef PIPES_PREFS_H
 #define PIPES_PREFS_H
-#include <message.h>
+
 #include <KConfigGroup>
+#include <message.h>
 
 #include <QVariant>
 
@@ -57,9 +58,9 @@ public:
 
     void load();
     void save();
+    void reset();
 
     PipeList pipeList() const;
-    void reset();
 
     friend class PipesPrefsTest;
 

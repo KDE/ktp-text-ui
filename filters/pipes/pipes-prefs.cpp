@@ -61,3 +61,8 @@ PipesPrefs::PipeList PipesPrefs::pipeList() const
 {
     return m_pipeList;
 }
+
+void PipesPrefs::reset()
+{
+    m_pipeList.clear();
+}
