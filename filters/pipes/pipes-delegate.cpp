@@ -29,7 +29,6 @@ PipesDelegate::PipesDelegate(QHash< int, QString > valueNames, QObject *parent) 
 
 PipesDelegate::~PipesDelegate()
 {
-
 }
 
 QString PipesDelegate::displayText(const QVariant &value, const QLocale &locale) const
@@ -65,12 +64,3 @@ void PipesDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, con
         model->setData(index, m_valueNames.key(box->currentText()));
     }
 }
-
-void PipesDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyledItemDelegate::updateEditorGeometry(editor, option, index);
-}
-
-// void PipesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
-//     QStyledItemDelegate::paint(painter, option, index);
-// }

@@ -44,6 +44,10 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
+    virtual void revert();
+    virtual bool submit();
+    virtual void clear();
+
 private:
     PipesPrefs m_prefs;
     PipesPrefs::PipeList m_pipes;

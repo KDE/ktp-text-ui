@@ -36,7 +36,6 @@ public:
 
 private:
     PipesModel m_model;
-    PipesPrefs m_prefs;
     Ui::PipesConfigUi m_ui;
 };
 

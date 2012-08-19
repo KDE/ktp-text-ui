@@ -31,6 +31,7 @@ KConfigGroup PipesPrefs::config() const
 
 void PipesPrefs::load()
 {
+    m_pipeList.clear();
     Q_FOREACH (QString name, config().groupList()) {
         KConfigGroup cfg = config().group(name);
         Pipe p;
@@ -66,4 +67,9 @@ PipesPrefs::PipeList PipesPrefs::pipeList() const
 void PipesPrefs::reset()
 {
     m_pipeList.clear();
+}
+
+void PipesPrefs::setPipeList(const PipesPrefs::PipeList &pipeList)
+{
+    m_pipeList = pipeList;
 }

@@ -55,13 +55,13 @@ PipesConfig::PipesConfig(QWidget *parent, const QVariantList &args):
 
 void PipesConfig::defaults()
 {
-    m_prefs.reset();
+    m_model.clear();
 }
 
 void PipesConfig::load() {
-    m_prefs.load();
+    m_model.revert();
 }
 
 void PipesConfig::save() {
-    m_prefs.save();
+    m_model.submit();
 }

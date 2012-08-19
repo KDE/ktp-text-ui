@@ -17,6 +17,7 @@
 */
 
 #include "pipes-model.h"
+#include <KDebug>
 
 PipesModel::PipesModel() : m_pipes(m_prefs.pipeList())
 {
@@ -50,6 +51,8 @@ QVariant PipesModel::data(const QModelIndex &index, int role) const
 }
 
 bool PipesModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+    kDebug() << "setting" << index << "to" << value;
+
     PipesPrefs::Pipe pipe = m_pipes.at(index.row());
     switch (index.column()) {
         case DirectionColumn :
@@ -84,4 +87,26 @@ Qt::ItemFlags PipesModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
     return flags;
+}
+
+void PipesModel::clear()
+{
+    beginResetModel();
+    m_pipes = PipesPrefs::PipeList();
+    endResetModel();
+}
+
+void PipesModel::revert()
+{
+    beginResetModel();
+    m_prefs.load();
+    m_pipes = m_prefs.pipeList();
+    endResetModel();
+}
+
+bool PipesModel::submit()
+{
+    m_prefs.setPipeList(m_pipes);
+    m_prefs.save();
+    return true;
 }

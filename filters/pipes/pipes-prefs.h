@@ -82,6 +82,7 @@ public:
     void reset();
 
     PipeList pipeList() const;
+    void setPipeList(const PipeList &pipeList);
 
     friend class PipesPrefsTest;
 
