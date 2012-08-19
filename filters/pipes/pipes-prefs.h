@@ -38,6 +38,7 @@ public:
         FormatPlainText
     };
 
+    //perhaps this class should be outside
     class Pipe {
     public:
         Pipe() {}

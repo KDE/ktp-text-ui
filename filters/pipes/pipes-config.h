@@ -20,6 +20,7 @@
 #define PIPES_CONFIG_H
 
 #include "pipes-prefs.h"
+#include "pipes-model.h"
 #include "ui_pipes-config.h"
 
 #include <KCModule>
@@ -34,6 +35,7 @@ public:
     virtual void defaults();
 
 private:
+    PipesModel m_model;
     PipesPrefs m_prefs;
     Ui::PipesConfigUi m_ui;
 };

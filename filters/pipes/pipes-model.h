@@ -16,28 +16,34 @@
  *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 */
 
-#include "pipes-config.h"
+#ifndef PIPES_MODEL_H
+#define PIPES_MODEL_H
 
-#include <KPluginFactory>
+#include <QtCore/QModelIndex>
+#include "pipes-prefs.h"
 
-K_PLUGIN_FACTORY(PipesConfigFactory, registerPlugin<PipesConfig>();)
-K_EXPORT_PLUGIN(PipesConfigFactory( "kcm_ktp_filter_pipes" ))
 
-PipesConfig::PipesConfig(QWidget *parent, const QVariantList &args):
-    KCModule(PipesConfigFactory::componentData(), parent, args), m_model(&m_prefs)
+class PipesModel : public QAbstractTableModel
 {
-    m_ui.setupUi(this);
-}
 
-void PipesConfig::defaults()
-{
-    m_prefs.reset();
-}
+public:
+    enum ColoumnRoles {
+        ExecutableColumn,
+        DirectionColumn,
+        FormatColumn
+    };
 
-void PipesConfig::load() {
-    m_prefs.load();
-}
+    PipesModel(PipesPrefs *prefs);
 
-void PipesConfig::save() {
-    m_prefs.save();
-}
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+private:
+    PipesPrefs *m_prefs;
+    QStringList m_columnNames;
+};
+
+#endif // PIPES_MODEL_H

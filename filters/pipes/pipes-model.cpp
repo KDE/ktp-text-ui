@@ -16,28 +16,37 @@
  *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 */
 
-#include "pipes-config.h"
+#include "pipes-model.h"
 
-#include <KPluginFactory>
-
-K_PLUGIN_FACTORY(PipesConfigFactory, registerPlugin<PipesConfig>();)
-K_EXPORT_PLUGIN(PipesConfigFactory( "kcm_ktp_filter_pipes" ))
-
-PipesConfig::PipesConfig(QWidget *parent, const QVariantList &args):
-    KCModule(PipesConfigFactory::componentData(), parent, args), m_model(&m_prefs)
+PipesModel::PipesModel(PipesPrefs *prefs) :
+    m_prefs(prefs)
 {
-    m_ui.setupUi(this);
+    m_columnNames << QLatin1String("Command") << QLatin1String("Direction") << QLatin1String("Format");
 }
 
-void PipesConfig::defaults()
+QVariant PipesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    m_prefs.reset();
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+        return m_columnNames[section];
+    }
+
+    return QVariant();
 }
 
-void PipesConfig::load() {
-    m_prefs.load();
+QVariant PipesModel::data(const QModelIndex &index, int role) const
+{
+    return QLatin1String("Yo Mamma");
 }
 
-void PipesConfig::save() {
-    m_prefs.save();
+int PipesModel::columnCount(const QModelIndex &parent) const
+{
+    Q_UNUSED (parent);
+    return m_columnNames.length();
 }
+
+int PipesModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED (parent);
+    return m_prefs->pipeList().size();
+}
+
