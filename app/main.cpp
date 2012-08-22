@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 {
     KAboutData aboutData("ktp-text-ui", 0,
                          ki18n("Telepathy Text Ui"),
-                         "0.4.1");
+                         "0.5");
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "david@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
     aboutData.addAuthor(ki18n("Francesco Nwokeka"), ki18n("Developer"), "francesco.nwokeka@gmail.com");
