@@ -48,8 +48,16 @@ bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
 
     if (!m_searchHits.isEmpty() && !account.isNull() && !entity.isNull()) {
         Q_FOREACH(const Tpl::SearchHit &searchHit, m_searchHits) {
-            if ((searchHit.account()->uniqueIdentifier() == account->uniqueIdentifier()) &&
-                (searchHit.target()->identifier() == entity->identifier())) {
+            Tp::AccountPtr searchHitAccount = searchHit.account();
+            Tpl::EntityPtr searchHitTarget = searchHit.target();
+
+            /* Don't display search hits with empty account or target */
+            if (searchHitAccount.isNull() || searchHitTarget.isNull()) {
+                continue;
+            }
+
+            if ((searchHitAccount->uniqueIdentifier() == account->uniqueIdentifier()) &&
+                (searchHitTarget->identifier() == entity->identifier())) {
                 matches_filter = true;
             }
         }
