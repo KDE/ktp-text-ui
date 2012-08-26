@@ -107,39 +107,39 @@ void MessageProcessorBasicTests::compare(const char *input, const char *expected
     QCOMPARE(processed, href);
 }
 
-void MessageProcessorBasicTests::testSingleCharBold()
-{
-    compare("*b*", "<b>b</b>");
-}
+// void MessageProcessorBasicTests::testSingleCharBold()
+// {
+//     compare("*b*", "<b>b</b>");
+// }
 
-void MessageProcessorBasicTests::testBold()
-{
-    compare("*this* shoudl *be in bold*", "<b>this</b> shoudl <b>be in bold</b>");
-}
+// void MessageProcessorBasicTests::testBold()
+// {
+//     compare("*this* shoudl *be in bold*", "<b>this</b> shoudl <b>be in bold</b>");
+// }
 
-void MessageProcessorBasicTests::testBoldItalics()
-{
-    compare("_*this is bold italics*_", "<i><b>this is bold italics</b></i>");
-    compare("_*this is bold italics_*", "<i><b>this is bold italics</i></b>");
-}
+// void MessageProcessorBasicTests::testBoldItalics()
+// {
+//     compare("_*this is bold italics*_", "<i><b>this is bold italics</b></i>");
+//     compare("_*this is bold italics_*", "<i><b>this is bold italics</i></b>");
+// }
 
-void MessageProcessorBasicTests::testMultiWordItalics()
-{
-    compare("_all _ this _hsould_ be in italics_", "<i>all _ this _hsould</i> be in italics_");
-    compare("_f f_ fd _f f_", "<i>f f</i> fd <i>f f</i>");
-    compare("_f _f_", "<i>f _f</i>");
-    compare("_dsd _ _ ss_", "<i>dsd _ _ ss</i>");
-}
+// void MessageProcessorBasicTests::testMultiWordItalics()
+// {
+//     compare("_all _ this _hsould_ be in italics_", "<i>all _ this _hsould</i> be in italics_");
+//     compare("_f f_ fd _f f_", "<i>f f</i> fd <i>f f</i>");
+//     compare("_f _f_", "<i>f _f</i>");
+//     compare("_dsd _ _ ss_", "<i>dsd _ _ ss</i>");
+// }
 
-void MessageProcessorBasicTests::testSingleWordItalics()
-{
-    compare("_b_", "<i>b</i>");
-}
+// void MessageProcessorBasicTests::testSingleWordItalics()
+// {
+//     compare("_b_", "<i>b</i>");
+// }
 
-void MessageProcessorBasicTests::testStrikethrough()
-{
-    compare("-strike through-", "<s>strike through</s>");
-}
+// void MessageProcessorBasicTests::testStrikethrough()
+// {
+//     compare("-strike through-", "<s>strike through</s>");
+// }
 
 void MessageProcessorBasicTests::testImageEmbedGIF()
 {
@@ -162,21 +162,21 @@ void MessageProcessorBasicTests::testXSS()
     compare("<script>alert('ha!');</script>", "&lt;script&gt;alert('ha!');&lt;/script&gt;");
 }
 
-void MessageProcessorBasicTests::testSearchExpansion()
-{
+// void MessageProcessorBasicTests::testSearchExpansion()
+// {
     //let's assume the user hasn't messed with their web shortcuts
-    compare("gg:kde", "http://www.google.com/search?q=kde&ie=UTF-8&oe=UTF-8");
-}
+//     compare("gg:kde", "http://www.google.com/search?q=kde&ie=UTF-8&oe=UTF-8");
+// }
 
 void MessageProcessorBasicTests::testUsingAColon()
 {
     compare("It should still leave normal stuff with:acolon alone", "It should still leave normal stuff with:acolon alone");
 }
 
-void MessageProcessorBasicTests::testSearchExpansionWithPadding()
-{
-    compare("  gg:kde\n", "http://www.google.com/search?q=kde&ie=UTF-8&oe=UTF-8");
-}
+// void MessageProcessorBasicTests::testSearchExpansionWithPadding()
+// {
+//     compare("  gg:kde\n", "http://www.google.com/search?q=kde&ie=UTF-8&oe=UTF-8");
+// }
 
 QTEST_MAIN(MessageProcessorBasicTests);
 

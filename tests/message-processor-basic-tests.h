@@ -40,17 +40,17 @@ private Q_SLOTS:
     void testUnsupportedProtocolCatching();
     void testMetadataGeneration();
     void testMultipleURLCatching();
-    void testSingleWordItalics();
-    void testMultiWordItalics();
-    void testSingleCharBold();
-    void testBoldItalics();
-    void testStrikethrough();
-    void testBold();
+//     void testSingleWordItalics();
+//     void testMultiWordItalics();
+//     void testSingleCharBold();
+//     void testBoldItalics();
+//     void testStrikethrough();
+//     void testBold();
     void testImageEmbedGIF();
     void testXSS();
-    void testSearchExpansion();
+//     void testSearchExpansion();
     void testUsingAColon();
-    void testSearchExpansionWithPadding();
+//     void testSearchExpansionWithPadding();
 };
 
 #endif // MESSAGE_PROCESSOR_BASIC_TESTS_H
