@@ -1,7 +1,7 @@
 
 
 kde4_add_unit_test(ktpchat_tests
-    TESTNAME basic-emoticon-test
+    TESTNAME message-processing-tests
     sync-processor.cpp
     message-processor-basic-tests.cpp
 )
