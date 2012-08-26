@@ -148,9 +148,9 @@ void MessageProcessorBasicTests::testImageEmbedGIF()
     "<a href='http://kde.org/images/teaser/jointhegame.gif'>"
         "http://kde.org/images/teaser/jointhegame.gif"
     "</a>\n"
-    "<a href='http://kde.org/images/teaser/jointhegame.gif'>"
+    "<br/><a href='http://kde.org/images/teaser/jointhegame.gif'>"
         "<img src='http://kde.org/images/teaser/jointhegame.gif'"
-            " style='max-width:100%;'"
+            " style='max-width:100%;margin-top:3px'"
             " alt='Click to view in browser' />"
     "</a>";
 
