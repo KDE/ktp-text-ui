@@ -109,6 +109,8 @@ void ConversationDatePicker::onDatesFinished(Tpl::PendingOperation *op)
 
     qSort(m_setDates);
     updatePaintedDates();
+
+    Q_EMIT dateChanged(date());
 }
 
 void ConversationDatePicker::updatePaintedDates()

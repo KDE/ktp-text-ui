@@ -114,8 +114,6 @@ void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &
     Tp::AccountPtr account = current.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
 
     ui->datePicker->setEntity(account, entity);
-
-    updateMainView();
 }
 
 void LogViewer::onDateSelected()
