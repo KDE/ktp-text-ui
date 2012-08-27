@@ -57,10 +57,10 @@ public:
      */
     ChatTab* getTab(const Tp::TextChannelPtr &incomingTextChannel);
 
-    void focusChat(ChatTab* tab);
+    void focusChat(ChatTab *tab);
 
-    void addTab(ChatTab* tab);
-    void removeTab(ChatTab* tab);
+    void addTab(ChatTab *tab);
+    void removeTab(ChatTab *tab);
 
 Q_SIGNALS:
     /** to emit before closing a window. This signal tells telepathyChatUi to remove the closed
