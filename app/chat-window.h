@@ -100,6 +100,7 @@ private Q_SLOTS:
     void onOpenLogTriggered();                                  /** Starts ktp-log-viewer accountId contactId */
     void setTabSpellDictionary(const QString &dict);            /** set the spelling language for the current chat tab*/
     void toggleBlockButton(bool contactIsBlocked);              /** Toggle block/unblock action according to the flag */
+    void updateAccountIcon();                                   /** Update account icon fake action */
 
 protected Q_SLOTS:
     void showSettingsDialog();
@@ -133,9 +134,6 @@ private:
     void setVideoCallEnabled(bool enable);
     void setShareDesktopEnabled(bool enable);
     void setPreviousConversationsEnabled(bool enable);
-
-    /** setter for account icon fake action */
-    void setAccountIcon(const QIcon &protocolIcon);
 
     /** starts audio call with given contact
      * @param account account sending the audio call request

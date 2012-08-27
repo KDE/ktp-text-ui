@@ -105,6 +105,12 @@ ChatWindow::ChatWindow()
     setCentralWidget(m_tabWidget);
 
     setupGUI(QSize(460, 440), static_cast<StandardWindowOptions>(Default^StatusBar), QLatin1String("chatwindow.rc"));
+
+    // Connects the toolbars iconSizeChanged to the custom toolbar item
+    // NOTE Must be called after setupGUI or the toolbars won't be created
+    Q_FOREACH(KToolBar *toolbar, toolBars()) {
+        connect(toolbar, SIGNAL(iconSizeChanged(const QSize&)), SLOT(updateAccountIcon()));
+    }
 }
 
 ChatWindow::~ChatWindow()
@@ -331,7 +337,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
     setPreviousConversationsEnabled(currentChatTab->previousConversationAvailable());
 #endif
 
-    setAccountIcon(currentChatTab->accountIcon());
+    updateAccountIcon();
 }
 
 void ChatWindow::onEnableSearchActions(bool enable)
@@ -698,9 +704,11 @@ void ChatWindow::setPreviousConversationsEnabled ( bool enable )
     }
 }
 
-void ChatWindow::setAccountIcon(const QIcon &icon)
+void ChatWindow::updateAccountIcon()
 {
-    m_accountIconLabel->setPixmap(icon.pixmap(toolBar()->iconSize()));
+    int index = m_tabWidget->currentIndex();
+    ChatTab *currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    m_accountIconLabel->setPixmap(currentChatTab->accountIcon().pixmap(toolBar()->iconSize()));
 }
 
 void ChatWindow::startAudioCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
