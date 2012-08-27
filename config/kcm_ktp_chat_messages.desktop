@@ -19,6 +19,7 @@ Name[sr@latin]=Priključci
 Name[sv]=Insticksprogram
 Name[uk]=Додатки
 Name[x-test]=xxPluginsxx
+Name[zh_CN]=插件
 Type=Service
 Exec=kcmshell4 kcm_ktp_message_filters
 Comment=How to deal with extra information obtained from messages
