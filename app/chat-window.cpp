@@ -105,6 +105,12 @@ ChatWindow::ChatWindow()
     setCentralWidget(m_tabWidget);
 
     setupGUI(QSize(460, 440), static_cast<StandardWindowOptions>(Default^StatusBar), QLatin1String("chatwindow.rc"));
+
+    // Connects the toolbars iconSizeChanged to the custom toolbar item
+    // NOTE Must be called after setupGUI or the toolbars won't be created
+    Q_FOREACH(KToolBar *toolbar, toolBars()) {
+        connect(toolbar, SIGNAL(iconSizeChanged(const QSize&)), SLOT(updateAccountIcon()));
+    }
 }
 
 ChatWindow::~ChatWindow()
@@ -145,7 +151,7 @@ void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
     }
 }
 
-void ChatWindow::focusChat(ChatTab* tab)
+void ChatWindow::focusChat(ChatTab *tab)
 {
     kDebug();
     m_tabWidget->setCurrentWidget(tab);
@@ -153,7 +159,7 @@ void ChatWindow::focusChat(ChatTab* tab)
 
 ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
 {
-    ChatTab* match = 0;
+    ChatTab *match = 0;
 
     // if targetHandle is None, targetId is also "", therefore we won't be able to find it.
     if (!incomingTextChannel->targetHandleType() == Tp::HandleTypeNone) {
@@ -176,7 +182,7 @@ ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
     return match;
 }
 
-void ChatWindow::removeTab(ChatTab* tab)
+void ChatWindow::removeTab(ChatTab *tab)
 {
     kDebug();
 
@@ -191,7 +197,7 @@ void ChatWindow::removeTab(ChatTab* tab)
     }
 }
 
-void ChatWindow::addTab(ChatTab* tab)
+void ChatWindow::addTab(ChatTab *tab)
 {
     kDebug();
 
@@ -211,7 +217,7 @@ void ChatWindow::destroyTab(QWidget* chatWidget)
 {
     kDebug();
 
-    ChatTab* tab = qobject_cast<ChatTab*>(chatWidget);
+    ChatTab *tab = qobject_cast<ChatTab*>(chatWidget);
     Q_ASSERT(tab);
 
     tab->setChatWindow(0);
@@ -283,7 +289,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         return;
     }
 
-    ChatTab* currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    ChatTab *currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
     currentChatTab->acknowledgeMessages();
     setWindowTitle(currentChatTab->title());
     setWindowIcon(currentChatTab->icon());
@@ -331,7 +337,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
     setPreviousConversationsEnabled(currentChatTab->previousConversationAvailable());
 #endif
 
-    setAccountIcon(currentChatTab->accountIcon());
+    updateAccountIcon();
 }
 
 void ChatWindow::onEnableSearchActions(bool enable)
@@ -425,7 +431,7 @@ void ChatWindow::onTabStateChanged()
 {
     kDebug();
 
-    ChatTab* sender = qobject_cast<ChatTab*>(QObject::sender());
+    ChatTab *sender = qobject_cast<ChatTab*>(QObject::sender());
     if (sender) {
         int tabIndex = m_tabWidget->indexOf(sender);
         setTabTextColor(tabIndex, sender->titleColor());
@@ -491,7 +497,7 @@ void ChatWindow::onShareDesktopTriggered()
 void ChatWindow::onOpenLogTriggered()
 {
     int index = m_tabWidget->currentIndex();
-    ChatTab* currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    ChatTab *currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
     Q_ASSERT(currentChatTab);
 
     Tp::AccountPtr account = currentChatTab->account();
@@ -526,7 +532,7 @@ void ChatWindow::showNotificationsDialog()
     KNotifyConfigWidget::configure(this, QLatin1String("ktelepathy"));
 }
 
-void ChatWindow::removeChatTabSignals(ChatTab* chatTab)
+void ChatWindow::removeChatTabSignals(ChatTab *chatTab)
 {
     disconnect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
     disconnect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
@@ -698,9 +704,11 @@ void ChatWindow::setPreviousConversationsEnabled ( bool enable )
     }
 }
 
-void ChatWindow::setAccountIcon(const QIcon &icon)
+void ChatWindow::updateAccountIcon()
 {
-    m_accountIconLabel->setPixmap(icon.pixmap(toolBar()->iconSize()));
+    int index = m_tabWidget->currentIndex();
+    ChatTab *currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    m_accountIconLabel->setPixmap(currentChatTab->accountIcon().pixmap(toolBar()->iconSize()));
 }
 
 void ChatWindow::startAudioCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
@@ -798,7 +806,7 @@ bool ChatWindow::event(QEvent *e)
 void ChatWindow::setTabSpellDictionary(const QString &dict)
 {
     int index = m_tabWidget->currentIndex();
-    ChatTab* currentChatTab=qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    ChatTab *currentChatTab=qobject_cast<ChatTab*>(m_tabWidget->widget(index));
     currentChatTab->setSpellDictionary(dict);
 }
 
