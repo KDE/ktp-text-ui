@@ -47,8 +47,11 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
     m_prev = nearestDates.first;
     m_next = nearestDates.second;
 
-    //FIXME check entity type, set as appropriately.
-    load(AdiumThemeView::SingleUserChat);
+    if (entity->entityType() == Tpl::EntityTypeRoom) {
+        load(AdiumThemeView::GroupChat);
+    } else {
+        load(AdiumThemeView::SingleUserChat);
+    }
 
 
     AdiumThemeHeaderInfo headerInfo;
