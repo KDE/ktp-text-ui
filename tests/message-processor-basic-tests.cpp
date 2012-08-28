@@ -20,6 +20,27 @@
 #include <KUrl>
 #include <QTextDocument>
 
+
+#define compare(input, expected) \
+{ \
+    QString processed = s.getProcessedMessage(input); \
+    QString href = QLatin1String(expected); \
+    QCOMPARE(processed, href); \
+}
+
+#define compareWithPlainText(input, expected) \
+{ \
+    QString processed = s.getProcessedMessage(input); \
+    QString href = QLatin1String(expected); \
+    QCOMPARE(processed, href); \
+    QTextDocument inputdoc, processeddoc; \
+    inputdoc.setHtml(QLatin1String(input)); \
+    processeddoc.setHtml(href); \
+    QString processedtext = processeddoc.toPlainText().replace(QLatin1String("\\*"), QLatin1String("*")); \
+    QCOMPARE(inputdoc.toPlainText(), processedtext); \
+}
+
+
 Tp::Message normalMessage(const char* msg) {
     return Tp::Message(Tp::ChannelTextMessageTypeNormal, QLatin1String(msg));
 }
@@ -99,29 +120,6 @@ void MessageProcessorBasicTests::testMultipleURLCatching()
 
     QCOMPARE(qvariant_cast<KUrl>(urls.at(0)), KUrl("http://duckduckgo.com/"));
     QCOMPARE(qvariant_cast<KUrl>(urls.at(1)), KUrl("http://www.google.com.au"));
-}
-
-void MessageProcessorBasicTests::compare(const char *input, const char *expected)
-{
-    QString processed = s.getProcessedMessage(input);
-    QString href = QLatin1String(expected);
-
-    QCOMPARE(processed, href);
-}
-
-void MessageProcessorBasicTests::compareWithPlainText(const char *input, const char *expected)
-{
-    QString processed = s.getProcessedMessage(input);
-    QString href = QLatin1String(expected);
-
-    QCOMPARE(processed, href);
-
-    QTextDocument inputdoc, processeddoc;
-    inputdoc.setHtml(QLatin1String(input));
-    processeddoc.setHtml(href);
-    QString processedtext = processeddoc.toPlainText().replace(QLatin1String("\\*"), QLatin1String("*"));
-
-    QCOMPARE(inputdoc.toPlainText(), processedtext);
 }
 
 void MessageProcessorBasicTests::testImageEmbedGIF()
