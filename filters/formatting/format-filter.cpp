@@ -32,7 +32,7 @@ public:
     QString mainPattern;
     QString allTagsPattern;
 
-    void addTag (const char *markingCharacter, char htmlTag);
+    void addTag (QString markingCharacter, QString htmlTag);
     QString filterString(QString string);
 };
 
@@ -42,16 +42,27 @@ FormatFilter::FormatFilter (QObject* parent, const QVariantList&) :
 {
     d->mainPattern = QLatin1String("(^|\\s)%1(\\S|\\S.*\\S)%1(\\s|$)");
 
-    d->allTagsPattern = QLatin1String("(") + QRegExp::escape(QLatin1String("_")) +
-                        QLatin1String("|") + QRegExp::escape(QLatin1String("*")) +
-                        QLatin1String("|") + QRegExp::escape(QLatin1String("-")) +
-                        QLatin1String("|") + QRegExp::escape(QLatin1String("/")) +
-                        QLatin1String(")");
+    QMap<QString, QString> tagsMap;
 
-    d->addTag("_", 'u');
-    d->addTag("\\*", 'b');
-    d->addTag("-", 's');
-    d->addTag("/", 'i');
+    tagsMap[QLatin1String("_")] = QLatin1String("u");
+    tagsMap[QLatin1String("*")] = QLatin1String("b");
+    tagsMap[QLatin1String("-")] = QLatin1String("s");
+    tagsMap[QLatin1String("/")] = QLatin1String("i");
+
+    d->allTagsPattern = QLatin1String("(");
+
+    QMapIterator<QString, QString> i(tagsMap);
+    while (i.hasNext()) {
+        i.next();
+
+        d->allTagsPattern += QRegExp::escape(i.key());
+        if (i.hasNext())
+            d->allTagsPattern += QLatin1String("|");
+
+        d->addTag(i.key(), i.value());
+    }
+
+    d->allTagsPattern += QLatin1String(")");
 }
 
 FormatFilter::~FormatFilter()
@@ -82,12 +93,12 @@ QString FormatFilter::Private::filterString(QString string)
     return string;
 }
 
-void FormatFilter::Private::addTag (const char *markingCharacter, char htmlTag)
+void FormatFilter::Private::addTag (QString markingCharacter, QString htmlTag)
 {
     QString repl = QLatin1String("\\1<%1>%2\\2%2</%1>\\3");
-    repl = repl.arg(htmlTag).arg(QLatin1String(markingCharacter));
+    repl = repl.arg(htmlTag).arg(markingCharacter);
 
-    QRegExp exp = QRegExp(mainPattern.arg(QLatin1String(markingCharacter)));
+    QRegExp exp = QRegExp(mainPattern.arg(QRegExp::escape(markingCharacter)));
     exp.setMinimal(true);
 
     tags.append(FormatTag(exp, repl));
