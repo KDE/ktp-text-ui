@@ -34,7 +34,7 @@
     QString href = QLatin1String(expected); \
     QCOMPARE(processed, href); \
     QTextDocument inputdoc, processeddoc; \
-    inputdoc.setHtml(QRegExp::escape(QLatin1String(input))); \
+    inputdoc.setHtml(QLatin1String(input)); \
     processeddoc.setHtml(href); \
     QCOMPARE(inputdoc.toPlainText(), processeddoc.toPlainText()); \
 }
@@ -161,9 +161,9 @@ void MessageProcessorBasicTests::testUsingAColon()
 
 void MessageProcessorBasicTests::testBold()
 {
-    compareWithPlainText("*b*", "<b>\\*b\\*</b>");
-    compareWithPlainText("*bold*", "<b>\\*bold\\*</b>");
-    compareWithPlainText("*this* should *be in bold*", "<b>\\*this\\*</b> should <b>\\*be in bold\\*</b>");
+    compareWithPlainText("*b*", "<b>*b*</b>");
+    compareWithPlainText("*bold*", "<b>*bold*</b>");
+    compareWithPlainText("*this* should *be in bold*", "<b>*this*</b> should <b>*be in bold*</b>");
 }
 
 void MessageProcessorBasicTests::testItalics()
@@ -191,18 +191,18 @@ void MessageProcessorBasicTests::testUnderline()
 
 void MessageProcessorBasicTests::testBoldItalics()
 {
-    compareWithPlainText("/*this is italics bold*/", "<i>/<b>\\*this is italics bold\\*</b>/</i>");
-    compareWithPlainText("*/this is bold italics/*", "<b>\\*<i>/this is bold italics/</i>\\*</b>");
+    compareWithPlainText("/*this is italics bold*/", "<i>/<b>*this is italics bold*</b>/</i>");
+    compareWithPlainText("*/this is bold italics/*", "<b>*<i>/this is bold italics/</i>*</b>");
 
-    compareWithPlainText("this is /*italics bold*/ , this is */bold italics/*", "this is <i>/<b>\\*italics bold\\*</b>/</i> , this is <b>\\*<i>/bold italics/</i>\\*</b>");
+    compareWithPlainText("this is /*italics bold*/ , this is */bold italics/*", "this is <i>/<b>*italics bold*</b>/</i> , this is <b>*<i>/bold italics/</i>*</b>");
 
-//    compareWithPlainText("/*this is wrong italics bold/*", "/\\*this is wrong italics bold/\\*");
+//    compareWithPlainText("/*this is wrong italics bold/*", "/*this is wrong italics bold/*");
 //    compareWithPlainText("this has a /punctuation mark/, after the slash", "this has a <i>/punctuation mark/</i>, after the slash");
 }
 
 void MessageProcessorBasicTests::testRandomFormatting()
 {
-    compareWithPlainText("/this *should* work/ but /let's be *sure*/", "<i>/this <b>\\*should\\*</b> work/</i> but <i>/let's be <b>\\*sure\\*</b>/</i>");
+    compareWithPlainText("/this *should* work/ but /let's be *sure*/", "<i>/this <b>*should*</b> work/</i> but <i>/let's be <b>*sure*</b>/</i>");
     compareWithPlainText("/this -should- work/ and /this -should- work as well/", "<i>/this <s>-should-</s> work/</i> and <i>/this <s>-should-</s> work as well/</i>");
 }
 
