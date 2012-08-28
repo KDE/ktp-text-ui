@@ -48,6 +48,7 @@ private Q_SLOTS:
     void testStrikethrough();
     void testUnderline();
     void testBoldItalics();
+    void testRandomFormatting();
 };
 
 #endif // MESSAGE_PROCESSOR_BASIC_TESTS_H
