@@ -2,6 +2,7 @@
 Name=Emoticons
 Name[cs]=Emotikony
 Name[da]=Emotikoner
+Name[es]=Emoticonos
 Name[fi]=Hymiöt
 Name[fr]=Émoticônes
 Name[hu]=Hangulatjelek
@@ -25,6 +26,7 @@ Encoding=UTF-8
 Comment=Show emoticons (smiley faces) inside the chat
 Comment[cs]=Zobrazit emotikony (smějící se obličeje) v rozhovoru
 Comment[da]=Vis emotikoner (smileys) indeni chatten
+Comment[es]=Mostrar emoticonos (caras sonrientes) dentro del chat
 Comment[fi]=Näytä hymiöt (hymynaamat) chatissä
 Comment[fr]=Afficher les émoticônes (visages souriants) au sein de la discussion
 Comment[hu]=Hangulatjelek (smiley arcok) megjelenítése a csevegésen belül

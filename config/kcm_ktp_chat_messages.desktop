@@ -2,6 +2,7 @@
 Name=Plugins
 Name[cs]=Moduly
 Name[da]=Plugins
+Name[es]=Complementos
 Name[fi]=Liitännäiset
 Name[fr]=Modules externes
 Name[hu]=Bővítmények
@@ -25,6 +26,7 @@ Exec=kcmshell4 kcm_ktp_message_filters
 Comment=How to deal with extra information obtained from messages
 Comment[cs]=Jak se vypořádat s extra informacemi obdrženými ze zpráv
 Comment[da]=Hvordan ekstra information modtaget i beskeder skal håndteres
+Comment[es]=Como tratar la información extra obtenida de los mensajes
 Comment[fr]=Comment traiter les informations complémentaires obtenues depuis des messages
 Comment[hu]=Hogyan kezelje az üzenetekből kapott extra információkat
 Comment[it]=Come gestire le informazioni aggiuntive ricavate dai messaggi
