@@ -1,23 +1,5 @@
 [Desktop Entry]
 Name=Web Shortcuts
-Name[cs]=Webové zkratky
-Name[da]=Webgenveje
-Name[fr]=Raccourcis web
-Name[hu]=Keresőazonosítók
-Name[it]=Scorciatoie web
-Name[nb]=Nettsnarveier
-Name[nl]=Webkoppelingen
-Name[nn]=Vevsnarvegar
-Name[pt]=Atalhos Web
-Name[pt_BR]=Atalhos da Internet
-Name[se]=Fierpmádatlávkestagat
-Name[sr]=Веб пречице
-Name[sr@ijekavian]=Веб пречице
-Name[sr@ijekavianlatin]=Veb prečice
-Name[sr@latin]=Veb prečice
-Name[sv]=Webbgenvägar
-Name[uk]=Вебскорочення
-Name[x-test]=xxWeb Shortcutsxx
 Encoding=UTF-8
 Type=Service
 # Comment=
