@@ -1,5 +1,6 @@
 /*
  *    Copyright (C) 2012  Lasath Fernando <kde@lasath.org>
+ *    Copyright (C) 2012  Daniele E. Domenichelli <daniele.domenichelli@gmail.com>
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -28,15 +29,18 @@ typedef QPair<QRegExp, QString> FormatTag;
 class FormatFilter::Private {
 public:
     QList<FormatTag> tags;
+
+    void addTag (const char *markingCharacter, char htmlTag);
+    QString filterString(QString string);
 };
 
 FormatFilter::FormatFilter (QObject* parent, const QVariantList&) :
     AbstractMessageFilter (parent), d(new Private())
 {
-    addTag("_", 'u');
-    addTag("\\*", 'b');
-    addTag("-", 's');
-    addTag("/", 'i');
+    d->addTag("_", 'u');
+    d->addTag("\\*", 'b');
+    d->addTag("-", 's');
+    d->addTag("/", 'i');
 }
 
 FormatFilter::~FormatFilter()
@@ -46,16 +50,23 @@ FormatFilter::~FormatFilter()
 
 void FormatFilter::filterMessage (Message& message)
 {
-    Q_FOREACH(FormatTag tag, d->tags) {
-        QString msg = message.mainMessagePart();
+    message.setMainMessagePart(d->filterString(message.mainMessagePart()));
 
-        msg = msg.replace(tag.first, tag.second);
-        message.setMainMessagePart(msg);
-    }
 }
 
+QString FormatFilter::Private::filterString(QString string)
+{
+    Q_FOREACH(FormatTag tag, tags) {
+        if (string.indexOf(tag.first) >= 0) {
+            string = string.replace(tag.first.cap(2), filterString(tag.first.cap(2)));
+            string = string.replace(tag.first, tag.second);
+        }
+    }
 
-void FormatFilter::addTag (const char *markingCharacter, char htmlTag)
+    return string;
+}
+
+void FormatFilter::Private::addTag (const char *markingCharacter, char htmlTag)
 {
     QString pattern = QLatin1String("(^|\\s)%1(\\S|\\S.*\\S)%1(\\s|$)");
     pattern = pattern.arg(QLatin1String(markingCharacter));
@@ -66,7 +77,7 @@ void FormatFilter::addTag (const char *markingCharacter, char htmlTag)
     QRegExp exp = QRegExp(pattern);
     exp.setMinimal(true);
 
-    d->tags.append(FormatTag(exp, repl));
+    tags.append(FormatTag(exp, repl));
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<FormatFilter>();)
