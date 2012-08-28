@@ -18,6 +18,7 @@
 
 #include "message-processor-basic-tests.h"
 #include <KUrl>
+#include <QTextDocument>
 
 Tp::Message normalMessage(const char* msg) {
     return Tp::Message(Tp::ChannelTextMessageTypeNormal, QLatin1String(msg));
@@ -100,11 +101,27 @@ void MessageProcessorBasicTests::testMultipleURLCatching()
     QCOMPARE(qvariant_cast<KUrl>(urls.at(1)), KUrl("http://www.google.com.au"));
 }
 
-void MessageProcessorBasicTests::compare(const char *input, const char *expected) {
+void MessageProcessorBasicTests::compare(const char *input, const char *expected)
+{
     QString processed = s.getProcessedMessage(input);
     QString href = QLatin1String(expected);
 
     QCOMPARE(processed, href);
+}
+
+void MessageProcessorBasicTests::compareWithPlainText(const char *input, const char *expected)
+{
+    QString processed = s.getProcessedMessage(input);
+    QString href = QLatin1String(expected);
+
+    QCOMPARE(processed, href);
+
+    QTextDocument inputdoc, processeddoc;
+    inputdoc.setHtml(QLatin1String(input));
+    processeddoc.setHtml(href);
+    QString processedtext = processeddoc.toPlainText().replace(QLatin1String("\\*"), QLatin1String("*"));
+
+    QCOMPARE(inputdoc.toPlainText(), processedtext);
 }
 
 void MessageProcessorBasicTests::testImageEmbedGIF()
@@ -146,43 +163,43 @@ void MessageProcessorBasicTests::testUsingAColon()
 
 void MessageProcessorBasicTests::testBold()
 {
-    compare("*b*", "<b>\\*b\\*</b>");
-    compare("*bold*", "<b>\\*bold\\*</b>");
-    compare("*this* should *be in bold*", "<b>\\*this\\*</b> should <b>\\*be in bold\\*</b>");
+    compareWithPlainText("*b*", "<b>\\*b\\*</b>");
+    compareWithPlainText("*bold*", "<b>\\*bold\\*</b>");
+    compareWithPlainText("*this* should *be in bold*", "<b>\\*this\\*</b> should <b>\\*be in bold\\*</b>");
 }
 
 void MessageProcessorBasicTests::testItalics()
 {
-    compare("/i/", "<i>/i/</i>");
-    compare(" /this/ should /be in italics/", "<i>/this/</i> should <i>/be in italics/</i>");
-    compare("/all / this /should/ be in italics/", "<i>/all / this /should/</i> be in italics/");
-    compare("/f f/ fd /f f/", "<i>/f f/</i> fd <i>/f f/</i>");
-    compare("/f /f/", "<i>/f /f/</i>");
-    compare("/dsd / / ss/", "<i>/dsd / / ss/</i>");
+    compareWithPlainText("/i/", "<i>/i/</i>");
+    compareWithPlainText(" /this/ should /be in italics/", "<i>/this/</i> should <i>/be in italics/</i>");
+    compareWithPlainText("/all / this /should/ be in italics/", "<i>/all / this /should/</i> be in italics/");
+    compareWithPlainText("/f f/ fd /f f/", "<i>/f f/</i> fd <i>/f f/</i>");
+    compareWithPlainText("/f /f/", "<i>/f /f/</i>");
+    compareWithPlainText("/dsd / / ss/", "<i>/dsd / / ss/</i>");
 }
 
 void MessageProcessorBasicTests::testStrikethrough()
 {
-    compare("-s-", "<s>-s-</s>");
-    compare("-strike through-", "<s>-strike through-</s>");
+    compareWithPlainText("-s-", "<s>-s-</s>");
+    compareWithPlainText("-strike through-", "<s>-strike through-</s>");
 }
 
 void MessageProcessorBasicTests::testUnderline()
 {
-    compare("_u_", "<u>_u_</u>");
-    compare("_underlined_", "<u>_underlined_</u>");
-    compare("_this_ should _be underlined_", "<u>_this_</u> should <u>_be underlined_</u>");
+    compareWithPlainText("_u_", "<u>_u_</u>");
+    compareWithPlainText("_underlined_", "<u>_underlined_</u>");
+    compareWithPlainText("_this_ should _be underlined_", "<u>_this_</u> should <u>_be underlined_</u>");
 }
 
 void MessageProcessorBasicTests::testBoldItalics()
 {
-    compare("/*this is italics bold*/", "<i>/<b>\\*this is italics bold\\*</b>/</i>");
-    compare("*/this is bold italics/*", "<b>\\*<i>/this is bold italics/</i>\\*</b>");
+    compareWithPlainText("/*this is italics bold*/", "<i>/<b>\\*this is italics bold\\*</b>/</i>");
+    compareWithPlainText("*/this is bold italics/*", "<b>\\*<i>/this is bold italics/</i>\\*</b>");
 
-    compare("/*this is just wrong/*", "/*this is just wrong/*");
+    compareWithPlainText("/*this is just wrong/*", "/*this is just wrong/*");
 
-    compare("this is /*italics bold*/ , this is */bold italics/*", "this is <i>/<b>\\*italics bold\\*</b>/</i> , this is <b>\\*<i>/bold italics/</i>\\*</b>");
-//    compare("this is /*italics bold*/, this is */bold italics/*", "this is <i>/<b>\\*italics bold\\*</b>/</i>, this is <b>\\*<i>/bold italics/</i>\\*</b>");
+    compareWithPlainText("this is /*italics bold*/ , this is */bold italics/*", "this is <i>/<b>\\*italics bold\\*</b>/</i> , this is <b>\\*<i>/bold italics/</i>\\*</b>");
+//    compareWithPlainText("this is /*italics bold*/, this is */bold italics/*", "this is <i>/<b>\\*italics bold\\*</b>/</i>, this is <b>\\*<i>/bold italics/</i>\\*</b>");
 }
 
 
