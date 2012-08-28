@@ -29,14 +29,25 @@ typedef QPair<QRegExp, QString> FormatTag;
 class FormatFilter::Private {
 public:
     QList<FormatTag> tags;
+    QString mainPattern;
+    QString allTagsPattern;
 
     void addTag (const char *markingCharacter, char htmlTag);
     QString filterString(QString string);
 };
 
 FormatFilter::FormatFilter (QObject* parent, const QVariantList&) :
-    AbstractMessageFilter (parent), d(new Private())
+    AbstractMessageFilter (parent),
+    d(new Private())
 {
+    d->mainPattern = QLatin1String("(^|\\s)%1(\\S|\\S.*\\S)%1(\\s|$)");
+
+    d->allTagsPattern = QLatin1String("(") + QRegExp::escape(QLatin1String("_")) +
+                        QLatin1String("|") + QRegExp::escape(QLatin1String("*")) +
+                        QLatin1String("|") + QRegExp::escape(QLatin1String("-")) +
+                        QLatin1String("|") + QRegExp::escape(QLatin1String("/")) +
+                        QLatin1String(")");
+
     d->addTag("_", 'u');
     d->addTag("\\*", 'b');
     d->addTag("-", 's');
@@ -51,16 +62,21 @@ FormatFilter::~FormatFilter()
 void FormatFilter::filterMessage (Message& message)
 {
     message.setMainMessagePart(d->filterString(message.mainMessagePart()));
-
 }
 
 QString FormatFilter::Private::filterString(QString string)
 {
+    QRegExp rx(mainPattern.arg(allTagsPattern));
+    rx.setMinimal(true);
+
+    int pos = 0;
+    while ((pos = string.indexOf(rx, pos)) != -1) {
+        string = string.replace(rx.cap(3), filterString(rx.cap(3)));
+        pos += rx.matchedLength();
+    }
+
     Q_FOREACH(FormatTag tag, tags) {
-        if (string.indexOf(tag.first) >= 0) {
-            string = string.replace(tag.first.cap(2), filterString(tag.first.cap(2)));
-            string = string.replace(tag.first, tag.second);
-        }
+        string = string.replace(tag.first, tag.second);
     }
 
     return string;
@@ -68,13 +84,10 @@ QString FormatFilter::Private::filterString(QString string)
 
 void FormatFilter::Private::addTag (const char *markingCharacter, char htmlTag)
 {
-    QString pattern = QLatin1String("(^|\\s)%1(\\S|\\S.*\\S)%1(\\s|$)");
-    pattern = pattern.arg(QLatin1String(markingCharacter));
-
     QString repl = QLatin1String("\\1<%1>%2\\2%2</%1>\\3");
     repl = repl.arg(htmlTag).arg(QLatin1String(markingCharacter));
 
-    QRegExp exp = QRegExp(pattern);
+    QRegExp exp = QRegExp(mainPattern.arg(QLatin1String(markingCharacter)));
     exp.setMinimal(true);
 
     tags.append(FormatTag(exp, repl));
