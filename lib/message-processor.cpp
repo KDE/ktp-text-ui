@@ -60,7 +60,7 @@ MessageProcessor::~MessageProcessor()
 
 Message MessageProcessor::processIncomingMessage(Message receivedMessage)
 {
-    Q_FOREACH(AbstractMessageFilter *filter, MessageProcessor::m_filters) {
+    Q_FOREACH (AbstractMessageFilter *filter, MessageProcessor::m_filters) {
         kDebug() << "running filter :" << filter->metaObject()->className();
         filter->filterMessage(receivedMessage);
     }
@@ -69,7 +69,7 @@ Message MessageProcessor::processIncomingMessage(Message receivedMessage)
 
 Message MessageProcessor::processOutgoingMessage(Message sentMessage)
 {
-    Q_FOREACH(AbstractMessageFilter *filter, MessageProcessor::m_filters) {
+    Q_FOREACH  (AbstractMessageFilter *filter, MessageProcessor::m_filters) {
         filter->filterMessage(sentMessage);
     }
     return sentMessage;

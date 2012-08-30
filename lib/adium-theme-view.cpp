@@ -642,6 +642,3 @@ const QString AdiumThemeView::variantPath() const
 {
     return m_variantPath;
 }
-
-
-

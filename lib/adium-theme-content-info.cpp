@@ -36,7 +36,6 @@ AdiumThemeContentInfo::AdiumThemeContentInfo()
     : AdiumThemeMessageInfo(),
     d(new AdiumThemeContentInfoPrivate)
 {
-
 }
 
 

@@ -16,8 +16,8 @@
  *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 */
 
-#ifndef FORMAT_FILTER_H
-#define FORMAT_FILTER_H
+#ifndef IMAGES_FILTER_H
+#define IMAGES_FILTER_H
 #include <KTp/AbstractMessageFilter>
 
 class ImagesFilter : public AbstractMessageFilter
@@ -34,4 +34,4 @@ private:
     Private *d;
 };
 
-#endif // FORMAT_FILTER_H
+#endif // IMAGES_FILTER_H

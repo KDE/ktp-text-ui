@@ -53,10 +53,7 @@ protected:
     explicit MessageProcessor();
 
 private:
-
-
-
-
+    // TODO Move in a private class
     void loadFilters();
     static MessageProcessor* s_instance;
     QList<AbstractMessageFilter*> m_filters;
