@@ -1,7 +1,21 @@
 [Desktop Entry]
 Name=Image Preview
+Name[cs]=Náhled obrázku
+Name[nl]=Afbeeldingsvoorbeeld
+Name[pt_BR]=Visualização de imagem
+Name[sk]=Náhľad obrázka
+Name[sv]=Förhandsgranskning av bild
+Name[uk]=Перегляд зображення
+Name[x-test]=xxImage Previewxx
 Encoding=UTF-8
 Comment=Embed a thumbnail of any image URL sent in a chat
+Comment[cs]=Vložit náhled všem URL obrázků odeslaných do rozhovoru
+Comment[nl]=Een miniatuur van elke verzonden URL van een afbeelding inbedden in een chat
+Comment[pt_BR]=Inserir uma miniatura de qualquer URL de imagem enviada em um bate-papo
+Comment[sk]=Zahrnúť náhľad každej URL poslanej v rozhovore
+Comment[sv]=Inbädda en miniatyrbild av alla webbadresser med bilder som skickas i en chatt
+Comment[uk]=Вбудовувати мініатюри для всіх адрес зображень, надісланих під час спілкування
+Comment[x-test]=xxEmbed a thumbnail of any image URL sent in a chatxx
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 

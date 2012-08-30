@@ -1,5 +1,12 @@
 [Desktop Entry]
 Name=Web Shortcuts
+Name[cs]=Webové zkratky
+Name[nl]=Webkoppelingen
+Name[pt_BR]=Atalhos da Internet
+Name[sk]=Webové skratky
+Name[sv]=Webbgenvägar
+Name[uk]=Вебскорочення
+Name[x-test]=xxWeb Shortcutsxx
 Encoding=UTF-8
 Type=Service
 # Comment=

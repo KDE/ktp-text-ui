@@ -1,8 +1,22 @@
 [Desktop Entry]
 Name=Plugins
+Name[cs]=Moduly
+Name[nl]=Plug-ins
+Name[pt_BR]=Plugins
+Name[sk]=Pluginy
+Name[sv]=Insticksprogram
+Name[uk]=Додатки
+Name[x-test]=xxPluginsxx
 Type=Service
 Exec=kcmshell4 kcm_ktp_message_filters
 Comment=How to deal with extra information obtained from messages
+Comment[cs]=Jak se vypořádat s extra informacemi obdrženými ze zpráv
+Comment[nl]=Hoe te handelen met extra informatie verkregen uit berichten
+Comment[pt_BR]=Como lidar com informações adicionais obtidas a partir de mensagens
+Comment[sk]=Ako sa vysporiadať s dodatočnými informáciami získanými zo správ
+Comment[sv]=Hur extra information som erhålls från meddelande ska hanteras
+Comment[uk]=Спосіб обробки додаткових даних, отриманих з повідомленнями
+Comment[x-test]=xxHow to deal with extra information obtained from messagesxx
 Icon=preferences-plugin
 
 X-KDE-Library=kcm_ktp_chat_messages

@@ -1,7 +1,21 @@
 [Desktop Entry]
 Name=Emoticons
+Name[cs]=Emotikony
+Name[nl]=Emoticons
+Name[pt_BR]=Emoticons
+Name[sk]=Emotikony
+Name[sv]=Smilisar
+Name[uk]=Емоційки
+Name[x-test]=xxEmoticonsxx
 Encoding=UTF-8
 Comment=Show emoticons (smiley faces) inside the chat
+Comment[cs]=Zobrazit emotikony (smějící se obličeje) v rozhovoru
+Comment[nl]=Emoticons tonen (lachende gezichtjes) in de chat
+Comment[pt_BR]=Mostra emoticons (carinhas) no interior do bate-papo
+Comment[sk]=Zobraziť emotikony (smajlíkov) v rozhovore
+Comment[sv]=Visa smilisar inne i chatten
+Comment[uk]=Показувати емоційки (смайлики) у вікні спілкування
+Comment[x-test]=xxShow emoticons (smiley faces) inside the chatxx
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 
