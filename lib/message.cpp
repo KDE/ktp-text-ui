@@ -53,6 +53,11 @@ void Message::appendMessagePart(const QString& part)
     m_parts << part;
 }
 
+void Message::appendScript(const QString& script)
+{
+    m_scripts << script;
+}
+
 QString Message::finalizedMessage() const
 {
     QString msg = m_mainPart + QLatin1String("\n") +
@@ -60,6 +65,30 @@ QString Message::finalizedMessage() const
 
 //     kDebug() << msg;
     return msg;
+}
+
+QString Message::finalizedScript() const
+{
+    if (m_scripts.empty()) {
+        return QString();
+    }
+
+    QString finalScript;
+
+    Q_FOREACH(const QString &script, m_scripts) {
+        if (!finalScript.contains(script)) {
+            if (!finalScript.isEmpty()) {
+                finalScript.append(QLatin1String("; "));
+            }
+            finalScript.append(script);
+        }
+    }
+    if (!finalScript.isEmpty()) {
+        finalScript.append(QLatin1String("; false;"));
+    }
+
+    kDebug() << finalScript;
+    return finalScript;
 }
 
 QVariant Message::property(const char *name) const
