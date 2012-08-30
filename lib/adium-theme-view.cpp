@@ -366,7 +366,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
                                  willAddMoreContentObjects,
                                  replaceLastContent);
 
-    appendMessage(styleHtml, mode);
+    appendMessage(styleHtml, message.script(), mode);
 }
 
 void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
@@ -404,7 +404,7 @@ void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
                                  willAddMoreContentObjects,
                                  replaceLastContent);
 
-    appendMessage(styleHtml, mode);
+    appendMessage(styleHtml, message.script(), mode);
 }
 
 QString AdiumThemeView::appendScript(AdiumThemeView::AppendMode mode)
@@ -475,11 +475,15 @@ AdiumThemeView::AppendMode AdiumThemeView::appendMode(const AdiumThemeMessageInf
     return mode;
 }
 
-void AdiumThemeView::appendMessage(QString &html, AppendMode mode)
+void AdiumThemeView::appendMessage(QString &html, const QString &script, AppendMode mode)
 {
     QString js = appendScript(mode).arg(html.replace(QLatin1Char('\"'), QLatin1String("\\\""))
                                             .replace(QLatin1Char('\n'), QLatin1String("")));
     page()->mainFrame()->evaluateJavaScript(js);
+
+    if (!script.isEmpty()) {
+        page()->mainFrame()->evaluateJavaScript(script);
+    }
 }
 
 void AdiumThemeView::onLinkClicked(const QUrl &url)

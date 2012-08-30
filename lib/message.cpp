@@ -77,17 +77,14 @@ QString Message::finalizedScript() const
 
     Q_FOREACH(const QString &script, m_scripts) {
         if (!finalScript.contains(script)) {
-            if (!finalScript.isEmpty()) {
-                finalScript.append(QLatin1String("; "));
-            }
             finalScript.append(script);
         }
     }
     if (!finalScript.isEmpty()) {
-        finalScript.append(QLatin1String("; false;"));
+        finalScript.append(QLatin1String("false;"));
     }
 
-    kDebug() << finalScript;
+//    kDebug() << finalScript;
     return finalScript;
 }
 
