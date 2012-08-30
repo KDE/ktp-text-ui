@@ -68,6 +68,11 @@ AdiumThemeMessageInfo::MessageType AdiumThemeMessageInfo::type() const
     return d->type;
 }
 
+void AdiumThemeMessageInfo::setType(AdiumThemeMessageInfo::MessageType type)
+{
+    d->type = type;
+}
+
 QString AdiumThemeMessageInfo::message() const
 {
     return d->message;
