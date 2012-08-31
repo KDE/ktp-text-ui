@@ -24,6 +24,7 @@
 
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
 #include <TelepathyLoggerQt4/Types>
+#include <TelepathyLoggerQt4/TextEvent>
 #endif
 
 #include <ktpchat_export.h>
