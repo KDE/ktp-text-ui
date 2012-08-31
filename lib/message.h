@@ -111,6 +111,9 @@ public:
     /*! \return the type of the message*/
     Tp::ChannelTextMessageType type() const;
 
+    /* \return the number of appended parts */
+    int partsSize() const;
+
 private:
     QDateTime   m_sentTime;
     QString     m_token;

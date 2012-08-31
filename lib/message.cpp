@@ -90,3 +90,8 @@ Tp::ChannelTextMessageType Message::type() const
 {
     return m_messageType;
 }
+
+int Message::partsSize() const
+{
+    return m_parts.size();
+}
