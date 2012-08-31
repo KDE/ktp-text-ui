@@ -185,7 +185,12 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
         }
         AdiumThemeContentInfo message(type);
 
-        message.setMessage(MessageProcessor::instance()->processIncomingMessage(event).finalizedMessage());
+        if (type == AdiumThemeMessageInfo::HistoryLocalToRemote) {
+            message.setMessage(MessageProcessor::instance()->processOutgoingMessage(event).finalizedMessage());
+        } else {
+            message.setMessage(MessageProcessor::instance()->processIncomingMessage(event).finalizedMessage());
+        }
+
         message.setService(m_account->serviceName());
         message.setSenderDisplayName(event->sender()->alias());
         message.setSenderScreenName(event->sender()->alias());
