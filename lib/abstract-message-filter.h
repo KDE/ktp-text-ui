@@ -39,6 +39,12 @@ public:
 
     /** Filter messages in either direction. Base implementation calls this for messages sent/recived in either direction.*/
     virtual void filterMessage(Message &message);
+
+    /** Scripts that must be included in the <head> section of the html required by this message filter.*/
+    virtual QStringList requiredScripts();
+
+    /** Scripts that must be included in the <head> section of the html required by this message filter.*/
+    virtual QStringList requiredStylesheets();
 };
 
 #endif // ABSTRACTPLUGIN_H

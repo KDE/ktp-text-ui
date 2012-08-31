@@ -40,3 +40,13 @@ void AbstractMessageFilter::filterOutgoingMessage(Message &message)
 void AbstractMessageFilter::filterMessage(Message &message)
 {
 }
+
+QStringList AbstractMessageFilter::requiredScripts()
+{
+    return QStringList();
+}
+
+QStringList AbstractMessageFilter::requiredStylesheets()
+{
+    return QStringList();
+}
