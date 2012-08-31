@@ -1,3 +1,5 @@
+include_directories (${KTP_INCLUDE_DIR})
+
 set(ktpchat_SRCS
         chat-widget.cpp
         chat-window-style.cpp

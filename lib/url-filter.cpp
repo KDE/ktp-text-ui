@@ -1,6 +1,7 @@
 /*
     Copyright (C) 2012  Lasath Fernando <kde@lasath.org>
     Copyright (C) 2012  David Edmundson <kde@davidedmundson.co.uk>
+    Copyright (C) 2012  Rohan Garg      <rohangarg@kubuntu.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -24,6 +25,7 @@
 #include <KUrl>
 #include <KProtocolInfo>
 #include <KDebug>
+#include <KTp/text-parser.h>
 
 UrlFilter::UrlFilter(QObject *parent)
     : AbstractMessageFilter(parent)
@@ -36,56 +38,19 @@ void UrlFilter::filterMessage(Message &info) {
     QVariantList urls = info.property("Urls").toList();
 
     // link detection
-    QRegExp link(QLatin1String("\\b(?:(\\w+)://|(www\\.))([^\\s]+)"));
-    int fromIndex = 0;
+    KTp::TextUrlData parsedUrl = KTp::TextParser::instance()->extractUrlData(message);
 
-    while ((fromIndex = message.indexOf(link, fromIndex)) != -1) {
-        QString realUrl = link.cap(0);
-        QString protocol = link.cap(1);
+    int offset = 0;
+    for (int i = 0; i < parsedUrl.fixedUrls.size(); i++) {
+         QString originalText = message.mid(parsedUrl.urlRanges.at(i).first + offset, parsedUrl.urlRanges.at(i).second);
+         QString link = QString::fromLatin1("<a href='%1'>%2</a>").arg(parsedUrl.fixedUrls.at(i), originalText);
+         message.replace(parsedUrl.urlRanges.at(i).first + offset, parsedUrl.urlRanges.at(i).second, link);
 
-        //if cap(1) is empty cap(2) was matched -> starts with www.
-        const bool startsWithWWW = link.cap(1).isEmpty();
+         urls.append(KUrl(parsedUrl.fixedUrls.at(i)));
 
-        kDebug() << "Found URL " << realUrl << "with protocol : " << (startsWithWWW ? QLatin1String("http") : protocol);
-
-
-        // if url has a supported protocol
-        if (startsWithWWW || KProtocolInfo::protocols().contains(protocol, Qt::CaseInsensitive)) {
-
-            // text not wanted in a link ( <,> )
-            QRegExp unwanted(QLatin1String("(&lt;|&gt;)"));
-
-            if (!realUrl.contains(unwanted)) {
-                // string to show to user
-                QString shownUrl = realUrl;
-
-                // check for newline and cut link when found
-                if (realUrl.contains(QLatin1String(("<br/>")))) {
-                    int findIndex = realUrl.indexOf(QLatin1String("<br/>"));
-                    realUrl.truncate(findIndex);
-                    shownUrl.truncate(findIndex);
-                }
-
-                // check prefix
-                if (startsWithWWW) {
-                    realUrl.prepend(QLatin1String("http://"));
-                }
-
-                // if the url is changed, show in chat what the user typed in
-                QString link = QLatin1String("<a href='") + realUrl + QLatin1String("'>") + shownUrl + QLatin1String("</a>");
-
-                message.replace(fromIndex, shownUrl.length(), link);
-                // advance position otherwise I end up parsing the same link
-                fromIndex += link.length();
-            } else {
-                fromIndex += realUrl.length();
-            }
-
-            urls.append(KUrl(realUrl));
-        } else {
-            fromIndex += link.matchedLength();
-        }
-    }
+         //after the first replacement is made, the original position values are not valid anymore, this adjusts them
+         offset += link.length() - originalText.length();
+     }
 
     info.setProperty("Urls", urls);
     info.setMainMessagePart(message);
