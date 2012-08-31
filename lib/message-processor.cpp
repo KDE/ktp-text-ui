@@ -27,6 +27,7 @@
 #include <KService>
 #include <KServiceTypeTrader>
 #include <KPluginFactory>
+#include <KDE/KStandardDirs>
 
 MessageProcessor* MessageProcessor::s_instance = 0;
 
@@ -56,6 +57,40 @@ MessageProcessor::MessageProcessor()
 
 MessageProcessor::~MessageProcessor()
 {
+}
+
+QString MessageProcessor::header()
+{
+    QStringList scripts;
+    QStringList stylesheets;
+    Q_FOREACH (AbstractMessageFilter *filter, MessageProcessor::m_filters) {
+        Q_FOREACH (const QString &script, filter->requiredScripts()) {
+            // Avoid duplicates
+            if (!scripts.contains(script)) {
+                scripts << script;
+            }
+        }
+    }
+    Q_FOREACH (AbstractMessageFilter *filter, MessageProcessor::m_filters) {
+        Q_FOREACH (const QString &stylesheet, filter->requiredStylesheets()) {
+            // Avoid duplicates
+            if (!stylesheets.contains(stylesheet)) {
+                stylesheets << stylesheet;
+            }
+        }
+    }
+
+    QString out(QLatin1String("\n    <!-- The following scripts and stylesheets are injected here by the plugins -->\n"));
+    Q_FOREACH(const QString &script, scripts) {
+        out.append(QString::fromLatin1("    <script type=\"text/javascript\" src=\"%1\"></script>\n").arg(KGlobal::dirs()->findResource("data", script)));
+    }
+    Q_FOREACH(const QString &stylesheet, stylesheets) {
+        out.append(QString::fromLatin1("    <link rel=\"stylesheet\" type=\"text/css\" href=\"%1\" />\n").arg(KGlobal::dirs()->findResource("data", stylesheet)));
+    }
+
+    kDebug() << out;
+
+    return out;
 }
 
 Message MessageProcessor::processIncomingMessage(Message receivedMessage)
