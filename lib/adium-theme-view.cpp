@@ -25,6 +25,7 @@
 #include "adium-theme-status-info.h"
 #include "chat-window-style-manager.h"
 #include "chat-window-style.h"
+#include "message-processor.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QTextCodec>
@@ -210,6 +211,12 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 
     index = templateHtml.indexOf(QLatin1String("%@"), index);
     templateHtml.replace(index, 2, footerHtml);
+
+    // Inject the scripts and the css just before the end of the head tag
+    index = templateHtml.indexOf(QLatin1String("</head>"));
+    templateHtml.insert(index, MessageProcessor::instance()->header());
+
+    kWarning() << templateHtml;
 
     setHtml(templateHtml);
 
