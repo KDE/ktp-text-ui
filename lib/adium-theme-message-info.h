@@ -46,7 +46,6 @@ public:
     AdiumThemeMessageInfo &operator=(const AdiumThemeMessageInfo &other);
 
     MessageType type() const;
-    void setType(MessageType type);
 
     /** The message itself of the message/status. */
     QString message() const;
