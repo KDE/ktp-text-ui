@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Emoticons
+Name[ca]=Emoticones
 Name[cs]=Emotikony
+Name[es]=Emoticonos
 Name[nl]=Emoticons
 Name[pt_BR]=Emoticons
 Name[sk]=Emotikony
@@ -9,7 +11,9 @@ Name[uk]=Емоційки
 Name[x-test]=xxEmoticonsxx
 Encoding=UTF-8
 Comment=Show emoticons (smiley faces) inside the chat
+Comment[ca]=Mostra les emoticones (cares somrients) dins del xat
 Comment[cs]=Zobrazit emotikony (smějící se obličeje) v rozhovoru
+Comment[es]=Mostrar emoticonos (caras sonrientes) dentro del chat
 Comment[nl]=Emoticons tonen (lachende gezichtjes) in de chat
 Comment[pt_BR]=Mostra emoticons (carinhas) no interior do bate-papo
 Comment[sk]=Zobraziť emotikony (smajlíkov) v rozhovore

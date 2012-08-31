@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Google Talk Style Formatting
+Name[ca]=Formatació seguint l'estil de Google Talk
 Name[cs]=Formátovat stylem Google Talk
+Name[es]=Formato de estilo Google Talk
 Name[nl]=Opmaak volgens de stijl van Google-Talk
 Name[pt_BR]=Formatação no estilo do Google-Talk
 Name[sk]=Formátovanie štýlom Google Talk
@@ -9,7 +11,9 @@ Name[sv]=Formatering enligt Google-talk
 Name[uk]=Форматування у стилі Google-Talk
 Name[x-test]=xxGoogle Talk Style Formattingxx
 Comment=Use _, * and - to make text italic, bold or strikeout respectively
+Comment[ca]=Usa _, * and - per convertir el text a itàlic, negreta o tatxat respectivament
 Comment[cs]=Použít _, * a - pro kurzívu, tučný a přeškrtnutý text
+Comment[es]=Utilizar _, * y - para poner el texto en cursiva, negrita o tachado respectivamente
 Comment[nl]=Gebruik _, * and - om tekst respectievelijk cursief, vet of doorgestreept te maken
 Comment[pt_BR]=Use _, * e - para tornar o texto em itálico, negrito ou riscado, respectivamente
 Comment[sk]=Použite _, * a - na zmenu textu na kurzívu, tučné alebo prečiarknuté
