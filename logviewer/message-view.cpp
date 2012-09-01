@@ -28,7 +28,6 @@
 #include <TelepathyLoggerQt4/LogManager>
 #include <TelepathyLoggerQt4/PendingEvents>
 #include <TelepathyLoggerQt4/TextEvent>
-
 #include <TelepathyQt/Account>
 
 MessageView::MessageView(QWidget *parent) :
@@ -39,13 +38,17 @@ MessageView::MessageView(QWidget *parent) :
 
 
 void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
-                          const QDate &date, const QPair< QDate, QDate > &nearestDates)
+                          const Tp::ContactPtr &contact, const QDate &date,
+                          const QPair< QDate, QDate > &nearestDates)
 {
     m_account = account;
     m_entity = entity;
+    m_contact = contact;
     m_date = date;
     m_prev = nearestDates.first;
     m_next = nearestDates.second;
+    m_initialized = false;
+    m_templateLoaded = false;
 
     if (entity->entityType() == Tpl::EntityTypeRoom) {
         load(AdiumThemeView::GroupChat);
@@ -53,12 +56,16 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
         load(AdiumThemeView::SingleUserChat);
     }
 
+    Tp::Avatar avatar = m_account->avatar();
+    if (!avatar.avatarData.isEmpty()) {
+        m_accountAvatar = QString(QLatin1String("data:%1;base64,%2")).
+                            arg(avatar.MIMEType.isEmpty() ? QLatin1String("image/*") : avatar.MIMEType).
+                            arg(QString::fromLatin1(m_account->avatar().avatarData.toBase64().data()));
+    }
 
-    AdiumThemeHeaderInfo headerInfo;
-    headerInfo.setDestinationDisplayName(m_entity->alias());
-    headerInfo.setChatName(m_entity->alias());
-    //  TODO set up other headerInfo here.
-    initialise(headerInfo);
+    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
+    Tpl::PendingEvents *pendingEvents  = logManager->queryEvents(m_account, m_entity, Tpl::EventTypeMaskText, m_date);
+    connect(pendingEvents, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsLoaded(Tpl::PendingOperation*)));
 }
 
 void MessageView::setHighlightText(const QString &text)
@@ -73,18 +80,44 @@ void MessageView::clearHighlightText()
 
 void MessageView::onLoadFinished()
 {
-    //load stuff here.
-    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-    Tpl::PendingEvents *pendingEvents  = logManager->queryEvents(m_account, m_entity, Tpl::EventTypeMaskText, m_date);
-    connect(pendingEvents, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsLoaded(Tpl::PendingOperation*)));
+    processStoredEvents();
+
+    m_templateLoaded = true;
 }
 
 void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
 {
     Tpl::PendingEvents *pe = qobject_cast<Tpl::PendingEvents*>(po);
 
-    QList<AdiumThemeContentInfo> messages;
+    /* Wait with initialization for the first event so that we can know when the chat session started */
+    if (!m_initialized) {
+        AdiumThemeHeaderInfo headerInfo;
+        headerInfo.setDestinationDisplayName(m_contact.isNull() ? m_entity->alias() : m_contact->alias());
+        headerInfo.setChatName(m_contact.isNull() ? m_entity->alias() : m_contact->alias());
+        headerInfo.setGroupChat(m_entity->entityType() == Tpl::EntityTypeRoom);
+        headerInfo.setSourceName(m_account->displayName());
+        headerInfo.setIncomingIconPath(m_contact->avatarData().fileName);
 
+        if (pe->events().count() > 0 && !pe->events().first().isNull()) {
+            headerInfo.setTimeOpened(pe->events().first()->timestamp());
+        }
+
+        initialise(headerInfo);
+
+        m_initialized = true;
+    }
+
+    m_events << pe->events();
+
+    /* Don't add retrieved messages until template is loaded */
+    if (m_templateLoaded) {
+        processStoredEvents();
+    }
+}
+
+
+void MessageView::processStoredEvents()
+{
     if (m_prev.isValid()) {
         AdiumThemeStatusInfo message(AdiumThemeMessageInfo::HistoryStatus);
         message.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Previous conversation")));
@@ -94,18 +127,23 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
         addStatusMessage(message);
     }
 
-    Q_FOREACH(const Tpl::EventPtr &event, pe->events()) {
-        const Tpl::TextEventPtr textEvent(event.staticCast<Tpl::TextEvent>());
+    while (!m_events.isEmpty()) {
+
+        const Tpl::TextEventPtr textEvent(m_events.takeFirst().staticCast<Tpl::TextEvent>());
 
         AdiumThemeMessageInfo::MessageType type;
         QString iconPath;
 
-        if(event->sender()->identifier() == m_account->normalizedName()) {
+        if(textEvent->sender()->identifier() == m_account->normalizedName()) {
             type = AdiumThemeMessageInfo::HistoryLocalToRemote;
+            iconPath = m_accountAvatar;
         } else {
             type = AdiumThemeMessageInfo::HistoryRemoteToLocal;
+            /* FIXME Add support for avatars in MUCs */
+            if (m_entity->entityType() == Tpl::EntityTypeContact) {
+                iconPath = m_contact->avatarData().fileName;
+            }
         }
-
 
         AdiumThemeContentInfo message(type);
         message.setMessage(MessageProcessor::instance()->processIncomingMessage(textEvent).finalizedMessage());
@@ -114,12 +152,11 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
         message.setSenderScreenName(textEvent->sender()->identifier());
         message.setTime(textEvent->timestamp());
         message.setUserIconPath(iconPath);
+
         kDebug()    << textEvent->timestamp()
                     << "from" << textEvent->sender()->identifier()
                     << "to" << textEvent->receiver()->identifier()
                     << textEvent->message();
-
-        messages.append(message);
 
         addContentMessage(message);
     }
@@ -152,6 +189,7 @@ void MessageView::onLinkClicked(const QUrl &link)
 
     AdiumThemeView::onLinkClicked(link);
 }
+
 
 void MessageView::doHighlightText()
 {
