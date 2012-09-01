@@ -142,8 +142,9 @@ void LogViewer::updateMainView()
     nearestDates.second = ui->datePicker->nextDate();
 
     Tpl::EntityPtr entity = currentIndex.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
+    Tp::ContactPtr contact = currentIndex.data(EntityModel::ContactRole).value<Tp::ContactPtr>();
     Tp::AccountPtr account = currentIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-    ui->messageView->loadLog(account, entity, date, nearestDates);
+    ui->messageView->loadLog(account, entity, contact, date, nearestDates);
 }
 
 void LogViewer::switchConversation(const QDate &date)

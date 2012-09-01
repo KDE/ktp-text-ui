@@ -24,6 +24,7 @@
 
 #include <QDate>
 
+#include <TelepathyLoggerQt4/Event>
 #include <TelepathyLoggerQt4/Entity>
 #include <TelepathyLoggerQt4/PendingOperation>
 
@@ -35,7 +36,8 @@ public:
     explicit MessageView(QWidget *parent = 0);
 
     void loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
-                 const QDate &date, const QPair< QDate, QDate > &nearestDates);
+                 const Tp::ContactPtr &contact, const QDate &date,
+                 const QPair< QDate, QDate > &nearestDates);
 
     void setHighlightText(const QString &text);
     void clearHighlightText();
@@ -52,14 +54,22 @@ Q_SIGNALS:
     void conversationSwitchRequested(const QDate &date);
 
 private:
+    void processStoredEvents();
+
     Tpl::EntityPtr m_entity;
     Tp::AccountPtr m_account;
+    Tp::ContactPtr m_contact;
     QDate m_date;
     QDate m_prev;
     QDate m_next;
 
     QString m_highlightedText;
 
+    Tpl::EventPtrList m_events;
+    bool m_initialized;
+    bool m_templateLoaded;
+
+    QString m_accountAvatar;
 };
 
 #endif // MESSAGEVIEW_H
