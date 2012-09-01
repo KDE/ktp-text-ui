@@ -60,12 +60,12 @@ void ImagesFilter::filterMessage (Message& message)
         if (!fileName.isNull() && fileName.contains(d->imageRegex)) {
             QString href = QString::fromAscii(url.toEncoded());
             message.appendMessagePart(
-                QLatin1Literal("<br/><a href='") % href % QLatin1Literal("'>") %
-                    QLatin1Literal("<img src='") %
+                QLatin1Literal("<br/><a href=\"") % href % QLatin1Literal("\">") %
+                    QLatin1Literal("<img src=\"") %
                     href %
-                    QLatin1Literal("' style='max-width:100%;margin-top:3px' alt='") %
+                    QLatin1Literal("\" style=\"max-width:100%;margin-top:3px\" alt=\"") %
                     i18n("Click to view in browser") %
-                    QLatin1Literal("' />") %
+                    QLatin1Literal("\" />") %
                 QLatin1Literal("</a>")
             );
         }
