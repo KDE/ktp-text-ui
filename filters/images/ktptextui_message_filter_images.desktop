@@ -37,6 +37,7 @@ Comment[sr@latin]=Ugnežđena sličica bilo kojeg URL‑a slike u ćaskanju
 Comment[sv]=Inbädda en miniatyrbild av alla webbadresser med bilder som skickas i en chatt
 Comment[uk]=Вбудовувати мініатюри для всіх адрес зображень, надісланих під час спілкування
 Comment[x-test]=xxEmbed a thumbnail of any image URL sent in a chatxx
+Comment[zh_CN]=嵌入聊天中图像 URL 的缩略图
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 

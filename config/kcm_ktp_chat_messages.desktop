@@ -40,6 +40,7 @@ Comment[sr@latin]=Kako obraditi dopunske podatke dobijene uz poruke
 Comment[sv]=Hur extra information som erhålls från meddelande ska hanteras
 Comment[uk]=Спосіб обробки додаткових даних, отриманих з повідомленнями
 Comment[x-test]=xxHow to deal with extra information obtained from messagesxx
+Comment[zh_CN]=处理消息中获得的额外信息
 Icon=preferences-plugin
 
 X-KDE-Library=kcm_ktp_chat_messages
