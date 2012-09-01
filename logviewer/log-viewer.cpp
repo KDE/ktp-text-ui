@@ -79,8 +79,6 @@ LogViewer::LogViewer(QWidget *parent) :
     ui->entityFilter->setProxy(m_filterModel);
     ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
 
-    //TODO parse command line args and update all views as appropriate
-
     connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
     connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
     connect(ui->datePicker, SIGNAL(dateChanged(QDate)), SLOT(onDateSelected()));
