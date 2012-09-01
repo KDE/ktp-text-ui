@@ -41,6 +41,13 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
                           const Tp::ContactPtr &contact, const QDate &date,
                           const QPair< QDate, QDate > &nearestDates)
 {
+
+    if (account.isNull() || entity.isNull()) {
+        //note contact can be null
+        kWarning() << "invalid account/contact. Not loading log";
+        return;
+    }
+    
     m_account = account;
     m_entity = entity;
     m_contact = contact;
@@ -96,7 +103,7 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
         headerInfo.setChatName(m_contact.isNull() ? m_entity->alias() : m_contact->alias());
         headerInfo.setGroupChat(m_entity->entityType() == Tpl::EntityTypeRoom);
         headerInfo.setSourceName(m_account->displayName());
-        headerInfo.setIncomingIconPath(m_contact->avatarData().fileName);
+        headerInfo.setIncomingIconPath(m_contact.isNull() ? QString() : m_contact->avatarData().fileName);
 
         if (pe->events().count() > 0 && !pe->events().first().isNull()) {
             headerInfo.setTimeOpened(pe->events().first()->timestamp());
@@ -141,7 +148,9 @@ void MessageView::processStoredEvents()
             type = AdiumThemeMessageInfo::HistoryRemoteToLocal;
             /* FIXME Add support for avatars in MUCs */
             if (m_entity->entityType() == Tpl::EntityTypeContact) {
-                iconPath = m_contact->avatarData().fileName;
+                if (m_contact) {
+                    iconPath = m_contact->avatarData().fileName;
+                }
             }
         }
 
