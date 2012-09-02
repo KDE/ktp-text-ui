@@ -40,6 +40,7 @@ private Q_SLOTS:
     void testUnsupportedProtocolCatching();
     void testMetadataGeneration();
     void testMultipleURLCatching();
+    void textRichTextUrlParsing();
 //     void testSingleWordItalics();
 //     void testMultiWordItalics();
 //     void testSingleCharBold();

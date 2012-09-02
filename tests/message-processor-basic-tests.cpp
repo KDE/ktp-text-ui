@@ -100,6 +100,13 @@ void MessageProcessorBasicTests::testMultipleURLCatching()
     QCOMPARE(qvariant_cast<KUrl>(urls.at(1)), KUrl("http://www.google.com.au"));
 }
 
+void MessageProcessorBasicTests::textRichTextUrlParsing()
+{
+    compare("go to http://example.com/page.php?code=",
+            "go to <a href=\"http://example.com/page.php?code=123&quot;\">http://example.com/page.php?code=123&quot;</a>");
+}
+
+
 void MessageProcessorBasicTests::compare(const char *input, const char *expected) {
     QString processed = s.getProcessedMessage(input);
     QString href = QLatin1String(expected);
