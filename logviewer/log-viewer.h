@@ -24,6 +24,7 @@
 #include <TelepathyQt/AccountManager>
 #include <TelepathyLoggerQt4/Types>
 
+class QMenu;
 namespace Ui {
     class LogViewer;
 }
@@ -54,12 +55,20 @@ private Q_SLOTS:
     void startGlobalSearch(const QString &term);
     void globalSearchFinished(Tpl::PendingOperation *);
     void clearGlobalSearch();
+    void showEntityListContextMenu(const QPoint &coords);
 
+    void clearAccountHistory();
+    void clearContactHistory();
+    void logClearingFinished(Tpl::PendingOperation *);
 private:
     Ui::LogViewer *ui;
     Tp::AccountManagerPtr m_accountManager;
     EntityModel *m_entityModel;
     EntityProxyModel *m_filterModel;
+
+    QMenu *m_entityListContextMenu;
+    QAction *m_clearAccountHistoryAction;
+    QAction *m_clearContactHistoryAction;
 };
 
 #endif // LOGVIEWER_H

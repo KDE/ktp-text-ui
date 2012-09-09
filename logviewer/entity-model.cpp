@@ -137,6 +137,24 @@ Qt::ItemFlags EntityModel::flags(const QModelIndex &index) const
     return QAbstractItemModel::flags(index);
 }
 
+bool EntityModel::removeRows(int start, int count, const QModelIndex &parent)
+{
+    EntityModelItem *parentItem;
+
+    if (parent.isValid()) {
+        parentItem = m_rootItem->item(parent.row());
+    } else {
+        parentItem = m_rootItem;
+    }
+
+    beginRemoveRows(parent, start, start + count - 1);
+    for (int row = 0; row < count; ++row) {
+        parentItem->removeItem(start);
+    }
+    endRemoveRows();
+
+    return true;
+}
 
 void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
 {

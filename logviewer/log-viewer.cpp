@@ -32,13 +32,17 @@
 #include <TelepathyLoggerQt4/PendingSearch>
 
 #include <QSortFilterProxyModel>
+#include <QMenu>
 #include <QWebFrame>
 #include <KLineEdit>
 #include <KPixmapSequence>
+#include <KMessageBox>
 
 #include "entity-model.h"
 #include "entity-proxy-model.h"
 #include "entity-model-item.h"
+
+Q_DECLARE_METATYPE(QModelIndex)
 
 LogViewer::LogViewer(QWidget *parent) :
     QWidget(parent),
@@ -76,6 +80,7 @@ LogViewer::LogViewer(QWidget *parent) :
     ui->entityList->setModel(m_filterModel);
     ui->entityList->setItemsExpandable(true);
     ui->entityList->setRootIsDecorated(true);
+    ui->entityList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->entityFilter->setProxy(m_filterModel);
     ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
 
@@ -85,6 +90,18 @@ LogViewer::LogViewer(QWidget *parent) :
     connect(ui->messageView, SIGNAL(conversationSwitchRequested(QDate)), SLOT(switchConversation(QDate)));
     connect(ui->globalSearch, SIGNAL(returnPressed(QString)), SLOT(startGlobalSearch(QString)));
     connect(ui->globalSearch, SIGNAL(clearButtonClicked()), SLOT(clearGlobalSearch()));
+    connect(ui->entityList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(showEntityListContextMenu(QPoint)));
+
+    /* Build the popup menu for entity list */
+    m_entityListContextMenu = new QMenu(ui->entityList);
+
+    m_clearAccountHistoryAction = new QAction(i18n("Clear account history"), m_entityListContextMenu);
+    connect(m_clearAccountHistoryAction, SIGNAL(triggered(bool)), SLOT(clearAccountHistory()));
+    m_entityListContextMenu->addAction(m_clearAccountHistoryAction);
+
+    m_clearContactHistoryAction = new QAction(i18n("Clear contact history"), m_entityListContextMenu);
+    connect(m_clearContactHistoryAction, SIGNAL(triggered(bool)), SLOT(clearContactHistory()));
+    m_entityListContextMenu->addAction(m_clearContactHistoryAction);
 }
 
 LogViewer::~LogViewer()
@@ -189,4 +206,101 @@ void LogViewer::clearGlobalSearch()
     m_filterModel->clearSearchHits();
     ui->datePicker->clearSearchHits();
     ui->messageView->clearHighlightText();
+}
+
+void LogViewer::showEntityListContextMenu (const QPoint &coords)
+{
+    QModelIndex index = ui->entityList->indexAt(coords);
+    if (!index.isValid()) {
+        return;
+    }
+    index = m_filterModel->mapToSource(index);
+
+    /* Whether the node is an account or a contact */
+    if (index.parent() == QModelIndex()) {
+        m_clearContactHistoryAction->setVisible(false);
+        m_clearAccountHistoryAction->setVisible(true);
+    } else {
+        m_clearContactHistoryAction->setVisible(true);
+        m_clearAccountHistoryAction->setVisible(false);
+    }
+
+    m_entityListContextMenu->setProperty("index", QVariant::fromValue(index));
+    m_entityListContextMenu->popup(ui->entityList->mapToGlobal(coords));
+}
+
+void LogViewer::clearAccountHistory()
+{
+    QModelIndex index = m_entityListContextMenu->property("index").value<QModelIndex>();
+    if (!index.isValid()) {
+        return;
+    }
+
+    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+    if (account.isNull()) {
+	return;
+    }
+
+    if (KMessageBox::questionYesNo(
+            this, i18n("Are you sure you want to remove all logs from account %1?", account->displayName()),
+            i18n("Clear account history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
+            QString(), KMessageBox::Dangerous) == KMessageBox::No) {
+        return;
+    }
+
+    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
+    Tpl::PendingOperation *operation = logManager->clearAccountHistory(account);
+    connect(operation, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(logClearingFinished(Tpl::PendingOperation*)));
+}
+
+void LogViewer::clearContactHistory()
+{
+    QModelIndex index = m_entityListContextMenu->property("index").value<QModelIndex>();
+    if (!index.isValid()) {
+        return;
+    }
+
+    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+    Tpl::EntityPtr entity = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
+    if (account.isNull() || entity.isNull()) {
+	return;
+    }
+
+    QString name = index.data(Qt::DisplayRole).toString();
+    if (KMessageBox::questionYesNo(
+            this, i18n("Are you sure you want to remove history of all conversations with %1?", name),
+            i18n("Clear contact history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
+            QString(), KMessageBox::Dangerous) == KMessageBox::No) {
+        return;
+    }
+
+    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
+    Tpl::PendingOperation *operation = logManager->clearEntityHistory(account, entity);
+    connect(operation, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(logClearingFinished(Tpl::PendingOperation*)));
+}
+
+void LogViewer::logClearingFinished(Tpl::PendingOperation *operation)
+{
+    if (!operation->errorName().isEmpty() || !operation->errorMessage().isEmpty()) {
+	/* Make sure we display at least some message */
+	QString msg = (operation->errorMessage().isEmpty()) ? operation->errorName() : operation->errorMessage();
+	KMessageBox::sorry(this, msg, operation->errorName(), 0);
+	return;
+    }
+
+    QModelIndex index = m_entityListContextMenu->property("index").value<QModelIndex>();
+    if (!index.isValid()) {
+        m_entityListContextMenu->setProperty("index", QVariant());
+        return;
+    }
+
+    QModelIndex parent = index.parent();
+    m_entityModel->removeRow(index.row(), parent);
+
+    /* If last entity was removed then remove the account node as well */
+    if (parent.isValid() && !m_entityModel->hasChildren(parent)) {
+        m_entityModel->removeRow(parent.row(), parent.parent());
+    }
+
+    m_entityListContextMenu->setProperty("index", QVariant());
 }

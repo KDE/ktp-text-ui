@@ -40,6 +40,11 @@ void EntityModelItem::addItem(EntityModelItem *item)
     m_items << item;
 }
 
+void EntityModelItem::removeItem(int index)
+{
+    delete m_items.takeAt(index);
+}
+
 EntityModelItem* EntityModelItem::item(int row) const
 {
     if (row < m_items.count()) {

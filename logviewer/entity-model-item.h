@@ -35,6 +35,7 @@ public:
     virtual ~EntityModelItem();
 
     void addItem(EntityModelItem *item);
+    void removeItem(int index);
 
     EntityModelItem* item(int row) const;
     EntityModelItem* item(const Tp::AccountPtr &account);

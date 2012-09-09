@@ -71,6 +71,8 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &child) const;
 
+    bool removeRows(int start, int count, const QModelIndex &parent = QModelIndex());
+
 private Q_SLOTS:
     void onEntitiesSearchFinished(Tpl::PendingOperation*);
     void onEntityContactRetrieved(Tp::PendingOperation*);
