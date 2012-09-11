@@ -29,7 +29,16 @@ public:
     AbstractMessageFilter(QObject* parent = 0);
     virtual ~AbstractMessageFilter();
 
-    virtual void filterMessage(Message &message) = 0;
+    /** Filter messages to show on the UI recieved by another contact*/
+    virtual void filterIncomingMessage(Message &message);
+
+    /** Filter messages to show in the UI that you have sent
+        This does _not_ affect the actual message sent, only the visual representation on your screen.
+    */
+    virtual void filterOutgoingMessage(Message &message);
+
+    /** Filter messages in either direction. Base implementation calls this for messages sent/recived in either direction.*/
+    virtual void filterMessage(Message &message);
 };
 
 #endif // ABSTRACTPLUGIN_H

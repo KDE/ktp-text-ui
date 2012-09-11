@@ -26,3 +26,17 @@ AbstractMessageFilter::AbstractMessageFilter(QObject* parent)
 AbstractMessageFilter::~AbstractMessageFilter()
 {
 }
+
+void AbstractMessageFilter::filterIncomingMessage(Message &message)
+{
+    filterMessage(message);
+}
+
+void AbstractMessageFilter::filterOutgoingMessage(Message &message)
+{
+    filterMessage(message);
+}
+
+void AbstractMessageFilter::filterMessage(Message &message)
+{
+}
