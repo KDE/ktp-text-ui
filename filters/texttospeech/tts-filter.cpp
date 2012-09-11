@@ -32,8 +32,9 @@ public:
     org::kde::KSpeech *kspeech;
 };
 
-TTSFilter::TTSFilter (QObject* parent, const QVariantList&) :
-    AbstractMessageFilter (parent), d(new Private)
+TTSFilter::TTSFilter(QObject *parent, const QVariantList &)
+    : AbstractMessageFilter(parent),
+      d(new Private)
 {
     d->kspeech = new org::kde::KSpeech(QLatin1String("org.kde.kttsd"), QLatin1String("/KSpeech"), QDBusConnection::sessionBus());
     d->kspeech->setApplicationName(i18n("KDE Instant Messaging"));
@@ -41,10 +42,11 @@ TTSFilter::TTSFilter (QObject* parent, const QVariantList&) :
 
 TTSFilter::~TTSFilter()
 {
+    delete d->kspeech;
     delete d;
 }
 
-void TTSFilter::filterMessage (Message& message)
+void TTSFilter::filterIncomingMessage(Message &message)
 {
     //FIXME with real name.
     d->kspeech->say(i18n("New message. %1").arg(message.mainMessagePart()), KSpeech::soHtml);

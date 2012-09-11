@@ -26,9 +26,9 @@ class TTSFilter : public AbstractMessageFilter
 Q_OBJECT
 
 public:
-    TTSFilter (QObject* parent, const QVariantList &);
+    TTSFilter(QObject *parent, const QVariantList &);
     virtual ~TTSFilter();
-    virtual void filterMessage (Message& message);
+    virtual void filterIncomingMessage(Message &message);
 
 private:
     class Private;
