@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Emoticons
+Name[ca]=Emoticones
 Name[cs]=Emotikony
 Name[da]=Emotikoner
 Name[el]=Emoticons
@@ -25,6 +26,7 @@ Name[x-test]=xxEmoticonsxx
 Name[zh_CN]=表情
 Encoding=UTF-8
 Comment=Show emoticons (smiley faces) inside the chat
+Comment[ca]=Mostra les emoticones (cares somrients) dins del xat
 Comment[cs]=Zobrazit emotikony (smějící se obličeje) v rozhovoru
 Comment[da]=Vis emotikoner (smileys) indeni chatten
 Comment[el]=Να εμφανίζονται τα emoticons (γελαστά πρόσωπα) μέσα στη συνομιλία

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Plugins
+Name[ca]=Connectors
 Name[cs]=Moduly
 Name[da]=Plugins
 Name[el]=Πρόσθετα
@@ -26,6 +27,7 @@ Name[zh_CN]=插件
 Type=Service
 Exec=kcmshell4 kcm_ktp_message_filters
 Comment=How to deal with extra information obtained from messages
+Comment[ca]=Com tractar la informació extra obtinguda dels missatges
 Comment[cs]=Jak se vypořádat s extra informacemi obdrženými ze zpráv
 Comment[da]=Hvordan ekstra information modtaget i beskeder skal håndteres
 Comment[el]=Πώς να χειριστείτε επιπλέον πληροφορίες που αποκτήθηκαν από μηνύματα
