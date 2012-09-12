@@ -5,7 +5,7 @@ set (ktptextui_message_filter_tts_SRCS
 kde4_add_ui_files (ktptextui_message_filter_tts_SRCS
 )
 
-qt4_add_dbus_interfaces(ktptextui_message_filter_tts_SRCS /usr/share/dbus-1/interfaces/org.kde.KSpeech.xml)
+qt4_add_dbus_interfaces(ktptextui_message_filter_tts_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
 kde4_add_plugin (ktptextui_message_filter_tts
                  ${ktptextui_message_filter_tts_SRCS}
