@@ -30,7 +30,6 @@ add_definitions (${KDE4_DEFINITIONS}
 
 macro_optional_find_package(TelepathyLoggerQt4)
 macro_log_feature(TELEPATHY_LOGGER_QT4_FOUND "TelepathyLoggerQt4" "Qt4 wrapper around telepathy-logger" FALSE "" "Needed for optional backlog support in the chat-window")
-macro_display_feature_log()
 if(TELEPATHY_LOGGER_QT4_FOUND)
     add_definitions( -DTELEPATHY_LOGGER_QT4_FOUND )
     include_directories(
@@ -45,8 +44,9 @@ add_subdirectory(data)
 add_subdirectory(adiumxtra-protocol-handler)
 add_subdirectory(logviewer)
 add_subdirectory(plasmoid)
-
-
 add_subdirectory(filters)
 add_subdirectory(tests)
+
+macro_display_feature_log()
+
 
