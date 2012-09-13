@@ -2,6 +2,7 @@
 Name=Emoticons
 Name[ca]=Emoticones
 Name[cs]=Emotikony
+Name[da]=Emotikoner
 Name[el]=Emoticons
 Name[es]=Emoticonos
 Name[fi]=Hymiöt
@@ -23,6 +24,7 @@ Encoding=UTF-8
 Comment=Show emoticons (smiley faces) inside the chat
 Comment[ca]=Mostra les emoticones (cares somrients) dins del xat
 Comment[cs]=Zobrazit emotikony (smějící se obličeje) v rozhovoru
+Comment[da]=Vis emotikoner (smileys) i chatten
 Comment[el]=Να εμφανίζονται τα emoticons (γελαστά πρόσωπα) μέσα στη συνομιλία
 Comment[es]=Mostrar emoticonos (caras sonrientes) dentro del chat
 Comment[fi]=Näytä hymiöt (hymynaamat) chatissä
