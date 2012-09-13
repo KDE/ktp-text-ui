@@ -1,7 +1,19 @@
 [Desktop Entry]
 Name=Text To Speech
+Name[da]=Tekst-til-tale
+Name[it]=Sintesi vocale
+Name[pt]=Texto para Fala
+Name[sv]=Text till tal
+Name[uk]=Синтез мовлення з тексту
+Name[x-test]=xxText To Speechxx
 Encoding=UTF-8
 Comment=Read out incoming messages using text-to-speech service
+Comment[da]=Læs indkommende beskeder op med tekst-til-tale-tjenesten
+Comment[it]=Leggi i messaggi in arrivo usando il servizio di sintesi vocale
+Comment[pt]=Ler as mensagens recebidas com o serviço de texto-para-fala
+Comment[sv]=Läs upp inkommande meddelande med text-till-tal-tjänsten
+Comment[uk]=Читати вхідні повідомлення за допомогою служби синтезу мовлення з тексту
+Comment[x-test]=xxRead out incoming messages using text-to-speech servicexx
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 X-KDE-Library=ktptextui_message_filter_tts
