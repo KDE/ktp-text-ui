@@ -96,6 +96,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->account = account;
     d->logManager = new LogManager(this);
 
+    connect(d->account.data(), SIGNAL(currentPresenceChanged(Tp::Presence)),
+            this, SLOT(currentPresenceChanged(Tp::Presence)));
 
     //load translations for this library. keep this before any i18n() calls in library code
     KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
@@ -294,8 +296,8 @@ void ChatWidget::setChatEnabled(bool enable)
 
 void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 {
-    if (!d->channel.isNull()) {
-        onChannelConnectionChanged(newTextChannelPtr->connection()->status());
+    if (!d->channel.isNull() && d->channel->connection()->status() == Tp::ConnectionStatusConnected) {
+        onContactPresenceChange(d->channel->groupSelfContact(), KTp::Presence(d->channel->groupSelfContact()->presence()));
     }
     d->channel = newTextChannelPtr;     // set the new channel
     d->contactModel->setTextChannel(newTextChannelPtr);
@@ -499,8 +501,6 @@ void ChatWidget::setupChannelSignals()
             SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
     connect(d->channel.data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
             this, SLOT(onChannelInvalidated()));
-    connect(d->channel.data()->connection().data(), SIGNAL(statusChanged(Tp::ConnectionStatus)),
-            this, SLOT(onChannelConnectionChanged(Tp::ConnectionStatus)));
 
     if (d->channel->hasChatStateInterface()) {
         connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
@@ -1044,18 +1044,18 @@ void ChatWidget::onChatPausedTimerExpired()
         d->channel->requestChatState(Tp::ChannelChatStatePaused);
 }
 
-void ChatWidget::onChannelConnectionChanged(Tp::ConnectionStatus status)
+void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)
 {
-    if (status == Tp::ConnectionStatusConnected) {
-        onContactPresenceChange(d->channel->groupSelfContact(), KTp::Presence(d->channel->groupSelfContact()->presence()));
-    } else if (status == Tp::ConnectionStatusDisconnected) {
+    if (presence == Tp::Presence::offline()) {
         // show a message informing the user
         AdiumThemeStatusInfo statusMessage;
         statusMessage.setMessage(i18n("You are now offline"));
         statusMessage.setService(d->channel->connection()->protocolName());
         statusMessage.setTime(QDateTime::currentDateTime());
         d->ui.chatArea->addStatusMessage(statusMessage);
+        Q_EMIT iconChanged(KTp::Presence(Tp::Presence::offline()).icon());
     }
 }
+
 
 #include "chat-widget.moc"

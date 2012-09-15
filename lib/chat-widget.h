@@ -135,8 +135,6 @@ protected Q_SLOTS:
 
     void chatViewReady();
 
-    void onChannelConnectionChanged(Tp::ConnectionStatus status);
-
 Q_SIGNALS:
     /** Emitted whenever the title for the chat changes, normally the name of the contact or a topic*/
     void titleChanged(const QString &title);
@@ -171,6 +169,7 @@ private Q_SLOTS:
     void onFormatColorReleased();
     void onHistoryFetched(const QList<AdiumThemeContentInfo> &messages);
     void onChatPausedTimerExpired();
+    void currentPresenceChanged(const Tp::Presence &presence);
 
     void temporaryFileTransferChannelCreated(Tp::PendingOperation *operation);
     void temporaryFileTransferStateChanged(Tp::FileTransferState, Tp::FileTransferStateChangeReason);
