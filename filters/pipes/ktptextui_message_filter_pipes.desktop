@@ -13,4 +13,4 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=false
 
 Name=Pipes
-Comment=Pipe all recieverd and/or sent messages through external programs
+Comment=Pipe all received and/or sent messages through external programs
