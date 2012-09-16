@@ -33,10 +33,13 @@ Message::Message(const Tp::Message &original) :
     setMainMessagePart(original.text());
 }
 
-Message::Message(const Tp::ReceivedMessage &original)
+Message::Message(const Tp::ReceivedMessage &original) :
+      m_sentTime(original.sent()),
+      m_token(original.messageToken()),
+      m_messageType(original.messageType()),
+      m_direction(Incoming)
 {
-    Message((Tp::Message) original);
-    m_direction = Incoming;
+    setMainMessagePart(original.text());
 }
 
 #ifdef TELEPATHY_LOGGER_QT4_FOUND
