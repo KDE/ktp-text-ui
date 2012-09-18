@@ -20,6 +20,7 @@ Name[sr@latin]=Emotikoni
 Name[sv]=Smilisar
 Name[uk]=Емоційки
 Name[x-test]=xxEmoticonsxx
+Name[zh_TW]=表情圖示
 Encoding=UTF-8
 Comment=Show emoticons (smiley faces) inside the chat
 Comment[ca]=Mostra les emoticones (cares somrients) dins del xat
@@ -41,6 +42,7 @@ Comment[sr@latin]=Prikaz emotikona (smeškova) unutar ćaskanja
 Comment[sv]=Visa smilisar inne i chatten
 Comment[uk]=Показувати емоційки (смайлики) у вікні спілкування
 Comment[x-test]=xxShow emoticons (smiley faces) inside the chatxx
+Comment[zh_TW]=在聊天中顯示表情圖示（笑臉符號等）
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 
