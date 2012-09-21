@@ -22,6 +22,7 @@
 #include "plugin-config-manager.h"
 
 #include <QMutex>
+#include <QStringBuilder>
 
 #include <KDebug>
 #include <KService>
@@ -80,10 +81,14 @@ QString MessageProcessor::header()
 
     QString out(QLatin1String("\n    <!-- The following scripts and stylesheets are injected here by the plugins -->\n"));
     Q_FOREACH(const QString &script, scripts) {
-        out.append(QString::fromLatin1("    <script type=\"text/javascript\" src=\"%1\"></script>\n").arg(KGlobal::dirs()->findResource("data", script)));
+        out = out % QLatin1String("    <script type=\"text/javascript\" src=\"")
+                  % KGlobal::dirs()->findResource("data", script)
+                  % QLatin1String("\"></script>\n");
     }
     Q_FOREACH(const QString &stylesheet, stylesheets) {
-        out.append(QString::fromLatin1("    <link rel=\"stylesheet\" type=\"text/css\" href=\"%1\" />\n").arg(KGlobal::dirs()->findResource("data", stylesheet)));
+        out = out % QLatin1String("    <link rel=\"stylesheet\" type=\"text/css\" href=\"")
+                  % KGlobal::dirs()->findResource("data", stylesheet)
+                  % QLatin1String("\" />\n");
     }
 
     kDebug() << out;
