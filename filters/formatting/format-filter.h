@@ -30,8 +30,6 @@ public:
     virtual void filterMessage (Message& message);
 
 private:
-    void addTag (const char *markingCharacter, char htmlTag);
-
     class Private;
     Private *d;
 };

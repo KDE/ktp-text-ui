@@ -1,5 +1,6 @@
 /*
  *    Copyright (C) 2012  Lasath Fernando <kde@lasath.org>
+ *    Copyright (C) 2012  Daniele E. Domenichelli <daniele.domenichelli@gmail.com>
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -28,14 +29,48 @@ typedef QPair<QRegExp, QString> FormatTag;
 class FormatFilter::Private {
 public:
     QList<FormatTag> tags;
+    QString mainPattern;
+    QString allTagsPattern;
+
+    void addTag (const QString &markingCharacter, const QString &htmlTag);
+    QString filterString(QString string);
 };
 
 FormatFilter::FormatFilter (QObject* parent, const QVariantList&) :
-    AbstractMessageFilter (parent), d(new Private())
+    AbstractMessageFilter (parent),
+    d(new Private())
 {
-    addTag("_", 'i');
-    addTag("\\*", 'b');
-    addTag("-", 's');
+    // Matches a string
+    // 1. The beginning of the string or a white character [ (^|\\s) ]
+    // 2. Depending on the regexp the tag to be replaced or a pattern including
+    //    all the tags in tagsMap [ %1 ]
+    // 3. One non-whitespace character, or by any string that starts and ends
+    //    with a non-whitespace character [ (\\S|\\S.*\\S) ]
+    // 4. Same as 2. [ %1 ]
+    // 5. A white character or the end of the string [ (\\s|$) ]
+    d->mainPattern = QLatin1String("(^|\\s)%1(\\S|\\S.*\\S)%1(\\s|$)");
+
+    QMap<QString, QString> tagsMap;
+
+    tagsMap[QLatin1String("_")] = QLatin1Char('u');
+    tagsMap[QLatin1String("*")] = QLatin1Char('b');
+    tagsMap[QLatin1String("-")] = QLatin1Char('s');
+    tagsMap[QLatin1String("/")] = QLatin1Char('i');
+
+    d->allTagsPattern = QLatin1Char('(');
+
+    QMapIterator<QString, QString> i(tagsMap);
+    while (i.hasNext()) {
+        i.next();
+
+        d->allTagsPattern += QRegExp::escape(i.key());
+        if (i.hasNext())
+            d->allTagsPattern += QLatin1Char('|');
+
+        d->addTag(i.key(), i.value());
+    }
+
+    d->allTagsPattern += QLatin1Char(')');
 }
 
 FormatFilter::~FormatFilter()
@@ -45,35 +80,36 @@ FormatFilter::~FormatFilter()
 
 void FormatFilter::filterMessage (Message& message)
 {
-    Q_FOREACH(FormatTag tag, d->tags) {
-        QString msg = message.mainMessagePart();
-
-        msg = msg.replace(tag.first, tag.second);
-        message.setMainMessagePart(msg);
-    }
+    message.setMainMessagePart(d->filterString(message.mainMessagePart()));
 }
 
-
-void FormatFilter::addTag (const char *markingCharacter, char htmlTag)
+QString FormatFilter::Private::filterString(QString string)
 {
-    QString pattern = QLatin1String("%1(\\S.*\\S)%1");
-    pattern = pattern.arg(QLatin1String(markingCharacter));
+    QRegExp rx(mainPattern.arg(allTagsPattern));
+    rx.setMinimal(true);
 
-    QString repl = QLatin1String("<%1>\\1</%1>");
-    repl = repl.arg(htmlTag);
+    int pos = 0;
+    while ((pos = string.indexOf(rx, pos)) != -1) {
+        string = string.replace(rx.cap(3), filterString(rx.cap(3)));
+        pos += rx.matchedLength();
+    }
 
-    QRegExp exp = QRegExp(pattern);
+    Q_FOREACH(const FormatTag &tag, tags) {
+        string = string.replace(tag.first, tag.second);
+    }
+
+    return string;
+}
+
+void FormatFilter::Private::addTag (const QString &markingCharacter, const QString &htmlTag)
+{
+    QString repl = QLatin1String("\\1<%1>%2\\2%2</%1>\\3");
+    repl = repl.arg(htmlTag).arg(markingCharacter);
+
+    QRegExp exp = QRegExp(mainPattern.arg(QRegExp::escape(markingCharacter)));
     exp.setMinimal(true);
 
-    d->tags.append(FormatTag(exp, repl));
-
-    QString singleCharPattern = QLatin1String("%1(\\S)%1");
-    singleCharPattern = singleCharPattern.arg(QLatin1String(markingCharacter));
-
-    QRegExp singleCharExp = QRegExp(singleCharPattern);
-    singleCharExp.setMinimal(true);
-
-    d->tags.append(FormatTag(singleCharExp, repl));
+    tags.append(FormatTag(exp, repl));
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<FormatFilter>();)
