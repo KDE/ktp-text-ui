@@ -99,7 +99,7 @@ public:
      *
      * \par
      * This will concatenate all the scripts parts of the message into one
-     * script that will be executed from the main view.
+     * script that must be executed after the finalized message is appended.
      */
     QString finalizedScript() const;
 
