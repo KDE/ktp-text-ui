@@ -31,7 +31,7 @@ target_link_libraries(ktp-log-viewer
             ${KDE4_KIO_LIBS}
             ${TELEPATHY_QT4_LIBRARIES}
             ${KDE4_KEMOTICONS_LIBS}
-      	    ${KDE4_KCMUTILS_LIBS}
+            ${KDE4_KCMUTILS_LIBS}
             ${TELEPATHY_LOGGER_QT4_LIBRARIES}
             ${QT_QTWEBKIT_LIBRARY}
             ktpchat)
