@@ -40,6 +40,14 @@ FormatFilter::FormatFilter (QObject* parent, const QVariantList&) :
     AbstractMessageFilter (parent),
     d(new Private())
 {
+    // Matches a string
+    // 1. The beginning of the string or a white character [ (^|\\s) ]
+    // 2. Depending on the regexp the tag to be replaced or a pattern including
+    //    all the tags in tagsMap [ %1 ]
+    // 3. One non-whitespace character, or by any string that starts and ends
+    //    with a non-whitespace character [ (\\S|\\S.*\\S) ]
+    // 4. Same as 2. [ %1 ]
+    // 5. A white character or the end of the string [ (\\s|$) ]
     d->mainPattern = QLatin1String("(^|\\s)%1(\\S|\\S.*\\S)%1(\\s|$)");
 
     QMap<QString, QString> tagsMap;
