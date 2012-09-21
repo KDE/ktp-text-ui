@@ -52,12 +52,12 @@ FormatFilter::FormatFilter (QObject* parent, const QVariantList&) :
 
     QMap<QString, QString> tagsMap;
 
-    tagsMap[QLatin1String("_")] = QLatin1String("u");
-    tagsMap[QLatin1String("*")] = QLatin1String("b");
-    tagsMap[QLatin1String("-")] = QLatin1String("s");
-    tagsMap[QLatin1String("/")] = QLatin1String("i");
+    tagsMap[QLatin1String("_")] = QLatin1Char('u');
+    tagsMap[QLatin1String("*")] = QLatin1Char('b');
+    tagsMap[QLatin1String("-")] = QLatin1Char('s');
+    tagsMap[QLatin1String("/")] = QLatin1Char('i');
 
-    d->allTagsPattern = QLatin1String("(");
+    d->allTagsPattern = QLatin1Char('(');
 
     QMapIterator<QString, QString> i(tagsMap);
     while (i.hasNext()) {
@@ -65,12 +65,12 @@ FormatFilter::FormatFilter (QObject* parent, const QVariantList&) :
 
         d->allTagsPattern += QRegExp::escape(i.key());
         if (i.hasNext())
-            d->allTagsPattern += QLatin1String("|");
+            d->allTagsPattern += QLatin1Char('|');
 
         d->addTag(i.key(), i.value());
     }
 
-    d->allTagsPattern += QLatin1String(")");
+    d->allTagsPattern += QLatin1Char(')');
 }
 
 FormatFilter::~FormatFilter()
