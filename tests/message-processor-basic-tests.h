@@ -27,8 +27,6 @@ class MessageProcessorBasicTests : public QObject
 {
 Q_OBJECT
 
-private:
-    void compare (const char* arg1, const char* arg2);
     SyncProcessor s;
 
 private Q_SLOTS:
@@ -40,17 +38,17 @@ private Q_SLOTS:
     void testUnsupportedProtocolCatching();
     void testMetadataGeneration();
     void testMultipleURLCatching();
-//     void testSingleWordItalics();
-//     void testMultiWordItalics();
-//     void testSingleCharBold();
-//     void testBoldItalics();
-//     void testStrikethrough();
-//     void testBold();
     void testImageEmbedGIF();
     void testXSS();
 //     void testSearchExpansion();
     void testUsingAColon();
 //     void testSearchExpansionWithPadding();
+    void testItalics();
+    void testBold();
+    void testStrikethrough();
+    void testUnderline();
+    void testBoldItalics();
+    void testRandomFormatting();
     void testBasicLatex();
     void testYoutubePreview();
     void testDefaultReplacements();
