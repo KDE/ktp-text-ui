@@ -2,10 +2,6 @@
 if(TELEPATHY_LOGGER_QT4_FOUND)
     add_definitions( -DTELEPATHY_LOGGER_QT4_FOUND )
 
-
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TELEPATHY_LOGGER_QT4_DEFINITIONS}" )
-
-
 include_directories(${CMAKE_SOURCE_DIR}/lib
                     ${TELEPATHY_LOGGER_QT4_INCLUDE_DIRS}
                    )
