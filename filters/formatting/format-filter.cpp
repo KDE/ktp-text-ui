@@ -32,7 +32,7 @@ public:
     QString mainPattern;
     QString allTagsPattern;
 
-    void addTag (QString markingCharacter, QString htmlTag);
+    void addTag (const QString &markingCharacter, const QString &htmlTag);
     QString filterString(QString string);
 };
 
@@ -94,14 +94,14 @@ QString FormatFilter::Private::filterString(QString string)
         pos += rx.matchedLength();
     }
 
-    Q_FOREACH(FormatTag tag, tags) {
+    Q_FOREACH(const FormatTag &tag, tags) {
         string = string.replace(tag.first, tag.second);
     }
 
     return string;
 }
 
-void FormatFilter::Private::addTag (QString markingCharacter, QString htmlTag)
+void FormatFilter::Private::addTag (const QString &markingCharacter, const QString &htmlTag)
 {
     QString repl = QLatin1String("\\1<%1>%2\\2%2</%1>\\3");
     repl = repl.arg(htmlTag).arg(markingCharacter);
