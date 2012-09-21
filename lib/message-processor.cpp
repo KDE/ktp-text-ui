@@ -70,8 +70,6 @@ QString MessageProcessor::header()
                 scripts << script;
             }
         }
-    }
-    Q_FOREACH (AbstractMessageFilter *filter, MessageProcessor::m_filters) {
         Q_FOREACH (const QString &stylesheet, filter->requiredStylesheets()) {
             // Avoid duplicates
             if (!stylesheets.contains(stylesheet)) {
