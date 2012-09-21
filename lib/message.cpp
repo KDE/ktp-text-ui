@@ -55,7 +55,11 @@ void Message::appendMessagePart(const QString& part)
 
 void Message::appendScript(const QString& script)
 {
-    m_scripts << script;
+    // Append the script only if it is not already appended to avoid multiple
+    // execution of the scripts.
+    if (!m_scripts.contains(script)) {
+        m_scripts << script;
+    }
 }
 
 QString Message::finalizedMessage() const
@@ -73,13 +77,8 @@ QString Message::finalizedScript() const
         return QString();
     }
 
-    QString finalScript;
+    QString finalScript = m_scripts.join(QLatin1String(""));
 
-    Q_FOREACH(const QString &script, m_scripts) {
-        if (!finalScript.contains(script)) {
-            finalScript.append(script);
-        }
-    }
     if (!finalScript.isEmpty()) {
         finalScript.append(QLatin1String("false;"));
     }
