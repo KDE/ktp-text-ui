@@ -35,6 +35,7 @@ if(TELEPATHY_LOGGER_QT4_FOUND)
     include_directories(
         ${TELEPATHY_LOGGER_QT4_INCLUDE_DIRS}
     )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TELEPATHY_LOGGER_QT4_DEFINITIONS}" )
 endif()
 
 add_subdirectory(lib)

@@ -57,8 +57,6 @@ kde4_add_library(ktpchat SHARED ${ktpchat_SRCS})
 
 # telepathy-logger-qt4 related stuff
 if(TELEPATHY_LOGGER_QT4_FOUND)
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TELEPATHY_LOGGER_QT4_DEFINITIONS}" )
-
     target_link_libraries(ktpchat
         ${TELEPATHY_LOGGER_QT4_LIBRARIES}
     )
