@@ -216,7 +216,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     index = templateHtml.indexOf(QLatin1String("</head>"));
     templateHtml.insert(index, MessageProcessor::instance()->header());
 
-    kWarning() << templateHtml;
+    //kDebug() << templateHtml;
 
     setHtml(templateHtml);
 
