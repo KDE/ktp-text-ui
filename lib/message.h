@@ -75,7 +75,16 @@ public:
      */
     void appendMessagePart(const QString &part);
 
+    /*! \brief Append a script
+     *
+     * \par
+     * Each plugin that requires to run a script after the page is updated can
+     * use this method to add a script will be run after the message is appended
+     */
+    void appendScript(const QString &script);
+
     /*! \brief Construct the final procesesd content
+     *
      * \par
      * This will concatenate all the visual 'parts' of the message into one
      * (Qt supported) HTML string.
@@ -85,6 +94,14 @@ public:
      *
      */
     QString finalizedMessage() const;
+
+    /*! \brief Construct the final script
+     *
+     * \par
+     * This will concatenate all the scripts parts of the message into one
+     * script that must be executed after the finalized message is appended.
+     */
+    QString finalizedScript() const;
 
     /*! \brief Sets the contents of a property
      * \par
@@ -121,6 +138,7 @@ private:
     QVariantMap m_properties;
     QString     m_mainPart;
     QStringList m_parts;
+    QStringList m_scripts;
 };
 
 

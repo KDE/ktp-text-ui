@@ -31,6 +31,7 @@ public:
     QString service;
     QStringList messageClasses;
     AdiumThemeMessageInfo::MessageType type;
+    QString script;
 };
 
 AdiumThemeMessageInfo::AdiumThemeMessageInfo()
@@ -150,4 +151,14 @@ QString AdiumThemeMessageInfo::messageClasses() const {
 void AdiumThemeMessageInfo::appendMessageClass(const QString &messageClass)
 {
     d->messageClasses.append(messageClass);
+}
+
+QString AdiumThemeMessageInfo::script() const
+{
+    return d->script;
+}
+
+void AdiumThemeMessageInfo::setScript(const QString& script)
+{
+    d->script = script;
 }

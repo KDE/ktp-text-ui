@@ -110,7 +110,7 @@ private:
                           bool consecutive,
                           bool willAddMoreContentObjects,
                           bool replaceLastContent);
-    void appendMessage(QString&, AppendMode mode);
+    void appendMessage(QString &htmlMessage, const QString &script, AppendMode mode);
 
     QString replaceHeaderKeywords(QString htmlTemplate, const AdiumThemeHeaderInfo&);
     QString replaceContentKeywords(QString& htmlTemplate, const AdiumThemeContentInfo&);
