@@ -45,6 +45,9 @@ public:
     static MessageProcessor* instance();
     ~MessageProcessor();
 
+    //text-ui will call this somewhere when creating the template
+    QString header();
+
     //text-ui will call this somewhere in handleIncommingMessage just before displaying it
     Message processIncomingMessage(Message message);
     Message processOutgoingMessage(Message message);

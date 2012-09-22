@@ -22,11 +22,13 @@
 #include "plugin-config-manager.h"
 
 #include <QMutex>
+#include <QStringBuilder>
 
 #include <KDebug>
 #include <KService>
 #include <KServiceTypeTrader>
 #include <KPluginFactory>
+#include <KDE/KStandardDirs>
 
 MessageProcessor* MessageProcessor::s_instance = 0;
 
@@ -56,6 +58,42 @@ MessageProcessor::MessageProcessor()
 
 MessageProcessor::~MessageProcessor()
 {
+}
+
+QString MessageProcessor::header()
+{
+    QStringList scripts;
+    QStringList stylesheets;
+    Q_FOREACH (AbstractMessageFilter *filter, MessageProcessor::m_filters) {
+        Q_FOREACH (const QString &script, filter->requiredScripts()) {
+            // Avoid duplicates
+            if (!scripts.contains(script)) {
+                scripts << script;
+            }
+        }
+        Q_FOREACH (const QString &stylesheet, filter->requiredStylesheets()) {
+            // Avoid duplicates
+            if (!stylesheets.contains(stylesheet)) {
+                stylesheets << stylesheet;
+            }
+        }
+    }
+
+    QString out(QLatin1String("\n    <!-- The following scripts and stylesheets are injected here by the plugins -->\n"));
+    Q_FOREACH(const QString &script, scripts) {
+        out = out % QLatin1String("    <script type=\"text/javascript\" src=\"")
+                  % KGlobal::dirs()->findResource("data", script)
+                  % QLatin1String("\"></script>\n");
+    }
+    Q_FOREACH(const QString &stylesheet, stylesheets) {
+        out = out % QLatin1String("    <link rel=\"stylesheet\" type=\"text/css\" href=\"")
+                  % KGlobal::dirs()->findResource("data", stylesheet)
+                  % QLatin1String("\" />\n");
+    }
+
+    kDebug() << out;
+
+    return out;
 }
 
 Message MessageProcessor::processIncomingMessage(Message receivedMessage)
