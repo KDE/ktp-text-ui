@@ -63,6 +63,15 @@ void Message::appendMessagePart(const QString& part)
     m_parts << part;
 }
 
+void Message::appendScript(const QString& script)
+{
+    // Append the script only if it is not already appended to avoid multiple
+    // execution of the scripts.
+    if (!m_scripts.contains(script)) {
+        m_scripts << script;
+    }
+}
+
 QString Message::finalizedMessage() const
 {
     QString msg = m_mainPart + QLatin1String("\n") +
@@ -70,6 +79,22 @@ QString Message::finalizedMessage() const
 
     kDebug() << msg;
     return msg;
+}
+
+QString Message::finalizedScript() const
+{
+    if (m_scripts.empty()) {
+        return QString();
+    }
+
+    QString finalScript = m_scripts.join(QLatin1String(""));
+
+    if (!finalScript.isEmpty()) {
+        finalScript.append(QLatin1String("false;"));
+    }
+
+//    kDebug() << finalScript;
+    return finalScript;
 }
 
 QVariant Message::property(const char *name) const

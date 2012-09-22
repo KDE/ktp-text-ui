@@ -65,6 +65,9 @@ public:
     QString messageClasses() const;
     void appendMessageClass(const QString& messageClass);
 
+    /** The script to be run after appending the message. */
+    QString script() const;
+    void setScript(const QString& script);
 private:
     AdiumThemeMessageInfoPrivate *d;
 };

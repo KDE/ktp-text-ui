@@ -25,6 +25,7 @@
 #include "adium-theme-status-info.h"
 #include "chat-window-style-manager.h"
 #include "chat-window-style.h"
+#include "message-processor.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QTextCodec>
@@ -211,6 +212,12 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     index = templateHtml.indexOf(QLatin1String("%@"), index);
     templateHtml.replace(index, 2, footerHtml);
 
+    // Inject the scripts and the css just before the end of the head tag
+    index = templateHtml.indexOf(QLatin1String("</head>"));
+    templateHtml.insert(index, MessageProcessor::instance()->header());
+
+    //kDebug() << templateHtml;
+
     setHtml(templateHtml);
 
     //hidden HTML debugging mode. Should have no visible way to turn it on.
@@ -359,7 +366,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
                                  willAddMoreContentObjects,
                                  replaceLastContent);
 
-    appendMessage(styleHtml, mode);
+    appendMessage(styleHtml, message.script(), mode);
 }
 
 void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
@@ -397,7 +404,7 @@ void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
                                  willAddMoreContentObjects,
                                  replaceLastContent);
 
-    appendMessage(styleHtml, mode);
+    appendMessage(styleHtml, message.script(), mode);
 }
 
 QString AdiumThemeView::appendScript(AdiumThemeView::AppendMode mode)
@@ -468,11 +475,15 @@ AdiumThemeView::AppendMode AdiumThemeView::appendMode(const AdiumThemeMessageInf
     return mode;
 }
 
-void AdiumThemeView::appendMessage(QString &html, AppendMode mode)
+void AdiumThemeView::appendMessage(QString &html, const QString &script, AppendMode mode)
 {
     QString js = appendScript(mode).arg(html.replace(QLatin1Char('\"'), QLatin1String("\\\""))
                                             .replace(QLatin1Char('\n'), QLatin1String("")));
     page()->mainFrame()->evaluateJavaScript(js);
+
+    if (!script.isEmpty()) {
+        page()->mainFrame()->evaluateJavaScript(script);
+    }
 }
 
 void AdiumThemeView::onLinkClicked(const QUrl &url)

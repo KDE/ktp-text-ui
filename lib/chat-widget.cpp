@@ -674,7 +674,9 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
         } else {
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
-            messageInfo.setMessage(MessageProcessor::instance()->processIncomingMessage(message).finalizedMessage());
+            Message processedMessage(MessageProcessor::instance()->processIncomingMessage(message));
+            messageInfo.setMessage(processedMessage.finalizedMessage());
+            messageInfo.setScript(processedMessage.finalizedScript());
 
             QDateTime time = message.sent();
             if (!time.isValid()) {
@@ -784,7 +786,9 @@ void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     }
     else {
         AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::LocalToRemote);
-        messageInfo.setMessage(MessageProcessor::instance()->processOutgoingMessage(message).finalizedMessage());
+        Message processedMessage(MessageProcessor::instance()->processOutgoingMessage(message));
+        messageInfo.setMessage(processedMessage.finalizedMessage());
+        messageInfo.setScript(processedMessage.finalizedScript());
 
         messageInfo.setTime(message.sent());
 

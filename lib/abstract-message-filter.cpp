@@ -42,6 +42,16 @@ void AbstractMessageFilter::filterMessage(Message &message)
 {
 }
 
+QStringList AbstractMessageFilter::requiredScripts()
+{
+    return QStringList();
+}
+
+QStringList AbstractMessageFilter::requiredStylesheets()
+{
+    return QStringList();
+}
+
 KConfigGroup AbstractMessageFilter::config()
 {
     // is there a way to make sure the derived class is a Q_OBJECT,
