@@ -181,6 +181,12 @@ private:
     /** connects necessary signals for the contactModel */
     void setupContactModelSignals();
 
+    /** Saves pair <target Id,language option selected> in a file */
+    void saveSpellCheckingOption();
+
+    /** Loads language option for specified target Id */
+    void loadSpellCheckingOption();
+
     virtual bool isOnTop() const;
     bool m_previousConversationAvailable;
 

@@ -183,8 +183,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     bool formatToolbarIsVisible = false;
     d->ui.formatToolbar->setVisible(formatToolbarIsVisible);
     d->showFormatToolbarAction->setChecked(formatToolbarIsVisible);
-
-    d->ui.sendMessageBox->setSpellCheckingLanguage(KGlobal::locale()->language());
+    loadSpellCheckingOption();
 
     d->pausedStateTimer = new QTimer(this);
     d->pausedStateTimer->setSingleShot(true);
@@ -220,6 +219,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
 ChatWidget::~ChatWidget()
 {
+    saveSpellCheckingOption();
     d->channel->requestClose(); // ensure closing; does nothing, if already closed
     delete d;
 }
@@ -1026,6 +1026,37 @@ void ChatWidget::onFormatColorReleased()
 void ChatWidget::setSpellDictionary(const QString &dict)
 {
     d->ui.sendMessageBox->setSpellCheckingLanguage(dict);
+}
+
+void ChatWidget::saveSpellCheckingOption()
+{
+    QString spellCheckingLanguage = spellDictionary();
+    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktp-text-uirc"));
+    KConfigGroup configGroup = config->group(d->channel->targetId());
+    if (spellCheckingLanguage != KGlobal::locale()->language()) {
+        configGroup.writeEntry("language", spellCheckingLanguage);
+    } else {
+        if (configGroup.exists()) {
+            configGroup.deleteEntry("language");
+            configGroup.deleteGroup();
+        } else {
+            return;
+        }
+    }
+    configGroup.sync();
+}
+
+void ChatWidget::loadSpellCheckingOption()
+{
+    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktp-text-uirc"));
+    KConfigGroup configGroup = config->group(d->channel->targetId());
+    QString spellCheckingLanguage;
+    if (configGroup.exists()) {
+        spellCheckingLanguage = configGroup.readEntry("language");
+    } else {
+	spellCheckingLanguage = KGlobal::locale()->language();
+    }
+    d->ui.sendMessageBox->setSpellCheckingLanguage(spellCheckingLanguage);
 }
 
 QString ChatWidget::spellDictionary() const
