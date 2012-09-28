@@ -63,7 +63,6 @@ public:
     /** Stores whether the channel is ready with all contacts upgraded*/
     bool chatviewlInitialised;
     Tp::ChannelChatState remoteContactChatState;
-    QAction *showFormatToolbarAction;
     bool isGroupChat;
     QString title;
     QString contactName;
@@ -103,25 +102,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
 
     d->chatviewlInitialised = false;
-    d->showFormatToolbarAction = new QAction(i18n("Show format options"), this);
     d->isGroupChat = (channel->targetHandleType() == Tp::HandleTypeContact ? false : true);
 
     d->ui.setupUi(this);
-    d->ui.formatToolbar->show();
-    d->ui.formatColor->setText(QString());
-    d->ui.formatColor->setIcon(KIcon(QLatin1String("format-text-color")));
-
-    d->ui.formatBold->setText(QString());
-    d->ui.formatBold->setIcon(KIcon(QLatin1String("format-text-bold")));
-
-    d->ui.formatItalic->setText(QString());
-    d->ui.formatItalic->setIcon(KIcon(QLatin1String("format-text-italic")));
-
-    d->ui.formatUnderline->setText(QString());
-    d->ui.formatUnderline->setIcon(KIcon(QLatin1String("format-text-underline")));
-
-    d->ui.insertEmoticon->setText(QString());
-    d->ui.insertEmoticon->setIcon(KIcon(QLatin1String("face-smile")));
 
     // connect channel signals
     setupChannelSignals();
@@ -173,26 +156,10 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     //set the title of this chat.
     d->title = info.chatName();
 
-    //format toolbar visibility
-    d->showFormatToolbarAction->setCheckable(true);
-    connect(d->showFormatToolbarAction, SIGNAL(toggled(bool)),
-            d->ui.formatToolbar, SLOT(setVisible(bool)));
-    d->ui.sendMessageBox->addAction(d->showFormatToolbarAction);
-
-    //FIXME load whether to show/hide by default from config file (do per account)
-    bool formatToolbarIsVisible = false;
-    d->ui.formatToolbar->setVisible(formatToolbarIsVisible);
-    d->showFormatToolbarAction->setChecked(formatToolbarIsVisible);
     loadSpellCheckingOption();
 
     d->pausedStateTimer = new QTimer(this);
     d->pausedStateTimer->setSingleShot(true);
-
-    //connect signals/slots from format toolbar
-    connect(d->ui.formatColor, SIGNAL(released()), SLOT(onFormatColorReleased()));
-    connect(d->ui.formatBold, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontBold(bool)));
-    connect(d->ui.formatItalic, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontItalic(bool)));
-    connect(d->ui.formatUnderline, SIGNAL(toggled(bool)), d->ui.sendMessageBox, SLOT(setFontUnderline(bool)));
 
     // make the sendMessageBox a focus proxy for the chatview
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
@@ -1014,13 +981,6 @@ void ChatWidget::findPreviousTextInChat(const QString& text, QWebPage::FindFlags
     // for "backwards" search
     flags |= QWebPage::FindBackward;
     d->ui.chatArea->findText(text, flags);
-}
-
-void ChatWidget::onFormatColorReleased()
-{
-    QColor color;
-    KColorDialog::getColor(color,this);
-    d->ui.sendMessageBox->setTextColor(color);
 }
 
 void ChatWidget::setSpellDictionary(const QString &dict)

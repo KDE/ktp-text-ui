@@ -166,7 +166,6 @@ private Q_SLOTS:
     void findTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findNextTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
-    void onFormatColorReleased();
     void onHistoryFetched(const QList<AdiumThemeContentInfo> &messages);
     void onChatPausedTimerExpired();
     void currentPresenceChanged(const Tp::Presence &presence);
