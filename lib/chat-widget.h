@@ -166,7 +166,6 @@ private Q_SLOTS:
     void findTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findNextTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
-    void onFormatColorReleased();
     void onHistoryFetched(const QList<AdiumThemeContentInfo> &messages);
     void onChatPausedTimerExpired();
     void currentPresenceChanged(const Tp::Presence &presence);
@@ -180,6 +179,12 @@ private:
 
     /** connects necessary signals for the contactModel */
     void setupContactModelSignals();
+
+    /** Saves pair <target Id,language option selected> in a file */
+    void saveSpellCheckingOption();
+
+    /** Loads language option for specified target Id */
+    void loadSpellCheckingOption();
 
     virtual bool isOnTop() const;
     bool m_previousConversationAvailable;

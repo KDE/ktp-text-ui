@@ -1,7 +1,27 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Text Formatting
+Name[cs]=Formátování textu
+Name[el]=Διαμόρφωση κειμένου
+Name[hu]=Szövegformázás
+Name[it]=Formattazione del testo
+Name[nl]=Opmaken van tekst
+Name[pt]=Formatação do Texto
+Name[pt_BR]=Formatação do texto
+Name[sv]=Textformatering
+Name[uk]=Форматування тексту
+Name[x-test]=xxText Formattingxx
 Comment=Use /, _, * and - to make text italic, underlined, bold or strikeout respectively
+Comment[cs]=Použít /,_, * a - pro kurzívu, podtržený, tučný a přeškrtnutý text
+Comment[el]=Χρησιμοποιήστε /, _, * και - για πλάγιους, υπογραμμισμένους, έντονους ή με επιγράμμιση χαρακτήρες αντίστοιχα
+Comment[hu]=A /, _, * és - használatával teheti a szöveget döntötté, aláhúzottá, félkövérré vagy áthúzottá
+Comment[it]=Usa /, _, * e - per rendere il testo rispettivamente corsivo, sottolineato, grassetto o barrato
+Comment[nl]=Gebruik /, _, * and - om tekst respectievelijk cursief, onderlijnt, vet of doorgestreept te maken
+Comment[pt]=Usar o '/', '_', '*' e '-' para tornar o texto itálico, sublinhado, negrito ou traçado, respectivamente
+Comment[pt_BR]=Use /, _, * e - para tornar o texto em itálico, sublinhado, negrito ou riscado, respectivamente
+Comment[sv]=Använd /,_, * och - för att antingen visa texten kursiv, understruken, med fetstil eller överstruken
+Comment[uk]=Використовувати /, _, * і - для курсиву, підкресленого, напівжирного та перекресленого тексту, відповідно
+Comment[x-test]=xxUse /, _, * and - to make text italic, underlined, bold or strikeout respectivelyxx
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 X-KDE-Library=ktptextui_message_filter_formatting
