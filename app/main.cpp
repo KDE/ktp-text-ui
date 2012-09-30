@@ -48,7 +48,8 @@ int main(int argc, char *argv[])
     Tp::registerTypes();
 
     Tp::AccountFactoryPtr accountFactory = Tp::AccountFactory::create(QDBusConnection::sessionBus(),
-                                                                      Tp::Account::FeatureCore);
+                                                                      Tp::Features() << Tp::Account::FeatureCore
+                                                                                     << Tp::Account::FeatureProfile);
 
     Tp::ConnectionFactoryPtr  connectionFactory = Tp::ConnectionFactory::create(
         QDBusConnection::sessionBus(),

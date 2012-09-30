@@ -38,6 +38,7 @@ private Q_SLOTS:
     void testUnsupportedProtocolCatching();
     void testMetadataGeneration();
     void testMultipleURLCatching();
+    void textRichTextUrlParsing();
     void testImageEmbedGIF();
     void testXSS();
 //     void testSearchExpansion();
