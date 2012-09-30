@@ -64,21 +64,21 @@ void MessageProcessorBasicTests::testEscaping()
 void MessageProcessorBasicTests::testUrlCatching()
 {
     QString processed = this->s.getProcessedMessage("http://www.google.com.au/");
-    QString href = QLatin1String("<a href='http://www.google.com.au/'>http://www.google.com.au/</a>");
+    QString href = QLatin1String("<a href=\"http://www.google.com.au/\">http://www.google.com.au/</a>");
 
     QCOMPARE(processed, href);
 }
 
 void MessageProcessorBasicTests::testURICatchingSMB() {
     QString processed = this->s.getProcessedMessage("smb://user@localhost/");
-    QString href = QLatin1String("<a href='smb://user@localhost/'>smb://user@localhost/</a>");
+    QString href = QLatin1String("<a href=\"smb://user@localhost/\">smb://user@localhost/</a>");
 
     QCOMPARE(processed, href);
 }
 
 void MessageProcessorBasicTests::testWWWCatching() {
     QString processed = this->s.getProcessedMessage("www.google.com.au");
-    QString href = QLatin1String("<a href='http://www.google.com.au'>www.google.com.au</a>");
+    QString href = QLatin1String("<a href=\"http://www.google.com.au\">www.google.com.au</a>");
 
     QCOMPARE(processed, href);
 }
@@ -122,17 +122,24 @@ void MessageProcessorBasicTests::testMultipleURLCatching()
     QCOMPARE(qvariant_cast<KUrl>(urls.at(1)), KUrl("http://www.google.com.au"));
 }
 
+void MessageProcessorBasicTests::textRichTextUrlParsing()
+{
+    compare("go to http://example.com/page.php?code=",
+            "go to <a href=\"http://example.com/page.php?code=123&quot;\">http://example.com/page.php?code=123&quot;</a>");
+}
+
+
 void MessageProcessorBasicTests::testImageEmbedGIF()
 {
     const char* message = "http://kde.org/images/teaser/jointhegame.gif";
     const char* imgTag =
-    "<a href='http://kde.org/images/teaser/jointhegame.gif'>"
+    "<a href=\"http://kde.org/images/teaser/jointhegame.gif\">"
         "http://kde.org/images/teaser/jointhegame.gif"
     "</a>\n"
-    "<br/><a href='http://kde.org/images/teaser/jointhegame.gif'>"
-        "<img src='http://kde.org/images/teaser/jointhegame.gif'"
-            " style='max-width:100%;margin-top:3px'"
-            " alt='Click to view in browser' />"
+    "<br/><a href=\"http://kde.org/images/teaser/jointhegame.gif\">"
+        "<img src=\"http://kde.org/images/teaser/jointhegame.gif\""
+            " style=\"max-width:100%;margin-top:3px\""
+            " alt=\"Click to view in browser\" />"
     "</a>";
 
     compare(message, imgTag);

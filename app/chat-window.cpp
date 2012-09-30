@@ -503,12 +503,14 @@ void ChatWindow::onOpenLogTriggered()
     Tp::AccountPtr account = currentChatTab->account();
     Tp::ContactPtr contact = currentChatTab->textChannel()->targetContact();
 
+    /* Add "--" before the UIDs so that KCmdLineArgs in ktp-log-viewer does not try to parse
+     * UIDs starting with "-" as arguments */
     if (!contact.isNull()) {
         KToolInvocation::kdeinitExec(QLatin1String("ktp-log-viewer"),
-                                     QStringList() << account->uniqueIdentifier() << contact->id());
+                                     QStringList() << QLatin1String("--") << account->uniqueIdentifier() << contact->id());
     } else {
         KToolInvocation::kdeinitExec(QLatin1String("ktp-log-viewer"),
-                                     QStringList() << account->uniqueIdentifier() << currentChatTab->textChannel()->targetId());
+                                     QStringList() << QLatin1String("--") << account->uniqueIdentifier() << currentChatTab->textChannel()->targetId());
     }
 }
 
