@@ -296,9 +296,8 @@ void ChatWidget::setChatEnabled(bool enable)
 
 void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 {
-    if (!d->channel.isNull() && d->channel->connection()->status() == Tp::ConnectionStatusConnected) {
-        onContactPresenceChange(d->channel->groupSelfContact(), KTp::Presence(d->channel->groupSelfContact()->presence()));
-    }
+    onContactPresenceChange(d->channel->groupSelfContact(), KTp::Presence(d->channel->groupSelfContact()->presence()));
+
     d->channel = newTextChannelPtr;     // set the new channel
     d->contactModel->setTextChannel(newTextChannelPtr);
 
