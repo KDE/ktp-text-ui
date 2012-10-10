@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Text To Speech
 Name[da]=Tekst-til-tale
+Name[de]=Sprachausgabe
 Name[el]=Μετατροπή κειμένου σε ομιλία
 Name[hu]=Szövegfelolvasó
 Name[it]=Sintesi vocale
@@ -14,6 +15,7 @@ Name[sr@latin]=Tekst u govor
 Name[sv]=Text till tal
 Name[uk]=Синтез мовлення з тексту
 Name[x-test]=xxText To Speechxx
+Name[zh_CN]=文本到语音
 Encoding=UTF-8
 Comment=Read out incoming messages using text-to-speech service
 Comment[da]=Læs indkommende beskeder op med tekst-til-tale-tjenesten
@@ -30,6 +32,7 @@ Comment[sr@latin]=Iščitava dolazne poruke preko servisa za tekst‑u‑govor
 Comment[sv]=Läs upp inkommande meddelande med text-till-tal-tjänsten
 Comment[uk]=Читати вхідні повідомлення за допомогою служби синтезу мовлення з тексту
 Comment[x-test]=xxRead out incoming messages using text-to-speech servicexx
+Comment[zh_CN]=使用语音合成服务来朗读收到的消息
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 X-KDE-Library=ktptextui_message_filter_tts
