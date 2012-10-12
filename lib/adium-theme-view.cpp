@@ -496,7 +496,7 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
     htmlTemplate.replace(QLatin1String("%destinationName%"), info.destinationName());
     htmlTemplate.replace(QLatin1String("%destinationDisplayName%"), info.destinationDisplayName());
     htmlTemplate.replace(QLatin1String("%incomingIconPath%"), (!info.incomingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
-    htmlTemplate.replace(QLatin1String("%outgoingIconPath%"), (!info.outgoingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
+    htmlTemplate.replace(QLatin1String("%outgoingIconPath%"), (!info.outgoingIconPath().isEmpty() ? info.outgoingIconPath().toString() : m_defaultAvatar));
     htmlTemplate.replace(QLatin1String("%timeOpened%"), KGlobal::locale()->formatTime(info.timeOpened().time()));
     htmlTemplate.replace(QLatin1String("%dateOpened%"), KGlobal::locale()->formatDate(info.timeOpened().date(), KLocale::LongDate));
 
