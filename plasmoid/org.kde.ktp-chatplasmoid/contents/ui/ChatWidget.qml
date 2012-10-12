@@ -162,7 +162,7 @@ Item {
 
         onCountChanged: {
             if(!moving && followConversation && contentHeight>height) {
-                view.positionViewAtEnd()
+                view.positionViewAtEnd(); view.positionViewAtEnd() //see https://bugreports.qt-project.org/browse/QTBUG-27529
             }
         }
     }
