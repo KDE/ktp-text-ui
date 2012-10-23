@@ -73,7 +73,7 @@ QSize ChatTextEdit::sizeHint() const
 
 void ChatTextEdit::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key()==Qt::Key_Return && !e->modifiers()) {
+    if ((e->key()==Qt::Key_Return ||  e->key()==Qt::Key_Enter) && !e->modifiers()) {
         Q_EMIT returnKeyPressed();
         return;
     }
