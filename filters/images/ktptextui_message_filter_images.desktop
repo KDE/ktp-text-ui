@@ -25,6 +25,7 @@ Name[sv]=Förhandsgranskning av bild
 Name[uk]=Перегляд зображення
 Name[x-test]=xxImage Previewxx
 Name[zh_CN]=图片预览
+Name[zh_TW]=影像預覽
 Encoding=UTF-8
 Comment=Embed a thumbnail of any image URL sent in a chat
 Comment[ca]=Incrusta una miniatura de qualsevol URL d'imatge enviat al xat
@@ -51,6 +52,7 @@ Comment[sv]=Inbädda en miniatyrbild av alla webbadresser med bilder som skickas
 Comment[uk]=Вбудовувати мініатюри для всіх адрес зображень, надісланих під час спілкування
 Comment[x-test]=xxEmbed a thumbnail of any image URL sent in a chatxx
 Comment[zh_CN]=嵌入聊天中图像 URL 的缩略图
+Comment[zh_TW]=聊天內傳送影像網址時嵌入其縮圖
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 

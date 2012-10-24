@@ -27,6 +27,7 @@ Name[sv]=Insticksprogram
 Name[uk]=Додатки
 Name[x-test]=xxPluginsxx
 Name[zh_CN]=插件
+Name[zh_TW]=外掛程式
 Type=Service
 Exec=kcmshell4 kcm_ktp_message_filters
 Comment=How to deal with extra information obtained from messages
@@ -53,6 +54,7 @@ Comment[sv]=Hur extra information som erhålls från meddelande ska hanteras
 Comment[uk]=Спосіб обробки додаткових даних, отриманих з повідомленнями
 Comment[x-test]=xxHow to deal with extra information obtained from messagesxx
 Comment[zh_CN]=处理消息中获得的额外信息
+Comment[zh_TW]=如何處理訊息中取得的額外資訊
 Icon=preferences-plugin
 
 X-KDE-Library=kcm_ktp_chat_messages
