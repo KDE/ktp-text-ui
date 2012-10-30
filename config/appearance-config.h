@@ -36,7 +36,7 @@ class AppearanceConfig : public KCModule
 
 public:
     explicit AppearanceConfig(QWidget *parent = 0,
-				const QVariantList& args = QVariantList());
+                              const QVariantList& args = QVariantList());
     ~AppearanceConfig();
 
 public Q_SLOTS:
