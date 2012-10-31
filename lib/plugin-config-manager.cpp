@@ -17,6 +17,7 @@
 */
 
 #include "plugin-config-manager.h"
+#include "version.h"
 
 #include <QMutex>
 #include <QSet>
@@ -53,7 +54,8 @@ PluginConfigManager::PluginConfigManager() :
 }
 
 KService::List offers() {
-    return KServiceTypeTrader::self()->query(QLatin1String("KTpTextUi/MessageFilter"));
+    return KServiceTypeTrader::self()->query(QLatin1String("KTpTextUi/MessageFilter"),
+                                             QLatin1String("[X-KTp-PluginInfo-Version] == " KTP_TEXT_UI_PLUGIN_FRAMEWORK_VERSION));
 }
 
 void PluginConfigManager::generateCache()

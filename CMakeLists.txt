@@ -1,6 +1,7 @@
 project(ktp-text-ui)
 
 set(KTP_TEXT_UI_VERSION "0.5.1")
+set(KTP_TEXT_UI_PLUGIN_FRAMEWORK_VERSION "1")
 set(IS_KTP_INTERNAL_MODULE TRUE)
 
 # Include our extra FindFoo.cmake files.
@@ -39,7 +40,7 @@ if(TELEPATHY_LOGGER_QT4_FOUND)
     )
 endif()
 
-configure_file(version.h.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+configure_file(version.h.in ${CMAKE_CURRENT_BINARY_DIR}/version.h @ONLY)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(lib)
