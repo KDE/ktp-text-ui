@@ -20,6 +20,7 @@
 #include "telepathy-chat-ui.h"
 
 #include "defines.h"
+#include "version.h"
 
 #include <TelepathyQt/ClientRegistrar>
 #include <TelepathyQt/AccountFactory>
@@ -36,7 +37,7 @@ int main(int argc, char *argv[])
 {
     KAboutData aboutData("ktp-text-ui", 0,
                          ki18n("Telepathy Text Ui"),
-                         "0.5.1");
+                         KTP_TEXT_UI_VERSION);
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "david@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
     aboutData.addAuthor(ki18n("Francesco Nwokeka"), ki18n("Developer"), "francesco.nwokeka@gmail.com");
