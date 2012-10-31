@@ -29,3 +29,7 @@ Comment[uk]=Фільтр повідомлень текстового інтер�
 Comment[x-test]=xxTelepathy Text-Ui Message Filterxx
 Comment[zh_CN]=Telepathy 文本界面消息过滤器
 Comment[zh_TW]=Telepathy 文字介面訊息過濾器
+
+# The ktp-text-ui plugin framework version for which the plugin is written
+[PropertyDef::X-KTp-PluginInfo-Version]
+Type=int
