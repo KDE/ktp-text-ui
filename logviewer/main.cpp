@@ -21,13 +21,14 @@
 #include <KCmdLineArgs>
 #include <KAboutData>
 #include "log-viewer.h"
+#include "version.h"
 
 int main(int argc, char *argv[])
 {
     KAboutData aboutData("ktp-log-viewer",
                          0,
                          ki18n("KDE IM Log Viewer"),
-                         "0.5.1");
+                         KTP_TEXT_UI_VERSION);
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "kde@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
     aboutData.setProductName("telepathy/log-viewer"); //set the correct name for bug reporting

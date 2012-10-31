@@ -17,6 +17,7 @@
 */
 
 #include "adiumxtra-protocol-handler.h"
+#include "version.h"
 
 #include <KApplication>
 #include <KAboutData>
@@ -28,7 +29,7 @@ int main(int argc, char *argv[])
     KAboutData aboutData("ktp-adiumxtra-protocol-handler",
                          0,
                          ki18n("AdiumXtra Protocol Handler"),
-                         "0.3.60");
+                         KTP_TEXT_UI_VERSION);
     aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
     aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
     aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
