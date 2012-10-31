@@ -56,10 +56,10 @@
 class ChatWidgetPrivate
 {
 public:
-    ChatWidgetPrivate()
+    ChatWidgetPrivate() :
+        remoteContactChatState(Tp::ChannelChatStateInactive);
+        isGroupChat(false)
     {
-        isGroupChat = false;
-        remoteContactChatState = Tp::ChannelChatStateInactive;
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
     bool chatviewlInitialised;

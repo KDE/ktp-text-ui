@@ -40,6 +40,7 @@ void AbstractMessageFilter::filterOutgoingMessage(Message &message)
 
 void AbstractMessageFilter::filterMessage(Message &message)
 {
+    Q_UNUSED(message)
 }
 
 QStringList AbstractMessageFilter::requiredScripts()
