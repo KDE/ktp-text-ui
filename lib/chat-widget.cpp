@@ -57,7 +57,7 @@ class ChatWidgetPrivate
 {
 public:
     ChatWidgetPrivate() :
-        remoteContactChatState(Tp::ChannelChatStateInactive);
+        remoteContactChatState(Tp::ChannelChatStateInactive),
         isGroupChat(false)
     {
     }
