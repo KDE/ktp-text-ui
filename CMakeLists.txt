@@ -14,7 +14,7 @@ set(KDE_MIN_VERSION "4.4.75")
 find_package (KDE4 ${KDE_MIN_VERSION} REQUIRED)
 find_package (TelepathyQt4 0.9.1 REQUIRED)
 find_package (KTp REQUIRED)
-find_package (TelepathyLoggerQt4 REQUIRED)
+find_package (TelepathyLoggerQt4 0.5.60 REQUIRED)
 
 include (CheckIncludeFiles)
 include (KDE4Defaults)
