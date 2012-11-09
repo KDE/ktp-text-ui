@@ -38,7 +38,6 @@ Message::Message(const Tp::ReceivedMessage &original) :
     setMainMessagePart(original.text());
 }
 
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
 Message::Message(const Tpl::TextEventPtr &original) :
     m_sentTime(original->timestamp()),
     m_token(original->messageToken()),
@@ -46,7 +45,6 @@ Message::Message(const Tpl::TextEventPtr &original) :
 {
     setMainMessagePart(original->message());
 }
-#endif
 
 QString Message::mainMessagePart() const
 {

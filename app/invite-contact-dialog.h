@@ -36,8 +36,7 @@ namespace KTp {
 class ContactGridWidget;
 }
 
-class AccountsModel;
-class QTcpSocket;
+class ContactsModel;
 
 class InviteContactDialog : public KDialog
 {
@@ -56,7 +55,7 @@ private Q_SLOTS:
 private:
     Tp::AccountPtr m_account;
     Tp::TextChannelPtr m_channel;
-    AccountsModel *m_accountsModel;
+    ContactsModel *m_contactsModel;
     KTp::ContactGridWidget *m_contactGridWidget;
 };
 

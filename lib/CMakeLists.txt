@@ -55,13 +55,6 @@ kde4_add_ui_files(ktpchat_SRCS ${ktpchat_UI})
 
 kde4_add_library(ktpchat SHARED ${ktpchat_SRCS})
 
-# telepathy-logger-qt4 related stuff
-if(TELEPATHY_LOGGER_QT4_FOUND)
-    target_link_libraries(ktpchat
-        ${TELEPATHY_LOGGER_QT4_LIBRARIES}
-    )
-endif()
-
 target_link_libraries(ktpchat
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
@@ -70,6 +63,7 @@ target_link_libraries(ktpchat
     ${QT_QTWEBKIT_LIBRARY}
     ${KDE4_KEMOTICONS_LIBS}
     ${KTP_LIBRARIES}
+    ${TELEPATHY_LOGGER_QT4_LIBRARIES}
 )
 install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})
 

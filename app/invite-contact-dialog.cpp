@@ -31,7 +31,7 @@
 #include <TelepathyQt/TextChannel>
 
 #include <KTp/debug.h>
-#include <KTp/Models/accounts-model.h>
+#include <KTp/Models/contacts-model.h>
 #include <KTp/Models/accounts-filter-model.h>
 #include <KTp/Widgets/contact-grid-widget.h>
 #include <telepathy-qt4/TelepathyQt/PendingChannelRequest>
@@ -43,11 +43,11 @@ InviteContactDialog::InviteContactDialog(const Tp::AccountPtr &account, const Tp
 {
     resize(500,450);
 
-    m_accountsModel = new AccountsModel(this);
-    m_accountsModel->onNewAccount(account);
+    m_contactsModel = new ContactsModel(this);
+    m_contactsModel->onNewAccount(account);
 
 
-    m_contactGridWidget = new KTp::ContactGridWidget(m_accountsModel, this);
+    m_contactGridWidget = new KTp::ContactGridWidget(m_contactsModel, this);
     m_contactGridWidget->contactFilterLineEdit()->setClickMessage(i18n("Search in Contacts..."));
     m_contactGridWidget->filter()->setPresenceTypeFilterFlags(AccountsFilterModel::ShowOnlyConnected);
     setMainWidget(m_contactGridWidget);

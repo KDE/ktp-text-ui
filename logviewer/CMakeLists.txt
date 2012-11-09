@@ -1,10 +1,4 @@
-#Only do anything with this app if the logger is available.
-if(TELEPATHY_LOGGER_QT4_FOUND)
-    add_definitions( -DTELEPATHY_LOGGER_QT4_FOUND )
-
-include_directories(${CMAKE_SOURCE_DIR}/lib
-                    ${TELEPATHY_LOGGER_QT4_INCLUDE_DIRS}
-                   )
+include_directories(${CMAKE_SOURCE_DIR}/lib)
 
 set(ktp-log-viewer_SRCS
         main.cpp
@@ -34,6 +28,3 @@ target_link_libraries(ktp-log-viewer
 
 install(TARGETS ktp-log-viewer DESTINATION ${BIN_INSTALL_DIR})
 install(FILES ktp-log-viewer.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-
-
-endif()
