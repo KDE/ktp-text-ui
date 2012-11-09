@@ -40,6 +40,9 @@ protected:
     // reimplemented
     void resizeEvent(QResizeEvent*);
 
+    void getHistory(bool up);
+    void addHistory(const QString &text);
+
 private Q_SLOTS:
     void recalculateSize();
     void updateScrollBar();
@@ -50,6 +53,10 @@ Q_SIGNALS:
 public Q_SLOTS:
     /** wraps setFontWeight to a simple on/off bold) */
     void setFontBold(bool);
+
+private:
+    QStringList m_history;
+    int m_historyPos;
 };
 
 #endif // CHATTEXTEDIT_H

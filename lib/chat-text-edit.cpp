@@ -27,6 +27,8 @@
 
 #include <KStandardShortcut>
 
+#define MAXHISTORY 100
+
 ChatTextEdit::ChatTextEdit(QWidget *parent) :
         KTextEdit(parent)
 {
@@ -39,6 +41,10 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
 
     // set to false so it doesn't paste anything unwanted apart from normal text
     setAcceptRichText(false);
+
+    // Initialize the history
+    m_history.prepend(QString());
+    m_historyPos = 0;
 
     connect(this, SIGNAL(textChanged()), SLOT(recalculateSize()));
 }
@@ -74,6 +80,9 @@ QSize ChatTextEdit::sizeHint() const
 void ChatTextEdit::keyPressEvent(QKeyEvent *e)
 {
     if ((e->key()==Qt::Key_Return ||  e->key()==Qt::Key_Enter) && !e->modifiers()) {
+	if (!toPlainText().isEmpty()) {
+	    addHistory(toPlainText());
+	}
         Q_EMIT returnKeyPressed();
         return;
     }
@@ -83,6 +92,14 @@ void ChatTextEdit::keyPressEvent(QKeyEvent *e)
             QWidget::keyReleaseEvent(e); //skip internal trapping, and pass to parent.
             return;
         }
+    }
+
+    if ((e->key() == Qt::Key_Up) && !textCursor().movePosition(QTextCursor::Up)) {
+        getHistory(true);
+    }
+
+    if ((e->key() == Qt::Key_Down) && !textCursor().movePosition(QTextCursor::Down)) {
+        getHistory(false);
     }
 
     if (e->key() == Qt::Key_PageUp ||
@@ -132,4 +149,47 @@ void ChatTextEdit::updateScrollBar()
 {
     setVerticalScrollBarPolicy(sizeHint().height() > height() ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAlwaysOff);
     ensureCursorVisible();
+}
+
+// History of sent messages based on code from Konversation
+// by Dario Abatianni
+
+void ChatTextEdit::getHistory(bool up)
+{
+    m_history[m_historyPos] = toPlainText();
+
+    if (up) {
+        m_historyPos++;
+
+        if (m_historyPos == m_history.length()) {
+            m_historyPos--;
+            return;
+        }
+    } else {
+        if (m_historyPos == 0) {
+            if (!toPlainText().isEmpty()) {
+                addHistory(toPlainText());
+            }
+
+            setText(QLatin1String(""));
+        } else {
+            m_historyPos--;
+        }
+    }
+
+    setText(m_history[m_historyPos]);
+}
+
+void ChatTextEdit::addHistory(const QString &text)
+{
+    if (m_history.value(1) != text) {
+        m_history[0] = text;
+        m_history.prepend(QString());
+
+        if (m_history.length() > MAXHISTORY) {
+            m_history.removeLast();
+        }
+    }
+
+    m_historyPos = 0;
 }
