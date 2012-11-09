@@ -22,10 +22,8 @@
 
 #include <TelepathyQt/Message>
 
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
 #include <TelepathyLoggerQt4/Types>
 #include <TelepathyLoggerQt4/TextEvent>
-#endif
 
 #include <ktpchat_export.h>
 
@@ -48,10 +46,7 @@ class KDE_TELEPATHY_CHAT_EXPORT Message {
 
 public:
     Message(const Tp::Message& original);
-
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
     Message(const Tpl::TextEventPtr &original);
-#endif
 
     /*! \brief The body of the message
      * \return the contents of the body of the message, as HTML
