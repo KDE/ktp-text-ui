@@ -22,10 +22,8 @@
 
 #include "adium-theme-content-info.h"
 
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
 #include <TelepathyLoggerQt4/LogManager>
 #include <TelepathyLoggerQt4/Entity>
-#endif
 
 #include <TelepathyQt/Types>
 #include <TelepathyQt/Account>
@@ -54,20 +52,15 @@ public:
 Q_SIGNALS:
     void fetched(const QList<AdiumThemeContentInfo> &messages);
 
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
 private Q_SLOTS:
     void onDatesFinished(Tpl::PendingOperation *po);
     void onEventsFinished(Tpl::PendingOperation *po);
-#endif
 
 private:
     Tp::AccountPtr m_account;
     Tp::TextChannelPtr m_textChannel;
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
     Tpl::EntityPtr m_contactEntity;
     Tpl::LogManagerPtr m_logManager;
-#endif
-
 
     int m_fetchAmount;
 };

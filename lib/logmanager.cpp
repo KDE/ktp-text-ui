@@ -24,8 +24,6 @@
 
 #include <KDebug>
 
-
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
 #include <TelepathyLoggerQt4/Init>
 #include <TelepathyLoggerQt4/Entity>
 #include <TelepathyLoggerQt4/PendingDates>
@@ -34,7 +32,6 @@
 #include <TelepathyLoggerQt4/TextEvent>
 #include <TelepathyLoggerQt4/CallEvent>
 #include <TelepathyLoggerQt4/LogManager>
-#endif
 
 #include <TelepathyQt/Types>
 #include <TelepathyQt/AvatarData>
@@ -45,7 +42,6 @@ LogManager::LogManager(QObject *parent)
     : QObject(parent),
     m_fetchAmount(10)
 {
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
     Tpl::init();
 
     m_logManager = Tpl::LogManager::instance();
@@ -53,10 +49,6 @@ LogManager::LogManager(QObject *parent)
         qWarning() << "LogManager not found";
         Q_ASSERT(false);
     }
-
-#else
-    kWarning() << "text-ui was built without log support";
-#endif
 }
 
 LogManager::~LogManager()
@@ -66,7 +58,6 @@ LogManager::~LogManager()
 
 bool LogManager::exists() const
 {
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
     if (!m_account.isNull() && !m_textChannel.isNull() && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
         Tpl::EntityPtr contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
                                                            Tpl::EntityTypeContact,
@@ -77,9 +68,6 @@ bool LogManager::exists() const
     } else {
         return false;
     }
-#else
-    return false;
-#endif
 }
 
 void LogManager::setTextChannel(const Tp::AccountPtr &account, const Tp::TextChannelPtr &textChannel)
@@ -96,7 +84,6 @@ void LogManager::setFetchAmount(int n)
 void LogManager::fetchLast()
 {
     kDebug();
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
     if (!m_account.isNull() && !m_textChannel.isNull() && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
         Tpl::EntityPtr contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
                                                 Tpl::EntityTypeContact,
@@ -107,13 +94,12 @@ void LogManager::fetchLast()
         connect(dates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
         return;
     }
-#endif
+
     //in all other cases finish immediately.
     QList<AdiumThemeContentInfo> messages;
     Q_EMIT fetched(messages);
 }
 
-#ifdef TELEPATHY_LOGGER_QT4_FOUND
 void LogManager::onDatesFinished(Tpl::PendingOperation *po)
 {
     Tpl::PendingDates *pd = (Tpl::PendingDates*) po;
@@ -206,4 +192,3 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
     kDebug() << "emit all messages" << messages.count();
     Q_EMIT fetched(messages);
 }
-#endif
