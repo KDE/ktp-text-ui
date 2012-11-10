@@ -33,7 +33,7 @@
 MessageView::MessageView(QWidget *parent) :
     AdiumThemeView(parent)
 {
-    connect(this, SIGNAL(loadFinished(bool)), SLOT(onLoadFinished()));
+    connect(this, SIGNAL(loadFinished(bool)), SLOT(processStoredEvents()));
 }
 
 
@@ -41,21 +41,18 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
                           const Tp::ContactPtr &contact, const QDate &date,
                           const QPair< QDate, QDate > &nearestDates)
 {
-
     if (account.isNull() || entity.isNull()) {
         //note contact can be null
         kWarning() << "invalid account/contact. Not loading log";
         return;
     }
-    
+
     m_account = account;
     m_entity = entity;
     m_contact = contact;
     m_date = date;
     m_prev = nearestDates.first;
     m_next = nearestDates.second;
-    m_initialized = false;
-    m_templateLoaded = false;
 
     if (entity->entityType() == Tpl::EntityTypeRoom) {
         load(AdiumThemeView::GroupChat);
@@ -85,41 +82,24 @@ void MessageView::clearHighlightText()
     setHighlightText(QString());
 }
 
-void MessageView::onLoadFinished()
-{
-    processStoredEvents();
-
-    m_templateLoaded = true;
-}
-
 void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
 {
     Tpl::PendingEvents *pe = qobject_cast<Tpl::PendingEvents*>(po);
-
-    /* Wait with initialization for the first event so that we can know when the chat session started */
-    if (!m_initialized) {
-        AdiumThemeHeaderInfo headerInfo;
-        headerInfo.setDestinationDisplayName(m_contact.isNull() ? m_entity->alias() : m_contact->alias());
-        headerInfo.setChatName(m_contact.isNull() ? m_entity->alias() : m_contact->alias());
-        headerInfo.setGroupChat(m_entity->entityType() == Tpl::EntityTypeRoom);
-        headerInfo.setSourceName(m_account->displayName());
-        headerInfo.setIncomingIconPath(m_contact.isNull() ? QString() : m_contact->avatarData().fileName);
-
-        if (pe->events().count() > 0 && !pe->events().first().isNull()) {
-            headerInfo.setTimeOpened(pe->events().first()->timestamp());
-        }
-
-        initialise(headerInfo);
-
-        m_initialized = true;
-    }
-
     m_events << pe->events();
 
-    /* Don't add retrieved messages until template is loaded */
-    if (m_templateLoaded) {
-        processStoredEvents();
+    /* Wait with initialization for the first event so that we can know when the chat session started */
+    AdiumThemeHeaderInfo headerInfo;
+    headerInfo.setDestinationDisplayName(m_contact.isNull() ? m_entity->alias() : m_contact->alias());
+    headerInfo.setChatName(m_contact.isNull() ? m_entity->alias() : m_contact->alias());
+    headerInfo.setGroupChat(m_entity->entityType() == Tpl::EntityTypeRoom);
+    headerInfo.setSourceName(m_account->displayName());
+    headerInfo.setIncomingIconPath(m_contact.isNull() ? QString() : m_contact->avatarData().fileName);
+
+    if (pe->events().count() > 0 && !pe->events().first().isNull()) {
+        headerInfo.setTimeOpened(pe->events().first()->timestamp());
     }
+
+    initialise(headerInfo);
 }
 
 

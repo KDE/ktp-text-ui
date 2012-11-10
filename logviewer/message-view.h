@@ -46,16 +46,14 @@ public Q_SLOTS:
     void onLinkClicked(const QUrl &link);
 
 private Q_SLOTS:
-   void onLoadFinished();
-   void onEventsLoaded(Tpl::PendingOperation* po);
-   void doHighlightText();
+    void onEventsLoaded(Tpl::PendingOperation* po);
+    void doHighlightText();
+    void processStoredEvents();
 
 Q_SIGNALS:
     void conversationSwitchRequested(const QDate &date);
 
 private:
-    void processStoredEvents();
-
     Tpl::EntityPtr m_entity;
     Tp::AccountPtr m_account;
     Tp::ContactPtr m_contact;
@@ -66,8 +64,6 @@ private:
     QString m_highlightedText;
 
     Tpl::EventPtrList m_events;
-    bool m_initialized;
-    bool m_templateLoaded;
 
     QString m_accountAvatar;
 };
