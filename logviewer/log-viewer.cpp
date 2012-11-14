@@ -24,12 +24,13 @@
 #include <TelepathyQt/PendingReady>
 #include <TelepathyQt/ContactManager>
 
-
 #include <TelepathyLoggerQt4/Init>
 #include <TelepathyLoggerQt4/Entity>
 #include <TelepathyLoggerQt4/LogManager>
 #include <TelepathyLoggerQt4/SearchHit>
 #include <TelepathyLoggerQt4/PendingSearch>
+
+#include <KTp/logs-importer.h>
 
 #include <QSortFilterProxyModel>
 #include <QMenu>
@@ -38,9 +39,12 @@
 #include <KPixmapSequence>
 #include <KMessageBox>
 
+#include <KDebug>
+
 #include "entity-model.h"
 #include "entity-proxy-model.h"
 #include "entity-model-item.h"
+#include "logs-import-dialog.h"
 
 Q_DECLARE_METATYPE(QModelIndex)
 
@@ -114,6 +118,8 @@ void LogViewer::onAccountManagerReady()
     Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
     logManager->setAccountManagerPtr(m_accountManager);
     m_entityModel->setAccountManager(m_accountManager);
+
+    runKopeteLogsImport();
 }
 
 void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &previous)
@@ -303,4 +309,35 @@ void LogViewer::logClearingFinished(Tpl::PendingOperation *operation)
     }
 
     m_entityListContextMenu->setProperty("index", QVariant());
+}
+
+void LogViewer::runKopeteLogsImport()
+{
+    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
+    KConfigGroup logsConfig = config->group("logs");
+
+    bool importDone = logsConfig.readEntry(QLatin1String("InitialKopeteImportDone"), QVariant(false)).toBool();
+    if (importDone) {
+	kDebug() << "Skipping initial Kopete logs import, already done.";
+	return;
+    }
+
+    QList<Tp::AccountPtr> accounts = m_accountManager->allAccounts();
+    QList<Tp::AccountPtr> matchingAccounts;
+    KTp::LogsImporter importer;
+
+    Q_FOREACH (const Tp::AccountPtr &account, accounts) {
+	if (importer.hasKopeteLogs(account)) {
+	    matchingAccounts << account;
+	}
+    }
+
+    kDebug() << "Initial Kopete logs import: found" << matchingAccounts.count() << "accounts to import";
+
+    if (!matchingAccounts.isEmpty()) {
+	LogsImportDialog *dialog = new LogsImportDialog(this);
+	dialog->importLogs(matchingAccounts);
+    }
+
+    logsConfig.writeEntry(QLatin1String("InitialKopeteImportDone"), true);
 }
