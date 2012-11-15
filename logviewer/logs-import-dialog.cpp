@@ -25,7 +25,7 @@
 #include <KListWidget>
 #include <KLocalizedString>
 #include <KDebug>
-#include <KTp/Logs/logs-importer.h>
+#include <KTp/logs-importer.h>
 #include <TelepathyQt/Account>
 
 Q_DECLARE_METATYPE(Tp::AccountPtr);
