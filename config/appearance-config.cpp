@@ -234,7 +234,7 @@ void AppearanceConfig::sendDemoMessages()
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::LocalToRemote);
     message.setMessage(i18n("Check out which cool adium themes work "
-                            "<a href=\"http://community.kde.org/Real-Time_Communication_and_Collaboration/Components/Chat_Window/Themes\">"
+                            "<a href=\"http://community.kde.org/KTp/Components/Chat_Window/Themes\">"
                             "here</a>!"));
     message.setSenderDisplayName(i18nc("Example email", "ted@example.com"));
     message.setSenderScreenName(i18nc("Example name", "Ted Example"));

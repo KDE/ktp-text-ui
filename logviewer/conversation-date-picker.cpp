@@ -43,6 +43,7 @@ void ConversationDatePicker::setEntity(const Tp::AccountPtr &account, const Tpl:
     if (!m_searchHits.isEmpty()) {
         setDatesFromSearchHits();
         updatePaintedDates();
+	Q_EMIT dateChanged(date());
     } else {
         Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
         Tpl::PendingDates *pendingDates = logManager->queryDates(account, entity, Tpl::EventTypeMaskText);
@@ -131,6 +132,10 @@ void ConversationDatePicker::setDatesFromSearchHits()
     }
 
     Q_FOREACH (const Tpl::SearchHit &searchHit, m_searchHits) {
+	if (searchHit.account().isNull() || searchHit.target().isNull()) {
+	    continue;
+	}
+
         if ((searchHit.account()->uniqueIdentifier() == m_account->uniqueIdentifier()) &&
             (searchHit.target()->identifier() == m_entity->identifier())) {
                 m_setDates << searchHit.date();

@@ -61,6 +61,8 @@ private Q_SLOTS:
     void clearContactHistory();
     void logClearingFinished(Tpl::PendingOperation *);
 private:
+    void runKopeteLogsImport();
+
     Ui::LogViewer *ui;
     Tp::AccountManagerPtr m_accountManager;
     EntityModel *m_entityModel;
