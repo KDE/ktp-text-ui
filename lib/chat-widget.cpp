@@ -50,6 +50,7 @@
 #include <TelepathyQt/OutgoingFileTransferChannel>
 
 #include <KTp/presence.h>
+#include <KTp/actions.h>
 #include "message-processor.h"
 
 class ChatWidgetPrivate
@@ -342,12 +343,7 @@ void ChatWidget::dropEvent(QDropEvent *e)
     if (data->hasUrls()) {
         Q_FOREACH(const QUrl &url, data->urls()) {
             if (url.isLocalFile()) {
-                Tp::FileTransferChannelCreationProperties properties(
-                        url.toLocalFile(),
-                        KMimeType::findByFileContent(url.toLocalFile())->name());
-                d->account->createFileTransfer(d->channel->targetContact(),
-                        properties, QDateTime::currentDateTime(),
-                        QLatin1String("org.freedesktop.Telepathy.Client.KTp.FileTransfer"));
+		KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), url.toLocalFile());
             } else {
                 d->ui.sendMessageBox->append(url.toString());
             }
@@ -375,13 +371,8 @@ void ChatWidget::dropEvent(QDropEvent *e)
             return;
         }
 
-        Tp::FileTransferChannelCreationProperties properties(
-                    tmpFile.fileName(),
-                    KMimeType::findByFileContent(tmpFile.fileName())->name());
         Tp::PendingChannelRequest *request;
-        request = d->account->createFileTransfer(d->channel->targetContact(),
-                        properties, QDateTime::currentDateTime(),
-                        QLatin1String("org.freedesktop.Telepathy.Client.KTp.FileTransfer"));
+	request = KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), tmpFile.fileName());
         connect(request, SIGNAL(finished(Tp::PendingOperation*)),
                 this, SLOT(temporaryFileTransferChannelCreated(Tp::PendingOperation*)));
 

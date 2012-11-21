@@ -25,6 +25,7 @@
 #include "chat-widget.h"
 
 #include <KTp/service-availability-checker.h>
+#include <KTp/actions.h>
 
 #include <KStandardAction>
 #include <KIcon>
@@ -58,9 +59,6 @@
 
 #include "invite-contact-dialog.h"
 
-#define PREFERRED_TEXTCHAT_HANDLER "org.freedesktop.Telepathy.Client.KTp.TextUi"
-#define PREFERRED_FILETRANSFER_HANDLER "org.freedesktop.Telepathy.Client.KTp.FileTransfer"
-#define PREFERRED_AUDIO_VIDEO_HANDLER "org.freedesktop.Telepathy.Client.KTp.CallUi"
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
 K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
@@ -709,11 +707,7 @@ void ChatWindow::updateAccountIcon()
 
 void ChatWindow::startAudioCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
 {
-    Tp::PendingChannelRequest *channelRequest = account->ensureAudioCall(contact,
-                                                                         QLatin1String("audio"),
-                                                                         QDateTime::currentDateTime(),
-                                                                         QLatin1String(PREFERRED_AUDIO_VIDEO_HANDLER));
-
+    Tp::PendingChannelRequest *channelRequest = KTp::Actions::startAudioCall(account, contact);
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 
@@ -735,40 +729,20 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
 
     QDateTime now = QDateTime::currentDateTime();
     Q_FOREACH(const QString& fileName, fileNames) {
-        QFileInfo fileinfo(fileName);
-
-        kDebug() << "Filename:" << fileName;
-        kDebug() << "Content type:" << KMimeType::findByFileContent(fileName)->name();
-
-        Tp::FileTransferChannelCreationProperties fileTransferProperties(fileName, KMimeType::findByFileContent(fileName)->name());
-
-        Tp::PendingChannelRequest* channelRequest = account->createFileTransfer(contact,
-                                                                                fileTransferProperties,
-                                                                                QDateTime::currentDateTime(),
-                                                                                QLatin1String(PREFERRED_FILETRANSFER_HANDLER));
-
+        Tp::PendingChannelRequest* channelRequest = KTp::Actions::startFileTransfer(account, contact, fileName);
         connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
     }
 }
 
 void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
 {
-    Tp::PendingChannelRequest* channelRequest = account->ensureAudioVideoCall(contact,
-                                                                              QLatin1String("audio"),
-                                                                              QLatin1String("video"),
-                                                                              QDateTime::currentDateTime(),
-                                                                              QLatin1String(PREFERRED_AUDIO_VIDEO_HANDLER));
-
+    Tp::PendingChannelRequest* channelRequest = KTp::Actions::startAudioVideoCall(account, contact);
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 
 void ChatWindow::startShareDesktop(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
 {
-    Tp::PendingChannelRequest* channelRequest = account->createStreamTube(contact,
-                                                                          QLatin1String("rfb"),
-                                                                          QDateTime::currentDateTime(),
-                                                                          QLatin1String(PREFERRED_RFB_HANDLER));
-
+    Tp::PendingChannelRequest* channelRequest = KTp::Actions::startDesktopSharing(account, contact);
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
 }
 
