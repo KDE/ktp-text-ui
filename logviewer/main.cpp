@@ -20,8 +20,12 @@
 #include <KUniqueApplication>
 #include <KCmdLineArgs>
 #include <KAboutData>
+
 #include "log-viewer.h"
 #include "version.h"
+
+#include <TelepathyQt/AccountManager>
+#include <TelepathyLoggerQt4/Init>
 
 int main(int argc, char *argv[])
 {
@@ -31,7 +35,9 @@ int main(int argc, char *argv[])
                          KTP_TEXT_UI_VERSION);
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "kde@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
+    aboutData.addAuthor(ki18n("Dan Vrátil"), ki18n("Developer"), "dvratil@redhat.com");
     aboutData.setProductName("telepathy/log-viewer"); //set the correct name for bug reporting
+    aboutData.setProgramIconName(QLatin1String("documentation"));
     aboutData.setLicense(KAboutData::License_GPL_V2);
 
     KCmdLineArgs::init(argc, argv, &aboutData);
@@ -42,9 +48,32 @@ int main(int argc, char *argv[])
 
     KCmdLineArgs::addCmdLineOptions(options);
 
-    KApplication a;
-    LogViewer w;
-    w.show();
+    KApplication app;
 
-    return a.exec();
+    Tp::registerTypes();
+    Tpl::init();
+
+    Tp::AccountFactoryPtr  accountFactory = Tp::AccountFactory::create(
+                                                QDBusConnection::sessionBus(),
+                                                Tp::Features() << Tp::Account::FeatureCore
+						    << Tp::Account::FeatureProfile);
+
+    Tp::ConnectionFactoryPtr connectionFactory = Tp::ConnectionFactory::create(
+                                                QDBusConnection::sessionBus(),
+                                                Tp::Features() << Tp::Connection::FeatureCore
+                                                    << Tp::Connection::FeatureSelfContact
+                                                    << Tp::Connection::FeatureRoster);
+
+    Tp::ContactFactoryPtr contactFactory = Tp::ContactFactory::create(
+                                                Tp::Features()  << Tp::Contact::FeatureAlias
+                                                    << Tp::Contact::FeatureAvatarData
+                                                    << Tp::Contact::FeatureSimplePresence
+                                                    << Tp::Contact::FeatureCapabilities);
+
+    Tp::ChannelFactoryPtr channelFactory = Tp::ChannelFactory::create(QDBusConnection::sessionBus());
+
+    LogViewer *logViewer = new LogViewer(accountFactory, connectionFactory, channelFactory, contactFactory);
+    logViewer->show();
+
+    return app.exec();
 }
