@@ -536,8 +536,6 @@ QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const Adiu
     htmlTemplate.replace(QLatin1String("%senderColor%"), info.senderColor());
     //senderStatusIcon
     htmlTemplate.replace(QLatin1String("%senderStatusIcon%"), info.senderStatusIcon());
-    //messageDirection
-    htmlTemplate.replace(QLatin1String("%messageDirection%"), info.messageDirection());
     //senderDisplayName
     htmlTemplate.replace(QLatin1String("%senderDisplayName%"), info.senderDisplayName());
 
@@ -555,7 +553,9 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
 {
     //message
     QString message = info.message();
-
+    message.prepend(QString::fromLatin1("<div dir=\"%1\">").arg(info.messageDirection()));
+    message.append(QLatin1String("</div>"));
+    
     htmlTemplate.replace(QLatin1String("%message%"), message);
 
     //service
@@ -572,6 +572,9 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
         htmlTemplate.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
     }
 
+    //messageDirection
+    htmlTemplate.replace(QLatin1String("%messageDirection%"), info.messageDirection());
+    
     htmlTemplate.replace(QLatin1String("%messageClasses%"), info.messageClasses());
 
 

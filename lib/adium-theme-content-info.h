@@ -58,9 +58,6 @@ public:
     QString senderStatusIcon() const;
     void setSenderStatusIcon(const QString& senderStatusIcon);
 
-    /** The text direction of the message (either rtl or ltr) */
-    QString messageDirection() const;
-
     /** The serverside (remotely set) name of the sender, such as an MSN display name.*/
     QString senderDisplayName() const;
     void setSenderDisplayName(const QString& senderDisplayName);
