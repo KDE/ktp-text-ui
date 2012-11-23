@@ -110,16 +110,6 @@ void AdiumThemeContentInfo::setSenderStatusIcon(const QString &senderStatusIcon)
     d->senderStatusIcon = senderStatusIcon;
 }
 
-QString AdiumThemeContentInfo::messageDirection() const
-{
-    switch(type()) {
-    case AdiumThemeMessageInfo::RemoteToLocal:
-        return QLatin1String("trl");
-    default:
-        return QLatin1String("ltr");
-    }
-}
-
 QString AdiumThemeContentInfo::senderDisplayName() const
 {
     return d->senderDisplayName;

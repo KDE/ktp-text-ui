@@ -146,6 +146,14 @@ QString AdiumThemeMessageInfo::messageClasses() const {
     return classes.join(QLatin1String(" "));
 }
 
+QString AdiumThemeMessageInfo::messageDirection() const
+{
+    if(message().isRightToLeft()) {
+        return QLatin1String("rtl");
+    } else {
+        return QLatin1String("ltr");
+    }
+}
 
 void AdiumThemeMessageInfo::appendMessageClass(const QString &messageClass)
 {
