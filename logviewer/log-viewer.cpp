@@ -33,13 +33,18 @@
 #include <KTp/logs-importer.h>
 
 #include <QSortFilterProxyModel>
-#include <QMenu>
 #include <QWebFrame>
 #include <KLineEdit>
 #include <KPixmapSequence>
 #include <KMessageBox>
 
 #include <KDebug>
+#include <KStandardAction>
+#include <KMenu>
+#include <KApplication>
+#include <KAction>
+#include <KActionCollection>
+#include <KMenuBar>
 
 #include "entity-model.h"
 #include "entity-proxy-model.h"
@@ -48,35 +53,24 @@
 
 Q_DECLARE_METATYPE(QModelIndex)
 
-LogViewer::LogViewer(QWidget *parent) :
-    QWidget(parent),
+LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::ConnectionFactoryPtr &connectionFactory,
+		     const Tp::ChannelFactoryPtr &channelFactory, const Tp::ContactFactoryPtr &contactFactory,
+		     QWidget *parent):
+    KXmlGuiWindow(parent),
     ui(new Ui::LogViewer)
 {
-    ui->setupUi(this);
     setWindowIcon(KIcon(QLatin1String("documentation")));
-    Tp::registerTypes();
-    Tpl::init();
 
-    Tp::AccountFactoryPtr  accountFactory = Tp::AccountFactory::create(
-                                                QDBusConnection::sessionBus(),
-                                                Tp::Features() << Tp::Account::FeatureCore
-						    << Tp::Account::FeatureProfile);
+    QWidget *widget = new QWidget(this);
+    setCentralWidget(widget);
+    ui->setupUi(widget);
 
-    Tp::ConnectionFactoryPtr connectionFactory = Tp::ConnectionFactory::create(
-                                                QDBusConnection::sessionBus(),
-                                                Tp::Features() << Tp::Connection::FeatureCore
-                                                    << Tp::Connection::FeatureSelfContact
-                                                    << Tp::Connection::FeatureRoster);
+    setupActions();
+    setupGUI(Keys | Save | Create, QLatin1String("log-viewer.rc"));
 
-    Tp::ContactFactoryPtr contactFactory = Tp::ContactFactory::create(
-                                                Tp::Features()  << Tp::Contact::FeatureAlias
-                                                    << Tp::Contact::FeatureAvatarData
-                                                    << Tp::Contact::FeatureSimplePresence
-                                                    << Tp::Contact::FeatureCapabilities);
-
-    Tp::ChannelFactoryPtr channelFactory = Tp::ChannelFactory::create(QDBusConnection::sessionBus());
-
+    /* Setup AccountManager */
     m_accountManager = Tp::AccountManager::create(accountFactory, connectionFactory, channelFactory, contactFactory);
+    connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
 
     m_entityModel = new EntityModel(this);
     m_filterModel = new EntityProxyModel(this);
@@ -89,29 +83,58 @@ LogViewer::LogViewer(QWidget *parent) :
     ui->entityFilter->setProxy(m_filterModel);
     ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
 
-    connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
     connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
     connect(ui->datePicker, SIGNAL(dateChanged(QDate)), SLOT(onDateSelected()));
-    connect(ui->messageView, SIGNAL(conversationSwitchRequested(QDate)), SLOT(switchConversation(QDate)));
-    connect(ui->globalSearch, SIGNAL(returnPressed(QString)), SLOT(startGlobalSearch(QString)));
-    connect(ui->globalSearch, SIGNAL(clearButtonClicked()), SLOT(clearGlobalSearch()));
-    connect(ui->entityList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(showEntityListContextMenu(QPoint)));
-
-    /* Build the popup menu for entity list */
-    m_entityListContextMenu = new QMenu(ui->entityList);
-
-    m_clearAccountHistoryAction = new QAction(i18n("Clear account history"), m_entityListContextMenu);
-    connect(m_clearAccountHistoryAction, SIGNAL(triggered(bool)), SLOT(clearAccountHistory()));
-    m_entityListContextMenu->addAction(m_clearAccountHistoryAction);
-
-    m_clearContactHistoryAction = new QAction(i18n("Clear contact history"), m_entityListContextMenu);
-    connect(m_clearContactHistoryAction, SIGNAL(triggered(bool)), SLOT(clearContactHistory()));
-    m_entityListContextMenu->addAction(m_clearContactHistoryAction);
+    connect(ui->messageView, SIGNAL(conversationSwitchRequested(QDate)), SLOT(slotSetConversationDate(QDate)));
+    connect(ui->globalSearch, SIGNAL(returnPressed(QString)), SLOT(slotStartGlobalSearch(QString)));
+    connect(ui->globalSearch, SIGNAL(clearButtonClicked()), SLOT(slotClearGlobalSearch()));
+    connect(ui->entityList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotShowEntityListContextMenu(QPoint)));
 }
 
 LogViewer::~LogViewer()
 {
-    delete ui;
+}
+
+void LogViewer::setupActions()
+{
+    KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
+    KStandardAction::showMenubar(this->menuBar(), SLOT(setVisible(bool)), actionCollection());
+
+    KAction *clearAccHistory = new KAction(i18n("Clear &account history"), this);
+    clearAccHistory->setIcon(KIcon(QLatin1String("edit-clear-history")));
+    connect(clearAccHistory, SIGNAL(triggered(bool)), SLOT(slotClearAccountHistory()));
+
+    KAction *clearContactHistory = new KAction(i18n("Clear &contact history"), this);
+    clearContactHistory->setIcon(KIcon(QLatin1String("edit-clear-history")));
+    clearContactHistory->setEnabled(false);
+    connect(clearContactHistory, SIGNAL(triggered(bool)), SLOT(slotClearContactHistory()));
+
+    KAction *importKopeteLogs = new KAction(i18n("&Import Kopete Logs"), this);
+    importKopeteLogs->setIcon(KIcon(QLatin1String("document-import")));
+    connect(importKopeteLogs, SIGNAL(triggered(bool)), SLOT(slotImportKopeteLogs()));
+
+    KAction *prevConversation = new KAction(i18n("&Previous Conversation"), this);
+    prevConversation->setShortcut(KShortcut(Qt::CTRL + Qt::Key_P));
+    prevConversation->setIcon(KIcon(QLatin1String("go-previous")));
+    prevConversation->setEnabled(false);
+    connect(prevConversation, SIGNAL(triggered(bool)), SLOT(slotJumpToPrevConversation()));
+
+    KAction *nextConversation = new KAction(i18n("&Next Conversation"), this);
+    nextConversation->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
+    nextConversation->setIcon(KIcon(QLatin1String("go-next")));
+    nextConversation->setEnabled(false);
+    connect(nextConversation, SIGNAL(triggered(bool)), SLOT(slotJumpToNextConversation()));
+
+    actionCollection()->addAction(QLatin1String("clear-account-logs"), clearAccHistory);
+    actionCollection()->addAction(QLatin1String("clear-contact-logs"), clearContactHistory);
+    actionCollection()->addAction(QLatin1String("import-kopete-logs"), importKopeteLogs);
+    actionCollection()->addAction(QLatin1String("jump-prev-conversation"), prevConversation);
+    actionCollection()->addAction(QLatin1String("jump-next-conversation"), nextConversation);
+
+    /* Build the popup menu for entity list */
+    m_entityListContextMenu = new KMenu(ui->entityList);
+    m_entityListContextMenu->addAction(clearAccHistory);
+    m_entityListContextMenu->addAction(clearContactHistory);
 }
 
 void LogViewer::onAccountManagerReady()
@@ -120,7 +143,8 @@ void LogViewer::onAccountManagerReady()
     logManager->setAccountManagerPtr(m_accountManager);
     m_entityModel->setAccountManager(m_accountManager);
 
-    runKopeteLogsImport();
+    /* Try to run log import */
+    slotImportKopeteLogs(false);
 }
 
 void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &previous)
@@ -129,29 +153,32 @@ void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &
 
     /* Ignore account nodes */
     if (current.parent() == QModelIndex()) {
+	actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(false);
         return;
     }
 
     Tpl::EntityPtr entity = current.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::AccountPtr account = current.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
 
+    if (!account.isNull() && !entity.isNull()) {
+	actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
+    }
+
     ui->datePicker->setEntity(account, entity);
 }
 
 void LogViewer::onDateSelected()
 {
-    updateMainView();
+    slotUpdateMainWindow();
 }
 
-void LogViewer::updateMainView()
+void LogViewer::slotUpdateMainWindow()
 {
     QModelIndex currentIndex = ui->entityList->currentIndex();
 
     if (!currentIndex.isValid()) {
         return;
     }
-
-    QPair< QDate, QDate > nearestDates;
 
     /* If the selected date is not within valid (highlighted) dates then display empty
      * conversation (even if there is a chat log for that particular date) */
@@ -160,8 +187,15 @@ void LogViewer::updateMainView()
         date = QDate();
     }
 
-    nearestDates.first = ui->datePicker->previousDate();
-    nearestDates.second = ui->datePicker->nextDate();
+    m_prevConversationDate = ui->datePicker->previousDate();
+    m_nextConversationDate = ui->datePicker->nextDate();
+
+    actionCollection()->action(QLatin1String("jump-prev-conversation"))->setEnabled(m_prevConversationDate.isValid());
+    actionCollection()->action(QLatin1String("jump-next-conversation"))->setEnabled(m_nextConversationDate.isValid());
+
+    QPair< QDate, QDate > nearestDates;
+    nearestDates.first = m_prevConversationDate;
+    nearestDates.second = m_nextConversationDate;
 
     Tpl::EntityPtr entity = currentIndex.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::ContactPtr contact = currentIndex.data(EntityModel::ContactRole).value<Tp::ContactPtr>();
@@ -169,12 +203,12 @@ void LogViewer::updateMainView()
     ui->messageView->loadLog(account, entity, contact, date, nearestDates);
 }
 
-void LogViewer::switchConversation(const QDate &date)
+void LogViewer::slotSetConversationDate(const QDate &date)
 {
     ui->datePicker->setDate(date);
 }
 
-void LogViewer::startGlobalSearch(const QString &term)
+void LogViewer::slotStartGlobalSearch(const QString &term)
 {
     if (term.isEmpty()) {
         ui->messageView->clearHighlightText();
@@ -192,10 +226,10 @@ void LogViewer::startGlobalSearch(const QString &term)
     Tpl::LogManagerPtr manager = Tpl::LogManager::instance();
     Tpl::PendingSearch *search = manager->search(term, Tpl::EventTypeMaskAny);
     connect (search, SIGNAL(finished(Tpl::PendingOperation*)),
-             this, SLOT(globalSearchFinished(Tpl::PendingOperation*)));
+             this, SLOT(onGlobalSearchFinished(Tpl::PendingOperation*)));
 }
 
-void LogViewer::globalSearchFinished(Tpl::PendingOperation *operation)
+void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
 {
     Tpl::PendingSearch *search = qobject_cast< Tpl::PendingSearch* >(operation);
     Q_ASSERT(search);
@@ -208,14 +242,14 @@ void LogViewer::globalSearchFinished(Tpl::PendingOperation *operation)
     ui->busyAnimation->setVisible(false);
 }
 
-void LogViewer::clearGlobalSearch()
+void LogViewer::slotClearGlobalSearch()
 {
     m_filterModel->clearSearchHits();
     ui->datePicker->clearSearchHits();
     ui->messageView->clearHighlightText();
 }
 
-void LogViewer::showEntityListContextMenu (const QPoint &coords)
+void LogViewer::slotShowEntityListContextMenu (const QPoint &coords)
 {
     QModelIndex index = ui->entityList->indexAt(coords);
     if (!index.isValid()) {
@@ -224,21 +258,22 @@ void LogViewer::showEntityListContextMenu (const QPoint &coords)
     index = m_filterModel->mapToSource(index);
 
     /* Whether the node is an account or a contact */
-    if (index.parent() == QModelIndex()) {
-        m_clearContactHistoryAction->setVisible(false);
-        m_clearAccountHistoryAction->setVisible(true);
-    } else {
-        m_clearContactHistoryAction->setVisible(true);
-        m_clearAccountHistoryAction->setVisible(false);
-    }
+    actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled((index.parent() != QModelIndex()));
 
     m_entityListContextMenu->setProperty("index", QVariant::fromValue(index));
     m_entityListContextMenu->popup(ui->entityList->mapToGlobal(coords));
 }
 
-void LogViewer::clearAccountHistory()
+void LogViewer::slotClearAccountHistory()
 {
-    QModelIndex index = m_entityListContextMenu->property("index").value<QModelIndex>();
+    QModelIndex index = ui->entityList->currentIndex();
+
+    /* Usually and account node is selected, so traverse up to it's parent
+     * account node */
+    if (index.parent().isValid()) {
+	index = index.parent();
+    }
+
     if (!index.isValid()) {
         return;
     }
@@ -257,12 +292,12 @@ void LogViewer::clearAccountHistory()
 
     Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
     Tpl::PendingOperation *operation = logManager->clearAccountHistory(account);
-    connect(operation, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(logClearingFinished(Tpl::PendingOperation*)));
+    connect(operation, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onLogClearingFinished(Tpl::PendingOperation*)));
 }
 
-void LogViewer::clearContactHistory()
+void LogViewer::slotClearContactHistory()
 {
-    QModelIndex index = m_entityListContextMenu->property("index").value<QModelIndex>();
+    QModelIndex index = ui->entityList->currentIndex();
     if (!index.isValid()) {
         return;
     }
@@ -283,10 +318,10 @@ void LogViewer::clearContactHistory()
 
     Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
     Tpl::PendingOperation *operation = logManager->clearEntityHistory(account, entity);
-    connect(operation, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(logClearingFinished(Tpl::PendingOperation*)));
+    connect(operation, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onLogClearingFinished(Tpl::PendingOperation*)));
 }
 
-void LogViewer::logClearingFinished(Tpl::PendingOperation *operation)
+void LogViewer::onLogClearingFinished(Tpl::PendingOperation *operation)
 {
     if (!operation->errorName().isEmpty() || !operation->errorMessage().isEmpty()) {
 	/* Make sure we display at least some message */
@@ -312,13 +347,13 @@ void LogViewer::logClearingFinished(Tpl::PendingOperation *operation)
     m_entityListContextMenu->setProperty("index", QVariant());
 }
 
-void LogViewer::runKopeteLogsImport()
+void LogViewer::slotImportKopeteLogs(bool force)
 {
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
     KConfigGroup logsConfig = config->group("logs");
 
     bool importDone = logsConfig.readEntry(QLatin1String("InitialKopeteImportDone"), QVariant(false)).toBool();
-    if (importDone) {
+    if (!force && importDone) {
 	kDebug() << "Skipping initial Kopete logs import, already done.";
 	return;
     }
@@ -341,4 +376,22 @@ void LogViewer::runKopeteLogsImport()
     }
 
     logsConfig.writeEntry(QLatin1String("InitialKopeteImportDone"), true);
+}
+
+void LogViewer::slotJumpToNextConversation()
+{
+    if (!m_nextConversationDate.isValid()) {
+	return;
+    }
+
+    ui->datePicker->setDate(m_nextConversationDate);
+}
+
+void LogViewer::slotJumpToPrevConversation()
+{
+    if (!m_prevConversationDate.isValid()) {
+	return;
+    }
+
+    ui->datePicker->setDate(m_prevConversationDate);
 }

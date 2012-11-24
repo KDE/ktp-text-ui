@@ -1,0 +1,23 @@
+<gui name="ktp-log-viewer"
+     version="1"
+     xmlns="http://www.kde.org/standards/kxmlgui/1.0"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
+                         http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd" >
+
+ <MenuBar>
+  <Menu name="file"/>
+  <Menu name="logs"><text>L&amp;ogs</text>
+    <Action name="clear-account-logs"/>
+    <Action name="clear-contact-logs"/>
+    <Separator />
+    <Action name="import-kopete-logs"/>
+  </Menu>
+  <Menu name="conversation"><text>&amp;Conversation</text>
+    <Action name="jump-prev-conversation"/>
+    <Action name="jump-next-conversation"/>
+  </Menu>
+  <Menu name="settings"/>
+ </MenuBar>
+
+ </gui>

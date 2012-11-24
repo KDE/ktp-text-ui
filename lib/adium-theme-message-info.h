@@ -65,6 +65,9 @@ public:
     QString messageClasses() const;
     void appendMessageClass(const QString& messageClass);
 
+    /** The text direction of the message (either rtl or ltr) */
+    QString messageDirection() const;
+
     /** The script to be run after appending the message. */
     QString script() const;
     void setScript(const QString& script);

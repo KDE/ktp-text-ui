@@ -30,3 +30,4 @@ target_link_libraries(ktp-log-viewer
 
 install(TARGETS ktp-log-viewer DESTINATION ${BIN_INSTALL_DIR})
 install(FILES ktp-log-viewer.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES log-viewer.rc DESTINATION  ${DATA_INSTALL_DIR}/ktp-log-viewer/)
