@@ -669,12 +669,7 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
     //choose the correct notification type:
     //options are:
     // kde_telepathy_contact_incoming
-    // kde_telepathy_contact_incoming_active_window - TODO - requires information not available yet.
-    //FIXME: until the above is available, simply deactivate the event
-    if(isOnTop()) {
-        kDebug() << "Widget is on top, not doing anything";
-        return;
-    }
+    // kde_telepathy_contact_incoming_active_window
     // don't notify of messages sent by self from another computer
     if (message.sender() == d->channel->groupSelfContact()) {
         return;
@@ -694,9 +689,12 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
     } else if(message.messageType() == Tp::ChannelTextMessageTypeNotice) {
         notificationType = QLatin1String("kde_telepathy_info_event");
     } else {
-        notificationType = QLatin1String("kde_telepathy_contact_incoming");
+        if (isOnTop()) {
+            notificationType = QLatin1String("kde_telepathy_contact_incoming_active_window");
+        } else {
+            notificationType = QLatin1String("kde_telepathy_contact_incoming");
+        }
     }
-
 
     KNotification *notification = new KNotification(notificationType, this,
                                                     KNotification::RaiseWidgetOnActivation
