@@ -22,11 +22,14 @@
 
 #include <KTextEdit>
 
+class ChannelContactModel;
 class ChatTextEdit : public KTextEdit
 {
     Q_OBJECT
 public:
     explicit ChatTextEdit(QWidget *parent = 0);
+
+    void setContactModel(ChannelContactModel *model);
 
     // reimplemented
     QSize minimumSizeHint() const;
@@ -43,6 +46,8 @@ protected:
     void getHistory(bool up);
     void addHistory(const QString &text);
 
+    void completeNick();
+
 private Q_SLOTS:
     void recalculateSize();
     void updateScrollBar();
@@ -57,6 +62,13 @@ public Q_SLOTS:
 private:
     QStringList m_history;
     int m_historyPos;
+
+    /* Nick completion */
+    ChannelContactModel *m_contactModel;
+    QString m_lastCompletion;
+    int m_oldCursorPos;
+    int m_completionPosition;
+    bool m_continuousCompletion;
 };
 
 #endif // CHATTEXTEDIT_H

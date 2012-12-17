@@ -114,6 +114,11 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->contactModel = new ChannelContactModel(d->channel, this);
     setupContactModelSignals();
 
+    /* Enable nick completion only in group chats */
+    if (d->isGroupChat) {
+        d->ui.sendMessageBox->setContactModel(d->contactModel);
+    }
+
     d->ui.contactsView->setModel(d->contactModel);
 
     d->yourName = channel->groupSelfContact()->alias();

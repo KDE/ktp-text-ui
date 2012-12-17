@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "chat-text-edit.h"
+#include "channel-contact-model.h"
 
 #include <QtGui/QMenu>
 #include <QtGui/QContextMenuEvent>
@@ -30,7 +31,11 @@
 #define MAXHISTORY 100
 
 ChatTextEdit::ChatTextEdit(QWidget *parent) :
-        KTextEdit(parent)
+        KTextEdit(parent),
+        m_contactModel(0),
+        m_oldCursorPos(0),
+        m_completionPosition(0),
+        m_continuousCompletion(false)
 {
     setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);    // no need for horizontal scrollbar with this
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -47,6 +52,11 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
     m_historyPos = 0;
 
     connect(this, SIGNAL(textChanged()), SLOT(recalculateSize()));
+}
+
+void ChatTextEdit::setContactModel(ChannelContactModel* model)
+{
+    m_contactModel = model;
 }
 
 void ChatTextEdit::setFontBold(bool isBold)
@@ -83,6 +93,8 @@ void ChatTextEdit::keyPressEvent(QKeyEvent *e)
 	if (!toPlainText().isEmpty()) {
 	    addHistory(toPlainText());
 	}
+	m_continuousCompletion = false;
+
         Q_EMIT returnKeyPressed();
         return;
     }
@@ -108,9 +120,17 @@ void ChatTextEdit::keyPressEvent(QKeyEvent *e)
         return;
     }
 
-    if (e->key() == Qt::Key_Tab && e->modifiers() & Qt::ControlModifier) {
-        QWidget::keyPressEvent(e);
+    if (e->key() == Qt::Key_Tab) {
+        if (e->modifiers() & Qt::ControlModifier) {
+            QWidget::keyPressEvent(e);
+        } else if (e->modifiers() == 0) {
+            completeNick();
+        }
         return;
+    }
+
+    if(!e->text().isEmpty() || ((e->key() >= Qt::Key_Home) && (e->key() <= Qt::Key_Down))) {
+        m_continuousCompletion = false;
     }
 
     KTextEdit::keyPressEvent(e);
@@ -192,4 +212,131 @@ void ChatTextEdit::addHistory(const QString &text)
     }
 
     m_historyPos = 0;
+}
+
+// Nick completion - based on code from Konversation by Eike Hein
+void ChatTextEdit::completeNick()
+{
+    if (!m_contactModel) {
+        return;
+    }
+
+    int pos, oldPos;
+    QTextCursor cursor = textCursor();
+    bool continousCompletion = m_continuousCompletion;
+
+    pos = cursor.position();
+    oldPos = m_oldCursorPos;
+
+    QString line = toPlainText();
+    QString newLine;
+
+    // Check if completion position is out of range
+    if (m_completionPosition >= m_contactModel->rowCount()) {
+        m_completionPosition = 0;
+    }
+
+    if (continousCompletion) {
+        line.remove(oldPos, pos - oldPos);
+        pos = oldPos;
+    }
+
+    // If the cursor is at beginning of line, insert last completion if the nick is still around
+    if (pos == 0 && !m_lastCompletion.isEmpty() && m_contactModel->containsNick(m_lastCompletion)) {
+        newLine = m_lastCompletion;
+        // New cursor position is behind nickname
+        pos = newLine.length();
+        // Add rest of the line
+        newLine += line;
+    } else {
+        // remember old cursor position in input field
+        m_oldCursorPos = pos;
+        // remember old cursor position locally
+        oldPos = pos;
+        // step back to last space or start of line
+        while (pos && line[pos - 1] != QLatin1Char(' ')) {
+            pos--;
+        }
+
+        // copy search pattern (lowercase)
+        QString pattern = line.mid(pos, oldPos - pos);
+        // copy line to newLine-buffer
+        newLine = line;
+
+        // did we find any pattern?
+        if (!pattern.isEmpty()) {
+            bool complete = false;
+            QString foundNick;
+
+            if (m_contactModel->rowCount() > 0) {
+                if (!continousCompletion) {
+                    int listPosition = 0;
+
+                    for (int i = 0; i < m_contactModel->rowCount(); ++i) {
+                        QModelIndex index = m_contactModel->index(i, 0);
+                        if (index.data().toString().startsWith(pattern, Qt::CaseInsensitive)) {
+                            m_completionPosition = listPosition;
+
+                            ++listPosition;
+                        }
+                    }
+                }
+
+                // remember old nick completion position
+                int oldCompletionPosition = m_completionPosition;
+                complete = true;
+
+                do {
+                    QModelIndex index = m_contactModel->index(m_completionPosition, 0);
+                    QString lookNick = index.data(Qt::DisplayRole).toString();
+                    if (lookNick.startsWith(pattern, Qt::CaseInsensitive)) {
+                        foundNick = lookNick;
+                    }
+
+                    // increment search position
+                    m_completionPosition++;
+
+                    // wrap around
+                    if(m_completionPosition == m_contactModel->rowCount()) {
+                        m_completionPosition = 0;
+                    }
+
+                // the search ends when we either find a suitable nick or we end up at the
+                // first search position
+                } while ((m_completionPosition != oldCompletionPosition) && foundNick.isEmpty());
+            }
+
+            // did we find a suitable nick?
+            if (!foundNick.isEmpty()) {
+                m_continuousCompletion = true;
+
+                // remove pattern from line
+                newLine.remove(pos, pattern.length());
+
+                // did we find the nick in the middle of the line?
+                if ((pos > 0) && complete) {
+                    m_lastCompletion = foundNick;
+                    newLine.insert(pos, foundNick);
+                    pos = pos + foundNick.length();
+                } else if ((pos == 0) && complete) {
+                    // no, it was at the beginning
+                    m_lastCompletion = foundNick;
+                    newLine.insert(pos, foundNick + QLatin1String(", "));
+                    pos = pos + foundNick.length() + 2; /* 2 = strlen(", ") */
+                } else {
+                    // the nick wasn't complete
+                    newLine.insert(pos, foundNick);
+                    pos = pos + foundNick.length();
+                }
+            } else {
+                // no pattern found, so restore old cursor position
+                pos = oldPos;
+            }
+        }
+    }
+
+    // Set new text and cursor position
+    setText(newLine);
+    cursor.setPosition(pos);
+    setTextCursor(cursor);
 }

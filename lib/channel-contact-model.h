@@ -44,14 +44,15 @@ public:
 
     void setTextChannel(const Tp::TextChannelPtr &channel);
 
+    bool containsNick(const QString &nick);
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
 Q_SIGNALS:
     void contactPresenceChanged(const Tp::ContactPtr &contact, const KTp::Presence &presence);
     void contactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
     void contactBlockStatusChanged(const Tp::ContactPtr &contact, bool blocked);
-
-protected:
-    int rowCount(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role) const;
 
 private Q_SLOTS:
     void onGroupMembersChanged(const Tp::Contacts &groupMembersAdded,

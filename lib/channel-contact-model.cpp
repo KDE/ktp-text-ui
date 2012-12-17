@@ -47,6 +47,16 @@ void ChannelContactModel::setTextChannel(const Tp::TextChannelPtr &channel)
                                      Tp::Contacts,Tp::Channel::GroupMemberChangeDetails)));
 }
 
+bool ChannelContactModel::containsNick(const QString& nick)
+{
+    Q_FOREACH(const Tp::ContactPtr &contact, m_contacts) {
+        if (contact->alias() == nick) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 int ChannelContactModel::rowCount(const QModelIndex &parent) const
 {
