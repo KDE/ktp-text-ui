@@ -12,6 +12,7 @@ X-KDE-RootOnly=false
 Categories=Qt;KDE;X-KDE-settings-network;
 
 Name=Chat Tab Behavior
+Name[bs]=Ponašanje kartice za ćaskanje
 Name[ca]=Comportament de la pestanya de xat
 Name[cs]=Chování karet rozhovoru
 Name[da]=Opførsel af chatfaneblade
