@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     Tp::AccountFactoryPtr  accountFactory = Tp::AccountFactory::create(
                                                 QDBusConnection::sessionBus(),
                                                 Tp::Features() << Tp::Account::FeatureCore
+                                                    << Tp::Account::FeatureAvatar
 						    << Tp::Account::FeatureProfile);
 
     Tp::ConnectionFactoryPtr connectionFactory = Tp::ConnectionFactory::create(
