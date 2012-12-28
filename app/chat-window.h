@@ -98,6 +98,7 @@ private Q_SLOTS:
     void onUnblockContactTriggered();                           /** Unblocks contact when already blocked */
     void onShareDesktopTriggered();                             /** start a desktop share */
     void onOpenLogTriggered();                                  /** Starts ktp-log-viewer accountId contactId */
+    void onClearViewTriggered();                                /** Clears current view */
     void setTabSpellDictionary(const QString &dict);            /** set the spelling language for the current chat tab*/
     void toggleBlockButton(bool contactIsBlocked);              /** Toggle block/unblock action according to the flag */
     void updateAccountIcon();                                   /** Update account icon fake action */

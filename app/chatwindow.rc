@@ -19,6 +19,8 @@
    <Action name="open-log"/>
    <Separator />
    <Action name="block-contact"/>
+   <Separator />
+   <Action name="clear-chat-view"/>
   </Menu>
   <Menu name="settings"/>
   <Menu name="help"/>

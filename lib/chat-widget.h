@@ -91,6 +91,8 @@ public:
 
     bool previousConversationAvailable();
 
+    void clear();
+
 public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
@@ -185,6 +187,9 @@ private:
 
     /** Loads language option for specified target Id */
     void loadSpellCheckingOption();
+
+    /** Loads theme into the the AdiumThemeView */
+    void initChatArea();
 
     virtual bool isOnTop() const;
     bool m_previousConversationAvailable;

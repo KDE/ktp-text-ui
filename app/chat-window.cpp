@@ -510,6 +510,16 @@ void ChatWindow::onOpenLogTriggered()
     }
 }
 
+void ChatWindow::onClearViewTriggered()
+{
+    ChatWidget *chatWidget = qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+
+    if (!chatWidget) {
+        return;
+    }
+
+    chatWidget->clear();
+}
 
 void ChatWindow::showSettingsDialog()
 {
@@ -620,6 +630,10 @@ void ChatWindow::setupCustomActions()
     m_accountIconLabel = new QLabel(this);
     accountIconAction->setDefaultWidget(m_accountIconLabel);
 
+    KAction *clearViewAction = new KAction(KIcon(QLatin1String("edit-clear-history")), i18n("&Clear View"), this);
+    clearViewAction->setToolTip(i18nc("Toolbar icon tooltip", "Clear all messages from current chat tab"));
+    connect(clearViewAction, SIGNAL(triggered()), this, SLOT(onClearViewTriggered()));
+
     // add custom actions to the collection
     actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
     actionCollection()->addAction(QLatin1String("previous-tab"), previousTabAction);
@@ -632,6 +646,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("account-icon"), accountIconAction);
     actionCollection()->addAction(QLatin1String("block-contact"), blockContactAction);
     actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
+    actionCollection()->addAction(QLatin1String("clear-chat-view"), clearViewAction);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)

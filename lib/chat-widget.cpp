@@ -58,7 +58,8 @@ class ChatWidgetPrivate
 public:
     ChatWidgetPrivate() :
         remoteContactChatState(Tp::ChannelChatStateInactive),
-        isGroupChat(false)
+        isGroupChat(false),
+        logsLoaded(false)
     {
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
@@ -74,6 +75,7 @@ public:
     ChannelContactModel *contactModel;
     LogManager *logManager;
     QTimer *pausedStateTimer;
+    bool logsLoaded;
 
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
@@ -95,6 +97,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->channel = channel;
     d->account = account;
     d->logManager = new LogManager(this);
+    connect(d->logManager, SIGNAL(fetched(QList<AdiumThemeContentInfo>)), SLOT(onHistoryFetched(QList<AdiumThemeContentInfo>)));
 
     connect(d->account.data(), SIGNAL(currentPresenceChanged(Tp::Presence)),
             this, SLOT(currentPresenceChanged(Tp::Presence)));
@@ -123,44 +126,13 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     d->yourName = channel->groupSelfContact()->alias();
 
-    d->ui.chatArea->load((d->isGroupChat?AdiumThemeView::GroupChat:AdiumThemeView::SingleUserChat));
-
     d->ui.sendMessageBox->setAcceptDrops(false);
     d->ui.chatArea->setAcceptDrops(false);
     setAcceptDrops(true);
 
-    AdiumThemeHeaderInfo info;
-
-    info.setGroupChat(d->isGroupChat);
-    //normal chat - self and one other person.
-    if (d->isGroupChat) {
-        info.setChatName(d->channel->targetId());
-    }
-    else
-    {
-        Tp::ContactPtr otherContact = d->channel->targetContact();
-
-        Q_ASSERT(otherContact);
-
-        d->contactName = otherContact->alias();
-        info.setDestinationDisplayName(otherContact->alias());
-        info.setDestinationName(otherContact->id());
-        info.setChatName(otherContact->alias());
-        info.setIncomingIconPath(otherContact->avatarData().fileName);
-        d->ui.contactsView->hide();
-    }
-
-    info.setSourceName(d->channel->connection()->protocolName());
-
-    //set up anything related to 'self'
-    info.setOutgoingIconPath(d->channel->groupSelfContact()->avatarData().fileName);
-    info.setTimeOpened(QDateTime::currentDateTime());
-    info.setServiceIconImage(KIconLoader::global()->iconPath(d->account->iconName(), KIconLoader::Panel));
+    /* Prepare the chat area */
     connect(d->ui.chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()), Qt::QueuedConnection);
-    d->ui.chatArea->initialise(info);
-
-    //set the title of this chat.
-    d->title = info.chatName();
+    initChatArea();
 
     loadSpellCheckingOption();
 
@@ -169,6 +141,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     // make the sendMessageBox a focus proxy for the chatview
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
+
     connect(d->ui.sendMessageBox, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
 
     connect(d->ui.searchBar, SIGNAL(findTextSignal(QString,QWebPage::FindFlags)), this, SLOT(findTextInChat(QString,QWebPage::FindFlags)));
@@ -773,8 +746,11 @@ void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
 
 void ChatWidget::chatViewReady()
 {
-    connect(d->logManager, SIGNAL(fetched(QList<AdiumThemeContentInfo>)), SLOT(onHistoryFetched(QList<AdiumThemeContentInfo>)));
-    d->logManager->fetchLast();
+    if (!d->logsLoaded) {
+        d->logManager->fetchLast();
+    }
+
+    d->logsLoaded = true;
 }
 
 
@@ -1029,9 +1005,51 @@ bool ChatWidget::previousConversationAvailable()
     return m_previousConversationAvailable;
 }
 
+void ChatWidget::clear()
+{
+    // Don't reload logs when re-initializing */
+    d->logsLoaded = true;
+    initChatArea();
+}
+
+void ChatWidget::initChatArea()
+{
+    d->ui.chatArea->load((d->isGroupChat ? AdiumThemeView::GroupChat : AdiumThemeView::SingleUserChat));
+
+    AdiumThemeHeaderInfo info;
+
+    info.setGroupChat(d->isGroupChat);
+    //normal chat - self and one other person.
+    if (d->isGroupChat) {
+        info.setChatName(d->channel->targetId());
+    } else {
+        Tp::ContactPtr otherContact = d->channel->targetContact();
+
+        Q_ASSERT(otherContact);
+
+        d->contactName = otherContact->alias();
+        info.setDestinationDisplayName(otherContact->alias());
+        info.setDestinationName(otherContact->id());
+        info.setChatName(otherContact->alias());
+        info.setIncomingIconPath(otherContact->avatarData().fileName);
+        d->ui.contactsView->hide();
+    }
+
+    info.setSourceName(d->channel->connection()->protocolName());
+
+    //set up anything related to 'self'
+    info.setOutgoingIconPath(d->channel->groupSelfContact()->avatarData().fileName);
+    info.setTimeOpened(QDateTime::currentDateTime());
+    info.setServiceIconImage(KIconLoader::global()->iconPath(d->account->iconName(), KIconLoader::Panel));
+    d->ui.chatArea->initialise(info);
+
+    //set the title of this chat.
+    d->title = info.chatName();
+}
+
 void ChatWidget::onChatPausedTimerExpired()
 {
-        d->channel->requestChatState(Tp::ChannelChatStatePaused);
+     d->channel->requestChatState(Tp::ChannelChatStatePaused);
 }
 
 void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)
