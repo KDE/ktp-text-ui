@@ -182,7 +182,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     // initialize LogManager
     if (!d->isGroupChat) {
-        d->logManager->setFetchAmount(3);
+        KConfig config(QLatin1String("ktelepathyrc"));
+        KConfigGroup tabConfig = config.group("Behavior");
+        d->logManager->setFetchAmount(tabConfig.readEntry<int>("scrollbackLength", 4));
         d->logManager->setTextChannel(d->account, d->channel);
         m_previousConversationAvailable = d->logManager->exists();
     } else {

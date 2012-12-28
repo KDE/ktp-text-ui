@@ -58,6 +58,49 @@
     </widget>
    </item>
    <item>
+    <widget class="KButtonGroup" name="scrollbackGroup">
+     <property name="title">
+      <string>Last conversation scrollback</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_p1">
+        <property name="text">
+         <string extracomment="First part of &quot;Show last %1 messages&quot; string">Show last</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="scrollbackLength">
+        <property name="value">
+         <number>4</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_p2">
+        <property name="text">
+         <string extracomment="Second part of &quot;Show last %1 messages&quot; string">messages</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

@@ -44,6 +44,9 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
 
     ui->newTabButtonGroup->button(m_openMode)->setChecked(true);
     connect(ui->newTabButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(onRadioSelected(int)));
+
+    ui->scrollbackLength->setValue(m_scrollbackLength);
+    connect(ui->scrollbackLength, SIGNAL(valueChanged(int)), this, SLOT(onScrollbackLengthChanged()));
 }
 
 BehaviorConfig::~BehaviorConfig()
@@ -64,6 +67,8 @@ void BehaviorConfig::load()
     } else if (mode == QLatin1String("LastWindow")) {
         m_openMode = TelepathyChatUi::LastWindow;
     }
+
+    m_scrollbackLength = tabConfig.readEntry("scrollbackLength", 4);
 }
 
 void BehaviorConfig::save()
@@ -85,6 +90,7 @@ void BehaviorConfig::save()
     }
 
     tabConfig.writeEntry("tabOpenMode", mode);
+    tabConfig.writeEntry("scrollbackLength", m_scrollbackLength);
     tabConfig.sync();
 }
 
@@ -105,5 +111,11 @@ void BehaviorConfig::onRadioSelected(int id)
     kDebug() << "BehaviorConfig::m_openMode changed from " << id << " to " << m_openMode;
     m_openMode = (TelepathyChatUi::TabOpenMode) id;
     kDebug() << "emitting changed(true)";
+    Q_EMIT changed(true);
+}
+
+void BehaviorConfig::onScrollbackLengthChanged()
+{
+    m_scrollbackLength = ui->scrollbackLength->value();
     Q_EMIT changed(true);
 }

@@ -84,7 +84,7 @@ void LogManager::setFetchAmount(int n)
 void LogManager::fetchLast()
 {
     kDebug();
-    if (!m_account.isNull() && !m_textChannel.isNull() && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
+    if (m_fetchAmount > 0 && !m_account.isNull() && !m_textChannel.isNull() && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
         Tpl::EntityPtr contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
                                                 Tpl::EntityTypeContact,
                                                 NULL,
@@ -146,7 +146,7 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
     QList<Tpl::EventPtr> allEvents = pe->events();
     QList<Tpl::TextEventPtr> events;
     QList<Tpl::EventPtr>::iterator i = allEvents.end();
-    while (i-- != allEvents.begin() && (events.count() <= m_fetchAmount)) {
+    while (i-- != allEvents.begin() && (events.count() < m_fetchAmount)) {
         Tpl::TextEventPtr textEvent = (*i).dynamicCast<Tpl::TextEvent>();
         if(!textEvent.isNull()) {
             if(!queuedMessageTokens.contains(textEvent->messageToken())) {

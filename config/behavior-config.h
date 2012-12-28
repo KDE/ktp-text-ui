@@ -47,9 +47,11 @@ protected:
 
 private Q_SLOTS:
     void onRadioSelected(int id);
+    void onScrollbackLengthChanged();
 
 private:
     int m_openMode;
+    int m_scrollbackLength;
     Ui::BehaviorConfigUi *ui;
 };
 
