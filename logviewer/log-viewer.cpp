@@ -51,7 +51,8 @@ LogViewer::LogViewer(QWidget *parent) :
 
     Tp::AccountFactoryPtr  accountFactory = Tp::AccountFactory::create(
                                                 QDBusConnection::sessionBus(),
-                                                Tp::Features() << Tp::Account::FeatureCore);
+                                                Tp::Features() << Tp::Account::FeatureCore
+                                                    << Tp::Account::FeatureAvatar);
 
     Tp::ConnectionFactoryPtr connectionFactory = Tp::ConnectionFactory::create(
                                                 QDBusConnection::sessionBus(),
