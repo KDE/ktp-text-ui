@@ -400,19 +400,31 @@ void ChatWindow::onInviteToChatTriggered()
 
 void ChatWindow::onNextTabActionTriggered()
 {
+    if (m_tabWidget->count() == 1) {
+        return;
+    }
+    
     int currIndex = m_tabWidget->currentIndex();
 
-    if (currIndex < m_tabWidget->count() && m_tabWidget->count() != 1) {
+    if (currIndex < m_tabWidget->count()-1) {
         m_tabWidget->setCurrentIndex(++currIndex);
+    } else {
+        m_tabWidget->setCurrentIndex(0);
     }
 }
 
 void ChatWindow::onPreviousTabActionTriggered()
 {
+    if (m_tabWidget->count() == 1) {
+        return;
+    }
+    
     int currIndex = m_tabWidget->currentIndex();
 
     if (currIndex > 0) {
         m_tabWidget->setCurrentIndex(--currIndex);
+    } else {
+        m_tabWidget->setCurrentIndex(m_tabWidget->count()-1);
     }
 }
 
