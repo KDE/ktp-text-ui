@@ -1065,5 +1065,9 @@ void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)
     }
 }
 
-
+void ChatWidget::addEmoticonToChat(const QString &emoticon)
+{
+    d->ui.sendMessageBox->insertPlainText(QLatin1String(" ") + emoticon);
+    d->ui.sendMessageBox->setFocus();
+}
 #include "chat-widget.moc"

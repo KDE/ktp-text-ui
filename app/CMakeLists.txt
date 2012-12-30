@@ -21,6 +21,7 @@ target_link_libraries(ktp-text-ui
             ${QT_QTWEBKIT_LIBRARY}
             ${KDE4_KNOTIFYCONFIG_LIBS}
             ${KDE4_KCMUTILS_LIBS}
+            ${KDEPIMLIBS_KPIMTEXTEDIT_LIBS}
             ktpchat)
 
 configure_file(org.freedesktop.Telepathy.Client.KTp.TextUi.service.in

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui name="ktp-text-ui"
-     version="4"
+     version="5"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -45,4 +45,10 @@
   <Action name="language"/>
  </ToolBar>
 
+ <ToolBar hidden="true" newline="true" fullWidth="true" noEdit="true" noMerge="1" position="bottom" name="emoticonsToolBar">
+  <text>Smiley Toolbar</text>
+  <Action name="emoticons"/>
+ </ToolBar>
+
 </gui>
+

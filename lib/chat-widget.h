@@ -86,6 +86,8 @@ public:
 
     void setSpellDictionary(const QString &dict);
 
+    void addEmoticonToChat(const QString &emoticon);
+
     /** Returns the chat state of remote contact */
     Tp::ChannelChatState remoteChatState();
 

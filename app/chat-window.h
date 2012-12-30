@@ -102,6 +102,7 @@ private Q_SLOTS:
     void setTabSpellDictionary(const QString &dict);            /** set the spelling language for the current chat tab*/
     void toggleBlockButton(bool contactIsBlocked);              /** Toggle block/unblock action according to the flag */
     void updateAccountIcon();                                   /** Update account icon fake action */
+    void onAddEmoticon(const QString& emoticon);                /** Add the corresponding emoticon*/
 
 protected Q_SLOTS:
     void showSettingsDialog();

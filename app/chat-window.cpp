@@ -56,6 +56,7 @@
 #include <TelepathyQt/TextChannel>
 
 #include <Sonnet/DictionaryComboBox>
+#include <kpimtextedit/emoticontexteditaction.h>
 
 #include "invite-contact-dialog.h"
 
@@ -646,6 +647,9 @@ void ChatWindow::setupCustomActions()
     clearViewAction->setToolTip(i18nc("Toolbar icon tooltip", "Clear all messages from current chat tab"));
     connect(clearViewAction, SIGNAL(triggered()), this, SLOT(onClearViewTriggered()));
 
+    KPIMTextEdit::EmoticonTextEditAction *addEmoticonAction = new KPIMTextEdit::EmoticonTextEditAction(this);
+    connect(addEmoticonAction, SIGNAL(emoticonActivated(QString)), this, SLOT(onAddEmoticon(QString)) );
+
     // add custom actions to the collection
     actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
     actionCollection()->addAction(QLatin1String("previous-tab"), previousTabAction);
@@ -659,6 +663,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("block-contact"), blockContactAction);
     actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
     actionCollection()->addAction(QLatin1String("clear-chat-view"), clearViewAction);
+    actionCollection()->addAction(QLatin1String("emoticons"), addEmoticonAction);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
@@ -833,5 +838,11 @@ void ChatWindow::toggleBlockButton(bool contactIsBlocked)
     setBlockEnabled(true);
 }
 
+void ChatWindow::onAddEmoticon(const QString& emoticon)
+{
+    int index = m_tabWidget->currentIndex();
+    ChatTab *currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
+    currentChatTab->addEmoticonToChat(emoticon);
+}
 
 #include "chat-window.moc"
