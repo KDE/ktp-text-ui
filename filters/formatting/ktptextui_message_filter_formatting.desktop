@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Google Talk Style Formatting
+Name[cs]=Formátovat stylem Google Talk
 Name[da]=Google Talk-stilformatering
 Name[el]=Διαμόρφωση του στιλ στο Google Talk
 Name[hu]=Google Talk stílusú formázás
@@ -12,6 +13,7 @@ Name[sv]=Formatering enligt Google-talk
 Name[uk]=Форматування у стилі Google-Talk
 Name[x-test]=xxGoogle Talk Style Formattingxx
 Comment=Use _, * and - to make text italic, bold or strikeout respectively
+Comment[cs]=Použít _, * a - pro kurzívu, tučný a přeškrtnutý text
 Comment[da]=Brug _, * og - til at lave hhv. kursiv, fed eller overstreget
 Comment[el]=Χρησιμοποιήστε _, * και - για πλάγιους, έντονους ή με επιγράμμιση χαρακτήρες αντίστοιχα
 Comment[hu]=Az _, * és - használatával teheti a szöveget döntötté, félkövérré vagy áthúzottá
