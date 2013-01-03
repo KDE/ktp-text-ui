@@ -30,7 +30,7 @@
          <string>A new window</string>
         </property>
         <attribute name="buttonGroup">
-         <string>newTabButtonGroup</string>
+         <string notr="true">newTabButtonGroup</string>
         </attribute>
        </widget>
       </item>
@@ -40,7 +40,7 @@
          <string>A new tab in the first window</string>
         </property>
         <attribute name="buttonGroup">
-         <string>newTabButtonGroup</string>
+         <string notr="true">newTabButtonGroup</string>
         </attribute>
        </widget>
       </item>
@@ -50,7 +50,7 @@
          <string>A new tab in the last focused window</string>
         </property>
         <attribute name="buttonGroup">
-         <string>newTabButtonGroup</string>
+         <string notr="true">newTabButtonGroup</string>
         </attribute>
        </widget>
       </item>
@@ -71,20 +71,9 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="scrollbackLength">
-        <property name="value">
-         <number>4</number>
-        </property>
-       </widget>
+       <widget class="KIntSpinBox" name="scrollbackLength"/>
       </item>
       <item row="0" column="2">
-       <widget class="QLabel" name="label_p2">
-        <property name="text">
-         <string extracomment="Second part of &quot;Show last %1 messages&quot; string">messages</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -121,6 +110,11 @@
    <extends>QGroupBox</extends>
    <header>kbuttongroup.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KIntSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>knuminput.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

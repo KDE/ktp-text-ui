@@ -23,6 +23,8 @@
 
 #include <KDebug>
 #include <KPluginFactory>
+#include <KLocalizedString>
+
 
 K_PLUGIN_FACTORY(KCMTelepathyChatBehaviorConfigFactory, registerPlugin<BehaviorConfig>();)
 K_EXPORT_PLUGIN(KCMTelepathyChatBehaviorConfigFactory("ktp_chat_behavior", "kcm_ktp_chat_behavior"))
@@ -45,6 +47,7 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
     ui->newTabButtonGroup->button(m_openMode)->setChecked(true);
     connect(ui->newTabButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(onRadioSelected(int)));
 
+    ui->scrollbackLength->setSuffix(ki18ncp("Part of config 'show last [spin box] messages' This is the suffix to the spin box. Be sure to include leading space"," message", " messages"));
     ui->scrollbackLength->setValue(m_scrollbackLength);
     connect(ui->scrollbackLength, SIGNAL(valueChanged(int)), this, SLOT(onScrollbackLengthChanged()));
 }
