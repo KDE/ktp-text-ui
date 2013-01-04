@@ -93,7 +93,7 @@ void MessageProcessorBasicTests::testUnsupportedProtocolCatching()
 
 void MessageProcessorBasicTests::testMetadataGeneration()
 {
-    Message processed = this->s.processOutGoingMessage(
+    KTp::Message processed = this->s.processOutGoingMessage(
         Tp::Message(
             Tp::ChannelTextMessageTypeNormal,
             QLatin1String("http://www.google.com.au/")
@@ -108,7 +108,7 @@ void MessageProcessorBasicTests::testMetadataGeneration()
 
 void MessageProcessorBasicTests::testMultipleURLCatching()
 {
-    Message processed = this->s.processOutGoingMessage(
+    KTp::Message processed = this->s.processOutGoingMessage(
         Tp::Message(
             Tp::ChannelTextMessageTypeNormal,
             QLatin1String("You should consider using http://duckduckgo.com/ instead of www.google.com.au")

@@ -21,7 +21,7 @@
 
 #include "adium-theme-view.h"
 #include "adium-theme-status-info.h"
-#include "message-processor.h"
+#include <KTp/message-processor.h>
 
 #include <KDebug>
 
@@ -135,7 +135,7 @@ void MessageView::processStoredEvents()
         }
 
         AdiumThemeContentInfo message(type);
-        message.setMessage(MessageProcessor::instance()->processIncomingMessage(textEvent).finalizedMessage());
+        message.setMessage(KTp::MessageProcessor::instance()->processIncomingMessage(textEvent).finalizedMessage());
         message.setService(m_account->serviceName());
         message.setSenderDisplayName(textEvent->sender()->alias());
         message.setSenderScreenName(textEvent->sender()->identifier());

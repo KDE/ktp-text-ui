@@ -19,7 +19,7 @@
 #ifndef SYNC_PROCESSOR_H
 #define SYNC_PROCESSOR_H
 
-#include <message-processor.h>
+#include <KTp/message-processor.h>
 
 class SyncProcessor
 {
@@ -28,8 +28,8 @@ public:
     SyncProcessor();
     ~SyncProcessor();
 
-    Message processIncommingMessage(const Tp::ReceivedMessage& message);
-    Message processOutGoingMessage ( Tp::Message message );
+    KTp::Message processIncommingMessage(const Tp::ReceivedMessage& message);
+    KTp::Message processOutGoingMessage ( Tp::Message message );
     QString getProcessedMessage ( const char* contents );
 
 private:

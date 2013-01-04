@@ -19,16 +19,16 @@
 #ifndef TTS_FILTER_H
 #define TTS_FILTER_H
 
-#include <KTp/AbstractMessageFilter>
+#include <KTp/abstract-message-filter.h>
 
-class TTSFilter : public AbstractMessageFilter
+class TTSFilter : public KTp::AbstractMessageFilter
 {
 Q_OBJECT
 
 public:
     TTSFilter(QObject *parent, const QVariantList &);
     virtual ~TTSFilter();
-    virtual void filterIncomingMessage(Message &message);
+    virtual void filterIncomingMessage(KTp::Message &message);
 
 private:
     class Private;

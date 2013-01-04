@@ -17,26 +17,26 @@
 */
 
 #include "sync-processor.h"
-#include <message-processor.h>
+#include <KTp/message-processor.h>
 
 #include <QString>
 
 struct SyncProcessor::SyncProcessorPrivate {
-    MessageProcessor *actualProcessor;
+    KTp::MessageProcessor *actualProcessor;
 };
 
 SyncProcessor::SyncProcessor() :
     d(new SyncProcessor::SyncProcessorPrivate())
 {
-    d->actualProcessor = MessageProcessor::instance();
+    d->actualProcessor = KTp::MessageProcessor::instance();
 }
 
-Message SyncProcessor::processIncommingMessage(const Tp::ReceivedMessage &message)
+KTp::Message SyncProcessor::processIncommingMessage(const Tp::ReceivedMessage &message)
 {
     return d->actualProcessor->processIncomingMessage(message);
 }
 
-Message SyncProcessor::processOutGoingMessage(Tp::Message message)
+KTp::Message SyncProcessor::processOutGoingMessage(Tp::Message message)
 {
     return d->actualProcessor->processOutgoingMessage(message);
 }

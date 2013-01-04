@@ -17,7 +17,7 @@
 */
 
 #include "messages-config.h"
-#include "plugin-config-manager.h"
+#include <KTp/message-filter-config-manager.h>
 
 #include <QVBoxLayout>
 
@@ -33,11 +33,11 @@ MessagesConfig::MessagesConfig(QWidget *parent, const QVariantList &args)
     : PluginPage(KTpMessagesConfigFactory::componentData(), parent, args)
 {
     pluginSelector()->addPlugins(
-        PluginConfigManager::self()->allPlugins(),
+        KTp::MessageFilterConfigManager::self()->allPlugins(),
         KPluginSelector::ReadConfigFile,
         i18n("Plugins"),
         QString(),
-        PluginConfigManager::self()->sharedConfig() //why won't this take a KConfigGroup?
+        KTp::MessageFilterConfigManager::self()->sharedConfig() //why won't this take a KConfigGroup?
     );
 
     //Am surprised that PluginPage() doesn't do this for me

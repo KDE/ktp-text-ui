@@ -48,10 +48,11 @@
 #include <TelepathyQt/Presence>
 #include <TelepathyQt/PendingChannelRequest>
 #include <TelepathyQt/OutgoingFileTransferChannel>
+#include <TelepathyLoggerQt4/TextEvent>
 
 #include <KTp/presence.h>
 #include <KTp/actions.h>
-#include "message-processor.h"
+#include <KTp/message-processor.h>
 
 class ChatWidgetPrivate
 {
@@ -610,7 +611,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
         } else {
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
-            Message processedMessage(MessageProcessor::instance()->processIncomingMessage(message));
+            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message));
             messageInfo.setMessage(processedMessage.finalizedMessage());
             messageInfo.setScript(processedMessage.finalizedScript());
 
@@ -720,7 +721,7 @@ void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     }
     else {
         AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::LocalToRemote);
-        Message processedMessage(MessageProcessor::instance()->processOutgoingMessage(message));
+        KTp::Message processedMessage(KTp::MessageProcessor::instance()->processOutgoingMessage(message));
         messageInfo.setMessage(processedMessage.finalizedMessage());
         messageInfo.setScript(processedMessage.finalizedScript());
 

@@ -13,6 +13,7 @@ target_link_libraries(ktpchat_tests
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
     ${TELEPATHY_QT4_LIBRARIES}
+    ${KTP_LIBRARIES}
 )
 
 add_definitions (-DQT_GUI_LIB)

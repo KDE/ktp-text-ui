@@ -19,9 +19,9 @@
 #ifndef EMOTICON_FILTER_H
 #define EMOTICON_FILTER_H
 
-#include <KTp/AbstractMessageFilter>
+#include <KTp/abstract-message-filter.h>
 
-class EmoticonFilter : public AbstractMessageFilter
+class EmoticonFilter : public KTp::AbstractMessageFilter
 {
 Q_OBJECT
 
@@ -29,7 +29,7 @@ public:
     EmoticonFilter(QObject* parent, const QVariantList &);
     virtual ~EmoticonFilter();
 
-    void filterMessage(Message& message);
+    void filterMessage(KTp::Message& message);
 private:
     class Private;
     Private *d;
