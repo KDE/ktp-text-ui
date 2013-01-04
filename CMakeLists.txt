@@ -1,7 +1,6 @@
 project(ktp-text-ui)
 
 set(KTP_TEXT_UI_VERSION "0.5.2")
-set(KTP_TEXT_UI_PLUGIN_FRAMEWORK_VERSION "2")
 set(IS_KTP_INTERNAL_MODULE TRUE)
 
 # Include our extra FindFoo.cmake files.
