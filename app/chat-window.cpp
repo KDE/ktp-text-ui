@@ -56,8 +56,8 @@
 #include <TelepathyQt/TextChannel>
 
 #include <Sonnet/DictionaryComboBox>
-#include <kpimtextedit/emoticontexteditaction.h>
 
+#include "emoticon-text-edit-action.h"
 #include "invite-contact-dialog.h"
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
@@ -647,7 +647,7 @@ void ChatWindow::setupCustomActions()
     clearViewAction->setToolTip(i18nc("Toolbar icon tooltip", "Clear all messages from current chat tab"));
     connect(clearViewAction, SIGNAL(triggered()), this, SLOT(onClearViewTriggered()));
 
-    KPIMTextEdit::EmoticonTextEditAction *addEmoticonAction = new KPIMTextEdit::EmoticonTextEditAction(this);
+    EmoticonTextEditAction *addEmoticonAction = new EmoticonTextEditAction(this);
     connect(addEmoticonAction, SIGNAL(emoticonActivated(QString)), this, SLOT(onAddEmoticon(QString)) );
 
     // add custom actions to the collection
