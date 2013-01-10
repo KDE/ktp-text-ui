@@ -20,7 +20,8 @@
 #include "logmanager.h"
 
 #include "adium-theme-content-info.h"
-#include "message-processor.h"
+
+#include <KTp/message-processor.h>
 
 #include <KDebug>
 
@@ -171,8 +172,8 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
         }
         AdiumThemeContentInfo message(type);
 
-        Message processedEvent(type == AdiumThemeMessageInfo::HistoryLocalToRemote ? MessageProcessor::instance()->processOutgoingMessage(event)
-                                                                                   : MessageProcessor::instance()->processIncomingMessage(event));
+        KTp::Message processedEvent(type == AdiumThemeMessageInfo::HistoryLocalToRemote ? KTp::MessageProcessor::instance()->processOutgoingMessage(event)
+                                                                                        : KTp::MessageProcessor::instance()->processIncomingMessage(event));
 
         message.setMessage(processedEvent.finalizedMessage());
         message.setScript(processedEvent.finalizedScript());

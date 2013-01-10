@@ -18,16 +18,17 @@
 
 #ifndef IMAGES_FILTER_H
 #define IMAGES_FILTER_H
-#include <KTp/AbstractMessageFilter>
 
-class ImagesFilter : public AbstractMessageFilter
+#include <KTp/abstract-message-filter.h>
+
+class ImagesFilter : public KTp::AbstractMessageFilter
 {
 Q_OBJECT
 
 public:
     ImagesFilter (QObject* parent, const QVariantList &);
     virtual ~ImagesFilter();
-    virtual void filterMessage (Message& message);
+    virtual void filterMessage (KTp::Message& message);
 
 private:
     class Private;

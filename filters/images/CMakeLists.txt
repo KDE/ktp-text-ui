@@ -15,6 +15,7 @@ target_link_libraries (ktptextui_message_filter_images
     ${KDE4_KDEUI_LIBS}
     ${TELEPATHY_QT4_LIBRARIES}
     ${KDE4_KEMOTICONS_LIBS}
+    ${KTP_LIBRARIES}
 )
 
 # Install:

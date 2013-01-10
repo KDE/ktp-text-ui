@@ -1,7 +1,6 @@
 project(ktp-text-ui)
 
 set(KTP_TEXT_UI_VERSION "0.5.2")
-set(KTP_TEXT_UI_PLUGIN_FRAMEWORK_VERSION "2")
 set(IS_KTP_INTERNAL_MODULE TRUE)
 
 # Include our extra FindFoo.cmake files.
@@ -47,6 +46,4 @@ add_subdirectory(config)
 add_subdirectory(data)
 add_subdirectory(adiumxtra-protocol-handler)
 add_subdirectory(logviewer)
-add_subdirectory(plasmoid)
 add_subdirectory(filters)
-add_subdirectory(tests)

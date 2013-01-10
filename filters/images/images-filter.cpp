@@ -33,7 +33,7 @@ public:
 };
 
 ImagesFilter::ImagesFilter (QObject* parent, const QVariantList&) :
-    AbstractMessageFilter (parent), d(new Private)
+    KTp::AbstractMessageFilter (parent), d(new Private)
 {
     QString imagePattern = QLatin1String("\\.(?:");
     Q_FOREACH (const QByteArray &format, QImageReader::supportedImageFormats()) {
@@ -50,7 +50,7 @@ ImagesFilter::~ImagesFilter()
     delete d;
 }
 
-void ImagesFilter::filterMessage (Message& message)
+void ImagesFilter::filterMessage (KTp::Message& message)
 {
     kDebug() << message.property("Urls").toList().size();
     Q_FOREACH (const QVariant &var, message.property("Urls").toList()) {

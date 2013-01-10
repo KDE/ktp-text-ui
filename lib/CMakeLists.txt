@@ -14,16 +14,9 @@ set(ktpchat_SRCS
         chat-text-edit.cpp
         chat-search-bar.cpp
         logmanager.cpp
-        message.cpp
-        abstract-message-filter.cpp
-        message-processor.cpp
-        url-filter.cpp
-        escape-filter.cpp
-        plugin-config-manager.cpp
 )
 
 set(ktpchat_HDRS
-    abstract-message-filter.h
     adium-theme-content-info.h
     adium-theme-header-info.h
     adium-theme-message-info.h

@@ -28,12 +28,12 @@ public:
 };
 
 EmoticonFilter::EmoticonFilter(QObject *parent, const QVariantList &)
-    : AbstractMessageFilter(parent),
+    : KTp::AbstractMessageFilter(parent),
       d(new Private)
 {
 }
 
-void EmoticonFilter::filterMessage(Message& message)
+void EmoticonFilter::filterMessage(KTp::Message& message)
 {
     message.setMainMessagePart(d->emoticons.theme().parseEmoticons(message.mainMessagePart()));
 }

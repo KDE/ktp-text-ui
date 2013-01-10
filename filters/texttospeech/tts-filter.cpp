@@ -33,7 +33,7 @@ public:
 };
 
 TTSFilter::TTSFilter(QObject *parent, const QVariantList &)
-    : AbstractMessageFilter(parent),
+    : KTp::AbstractMessageFilter(parent),
       d(new Private)
 {
     d->kspeech = new org::kde::KSpeech(QLatin1String("org.kde.kttsd"), QLatin1String("/KSpeech"), QDBusConnection::sessionBus());
@@ -46,7 +46,7 @@ TTSFilter::~TTSFilter()
     delete d;
 }
 
-void TTSFilter::filterIncomingMessage(Message &message)
+void TTSFilter::filterIncomingMessage(KTp::Message &message)
 {
     //FIXME with real name.
     d->kspeech->say(i18n("New message. %1").arg(message.mainMessagePart()), KSpeech::soHtml);

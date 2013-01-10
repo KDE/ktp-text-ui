@@ -16,6 +16,7 @@ target_link_libraries (ktptextui_message_filter_tts
     ${QT_LIBRARIES}
     ${KDE4_KDEUI_LIBS}
     ${TELEPATHY_QT4_LIBRARIES}
+    ${KTP_LIBRARIES}
 )
 
 # Install:

@@ -37,7 +37,7 @@ public:
 };
 
 FormatFilter::FormatFilter (QObject* parent, const QVariantList&) :
-    AbstractMessageFilter (parent),
+    KTp::AbstractMessageFilter (parent),
     d(new Private())
 {
     // Matches a string
@@ -78,7 +78,7 @@ FormatFilter::~FormatFilter()
     delete d;
 }
 
-void FormatFilter::filterMessage (Message& message)
+void FormatFilter::filterMessage (KTp::Message& message)
 {
     message.setMainMessagePart(d->filterString(message.mainMessagePart()));
 }
