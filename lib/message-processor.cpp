@@ -51,6 +51,8 @@ MessageProcessor::MessageProcessor()
     m_filters.append(new UrlFilter(this));
 
     loadFilters();
+
+    m_filters.append(new BackslashFilter(this));
 }
 
 

@@ -37,4 +37,11 @@ public:
     virtual void filterMessage(Message& message);
 };
 
+class BackslashFilter : public AbstractMessageFilter
+{
+public:
+    explicit BackslashFilter(QObject *parent = 0);
+    virtual void filterMessage(Message& message);
+};
+
 #endif

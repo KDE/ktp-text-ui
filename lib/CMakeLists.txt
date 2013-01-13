@@ -19,6 +19,7 @@ set(ktpchat_SRCS
         message-processor.cpp
         url-filter.cpp
         escape-filter.cpp
+        backslash-filter.cpp
         plugin-config-manager.cpp
 )
 

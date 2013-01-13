@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2012  Lasath Fernando <kde@lasath.org>
+    Copyright (C) 2013  Daniele E. Domenichelli <daniele.domenichelli@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -18,23 +19,13 @@
 
 #include "filters.h"
 
-#include <QtGui/QTextDocument> //needed for Qt::escape
-
-EscapeFilter::EscapeFilter(QObject *parent)
+BackslashFilter::BackslashFilter(QObject *parent)
     : AbstractMessageFilter(parent)
 {
 }
 
-void EscapeFilter::filterMessage(Message& message)
+void BackslashFilter::filterMessage(Message& message)
 {
-    QString escapedMessage = Qt::escape(message.mainMessagePart());
-
-    escapedMessage.replace(QLatin1String("\n "), QLatin1String("<br/>&nbsp;")); //keep leading whitespaces
-    escapedMessage.replace(QLatin1Char('\n'), QLatin1String("<br/>"));
-    escapedMessage.replace(QLatin1Char('\r'), QLatin1String("<br/>"));
-    escapedMessage.replace(QLatin1Char('\t'), QLatin1String("&nbsp; &nbsp; ")); // replace tabs by 4 spaces
-    escapedMessage.replace(QLatin1String("  "), QLatin1String(" &nbsp;")); // keep multiple whitespaces
-
-    message.setMainMessagePart(escapedMessage);
+    message.setMainMessagePart(message.mainMessagePart().replace(QLatin1Char('\\'), QLatin1String("\\\\"))); //replace a single backslash with two backslashes.
 }
 
