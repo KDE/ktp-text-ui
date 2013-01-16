@@ -31,25 +31,24 @@
 #include <TelepathyQt/TextChannel>
 
 #include <KTp/debug.h>
-#include <KTp/Models/contacts-model.h>
-#include <KTp/Models/accounts-filter-model.h>
+#include <KTp/Models/contacts-list-model.h>
+#include <KTp/Models/contacts-filter-model.h>
 #include <KTp/Widgets/contact-grid-widget.h>
 #include <telepathy-qt4/TelepathyQt/PendingChannelRequest>
 
-InviteContactDialog::InviteContactDialog(const Tp::AccountPtr &account, const Tp::TextChannelPtr &channel, QWidget *parent) :
+InviteContactDialog::InviteContactDialog(const Tp::AccountManagerPtr &accountManager, const Tp::AccountPtr &account, const Tp::TextChannelPtr &channel, QWidget *parent) :
     KDialog(parent),
     m_account(account),
-    m_channel(channel)
+    m_channel(channel),
+    m_contactsModel(new KTp::ContactsListModel(this))
 {
     resize(500,450);
 
-    m_contactsModel = new ContactsModel(this);
-    m_contactsModel->onNewAccount(account);
-
+    m_contactsModel->setAccountManager(accountManager);
 
     m_contactGridWidget = new KTp::ContactGridWidget(m_contactsModel, this);
     m_contactGridWidget->contactFilterLineEdit()->setClickMessage(i18n("Search in Contacts..."));
-    m_contactGridWidget->filter()->setPresenceTypeFilterFlags(AccountsFilterModel::ShowOnlyConnected);
+    m_contactGridWidget->filter()->setPresenceTypeFilterFlags(KTp::ContactsFilterModel::ShowOnlyConnected);
     setMainWidget(m_contactGridWidget);
 
     connect(m_contactGridWidget,

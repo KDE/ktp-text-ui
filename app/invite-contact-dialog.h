@@ -34,9 +34,9 @@ class PendingOperation;
 
 namespace KTp {
 class ContactGridWidget;
+class ContactsListModel;
 }
 
-class ContactsModel;
 
 class InviteContactDialog : public KDialog
 {
@@ -44,7 +44,7 @@ class InviteContactDialog : public KDialog
     Q_DISABLE_COPY(InviteContactDialog)
 
 public:
-    InviteContactDialog(const Tp::AccountPtr &account, const Tp::TextChannelPtr &channel, QWidget *parent);
+    InviteContactDialog(const Tp::AccountManagerPtr &accountManager, const Tp::AccountPtr &account, const Tp::TextChannelPtr &channel, QWidget *parent);
     Tp::AccountPtr account() const;
     Tp::TextChannelPtr channel() const;
 
@@ -55,7 +55,7 @@ private Q_SLOTS:
 private:
     Tp::AccountPtr m_account;
     Tp::TextChannelPtr m_channel;
-    ContactsModel *m_contactsModel;
+    KTp::ContactsListModel *m_contactsModel;
     KTp::ContactGridWidget *m_contactGridWidget;
 };
 

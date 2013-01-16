@@ -22,6 +22,8 @@
 #define TELEPATHYCHATUI_H
 
 #include <TelepathyQt/AbstractClientHandler>
+#include <TelepathyQt/AccountManager>
+
 #include <KTp/telepathy-handler-application.h>
 
 class ChatTab;
@@ -31,7 +33,7 @@ class TelepathyChatUi : public KTp::TelepathyHandlerApplication, public Tp::Abst
 {
     Q_OBJECT
 public:
-    TelepathyChatUi();
+    TelepathyChatUi(const Tp::AccountManagerPtr &accountManager);
     ~TelepathyChatUi();
 
     enum TabOpenMode {
@@ -39,7 +41,6 @@ public:
         FirstWindow,
         LastWindow
     };
-
 
     virtual void handleChannels(const Tp::MethodInvocationContextPtr<> & context,
             const Tp::AccountPtr &account,
@@ -51,14 +52,16 @@ public:
 
     virtual bool bypassApproval() const;
 
+    Tp::AccountManagerPtr accountManager() const;
+
 private Q_SLOTS:
     void removeWindow(ChatWindow *window);
     void dettachTab(ChatTab *tab);
 
 private:
-
     ChatWindow* createWindow();
 
+    Tp::AccountManagerPtr m_accountManager;
     QList<ChatWindow*> m_chatWindows;
     TabOpenMode m_openMode;
 };

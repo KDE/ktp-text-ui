@@ -59,6 +59,7 @@
 
 #include "emoticon-text-edit-action.h"
 #include "invite-contact-dialog.h"
+#include "telepathy-chat-ui.h"
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
@@ -390,7 +391,9 @@ void ChatWindow::onGenericOperationFinished(Tp::PendingOperation* op)
 void ChatWindow::onInviteToChatTriggered()
 {
     ChatTab *currChat = qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
-    InviteContactDialog *dialog = new InviteContactDialog(currChat->account(), currChat->textChannel(), this);
+
+    TelepathyChatUi *app = qobject_cast<TelepathyChatUi*>(KApplication::instance());
+    InviteContactDialog *dialog = new InviteContactDialog(app->accountManager(), currChat->account(), currChat->textChannel(), this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }

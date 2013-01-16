@@ -39,8 +39,9 @@ inline Tp::ChannelClassSpecList channelClassList()
 }
 
 
-TelepathyChatUi::TelepathyChatUi()
-    : KTp::TelepathyHandlerApplication(true, -1, -1), AbstractClientHandler(channelClassList())
+TelepathyChatUi::TelepathyChatUi(const Tp::AccountManagerPtr &accountManager)
+    : KTp::TelepathyHandlerApplication(true, -1, -1), AbstractClientHandler(channelClassList()),
+      m_accountManager(accountManager)
 {
     kDebug();
 
@@ -183,5 +184,10 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
 bool TelepathyChatUi::bypassApproval() const
 {
     return false;
+}
+
+Tp::AccountManagerPtr TelepathyChatUi::accountManager() const
+{
+    return m_accountManager;
 }
 

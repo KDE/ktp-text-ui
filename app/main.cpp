@@ -29,6 +29,10 @@
 #include <TelepathyQt/ContactFactory>
 #include <TelepathyQt/TextChannel>
 #include <TelepathyQt/OutgoingFileTransferChannel>
+#include <TelepathyQt/AccountManager>
+
+
+#include <KTp/contact-factory.h>
 
 #include <KAboutData>
 #include <KCmdLineArgs>
@@ -70,7 +74,7 @@ int main(int argc, char *argv[])
     channelFactory->addFeaturesForTextChatrooms(textFeatures);
     channelFactory->addFeaturesForOutgoingFileTransfers(Tp::OutgoingFileTransferChannel::FeatureCore);
 
-    Tp::ContactFactoryPtr contactFactory = Tp::ContactFactory::create(
+    Tp::ContactFactoryPtr contactFactory = KTp::ContactFactory::create(
         Tp::Features() << Tp::Contact::FeatureAlias
                        << Tp::Contact::FeatureAvatarToken
                        << Tp::Contact::FeatureAvatarData
@@ -78,10 +82,11 @@ int main(int argc, char *argv[])
                        << Tp::Contact::FeatureSimplePresence
     );
 
-    Tp::ClientRegistrarPtr registrar = Tp::ClientRegistrar::create(accountFactory, connectionFactory,
-                                                                   channelFactory, contactFactory);
+    Tp::AccountManagerPtr accountManager = Tp::AccountManager::create(QDBusConnection::sessionBus(), accountFactory, connectionFactory, channelFactory, contactFactory);
 
-    Tp::SharedPtr<TelepathyChatUi> app = Tp::SharedPtr<TelepathyChatUi>(new TelepathyChatUi);
+    Tp::ClientRegistrarPtr registrar = Tp::ClientRegistrar::create(accountManager);
+
+    Tp::SharedPtr<TelepathyChatUi> app = Tp::SharedPtr<TelepathyChatUi>(new TelepathyChatUi(accountManager));
     Tp::AbstractClientPtr handler = Tp::AbstractClientPtr(app);
     registrar->registerClient(handler, QLatin1String(KTP_TEXTUI_CLIENT_NAME));
 
