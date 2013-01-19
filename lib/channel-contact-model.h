@@ -63,11 +63,14 @@ private Q_SLOTS:
     void onContactPresenceChanged(const Tp::Presence &presence);
     void onContactAliasChanged(const QString &alias);
     void onContactBlockStatusChanged(bool blocked);
+    void onChatStateChanged(const Tp::ContactPtr &contact, Tp::ChannelChatState state);
+
 
 private:
     void addContacts(const Tp::Contacts &contacts);
     void removeContacts(const Tp::Contacts &contacts);
     QList<Tp::ContactPtr> m_contacts;
+    QHash<Tp::ContactPtr, Tp::ChannelChatState> m_chatState;
 };
 
 #endif // CHANNEL_CONTACT_MODEL_H

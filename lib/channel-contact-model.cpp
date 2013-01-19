@@ -34,6 +34,7 @@ void ChannelContactModel::setTextChannel(const Tp::TextChannelPtr &channel)
     //remove existing contacts in list
     beginRemoveRows(QModelIndex(), 0, m_contacts.size());
     m_contacts.clear();
+    m_chatState.clear();
     endRemoveRows();
 
     //add existing contacts from channel
@@ -45,6 +46,10 @@ void ChannelContactModel::setTextChannel(const Tp::TextChannelPtr &channel)
                                        Tp::Contacts,Tp::Channel::GroupMemberChangeDetails)),
             SLOT(onGroupMembersChanged(Tp::Contacts,Tp::Contacts,Tp::Contacts,
                                      Tp::Contacts,Tp::Channel::GroupMemberChangeDetails)));
+
+    connect(channel.data(),
+            SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
+            SLOT(onChatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)));
 }
 
 bool ChannelContactModel::containsNick(const QString& nick)
@@ -79,8 +84,14 @@ QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
         return QVariant(m_contacts[row]->alias());
 
     case Qt::DecorationRole:
-        return KTp::Presence(m_contacts[row]->presence()).icon();
+    {
+        const Tp::ContactPtr contact = m_contacts[row];
+        if (m_chatState.contains(contact) && m_chatState[contact] == Tp::ChannelChatStateComposing) {
+            return KIcon(QLatin1String("document-edit"));
 
+        }
+        return KTp::Presence(contact->presence()).icon();
+    }
     default:
         return QVariant();
     }
@@ -160,7 +171,16 @@ void ChannelContactModel::removeContacts(const Tp::Contacts &contacts)
 
         beginRemoveRows(QModelIndex(), m_contacts.indexOf(contact), m_contacts.indexOf(contact));
         m_contacts.removeAll(contact);
+        m_chatState.remove(contact);
         endRemoveRows();
     }
+}
+
+void ChannelContactModel::onChatStateChanged(const Tp::ContactPtr &contact, Tp::ChannelChatState state)
+{
+    const QModelIndex index = createIndex(m_contacts.lastIndexOf(contact), 0);
+
+    m_chatState[contact] = state;
+    dataChanged(index, index);
 }
 
