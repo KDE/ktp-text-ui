@@ -583,7 +583,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
                 switch (reportDetails.error()) {
                 case Tp::ChannelTextSendErrorOffline:
                     if (reportDetails.hasEchoedMessage()) {
-                        if(message.sender()->isBlocked()) {
+                        if(message.sender() && message.sender()->isBlocked()) {
                             text = i18n("Delivery of the message \"%1\" "
                                         "failed because the remote contact is blocked",
                                         reportDetails.echoedMessage().text());
@@ -593,7 +593,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
                                         reportDetails.echoedMessage().text());
                          }
                     } else {
-                        if(message.sender()->isBlocked()) {
+                        if(message.sender() && message.sender()->isBlocked()) {
                             text = i18n("Delivery of a message failed "
                                         "because the remote contact is blocked");
                         } else {
@@ -743,12 +743,21 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
                                                     | KNotification::CloseWhenWidgetActivated
                                                     | KNotification::Persistent);
     notification->setComponentData(d->telepathyComponentData());
-    notification->setTitle(i18n("%1 has sent you a message", message.sender()->alias()));
+   
+    QString senderName;
 
-    QPixmap notificationPixmap;
-    if (notificationPixmap.load(message.sender()->avatarData().fileName)) {
-        notification->setPixmap(notificationPixmap);
+    if (message.sender().isNull()) {
+        senderName = message.senderNickname();
+    } else {
+        senderName = message.sender()->alias();
+        QPixmap notificationPixmap;
+        if (notificationPixmap.load(message.sender()->avatarData().fileName)) {
+            notification->setPixmap(notificationPixmap);
+        }
+        //allows per contact notifications
+        notification->addContext(QLatin1String("contact"), message.sender()->id());
     }
+    notification->setTitle(i18n("%1 has sent you a message", senderName));
 
     // Remove empty lines from message
     QString notifyText = message.text().simplified();
@@ -760,9 +769,6 @@ void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
         notification->setText(notifyText);
     }
 
-    //allows per contact notifications
-    notification->addContext(QLatin1String("contact"), message.sender()->id());
-    //TODO notification->addContext("group",... Requires KDE Telepathy Contact to work out which group they are in.
 
     notification->setActions(QStringList(i18n("View")));
     connect(notification, SIGNAL(activated(uint)), this, SIGNAL(notificationClicked()));
