@@ -292,7 +292,11 @@ void ChatWindow::onCurrentIndexChanged(int index)
     ChatTab *currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
     currentChatTab->acknowledgeMessages();
     setWindowTitle(currentChatTab->title());
-    setWindowIcon(currentChatTab->icon());
+    if (hasUnreadMessages()) {
+        setWindowIcon(KIcon(QLatin1String("mail-mark-unread-new")));
+    } else {
+        setWindowIcon(currentChatTab->icon());
+    }
 
     //call this to update the "Typing.." in window title
     onUserTypingChanged(currentChatTab->remoteChatState());
@@ -443,11 +447,34 @@ void ChatWindow::onTabStateChanged()
 {
     kDebug();
 
+    KIcon windowIcon;
     ChatTab *sender = qobject_cast<ChatTab*>(QObject::sender());
     if (sender) {
         int tabIndex = m_tabWidget->indexOf(sender);
         setTabTextColor(tabIndex, sender->titleColor());
+
+        if (sender->remoteChatState() == Tp::ChannelChatStateComposing) {
+            setTabIcon(tabIndex, KIcon(QLatin1String("document-edit")));
+            if (sender == m_tabWidget->currentWidget()) {
+                windowIcon = KIcon(QLatin1String("document-edit"));
+            } else {
+                windowIcon = qobject_cast<ChatTab*>(m_tabWidget->currentWidget())->icon();
+            }
+        } else {
+            setTabIcon(tabIndex, sender->icon());
+            windowIcon = sender->icon();
+        }
+
+        if (sender->unreadMessageCount() > 0) {
+            setTabIcon(tabIndex, KIcon(QLatin1String("mail-mark-unread-new")));
+        }
     }
+
+    if (hasUnreadMessages()) {
+        windowIcon = KIcon(QLatin1String("mail-mark-unread-new"));
+    }
+
+    setWindowIcon(windowIcon);
 }
 
 void ChatWindow::onTabIconChanged(const KIcon & newIcon)
@@ -847,5 +874,18 @@ void ChatWindow::onAddEmoticon(const QString& emoticon)
     ChatTab *currentChatTab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
     currentChatTab->addEmoticonToChat(emoticon);
 }
+
+bool ChatWindow::hasUnreadMessages() const
+{
+    for (int i = 0; i < m_tabWidget->count(); i++) {
+        ChatTab *tab = qobject_cast<ChatTab*>(m_tabWidget->widget(i));
+        if (tab && tab->unreadMessageCount() > 0) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 #include "chat-window.moc"

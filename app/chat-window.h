@@ -161,6 +161,9 @@ private:
      */
     void startShareDesktop(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
 
+    /** Returns whether there's at least one tab with unread message */
+    bool hasUnreadMessages() const;
+
     KTabWidget *m_tabWidget;
 
     Sonnet::DictionaryComboBox *m_spellDictCombo;
