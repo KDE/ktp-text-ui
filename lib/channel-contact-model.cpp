@@ -31,10 +31,11 @@ ChannelContactModel::ChannelContactModel(const Tp::TextChannelPtr &channel, QObj
 
 void ChannelContactModel::setTextChannel(const Tp::TextChannelPtr &channel)
 {
+    m_channel = channel;
+    
     //remove existing contacts in list
     beginRemoveRows(QModelIndex(), 0, m_contacts.size());
     m_contacts.clear();
-    m_chatState.clear();
     endRemoveRows();
 
     //add existing contacts from channel
@@ -86,7 +87,7 @@ QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole:
     {
         const Tp::ContactPtr contact = m_contacts[row];
-        if (m_chatState.contains(contact) && m_chatState[contact] == Tp::ChannelChatStateComposing) {
+        if (m_channel->chatState(contact) == Tp::ChannelChatStateComposing) {
             return KIcon(QLatin1String("document-edit"));
 
         }
@@ -171,16 +172,14 @@ void ChannelContactModel::removeContacts(const Tp::Contacts &contacts)
 
         beginRemoveRows(QModelIndex(), m_contacts.indexOf(contact), m_contacts.indexOf(contact));
         m_contacts.removeAll(contact);
-        m_chatState.remove(contact);
         endRemoveRows();
     }
 }
 
 void ChannelContactModel::onChatStateChanged(const Tp::ContactPtr &contact, Tp::ChannelChatState state)
 {
+    Q_UNUSED(state)
     const QModelIndex index = createIndex(m_contacts.lastIndexOf(contact), 0);
-
-    m_chatState[contact] = state;
     dataChanged(index, index);
 }
 

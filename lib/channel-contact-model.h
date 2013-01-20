@@ -67,10 +67,10 @@ private Q_SLOTS:
 
 
 private:
+    Tp::TextChannelPtr m_channel;
     void addContacts(const Tp::Contacts &contacts);
     void removeContacts(const Tp::Contacts &contacts);
     QList<Tp::ContactPtr> m_contacts;
-    QHash<Tp::ContactPtr, Tp::ChannelChatState> m_chatState;
 };
 
 #endif // CHANNEL_CONTACT_MODEL_H
