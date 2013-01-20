@@ -30,6 +30,7 @@ Encoding=UTF-8
 Comment=Read out incoming messages using text-to-speech service
 Comment[cs]=Předčítat příchozí zprávy pomocí služby hlasové syntézy
 Comment[da]=Læs indkommende beskeder op med tekst-til-tale-tjenesten
+Comment[de]=Eingehende Nachrichten mit dem Sprachausgabedienst volesen
 Comment[el]=Ανάγνωση εισερχόμενων μηνυμάτων με χρήση υπηρεσίας μετατροπή-κειμένου-σε-ομιλία
 Comment[es]=Leer los mensajes entrantes utilizando el servicio texto-a-locución
 Comment[et]=Sisenevate sõnumite ettelugemine teksti ettelugemise teenuse abil
