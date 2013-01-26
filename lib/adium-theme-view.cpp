@@ -542,8 +542,11 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
 {
     //message
     QString message = info.message();
-    message.prepend(QString::fromLatin1("<span dir=\"%1\">").arg(info.messageDirection()));
-    message.append(QLatin1String("</span>"));
+
+    if(info.messageDirection() == QLatin1String("rtl")) {
+        message.prepend(QString::fromLatin1("<div dir=\"rtl\">"));
+        message.append(QLatin1String("</div>"));
+    }
 
     htmlTemplate.replace(QLatin1String("%message%"), message);
 
