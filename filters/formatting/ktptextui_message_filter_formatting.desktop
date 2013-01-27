@@ -2,10 +2,10 @@
 Encoding=UTF-8
 Name=Google Talk Style Formatting
 Name[cs]=Formátovat stylem Google Talk
-Name[da]=Google Talk-stilformatering
+Name[da]=Google Talk-agtig formatering
 Name[de]=„Google Talk“-Stilformatierung
-Name[el]=Διαμόρφωση του στιλ στο Google Talk
-Name[es]=Formato de estilo de Google Talk
+Name[el]=Στιλ διαμόρφωσης Google Talk
+Name[es]=Formato de estilo Google Talk
 Name[et]=Google Talki stiilis vormindamine
 Name[fi]=Google Talkin tapainen muotoilu
 Name[gl]=Formato de estilo de Google Talk
@@ -30,7 +30,11 @@ Name[zh_CN]=Google Talk 样式的格式
 Name[zh_TW]=Google Talk 樣式的格式
 Comment=Use _, * and - to make text italic, bold or strikeout respectively
 Comment[cs]=Použít _, * a - pro kurzívu, tučný a přeškrtnutý text
+<<<<<<< HEAD
 Comment[da]=Brug _, * og - til at lave hhv. kursiv, fed eller overstreget
+=======
+Comment[da]=Brug _, * og - til at gøre tekst hhv. kursiv, fed eller gennemstreget
+>>>>>>> kde-telepathy-0.5
 Comment[de]=Mit „_“, “*“ und „-“ wird Text geneigt, fett oder durchgestrichen dargestellt
 Comment[el]=Χρησιμοποιήστε _, * και - για πλάγιους, έντονους ή με επιγράμμιση χαρακτήρες αντίστοιχα
 Comment[es]=Utilice _, * y - para poner el texto en cursiva, negrita o tachado respectivamente

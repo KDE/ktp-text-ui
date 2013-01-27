@@ -91,7 +91,7 @@ void LogManager::fetchLast()
                                                 NULL,
                                                 NULL);
 
-        Tpl::PendingDates* dates = m_logManager->queryDates( m_account, contactEntity, Tpl::EventTypeMaskText);
+        Tpl::PendingDates* dates = m_logManager->queryDates(m_account, contactEntity, Tpl::EventTypeMaskText);
         connect(dates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
         return;
     }
@@ -112,7 +112,7 @@ void LogManager::onDatesFinished(Tpl::PendingOperation *po)
 
     QList<QDate> dates = pd->dates();
 
-    if( !dates.isEmpty() ) {
+    if (!dates.isEmpty()) {
         QDate date = dates.last();
 
         kDebug() << pd->account()->uniqueIdentifier() << pd->entity()->identifier() << dates;
@@ -135,7 +135,7 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
     }
 
     QStringList queuedMessageTokens;
-    if(!m_textChannel.isNull()) {
+    if (!m_textChannel.isNull()) {
         Q_FOREACH(const Tp::ReceivedMessage &message, m_textChannel->messageQueue()) {
             queuedMessageTokens.append(message.messageToken());
         }
@@ -149,9 +149,9 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
     QList<Tpl::EventPtr>::iterator i = allEvents.end();
     while (i-- != allEvents.begin() && (events.count() < m_fetchAmount)) {
         Tpl::TextEventPtr textEvent = (*i).dynamicCast<Tpl::TextEvent>();
-        if(!textEvent.isNull()) {
-            if(!queuedMessageTokens.contains(textEvent->messageToken())) {
-                events.prepend( textEvent );
+        if (!textEvent.isNull()) {
+            if (!queuedMessageTokens.contains(textEvent->messageToken())) {
+                events.prepend(textEvent);
             }
         }
     }
@@ -161,7 +161,7 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
     Q_FOREACH(const Tpl::TextEventPtr &event, events) {
         AdiumThemeMessageInfo::MessageType type;
         Tp::ContactPtr contact;
-        if(event->sender()->identifier() == m_account->normalizedName()) {
+        if (event->sender()->identifier() == m_account->normalizedName()) {
             type = AdiumThemeMessageInfo::HistoryLocalToRemote;
             if (m_account->connection()) {
                 contact = m_account->connection()->selfContact();
@@ -170,6 +170,15 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
             type = AdiumThemeMessageInfo::HistoryRemoteToLocal;
             contact = m_textChannel->targetContact();
         }
+
+        /* When connection is dropped (account goes offline), we get an invalid
+         * contact, so we can't correctly create the message. There's no point
+         * emitting fetched() with only partial list of messages, so let's
+         * just terminate here. */
+        if (!contact) {
+            return;
+        }
+
         AdiumThemeContentInfo message(type);
 
         KTp::Message processedEvent(type == AdiumThemeMessageInfo::HistoryLocalToRemote ? KTp::MessageProcessor::instance()->processOutgoingMessage(event)
