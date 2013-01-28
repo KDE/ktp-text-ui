@@ -2,10 +2,10 @@
 Encoding=UTF-8
 Name=Google Talk Style Formatting
 Name[cs]=Formátovat stylem Google Talk
-Name[da]=Google Talk-agtig formatering
+Name[da]=Google Talk-stilformatering
 Name[de]=„Google Talk“-Stilformatierung
-Name[el]=Στιλ διαμόρφωσης Google Talk
-Name[es]=Formato de estilo Google Talk
+Name[el]=Διαμόρφωση του στιλ στο Google Talk
+Name[es]=Formato de estilo de Google Talk
 Name[et]=Google Talki stiilis vormindamine
 Name[fi]=Google Talkin tapainen muotoilu
 Name[gl]=Formato de estilo de Google Talk
@@ -30,11 +30,7 @@ Name[zh_CN]=Google Talk 样式的格式
 Name[zh_TW]=Google Talk 樣式的格式
 Comment=Use _, * and - to make text italic, bold or strikeout respectively
 Comment[cs]=Použít _, * a - pro kurzívu, tučný a přeškrtnutý text
-<<<<<<< HEAD
 Comment[da]=Brug _, * og - til at lave hhv. kursiv, fed eller overstreget
-=======
-Comment[da]=Brug _, * og - til at gøre tekst hhv. kursiv, fed eller gennemstreget
->>>>>>> kde-telepathy-0.5
 Comment[de]=Mit „_“, “*“ und „-“ wird Text geneigt, fett oder durchgestrichen dargestellt
 Comment[el]=Χρησιμοποιήστε _, * και - για πλάγιους, έντονους ή με επιγράμμιση χαρακτήρες αντίστοιχα
 Comment[es]=Utilice _, * y - para poner el texto en cursiva, negrita o tachado respectivamente
@@ -58,6 +54,9 @@ Comment[wa]=Si siervi di _, * eyet - po rinde les scrijhaedjes clintchîs, crås
 Comment[x-test]=xxUse _, * and - to make text italic, bold or strikeout respectivelyxx
 Comment[zh_CN]=使用 _、* 和 - 来使文本变为斜体、粗体或删除线
 Comment[zh_TW]=用 _, * 與 - 來顯示文字的斜體協、粗體與刪除線。
+<<<<<<< HEAD
+=======
+>>>>>>> kde-telepathy-0.5
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 X-KDE-Library=ktptextui_message_filter_formatting
