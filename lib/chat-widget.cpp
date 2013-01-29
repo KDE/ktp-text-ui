@@ -165,7 +165,14 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     //set up anything related to 'self'
     info.setOutgoingIconPath(d->channel->groupSelfContact()->avatarData().fileName);
-    info.setTimeOpened(QDateTime::currentDateTime());
+
+    //set the message time
+    if (!d->channel->messageQueue().isEmpty()) {
+        info.setTimeOpened(d->channel->messageQueue().first().received());
+    } else {
+        info.setTimeOpened(QDateTime::currentDateTime());
+    }
+
     info.setServiceIconImage(KIconLoader::global()->iconPath(d->account->iconName(), KIconLoader::Panel));
     connect(d->ui.chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()), Qt::QueuedConnection);
     d->ui.chatArea->initialise(info);
