@@ -462,7 +462,7 @@ void ChatWindow::onTabStateChanged()
             }
         } else {
             setTabIcon(tabIndex, sender->icon());
-            windowIcon = sender->icon();
+            windowIcon = qobject_cast<ChatTab*>(m_tabWidget->currentWidget())->icon();
         }
 
         if (sender->unreadMessageCount() > 0) {
