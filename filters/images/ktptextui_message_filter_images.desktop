@@ -2,6 +2,7 @@
 Name=Image Preview
 Name[bs]=Pregled slike
 Name[ca]=Vista prèvia d'imatge
+Name[ca@valencia]=Vista prèvia d'imatge
 Name[cs]=Náhled obrázku
 Name[da]=Forhåndsvisning af billede
 Name[de]=Bildvorschau
@@ -36,6 +37,7 @@ Encoding=UTF-8
 Comment=Embed a thumbnail of any image URL sent in a chat
 Comment[bs]=Unesite sličicu neke URL slike poslane u ćaskanju
 Comment[ca]=Incrusta una miniatura de qualsevol URL d'imatge enviat al xat
+Comment[ca@valencia]=Incrusta una miniatura de qualsevol URL d'imatge enviat al xat
 Comment[cs]=Vložit náhled všem URL obrázků odeslaných do rozhovoru
 Comment[da]=Indlejr en miniature af billed-URL'er sendt i chatten
 Comment[de]=Vorschaubild jeder in einen Chat gesendeten Bildadresse einbetten
