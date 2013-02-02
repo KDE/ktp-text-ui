@@ -57,9 +57,6 @@ Comment[wa]=Si siervi di _, * eyet - po rinde les scrijhaedjes clintchîs, crås
 Comment[x-test]=xxUse _, * and - to make text italic, bold or strikeout respectivelyxx
 Comment[zh_CN]=使用 _、* 和 - 来使文本变为斜体、粗体或删除线
 Comment[zh_TW]=用 _, * 與 - 來顯示文字的斜體協、粗體與刪除線。
-<<<<<<< HEAD
-=======
->>>>>>> kde-telepathy-0.5
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 X-KDE-Library=ktptextui_message_filter_formatting
