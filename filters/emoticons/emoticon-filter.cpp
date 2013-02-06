@@ -33,8 +33,9 @@ EmoticonFilter::EmoticonFilter(QObject *parent, const QVariantList &)
 {
 }
 
-void EmoticonFilter::filterMessage(KTp::Message& message)
+void EmoticonFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
 {
+    Q_UNUSED(context)
     message.setMainMessagePart(d->emoticons.theme().parseEmoticons(message.mainMessagePart()));
 }
 

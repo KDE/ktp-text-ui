@@ -28,7 +28,7 @@ Q_OBJECT
 public:
     TTSFilter(QObject *parent, const QVariantList &);
     virtual ~TTSFilter();
-    virtual void filterIncomingMessage(KTp::Message &message);
+    virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
 
 private:
     class Private;

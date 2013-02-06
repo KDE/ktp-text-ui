@@ -78,8 +78,9 @@ FormatFilter::~FormatFilter()
     delete d;
 }
 
-void FormatFilter::filterMessage (KTp::Message& message)
+void FormatFilter::filterMessage (KTp::Message& message, const KTp::MessageContext &context)
 {
+    Q_UNUSED(context)
     message.setMainMessagePart(d->filterString(message.mainMessagePart()));
 }
 

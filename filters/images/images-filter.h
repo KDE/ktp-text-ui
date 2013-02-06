@@ -28,7 +28,7 @@ Q_OBJECT
 public:
     ImagesFilter (QObject* parent, const QVariantList &);
     virtual ~ImagesFilter();
-    virtual void filterMessage (KTp::Message& message);
+    virtual void filterMessage (KTp::Message &message, const KTp::MessageContext &context);
 
 private:
     class Private;

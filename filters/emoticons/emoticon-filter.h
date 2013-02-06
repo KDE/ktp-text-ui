@@ -29,7 +29,7 @@ public:
     EmoticonFilter(QObject* parent, const QVariantList &);
     virtual ~EmoticonFilter();
 
-    void filterMessage(KTp::Message& message);
+    void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
 private:
     class Private;
     Private *d;

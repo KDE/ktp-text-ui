@@ -50,8 +50,9 @@ ImagesFilter::~ImagesFilter()
     delete d;
 }
 
-void ImagesFilter::filterMessage (KTp::Message& message)
+void ImagesFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
 {
+    Q_UNUSED(context)
     kDebug() << message.property("Urls").toList().size();
     Q_FOREACH (const QVariant &var, message.property("Urls").toList()) {
         const KUrl url = qvariant_cast<KUrl>(var);

@@ -28,7 +28,7 @@ Q_OBJECT
 public:
     FormatFilter (QObject* parent, const QVariantList &);
     virtual ~FormatFilter();
-    virtual void filterMessage (KTp::Message& message);
+    virtual void filterMessage (KTp::Message &message, const KTp::MessageContext &context);
 
 private:
     class Private;

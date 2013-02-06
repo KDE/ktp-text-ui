@@ -46,8 +46,17 @@ TTSFilter::~TTSFilter()
     delete d;
 }
 
-void TTSFilter::filterIncomingMessage(KTp::Message &message)
+void TTSFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
 {
+    Q_UNUSED (context)
+    if (message.direction() == KTp::Message::LocalToRemote) {
+        return;
+    }
+
+    if (message.isHistory()) {
+        return;
+    }
+
     //FIXME with real name.
     d->kspeech->say(i18n("New message. %1").arg(message.mainMessagePart()), KSpeech::soHtml);
 }

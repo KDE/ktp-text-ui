@@ -611,7 +611,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
         } else {
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
-            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message));
+            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processMessage(message, d->account, d->channel));
             messageInfo.setMessage(processedMessage.finalizedMessage());
             messageInfo.setScript(processedMessage.finalizedScript());
 
@@ -727,7 +727,7 @@ void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     }
     else {
         AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::LocalToRemote);
-        KTp::Message processedMessage(KTp::MessageProcessor::instance()->processOutgoingMessage(message));
+        KTp::Message processedMessage(KTp::MessageProcessor::instance()->processMessage(message, d->account, d->channel));
         messageInfo.setMessage(processedMessage.finalizedMessage());
         messageInfo.setScript(processedMessage.finalizedScript());
 

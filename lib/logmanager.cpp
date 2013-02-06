@@ -181,8 +181,7 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
 
         AdiumThemeContentInfo message(type);
 
-        KTp::Message processedEvent(type == AdiumThemeMessageInfo::HistoryLocalToRemote ? KTp::MessageProcessor::instance()->processOutgoingMessage(event)
-                                                                                        : KTp::MessageProcessor::instance()->processIncomingMessage(event));
+        KTp::Message processedEvent = KTp::MessageProcessor::instance()->processMessage(event, m_account, m_textChannel);
 
         message.setMessage(processedEvent.finalizedMessage());
         message.setScript(processedEvent.finalizedScript());
