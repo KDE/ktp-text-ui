@@ -40,7 +40,6 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
 
     ui->setupUi(this);
 
-    ui->newTabButtonGroup->setId(ui->radioLast, TelepathyChatUi::LastWindow);
     ui->newTabButtonGroup->setId(ui->radioNew, TelepathyChatUi::NewWindow);
     ui->newTabButtonGroup->setId(ui->radioZero, TelepathyChatUi::FirstWindow);
 
@@ -67,8 +66,6 @@ void BehaviorConfig::load()
         m_openMode = TelepathyChatUi::NewWindow;
     } else if (mode == QLatin1String("FirstWindow")) {
         m_openMode = TelepathyChatUi::FirstWindow;
-    } else if (mode == QLatin1String("LastWindow")) {
-        m_openMode = TelepathyChatUi::LastWindow;
     }
 
     m_scrollbackLength = tabConfig.readEntry("scrollbackLength", 4);
@@ -86,9 +83,6 @@ void BehaviorConfig::save()
             break;
         case TelepathyChatUi::FirstWindow :
             mode = QLatin1String("FirstWindow");
-            break;
-        case TelepathyChatUi::LastWindow :
-            mode = QLatin1String("LastWindow");
             break;
     }
 

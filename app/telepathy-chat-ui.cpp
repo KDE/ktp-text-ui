@@ -50,12 +50,11 @@ TelepathyChatUi::TelepathyChatUi(const Tp::AccountManagerPtr &accountManager)
 
     // load the settings for new tab "open mode"
     QString mode = tabConfig.readEntry("tabOpenMode", "FirstWindow");
+    m_openMode = FirstWindow;
     if (mode == QLatin1String("NewWindow")) {
         m_openMode = NewWindow;
     } else if (mode == QLatin1String("FirstWindow")) {
         m_openMode = FirstWindow;
-    } else if (mode == QLatin1String("LastWindow")) {
-        m_openMode = LastWindow;
     }
 }
 
@@ -155,13 +154,13 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     }
 
     //if there is currently no tab containing the incoming channel.
+
     if (!tabFound) {
         ChatWindow* window = 0;
         switch (m_openMode) {
             case FirstWindow:
                 window = m_chatWindows.count()?m_chatWindows[0]:createWindow();
                 break;
-            case LastWindow:
             case NewWindow:
                 window = createWindow();
                 break;

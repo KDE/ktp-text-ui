@@ -20,7 +20,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Open new conversations in :</string>
+         <string>Open new conversations :</string>
         </property>
        </widget>
       </item>
@@ -37,17 +37,7 @@
       <item>
        <widget class="QRadioButton" name="radioZero">
         <property name="text">
-         <string>A new tab in the first window</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">newTabButtonGroup</string>
-        </attribute>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="radioLast">
-        <property name="text">
-         <string>A new tab in the last focused window</string>
+         <string>As tabs in the same window</string>
         </property>
         <attribute name="buttonGroup">
          <string notr="true">newTabButtonGroup</string>
