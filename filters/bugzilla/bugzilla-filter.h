@@ -19,9 +19,11 @@
 #ifndef BUGZILLA_FILTER_H
 #define BUGZILLA_FILTER_H
 
-#include <KTp/AbstractMessageFilter>
+#include <KTp/abstract-message-filter.h>
 
-class BugzillaFilter : public AbstractMessageFilter
+#include <KUrl>
+
+class BugzillaFilter : public KTp::AbstractMessageFilter
 {
     Q_OBJECT
 
@@ -29,10 +31,11 @@ public:
     BugzillaFilter(QObject *parent, const QVariantList &);
     virtual ~BugzillaFilter();
 
-    virtual void filterMessage(Message &message);
-    void addBugDescription(Message &msg, KUrl &baseUrl);
+    virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
 
 private:
+    void addBugDescription(KTp::Message &msg, const KUrl &baseUrl);
+
     class Private;
     Private *d;
 };

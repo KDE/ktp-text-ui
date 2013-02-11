@@ -12,7 +12,6 @@ kde4_add_plugin (ktptextui_message_filter_tts
 )
 
 target_link_libraries (ktptextui_message_filter_tts
-    ktpchat
     ${QT_LIBRARIES}
     ${KDE4_KDEUI_LIBS}
     ${TELEPATHY_QT4_LIBRARIES}

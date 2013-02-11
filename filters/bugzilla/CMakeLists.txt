@@ -9,10 +9,11 @@ kde4_add_plugin (ktptextui_message_filter_bugzilla
 )
 
 target_link_libraries (ktptextui_message_filter_bugzilla
-    ktpchat
     ${QT_LIBRARIES}
-    ${QJSON_LIBRARIES}
+    ${qjson_LIBRARIES}
     ${KDE4_KIO_LIBS}
+    ${KTP_LIBRARIES}
+    ${TELEPATHY_QT4_LIBRARIES}
 )
 
 # Install:

@@ -23,7 +23,6 @@
 #include <KPluginFactory>
 #include <KDebug>
 #include <KUrl>
-#include <KUriFilter>
 #include <KIO/Job>
 #include <QTextDocument>
 
@@ -38,7 +37,7 @@ BugzillaFilter::BugzillaFilter(QObject *parent, const QVariantList &) :
     AbstractMessageFilter(parent), d(new Private)
 {
     d->bugText = QRegExp(QLatin1String("BUG:[ ]*(\\d+)"));
-    d->sectionTemplate = QLatin1String("[BUG <a href='%1'>%2</a>] %3");
+    d->sectionTemplate = QLatin1String("<br/>[BUG <a href='%1'>%2</a>] %3 - %4");
 }
 
 BugzillaFilter::~BugzillaFilter()
@@ -46,7 +45,7 @@ BugzillaFilter::~BugzillaFilter()
     delete d;
 }
 
-void BugzillaFilter::addBugDescription(Message &msg, KUrl &baseUrl) {
+void BugzillaFilter::addBugDescription(KTp::Message &msg, const KUrl &baseUrl) {
     KUrl request;
     request.setHost(baseUrl.host());
     request.setProtocol(baseUrl.protocol());
@@ -62,6 +61,7 @@ void BugzillaFilter::addBugDescription(Message &msg, KUrl &baseUrl) {
     KIO::StoredTransferJob *job = KIO::storedGet(request);
     job->exec();
 
+
     QVariantMap response = QJson::Parser().parse(job->data()).toMap();
     if (response.contains(QLatin1String("result"))) {
         QVariantMap result = response.value(QLatin1String("result")).toMap();
@@ -71,12 +71,17 @@ void BugzillaFilter::addBugDescription(Message &msg, KUrl &baseUrl) {
                 QVariantMap bug = bugs.first().toMap();
                 if (bug.contains(QLatin1String("summary"))) {
                     QString summary = bug.value(QLatin1String("summary")).toString();
-                    kDebug() << summary;
+                    QString status = bug.value(QLatin1String("status")).toString();
+
+                    if (status == QLatin1String("RESOLVED")) {
+                        status += QString::fromLatin1(" (%1)").arg(bug.value(QLatin1String("resolution")).toString());
+                    }
 
                     msg.appendMessagePart(d->sectionTemplate
                         .arg(baseUrl.url())
                         .arg(Qt::escape(baseUrl.queryItemValue(QLatin1String("id"))))
-                        .arg(Qt::escape(summary)));
+                        .arg(Qt::escape(summary))
+                        .arg(status));
                 }
             }
         }
@@ -84,18 +89,26 @@ void BugzillaFilter::addBugDescription(Message &msg, KUrl &baseUrl) {
 
 }
 
-void BugzillaFilter::filterMessage(Message &message)
+void BugzillaFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
 {
+    //if we're hidden we don't want to make network requests that can show we're online
+    if (context.account()->currentPresence().type() == Tp::ConnectionPresenceTypeHidden) {
+        return;
+    }
+
     QString msg = message.mainMessagePart();
     int index = msg.indexOf(d->bugText);
     while (index >= 0) {
         KUrl baseUrl;
+
+        //TODO make this configurable
         baseUrl.setProtocol(QLatin1String("https"));
         baseUrl.setHost(QLatin1String("bugs.kde.org"));
         baseUrl.setFileName(QLatin1String("show_bug.cgi"));
         baseUrl.addQueryItem(QLatin1String("id"), d->bugText.cap(1));
 
         addBugDescription(message, baseUrl);
+
         index = msg.indexOf(d->bugText, index + 1);
     }
 
@@ -105,7 +118,6 @@ void BugzillaFilter::filterMessage(Message &message)
         if (url.fileName() == QLatin1String("show_bug.cgi")) { //a bugzilla of some sort
             kDebug() << "link is to a bugzilla:" << url.host();
 
-            //by using the host from the link, it will work with *any* bugzilla installation
             addBugDescription(message, url);
         }
     }
