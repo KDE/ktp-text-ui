@@ -61,6 +61,7 @@ ChatSearchBar::ChatSearchBar(QWidget *parent)
     connect(m_searchInput, SIGNAL(textChanged(QString)), this, SLOT(textChanged(QString)));
 
     QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setContentsMargins(2, 0, 2, 0);
     layout->addWidget(m_closeButton);
     layout->setAlignment(m_closeButton, Qt::AlignLeft | Qt::AlignTop);
 
