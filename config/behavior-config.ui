@@ -20,14 +20,14 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Open new conversations :</string>
+         <string>Open new conversations:</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QRadioButton" name="radioNew">
         <property name="text">
-         <string>A new window</string>
+         <string>As new windows</string>
         </property>
         <attribute name="buttonGroup">
          <string notr="true">newTabButtonGroup</string>
@@ -50,7 +50,7 @@
    <item>
     <widget class="KButtonGroup" name="scrollbackGroup">
      <property name="title">
-      <string>Last conversation scrollback</string>
+      <string>Last Conversation Scrollback</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">

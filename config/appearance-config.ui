@@ -38,7 +38,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="fontFamilyLabel">
           <property name="text">
-           <string>Select Font: </string>
+           <string>Select Font:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -51,7 +51,7 @@
         <item row="2" column="0">
          <widget class="QLabel" name="fontSizeLabel">
           <property name="text">
-           <string>Select Size: </string>
+           <string>Select Size:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
