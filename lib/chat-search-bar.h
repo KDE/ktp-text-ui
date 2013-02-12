@@ -27,6 +27,7 @@
 
 class KLineEdit;
 class KPushButton;
+class QToolButton;
 
 /**
  * @brief Input field for user to insert text to look for inside a chat window
@@ -80,9 +81,9 @@ private:
     QWebPage::FindFlags findFlags();
 
     KLineEdit *m_searchInput;
-    KPushButton *m_closeButton
-    , *m_nextButton
-    , *m_previousButton;
+    QToolButton *m_closeButton;
+    KPushButton *m_nextButton;
+    KPushButton *m_previousButton;
 
     // search criteria variables
     bool m_highlightAll

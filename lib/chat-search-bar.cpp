@@ -28,16 +28,18 @@
 #include <QCheckBox>
 #include <QDebug>
 #include <QHBoxLayout>
+#include <QToolButton>
 
 ChatSearchBar::ChatSearchBar(QWidget *parent)
     : QWidget(parent)
     , m_searchInput(new KLineEdit(this))
-    , m_closeButton(new KPushButton(this))
+    , m_closeButton(new QToolButton(this))
     , m_nextButton(new KPushButton(KIcon(QLatin1String("go-down-search")), i18nc("Next search result" ,"&Next"), this))
     , m_previousButton(new KPushButton(KIcon(QLatin1String("go-up-search")), i18nc("Previous search result" ,"&Previous"), this))
     , m_caseSensitive(false)
 {
     // close button setup
+    m_closeButton->setAutoRaise(true);
     m_closeButton->setIcon(KIcon(QLatin1String("dialog-close")));
     connect(m_closeButton, SIGNAL(clicked(bool)), this, SLOT(toggleView(bool)));
 
@@ -60,6 +62,8 @@ ChatSearchBar::ChatSearchBar(QWidget *parent)
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(m_closeButton);
+    layout->setAlignment(m_closeButton, Qt::AlignLeft | Qt::AlignTop);
+
     layout->addWidget(m_searchInput);
     layout->addWidget(m_nextButton);
     layout->addWidget(m_previousButton);
