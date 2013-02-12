@@ -68,6 +68,9 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
             this, SLOT(onOpenLinkActionTriggered()));
 
     connect(this, SIGNAL(linkClicked(QUrl)), this, SLOT(onLinkClicked(QUrl)));
+
+    QWebSettings *ws = settings();
+    ws->setAttribute(QWebSettings::ZoomTextOnly, true);
 }
 
 void AdiumThemeView::load(ChatType chatType) {
@@ -131,6 +134,26 @@ void AdiumThemeView::contextMenuEvent(QContextMenuEvent *event)
     } else {
         QWebView::contextMenuEvent(event);
     }
+}
+
+void AdiumThemeView::wheelEvent(QWheelEvent* event)
+{
+    // Zoom text on Ctrl + Scroll
+    if (event->modifiers() & Qt::CTRL) {
+        qreal factor = zoomFactor();
+        if (event->delta() > 0) {
+            factor += 0.1;
+        } else if (event->delta() < 0) {
+            factor -= 0.1;
+        }
+        setZoomFactor(factor);
+        Q_EMIT zoomFactorChanged(factor);
+
+        event->accept();
+        return;
+    }
+
+    QWebView::wheelEvent(event);
 }
 
 void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)

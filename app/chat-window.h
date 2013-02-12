@@ -103,6 +103,9 @@ private Q_SLOTS:
     void toggleBlockButton(bool contactIsBlocked);              /** Toggle block/unblock action according to the flag */
     void updateAccountIcon();                                   /** Update account icon fake action */
     void onAddEmoticon(const QString& emoticon);                /** Add the corresponding emoticon*/
+    void onZoomIn();
+    void onZoomOut();
+    void onZoomFactorChanged(qreal zoom);
 
 protected Q_SLOTS:
     void showSettingsDialog();
@@ -168,6 +171,7 @@ private:
 
     Sonnet::DictionaryComboBox *m_spellDictCombo;
     QLabel *m_accountIconLabel;
+    qreal m_zoomFactor;
 };
 
 #endif // CHATWINDOW_H

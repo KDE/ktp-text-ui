@@ -73,6 +73,10 @@ ChatWindow::ChatWindow()
     //that data are available when we need them later in desktopSharingCapability()
     (void) s_krfbAvailableChecker.operator->();
 
+    KConfig config(QLatin1String("ktelepathyrc"));
+    KConfigGroup group = config.group("Appearance");
+    m_zoomFactor = group.readEntry("zoomFactor", (qreal) 1.0);
+
     //setup actions
     KStandardAction::close(this,SLOT(closeCurrentTab()),actionCollection());
     KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
@@ -86,6 +90,9 @@ ChatWindow::ChatWindow()
     // start disabled
     KStandardAction::findNext(this, SLOT(onFindNextText()), actionCollection())->setEnabled(false);
     KStandardAction::findPrev(this, SLOT(onFindPreviousText()), actionCollection())->setEnabled(false);
+
+    KStandardAction::zoomIn(this, SLOT(onZoomIn()), actionCollection());
+    KStandardAction::zoomOut(this, SLOT(onZoomOut()), actionCollection());
 
     // create custom actions
     setupCustomActions();
@@ -202,6 +209,7 @@ void ChatWindow::addTab(ChatTab *tab)
     kDebug();
 
     setupChatTabSignals(tab);
+    tab->setZoomFactor(m_zoomFactor);
 
     m_tabWidget->addTab(tab, tab->icon(), tab->title());
     m_tabWidget->setCurrentWidget(tab);
@@ -619,6 +627,7 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab, SIGNAL(contactPresenceChanged(KTp::Presence)), this, SLOT(onTabStateChanged()));
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
     connect(chatTab, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
+    connect(chatTab, SIGNAL(zoomFactorChanged(qreal)), this, SLOT(onZoomFactorChanged(qreal)));
 }
 
 void ChatWindow::setupCustomActions()
@@ -887,5 +896,33 @@ bool ChatWindow::hasUnreadMessages() const
     return false;
 }
 
+void ChatWindow::onZoomIn()
+{
+    onZoomFactorChanged(m_zoomFactor + 0.1);
+}
+
+void ChatWindow::onZoomOut()
+{
+    onZoomFactorChanged(m_zoomFactor - 0.1);
+}
+
+void ChatWindow::onZoomFactorChanged(qreal zoom)
+{
+    m_zoomFactor = zoom;
+
+    for (int i = 0; i < m_tabWidget->count(); i++) {
+        ChatWidget *widget = qobject_cast<ChatWidget*>(m_tabWidget->widget(i));
+        if (!widget) {
+            continue;
+        }
+
+        widget->setZoomFactor(zoom);
+    }
+
+    KConfig config(QLatin1String("ktelepathyrc"));
+    KConfigGroup group = config.group("Appearance");
+    group.writeEntry("zoomFactor", m_zoomFactor);
+
+}
 
 #include "chat-window.moc"

@@ -96,6 +96,10 @@ public Q_SLOTS:
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void wheelEvent(QWheelEvent *event);
+
+Q_SIGNALS:
+    void zoomFactorChanged(qreal zoomFactor);
 
 private:
     ChatWindowStyle *m_chatStyle;

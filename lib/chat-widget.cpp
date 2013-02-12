@@ -133,6 +133,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     /* Prepare the chat area */
     connect(d->ui.chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()), Qt::QueuedConnection);
+    connect(d->ui.chatArea, SIGNAL(zoomFactorChanged(qreal)), SIGNAL(zoomFactorChanged(qreal)));
     initChatArea();
 
     loadSpellCheckingOption();
@@ -1017,6 +1018,16 @@ void ChatWidget::clear()
     // Don't reload logs when re-initializing */
     d->logsLoaded = true;
     initChatArea();
+}
+
+void ChatWidget::setZoomFactor(qreal zoomFactor)
+{
+    d->ui.chatArea->setZoomFactor(zoomFactor);
+}
+
+qreal ChatWidget::zoomFactor() const
+{
+    return d->ui.chatArea->zoomFactor();
 }
 
 void ChatWidget::initChatArea()

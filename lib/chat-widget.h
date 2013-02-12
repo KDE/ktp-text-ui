@@ -95,6 +95,10 @@ public:
 
     void clear();
 
+    qreal zoomFactor() const;
+
+    void setZoomFactor(qreal zoomFactor);
+
 public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
@@ -164,6 +168,9 @@ Q_SIGNALS:
 
     /** Emitted when a notification for the chat window has been activated*/
     void notificationClicked();
+
+    /** Emitted when zoom level in chat view changes */
+    void zoomFactorChanged(qreal zoomFactor);
 
 private Q_SLOTS:
     /** received when user changes search criteria or when searching for text */
