@@ -844,11 +844,14 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const K
     }
 
     if (!message.isNull()) {
-        AdiumThemeStatusInfo statusMessage;
-        statusMessage.setMessage(message);
-        statusMessage.setService(d->channel->connection()->protocolName());
-        statusMessage.setTime(QDateTime::currentDateTime());
-        d->ui.chatArea->addStatusMessage(statusMessage);
+        if ((d->ui.chatArea->showPresenceMode() == AdiumThemeView::Always) ||
+            ((d->ui.chatArea->showPresenceMode() == AdiumThemeView::NeverInGroupChats) && d->isGroupChat)) {
+            AdiumThemeStatusInfo statusMessage;
+            statusMessage.setMessage(message);
+            statusMessage.setService(d->channel->connection()->protocolName());
+            statusMessage.setTime(QDateTime::currentDateTime());
+            d->ui.chatArea->addStatusMessage(statusMessage);
+        }
     }
 
     //if in a non-group chat situation, and the other contact has changed state...

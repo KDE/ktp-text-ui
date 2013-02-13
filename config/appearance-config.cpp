@@ -59,6 +59,7 @@ AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList& args)
     connect(ui->customFontBox, SIGNAL(clicked(bool)), SLOT(onFontGroupChanged(bool)));
     connect(ui->fontFamily, SIGNAL(currentFontChanged(QFont)), SLOT(onFontFamilyChanged(QFont)));
     connect(ui->fontSize, SIGNAL(valueChanged(int)), SLOT(onFontSizeChanged(int)));
+    connect(ui->showPresenceModeComboBox, SIGNAL(activated(int)), SLOT(onShowPresenceModeSelected(int)));
 }
 
 AppearanceConfig::~AppearanceConfig()
@@ -168,6 +169,14 @@ void AppearanceConfig::onFontSizeChanged(int fontSize)
     changed();
 }
 
+void AppearanceConfig::onShowPresenceModeSelected(int showPresenceMode)
+{
+    kDebug();
+    ui->chatView->setShowPresenceMode(static_cast<AdiumThemeView::ShowPresenceMode>(showPresenceMode));
+    ui->chatView->initialise(m_demoChatHeader);
+    changed();
+}
+
 void AppearanceConfig::sendDemoMessages()
 {
     //add a fake message
@@ -209,12 +218,14 @@ void AppearanceConfig::sendDemoMessages()
     statusMessage.setService(i18n("Jabber"));
     ui->chatView->addStatusMessage(statusMessage);
 
-    statusMessage = AdiumThemeStatusInfo(true);
-    statusMessage.setMessage(i18n("Ted Example has left the chat.")); //FIXME sync this with chat text logic.
-    statusMessage.setTime(QDateTime::currentDateTime());
-    statusMessage.setService(i18n("Jabber"));
-    statusMessage.setStatus(QLatin1String("away"));
-    ui->chatView->addStatusMessage(statusMessage);
+    if (ui->chatView->showPresenceMode() != AdiumThemeView::Never) {
+        statusMessage = AdiumThemeStatusInfo(true);
+        statusMessage.setMessage(i18n("Ted Example has left the chat.")); //FIXME sync this with chat text logic.
+        statusMessage.setTime(QDateTime::currentDateTime());
+        statusMessage.setService(i18n("Jabber"));
+        statusMessage.setStatus(QLatin1String("away"));
+        ui->chatView->addStatusMessage(statusMessage);
+    }
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
     message.setMessage(i18n("Hello"));
@@ -250,19 +261,21 @@ void AppearanceConfig::sendDemoMessages()
     message.setTime(QDateTime::currentDateTime());
     ui->chatView->addContentMessage(message);
 
-    statusMessage = AdiumThemeStatusInfo();
-    statusMessage.setMessage(i18n("Ted Example is now Away.")); //FIXME sync this with chat text logic.
-    statusMessage.setTime(QDateTime::currentDateTime());
-    statusMessage.setService(i18n("Jabber"));
-    statusMessage.setStatus(QLatin1String("away"));
-    ui->chatView->addStatusMessage(statusMessage);
+    if (ui->chatView->showPresenceMode() != AdiumThemeView::Never) {
+        statusMessage = AdiumThemeStatusInfo();
+        statusMessage.setMessage(i18n("Ted Example is now Away.")); //FIXME sync this with chat text logic.
+        statusMessage.setTime(QDateTime::currentDateTime());
+        statusMessage.setService(i18n("Jabber"));
+        statusMessage.setStatus(QLatin1String("away"));
+        ui->chatView->addStatusMessage(statusMessage);
 
-    statusMessage = AdiumThemeStatusInfo();
-    statusMessage.setMessage(i18n("Ted Example has left the chat.")); //FIXME sync this with chat text logic.
-    statusMessage.setTime(QDateTime::currentDateTime());
-    statusMessage.setService(i18n("Jabber"));
-    statusMessage.setStatus(QLatin1String("away"));
-    ui->chatView->addStatusMessage(statusMessage);
+        statusMessage = AdiumThemeStatusInfo();
+        statusMessage.setMessage(i18n("Ted Example has left the chat.")); //FIXME sync this with chat text logic.
+        statusMessage.setTime(QDateTime::currentDateTime());
+        statusMessage.setService(i18n("Jabber"));
+        statusMessage.setStatus(QLatin1String("away"));
+        ui->chatView->addStatusMessage(statusMessage);
+    }
 }
 
 void AppearanceConfig::defaults()
@@ -277,6 +290,7 @@ void AppearanceConfig::defaults()
     ui->chatView->setUseCustomFont(false);
     ui->fontFamily->setCurrentFont(KGlobalSettings::generalFont());
     ui->fontSize->setValue(QWebSettings::DefaultFontSize);
+    onShowPresenceModeSelected(static_cast<int>(AdiumThemeView::Always));
 }
 
 void AppearanceConfig::load()
@@ -291,8 +305,8 @@ void AppearanceConfig::load()
     ui->customFontBox->setChecked(ui->chatView->isCustomFont());
     ui->fontFamily->setCurrentFont(QFont(ui->chatView->fontFamily()));
     ui->fontSize->setValue(ui->chatView->fontSize());
+    ui->showPresenceModeComboBox->setCurrentIndex(ui->chatView->showPresenceMode());
 }
-
 
 void AppearanceConfig::save()
 {
@@ -307,6 +321,7 @@ void AppearanceConfig::save()
     appearanceConfig.writeEntry("useCustomFont", ui->customFontBox->isChecked());
     appearanceConfig.writeEntry("fontFamily", ui->fontFamily->currentFont().family());
     appearanceConfig.writeEntry("fontSize", ui->fontSize->value());
+    appearanceConfig.writeEntry("showPresenceMode", ui->showPresenceModeComboBox->currentIndex());
 
     appearanceConfig.sync();
     config->sync();

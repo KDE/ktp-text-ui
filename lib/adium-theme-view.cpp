@@ -116,6 +116,8 @@ void AdiumThemeView::load(ChatType chatType) {
     m_useCustomFont = appearanceConfig.readEntry("useCustomFont", false);
     m_fontFamily = appearanceConfig.readEntry("fontFamily", QWebSettings::globalSettings()->fontFamily(QWebSettings::StandardFont));
     m_fontSize = appearanceConfig.readEntry("fontSize", QWebSettings::globalSettings()->fontSize(QWebSettings::DefaultFontSize));
+
+    m_showPresenceMode = static_cast<AdiumThemeView::ShowPresenceMode>(appearanceConfig.readEntry("showPresenceMode", (int) AdiumThemeView::Always));
 }
 
 
@@ -312,6 +314,17 @@ void AdiumThemeView::setUseCustomFont(bool useCustomFont)
 bool AdiumThemeView::isCustomFont() const
 {
     return m_useCustomFont;
+}
+
+void AdiumThemeView::setShowPresenceMode(ShowPresenceMode showPresenceMode)
+{
+    kDebug();
+    m_showPresenceMode = showPresenceMode;
+}
+
+AdiumThemeView::ShowPresenceMode AdiumThemeView::showPresenceMode() const
+{
+    return m_showPresenceMode;
 }
 
 bool AdiumThemeView::isHeaderDisplayed() const

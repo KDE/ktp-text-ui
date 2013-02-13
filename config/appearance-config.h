@@ -58,6 +58,7 @@ private Q_SLOTS:
     void onFontGroupChanged(bool);
     void onFontFamilyChanged(QFont);
     void onFontSizeChanged(int);
+    void onShowPresenceModeSelected(int);
 
 private:
     Ui::ChatWindowConfig *ui;
