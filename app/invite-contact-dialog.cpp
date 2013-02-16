@@ -29,12 +29,12 @@
 
 #include <TelepathyQt/Contact>
 #include <TelepathyQt/TextChannel>
+#include <TelepathyQt/PendingChannelRequest>
 
 #include <KTp/debug.h>
 #include <KTp/Models/contacts-list-model.h>
 #include <KTp/Models/contacts-filter-model.h>
 #include <KTp/Widgets/contact-grid-widget.h>
-#include <telepathy-qt4/TelepathyQt/PendingChannelRequest>
 
 InviteContactDialog::InviteContactDialog(const Tp::AccountManagerPtr &accountManager, const Tp::AccountPtr &account, const Tp::TextChannelPtr &channel, QWidget *parent) :
     KDialog(parent),
