@@ -7,7 +7,9 @@ set(ktp-text-ui_SRCS
         chat-tab.cpp
         emoticon-text-edit-action.cpp
         emoticon-text-edit-selector.cpp
-        invite-contact-dialog.cpp       
+        invite-contact-dialog.cpp
+        abstract-contact-delegate.cpp
+        contact-delegate-compact.cpp
 )
 
 kde4_add_executable(ktp-text-ui ${ktp-text-ui_SRCS})

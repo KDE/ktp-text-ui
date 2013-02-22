@@ -66,7 +66,7 @@ void TelepathyChatUi::removeWindow(ChatWindow *window)
 
 ChatWindow* TelepathyChatUi::createWindow()
 {
-    ChatWindow* window = new ChatWindow();
+    ChatWindow* window = new ChatWindow(m_accountManager);
 
     connect(window, SIGNAL(detachRequested(ChatTab*)), this, SLOT(dettachTab(ChatTab*)));
     connect(window, SIGNAL(aboutToClose(ChatWindow*)), this, SLOT(removeWindow(ChatWindow*)));

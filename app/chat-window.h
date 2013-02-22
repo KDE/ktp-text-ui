@@ -39,7 +39,7 @@ class ChatWindow : public KXmlGuiWindow
 Q_OBJECT
 
 public:
-    ChatWindow();
+    ChatWindow(const Tp::AccountManagerPtr &accountManager);
     virtual ~ChatWindow();
 
     enum NotificationType {

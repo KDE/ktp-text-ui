@@ -23,9 +23,12 @@
 #include "chat-search-bar.h"
 #include "chat-tab.h"
 #include "chat-widget.h"
+#include "contact-delegate-compact.h"
 
 #include <KTp/service-availability-checker.h>
 #include <KTp/actions.h>
+#include <KTp/Models/contacts-model.h>
+
 
 #include <KStandardAction>
 #include <KIcon>
@@ -49,6 +52,9 @@
 #include <QEvent>
 #include <QWidgetAction>
 #include <QLabel>
+#include <QTreeView>
+#include <QHBoxLayout>
+
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/ContactCapabilities>
@@ -66,7 +72,7 @@
 K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
                           (QLatin1String(PREFERRED_RFB_HANDLER)));
 
-ChatWindow::ChatWindow()
+ChatWindow::ChatWindow(const Tp::AccountManagerPtr &accountManager)
 {
     //This effectively constructs the s_krfbAvailableChecker object the first
     //time that this code is executed. This is to start the d-bus query early, so
@@ -97,6 +103,19 @@ ChatWindow::ChatWindow()
     // create custom actions
     setupCustomActions();
 
+    QWidget *widget = new QWidget(this);
+
+    QTreeView *treeView = new QTreeView(this);
+    KTp::ContactsModel *model = new KTp::ContactsModel(this);
+    model->setTrackUnreadMessages(true);
+    model->setAccountManager(accountManager);
+
+    treeView->setModel(model);
+    treeView->setItemDelegate(new ContactDelegateCompact);
+    treeView->setHeaderHidden(true);
+    treeView->setRootIsDecorated(false);
+    model->setSortRole(KTp::ContactHasTextChannelRole);
+
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
     m_tabWidget->setMovable(true);
@@ -104,12 +123,18 @@ ChatWindow::ChatWindow()
     m_tabWidget->setTabsClosable(true);
     m_tabWidget->setTabBarHidden(true);
 
+
+    QHBoxLayout *layout = new QHBoxLayout(widget);
+    layout->addWidget(treeView);
+    layout->addWidget(m_tabWidget);
+
+
     connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(destroyTab(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
     connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)),m_tabWidget, SLOT(removeTab(int)));
     connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int,QPoint)), SLOT(tabBarContextMenu(int,QPoint)));
 
-    setCentralWidget(m_tabWidget);
+    setCentralWidget(widget);
 
     setupGUI(QSize(460, 440), static_cast<StandardWindowOptions>(Default^StatusBar), QLatin1String("chatwindow.rc"));
 
