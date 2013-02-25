@@ -4,6 +4,7 @@ add_subdirectory(formatting)
 add_subdirectory(images)
 #Commented out until https://bugs.kde.org/show_bug.cgi?id=304740
 # add_subdirectory(searchexpansion)
+add_subdirectory(youtube)
 
 
 IF (EXISTS "${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml")
@@ -15,4 +16,3 @@ if(HAS_KTTS)
 endif(HAS_KTTS)
 
 macro_log_feature(HAS_KTTS "KTTSD" "KDE Text to Speech Deamon" "" FALSE "" "Needed for optional tts message plugin")
-add_subdirectory(youtube)

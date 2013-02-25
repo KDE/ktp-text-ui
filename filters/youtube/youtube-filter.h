@@ -19,20 +19,16 @@
 #ifndef YOUTUBE_FILTER_H
 #define YOUTUBE_FILTER_H
 
-#include <KTp/AbstractMessageFilter>
+#include <KTp/abstract-message-filter.h>
 
-class YoutubeFilter : public AbstractMessageFilter
+class YoutubeFilter : public KTp::AbstractMessageFilter
 {
     Q_OBJECT
 
 public:
     YoutubeFilter(QObject *parent, const QVariantList &);
     virtual ~YoutubeFilter();
-    virtual void filterMessage(Message &message);
-
-private:
-    class Private;
-    Private *d;
+    virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
 };
 
 #endif // YOUTUBE_FILTER_H

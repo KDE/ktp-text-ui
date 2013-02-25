@@ -9,10 +9,9 @@ kde4_add_plugin (ktptextui_message_filter_youtube
 target_link_libraries (ktptextui_message_filter_youtube
     ktpchat
     ${QT_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     ${TELEPATHY_QT4_LIBRARIES}
-    ${KDE4_KEMOTICONS_LIBS}
+    ${KTP_LIBRARIES}
 )
 
 # Install:

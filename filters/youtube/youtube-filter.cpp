@@ -23,24 +23,19 @@
 #include <KUrl>
 #include <KUriFilter>
 
-class YoutubeFilter::Private
-{
-public:
-};
-
 YoutubeFilter::YoutubeFilter(QObject *parent, const QVariantList &) :
-    AbstractMessageFilter(parent), d(new Private)
+    AbstractMessageFilter(parent)
 {
 }
 
 YoutubeFilter::~YoutubeFilter()
 {
-    delete d;
 }
 
-void YoutubeFilter::filterMessage(Message &message)
+void YoutubeFilter::filterMessage(KTp::Message &message, const KTp::MessageContext&)
 {
-    QString html = QLatin1String(
+    static const QString html = QLatin1String(
+        "<br />\n"
         "<iframe class=\"youtube-player\" "
             "type=\"text/html\""
             "style=\"max-width:100%;max-height:100%\""
@@ -49,13 +44,20 @@ void YoutubeFilter::filterMessage(Message &message)
         "</iframe>"
     );
 
+    static const QRegExp validId(QLatin1String("[a-zA-Z0-9_-]+"));
+
     Q_FOREACH (QVariant var, message.property("Urls").toList()) {
         KUrl url = qvariant_cast<KUrl>(var);
-        if (url.host() == QLatin1String("www.youtube.com")) {
+        if (url.host() == QLatin1String("www.youtube.com") ||
+                url.host() == QLatin1String("youtube.com")) {
             kDebug() << "found youtube url :" << url.url();
-            kDebug() << "v =" << url.queryItemValue(QLatin1String("v"));
 
-            message.appendMessagePart(html.arg(url.queryItemValue(QLatin1String("v"))));
+            QString v = url.queryItemValue(QLatin1String("v"));
+            kDebug() << "v =" << v;
+
+            if (v.contains(validId)){
+                message.appendMessagePart(html.arg(url.queryItemValue(QLatin1String("v"))));
+            }
         }
     }
 }
