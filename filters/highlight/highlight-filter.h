@@ -19,16 +19,16 @@
 #ifndef HIGHLIGHT_FILTER_H
 #define HIGHLIGHT_FILTER_H
 
-#include <KTp/AbstractMessageFilter>
+#include <KTp/abstract-message-filter.h>
 
-class HighlightFilter : public AbstractMessageFilter
+class HighlightFilter : public KTp::AbstractMessageFilter
 {
     Q_OBJECT
 
 public:
     HighlightFilter(QObject *parent, const QVariantList &);
     virtual ~HighlightFilter();
-    virtual void filterMessage(Message &message);
+    virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
 
 private:
     class Private;

@@ -36,7 +36,7 @@ public:
 };
 
 HighlightFilter::HighlightFilter(QObject *parent, const QVariantList &) :
-    AbstractMessageFilter(parent), d(new Private)
+    KTp::AbstractMessageFilter(parent), d(new Private)
 {
     d->accountManager = Tp::AccountManager::create(QDBusConnection::sessionBus());
     d->accountManager->becomeReady();
@@ -47,7 +47,7 @@ HighlightFilter::~HighlightFilter()
     delete d;
 }
 
-void HighlightFilter::filterMessage(Message &message)
+void HighlightFilter::filterMessage(KTp::Message &message, const KTp::MessageContext&)
 {
     QString msg = message.mainMessagePart();
 

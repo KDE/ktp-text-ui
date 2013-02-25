@@ -11,6 +11,7 @@ target_link_libraries (ktptextui_message_filter_highlight
     ${QT_LIBRARIES}
     ${KDE4_KDECORE_LIBS}
     ${TELEPATHY_QT4_LIBRARIES}
+    ${KTP_LIBRARIES}
 )
 
 # Install:
