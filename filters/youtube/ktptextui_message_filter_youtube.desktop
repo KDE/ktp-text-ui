@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Youtube Preview
-Comment=If any messages contains a link to a youtube video, it will embed a preview in the chat
+Name=YouTube Preview
+Comment=If any messages contains a link to a YouTube video, it will embed a preview in the chat
 Encoding=UTF-8
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
