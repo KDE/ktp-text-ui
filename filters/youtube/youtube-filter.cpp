@@ -55,7 +55,7 @@ void YoutubeFilter::filterMessage(KTp::Message &message, const KTp::MessageConte
             QString v = url.queryItemValue(QLatin1String("v"));
             kDebug() << "v =" << v;
 
-            if (v.contains(validId)){
+            if (validId.exactMatch(v)){
                 message.appendMessagePart(html.arg(url.queryItemValue(QLatin1String("v"))));
             }
         }
