@@ -22,8 +22,6 @@
 
 #include <KPluginFactory>
 #include <KDebug>
-#include <KUrl>
-#include <KUriFilter>
 #include <KUser>
 
 #include <TelepathyQt/AccountManager>
