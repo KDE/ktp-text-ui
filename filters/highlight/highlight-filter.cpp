@@ -32,8 +32,9 @@ public:
     KUser user;
 };
 
-HighlightFilter::HighlightFilter(QObject *parent, const QVariantList &) :
-    KTp::AbstractMessageFilter(parent), d(new Private)
+HighlightFilter::HighlightFilter(QObject *parent, const QVariantList&) :
+    KTp::AbstractMessageFilter(parent),
+    d(new Private)
 {
 }
 

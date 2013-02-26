@@ -26,7 +26,7 @@ class HighlightFilter : public KTp::AbstractMessageFilter
     Q_OBJECT
 
 public:
-    HighlightFilter(QObject *parent, const QVariantList &);
+    HighlightFilter(QObject *parent, const QVariantList &args);
     virtual ~HighlightFilter();
     virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
 
