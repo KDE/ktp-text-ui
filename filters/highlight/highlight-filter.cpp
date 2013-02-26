@@ -31,15 +31,12 @@
 class HighlightFilter::Private
 {
 public:
-    Tp::AccountManagerPtr accountManager;
     KUser user;
 };
 
 HighlightFilter::HighlightFilter(QObject *parent, const QVariantList &) :
     KTp::AbstractMessageFilter(parent), d(new Private)
 {
-    d->accountManager = Tp::AccountManager::create(QDBusConnection::sessionBus());
-    d->accountManager->becomeReady();
 }
 
 HighlightFilter::~HighlightFilter()
@@ -47,20 +44,18 @@ HighlightFilter::~HighlightFilter()
     delete d;
 }
 
-void HighlightFilter::filterMessage(KTp::Message &message, const KTp::MessageContext&)
+void HighlightFilter::filterMessage(KTp::Message &message,
+                                    const KTp::MessageContext &context)
 {
     QString msg = message.mainMessagePart();
 
-    Q_FOREACH (Tp::AccountPtr ptr, d->accountManager->allAccounts()) {
-        if (msg.contains(ptr->nickname(), Qt::CaseInsensitive)) {
-            kDebug() << "message contains user alias :" << ptr->nickname();
-            message.setProperty("highlight", true);
-        }
+    if (msg.contains(context.account()->nickname(), Qt::CaseInsensitive)) {
+        message.setProperty("highlight", true);
+    }
 
-        if (msg.contains(d->user.loginName(), Qt::CaseInsensitive)) {
-            kDebug() << "messge contains user login name" << d->user.loginName();
-            message.setProperty("highlight", true);
-        }
+    if (msg.contains(d->user.loginName(), Qt::CaseInsensitive)) {
+        kDebug() << "messge contains user login name" << d->user.loginName();
+        message.setProperty("highlight", true);
     }
 
     if (message.property("highlight").toBool()){
