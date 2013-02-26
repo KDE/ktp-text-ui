@@ -32,9 +32,9 @@ public:
     virtual ~BugzillaFilter();
 
     virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
-
+    virtual QStringList requiredScripts();
 private:
-    void addBugDescription(KTp::Message &msg, const KUrl &baseUrl);
+    void addBugDescription(KTp::Message &message, const KUrl &baseUrl);
 
     class Private;
     Private *d;

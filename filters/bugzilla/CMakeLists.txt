@@ -24,3 +24,6 @@ install (TARGETS ktptextui_message_filter_bugzilla
 install (FILES ktptextui_message_filter_bugzilla.desktop
          DESTINATION ${SERVICES_INSTALL_DIR}
 )
+
+install (FILES showBugzillaInfo.js
+         DESTINATION ${DATA_INSTALL_DIR}/ktelepathy)
