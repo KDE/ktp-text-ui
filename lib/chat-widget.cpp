@@ -26,6 +26,7 @@
 #include "adium-theme-status-info.h"
 #include "channel-contact-model.h"
 #include "logmanager.h"
+#include "notify-filter.h"
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
@@ -81,6 +82,7 @@ public:
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
     KComponentData telepathyComponentData();
+    KTp::AbstractMessageFilter *notifyFilter;
 };
 
 
@@ -165,12 +167,16 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     } else {
         m_previousConversationAvailable = false;
     }
+
+    d->notifyFilter = new NotifyFilter(this);
+    KTp::MessageProcessor::instance()->appendFilter(d->notifyFilter);
 }
 
 ChatWidget::~ChatWidget()
 {
     saveSpellCheckingOption();
     d->channel->requestClose(); // ensure closing; does nothing, if already closed
+    KTp::MessageProcessor::instance()->removeFilter(d->notifyFilter);
     delete d;
 }
 
@@ -430,8 +436,6 @@ void ChatWidget::setupChannelSignals()
 {
     connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
             SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
-    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
-            SLOT(notifyAboutIncomingMessage(Tp::ReceivedMessage)));
     connect(d->channel.data(), SIGNAL(pendingMessageRemoved(Tp::ReceivedMessage)),
             SIGNAL(unreadMessagesChanged()));
     connect(d->channel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
@@ -646,74 +650,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
 
 void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
 {
-    //send the correct notification:
-    QString notificationType;
-    //choose the correct notification type:
-    //options are:
-    // kde_telepathy_contact_incoming
-    // kde_telepathy_contact_incoming_active_window
-    // don't notify of messages sent by self from another computer
-    if (message.sender() == d->channel->groupSelfContact()) {
-        return;
-    }
-
-    if (message.isDeliveryReport()) {
-        return;
-    }
-
-    // kde_telepathy_contact_highlight (contains your name)
-    // kde_telepathy_info_event
-
-    //if the message text contains sender name, it's a "highlighted message"
-    //TODO DrDanz suggested this could be a configurable list of words that make it highlighted.(seems like a good idea to me)
-    if(message.text().contains(d->channel->groupSelfContact()->alias())) {
-        notificationType = QLatin1String("kde_telepathy_contact_highlight");
-    } else if(message.messageType() == Tp::ChannelTextMessageTypeNotice) {
-        notificationType = QLatin1String("kde_telepathy_info_event");
-    } else {
-        if (isOnTop()) {
-            notificationType = QLatin1String("kde_telepathy_contact_incoming_active_window");
-        } else {
-            notificationType = QLatin1String("kde_telepathy_contact_incoming");
-        }
-    }
-
-    KNotification *notification = new KNotification(notificationType, this,
-                                                    KNotification::RaiseWidgetOnActivation
-                                                    | KNotification::CloseWhenWidgetActivated
-                                                    | KNotification::Persistent);
-    notification->setComponentData(d->telepathyComponentData());
-   
-    QString senderName;
-
-    if (message.sender().isNull()) {
-        senderName = message.senderNickname();
-    } else {
-        senderName = message.sender()->alias();
-        QPixmap notificationPixmap;
-        if (notificationPixmap.load(message.sender()->avatarData().fileName)) {
-            notification->setPixmap(notificationPixmap);
-        }
-        //allows per contact notifications
-        notification->addContext(QLatin1String("contact"), message.sender()->id());
-    }
-    notification->setTitle(i18n("%1 has sent you a message", senderName));
-
-    // Remove empty lines from message
-    QString notifyText = message.text().simplified();
-    if (notifyText.length() > 170) {
-        //search for the closest space in text
-        QString truncatedMsg = notifyText.left(notifyText.indexOf(QLatin1Char(' '), 150)).append(QLatin1String("..."));
-        notification->setText(truncatedMsg);
-    } else {
-        notification->setText(notifyText);
-    }
-
-
-    notification->setActions(QStringList(i18n("View")));
-    connect(notification, SIGNAL(activated(uint)), this, SIGNAL(notificationClicked()));
-
-    notification->sendEvent();
+    Q_ASSERT(false);
 }
 
 void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/

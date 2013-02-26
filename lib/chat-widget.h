@@ -99,6 +99,9 @@ public:
 
     void setZoomFactor(qreal zoomFactor);
 
+    /** Is this widget visible and in the active window */
+    virtual bool isOnTop() const;
+
 public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
@@ -200,7 +203,6 @@ private:
     /** Loads theme into the the AdiumThemeView */
     void initChatArea();
 
-    virtual bool isOnTop() const;
     bool m_previousConversationAvailable;
 
     ChatWidgetPrivate * const d;
