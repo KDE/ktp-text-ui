@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=YouTube Preview
+Name[cs]=Náhled YouTube
+Name[it]=Anteprima di YouTube
+Name[pt_BR]=Visualização do YouTube
+Name[uk]=Попередній перегляд YouTube
+Name[x-test]=xxYouTube Previewxx
 Comment=If any messages contains a link to a YouTube video, it will embed a preview in the chat
+Comment[it]=Se in un messaggio c'è un collegamento ad un video di YouTube, sarà integrato come anteprima nella finestra di chat
+Comment[pt_BR]=Se alguma mensagem conter um link para um vídeo do YouTube, será embutida uma visualização no bate-papo
+Comment[uk]=Якщо у будь-якому з повідомлень міститься посилання на відео на YouTube, вбудовує зображення попереднього перегляду цього відео до панелі спілкування
+Comment[x-test]=xxIf any messages contains a link to a YouTube video, it will embed a preview in the chatxx
 Encoding=UTF-8
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
