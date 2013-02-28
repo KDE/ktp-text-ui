@@ -1,12 +1,18 @@
 [Desktop Entry]
 Name=YouTube Preview
 Name[cs]=Náhled YouTube
+Name[el]=Προεπισκόπηση YouTube
 Name[it]=Anteprima di YouTube
+Name[nl]=Voorbeeld van YouTube
+Name[pt]=Antevisão do YouTube
 Name[pt_BR]=Visualização do YouTube
 Name[uk]=Попередній перегляд YouTube
 Name[x-test]=xxYouTube Previewxx
 Comment=If any messages contains a link to a YouTube video, it will embed a preview in the chat
+Comment[el]=Στα μηνύματα που περιέχουν σύνδεσμο σε YouTube βίντεο, θα ενσωματώνεται η προεπισκόπηση στη συνομιλία
 Comment[it]=Se in un messaggio c'è un collegamento ad un video di YouTube, sarà integrato come anteprima nella finestra di chat
+Comment[nl]=Als een bericht een koppeling bevat naar een YouTube video, zal het ingebed worden als een voorbeeld in de chat
+Comment[pt]=Se alguma das mensagens tiver um endereço de um vídeo do YouTube, irá incorporar uma antevisão na conversa
 Comment[pt_BR]=Se alguma mensagem conter um link para um vídeo do YouTube, será embutida uma visualização no bate-papo
 Comment[uk]=Якщо у будь-якому з повідомлень міститься посилання на відео на YouTube, вбудовує зображення попереднього перегляду цього відео до панелі спілкування
 Comment[x-test]=xxIf any messages contains a link to a YouTube video, it will embed a preview in the chatxx
