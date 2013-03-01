@@ -189,6 +189,11 @@ ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
     return match;
 }
 
+ChatTab *ChatWindow::getCurrentTab()
+{
+    return qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
+}
+
 void ChatWindow::removeTab(ChatTab *tab)
 {
     kDebug();
@@ -689,6 +694,12 @@ void ChatWindow::setupCustomActions()
     EmoticonTextEditAction *addEmoticonAction = new EmoticonTextEditAction(this);
     connect(addEmoticonAction, SIGNAL(emoticonActivated(QString)), this, SLOT(onAddEmoticon(QString)) );
 
+    KAction *sendMessage = new KAction(i18n("Send message"), this);
+    sendMessage->setShortcut(QKeySequence::InsertParagraphSeparator, KAction::DefaultShortcut);
+    sendMessage->setShortcutConfigurable(true);
+    sendMessage->setGlobalShortcutAllowed(false);
+    connect(sendMessage, SIGNAL(triggered()), SLOT(sendCurrentTabMessage()));
+
     // add custom actions to the collection
     actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
     actionCollection()->addAction(QLatin1String("previous-tab"), previousTabAction);
@@ -703,6 +714,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
     actionCollection()->addAction(QLatin1String("clear-chat-view"), clearViewAction);
     actionCollection()->addAction(QLatin1String("emoticons"), addEmoticonAction);
+    actionCollection()->addAction(QLatin1String("send-message"), sendMessage);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
@@ -922,7 +934,6 @@ void ChatWindow::onZoomFactorChanged(qreal zoom)
     KConfig config(QLatin1String("ktelepathyrc"));
     KConfigGroup group = config.group("Appearance");
     group.writeEntry("zoomFactor", m_zoomFactor);
-
 }
 
 #include "chat-window.moc"

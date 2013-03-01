@@ -25,17 +25,32 @@
 #include <QtGui/QAction>
 #include <QtCore/QTimer>
 #include <QtCore/QDebug>
+#include <QtCore/QString>
 
 #include <KStandardShortcut>
+#include <KActionCollection>
 
 #define MAXHISTORY 100
+
+KAction *searchActionGlobal(const QString& name)
+{
+    QList<KActionCollection*> collections = KActionCollection::allCollections();
+    KAction* action = NULL;
+    Q_FOREACH(KActionCollection *collection, collections) {
+        if (!action) {
+            action = qobject_cast<KAction*>(collection->action(name));
+        }
+    }
+    return action;
+}
 
 ChatTextEdit::ChatTextEdit(QWidget *parent) :
         KTextEdit(parent),
         m_contactModel(0),
         m_oldCursorPos(0),
         m_completionPosition(0),
-        m_continuousCompletion(false)
+        m_continuousCompletion(false),
+        m_sendMessageAction(0)
 {
     setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);    // no need for horizontal scrollbar with this
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -52,6 +67,8 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
     m_historyPos = 0;
 
     connect(this, SIGNAL(textChanged()), SLOT(recalculateSize()));
+
+    m_sendMessageAction = searchActionGlobal(QLatin1String("send-message"));
 }
 
 void ChatTextEdit::setContactModel(ChannelContactModel* model)
@@ -89,16 +106,6 @@ QSize ChatTextEdit::sizeHint() const
 
 void ChatTextEdit::keyPressEvent(QKeyEvent *e)
 {
-    if ((e->key()==Qt::Key_Return ||  e->key()==Qt::Key_Enter) && !e->modifiers()) {
-	if (!toPlainText().isEmpty()) {
-	    addHistory(toPlainText());
-	}
-	m_continuousCompletion = false;
-
-        Q_EMIT returnKeyPressed();
-        return;
-    }
-
     if (e->matches(QKeySequence::Copy)) {
         if (!textCursor().hasSelection()) {
             QWidget::keyReleaseEvent(e); //skip internal trapping, and pass to parent.
@@ -141,6 +148,13 @@ bool ChatTextEdit::event(QEvent *e)
     if (e->type() == QEvent::ShortcutOverride) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(e);
         const int key = keyEvent->key() | keyEvent->modifiers();
+        if (m_sendMessageAction->shortcut().contains(key)) {
+            // keyPressEvent() handles Control modifier wrong, so we need that thing
+            // to be in event().
+            this->sendMessage();
+            e->setAccepted(true);
+            return false;
+        }
         if (KStandardShortcut::find().contains(key)) {
             return false; //never catch "find" sequence.
         }
@@ -169,6 +183,16 @@ void ChatTextEdit::updateScrollBar()
 {
     setVerticalScrollBarPolicy(sizeHint().height() > height() ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAlwaysOff);
     ensureCursorVisible();
+}
+
+void ChatTextEdit::sendMessage()
+{
+    if (!toPlainText().isEmpty()) {
+        addHistory(toPlainText());
+    }
+    m_continuousCompletion = false;
+
+    Q_EMIT returnKeyPressed();
 }
 
 // History of sent messages based on code from Konversation

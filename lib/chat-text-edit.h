@@ -21,6 +21,7 @@
 #define CHATTEXTEDIT_H
 
 #include <KTextEdit>
+#include <KAction>
 
 class ChannelContactModel;
 class ChatTextEdit : public KTextEdit
@@ -58,6 +59,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     /** wraps setFontWeight to a simple on/off bold) */
     void setFontBold(bool);
+    void sendMessage(); // Sends message entered (<= Return key pressing)
 
 private:
     QStringList m_history;
@@ -69,6 +71,8 @@ private:
     int m_oldCursorPos;
     int m_completionPosition;
     bool m_continuousCompletion;
+
+    KAction *m_sendMessageAction;
 };
 
 #endif // CHATTEXTEDIT_H

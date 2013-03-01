@@ -56,6 +56,7 @@ public:
      * @param incomingTextChannel textChannel to search for
      */
     ChatTab* getTab(const Tp::TextChannelPtr &incomingTextChannel);
+    ChatTab* getCurrentTab();
 
     void focusChat(ChatTab *tab);
 
