@@ -54,7 +54,7 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
 
     notification->setComponentData(telepathyComponentData());
     notification->setTitle(i18n("%1 has sent you a message",
-                                message.senderName()));
+                                message.senderAlias()));
 
     QString senderAvatar = message.property("senderAvatar").toString();
     if (!senderAvatar.isNull()) {
