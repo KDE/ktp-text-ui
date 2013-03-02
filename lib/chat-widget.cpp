@@ -169,14 +169,12 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     }
 
     d->notifyFilter = new NotifyFilter(this);
-    KTp::MessageProcessor::instance()->appendFilter(d->notifyFilter);
 }
 
 ChatWidget::~ChatWidget()
 {
     saveSpellCheckingOption();
     d->channel->requestClose(); // ensure closing; does nothing, if already closed
-    KTp::MessageProcessor::instance()->removeFilter(d->notifyFilter);
     delete d;
 }
 
@@ -617,6 +615,12 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
             KTp::Message processedMessage(KTp::MessageProcessor::instance()->processMessage(message, d->account, d->channel));
+
+            // FIXME: eventually find a way to make MessageProcessor allow per
+            //        instance filters.
+            d->notifyFilter->filterMessage(processedMessage,
+                                           KTp::MessageContext(d->account, d->channel));
+
             messageInfo.setMessage(processedMessage.finalizedMessage());
             messageInfo.setScript(processedMessage.finalizedScript());
 
@@ -646,11 +650,6 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
         }
     }
 
-}
-
-void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
-{
-    Q_ASSERT(false);
 }
 
 void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
