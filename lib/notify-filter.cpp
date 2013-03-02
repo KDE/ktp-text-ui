@@ -28,8 +28,7 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
         return;
     }
     // don't notify of messages sent by self from another location
-    if (message.property("sender").toString() ==
-            context.channel()->groupSelfContact()->alias()) {
+    if (message.senderId() == context.channel()->groupSelfContact()->id()) {
         return;
     }
 
@@ -55,9 +54,9 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
 
     notification->setComponentData(telepathyComponentData());
     notification->setTitle(i18n("%1 has sent you a message",
-                                message.property("sender").toString()));
+                                message.senderName()));
 
-    QString senderAvatar = message.property("sender-avatar").toString();
+    QString senderAvatar = message.property("senderAvatar").toString();
     if (!senderAvatar.isNull()) {
         QPixmap notificationPixmap;
         if (notificationPixmap.load(senderAvatar)) {
