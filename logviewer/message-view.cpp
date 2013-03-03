@@ -135,7 +135,7 @@ void MessageView::processStoredEvents()
         }
 
         AdiumThemeContentInfo message(type);
-        message.setMessage(KTp::MessageProcessor::instance()->processMessage(textEvent, m_account, Tp::TextChannelPtr()).finalizedMessage());
+        message.setMessage(KTp::MessageProcessor::instance()->processIncomingMessage(textEvent, m_account, Tp::TextChannelPtr()).finalizedMessage());
         message.setService(m_account->serviceName());
         message.setSenderDisplayName(textEvent->sender()->alias());
         message.setSenderScreenName(textEvent->sender()->identifier());

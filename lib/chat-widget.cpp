@@ -329,7 +329,7 @@ void ChatWidget::dropEvent(QDropEvent *e)
     if (data->hasUrls()) {
         Q_FOREACH(const QUrl &url, data->urls()) {
             if (url.isLocalFile()) {
-		KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), url.toLocalFile());
+        KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), url.toLocalFile());
             } else {
                 d->ui.sendMessageBox->append(url.toString());
             }
@@ -358,7 +358,7 @@ void ChatWidget::dropEvent(QDropEvent *e)
         }
 
         Tp::PendingChannelRequest *request;
-	request = KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), tmpFile.fileName());
+    request = KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), tmpFile.fileName());
         connect(request, SIGNAL(finished(Tp::PendingOperation*)),
                 this, SLOT(temporaryFileTransferChannelCreated(Tp::PendingOperation*)));
 
@@ -614,7 +614,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
         } else {
             AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
 
-            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processMessage(message, d->account, d->channel));
+            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel));
 
             // FIXME: eventually find a way to make MessageProcessor allow per
             //        instance filters.
@@ -664,7 +664,7 @@ void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     }
     else {
         AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::LocalToRemote);
-        KTp::Message processedMessage(KTp::MessageProcessor::instance()->processMessage(message, d->account, d->channel));
+        KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel));
         messageInfo.setMessage(processedMessage.finalizedMessage());
         messageInfo.setScript(processedMessage.finalizedScript());
 
@@ -703,7 +703,7 @@ void ChatWidget::sendMessage()
     QString message = d->ui.sendMessageBox->toPlainText();
 
     if (!message.isEmpty()) {
-        message = KTp::MessageProcessor::instance()->preprocessMessage(
+        message = KTp::MessageProcessor::instance()->processOutgoingMessage(
                     message, d->account, d->channel).finalizedMessage();
 
         if (d->channel->supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
@@ -936,7 +936,7 @@ void ChatWidget::loadSpellCheckingOption()
     if (configGroup.exists()) {
         spellCheckingLanguage = configGroup.readEntry("language");
     } else {
-	spellCheckingLanguage = KGlobal::locale()->language();
+    spellCheckingLanguage = KGlobal::locale()->language();
     }
     d->ui.sendMessageBox->setSpellCheckingLanguage(spellCheckingLanguage);
 }
