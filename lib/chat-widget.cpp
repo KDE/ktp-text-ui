@@ -703,9 +703,13 @@ void ChatWidget::sendMessage()
     QString message = d->ui.sendMessageBox->toPlainText();
 
     if (!message.isEmpty()) {
+        message = KTp::MessageProcessor::instance()->preprocessMessage(
+                    message, d->account, d->channel).finalizedMessage();
+
         if (d->channel->supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
             //remove "/me " from the start of the message
             message.remove(0,4);
+
             d->channel->send(message, Tp::ChannelTextMessageTypeAction);
         } else {
             d->channel->send(message);
