@@ -3,7 +3,7 @@ add_subdirectory(emoticons)
 add_subdirectory(formatting)
 add_subdirectory(images)
 #Commented out until https://bugs.kde.org/show_bug.cgi?id=304740
-# add_subdirectory(searchexpansion)
+add_subdirectory(searchexpansion)
 add_subdirectory(youtube)
 add_subdirectory(highlight)
 

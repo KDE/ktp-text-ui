@@ -38,7 +38,11 @@ SearchexpansionFilter::~SearchexpansionFilter()
     delete d;
 }
 
-void SearchexpansionFilter::filterMessage(Message &message)
+void SearchexpansionFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
+{
+}
+
+void SearchexpansionFilter::filterOutgoingMessage(KTp::Message &message, const KTp::MessageContext &context)
 {
     KUriFilterData data(message.mainMessagePart().trimmed());
     if(KUriFilter::self()->filterSearchUri(data, KUriFilter::WebShortcutFilter)) {
