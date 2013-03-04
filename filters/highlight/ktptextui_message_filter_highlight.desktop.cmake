@@ -11,7 +11,7 @@ X-KDE-PluginInfo-Version=@KTP_TEXT_UI_VERSION@
 X-KDE-PluginInfo-Website=http://community.kde.org/KTp
 X-KDE-PluginInfo-License=LGPL
 X-KDE-PluginInfo-EnabledByDefault=false
-X-KTp-PluginInfo-Version=2
+X-KDE-PluginInfo-Version=@KTP_MESSAGE_FILTER_FRAMEWORK_VERSION@
 
 Name=Highlight
 Name[da]=Fremhævning
