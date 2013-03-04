@@ -20,6 +20,7 @@
 #include "telepathy-chat-ui.h"
 #include "chat-tab.h"
 #include "chat-window.h"
+#include "text-chat-config.h"
 
 #include <KDebug>
 #include <KConfigGroup>
@@ -44,18 +45,6 @@ TelepathyChatUi::TelepathyChatUi(const Tp::AccountManagerPtr &accountManager)
       m_accountManager(accountManager)
 {
     kDebug();
-
-    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
-    KConfigGroup tabConfig = config->group("Behavior");
-
-    // load the settings for new tab "open mode"
-    QString mode = tabConfig.readEntry("tabOpenMode", "FirstWindow");
-    m_openMode = FirstWindow;
-    if (mode == QLatin1String("NewWindow")) {
-        m_openMode = NewWindow;
-    } else if (mode == QLatin1String("FirstWindow")) {
-        m_openMode = FirstWindow;
-    }
 }
 
 void TelepathyChatUi::removeWindow(ChatWindow *window)
@@ -157,11 +146,11 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
 
     if (!tabFound) {
         ChatWindow* window = 0;
-        switch (m_openMode) {
-            case FirstWindow:
+        switch (TextChatConfig::instance()->openMode()) {
+            case TextChatConfig::FirstWindow:
                 window = m_chatWindows.count()?m_chatWindows[0]:createWindow();
                 break;
-            case NewWindow:
+            case TextChatConfig::NewWindow:
                 window = createWindow();
                 break;
         }

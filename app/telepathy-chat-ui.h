@@ -36,12 +36,6 @@ public:
     TelepathyChatUi(const Tp::AccountManagerPtr &accountManager);
     ~TelepathyChatUi();
 
-    enum TabOpenMode {
-        NewWindow,
-        FirstWindow,
-        LastWindow
-    };
-
     virtual void handleChannels(const Tp::MethodInvocationContextPtr<> & context,
             const Tp::AccountPtr &account,
             const Tp::ConnectionPtr &connection,
@@ -63,7 +57,6 @@ private:
 
     Tp::AccountManagerPtr m_accountManager;
     QList<ChatWindow*> m_chatWindows;
-    TabOpenMode m_openMode;
 };
 
 #endif // TELEPATHYCHATUI_H

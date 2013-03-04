@@ -15,6 +15,7 @@ set(ktpchat_SRCS
         chat-search-bar.cpp
         logmanager.cpp
         notify-filter.cpp
+        text-chat-config.cpp
 )
 
 set(ktpchat_HDRS
@@ -27,6 +28,7 @@ set(ktpchat_HDRS
     chat-widget.h
     chat-window-style.h
     chat-window-style-manager.h
+    text-chat-config.h
 )
 
 set(ktpchat_PRETTY_HDRS
@@ -39,6 +41,7 @@ set(ktpchat_PRETTY_HDRS
     KTp/ChatWidget
     KTp/ChatWindowStyle
     KTp/ChatWindowStyleManager
+    KTp/TextChatConfig
 )
 
 set(ktpchat_UI

@@ -1,7 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Lasath Fernando <kde@lasath.org>
- *   Copyright (C) 2011 by David Edmundson <kde@davidedmundson.co.uk>
- *
+ *   Copyright (C) 2013 by Stefan Eggers <coloncolonone@gmail.com>         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,40 +17,44 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
+#ifndef TEXT_CHAT_CONFIG_H
+#define TEXT_CHAT_CONFIG_H
 
-#ifndef BEHAVIOR_CONFIG_H
-#define BEHAVIOR_CONFIG_H
+#include <QtCore/QMutex>
+#include <QtCore/QObject>
 
-#include <KCModule>
-#include "text-chat-config.h"
+#include "ktpchat_export.h"
 
-namespace Ui {
-class BehaviorConfigUi;
-}
+class TextChatConfigPrivate;
 
-class BehaviorConfig : public KCModule
+class KDE_TELEPATHY_CHAT_EXPORT TextChatConfig : QObject
 {
     Q_OBJECT
 
-public:
-    explicit BehaviorConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
-    virtual ~BehaviorConfig();
+  public:
+    enum TabOpenMode {
+        NewWindow,
+        FirstWindow
+    };
 
-public Q_SLOTS:
-    virtual void load();
-    virtual void save();
+    // settings get loaded when instance gets created
+    static TextChatConfig *instance();
 
-protected:
-    virtual void changeEvent(QEvent *e);
+    // write out current settings to file
+    void sync();
 
-private Q_SLOTS:
-    void onRadioSelected(int id);
-    void onScrollbackLengthChanged();
+    TabOpenMode openMode();
+    void setOpenMode(TabOpenMode mode);
+
+    int scrollbackLength();
+    void setScrollbackLength(int length);
 
 private:
-    TextChatConfig::TabOpenMode m_openMode;
-    int m_scrollbackLength;
-    Ui::BehaviorConfigUi *ui;
+    TextChatConfig();
+
+    static QMutex mutex;
+
+    const QScopedPointer<TextChatConfigPrivate> d;
 };
 
-#endif // BEHAVIOR_CONFIG_H
+#endif // TEXT_CHAT_CONFIG_H

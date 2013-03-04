@@ -40,8 +40,8 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
 
     ui->setupUi(this);
 
-    ui->newTabButtonGroup->setId(ui->radioNew, TelepathyChatUi::NewWindow);
-    ui->newTabButtonGroup->setId(ui->radioZero, TelepathyChatUi::FirstWindow);
+    ui->newTabButtonGroup->setId(ui->radioNew, TextChatConfig::NewWindow);
+    ui->newTabButtonGroup->setId(ui->radioZero, TextChatConfig::FirstWindow);
 
     ui->newTabButtonGroup->button(m_openMode)->setChecked(true);
     connect(ui->newTabButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(onRadioSelected(int)));
@@ -58,37 +58,15 @@ BehaviorConfig::~BehaviorConfig()
 
 void BehaviorConfig::load()
 {
-    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
-    KConfigGroup tabConfig = config->group("Behavior");
-
-    QString mode = tabConfig.readEntry("tabOpenMode", "NewWindow");
-    if(mode == QLatin1String("NewWindow")) {
-        m_openMode = TelepathyChatUi::NewWindow;
-    } else if (mode == QLatin1String("FirstWindow")) {
-        m_openMode = TelepathyChatUi::FirstWindow;
-    }
-
-    m_scrollbackLength = tabConfig.readEntry("scrollbackLength", 4);
+    m_openMode = TextChatConfig::instance()->openMode();
+    m_scrollbackLength = TextChatConfig::instance()->scrollbackLength();
 }
 
 void BehaviorConfig::save()
 {
-    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
-    KConfigGroup tabConfig = config->group("Behavior");
-
-    QString mode;
-    switch (m_openMode) {
-        case TelepathyChatUi::NewWindow :
-            mode = QLatin1String("NewWindow");
-            break;
-        case TelepathyChatUi::FirstWindow :
-            mode = QLatin1String("FirstWindow");
-            break;
-    }
-
-    tabConfig.writeEntry("tabOpenMode", mode);
-    tabConfig.writeEntry("scrollbackLength", m_scrollbackLength);
-    tabConfig.sync();
+    TextChatConfig::instance()->setOpenMode(m_openMode);
+    TextChatConfig::instance()->setScrollbackLength(m_scrollbackLength);
+    TextChatConfig::instance()->sync();
 }
 
 void BehaviorConfig::changeEvent(QEvent* e)
@@ -106,7 +84,7 @@ void BehaviorConfig::changeEvent(QEvent* e)
 void BehaviorConfig::onRadioSelected(int id)
 {
     kDebug() << "BehaviorConfig::m_openMode changed from " << id << " to " << m_openMode;
-    m_openMode = (TelepathyChatUi::TabOpenMode) id;
+    m_openMode = (TextChatConfig::TabOpenMode) id;
     kDebug() << "emitting changed(true)";
     Q_EMIT changed(true);
 }
