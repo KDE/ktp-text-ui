@@ -56,12 +56,6 @@ void HighlightFilter::filterMessage(KTp::Message &message,
         kDebug() << "messge contains user login name" << d->user.loginName();
         message.setProperty("highlight", true);
     }
-
-    if (message.property("highlight").toBool()){
-        msg = QLatin1Literal("<div style='color:red;'>") % msg %
-                QLatin1Literal("</div>");
-        message.setMainMessagePart(msg);
-    }
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<HighlightFilter>();)

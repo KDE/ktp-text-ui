@@ -630,6 +630,10 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
             }
             messageInfo.setTime(time);
 
+            if (processedMessage.property("highlight").toBool()) {
+                messageInfo.appendMessageClass(QLatin1String("mention"));
+            }
+
             //sender can have just an ID or be a full contactPtr. Use full contact info if available.
             if (message.sender().isNull()) {
                 messageInfo.setSenderDisplayName(message.senderNickname());
