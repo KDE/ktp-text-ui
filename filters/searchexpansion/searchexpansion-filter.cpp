@@ -40,10 +40,13 @@ SearchexpansionFilter::~SearchexpansionFilter()
 
 void SearchexpansionFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
 {
+    Q_UNUSED(message);
+    Q_UNUSED(context);
 }
 
 void SearchexpansionFilter::filterOutgoingMessage(KTp::Message &message, const KTp::MessageContext &context)
 {
+    Q_UNUSED(context);
     KUriFilterData data(message.mainMessagePart().trimmed());
     if(KUriFilter::self()->filterSearchUri(data, KUriFilter::WebShortcutFilter)) {
 
