@@ -22,6 +22,8 @@
 	<integer>4</integer>
 	<key>XtraBundleVersion</key>
 	<string>1</string>
+	<key>DefaultVariant</key>
+	<string>Blue on Green No Names Alt</string>
 	<key>DefaultFontFamily</key>
 	<string>Lucida Grande</string>
 	<key>DefaultFontSize</key>
