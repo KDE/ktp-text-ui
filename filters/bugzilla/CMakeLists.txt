@@ -1,5 +1,3 @@
-find_package(QJSON REQUIRED)
-
 set (ktptextui_message_filter_bugzilla_SRCS
      bugzilla-filter.cpp
 )
