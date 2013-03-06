@@ -7,11 +7,11 @@ X-KDE-Library=ktptextui_message_filter_highlight
 X-KDE-PluginInfo-Author=Lasath Fernando
 X-KDE-PluginInfo-Email=kde@lasath.org
 X-KDE-PluginInfo-Name=highlight
-X-KDE-PluginInfo-Version=0.6
+X-KDE-PluginInfo-Version=@KTP_TEXT_UI_VERSION@
 X-KDE-PluginInfo-Website=http://community.kde.org/KTp
 X-KDE-PluginInfo-License=LGPL
 X-KDE-PluginInfo-EnabledByDefault=false
-X-KTp-PluginInfo-Version=2
+X-KDE-PluginInfo-Version=@KTP_MESSAGE_FILTER_FRAMEWORK_VERSION@
 
 Name=Highlight
 Name[da]=Fremhævning

@@ -23,6 +23,10 @@ install (TARGETS ktptextui_message_filter_emoticons
          DESTINATION ${PLUGIN_INSTALL_DIR}
 )
 
-install (FILES ktptextui_message_filter_emoticons.desktop
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ktptextui_message_filter_emoticons.desktop.cmake
+               ${CMAKE_CURRENT_BINARY_DIR}/ktptextui_message_filter_emoticons.desktop
+               @ONLY)
+
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/ktptextui_message_filter_emoticons.desktop
          DESTINATION ${SERVICES_INSTALL_DIR}
 )

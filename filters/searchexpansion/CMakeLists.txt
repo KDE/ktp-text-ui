@@ -21,7 +21,11 @@ install (TARGETS ktptextui_message_filter_searchexpansion
          DESTINATION ${PLUGIN_INSTALL_DIR}
 )
 
-install (FILES ktptextui_message_filter_searchexpansion.desktop
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ktptextui_message_filter_searchexpansion.desktop.cmake
+               ${CMAKE_CURRENT_BINARY_DIR}/ktptextui_message_filter_searchexpansion.desktop
+               @ONLY)
+
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/ktptextui_message_filter_searchexpansion.desktop
          DESTINATION ${SERVICES_INSTALL_DIR}
 )
 
