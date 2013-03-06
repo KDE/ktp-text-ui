@@ -354,8 +354,14 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
     // contentMessage is const, we need a non-const one to append message classes
     AdiumThemeContentInfo message(contentMessage);
 
+    // 2 consecutive messages can be combined when:
+    //  * Sender is the same
+    //  * Message type is the same
+    //  * Both have the "mention" class, or none of them have it
+    //  * Theme does not disable consecutive messages
     if (m_lastContent.senderScreenName() == message.senderScreenName()
         && m_lastContent.type() == message.type()
+        && m_lastContent.messageClasses().contains(QLatin1String("mention")) == message.messageClasses().contains(QLatin1String("mention"))
         && !m_chatStyle->disableCombineConsecutive()) {
         consecutiveMessage = true;
         message.appendMessageClass(QLatin1String("consecutive"));
