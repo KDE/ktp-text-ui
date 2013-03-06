@@ -66,7 +66,7 @@ void TextChatConfig::sync()
 
     QString mode;
     if (d->m_openMode == TextChatConfig::NewWindow) {
-	mode = QLatin1String("NewWindow");
+        mode = QLatin1String("NewWindow");
     } else {
         mode = QLatin1String("FirstWindow");
     }
