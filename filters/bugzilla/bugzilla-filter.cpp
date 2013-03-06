@@ -19,8 +19,6 @@
 
 #include "bugzilla-filter.h"
 
-#include <qjson/parser.h>
-
 #include <KPluginFactory>
 #include <KDebug>
 #include <KUrl>
