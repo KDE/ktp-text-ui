@@ -1,5 +1,6 @@
 /*
  *    Copyright (C) 2012  Lasath Fernando <kde@lasath.org>
+ *    Copyright (C) 2013  David Edmundson <kde@davidedmundson.co.uk>
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -34,14 +35,26 @@ public:
     }
 
     QRegExp bugText;
-    QString sectionTemplate;
     int filterId;
+    QStringList bugzillaHosts;
 };
 
 BugzillaFilter::BugzillaFilter(QObject *parent, const QVariantList &) :
     AbstractMessageFilter(parent), d(new Private)
 {
     d->bugText = QRegExp(QLatin1String("BUG:[ ]*(\\d+)"));
+
+    d->bugzillaHosts << QLatin1String("bugzilla.mozilla.org")
+                     << QLatin1String("bugzilla.kernel.org")
+                     << QLatin1String("bugzilla.gnome.org")
+                     << QLatin1String("bugs.kde.org")
+                     << QLatin1String("issues.apache.org")
+                     << QLatin1String("www.openoffice.org")
+                     << QLatin1String("bugs.eclipse.org/bugs")
+                     << QLatin1String("bugzilla.redhat.com/bugzilla")
+                     << QLatin1String("qa.mandriva.com")
+                     << QLatin1String("bugs.gentoo.org")
+                     << QLatin1String("bugzilla.novell.com");
 }
 
 BugzillaFilter::~BugzillaFilter()
@@ -98,7 +111,25 @@ void BugzillaFilter::filterMessage(KTp::Message &message, const KTp::MessageCont
         KUrl url = qvariant_cast<KUrl>(var);
 
         if (url.fileName() == QLatin1String("show_bug.cgi")) { //a bugzilla of some sort
-            addBugDescription(message, url);
+
+                        //add a check on the hostname against a whitelist.
+
+            //as we have to use jsonp to get round making a cross-domain http request, a malicious website
+            //could pretend to be bugzilla and return arbitrary data that we cannot sanitise, filling the text-ui
+            //then someone could send a link potentially executing random JS.
+            //somewhat unlikely..but better safe than sorry.
+            //QML rewrite will fix it, as that does not have security origin checks on XHttpRequest objects
+
+            //Do not try and make this plugin more generic by removing this check unless you know what you are doing.
+
+            //check hostname against a whitelist of bugzilla instances
+
+            //TODO as we are checking the hostname we can support host/bugID formats
+            //TODO make this configurable in config
+
+            if (d->bugzillaHosts.contains(url.host())) {
+                addBugDescription(message, url);
+            }
         }
     }
 }
