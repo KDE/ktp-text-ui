@@ -32,6 +32,8 @@ public:
     org::kde::KSpeech *kspeech;
 };
 
+static const KCatalogLoader loader(QLatin1String("ktp-filters"));
+
 TTSFilter::TTSFilter(QObject *parent, const QVariantList &)
     : KTp::AbstractMessageFilter(parent),
       d(new Private)
