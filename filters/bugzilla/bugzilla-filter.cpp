@@ -31,11 +31,11 @@ class BugzillaFilter::Private
 {
 public:
     Private() {
-        filterId = 0;
+        requestCounter = 0;
     }
 
     QRegExp bugText;
-    int filterId;
+    int requestCounter;
     QStringList bugzillaHosts;
 };
 
@@ -62,9 +62,10 @@ BugzillaFilter::~BugzillaFilter()
     delete d;
 }
 
-void BugzillaFilter::addBugDescription(KTp::Message &message, const KUrl &baseUrl) {
-    QString bugRequestId((QLatin1String("bug_") + QString::number(d->filterId)));
-    d->filterId++;
+void BugzillaFilter::addBugDescription(KTp::Message &message, const KUrl &baseUrl)
+{
+    QString bugRequestId((QLatin1String("bug_") + QString::number(d->requestCounter)));
+    d->requestCounter++;
 
     KUrl request;
     request.setHost(baseUrl.host());
@@ -111,8 +112,6 @@ void BugzillaFilter::filterMessage(KTp::Message &message, const KTp::MessageCont
         KUrl url = qvariant_cast<KUrl>(var);
 
         if (url.fileName() == QLatin1String("show_bug.cgi")) { //a bugzilla of some sort
-
-                        //add a check on the hostname against a whitelist.
 
             //as we have to use jsonp to get round making a cross-domain http request, a malicious website
             //could pretend to be bugzilla and return arbitrary data that we cannot sanitise, filling the text-ui
