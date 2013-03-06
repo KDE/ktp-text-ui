@@ -10,7 +10,6 @@ kde4_add_plugin (ktptextui_message_filter_formatting
 )
 
 target_link_libraries (ktptextui_message_filter_formatting
-    ktpchat
     ${QT_LIBRARIES}
     ${KDE4_KDEUI_LIBS}
     ${TELEPATHY_QT4_LIBRARIES}
