@@ -228,11 +228,12 @@ void AppearanceConfig::sendDemoMessages()
     }
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
-    message.setMessage(i18n("Hello"));
+    message.setMessage(i18nc("Example message", "Hello Larry"));
     message.setSenderDisplayName(i18nc("Example email", "larry@example.com"));
     message.setSenderScreenName(i18nc("Example name", "Larry Demo"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
+    message.appendMessageClass(QLatin1String("mention"));
     ui->chatView->addContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
