@@ -697,7 +697,6 @@ void ChatWindow::setupCustomActions()
     KAction *sendMessage = new KAction(i18n("Send message"), this);
     sendMessage->setShortcut(QKeySequence::InsertParagraphSeparator, KAction::DefaultShortcut);
     sendMessage->setShortcutConfigurable(true);
-    sendMessage->setGlobalShortcutAllowed(false);
     connect(sendMessage, SIGNAL(triggered()), SLOT(sendCurrentTabMessage()));
 
     // add custom actions to the collection
