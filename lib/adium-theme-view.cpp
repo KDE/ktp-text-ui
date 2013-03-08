@@ -94,8 +94,8 @@ void AdiumThemeView::load(ChatType chatType) {
 
     QString variant = appearanceConfig.readEntry("styleVariant");
     if (!variant.isEmpty()) {
-        m_variantPath = QString(QLatin1String("Variants/%1.css")).arg(variant);
         m_variantName = variant;
+        m_variantPath = m_chatStyle->getVariants().value(variant);
 
         // keep m_variantPath, m_variantName empty if there is no variant
     } else if (!m_chatStyle->getVariants().isEmpty()) {
