@@ -228,7 +228,7 @@ void AppearanceConfig::sendDemoMessages()
     }
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
-    message.setMessage(i18nc("Example message", "Hello Larry"));
+    message.setMessage(i18nc("Example message", "Hello Ted"));
     message.setSenderDisplayName(i18nc("Example email", "larry@example.com"));
     message.setSenderScreenName(i18nc("Example name", "Larry Demo"));
     message.setService(i18n("Jabber"));
