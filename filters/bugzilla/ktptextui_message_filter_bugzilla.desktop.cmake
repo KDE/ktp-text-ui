@@ -1,7 +1,21 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Bugzilla Information
+Name[el]=Πληροφορίες Bugzilla
+Name[it]=Informazioni di Bugzilla
+Name[nl]=Informatie in Bugzilla
+Name[pt]=Informação do Bugzilla
+Name[sl]=Podrobnosti o Bugzilli
+Name[uk]=Дані у системі стеження за вадами
+Name[x-test]=xxBugzilla Informationxx
 Comment=When receiving a link to a bug on bugzilla show additional information such as the title and status
+Comment[el]=Κατά τη λήψη συνδέσμου σε ένα σφάλμα στο bugzilla να εμφανίζοντια επιπλέον πληροφορίες όπως ο τίτλος και η κατάσταση
+Comment[it]=Con collegamenti a bugzilla, mostra informazioni quali il titolo e lo stato dei bug relativi
+Comment[nl]=Bij het ontvangen van een koppeling naar een bug in bugzilla toon dan extra informatie zoals de titel en de status
+Comment[pt]=Ao receber uma hiperligação para um erro no Bugzilla, mostra informações adicionais como o título e o estado
+Comment[sl]=Ko prejmete povezavo na hrošč na Bugzilli, prikaže dodatne podrobnosti kot recimo naslov in stanje
+Comment[uk]=У разі отримання посилання на запис вади у системі стеження за вадами показати додаткові дані, зокрема назву запису та стан вади
+Comment[x-test]=xxWhen receiving a link to a bug on bugzilla show additional information such as the title and statusxx
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 X-KDE-Library=ktptextui_message_filter_bugzilla
