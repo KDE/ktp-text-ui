@@ -18,6 +18,11 @@ body {
     border-width:2px;
 }
 
+.KopeteMessage.incoming.message.mention
+{
+    background-color:#b1eded;
+}
+
 .IncomingList, .OutgoingList
 {
     margin-left: 0;
