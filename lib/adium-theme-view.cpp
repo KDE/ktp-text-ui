@@ -94,8 +94,8 @@ void AdiumThemeView::load(ChatType chatType) {
 
     QString variant = appearanceConfig.readEntry("styleVariant");
     if (!variant.isEmpty()) {
-        m_variantPath = QString(QLatin1String("Variants/%1.css")).arg(variant);
         m_variantName = variant;
+        m_variantPath = m_chatStyle->getVariants().value(variant);
 
         // keep m_variantPath, m_variantName empty if there is no variant
     } else if (!m_chatStyle->getVariants().isEmpty()) {
@@ -222,7 +222,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 
     int index = 0;
     index = templateHtml.indexOf(QLatin1String("%@"), index);
-    templateHtml.replace(index, 2, QString(QLatin1String("file:///")).append(m_chatStyle->getStyleBaseHref()));
+    templateHtml.replace(index, 2, QString(QLatin1String("file://")).append(m_chatStyle->getStyleBaseHref()));
 
     if (numberOfPlaceholders == 5) {
         index = templateHtml.indexOf(QLatin1String("%@"), index);
