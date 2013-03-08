@@ -222,7 +222,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 
     int index = 0;
     index = templateHtml.indexOf(QLatin1String("%@"), index);
-    templateHtml.replace(index, 2, QString(QLatin1String("file:///")).append(m_chatStyle->getStyleBaseHref()));
+    templateHtml.replace(index, 2, QString(QLatin1String("file://")).append(m_chatStyle->getStyleBaseHref()));
 
     if (numberOfPlaceholders == 5) {
         index = templateHtml.indexOf(QLatin1String("%@"), index);
