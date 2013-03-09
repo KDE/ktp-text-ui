@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=YouTube Preview
 Name[cs]=Náhled YouTube
+Name[de]=YouTube-Vorschau
 Name[el]=Προεπισκόπηση YouTube
 Name[fi]=YouTube-esikatselu
 Name[ia]=Vista preliminar de YouTube
