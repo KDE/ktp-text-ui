@@ -41,6 +41,7 @@ BugzillaFilter::BugzillaFilter(QObject *parent, const QVariantList &) :
     AbstractMessageFilter(parent), d(new Private)
 {
     d->bugText = QRegExp(QLatin1String("BUG:[ ]*(\\d+)"));
+    d->bugText.setCaseSensitivity(Qt::CaseInsensitive);
 
     d->bugzillaHosts << QLatin1String("bugzilla.mozilla.org")
                      << QLatin1String("bugzilla.kernel.org")
