@@ -42,7 +42,7 @@ Name[zh_CN]=网页快捷方式
 Name[zh_TW]=網頁捷徑
 Encoding=UTF-8
 Type=Service
-# Comment=
+Comment=Expand a KDE-shortened URI into a URL (i.e. typing wp:KDE will translate to http://en.wikipedia.org/wiki/KDE)
 ServiceTypes=KTpTextUi/MessageFilter
 
 X-KDE-Library=ktptextui_message_filter_searchexpansion
