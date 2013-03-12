@@ -146,8 +146,13 @@ void ChatTextEdit::keyPressEvent(QKeyEvent *e)
 bool ChatTextEdit::event(QEvent *e)
 {
     if (e->type() == QEvent::ShortcutOverride) {
+        // Extract key code for shortcut sequence comparison
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(e);
-        const int key = keyEvent->key() | keyEvent->modifiers();
+        int key = keyEvent->key();
+        if (keyEvent->modifiers() != Qt::KeypadModifier) {
+            // Keypad modifier is not used in KDE shortcuts setup, so, we need to skip it.
+            key |= keyEvent->modifiers();
+        }
         if (m_sendMessageAction->shortcut().contains(key)) {
             // keyPressEvent() handles Control modifier wrong, so we need that thing
             // to be in event().
