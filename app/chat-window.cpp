@@ -695,7 +695,10 @@ void ChatWindow::setupCustomActions()
     connect(addEmoticonAction, SIGNAL(emoticonActivated(QString)), this, SLOT(onAddEmoticon(QString)) );
 
     KAction *sendMessage = new KAction(i18n("Send message"), this);
-    sendMessage->setShortcut(QKeySequence::InsertParagraphSeparator, KAction::DefaultShortcut);
+    sendMessage->setShortcuts(
+                // Setting default shortcuts. Return will be a primary one, and Enter (on keypad) - alternate.
+                QList<QKeySequence>() << QKeySequence(Qt::Key_Return) << QKeySequence(Qt::Key_Enter),
+                KAction::DefaultShortcut);
     sendMessage->setShortcutConfigurable(true);
     connect(sendMessage, SIGNAL(triggered()), SLOT(sendCurrentTabMessage()));
 
