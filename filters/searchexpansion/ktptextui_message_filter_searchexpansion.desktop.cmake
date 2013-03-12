@@ -43,6 +43,13 @@ Name[zh_TW]=網頁捷徑
 Encoding=UTF-8
 Type=Service
 Comment=Expand a KDE-shortened URI into a URL (i.e. typing wp:KDE will translate to http://en.wikipedia.org/wiki/KDE)
+Comment[ia]=Expande un URI abbreviate de KDE in un URL (i.e. typar wp:KDE il traducera se mesme in http://en.wikipedia.org/wiki/KDE)
+Comment[it]=Espande un URI abbreviato di KDE in un URL (ad es. wp:KDE sarà trasformato in http://it.wikipedia.org/wiki/KDE)
+Comment[nl]=Expandeer een door KDE afgekorte URI in een URL (bijv. typen van wp:KDE wordt vertaald in http://en.wikipedia.org/wiki/KDE)
+Comment[pt]=Expandir um URI curto no KDE para um URL (i.e., se escrever wp:KDE, será traduzido para http://en.wikipedia.org/wiki/KDE)
+Comment[pt_BR]=Expandir uma URI curta no KDE para uma URL (p.ex., se digitar wp:KDE, será traduzido para http://en.wikipedia.org/wiki/KDE)
+Comment[uk]=Доповнення вебскорочень адрес KDE до повноцінних адрес (тобто текст wp:KDE буде доповнено до http://en.wikipedia.org/wiki/KDE)
+Comment[x-test]=xxExpand a KDE-shortened URI into a URL (i.e. typing wp:KDE will translate to http://en.wikipedia.org/wiki/KDE)xx
 ServiceTypes=KTpTextUi/MessageFilter
 
 X-KDE-Library=ktptextui_message_filter_searchexpansion
