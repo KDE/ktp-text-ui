@@ -38,7 +38,7 @@ void YoutubeFilter::filterMessage(KTp::Message &message, const KTp::MessageConte
         "<br />\n"
         "<iframe class=\"youtube-player\" "
             "type=\"text/html\""
-            "style=\"max-width:100%;max-height:100%\""
+            "style=\"max-width:100%;max-height:100%;margin-top:3px\""
             "src=\"http://www.youtube.com/embed/%1\" "
             "frameborder=\"0\">"
         "</iframe>"
