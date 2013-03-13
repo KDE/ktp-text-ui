@@ -170,9 +170,9 @@ private:
     /** Returns whether there's at least one tab with unread message */
     bool hasUnreadMessages() const;
 
-    KTabWidget *m_tabWidget;
-
     KAction *m_sendMessage;
+
+    KTabWidget *m_tabWidget;
 
     Sonnet::DictionaryComboBox *m_spellDictCombo;
     QLabel *m_accountIconLabel;
