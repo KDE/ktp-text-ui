@@ -283,7 +283,7 @@ void LogViewer::slotClearAccountHistory()
         return;
     }
 
-    if (KMessageBox::questionYesNo(
+    if (KMessageBox::warningYesNo(
             this, i18n("Are you sure you want to remove all logs from account %1?", account->displayName()),
             i18n("Clear account history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
             QString(), KMessageBox::Dangerous) == KMessageBox::No) {
@@ -309,7 +309,7 @@ void LogViewer::slotClearContactHistory()
     }
 
     QString name = index.data(Qt::DisplayRole).toString();
-    if (KMessageBox::questionYesNo(
+    if (KMessageBox::warningYesNo(
             this, i18n("Are you sure you want to remove history of all conversations with %1?", name),
             i18n("Clear contact history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
             QString(), KMessageBox::Dangerous) == KMessageBox::No) {
