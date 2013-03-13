@@ -713,7 +713,7 @@ void ChatWidget::sendMessage()
 
     if (!message.isEmpty()) {
         message = KTp::MessageProcessor::instance()->processOutgoingMessage(
-                    message, d->account, d->channel).mainMessagePart();
+                    message, d->account, d->channel).text();
 
         if (d->channel->supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
             //remove "/me " from the start of the message
