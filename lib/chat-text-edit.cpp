@@ -32,25 +32,12 @@
 
 #define MAXHISTORY 100
 
-KAction *searchActionGlobal(const QString& name)
-{
-    QList<KActionCollection*> collections = KActionCollection::allCollections();
-    KAction* action = NULL;
-    Q_FOREACH(KActionCollection *collection, collections) {
-        if (!action) {
-            action = qobject_cast<KAction*>(collection->action(name));
-        }
-    }
-    return action;
-}
-
 ChatTextEdit::ChatTextEdit(QWidget *parent) :
         KTextEdit(parent),
         m_contactModel(0),
         m_oldCursorPos(0),
         m_completionPosition(0),
-        m_continuousCompletion(false),
-        m_sendMessageAction(0)
+        m_continuousCompletion(false)
 {
     setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);    // no need for horizontal scrollbar with this
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -67,8 +54,6 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
     m_historyPos = 0;
 
     connect(this, SIGNAL(textChanged()), SLOT(recalculateSize()));
-
-    m_sendMessageAction = searchActionGlobal(QLatin1String("send-message"));
 }
 
 void ChatTextEdit::setContactModel(ChannelContactModel* model)
@@ -153,7 +138,8 @@ bool ChatTextEdit::event(QEvent *e)
             // Keypad modifier is not used in KDE shortcuts setup, so, we need to skip it.
             key |= keyEvent->modifiers();
         }
-        if (m_sendMessageAction->shortcut().contains(key)) {
+
+        if (m_sendMessageShortcuts.contains(key)) {
             // keyPressEvent() handles Control modifier wrong, so we need that thing
             // to be in event().
             this->sendMessage();
@@ -198,6 +184,11 @@ void ChatTextEdit::sendMessage()
     m_continuousCompletion = false;
 
     Q_EMIT returnKeyPressed();
+}
+
+void ChatTextEdit::setSendMessageShortcuts(const KShortcut &shortcuts)
+{
+    m_sendMessageShortcuts = KShortcut(shortcuts);
 }
 
 // History of sent messages based on code from Konversation

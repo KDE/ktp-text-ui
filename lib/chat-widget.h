@@ -29,6 +29,7 @@
 
 #include <KIcon>
 #include <KColorScheme>
+#include <KShortcut>
 
 #include <TelepathyQt/ReceivedMessage>
 
@@ -109,6 +110,8 @@ public Q_SLOTS:
     /** Mark that the following messages have been seen by the user.
       */
     void acknowledgeMessages();
+
+    void updateSendMessageShortcuts(const KShortcut &shortcuts);
 
 protected:
     void changeEvent(QEvent *e);

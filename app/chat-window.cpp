@@ -67,6 +67,8 @@ K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecke
                           (QLatin1String(PREFERRED_RFB_HANDLER)));
 
 ChatWindow::ChatWindow()
+    : m_sendMessage(0),
+      m_tabWidget(0)
 {
     //This effectively constructs the s_krfbAvailableChecker object the first
     //time that this code is executed. This is to start the d-bus query early, so
@@ -94,9 +96,6 @@ ChatWindow::ChatWindow()
     KStandardAction::zoomIn(this, SLOT(onZoomIn()), actionCollection());
     KStandardAction::zoomOut(this, SLOT(onZoomOut()), actionCollection());
 
-    // create custom actions
-    setupCustomActions();
-
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
     m_tabWidget->setMovable(true);
@@ -110,6 +109,10 @@ ChatWindow::ChatWindow()
     connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int,QPoint)), SLOT(tabBarContextMenu(int,QPoint)));
 
     setCentralWidget(m_tabWidget);
+
+    // create custom actions
+    // we must do it AFTER m_tabWidget is set up
+    setupCustomActions();
 
     setupGUI(QSize(460, 440), static_cast<StandardWindowOptions>(Default^StatusBar), QLatin1String("chatwindow.rc"));
 
@@ -224,6 +227,8 @@ void ChatWindow::addTab(ChatTab *tab)
             m_tabWidget->setTabBarHidden(false);
         }
     }
+
+    tab->updateSendMessageShortcuts(m_sendMessage->shortcut());
 }
 
 void ChatWindow::destroyTab(QWidget* chatWidget)
@@ -694,13 +699,14 @@ void ChatWindow::setupCustomActions()
     EmoticonTextEditAction *addEmoticonAction = new EmoticonTextEditAction(this);
     connect(addEmoticonAction, SIGNAL(emoticonActivated(QString)), this, SLOT(onAddEmoticon(QString)) );
 
-    KAction *sendMessage = new KAction(i18n("Send message"), this);
-    sendMessage->setShortcuts(
+    m_sendMessage = new KAction(i18n("Send message"), this);
+    m_sendMessage->setShortcuts(
                 // Setting default shortcuts. Return will be a primary one, and Enter (on keypad) - alternate.
                 QList<QKeySequence>() << QKeySequence(Qt::Key_Return) << QKeySequence(Qt::Key_Enter),
                 KAction::DefaultShortcut);
-    sendMessage->setShortcutConfigurable(true);
-    connect(sendMessage, SIGNAL(triggered()), SLOT(sendCurrentTabMessage()));
+    m_sendMessage->setShortcutConfigurable(true);
+    connect(m_sendMessage, SIGNAL(triggered()), SLOT(sendCurrentTabMessage()));
+    connect(m_sendMessage, SIGNAL(changed()), SLOT(updateSendMessageShortcuts()));
 
     // add custom actions to the collection
     actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
@@ -716,7 +722,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
     actionCollection()->addAction(QLatin1String("clear-chat-view"), clearViewAction);
     actionCollection()->addAction(QLatin1String("emoticons"), addEmoticonAction);
-    actionCollection()->addAction(QLatin1String("send-message"), sendMessage);
+    actionCollection()->addAction(QLatin1String("send-message"), m_sendMessage);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
@@ -936,6 +942,15 @@ void ChatWindow::onZoomFactorChanged(qreal zoom)
     KConfig config(QLatin1String("ktelepathyrc"));
     KConfigGroup group = config.group("Appearance");
     group.writeEntry("zoomFactor", m_zoomFactor);
+}
+
+void ChatWindow::updateSendMessageShortcuts()
+{
+    KShortcut newSendMessageShortcuts = m_sendMessage->shortcut();
+    for (int i = 0; i < m_tabWidget->count(); i++) {
+        ChatTab* tab = qobject_cast<ChatTab*>(m_tabWidget->widget(i));
+        tab->updateSendMessageShortcuts(newSendMessageShortcuts);
+    }
 }
 
 #include "chat-window.moc"

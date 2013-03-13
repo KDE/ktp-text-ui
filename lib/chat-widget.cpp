@@ -489,6 +489,11 @@ void ChatWidget::acknowledgeMessages()
     }
 }
 
+void ChatWidget::updateSendMessageShortcuts(const KShortcut &shortcuts)
+{
+    d->ui.sendMessageBox->setSendMessageShortcuts(shortcuts);
+}
+
 bool ChatWidget::isOnTop() const
 {
     kDebug() << ( isActiveWindow() && isVisible() );

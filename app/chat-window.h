@@ -25,6 +25,7 @@
 
 #include <KXmlGuiWindow>
 #include <KTabWidget>
+#include <KAction>
 
 namespace Sonnet {
     class DictionaryComboBox;
@@ -107,6 +108,7 @@ private Q_SLOTS:
     void onZoomIn();
     void onZoomOut();
     void onZoomFactorChanged(qreal zoom);
+    void updateSendMessageShortcuts();
 
 protected Q_SLOTS:
     void showSettingsDialog();
@@ -169,6 +171,8 @@ private:
     bool hasUnreadMessages() const;
 
     KTabWidget *m_tabWidget;
+
+    KAction *m_sendMessage;
 
     Sonnet::DictionaryComboBox *m_spellDictCombo;
     QLabel *m_accountIconLabel;

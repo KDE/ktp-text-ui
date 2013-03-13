@@ -20,6 +20,9 @@
 #ifndef CHATTEXTEDIT_H
 #define CHATTEXTEDIT_H
 
+#include <QtCore/QList>
+#include <QtGui/QKeySequence>
+
 #include <KTextEdit>
 #include <KAction>
 
@@ -61,6 +64,12 @@ public Q_SLOTS:
     void setFontBold(bool);
     void sendMessage(); // Sends message entered (<= Return key pressing)
 
+    /**
+     * Updates internal message sending shortcuts. Must be called on every window
+     * creation and every message sending shortcuts change.
+     */
+    void setSendMessageShortcuts(const KShortcut &shortcuts);
+
 private:
     QStringList m_history;
     int m_historyPos;
@@ -72,7 +81,7 @@ private:
     int m_completionPosition;
     bool m_continuousCompletion;
 
-    KAction *m_sendMessageAction;
+    KShortcut m_sendMessageShortcuts;
 };
 
 #endif // CHATTEXTEDIT_H
