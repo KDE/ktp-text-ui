@@ -49,6 +49,7 @@ InviteContactDialog::InviteContactDialog(const Tp::AccountManagerPtr &accountMan
     m_contactGridWidget = new KTp::ContactGridWidget(m_contactsModel, this);
     m_contactGridWidget->contactFilterLineEdit()->setClickMessage(i18n("Search in Contacts..."));
     m_contactGridWidget->filter()->setPresenceTypeFilterFlags(KTp::ContactsFilterModel::ShowOnlyConnected);
+    m_contactGridWidget->filter()->setAccountFilter(account);
     setMainWidget(m_contactGridWidget);
     setWindowTitle(i18n("Select Contacts to Invite to Group Chat"));
 
