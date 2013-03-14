@@ -133,8 +133,8 @@ void LogViewer::setupActions()
 
     /* Build the popup menu for entity list */
     m_entityListContextMenu = new KMenu(ui->entityList);
-    m_entityListContextMenu->addAction(clearAccHistory);
     m_entityListContextMenu->addAction(clearContactHistory);
+    m_entityListContextMenu->addAction(clearAccHistory);
 }
 
 void LogViewer::onAccountManagerReady()
