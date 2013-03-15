@@ -38,6 +38,7 @@
 #include <KColorScheme>
 #include <KTabBar>
 #include <KSettings/Dialog>
+#include <kcmodulecontainer.h>
 #include <KNotification>
 #include <KNotifyConfigWidget>
 #include <KMenuBar>
@@ -425,7 +426,7 @@ void ChatWindow::onNextTabActionTriggered()
     if (m_tabWidget->count() == 1) {
         return;
     }
-    
+
     int currIndex = m_tabWidget->currentIndex();
 
     if (currIndex < m_tabWidget->count()-1) {
@@ -440,7 +441,7 @@ void ChatWindow::onPreviousTabActionTriggered()
     if (m_tabWidget->count() == 1) {
         return;
     }
-    
+
     int currIndex = m_tabWidget->currentIndex();
 
     if (currIndex > 0) {

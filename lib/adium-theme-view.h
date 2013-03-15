@@ -59,12 +59,6 @@ public:
         ReplaceLastMessage
     };
 
-    enum ShowPresenceMode {
-        Always = 0,
-        NeverInGroupChats = 1,
-        Never = 2
-    };
-
     explicit AdiumThemeView(QWidget *parent = 0);
 
     /** Loads the Theme data*/
@@ -92,8 +86,8 @@ public:
     void setHeaderDisplayed(bool);
     /* .. font, backgrounds, everything else.*/
 
-    void setShowPresenceMode(ShowPresenceMode showPresenceMode);
-    ShowPresenceMode showPresenceMode() const;
+    void setShowPresenceChanges(bool showPresenceChanges);
+    bool showPresenceChanges() const;
 
     void clear();
 
@@ -117,7 +111,7 @@ private:
     bool m_useCustomFont;
     QString m_fontFamily;
     int m_fontSize;
-    ShowPresenceMode m_showPresenceMode;
+    bool m_showPresenceChanges;
 
     QString appendScript(AppendMode mode);
     AppendMode appendMode(const AdiumThemeMessageInfo &message,

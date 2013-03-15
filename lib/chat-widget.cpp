@@ -793,8 +793,7 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const K
     }
 
     if (!message.isNull()) {
-        if ((d->ui.chatArea->showPresenceMode() == AdiumThemeView::Always) ||
-            ((d->ui.chatArea->showPresenceMode() == AdiumThemeView::NeverInGroupChats) && d->isGroupChat)) {
+        if (d->ui.chatArea->showPresenceChanges()) {
             AdiumThemeStatusInfo statusMessage;
             statusMessage.setMessage(message);
             statusMessage.setService(d->channel->connection()->protocolName());
