@@ -15,6 +15,7 @@ X-KDE-PluginInfo-Weight=10
 X-KTp-PluginInfo-Version=@KTP_MESSAGE_FILTER_FRAMEWORK_VERSION@
 
 Name=Highlight
+Name[cs]=Zvýraznění
 Name[da]=Fremhævning
 Name[de]=Hervorhebung
 Name[el]=Τονισμός
