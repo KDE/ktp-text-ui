@@ -7,6 +7,7 @@ Name[it]=Informazioni di Bugzilla
 Name[nl]=Informatie in Bugzilla
 Name[pt]=Informação do Bugzilla
 Name[pt_BR]=Informações do Bugzilla
+Name[ro]=Informații Bugzilla
 Name[sk]=Informácie o Bugzilla
 Name[sl]=Podrobnosti o Bugzilli
 Name[sr]=Бубаждајини подаци
