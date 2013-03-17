@@ -122,7 +122,7 @@ protected:
 
 protected Q_SLOTS:
     /** Show the received message in the chat window*/
-    void handleIncomingMessage(const Tp::ReceivedMessage &message);
+    void handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified = false);
 
     /** Show the message sent in the chat window*/
     void handleMessageSent(const Tp::Message &message,

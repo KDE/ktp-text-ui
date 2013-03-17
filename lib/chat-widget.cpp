@@ -470,7 +470,7 @@ void ChatWidget::onHistoryFetched(const QList<AdiumThemeContentInfo> &messages)
 
     //process any messages we've 'missed' whilst initialising.
     Q_FOREACH(const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
-        handleIncomingMessage(message);
+        handleIncomingMessage(message, true);
     }
 }
 
@@ -500,7 +500,7 @@ bool ChatWidget::isOnTop() const
     return ( isActiveWindow() && isVisible() );
 }
 
-void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
+void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified)
 {
     kDebug() << title() << message.text();
 
@@ -623,8 +623,10 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
 
             // FIXME: eventually find a way to make MessageProcessor allow per
             //        instance filters.
-            d->notifyFilter->filterMessage(processedMessage,
-                                           KTp::MessageContext(d->account, d->channel));
+            if (!alreadyNotified) {
+                d->notifyFilter->filterMessage(processedMessage,
+                                               KTp::MessageContext(d->account, d->channel));
+            }
 
             messageInfo.setMessage(processedMessage.finalizedMessage());
             messageInfo.setScript(processedMessage.finalizedScript());
