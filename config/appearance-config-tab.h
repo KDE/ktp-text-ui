@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2011 by David Edmundson <kde@davidedmundson.co.uk>      *
+ *   Copyright (C) 2013 by Huba Nagy <12huba@gmail.com>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,32 +17,60 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef APPEARANCE_CONFIG_H
-#define APPEARANCE_CONFIG_H
+#ifndef APPEARANCE_CONFIG_TAB_H
+#define APPEARANCE_CONFIG_TAB_H
 
 #include "adium-theme-header-info.h"
-#include "appearance-config-tab.h"
 
-#include <KCModule>
+#include <QWidget>
+#include <KConfigGroup>
 
-class AppearanceConfig : public KCModule
+namespace Ui
+{
+  class ChatWindowConfig;
+}
+
+class AppearanceConfigTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit AppearanceConfig(QWidget *parent = 0,
-                              const QVariantList &args = QVariantList());
-    ~AppearanceConfig();
+    enum TabMode {
+        NormalChat,
+        GroupChat
+    };
 
-public Q_SLOTS:
-    virtual void save();
-    virtual void load();
-    virtual void defaults();
+    explicit AppearanceConfigTab(QWidget *parent = 0, TabMode mode = NormalChat);
+
+    virtual ~AppearanceConfigTab();
+
+    void saveTab(KConfigGroup appearanceConfigGroup);
+    void loadTab();
+    void defaultTab();
+
+Q_SIGNALS:
+    void tabChanged();
 
 protected:
-    AppearanceConfigTab *m_singleTab;
-    AppearanceConfigTab *m_groupTab;
+    void changeEvent(QEvent *e);
 
+private Q_SLOTS:
+    void sendDemoMessages();
+    void onStylesLoaded();
+    void updateVariantsList();
+
+    void onStyleSelected(int index);
+    void onVariantSelected(const QString &variant);
+    void onShowHeaderChanged(bool showHead);
+    void onFontGroupChanged(bool useCustomFont);
+    void onFontFamilyChanged(const QFont &font);
+    void onFontSizeChanged(int fontSize);
+    void onShowPresenceChangesChanged(int stateChanged);
+
+private:
+    Ui::ChatWindowConfig *ui;
+    AdiumThemeHeaderInfo m_demoChatHeader;
+    bool m_groupChat;
 };
 
-#endif // APPEARANCE_CONFIG_H
+#endif // APPEARANCE_CONFIG_TAB_H

@@ -77,22 +77,22 @@ void AdiumThemeView::load(ChatType chatType) {
 
     //determine the chat window style to use
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
-    KConfigGroup appearanceConfig = config->group("Appearance");
+    KConfigGroup appearanceConfig;
 
-    QString chatStyleName;
     if (chatType == AdiumThemeView::SingleUserChat) {
-        chatStyleName = appearanceConfig.readEntry("styleName", "renkoo.AdiumMessageStyle");
+        appearanceConfig = config->group("Appearance");
+        m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(appearanceConfig.readEntry(QLatin1String("styleName"), "renkoo.AdiumMessageStyle"));
     } else {
-        chatStyleName = QLatin1String("SimKete.AdiumMessageStyle");
+        appearanceConfig = config->group("GroupAppearance");
+        m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(appearanceConfig.readEntry(QLatin1String("styleName"), "SimKete.AdiumMessageStyle"));
     }
 
-    m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
     if (m_chatStyle == 0 || !m_chatStyle->isValid()) {
         KMessageBox::error(this, i18n("Failed to load a valid theme. Your installation is broken. Check your kde path. "
                                       "Will now crash."));
     }
 
-    QString variant = appearanceConfig.readEntry("styleVariant");
+    QString variant = appearanceConfig.readEntry(QLatin1String("styleVariant"));
     if (!variant.isEmpty()) {
         m_variantName = variant;
         m_variantPath = m_chatStyle->getVariants().value(variant);
@@ -117,7 +117,7 @@ void AdiumThemeView::load(ChatType chatType) {
     m_fontFamily = appearanceConfig.readEntry("fontFamily", QWebSettings::globalSettings()->fontFamily(QWebSettings::StandardFont));
     m_fontSize = appearanceConfig.readEntry("fontSize", QWebSettings::globalSettings()->fontSize(QWebSettings::DefaultFontSize));
 
-    m_showPresenceMode = static_cast<AdiumThemeView::ShowPresenceMode>(appearanceConfig.readEntry("showPresenceMode", (int) AdiumThemeView::Always));
+    m_showPresenceChanges = appearanceConfig.readEntry("showPresenceChanges", true);
 }
 
 
@@ -316,15 +316,15 @@ bool AdiumThemeView::isCustomFont() const
     return m_useCustomFont;
 }
 
-void AdiumThemeView::setShowPresenceMode(ShowPresenceMode showPresenceMode)
+void AdiumThemeView::setShowPresenceChanges(bool showPresenceChanges)
 {
     kDebug();
-    m_showPresenceMode = showPresenceMode;
+    m_showPresenceChanges = showPresenceChanges;
 }
 
-AdiumThemeView::ShowPresenceMode AdiumThemeView::showPresenceMode() const
+bool AdiumThemeView::showPresenceChanges() const
 {
-    return m_showPresenceMode;
+    return m_showPresenceChanges;
 }
 
 bool AdiumThemeView::isHeaderDisplayed() const

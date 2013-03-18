@@ -48,9 +48,15 @@ Comment[it]=Espande un URI abbreviato di KDE in un URL (ad es. wp:KDE sarà tras
 Comment[nl]=Expandeer een door KDE afgekorte URI in een URL (bijv. typen van wp:KDE wordt vertaald in http://en.wikipedia.org/wiki/KDE)
 Comment[pt]=Expandir um URI curto no KDE para um URL (i.e., se escrever wp:KDE, será traduzido para http://en.wikipedia.org/wiki/KDE)
 Comment[pt_BR]=Expandir uma URI curta no KDE para uma URL (p.ex., se digitar wp:KDE, será traduzido para http://en.wikipedia.org/wiki/KDE)
+Comment[sk]=Rozvinúť KDE-skrátené URI do a URL (napr. napísanie wp:KDE sa preloží do http://en.wikipedia.org/wiki/KDE)
 Comment[sl]=Razširi URI, ki ga je skrajšal KDE, v naslov URL  (npr. če vtipkate wp:KDE bo to postalo http://en.wikipedia.org/wiki/KDE)
+Comment[sr]=Проширите КДЕ‑скраћени УРИ у УРЛ (нпр. унос wp:KDE постаје http://en.wikipedia.org/wiki/KDE).
+Comment[sr@ijekavian]=Проширите КДЕ‑скраћени УРИ у УРЛ (нпр. унос wp:KDE постаје http://en.wikipedia.org/wiki/KDE).
+Comment[sr@ijekavianlatin]=Proširite KDE-skraćeni URI u URL (npr. unos wp:KDE postaje http://en.wikipedia.org/wiki/KDE).
+Comment[sr@latin]=Proširite KDE-skraćeni URI u URL (npr. unos wp:KDE postaje http://en.wikipedia.org/wiki/KDE).
 Comment[uk]=Доповнення вебскорочень адрес KDE до повноцінних адрес (тобто текст wp:KDE буде доповнено до http://en.wikipedia.org/wiki/KDE)
 Comment[x-test]=xxExpand a KDE-shortened URI into a URL (i.e. typing wp:KDE will translate to http://en.wikipedia.org/wiki/KDE)xx
+Comment[zh_TW]=展開 KDE 短網址變成實際網址（例：輸入 wp:KDE 會轉變成 http://en.wikipedia.org/wiki/KDE）
 ServiceTypes=KTpTextUi/MessageFilter
 
 X-KDE-Library=ktptextui_message_filter_searchexpansion
