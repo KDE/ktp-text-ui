@@ -6,6 +6,7 @@ Name[el]=Προεπισκόπηση YouTube
 Name[fi]=YouTube-esikatselu
 Name[ia]=Vista preliminar de YouTube
 Name[it]=Anteprima di YouTube
+Name[mr]=यूट्यूब पूर्वावलोकन
 Name[nl]=Voorbeeld van YouTube
 Name[pt]=Antevisão do YouTube
 Name[pt_BR]=Visualização do YouTube
