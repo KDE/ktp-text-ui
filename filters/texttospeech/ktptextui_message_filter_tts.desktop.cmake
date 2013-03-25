@@ -13,6 +13,7 @@ Name[hu]=Szövegfelolvasó
 Name[ia]=Ab texto a parola
 Name[it]=Sintesi vocale
 Name[lt]=Tekstas balsu
+Name[mr]=पाठ्य-ते-भाष्य
 Name[nb]=Tekst til tale
 Name[nl]=Tekst-naar-spraak
 Name[pl]=Tekst-na-mowę

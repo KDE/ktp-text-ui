@@ -93,7 +93,6 @@ void InviteContactDialog::onOkClicked()
     else {
         QList<Tp::ContactPtr> contacts;
         contacts << contact;
-        contacts << m_channel->groupContacts(false).toList();
         m_account->createConferenceTextChat(QList<Tp::ChannelPtr>() << m_channel, contacts);
     }
 }

@@ -520,8 +520,10 @@ AdiumThemeView::AppendMode AdiumThemeView::appendMode(const AdiumThemeMessageInf
 
 void AdiumThemeView::appendMessage(QString &html, const QString &script, AppendMode mode)
 {
-    QString js = appendScript(mode).arg(html.replace(QLatin1Char('\"'), QLatin1String("\\\""))
-                                            .replace(QLatin1Char('\n'), QLatin1String("")));
+    QString js = appendScript(mode).arg(html.replace(QLatin1Char('\\'), QLatin1String("\\\\")) /* replace single \ with \\   */
+                                            .replace(QLatin1Char('\"'), QLatin1String("\\\"")) /* replace " with \"   */
+                                            .replace(QLatin1Char('\n'), QLatin1String(""))); /* remove new lines    */
+
     page()->mainFrame()->evaluateJavaScript(js);
 
     if (!script.isEmpty()) {

@@ -18,6 +18,7 @@ Name[ia]=Emoticones
 Name[it]=Emoticon
 Name[kk]=Көңіл күйі белгілері
 Name[lt]=Jaustukai
+Name[mr]=भावप्रतिमा
 Name[nb]=Humørfjes
 Name[nl]=Emoticons
 Name[nn]=Fjesingar

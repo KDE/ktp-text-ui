@@ -23,6 +23,7 @@ Name[et]=Esiletõstmine
 Name[fi]=Korostus
 Name[ia]=Evidentia
 Name[it]=Evidenziazione
+Name[mr]=ठसवा
 Name[nb]=Marker
 Name[nl]=Accentueren
 Name[nn]=Markert melding
