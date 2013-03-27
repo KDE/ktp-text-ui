@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Bugzilla Information
 Name[el]=Πληροφορίες Bugzilla
+Name[es]=Información de Bugzilla
 Name[ia]=Information de Bugzilla
 Name[it]=Informazioni di Bugzilla
 Name[mr]=बगझिल्ला माहिती
@@ -22,6 +23,7 @@ Name[x-test]=xxBugzilla Informationxx
 Name[zh_TW]=Bugzilla 資訊
 Comment=When receiving a link to a bug on bugzilla show additional information such as the title and status
 Comment[el]=Κατά τη λήψη συνδέσμου σε ένα σφάλμα στο bugzilla να εμφανίζοντια επιπλέον πληροφορίες όπως ο τίτλος και η κατάσταση
+Comment[es]=Cuando se recibe un enlace a un error en bugzilla se muestra información adicional como el título y el estado
 Comment[ia]=Quando on recip eun ligamine a un bug sur bugzilla on monstra information additional tal como le titulo e le stato
 Comment[it]=Con collegamenti a bugzilla, mostra informazioni quali il titolo e lo stato dei bug relativi
 Comment[nl]=Bij het ontvangen van een koppeling naar een bug in bugzilla toon dan extra informatie zoals de titel en de status

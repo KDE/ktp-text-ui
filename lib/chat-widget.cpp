@@ -55,6 +55,8 @@
 #include <KTp/actions.h>
 #include <KTp/message-processor.h>
 
+#include <sonnet/speller.h>
+
 class ChatWidgetPrivate
 {
 public:
@@ -925,7 +927,7 @@ void ChatWidget::saveSpellCheckingOption()
     QString spellCheckingLanguage = spellDictionary();
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktp-text-uirc"));
     KConfigGroup configGroup = config->group(d->channel->targetId());
-    if (spellCheckingLanguage != KGlobal::locale()->language()) {
+    if (spellCheckingLanguage != Sonnet::Speller().defaultLanguage()) {
         configGroup.writeEntry("language", spellCheckingLanguage);
     } else {
         if (configGroup.exists()) {
@@ -946,7 +948,7 @@ void ChatWidget::loadSpellCheckingOption()
     if (configGroup.exists()) {
         spellCheckingLanguage = configGroup.readEntry("language");
     } else {
-    spellCheckingLanguage = KGlobal::locale()->language();
+	spellCheckingLanguage = Sonnet::Speller().defaultLanguage();
     }
     d->ui.sendMessageBox->setSpellCheckingLanguage(spellCheckingLanguage);
 }
