@@ -140,10 +140,12 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(d->ui.chatArea, SIGNAL(zoomFactorChanged(qreal)), SIGNAL(zoomFactorChanged(qreal)));
     initChatArea();
 
-    loadSpellCheckingOption();
-
     d->pausedStateTimer = new QTimer(this);
     d->pausedStateTimer->setSingleShot(true);
+
+    // Spellchecking set up will trigger textChanged() signal of d->ui.sendMessageBox
+    // and our handler checks state of the timer created above.
+    loadSpellCheckingOption();
 
     // make the sendMessageBox a focus proxy for the chatview
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
@@ -942,13 +944,21 @@ void ChatWidget::saveSpellCheckingOption()
 
 void ChatWidget::loadSpellCheckingOption()
 {
+    // KTextEdit::setSpellCheckingLanguage() (see call below) does not do anything if there
+    // is no highlighter created yet, and KTextEdit::setCheckSpellingEnabled() does not create
+    // it if there is no focus on widget.
+    // Therefore d->ui.sendMessageBox->setSpellCheckingLanguage() call below would be is ignored.
+    // While this looks like KTextEditor bug (espesially taking into account its documentation),
+    // just a call to KTextEditor::createHighlighter() before setting language fixes this
+    d->ui.sendMessageBox->createHighlighter();
+
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktp-text-uirc"));
     KConfigGroup configGroup = config->group(d->channel->targetId());
     QString spellCheckingLanguage;
     if (configGroup.exists()) {
         spellCheckingLanguage = configGroup.readEntry("language");
     } else {
-	spellCheckingLanguage = Sonnet::Speller().defaultLanguage();
+        spellCheckingLanguage = Sonnet::Speller().defaultLanguage();
     }
     d->ui.sendMessageBox->setSpellCheckingLanguage(spellCheckingLanguage);
 }
