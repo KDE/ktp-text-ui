@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=YouTube Preview
+Name[ca]=Vista prèvia de YouTube
 Name[cs]=Náhled YouTube
 Name[de]=YouTube-Vorschau
 Name[el]=Προεπισκόπηση YouTube
@@ -26,6 +27,7 @@ Name[uk]=Попередній перегляд YouTube
 Name[x-test]=xxYouTube Previewxx
 Name[zh_TW]=YouTube 預覽
 Comment=If any messages contains a link to a YouTube video, it will embed a preview in the chat
+Comment[ca]=Si qualsevol missatge conté un enllaç a un vídeo de YouTube, s'encastarà una vista prèvia en el xat
 Comment[el]=Στα μηνύματα που περιέχουν σύνδεσμο σε YouTube βίντεο, θα ενσωματώνεται η προεπισκόπηση στη συνομιλία
 Comment[es]=Si un mensaje contiene un enlace a un vídeo de YouTube, esta opción incrustará una vista previa en la conversación.
 Comment[fi]=Jos saapuvassa viestissä on linkki YouTube-videoon, keskusteluun upotetaan esikatselu videosta

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Text Formatting
+Name[ca]=Formatació de text
 Name[cs]=Formátování textu
 Name[de]=Textformatierung
 Name[el]=Διαμόρφωση κειμένου
@@ -28,6 +29,7 @@ Name[uk]=Форматування тексту
 Name[x-test]=xxText Formattingxx
 Name[zh_TW]=文字格式
 Comment=Use /, _, * and - to make text italic, underlined, bold or strikeout respectively
+Comment[ca]=Usa /, _, * i - per convertir el text a itàlic, subratllat, negreta o tatxat respectivament
 Comment[cs]=Použít /,_, * a - pro kurzívu, podtržený, tučný a přeškrtnutý text
 Comment[de]=Mit „/“, „_“, “*“ und „-“ wird Text geneigt, unterstrichen, fett oder durchgestrichen dargestellt
 Comment[el]=Χρησιμοποιήστε /, _, * και - για πλάγιους, υπογραμμισμένους, έντονους ή με επιγράμμιση χαρακτήρες αντίστοιχα
