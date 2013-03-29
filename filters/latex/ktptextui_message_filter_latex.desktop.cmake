@@ -14,5 +14,5 @@ X-KDE-PluginInfo-EnabledByDefault=false
 X-KDE-PluginInfo-Weight=10
 X-KTp-PluginInfo-Version=@KTP_MESSAGE_FILTER_FRAMEWORK_VERSION@
 
-Name=Latex Renderer
+Name=LaTeX Renderer
 Comment=If incoming messages contain LaTeX between $$, it will render it directly into the chat.

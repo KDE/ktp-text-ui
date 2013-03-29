@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Latex header:</string>
+      <string>LaTeX header:</string>
      </property>
     </widget>
    </item>
@@ -36,7 +36,7 @@
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Latex command line:</string>
+      <string>LaTeX command line:</string>
      </property>
     </widget>
    </item>
