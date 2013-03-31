@@ -45,6 +45,7 @@ Encoding=UTF-8
 Type=Service
 Comment=Expand a KDE-shortened URI into a URL (i.e. typing wp:KDE will translate to http://en.wikipedia.org/wiki/KDE)
 Comment[ca]=Expandeix un URI retallat pel KDE en un URL (p. ex. teclejant wp:KDE es traduirà a http://en.wikipedia.org/wiki/KDE)
+Comment[da]=Fold en KDE-forkortet URI ud til en URL (dvs. at skrive wp:KDE vil blive til http://en.wikipedia.org/wiki/KDE)
 Comment[el]=Αναπτύξτε μια KDE συντόμευση ενός URI σε URL (δηλ. αν πληκτρολογήσετε wp:KDE θα μεταφραστεί σε http://en.wikipedia.org/wiki/KDE)
 Comment[es]=Expande una URI abreviada de KDE en una URL (por ejemplo, escribir wp:KDE se traducirá a http://en.wikipedia.org/wiki/KDE)
 Comment[ia]=Expande un URI abbreviate de KDE in un URL (i.e. typar wp:KDE il traducera se mesme in http://en.wikipedia.org/wiki/KDE)
