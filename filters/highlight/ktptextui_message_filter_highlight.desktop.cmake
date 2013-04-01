@@ -15,6 +15,7 @@ X-KDE-PluginInfo-Weight=10
 X-KTp-PluginInfo-Version=@KTP_MESSAGE_FILTER_FRAMEWORK_VERSION@
 
 Name=Highlight
+Name[bs]=Naznačavanje
 Name[ca]=Ressaltat
 Name[cs]=Zvýraznění
 Name[da]=Fremhævning
@@ -49,6 +50,7 @@ Name[uk]=Підсвічування
 Name[x-test]=xxHighlightxx
 Name[zh_TW]=高亮度
 Comment=If any incoming messages contain your nickname, it will highlight them in red
+Comment[bs]=Ako dolazna poruka sadrži vaš nadimak, bit će naznačena crvenom bojom
 Comment[ca]=Si qualsevol missatge entrant conté el vostre sobrenom, es ressaltarà en vermell.
 Comment[da]=Hvis indkommende beskeder indeholder dit kaldenavn, vil de blive fremhævet med rødt
 Comment[el]=Τα εισερχόμενα μηνύματα που περιέχουν το ψευδώνυμό σας, θα τονίζονται με κόκκινο

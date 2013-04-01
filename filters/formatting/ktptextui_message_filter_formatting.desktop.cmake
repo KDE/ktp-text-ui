@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Text Formatting
+Name[bs]=Formatiranje teksta
 Name[ca]=Formatació de text
 Name[cs]=Formátování textu
 Name[da]=Tekstformatering
@@ -30,6 +31,7 @@ Name[uk]=Форматування тексту
 Name[x-test]=xxText Formattingxx
 Name[zh_TW]=文字格式
 Comment=Use /, _, * and - to make text italic, underlined, bold or strikeout respectively
+Comment[bs]=Koristite _, * i - da napravite tekst kurzivnim, podebljanim ili precrtanim
 Comment[ca]=Usa /, _, * i - per convertir el text a itàlic, subratllat, negreta o tatxat respectivament
 Comment[cs]=Použít /,_, * a - pro kurzívu, podtržený, tučný a přeškrtnutý text
 Comment[da]=Brug /, _, * og - til at lave hhv. kursiv, fed eller overstreget
