@@ -129,7 +129,7 @@ TextChatConfig::TextChatConfig() :
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
     KConfigGroup behaviorConfig = config->group("Behavior");
 
-    QString mode = behaviorConfig.readEntry("tabOpenMode", "NewWindow");
+    QString mode = behaviorConfig.readEntry("tabOpenMode", "FirstWindow");
     if(mode == QLatin1String("NewWindow")) {
         d->m_openMode = TextChatConfig::NewWindow;
     } else {
