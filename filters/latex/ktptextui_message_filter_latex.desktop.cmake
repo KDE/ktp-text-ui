@@ -15,6 +15,8 @@ X-KDE-PluginInfo-Weight=10
 X-KTp-PluginInfo-Version=@KTP_MESSAGE_FILTER_FRAMEWORK_VERSION@
 
 Name=LaTeX Renderer
+Name[el]=Πρόγραμμα αποτύπωσης LaTeX
+Name[es]=Renderizador de LaTeX
 Name[it]=Visualizzatore LaTeX
 Name[kk]=LaTeX кескіндегіші
 Name[pt]=Representação em LaTeX
@@ -23,6 +25,8 @@ Name[sv]=Latex-återgivning
 Name[uk]=Показ формул LaTeX
 Name[x-test]=xxLaTeX Rendererxx
 Comment=If incoming messages contain LaTeX between $$, it will render it directly into the chat.
+Comment[el]=Αν τα εισερχόμενα μηνύματα περιέχουν LaTeX ανάμεσα σε $$, η αποτύπωση θα γίνεται απευθείας στη συνομιλία.
+Comment[es]=Si un mensaje recibido contiene código LaTeX entre $$, éste se renderizará directamente en el chat.
 Comment[it]=Se in un messaggio c'è codice LaTeX dentro $$...$$, sarà visualizzato direttamente nella finestra di chat
 Comment[pt]=Se as mensagens recebidas tiverem código em LaTeX entre $$, o mesmo será desenhado directamente na conversa.
 Comment[pt_BR]=Se existir código em LaTeX entre $$ nas mensagens recebidas, ele será mostrado no bate-papo.
