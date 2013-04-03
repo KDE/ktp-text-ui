@@ -25,7 +25,9 @@
     <widget class="QPlainTextEdit" name="kcfg_LatexHeader">
      <property name="plainText">
       <string>\documentclass{minimal}
+\usepackage{color}
 \pagestyle{empty}
+\color{black}
 </string>
      </property>
     </widget>

@@ -10,7 +10,9 @@
         </entry>
         <entry name="LatexHeader" type="String">
             <default>\documentclass{minimal}
+\usepackage{color}
 \pagestyle{empty}
+\color{black}
 </default>
         </entry>
     </group>
