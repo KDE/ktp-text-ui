@@ -24,6 +24,7 @@ Name[es]=Realce
 Name[et]=Esiletõstmine
 Name[fi]=Korostus
 Name[fr]=Surligner
+Name[hu]=Kiemelés
 Name[ia]=Evidentia
 Name[it]=Evidenziazione
 Name[kk]=Бояп белгілеген

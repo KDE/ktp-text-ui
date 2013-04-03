@@ -8,6 +8,7 @@ Name[el]=Προεπισκόπηση YouTube
 Name[es]=Vista previa de YouTube
 Name[fi]=YouTube-esikatselu
 Name[fr]=Aperçu YouTube
+Name[hu]=YouTube előnézet
 Name[ia]=Vista preliminar de YouTube
 Name[it]=Anteprima di YouTube
 Name[kk]=YouTube алдың-аласы
