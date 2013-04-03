@@ -9,10 +9,7 @@
             <default>latex -interaction=batchmode -halt-on-error</default>
         </entry>
         <entry name="LatexHeader" type="String">
-            <default>\documentclass{standalone}
-\usepackage{color}
-\usepackage{amsmath,latexsym,amsfonts,amssymb,ulem}
-\usepackage{graphicx}
+            <default>\documentclass{minimal}
 \pagestyle{empty}
 </default>
         </entry>
