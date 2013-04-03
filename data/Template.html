@@ -293,9 +293,11 @@
             if (windowHeight > 0) {
                 var contentElement = document.getElementById('Chat');
                 var contentHeight = contentElement.offsetHeight;
-                if (windowHeight - contentHeight > 0) {
+                var margin = parseFloat(document.defaultView.getComputedStyle(document.body, null).getPropertyValue("margin-bottom"));
+                var location = windowHeight - contentHeight - margin;
+                if (location > 0) {
                     contentElement.style.position = 'relative';
-                    contentElement.style.top = (windowHeight - contentHeight) + 'px';
+                    contentElement.style.top = location + 'px';
                 } else {
                     contentElement.style.position = 'static';
                 }
