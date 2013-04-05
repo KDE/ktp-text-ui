@@ -42,7 +42,7 @@ void LatexFilter::filterMessage(KTp::Message &message, const KTp::MessageContext
 {
     Q_UNUSED(context);
 
-    const QString messageText = message.mainMessagePart();
+    QString messageText = message.mainMessagePart();
     if (!messageText.contains(QLatin1String("$$"))) {
         return;
     }
@@ -50,48 +50,31 @@ void LatexFilter::filterMessage(KTp::Message &message, const KTp::MessageContext
     QRegExp rg(QLatin1String("\\$\\$.+\\$\\$"));
     rg.setMinimal(true);
 
-    QMap<QString, QString> replaceMap;
     int pos = 0;
-    while (pos >= 0 && pos < messageText.length()) {
-        pos = rg.indexIn(messageText, pos);
+    while ((pos = rg.indexIn(messageText, pos)) != -1) {
+        QString formula = rg.cap();
+        // remove the $$ delimiters on start/end
+        formula.remove(QLatin1String("$$"));
 
-        if (pos >= 0) {
-            const QString match = rg.cap(0);
-            pos += rg.matchedLength();
+        // we can skip totally empty/whitespace-only formulas
+        formula = formula.trimmed();
 
-            QString formul = match;
-            // first remove the $$ delimiters on start and end
-            formul.remove(QLatin1String("$$"));
-            // then trim the result, so we can skip totally empty/whitespace-only formulas
-            formul = formul.trimmed();
-            if (formul.isEmpty() || !securityCheck(formul)) {
-                continue;
-            }
-
-            // get the image and encode it with base64
-            replaceMap[match] = handleLatex(formul);
-        }
-    }
-
-    if (replaceMap.isEmpty()) {
-        // we haven't found any LaTeX strings
-        return;
-    }
-
-    for (QMap<QString, QString>::ConstIterator it = replaceMap.constBegin(); it != replaceMap.constEnd(); ++it) {
-        QImage theImage(*it);
-        if (theImage.isNull()) {
+        if (formula.isEmpty() || !isSafe(formula)) {
             continue;
         }
 
-        message.appendMessagePart(
-                QLatin1Literal("<br/>") %
-                QLatin1Literal("<img src=\"") %
-                (*it) %
-                QLatin1Literal("\" style=\"max-width:100%;margin-top:3px\" alt=\"") %
-                QLatin1Literal("\" />")
-        );
+        QString image(QLatin1Literal("<img src=\"data:image/png;base64,") %
+        handleLatex(formula) %
+        QLatin1Literal("\" style=\"max-width:100%;margin-top:3px\" alt=\"") %
+        QLatin1Literal("\" />"));
+
+        int length = rg.matchedLength();
+        messageText.replace(pos, length, image);
+
+        pos += length;
     }
+
+    message.setMainMessagePart(messageText);
 }
 
 QString LatexFilter::handleLatex(const QString &latexFormula)
@@ -168,10 +151,15 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
         return QString();
     }
 
-    return imageFile;
+    // Encode the image to base64
+    QFile file(imageFile);
+    file.open(QIODevice::ReadOnly);
+    QByteArray image = file.readAll();
+
+    return QString::fromAscii(image.toBase64());
 }
 
-bool LatexFilter::securityCheck(const QString &latexFormula)
+bool LatexFilter::isSafe(const QString &latexFormula)
 {
     return !latexFormula.contains(QRegExp(QLatin1String(
         "\\\\(def|let|futurelet|newcommand|renewcomment|else|fi|write|input|include"

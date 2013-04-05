@@ -19,8 +19,6 @@
 #ifndef LATEX_FILTER_H
 #define LATEX_FILTER_H
 
-#include <QColor>
-
 #include <KTemporaryFile>
 
 #include <KTp/abstract-message-filter.h>
@@ -35,7 +33,7 @@ public:
     virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
 
 private:
-    bool securityCheck(const QString &latexFormula);
+    bool isSafe(const QString &latexFormula);
     QString handleLatex(const QString &latexFormula);
     QList<KTemporaryFile *> m_tempFiles;
 
