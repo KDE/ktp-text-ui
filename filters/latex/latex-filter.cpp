@@ -65,8 +65,10 @@ void LatexFilter::filterMessage(KTp::Message &message, const KTp::MessageContext
 
         QString image(QLatin1Literal("<img src=\"data:image/png;base64,") %
         handleLatex(formula) %
-        QLatin1Literal("\" style=\"max-width:100%;margin-top:3px\" alt=\"") %
-        QLatin1Literal("\" />"));
+        QLatin1Literal("\" style=\"max-width:100%;margin-top:3px\"") %
+        QLatin1Literal("alt=\"") %
+        formula %
+        QLatin1Literal("\" isEmotion=\"true\"/>"));
 
         int length = rg.matchedLength();
         messageText.replace(pos, length, image);
