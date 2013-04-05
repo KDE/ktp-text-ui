@@ -88,16 +88,15 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
                     .arg(latexFormula));
     latexText.append(QLatin1String("\\end{document}"));
 
-    KTemporaryFile *texFile(new KTemporaryFile);
-    texFile->setPrefix(QLatin1String("ktplatex-"));
-    texFile->setSuffix(QLatin1String(".tex"));
-    if (!texFile->open()) {
+    KTemporaryFile texFile;
+    texFile.setPrefix(QLatin1String("ktplatex-"));
+    texFile.setSuffix(QLatin1String(".tex"));
+    if (!texFile.open()) {
       kError() << "Cannot create the TeX file";
       return QString();
     }
-    texFile->write(latexText.toAscii());
-    texFile->close();
-    m_tempFiles << texFile;
+    texFile.write(latexText.toAscii());
+    texFile.close();
 
     if (LatexConfig::latexCmd().isEmpty()) {
         kError() << "No TeX compiler set!";
@@ -111,7 +110,7 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
     }
     const KStandardDirs outputDir;
     latexArgs << QString(QLatin1String("-output-directory=%1")).arg(outputDir.resourceDirs("tmp").first());
-    latexArgs << texFile->fileName();
+    latexArgs << texFile.fileName();
 
     if (KStandardDirs::findExe(latexCmd.first()).isEmpty()) {
         kError() << "Cannot find the TeX" << latexCmd.first() << " program.\n;"
@@ -136,8 +135,8 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
         return QString();
     }
 
-    const QString dviFile = texFile->fileName().replace(QLatin1String(".tex"),QLatin1String(".dvi"));
-    const QString imageFile = texFile->fileName().replace(QLatin1String(".tex"),QLatin1String(".png"));
+    const QString dviFile = texFile.fileName().replace(QLatin1String(".tex"), QLatin1String(".dvi"));
+    const QString imageFile = texFile.fileName().replace(QLatin1String(".tex"), QLatin1String(".png"));
 
     QStringList dvipngArgs;
     dvipngArgs << QLatin1String("-D300");
@@ -158,6 +157,12 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
     file.open(QIODevice::ReadOnly);
     QByteArray image = file.readAll();
 
+    // We don't need the files anymore
+    QFile::remove(dviFile);
+    QFile::remove(imageFile);
+    QFile::remove(texFile.fileName().replace(QLatin1String(".tex"), QLatin1String(".aux")));
+    QFile::remove(texFile.fileName().replace(QLatin1String(".tex"), QLatin1String(".log")));
+
     return QString::fromAscii(image.toBase64());
 }
 
@@ -173,7 +178,6 @@ bool LatexFilter::isSafe(const QString &latexFormula)
 
 LatexFilter::~LatexFilter()
 {
-    qDeleteAll(m_tempFiles);
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<LatexFilter>();)

@@ -35,7 +35,6 @@ public:
 private:
     bool isSafe(const QString &latexFormula);
     QString handleLatex(const QString &latexFormula);
-    QList<KTemporaryFile *> m_tempFiles;
 
 };
 
