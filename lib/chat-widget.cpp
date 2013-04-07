@@ -275,11 +275,6 @@ void ChatWidget::keyPressEvent(QKeyEvent *e)
         return;
     }
 
-    if (e->key() == Qt::Key_Escape && d->ui.searchBar->isVisible()) {
-        d->ui.searchBar->toggleView(false);
-        return;
-    }
-
     if (e->key() == Qt::Key_PageUp ||
         e->key() == Qt::Key_PageDown) {
         d->ui.chatArea->event(e);
