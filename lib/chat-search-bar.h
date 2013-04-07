@@ -52,6 +52,9 @@ public Q_SLOTS:
     /** toggle search bar visibility */
     void toggleView(bool toggle);
 
+protected:
+    bool event(QEvent *e);
+
 private Q_SLOTS:
     /** called when user writes in search bar
      * this emits a signal for chat-window with the text to search for

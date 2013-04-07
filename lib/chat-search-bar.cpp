@@ -30,6 +30,8 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 
+#include <QtGui/QKeyEvent>
+
 ChatSearchBar::ChatSearchBar(QWidget *parent)
     : QWidget(parent)
     , m_searchInput(new KLineEdit(this))
@@ -153,6 +155,18 @@ void ChatSearchBar::toggleView(bool toggle)
         show();
         m_searchInput->setFocus();
     }
+}
+
+bool ChatSearchBar::event(QEvent *e)
+{
+    if (e->type() == QEvent::ShortcutOverride && static_cast<QKeyEvent*>(e)->key() == Qt::Key_Escape) {
+        if (isVisible()) {
+            setVisible(false);
+            e->accept();
+            return true;
+        }
+    }
+    return false;
 }
 
 void ChatSearchBar::textChanged(const QString& text)
