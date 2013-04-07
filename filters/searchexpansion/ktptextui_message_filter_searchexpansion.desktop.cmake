@@ -65,6 +65,7 @@ Comment[sv]=Expandera webbadress avkortad av KDE (dvs. att skriva wp:KDE övers�
 Comment[tr]=KDE kısaltılmış bir URI'i URL'ye genişlet (örn. wp:KDE yazmak bunu http://en.wikipedia.org/wiki/KDE haline getirecektir)
 Comment[uk]=Доповнення вебскорочень адрес KDE до повноцінних адрес (тобто текст wp:KDE буде доповнено до http://en.wikipedia.org/wiki/KDE)
 Comment[x-test]=xxExpand a KDE-shortened URI into a URL (i.e. typing wp:KDE will translate to http://en.wikipedia.org/wiki/KDE)xx
+Comment[zh_CN]=展开 KDE 的短连接为完整链接 (例如输入 wp:KDE 将会转换为 http://en.wikipedia.org/wiki/KDE)
 Comment[zh_TW]=展開 KDE 短網址變成實際網址（例：輸入 wp:KDE 會轉變成 http://en.wikipedia.org/wiki/KDE）
 ServiceTypes=KTpTextUi/MessageFilter
 
