@@ -16,6 +16,7 @@ X-KTp-PluginInfo-Version=@KTP_MESSAGE_FILTER_FRAMEWORK_VERSION@
 
 Name=LaTeX Renderer
 Name[da]=LaTeX-rendering
+Name[de]=LaTeX-Renderer
 Name[el]=Πρόγραμμα αποτύπωσης LaTeX
 Name[es]=Renderizador de LaTeX
 Name[hu]=LaTeX renderelő
