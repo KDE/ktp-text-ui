@@ -84,15 +84,7 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
         }
     }
 
-    //truncate message if necessary
-    QString notifyText = message.mainMessagePart().simplified();
-    if (notifyText.length() > 170) {
-        //search for the closest space in text
-        notifyText.truncate(notifyText.indexOf(QLatin1Char(' '), 150));
-        notifyText.append(QLatin1String("..."));
-    }
-    notification->setText(notifyText);
-
+    notification->setText(message.mainMessagePart().simplified());
 
     notification->setActions(QStringList(i18n("View")));
     connect(notification, SIGNAL(activated(uint)), m_widget, SIGNAL(notificationClicked()));
