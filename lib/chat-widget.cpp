@@ -30,6 +30,7 @@
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
+#include <QSortFilterProxyModel>
 
 #include <KColorDialog>
 #include <KNotification>
@@ -127,7 +128,12 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
         d->ui.sendMessageBox->setContactModel(d->contactModel);
     }
 
-    d->ui.contactsView->setModel(d->contactModel);
+    QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(this);
+    sortModel->setSourceModel(d->contactModel);
+    sortModel->setSortRole(Qt::DisplayRole);
+    sortModel->setDynamicSortFilter(true);
+
+    d->ui.contactsView->setModel(sortModel);
 
     d->yourName = channel->groupSelfContact()->alias();
 
