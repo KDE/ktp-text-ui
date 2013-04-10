@@ -52,7 +52,6 @@ Comment[ia]=Expande un URI abbreviate de KDE in un URL (i.e. typar wp:KDE il tra
 Comment[it]=Espande un URI abbreviato di KDE in un URL (ad es. wp:KDE sarà trasformato in http://it.wikipedia.org/wiki/KDE)
 Comment[kk]=KDE-қыөсқарма URI-ды толық URL-ге аудару (мысалы, wp:KDE дегені http://en.wikipedia.org/wiki/KDE болады)
 Comment[nl]=Expandeer een door KDE afgekorte URI in een URL (bijv. typen van wp:KDE wordt vertaald in http://en.wikipedia.org/wiki/KDE)
-Comment[pl]=Rozwiń skrócone przez KDE adresy URI do adresów URL (np. po wpisaniu wp:KDE zostanie to przetłumaczone na http://en.wikipedia.org/wiki/KDE)
 Comment[pt]=Expandir um URI curto no KDE para um URL (i.e., se escrever wp:KDE, será traduzido para http://en.wikipedia.org/wiki/KDE)
 Comment[pt_BR]=Expandir uma URI curta no KDE para uma URL (p.ex., se digitar wp:KDE, será traduzido para http://en.wikipedia.org/wiki/KDE)
 Comment[ru]=Дополнение веб-сокращений адресов KDE до полноценных (например, вместо wp: KDE будет показан http://en.wikipedia.org/wiki/KDE)
