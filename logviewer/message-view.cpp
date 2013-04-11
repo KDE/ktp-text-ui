@@ -174,13 +174,22 @@ void MessageView::processStoredEvents()
 
 void MessageView::onLinkClicked(const QUrl &link)
 {
+    // Don't emit the signal directly, KWebView does not like when we reload the
+    // page from an event handler (and then chain up) and we can't guarantee
+    // that everyone will use QueuedConnection when connecting to
+    // conversationSwitchRequested() slot
+
     if (link.fragment() == QLatin1String("x-nextConversation")) {
-        Q_EMIT conversationSwitchRequested(m_next);
+        // Q_EMIT conversationSwitchRequested(m_next)
+        QMetaObject::invokeMethod(this, "conversationSwitchRequested", Qt::QueuedConnection,
+            Q_ARG(QDate, m_next));
         return;
     }
 
     if (link.fragment() == QLatin1String("x-prevConversation")) {
-        Q_EMIT conversationSwitchRequested(m_prev);
+        // Q_EMIT conversationSwitchRequested(m_prev)
+        QMetaObject::invokeMethod(this, "conversationSwitchRequested", Qt::QueuedConnection,
+            Q_ARG(QDate, m_prev));
         return;
     }
 
