@@ -20,7 +20,7 @@
 #ifndef ADIUMTHEMEVIEW_H
 #define ADIUMTHEMEVIEW_H
 
-#include <QtWebKit/QWebView>
+#include <KWebView>
 
 #include "adium-theme-header-info.h"
 #include "adium-theme-content-info.h"
@@ -38,7 +38,7 @@ class QContextMenuEvent;
 
 class KAction;
 
-class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public QWebView
+class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public KWebView
 {
     Q_OBJECT
 public:
