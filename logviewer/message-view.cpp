@@ -102,6 +102,10 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
     initialise(headerInfo);
 }
 
+bool operator<(const Tpl::EventPtr &e1, const Tpl::EventPtr &e2)
+{
+    return e1->timestamp() < e2->timestamp();
+}
 
 void MessageView::processStoredEvents()
 {
@@ -113,6 +117,10 @@ void MessageView::processStoredEvents()
 
         addStatusMessage(message);
     }
+
+    // See https://bugs.kde.org/show_bug.cgi?id=317866
+    // Uses the operator< overload above
+    qSort(m_events);
 
     while (!m_events.isEmpty()) {
 
