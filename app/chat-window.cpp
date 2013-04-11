@@ -706,7 +706,6 @@ void ChatWindow::setupCustomActions()
                 QList<QKeySequence>() << QKeySequence(Qt::Key_Return) << QKeySequence(Qt::Key_Enter),
                 KAction::DefaultShortcut);
     m_sendMessage->setShortcutConfigurable(true);
-    connect(m_sendMessage, SIGNAL(triggered()), SLOT(sendCurrentTabMessage()));
     connect(m_sendMessage, SIGNAL(changed()), SLOT(updateSendMessageShortcuts()));
 
     // add custom actions to the collection
