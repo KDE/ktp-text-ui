@@ -52,6 +52,7 @@ Comment[hu]=Bejövő üzenetek felolvasása a szövegfelolvasó szolgáltatás h
 Comment[ia]=Lege in alte voce messages per usar le servicio de text-to-speech (ab texto a parola)
 Comment[it]=Leggi i messaggi in arrivo usando il servizio di sintesi vocale
 Comment[kk]=Келген хабарламаларды мәтінді дауыстап оқу қызметі көмегімен оқу
+Comment[lt]=Skaityti gaunamas žinutes naudojant tekstas-į-kalbą paslaugą
 Comment[nb]=Les opp innkommend meldinger med tekst-til-tale-tjeneste
 Comment[nl]=Spreek het inkomende bericht uit met de tekst-tot-spraak-dienst
 Comment[pl]=Odczytuj przychodzące wiadomości używając usługi tekstu-na-mowę

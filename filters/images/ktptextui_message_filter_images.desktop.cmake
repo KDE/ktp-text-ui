@@ -56,6 +56,7 @@ Comment[hu]=Bélyegkép beágyazása bármely képhivatkozáshoz, amelyet a csev
 Comment[ia]=Incorpora un miniatura de ulle URL de imagine inviate in un conversation
 Comment[it]=Include miniature degli URL di immagini inviati in una chat
 Comment[kk]=Чаттағы жіберілген кескін URL-інде нобайы болсын
+Comment[lt]=Įjungti miniatiūras kiekvieno paveikslėlio URL atsiuntame pokalbyje
 Comment[nb]=Bygg inn et minibilde av enhver bilde-URL sent i en prat
 Comment[nl]=Een miniatuur of elke verzonden URL van een afbeelding inbedden in een chat
 Comment[pl]=Osadź miniaturę jakiegokolwiek adresu URL obrazu w oknie rozmowy
