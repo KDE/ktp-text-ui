@@ -168,7 +168,7 @@ void ChatWindow::focusChat(ChatTab *tab)
     m_tabWidget->setCurrentWidget(tab);
 }
 
-ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
+ChatTab* ChatWindow::getTab(const Tp::AccountPtr &account, const Tp::TextChannelPtr &incomingTextChannel)
 {
     ChatTab *match = 0;
 
@@ -184,8 +184,9 @@ ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
             Q_ASSERT(auxChatTab);
 
             // check for duplicate chat
-            if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
-            && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
+            if (auxChatTab->account() == account
+                && auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
+                && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
                 match = auxChatTab;
             }
         }

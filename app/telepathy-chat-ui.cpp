@@ -119,7 +119,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     //search for any tabs which are already handling this channel.
     for (int i = 0; i < m_chatWindows.count() && !tabFound; ++i) {
         ChatWindow *window = m_chatWindows.at(i);
-        ChatTab* tab = window->getTab(textChannel);
+        ChatTab* tab = window->getTab(account, textChannel);
 
         if (tab) {
             tabFound = true;
