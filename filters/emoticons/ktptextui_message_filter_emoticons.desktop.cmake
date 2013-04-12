@@ -59,6 +59,7 @@ Comment[hu]=Hangulatjelek (smiley arcok) megjelenítése a csevegésen belül
 Comment[ia]=Monstra emoticones (facias surridente) intra le conversation
 Comment[it]=Mostra emoticon (faccine) nella chat
 Comment[kk]=Көңіл күйі белгілерді чатта көрсету
+Comment[lt]=Rodyti šypsenėles pokalbio viduje
 Comment[nb]=Vis humørfjes (emotikoner) inne i praten
 Comment[nl]=Emoticons tonen (lachende gezichtjes) in de chat
 Comment[pl]=Pokaż emotikony (buźki) wewnątrz okna rozmowy
