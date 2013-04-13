@@ -5,6 +5,7 @@ Name[ca]=Informació del Bugzilla
 Name[da]=Bugzilla-information
 Name[el]=Πληροφορίες Bugzilla
 Name[es]=Información de Bugzilla
+Name[fi]=Bugzilla-tiedot
 Name[hu]=Bugzilla információk
 Name[ia]=Information de Bugzilla
 Name[it]=Informazioni di Bugzilla
