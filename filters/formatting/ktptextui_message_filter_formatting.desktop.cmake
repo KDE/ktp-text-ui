@@ -42,6 +42,7 @@ Comment[da]=Brug /, _, * og - til at lave hhv. kursiv, fed eller overstreget
 Comment[de]=Mit „/“, „_“, “*“ und „-“ wird Text geneigt, unterstrichen, fett oder durchgestrichen dargestellt
 Comment[el]=Χρησιμοποιήστε /, _, * και - για πλάγιους, υπογραμμισμένους, έντονους ή με επιγράμμιση χαρακτήρες αντίστοιχα
 Comment[es]=Utilice /, _, * y - para poner el texto en cursiva, subrayado, negrita o tachado respectivamente
+Comment[fi]=Käytä merkkejä /, _, * ja - tekstin kursivointiin, alleviivaamiseen, lihavoittamiseen tai yliviivaamiseen
 Comment[hu]=A /, _, * és - használatával teheti a szöveget döntötté, aláhúzottá, félkövérré vagy áthúzottá
 Comment[ia]=Usa /,_,* e - pro facer texto cursive, sublineate, grasse o strikeout respectivemente
 Comment[it]=Usa /, _, * e - per rendere il testo rispettivamente corsivo, sottolineato, grassetto o barrato
