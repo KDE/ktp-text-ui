@@ -354,7 +354,46 @@ void AdiumThemeView::clear()
     }
 }
 
-void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessage)
+void AdiumThemeView::addMessage(const KTp::Message &message)
+{
+    if (message.type() == Tp::ChannelTextMessageTypeAction) {
+        addStatusMessage(QString::fromLatin1("%1 %2").arg(message.senderAlias(), message.mainMessagePart()));
+    } else {
+        AdiumThemeContentInfo messageInfo;
+        if (message.direction() == KTp::Message::RemoteToLocal) {
+            messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::RemoteToLocal);
+        } else {
+            messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::LocalToRemote);
+        }
+
+        messageInfo.setMessage(message.finalizedMessage());
+        messageInfo.setScript(message.finalizedScript());
+
+        messageInfo.setTime(message.time());
+
+        if (message.property("highlight").toBool()) {
+            messageInfo.appendMessageClass(QLatin1String("mention"));
+        }
+        messageInfo.setSenderDisplayName(message.senderAlias());
+        messageInfo.setSenderScreenName(message.senderId());
+        if (message.sender()) {
+            messageInfo.setUserIconPath(message.sender()->avatarData().fileName);
+        }
+
+        addAdiumContentMessage(messageInfo);
+    }
+}
+
+void AdiumThemeView::addStatusMessage(const QString &text, const QDateTime &time)
+{
+    AdiumThemeStatusInfo messageInfo;
+    messageInfo.setMessage(text);
+    messageInfo.setTime(time);
+//    messageInfo.setStatus(QLatin1String("error")); //port this?
+    addAdiumStatusMessage(messageInfo);
+}
+
+void AdiumThemeView::addAdiumContentMessage(const AdiumThemeContentInfo &contentMessage)
 {
     QString styleHtml;
     bool consecutiveMessage = false;
@@ -422,7 +461,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
     appendMessage(styleHtml, message.script(), mode);
 }
 
-void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
+void AdiumThemeView::addAdiumStatusMessage(const AdiumThemeStatusInfo& statusMessage)
 {
     QString styleHtml;
     bool consecutiveMessage = false;
@@ -713,3 +752,5 @@ const QString AdiumThemeView::variantPath() const
 {
     return m_variantPath;
 }
+
+

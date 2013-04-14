@@ -32,6 +32,8 @@
 #include <TelepathyQt/PendingOperation>
 #include <TelepathyQt/PendingContacts>
 
+#include <KTp/contact.h>
+
 #include <QPixmap>
 
 EntityModel::EntityModel(QObject *parent) :
@@ -204,7 +206,7 @@ void EntityModel::onEntityContactRetrieved(Tp::PendingOperation *operation)
             item = parent->item(itemRow);
 
             if (item->data(EntityModel::IdRole).toString() == contact->id()) {
-                item->setData(QVariant::fromValue(contact), EntityModel::ContactRole);
+                item->setData(QVariant::fromValue(KTp::ContactPtr::qObjectCast(contact)), EntityModel::ContactRole);
                 break;
             }
 

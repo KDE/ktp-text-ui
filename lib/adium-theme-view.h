@@ -27,6 +27,8 @@
 
 #include <KEmoticons>
 
+#include <KTp/message.h>
+
 #include "ktpchat_export.h"
 
 class AdiumThemeContentInfo;
@@ -92,10 +94,13 @@ public:
     void clear();
 
 public Q_SLOTS:
-    void addContentMessage(const AdiumThemeContentInfo&);
-    void addStatusMessage(const AdiumThemeStatusInfo&);
+    void addMessage(const KTp::Message &message);
+    void addStatusMessage(const QString &text, const QDateTime &time=QDateTime::currentDateTime());
     void onOpenLinkActionTriggered();
     virtual void onLinkClicked(const QUrl &);
+
+    void addAdiumContentMessage(const AdiumThemeContentInfo&);
+    void addAdiumStatusMessage(const AdiumThemeStatusInfo&);
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);

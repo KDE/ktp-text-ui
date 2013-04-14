@@ -111,43 +111,13 @@ void MessageView::processStoredEvents()
         message.setService(m_account->serviceName());
         message.setTime(QDateTime(m_prev));
 
-        addStatusMessage(message);
+        addAdiumStatusMessage(message);
     }
 
     while (!m_events.isEmpty()) {
-
         const Tpl::TextEventPtr textEvent(m_events.takeFirst().staticCast<Tpl::TextEvent>());
-
-        AdiumThemeMessageInfo::MessageType type;
-        QString iconPath;
-
-        if(textEvent->sender()->identifier() == m_account->normalizedName()) {
-            type = AdiumThemeMessageInfo::HistoryLocalToRemote;
-            iconPath = m_accountAvatar;
-        } else {
-            type = AdiumThemeMessageInfo::HistoryRemoteToLocal;
-            /* FIXME Add support for avatars in MUCs */
-            if (m_entity->entityType() == Tpl::EntityTypeContact) {
-                if (m_contact) {
-                    iconPath = m_contact->avatarData().fileName;
-                }
-            }
-        }
-
-        AdiumThemeContentInfo message(type);
-        message.setMessage(KTp::MessageProcessor::instance()->processIncomingMessage(textEvent, m_account, Tp::TextChannelPtr()).finalizedMessage());
-        message.setService(m_account->serviceName());
-        message.setSenderDisplayName(textEvent->sender()->alias());
-        message.setSenderScreenName(textEvent->sender()->identifier());
-        message.setTime(textEvent->timestamp());
-        message.setUserIconPath(iconPath);
-
-        kDebug()    << textEvent->timestamp()
-                    << "from" << textEvent->sender()->identifier()
-                    << "to" << textEvent->receiver()->identifier()
-                    << textEvent->message();
-
-        addContentMessage(message);
+        KTp::Message message = KTp::MessageProcessor::instance()->processIncomingMessage(textEvent, m_account, Tp::TextChannelPtr());
+        addMessage(message);
     }
 
     if (m_next.isValid()) {
@@ -155,8 +125,7 @@ void MessageView::processStoredEvents()
         message.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Next conversation")));
         message.setService(m_account->serviceName());
         message.setTime(QDateTime(m_next));
-
-        addStatusMessage(message);
+        addAdiumStatusMessage(message);
     }
 
     /* Can't highlight the text directly, we need to wait for the JavaScript in

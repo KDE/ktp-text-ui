@@ -31,6 +31,7 @@
 #include <TelepathyLoggerQt4/PendingSearch>
 
 #include <KTp/logs-importer.h>
+#include <KTp/contact.h>
 
 #include <QSortFilterProxyModel>
 #include <QWebFrame>
@@ -198,7 +199,7 @@ void LogViewer::slotUpdateMainWindow()
     nearestDates.second = m_nextConversationDate;
 
     Tpl::EntityPtr entity = currentIndex.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
-    Tp::ContactPtr contact = currentIndex.data(EntityModel::ContactRole).value<Tp::ContactPtr>();
+    KTp::ContactPtr contact = currentIndex.data(EntityModel::ContactRole).value<KTp::ContactPtr>();
     Tp::AccountPtr account = currentIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
     ui->messageView->loadLog(account, entity, contact, date, nearestDates);
 }

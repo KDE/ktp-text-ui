@@ -97,7 +97,7 @@ void LogManager::fetchLast()
     }
 
     //in all other cases finish immediately.
-    QList<AdiumThemeContentInfo> messages;
+    QList<KTp::Message> messages;
     Q_EMIT fetched(messages);
 }
 
@@ -120,7 +120,7 @@ void LogManager::onDatesFinished(Tpl::PendingOperation *po)
         Tpl::PendingEvents *events = m_logManager->queryEvents( pd->account(), pd->entity(), Tpl::EventTypeMaskAny, date);
         connect(events, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsFinished(Tpl::PendingOperation*)));
     } else {
-        QList<AdiumThemeContentInfo> messages;
+        QList<KTp::Message> messages;
         Q_EMIT fetched(messages);
     }
 }
@@ -156,45 +156,9 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
         }
     }
 
-
-    QList<AdiumThemeContentInfo> messages;
+    QList<KTp::Message> messages;
     Q_FOREACH(const Tpl::TextEventPtr &event, events) {
-        AdiumThemeMessageInfo::MessageType type;
-        Tp::ContactPtr contact;
-        if (event->sender()->identifier() == m_account->normalizedName()) {
-            type = AdiumThemeMessageInfo::HistoryLocalToRemote;
-            if (m_account->connection()) {
-                contact = m_account->connection()->selfContact();
-            }
-        } else {
-            type = AdiumThemeMessageInfo::HistoryRemoteToLocal;
-            contact = m_textChannel->targetContact();
-        }
-
-        /* When connection is dropped (account goes offline), we get an invalid
-         * contact, so we can't correctly create the message. There's no point
-         * emitting fetched() with only partial list of messages, so let's
-         * just terminate here. */
-        if (!contact) {
-            return;
-        }
-
-        AdiumThemeContentInfo message(type);
-
-        KTp::Message processedEvent = KTp::MessageProcessor::instance()->processIncomingMessage(event, m_account, m_textChannel);
-
-        message.setMessage(processedEvent.finalizedMessage());
-        message.setScript(processedEvent.finalizedScript());
-        message.setService(m_account->serviceName());
-        message.setSenderDisplayName(event->sender()->alias());
-        message.setSenderScreenName(event->sender()->alias());
-        message.setTime(event->timestamp());
-        message.setUserIconPath(contact->avatarData().fileName);
-        kDebug()    << event->timestamp()
-                    << "from" << event->sender()->identifier()
-                    << "to" << event->receiver()->identifier()
-                    << event->message();
-
+        KTp::Message message = KTp::MessageProcessor::instance()->processIncomingMessage(event, m_account, m_textChannel);
         messages.append(message);
     }
 
