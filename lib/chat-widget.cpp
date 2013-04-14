@@ -69,7 +69,7 @@ public:
     {
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
-    bool chatviewlInitialised;
+    bool chatViewInitialized;
     Tp::ChannelChatState remoteContactChatState;
     bool isGroupChat;
     QString title;
@@ -112,7 +112,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     //load translations for this library. keep this before any i18n() calls in library code
     KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
 
-    d->chatviewlInitialised = false;
+    d->chatViewInitialized = false;
     d->isGroupChat = (channel->targetHandleType() == Tp::HandleTypeContact ? false : true);
 
     d->ui.setupUi(this);
@@ -468,7 +468,7 @@ void ChatWidget::setupContactModelSignals()
 
 void ChatWidget::onHistoryFetched(const QList<KTp::Message> &messages)
 {
-    d->chatviewlInitialised = true;
+    d->chatViewInitialized = true;
 
     kDebug() << "found" << messages.count() << "messages in history";
     Q_FOREACH(const KTp::Message &message, messages) {
@@ -490,7 +490,7 @@ void ChatWidget::acknowledgeMessages()
 {
     kDebug();
     //if we're not initialised we can't have shown anything, even if we are on top, therefore ignore all requests to do so
-    if (d->chatviewlInitialised) {
+    if (d->chatViewInitialized) {
         //acknowledge everything in the message queue.
         d->channel->acknowledge(d->channel->messageQueue());
     }
@@ -511,7 +511,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
 {
     kDebug() << title() << message.text();
 
-    if (d->chatviewlInitialised) {
+    if (d->chatViewInitialized) {
 
         //debug the message parts (looking for HTML etc)
 //        Q_FOREACH(Tp::MessagePart part, message.parts())
