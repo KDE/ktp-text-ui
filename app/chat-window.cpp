@@ -61,6 +61,7 @@
 #include "emoticon-text-edit-action.h"
 #include "invite-contact-dialog.h"
 #include "telepathy-chat-ui.h"
+#include "text-chat-config.h"
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
@@ -472,7 +473,7 @@ void ChatWindow::onTabStateChanged()
         int tabIndex = m_tabWidget->indexOf(sender);
         setTabTextColor(tabIndex, sender->titleColor());
 
-        if (sender->remoteChatState() == Tp::ChannelChatStateComposing) {
+        if (TextChatConfig::instance()->showOthersTyping() && (sender->remoteChatState() == Tp::ChannelChatStateComposing)) {
             setTabIcon(tabIndex, KIcon(QLatin1String("document-edit")));
             if (sender == m_tabWidget->currentWidget()) {
                 windowIcon = KIcon(QLatin1String("document-edit"));
@@ -843,10 +844,14 @@ void ChatWindow::onUserTypingChanged(Tp::ChannelChatState state)
     Q_ASSERT(currChat);
     QString title = currChat->title();
 
-    if (state == Tp::ChannelChatStateComposing) {
-        setWindowTitle(i18nc("String prepended in window title, arg is contact's name", "Typing... %1", title));
-    } else if (state == Tp::ChannelChatStatePaused) {
-        setWindowTitle(i18nc("String appended in window title, arg is contact's name", "%1 has entered text", title));
+    if (TextChatConfig::instance()->showOthersTyping()) {
+        if (state == Tp::ChannelChatStateComposing) {
+            setWindowTitle(i18nc("String prepended in window title, arg is contact's name", "Typing... %1", title));
+        } else if (state == Tp::ChannelChatStatePaused) {
+            setWindowTitle(i18nc("String appended in window title, arg is contact's name", "%1 has entered text", title));
+        } else {
+            setWindowTitle(title);
+        }
     } else {
         setWindowTitle(title);
     }

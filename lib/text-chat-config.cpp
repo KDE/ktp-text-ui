@@ -34,6 +34,8 @@ class TextChatConfigPrivate
 public:
     TextChatConfig::TabOpenMode m_openMode;
     int m_scrollbackLength;
+    bool m_showMeTyping;
+    bool m_showOthersTyping;
 };
 
 
@@ -73,6 +75,10 @@ void TextChatConfig::sync()
     behaviorConfig.writeEntry("tabOpenMode", mode);
 
     behaviorConfig.writeEntry("scrollbackLength", d->m_scrollbackLength);
+
+    behaviorConfig.writeEntry("showMeTyping", d->m_showMeTyping);
+
+    behaviorConfig.writeEntry("showOthersTyping", d->m_showOthersTyping);
 
     behaviorConfig.sync();
 
@@ -120,6 +126,46 @@ void TextChatConfig::setScrollbackLength(int length)
 }
 
 
+bool TextChatConfig::showMeTyping()
+{
+    bool result;
+
+    mutex.lock();
+    result = d->m_showMeTyping;
+    mutex.unlock();
+
+    return result;
+}
+
+
+void TextChatConfig::setShowMeTyping(bool showTyping)
+{
+    mutex.lock();
+    d->m_showMeTyping = showTyping;
+    mutex.unlock();
+}
+
+
+bool TextChatConfig::showOthersTyping()
+{
+    bool result;
+
+    mutex.lock();
+    result = d->m_showOthersTyping;
+    mutex.unlock();
+
+    return result;
+}
+
+
+void TextChatConfig::setShowOthersTyping(bool showTyping)
+{
+    mutex.lock();
+    d->m_showOthersTyping = showTyping;
+    mutex.unlock();
+}
+
+
 TextChatConfig::TextChatConfig() :
     d(new TextChatConfigPrivate())
 {
@@ -137,6 +183,10 @@ TextChatConfig::TextChatConfig() :
     }
 
     d->m_scrollbackLength = behaviorConfig.readEntry("scrollbackLength", 4);
+
+    d->m_showMeTyping = behaviorConfig.readEntry("showMeTyping", true);
+
+    d->m_showOthersTyping = behaviorConfig.readEntry("showOthersTyping", true);
 }
 
 

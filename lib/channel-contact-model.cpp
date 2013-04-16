@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "channel-contact-model.h"
+#include "text-chat-config.h"
 
 #include <KDebug>
 #include <KIcon>
@@ -87,7 +88,7 @@ QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole:
     {
         const Tp::ContactPtr contact = m_contacts[row];
-        if (m_channel->chatState(contact) == Tp::ChannelChatStateComposing) {
+        if (TextChatConfig::instance()->showOthersTyping() && (m_channel->chatState(contact) == Tp::ChannelChatStateComposing)) {
             return KIcon(QLatin1String("document-edit"));
 
         }

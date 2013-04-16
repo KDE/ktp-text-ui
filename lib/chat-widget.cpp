@@ -27,6 +27,7 @@
 #include "channel-contact-model.h"
 #include "logmanager.h"
 #include "notify-filter.h"
+#include "text-chat-config.h"
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
@@ -400,7 +401,7 @@ QColor ChatWidget::titleColor() const
 
     KColorScheme scheme(QPalette::Active, KColorScheme::Window);
 
-    if (d->remoteContactChatState == Tp::ChannelChatStateComposing) {
+    if (TextChatConfig::instance()->showOthersTyping() && (d->remoteContactChatState == Tp::ChannelChatStateComposing)) {
         kDebug() << "remote is typing";
         return scheme.foreground(KColorScheme::PositiveText).color();
     }
@@ -886,8 +887,14 @@ void ChatWidget::onInputBoxChanged()
             d->pausedStateTimer->start(5000);
         } else {
             //if the user has just typed some text, set state to Composing and start the timer
-            d->channel->requestChatState(Tp::ChannelChatStateComposing);
-            d->pausedStateTimer->start(5000);
+            //unless "show me typing" is off; in that case set state to Active and stop the timer
+            if (TextChatConfig::instance()->showMeTyping()) {
+                d->channel->requestChatState(Tp::ChannelChatStateComposing);
+                d->pausedStateTimer->start(5000);
+            } else {
+                d->channel->requestChatState(Tp::ChannelChatStateActive);
+                d->pausedStateTimer->stop();
+            }
         }
     } else {
         //if the user typed no text/cleared the input field, set Active and stop the timer
@@ -1040,7 +1047,11 @@ void ChatWidget::initChatArea()
 
 void ChatWidget::onChatPausedTimerExpired()
 {
-     d->channel->requestChatState(Tp::ChannelChatStatePaused);
+     if (TextChatConfig::instance()->showMeTyping()) {
+        d->channel->requestChatState(Tp::ChannelChatStatePaused);
+    } else {
+        d->channel->requestChatState(Tp::ChannelChatStateActive);
+    }
 }
 
 void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)

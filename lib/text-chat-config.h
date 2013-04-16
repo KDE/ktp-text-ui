@@ -49,6 +49,12 @@ class KDE_TELEPATHY_CHAT_EXPORT TextChatConfig : QObject
     int scrollbackLength();
     void setScrollbackLength(int length);
 
+    bool showMeTyping();
+    void setShowMeTyping(bool showTyping);
+
+    bool showOthersTyping();
+    void setShowOthersTyping(bool showTyping);
+
 private:
     TextChatConfig();
 

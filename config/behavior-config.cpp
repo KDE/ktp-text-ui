@@ -49,6 +49,12 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
     ui->scrollbackLength->setSuffix(ki18ncp("Part of config 'show last [spin box] messages' This is the suffix to the spin box. Be sure to include leading space"," message", " messages"));
     ui->scrollbackLength->setValue(m_scrollbackLength);
     connect(ui->scrollbackLength, SIGNAL(valueChanged(int)), this, SLOT(onScrollbackLengthChanged()));
+
+    ui->checkBoxShowMeTyping->setChecked(m_showMeTyping);
+    connect(ui->checkBoxShowMeTyping, SIGNAL(toggled(bool)), this, SLOT(onShowMeTypingChanged(bool)));
+
+    ui->checkBoxShowOthersTyping->setChecked(m_showOthersTyping);
+    connect(ui->checkBoxShowOthersTyping, SIGNAL(toggled(bool)), this, SLOT(onShowOthersTypingChanged(bool)));
 }
 
 BehaviorConfig::~BehaviorConfig()
@@ -60,12 +66,16 @@ void BehaviorConfig::load()
 {
     m_openMode = TextChatConfig::instance()->openMode();
     m_scrollbackLength = TextChatConfig::instance()->scrollbackLength();
+    m_showMeTyping = TextChatConfig::instance()->showMeTyping();
+    m_showOthersTyping = TextChatConfig::instance()->showOthersTyping();
 }
 
 void BehaviorConfig::save()
 {
     TextChatConfig::instance()->setOpenMode(m_openMode);
     TextChatConfig::instance()->setScrollbackLength(m_scrollbackLength);
+    TextChatConfig::instance()->setShowMeTyping(m_showMeTyping);
+    TextChatConfig::instance()->setShowOthersTyping(m_showOthersTyping);
     TextChatConfig::instance()->sync();
 }
 
@@ -92,5 +102,17 @@ void BehaviorConfig::onRadioSelected(int id)
 void BehaviorConfig::onScrollbackLengthChanged()
 {
     m_scrollbackLength = ui->scrollbackLength->value();
+    Q_EMIT changed(true);
+}
+
+void BehaviorConfig::onShowMeTypingChanged(bool state)
+{
+    m_showMeTyping = state;
+    Q_EMIT changed(true);
+}
+
+void BehaviorConfig::onShowOthersTypingChanged(bool state)
+{
+    m_showOthersTyping = state;
     Q_EMIT changed(true);
 }
