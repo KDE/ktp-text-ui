@@ -56,7 +56,21 @@ void YoutubeFilter::filterMessage(KTp::Message &message, const KTp::MessageConte
             kDebug() << "v =" << v;
 
             if (validId.exactMatch(v)){
-                message.appendMessagePart(html.arg(url.queryItemValue(QLatin1String("v"))));
+                message.appendMessagePart(html.arg(v));
+            }
+        }
+        else if (url.host() == QLatin1String("www.youtu.be") ||
+                url.host() == QLatin1String("youtu.be")) {
+            kDebug() << "found youtube url :" << url.url();
+
+            QString v = url.path().mid(1);
+            if (v.endsWith(QLatin1Char('/'))) {
+                v.chop(1);
+            }
+            kDebug() << "v =" << v;
+
+            if (validId.exactMatch(v)){
+                message.appendMessagePart(html.arg(v));
             }
         }
     }
