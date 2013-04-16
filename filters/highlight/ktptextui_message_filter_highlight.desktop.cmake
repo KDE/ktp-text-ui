@@ -53,6 +53,7 @@ Name[zh_CN]=高亮
 Name[zh_TW]=高亮度
 Comment=If any incoming messages contain your nickname, it will highlight them in red
 Comment[ca]=Si qualsevol missatge entrant conté el vostre sobrenom, es ressaltarà en vermell.
+Comment[cs]=Pokud libovolná příchozí zpráva obsahuje vaši přezdívku bude zvýrazněna červeně
 Comment[da]=Hvis indkommende beskeder indeholder dit kaldenavn, vil de blive fremhævet med rødt
 Comment[el]=Τα εισερχόμενα μηνύματα που περιέχουν το ψευδώνυμό σας, θα τονίζονται με κόκκινο
 Comment[es]=Esta opción resaltará en rojo cualquier mensaje entrante que contenga su apodo.
