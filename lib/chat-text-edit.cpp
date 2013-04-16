@@ -26,6 +26,8 @@
 #include <QtCore/QTimer>
 #include <QtCore/QDebug>
 #include <QtCore/QString>
+#include <QApplication>
+#include <QClipboard>
 
 #include <KStandardShortcut>
 #include <KActionCollection>
@@ -174,6 +176,14 @@ void ChatTextEdit::updateScrollBar()
 {
     setVerticalScrollBarPolicy(sizeHint().height() > height() ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAlwaysOff);
     ensureCursorVisible();
+}
+
+void ChatTextEdit::pasteSelection()
+{
+    const QMimeData *md = QApplication::clipboard()->mimeData(QClipboard::Selection);
+    if (md) {
+        insertFromMimeData(md);
+    }
 }
 
 void ChatTextEdit::sendMessage()

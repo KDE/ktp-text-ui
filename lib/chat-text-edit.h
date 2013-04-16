@@ -55,6 +55,7 @@ protected:
 private Q_SLOTS:
     void recalculateSize();
     void updateScrollBar();
+    void pasteSelection();
 
 Q_SIGNALS:
     void returnKeyPressed();

@@ -158,6 +158,16 @@ void AdiumThemeView::wheelEvent(QWheelEvent* event)
     QWebView::wheelEvent(event);
 }
 
+void AdiumThemeView::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->modifiers() == Qt::NoModifier && event->button() == Qt::MidButton) {
+        Q_EMIT textPasted();
+        event->accept();
+        return;
+    }
+    QWebView::mouseReleaseEvent(event);
+}
+
 void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 {
     QString headerHtml;
