@@ -78,8 +78,7 @@ void ChatTextEdit::setFontBold(bool isBold)
 QSize ChatTextEdit::minimumSizeHint() const
 {
     QSize sh = KTextEdit::minimumSizeHint();
-    sh.setHeight(fontMetrics().height() + 1);
-    sh += QSize(0, QFrame::lineWidth() * 2);
+    sh.setHeight(2 * fontMetrics().height() + fontMetrics().lineSpacing());
     return sh;
 }
 
