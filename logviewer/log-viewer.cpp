@@ -32,6 +32,10 @@
 
 #include <KTp/logs-importer.h>
 
+#include <kpeople/persons-model.h>
+#include <kpeople/persons-presence-model.h>
+#include <kpeople/ktp-translation-proxy.h>
+
 #include <QSortFilterProxyModel>
 #include <QWebFrame>
 #include <KLineEdit>
@@ -46,12 +50,13 @@
 #include <KActionCollection>
 #include <KMenuBar>
 
-#include "entity-model.h"
-#include "entity-proxy-model.h"
-#include "entity-model-item.h"
+#include "persons-filter-model.h"
 #include "logs-import-dialog.h"
 
 Q_DECLARE_METATYPE(QModelIndex)
+Q_DECLARE_METATYPE(Tp::AccountPtr)
+Q_DECLARE_METATYPE(Tp::ContactPtr)
+Q_DECLARE_METATYPE(Tpl::EntityPtr)
 
 LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::ConnectionFactoryPtr &connectionFactory,
                      const Tp::ChannelFactoryPtr &channelFactory, const Tp::ContactFactoryPtr &contactFactory,
@@ -72,15 +77,19 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     m_accountManager = Tp::AccountManager::create(accountFactory, connectionFactory, channelFactory, contactFactory);
     connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
 
-    m_entityModel = new EntityModel(this);
-    m_filterModel = new EntityProxyModel(this);
-    m_filterModel->setSourceModel(m_entityModel);
+    m_personsModel = new PersonsModel(0, PersonsModel::FeatureAll, this);
 
-    ui->entityList->setModel(m_filterModel);
+    m_presenceModel = new PersonsPresenceModel(this);
+    m_presenceModel->setSourceModel(m_personsModel);
+
+    m_personsFilter = new PersonsFilterModel(this);
+    m_personsFilter->setSourceModel(m_presenceModel);
+
+    ui->entityList->setModel(m_personsFilter);
     ui->entityList->setItemsExpandable(true);
     ui->entityList->setRootIsDecorated(true);
     ui->entityList->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->entityFilter->setProxy(m_filterModel);
+    ui->entityFilter->setProxy(m_personsFilter);
     ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
 
     connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
@@ -100,6 +109,7 @@ void LogViewer::setupActions()
     KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
     KStandardAction::showMenubar(this->menuBar(), SLOT(setVisible(bool)), actionCollection());
 
+    /*
     KAction *clearAccHistory = new KAction(i18n("Clear &account history"), this);
     clearAccHistory->setIcon(KIcon(QLatin1String("edit-clear-history")));
     connect(clearAccHistory, SIGNAL(triggered(bool)), SLOT(slotClearAccountHistory()));
@@ -108,6 +118,7 @@ void LogViewer::setupActions()
     clearContactHistory->setIcon(KIcon(QLatin1String("edit-clear-history")));
     clearContactHistory->setEnabled(false);
     connect(clearContactHistory, SIGNAL(triggered(bool)), SLOT(slotClearContactHistory()));
+    */
 
     KAction *importKopeteLogs = new KAction(i18n("&Import Kopete Logs"), this);
     importKopeteLogs->setIcon(KIcon(QLatin1String("document-import")));
@@ -125,24 +136,24 @@ void LogViewer::setupActions()
     nextConversation->setEnabled(false);
     connect(nextConversation, SIGNAL(triggered(bool)), SLOT(slotJumpToNextConversation()));
 
-    actionCollection()->addAction(QLatin1String("clear-account-logs"), clearAccHistory);
+    /*
     actionCollection()->addAction(QLatin1String("clear-contact-logs"), clearContactHistory);
+    */
     actionCollection()->addAction(QLatin1String("import-kopete-logs"), importKopeteLogs);
     actionCollection()->addAction(QLatin1String("jump-prev-conversation"), prevConversation);
     actionCollection()->addAction(QLatin1String("jump-next-conversation"), nextConversation);
 
     /* Build the popup menu for entity list */
     m_entityListContextMenu = new KMenu(ui->entityList);
+    /*
     m_entityListContextMenu->addAction(clearContactHistory);
     m_entityListContextMenu->addAction(clearAccHistory);
+    */
 }
 
 void LogViewer::onAccountManagerReady()
 {
-    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-    logManager->setAccountManagerPtr(m_accountManager);
-    m_entityModel->setAccountManager(m_accountManager);
-
+    m_personsFilter->setAccountManager(m_accountManager);
     /* Try to run log import */
     slotImportKopeteLogs(false);
 }
@@ -151,18 +162,21 @@ void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &
 {
     Q_UNUSED(previous);
 
-    /* Ignore account nodes */
-    if (current.parent() == QModelIndex()) {
-        actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(false);
+    // FIXME: Show something fancy when selecting a persona
+    if (current.data(PersonsModel::ResourceTypeRole).toUInt() == PersonsModel::Person) {
+        ui->datePicker->clear();
+        ui->messageView->clear();
         return;
     }
 
-    Tpl::EntityPtr entity = current.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
-    Tp::AccountPtr account = current.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+    Tpl::EntityPtr entity = current.data(PersonsFilterModel::EntityRole).value<Tpl::EntityPtr>();
+    Tp::AccountPtr account = current.data(PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
 
+    /*
     if (!account.isNull() && !entity.isNull()) {
         actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
     }
+    */
 
     ui->datePicker->setEntity(account, entity);
 }
@@ -197,9 +211,9 @@ void LogViewer::slotUpdateMainWindow()
     nearestDates.first = m_prevConversationDate;
     nearestDates.second = m_nextConversationDate;
 
-    Tpl::EntityPtr entity = currentIndex.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
-    Tp::ContactPtr contact = currentIndex.data(EntityModel::ContactRole).value<Tp::ContactPtr>();
-    Tp::AccountPtr account = currentIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+    Tpl::EntityPtr entity = currentIndex.data(PersonsFilterModel::EntityRole).value<Tpl::EntityPtr>();
+    Tp::ContactPtr contact = currentIndex.data(PersonsModel::IMContactRole).value<Tp::ContactPtr>();
+    Tp::AccountPtr account = currentIndex.data(PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
     ui->messageView->loadLog(account, entity, contact, date, nearestDates);
 }
 
@@ -212,7 +226,7 @@ void LogViewer::slotStartGlobalSearch(const QString &term)
 {
     if (term.isEmpty()) {
         ui->messageView->clearHighlightText();
-        m_filterModel->clearSearchHits();
+        m_personsFilter->clearSearchHits();
         ui->datePicker->clearSearchHits();
         return;
     }
@@ -234,7 +248,7 @@ void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
     Tpl::PendingSearch *search = qobject_cast< Tpl::PendingSearch* >(operation);
     Q_ASSERT(search);
 
-    m_filterModel->setSearchHits(search->hits());
+    m_personsFilter->setSearchHits(search->hits());
     ui->datePicker->setSearchHits(search->hits());
 
     ui->globalSearch->setEnabled(true);
@@ -244,55 +258,22 @@ void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
 
 void LogViewer::slotClearGlobalSearch()
 {
-    m_filterModel->clearSearchHits();
+    m_personsFilter->clearSearchHits();
     ui->datePicker->clearSearchHits();
     ui->messageView->clearHighlightText();
 }
 
 void LogViewer::slotShowEntityListContextMenu (const QPoint &coords)
 {
+    /*
     QModelIndex index = ui->entityList->indexAt(coords);
     if (!index.isValid()) {
         return;
     }
-    index = m_filterModel->mapToSource(index);
-
-    /* Whether the node is an account or a contact */
-    actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled((index.parent() != QModelIndex()));
 
     m_entityListContextMenu->setProperty("index", QVariant::fromValue(index));
     m_entityListContextMenu->popup(ui->entityList->mapToGlobal(coords));
-}
-
-void LogViewer::slotClearAccountHistory()
-{
-    QModelIndex index = ui->entityList->currentIndex();
-
-    /* Usually and account node is selected, so traverse up to it's parent
-     * account node */
-    if (index.parent().isValid()) {
-        index = index.parent();
-    }
-
-    if (!index.isValid()) {
-        return;
-    }
-
-    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-    if (account.isNull()) {
-        return;
-    }
-
-    if (KMessageBox::warningYesNo(
-            this, i18n("Are you sure you want to remove all logs from account %1?", account->displayName()),
-            i18n("Clear account history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
-            QString(), KMessageBox::Dangerous) == KMessageBox::No) {
-        return;
-    }
-
-    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-    Tpl::PendingOperation *operation = logManager->clearAccountHistory(account);
-    connect(operation, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onLogClearingFinished(Tpl::PendingOperation*)));
+    */
 }
 
 void LogViewer::slotClearContactHistory()
@@ -302,8 +283,8 @@ void LogViewer::slotClearContactHistory()
         return;
     }
 
-    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-    Tpl::EntityPtr entity = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
+    Tp::AccountPtr account = index.data(PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
+    Tpl::EntityPtr entity = index.data(PersonsFilterModel::EntityRole).value<Tpl::EntityPtr>();
     if (account.isNull() || entity.isNull()) {
         return;
     }
@@ -336,13 +317,16 @@ void LogViewer::onLogClearingFinished(Tpl::PendingOperation *operation)
         return;
     }
 
+    /*
     QModelIndex parent = index.parent();
     m_entityModel->removeRow(index.row(), parent);
-
+    */
     /* If last entity was removed then remove the account node as well */
+    /*
     if (parent.isValid() && !m_entityModel->hasChildren(parent)) {
         m_entityModel->removeRow(parent.row(), parent.parent());
     }
+    */
 
     m_entityListContextMenu->setProperty("index", QVariant());
 }

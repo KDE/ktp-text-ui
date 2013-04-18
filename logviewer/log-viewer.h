@@ -31,8 +31,9 @@ namespace Tpl {
     class PendingOperation;
 }
 
-class EntityModel;
-class EntityProxyModel;
+class PersonsModel;
+class PersonsPresenceModel;
+class PersonsFilterModel;
 class KMenu;
 
 class LogViewer : public KXmlGuiWindow
@@ -58,7 +59,6 @@ private Q_SLOTS:
     void slotStartGlobalSearch(const QString &term);
     void onGlobalSearchFinished(Tpl::PendingOperation *);
 
-    void slotClearAccountHistory();
     void slotClearContactHistory();
     void onLogClearingFinished(Tpl::PendingOperation *);
 
@@ -72,8 +72,9 @@ private:
 
     Ui::LogViewer *ui;
     Tp::AccountManagerPtr m_accountManager;
-    EntityModel *m_entityModel;
-    EntityProxyModel *m_filterModel;
+    PersonsModel *m_personsModel;
+    PersonsPresenceModel *m_presenceModel;
+    PersonsFilterModel *m_personsFilter;
 
     KMenu *m_entityListContextMenu;
 

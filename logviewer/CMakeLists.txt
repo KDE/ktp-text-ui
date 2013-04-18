@@ -1,5 +1,9 @@
 include_directories(${CMAKE_SOURCE_DIR}/lib)
 
+find_package(KPeople REQUIRED)
+
+include_directories(${KPEOPLE_INCLUDES})
+
 set(ktp-log-viewer_SRCS
         main.cpp
         log-viewer.cpp
@@ -10,6 +14,7 @@ set(ktp-log-viewer_SRCS
         entity-view.cpp
         entity-proxy-model.cpp
         conversation-date-picker.cpp
+        persons-filter-model.cpp
 )
 
 kde4_add_ui_files(ktp-log-viewer_SRCS log-viewer.ui)
@@ -26,6 +31,7 @@ target_link_libraries(ktp-log-viewer
             ${TELEPATHY_LOGGER_QT4_LIBRARIES}
             ${KDE4_KDEWEBKIT_LIBRARY}
             ${KTP_LIBRARIES}
+            ${KPEOPLE_LIBS}
             ktpchat)
 
 install(TARGETS ktp-log-viewer DESTINATION ${BIN_INSTALL_DIR})
