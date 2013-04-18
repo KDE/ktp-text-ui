@@ -102,6 +102,10 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
     initialise(headerInfo);
 }
 
+bool operator<(const Tpl::EventPtr &e1, const Tpl::EventPtr &e2)
+{
+    return e1->timestamp() < e2->timestamp();
+}
 
 void MessageView::processStoredEvents()
 {
@@ -113,6 +117,10 @@ void MessageView::processStoredEvents()
 
         addAdiumStatusMessage(message);
     }
+
+    // See https://bugs.kde.org/show_bug.cgi?id=317866
+    // Uses the operator< overload above
+    qSort(m_events);
 
     while (!m_events.isEmpty()) {
         const Tpl::TextEventPtr textEvent(m_events.takeFirst().staticCast<Tpl::TextEvent>());
@@ -135,13 +143,22 @@ void MessageView::processStoredEvents()
 
 void MessageView::onLinkClicked(const QUrl &link)
 {
+    // Don't emit the signal directly, KWebView does not like when we reload the
+    // page from an event handler (and then chain up) and we can't guarantee
+    // that everyone will use QueuedConnection when connecting to
+    // conversationSwitchRequested() slot
+
     if (link.fragment() == QLatin1String("x-nextConversation")) {
-        Q_EMIT conversationSwitchRequested(m_next);
+        // Q_EMIT conversationSwitchRequested(m_next)
+        QMetaObject::invokeMethod(this, "conversationSwitchRequested", Qt::QueuedConnection,
+            Q_ARG(QDate, m_next));
         return;
     }
 
     if (link.fragment() == QLatin1String("x-prevConversation")) {
-        Q_EMIT conversationSwitchRequested(m_prev);
+        // Q_EMIT conversationSwitchRequested(m_prev)
+        QMetaObject::invokeMethod(this, "conversationSwitchRequested", Qt::QueuedConnection,
+            Q_ARG(QDate, m_prev));
         return;
     }
 

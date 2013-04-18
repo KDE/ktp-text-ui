@@ -125,6 +125,11 @@ void LogManager::onDatesFinished(Tpl::PendingOperation *po)
     }
 }
 
+bool operator<(const Tpl::EventPtr &e1, const Tpl::EventPtr &e2)
+{
+    return e1->timestamp() < e2->timestamp();
+}
+
 void LogManager::onEventsFinished(Tpl::PendingOperation *po)
 {
     Tpl::PendingEvents *pe = (Tpl::PendingEvents*) po;
@@ -145,6 +150,11 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
 
     // get last n (m_fetchLast) messages that are not queued
     QList<Tpl::EventPtr> allEvents = pe->events();
+
+    // See https://bugs.kde.org/show_bug.cgi?id=317866
+    // Uses the operator< overload above
+    qSort(allEvents);
+
     QList<Tpl::TextEventPtr> events;
     QList<Tpl::EventPtr>::iterator i = allEvents.end();
     while (i-- != allEvents.begin() && (events.count() < m_fetchAmount)) {
