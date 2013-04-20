@@ -19,7 +19,6 @@
 
 
 #include "entity-model.h"
-#include "entity-model-item.h"
 
 #include <TelepathyLoggerQt4/LogManager>
 #include <TelepathyLoggerQt4/PendingEntities>
@@ -32,23 +31,28 @@
 #include <TelepathyQt/PendingOperation>
 #include <TelepathyQt/PendingContacts>
 
-#include <QPixmap>
+class EntityModelItem
+{
+  public:
+    Tp::AccountPtr account;
+    Tpl::EntityPtr entity;
+    Tp::ContactPtr contact;
+};
 
 EntityModel::EntityModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
-    m_rootItem = new EntityModelItem();
 }
 
 EntityModel::~EntityModel()
 {
-    delete m_rootItem;
+    qDeleteAll(m_items);
 }
 
 void EntityModel::setAccountManager(const Tp::AccountManagerPtr &accountManager)
 {
     Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-    Q_FOREACH(const Tp::AccountPtr &account, accountManager->allAccounts()) {
+    Q_FOREACH (const Tp::AccountPtr &account, accountManager->allAccounts()) {
         connect(logManager->queryEntities(account),
                 SIGNAL(finished(Tpl::PendingOperation*)),
                 SLOT(onEntitiesSearchFinished(Tpl::PendingOperation*)));
@@ -57,11 +61,9 @@ void EntityModel::setAccountManager(const Tp::AccountManagerPtr &accountManager)
 
 int EntityModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent == QModelIndex()) {
-        return m_rootItem->itemCount();
-    }
+    Q_UNUSED(parent);
 
-    return static_cast<EntityModelItem*>(parent.internalPointer())->itemCount();
+    return m_items.count();
 }
 
 int EntityModel::columnCount(const QModelIndex &parent) const
@@ -77,35 +79,19 @@ QModelIndex EntityModel::index(int row, int column, const QModelIndex &parent) c
         return QModelIndex();
     }
 
-    EntityModelItem *parentItem, *childItem;
-    if (parent == QModelIndex()) {
-        parentItem = m_rootItem;
-    } else {
-        parentItem = static_cast<EntityModelItem*>(parent.internalPointer());
-    }
-
-    childItem = parentItem->item(row);
+    EntityModelItem *childItem = m_items.at(row);
     if (childItem) {
         return createIndex(row, column, childItem);
-    } else {
-        return QModelIndex();
     }
+
+    return QModelIndex();
 }
 
 QModelIndex EntityModel::parent(const QModelIndex &child) const
 {
-    if (child == QModelIndex()) {
-        return QModelIndex();
-    }
+    Q_UNUSED(child);
 
-    EntityModelItem* item = static_cast< EntityModelItem* >(child.internalPointer());
-    EntityModelItem *parent = item->parent();
-
-    if (parent == m_rootItem) {
-        return QModelIndex();
-    }
-
-    return createIndex(parent->row(), 0, parent);
+    return QModelIndex();
 }
 
 QVariant EntityModel::data(const QModelIndex &index, int role) const
@@ -114,42 +100,29 @@ QVariant EntityModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    EntityModelItem *item;
-    if (index.parent() == QModelIndex()) {
-        item = m_rootItem->item(index.row());
-    } else {
-        item = m_rootItem->item(index.parent().row())->item(index.row());
+    EntityModelItem *item = m_items.at(index.row());
+
+    switch (role) {
+        case Qt::DisplayRole:
+            return item->contact ? item->contact->alias() : item->entity->alias();
+        case EntityModel::AccountRole:
+            return QVariant::fromValue(item->account);
+        case EntityModel::ContactRole:
+            return QVariant::fromValue(item->contact);
+        case EntityModel::EntityRole:
+            return QVariant::fromValue(item->entity);
+        case EntityModel::IdRole:
+            return item->entity->identifier();
     }
 
-    if (!item) {
-        return QVariant();
-    }
-
-    return item->data(role);
-}
-
-Qt::ItemFlags EntityModel::flags(const QModelIndex &index) const
-{
-    if (index.parent() == QModelIndex()) {
-        return QAbstractItemModel::flags(index) & ~Qt::ItemIsSelectable;
-    }
-
-    return QAbstractItemModel::flags(index);
+    return QVariant();
 }
 
 bool EntityModel::removeRows(int start, int count, const QModelIndex &parent)
 {
-    EntityModelItem *parentItem;
-
-    if (parent.isValid()) {
-        parentItem = m_rootItem->item(parent.row());
-    } else {
-        parentItem = m_rootItem;
-    }
-
     beginRemoveRows(parent, start, start + count - 1);
     for (int row = 0; row < count; ++row) {
-        parentItem->removeItem(start);
+        m_items.removeAt(start);
     }
     endRemoveRows();
 
@@ -162,22 +135,13 @@ void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
 
     Tpl::EntityPtrList newEntries = pendingEntities->entities();
 
-    Q_FOREACH(const Tpl::EntityPtr &entity, newEntries) {
-        EntityModelItem *parent = m_rootItem->item(pendingEntities->account());
-        if (!parent) {
-            beginInsertRows(QModelIndex(), m_rootItem->itemCount(), m_rootItem->itemCount());
-            parent = new EntityModelItem(m_rootItem);
-            parent->setData(QVariant::fromValue(pendingEntities->account()), EntityModel::AccountRole);
-            m_rootItem->addItem(parent);
-            endInsertRows();
-        }
-
-        QModelIndex parentIndex = index(parent->row(), 0, QModelIndex());
-        beginInsertRows(parentIndex, parent->itemCount() , parent->itemCount());
-        EntityModelItem *item = new EntityModelItem(parent);
-        item->setData(QVariant::fromValue(pendingEntities->account()), EntityModel::AccountRole);
-        item->setData(QVariant::fromValue(entity), EntityModel::EntityRole);
-        parent->addItem(item);
+    Q_FOREACH (const Tpl::EntityPtr &entity, newEntries) {
+        beginInsertRows(QModelIndex(), m_items.count(), m_items.count());
+        EntityModelItem *item = new EntityModelItem();
+        item->account = pendingEntities->account();
+        item->entity = entity;
+        m_items << item;
+        endInsertRows();
 
         if (pendingEntities->account()->connection()) {
             Tp::PendingOperation *op =
@@ -186,7 +150,6 @@ void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
             connect(op, SIGNAL(finished(Tp::PendingOperation*)),
                     this, SLOT(onEntityContactRetrieved(Tp::PendingOperation*)));
         }
-        endInsertRows();
     }
 }
 
@@ -194,25 +157,12 @@ void EntityModel::onEntityContactRetrieved(Tp::PendingOperation *operation)
 {
     Tp::PendingContacts *pendingContacts = qobject_cast<Tp::PendingContacts*>(operation);
 
-    Q_FOREACH(const Tp::ContactPtr &contact, pendingContacts->contacts()) {
-
-        int accRow = 0; int itemRow = 0;
-        EntityModelItem *parent, *item;
-
-        do {
-            parent = m_rootItem->item(accRow);
-            item = parent->item(itemRow);
-
-            if (item->data(EntityModel::IdRole).toString() == contact->id()) {
-                item->setData(QVariant::fromValue(contact), EntityModel::ContactRole);
-                break;
+    Q_FOREACH (const Tp::ContactPtr &contact, pendingContacts->contacts()) {
+        for (int i = 0; i < m_items.count(); ++i) {
+            EntityModelItem *item = m_items.at(i);
+            if (item->entity->identifier() == contact->id()) {
+                item->contact = contact;
             }
-
-            itemRow++;
-            if (itemRow >= parent->itemCount()) {
-                accRow++;
-                itemRow = 0;
-            }
-        } while (accRow < m_rootItem->itemCount());
+        }
     }
 }
