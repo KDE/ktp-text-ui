@@ -50,6 +50,7 @@ Comment[cs]=Rozbalí zkratku URI z KDE na URL (např. wp:KDE se přeloží na ht
 Comment[da]=Fold en KDE-forkortet URI ud til en URL (dvs. at skrive wp:KDE vil blive til http://en.wikipedia.org/wiki/KDE)
 Comment[el]=Αναπτύξτε μια KDE συντόμευση ενός URI σε URL (δηλ. αν πληκτρολογήσετε wp:KDE θα μεταφραστεί σε http://en.wikipedia.org/wiki/KDE)
 Comment[es]=Expande una URI abreviada de KDE en una URL (por ejemplo, escribir wp:KDE se traducirá a http://en.wikipedia.org/wiki/KDE)
+Comment[fi]=Laajentaa KDE-lyhennetyn URI:n URL:ksi eli kirjoitettu wp:KDE muutetaan muotoon http://en.wikipedia.org/wiki/KDE
 Comment[fr]=Développe une URI raccourcie pour KDE dans une URL (c'est-à-dire saisir « wp:KDE » se traduira en http://en.wikipedia.org/wiki/KDE)
 Comment[ia]=Expande un URI abbreviate de KDE in un URL (i.e. typar wp:KDE il traducera se mesme in http://en.wikipedia.org/wiki/KDE)
 Comment[it]=Espande un URI abbreviato di KDE in un URL (ad es. wp:KDE sarà trasformato in http://it.wikipedia.org/wiki/KDE)
