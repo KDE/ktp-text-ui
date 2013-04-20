@@ -37,6 +37,7 @@ Comment[cs]=Pokud obdržíte odkaz na bugzillu zobrazí se v rozhovoru dodatečn
 Comment[da]=Viser yderligere information såsom titel og status, når du modtager et link til en fejlrapport på bugzilla
 Comment[el]=Κατά τη λήψη συνδέσμου σε ένα σφάλμα στο bugzilla να εμφανίζοντια επιπλέον πληροφορίες όπως ο τίτλος και η κατάσταση
 Comment[es]=Cuando se recibe un enlace a un error en bugzilla se muestra información adicional como el título y el estado
+Comment[fi]=Vastaanotettaessa vikailmoituslinkki bugzillaan näyttää lisätietoja kuten sen otsikon ja tilan
 Comment[fr]=Lors de la réception d'un lien vers un bogue sur Bugzilla, affiche des information additionnelles telles que le titre et l'état
 Comment[ia]=Quando on recip eun ligamine a un bug sur bugzilla on monstra information additional tal como le titulo e le stato
 Comment[it]=Con collegamenti a bugzilla, mostra informazioni quali il titolo e lo stato dei bug relativi
