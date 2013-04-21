@@ -85,8 +85,9 @@ QSize ChatTextEdit::minimumSizeHint() const
 QSize ChatTextEdit::sizeHint() const
 {
     QSize sh = KTextEdit::sizeHint();
-    sh.setHeight(int (document()->size().height()));
-    sh += QSize(0, (QFrame::lineWidth() * 2) + 1);
+    sh.setHeight((int)(document()->size().height()) +
+                 contentsMargins().top() +
+                 contentsMargins().bottom());
     return sh;
 }
 
