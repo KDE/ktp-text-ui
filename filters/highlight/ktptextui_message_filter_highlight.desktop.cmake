@@ -55,6 +55,7 @@ Comment=If any incoming messages contain your nickname, it will highlight them i
 Comment[ca]=Si qualsevol missatge entrant conté el vostre sobrenom, es ressaltarà en vermell.
 Comment[cs]=Pokud libovolná příchozí zpráva obsahuje vaši přezdívku bude zvýrazněna červeně
 Comment[da]=Hvis indkommende beskeder indeholder dit kaldenavn, vil de blive fremhævet med rødt
+Comment[de]=Wenn eine eingehende Nachricht Ihren Spitznamen enthält, wird sie rot hervorgehoben
 Comment[el]=Τα εισερχόμενα μηνύματα που περιέχουν το ψευδώνυμό σας, θα τονίζονται με κόκκινο
 Comment[es]=Esta opción resaltará en rojo cualquier mensaje entrante que contenga su apodo.
 Comment[fi]=Jos saapuvassa viestissä on nimimerkkisi, viesti korostetaan punaisella

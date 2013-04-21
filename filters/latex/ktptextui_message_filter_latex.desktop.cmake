@@ -42,6 +42,7 @@ Name[zh_CN]=LaTeX 渲染器
 Comment=If incoming messages contain LaTeX between $$, it will render it directly into the chat.
 Comment[cs]=Pokud příchozí zpráva obsahuje kód latex mezi $$ bude vykreslena přímo do rozhovoru
 Comment[da]=Hvis indkommende beskeder indholder LaTeX mellem $$, vil den rendere det direkte i chatten.
+Comment[de]=Wenn eine eingehende Nachricht LaTeX eingeschlossenen in $$ enthält, wird sie direkt im Chat-Fenster gerendert.
 Comment[el]=Αν τα εισερχόμενα μηνύματα περιέχουν LaTeX ανάμεσα σε $$, η αποτύπωση θα γίνεται απευθείας στη συνομιλία.
 Comment[es]=Si un mensaje recibido contiene código LaTeX entre $$, éste se renderizará directamente en el chat.
 Comment[fi]=Jos saapuvissa viesteissä on LaTeX-koodia $$-merkkien välissä, se koodi renderöidään suoraan keskusteluun.
