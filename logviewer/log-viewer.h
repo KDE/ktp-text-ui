@@ -31,9 +31,10 @@ namespace Tpl {
     class PendingOperation;
 }
 
+class EntityModel;
 class PersonsModel;
 class PersonsPresenceModel;
-class PersonsFilterModel;
+class PersonEntityMergeModel;
 class KMenu;
 
 class LogViewer : public KXmlGuiWindow
@@ -73,8 +74,9 @@ private:
     Ui::LogViewer *ui;
     Tp::AccountManagerPtr m_accountManager;
     PersonsModel *m_personsModel;
+    EntityModel *m_entityModel;
     PersonsPresenceModel *m_presenceModel;
-    PersonsFilterModel *m_personsFilter;
+    PersonEntityMergeModel *m_mergeModel;
 
     KMenu *m_entityListContextMenu;
 

@@ -50,13 +50,11 @@
 #include <KActionCollection>
 #include <KMenuBar>
 
-#include "persons-filter-model.h"
+#include "entity-model.h"
 #include "logs-import-dialog.h"
+#include "person-entity-merge-model.h"
 
 Q_DECLARE_METATYPE(QModelIndex)
-Q_DECLARE_METATYPE(Tp::AccountPtr)
-Q_DECLARE_METATYPE(Tp::ContactPtr)
-Q_DECLARE_METATYPE(Tpl::EntityPtr)
 
 LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::ConnectionFactoryPtr &connectionFactory,
                      const Tp::ChannelFactoryPtr &channelFactory, const Tp::ContactFactoryPtr &contactFactory,
@@ -82,14 +80,15 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     m_presenceModel = new PersonsPresenceModel(this);
     m_presenceModel->setSourceModel(m_personsModel);
 
-    m_personsFilter = new PersonsFilterModel(this);
-    m_personsFilter->setSourceModel(m_presenceModel);
+    m_entityModel = new EntityModel(this);
 
-    ui->entityList->setModel(m_personsFilter);
+    m_mergeModel = new PersonEntityMergeModel(m_personsModel, m_entityModel, this);
+
+    ui->entityList->setModel(m_mergeModel);
     ui->entityList->setItemsExpandable(true);
     ui->entityList->setRootIsDecorated(true);
     ui->entityList->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->entityFilter->setProxy(m_personsFilter);
+    //ui->entityFilter->setProxy(m_mergeModel);
     ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
 
     connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
@@ -153,7 +152,8 @@ void LogViewer::setupActions()
 
 void LogViewer::onAccountManagerReady()
 {
-    m_personsFilter->setAccountManager(m_accountManager);
+    m_entityModel->setAccountManager(m_accountManager);
+
     /* Try to run log import */
     slotImportKopeteLogs(false);
 }
@@ -169,7 +169,7 @@ void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &
         return;
     }
 
-    Tpl::EntityPtr entity = current.data(PersonsFilterModel::EntityRole).value<Tpl::EntityPtr>();
+    Tpl::EntityPtr entity = current.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::AccountPtr account = current.data(PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
 
     /*
@@ -211,7 +211,7 @@ void LogViewer::slotUpdateMainWindow()
     nearestDates.first = m_prevConversationDate;
     nearestDates.second = m_nextConversationDate;
 
-    Tpl::EntityPtr entity = currentIndex.data(PersonsFilterModel::EntityRole).value<Tpl::EntityPtr>();
+    Tpl::EntityPtr entity = currentIndex.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::ContactPtr contact = currentIndex.data(PersonsModel::IMContactRole).value<Tp::ContactPtr>();
     Tp::AccountPtr account = currentIndex.data(PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
     ui->messageView->loadLog(account, entity, contact, date, nearestDates);
@@ -226,7 +226,7 @@ void LogViewer::slotStartGlobalSearch(const QString &term)
 {
     if (term.isEmpty()) {
         ui->messageView->clearHighlightText();
-        m_personsFilter->clearSearchHits();
+        m_mergeModel->clearSearchHits();
         ui->datePicker->clearSearchHits();
         return;
     }
@@ -248,7 +248,7 @@ void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
     Tpl::PendingSearch *search = qobject_cast< Tpl::PendingSearch* >(operation);
     Q_ASSERT(search);
 
-    m_personsFilter->setSearchHits(search->hits());
+    m_mergeModel->setSearchHits(search->hits());
     ui->datePicker->setSearchHits(search->hits());
 
     ui->globalSearch->setEnabled(true);
@@ -258,7 +258,7 @@ void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
 
 void LogViewer::slotClearGlobalSearch()
 {
-    m_personsFilter->clearSearchHits();
+    m_mergeModel->clearSearchHits();
     ui->datePicker->clearSearchHits();
     ui->messageView->clearHighlightText();
 }
@@ -284,7 +284,7 @@ void LogViewer::slotClearContactHistory()
     }
 
     Tp::AccountPtr account = index.data(PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
-    Tpl::EntityPtr entity = index.data(PersonsFilterModel::EntityRole).value<Tpl::EntityPtr>();
+    Tpl::EntityPtr entity = index.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
     if (account.isNull() || entity.isNull()) {
         return;
     }

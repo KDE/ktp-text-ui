@@ -9,12 +9,11 @@ set(ktp-log-viewer_SRCS
         log-viewer.cpp
         logs-import-dialog.cpp
         entity-model.cpp
-        entity-model-item.cpp
         message-view.cpp
         entity-view.cpp
         entity-proxy-model.cpp
         conversation-date-picker.cpp
-        persons-filter-model.cpp
+        person-entity-merge-model.cpp
 )
 
 kde4_add_ui_files(ktp-log-viewer_SRCS log-viewer.ui)
