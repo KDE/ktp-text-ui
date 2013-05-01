@@ -48,7 +48,7 @@ bool EntityFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sour
     const PersonEntityMergeModel::ItemType itemType =
         static_cast<PersonEntityMergeModel::ItemType>(index.data(PersonEntityMergeModel::ItemTypeRole).toUInt());
     if (itemType == PersonEntityMergeModel::Entity) {
-        const Tp::AccountPtr account = source_parent.data(PersonEntityMergeModel::AccountRole).value< Tp::AccountPtr >();
+        const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value< Tp::AccountPtr >();
         const Tpl::EntityPtr entity = index.data(PersonEntityMergeModel::EntityRole).value< Tpl::EntityPtr >();
         Q_ASSERT(!entity.isNull());
 
@@ -65,8 +65,10 @@ bool EntityFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sour
                 }
 
                 if ((searchHitAccount->uniqueIdentifier() == account->uniqueIdentifier()) &&
-                    (searchHitTarget->identifier() == entity->identifier())) {
+                    (searchHitTarget->identifier() == entity->identifier()))
+                {
                     matches_filter = true;
+                    break;
                 }
             }
         } else {
@@ -83,14 +85,14 @@ bool EntityFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sour
         /* Check if contact's account name matches */
         if (entity->alias().contains(term, Qt::CaseInsensitive) && matches_filter) {
             kDebug() << entity->alias() << "matches" << term;
-            return true;
+            return matches_filter;
         }
 
         /* If there's information about contact's real name try to match it too */
         if (!contact.isNull()) {
             if (contact->alias().contains(term, Qt::CaseInsensitive) && matches_filter) {
                 kDebug() << contact->alias() << "matches" << term;
-                return true;
+                return matches_filter;
             }
         }
 
