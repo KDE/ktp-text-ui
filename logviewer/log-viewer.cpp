@@ -195,7 +195,8 @@ void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &
 
     Tpl::EntityPtr entity = current.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::AccountPtr account = current.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
-
+    Q_ASSERT(!entity.isNull());
+    Q_ASSERT(!account.isNull());
     /*
     if (!account.isNull() && !entity.isNull()) {
         actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
@@ -236,8 +237,8 @@ void LogViewer::slotUpdateMainWindow()
     nearestDates.second = m_nextConversationDate;
 
     Tpl::EntityPtr entity = currentIndex.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
-    Tp::ContactPtr contact = currentIndex.data(PersonsModel::IMContactRole).value<Tp::ContactPtr>();
-    Tp::AccountPtr account = currentIndex.data(PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
+    Tp::ContactPtr contact = currentIndex.data(PersonEntityMergeModel::ContactRole).value<Tp::ContactPtr>();
+    Tp::AccountPtr account = currentIndex.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
     ui->messageView->loadLog(account, entity, contact, date, nearestDates);
 }
 
