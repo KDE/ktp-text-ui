@@ -77,7 +77,9 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     m_accountManager = Tp::AccountManager::create(accountFactory, connectionFactory, channelFactory, contactFactory);
     connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
 
-    m_personsModel = new PersonsModel(0, PersonsModel::FeatureAll, this);
+    m_personsModel = new PersonsModel(PersonsModel::FeatureIM | PersonsModel::FeatureContactUID,
+                                      PersonsModel::FeatureAvatars | PersonsModel::FeatureFullName | PersonsModel::FeatureGroups,
+                                      this);
 
     m_presenceModel = new PersonsPresenceModel(this);
     m_presenceModel->setSourceModel(m_personsModel);
