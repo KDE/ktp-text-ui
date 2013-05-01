@@ -209,9 +209,11 @@ int PersonEntityMergeModel::columnCount(const QModelIndex& parent) const
 Qt::ItemFlags PersonEntityMergeModel::flags(const QModelIndex& index) const
 {
     // FIXME: Make Persons selectable and show some fancy stuff
+    /*
     if (index.data(PersonsModel::ResourceTypeRole).toUInt() == PersonsModel::Person) {
         return Qt::ItemIsEnabled;
     }
+    */
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
@@ -229,6 +231,8 @@ QVariant PersonEntityMergeModel::data(const QModelIndex &index, int role) const
 
         if (role == Qt::DisplayRole) {
             return item->label;
+        } else if (role == PersonEntityMergeModel::ItemTypeRole) {
+            return PersonEntityMergeModel::Group;
         }
 
         // FIXME: We could support more roles?
@@ -242,6 +246,13 @@ QVariant PersonEntityMergeModel::data(const QModelIndex &index, int role) const
     switch (role) {
         case PersonEntityMergeModel::EntityRole:
             return item->entityIndex.data(EntityModel::EntityRole);
+        case PersonEntityMergeModel::ContactRole:
+            return item->contactIndex.data(PersonsModel::IMContactRole);
+        case PersonEntityMergeModel::AccountRole:
+            return item->entityIndex.data(EntityModel::AccountRole);
+        case PersonEntityMergeModel::ItemTypeRole:
+            return item->isPersona() ? PersonEntityMergeModel::Persona
+                                     : PersonEntityMergeModel::Entity;
     }
 
     // Extract role from respective parent model
@@ -250,6 +261,9 @@ QVariant PersonEntityMergeModel::data(const QModelIndex &index, int role) const
         value = m_personsModel->data(item->personaIndex, role);
     } else if (item->contactIndex.isValid()) {
         value = m_personsModel->data(item->contactIndex, role);
+        if (value.isNull()) {
+            value = m_entityModel->data(item->entityIndex, role);
+        }
     } else {
         value = m_entityModel->data(item->entityIndex, role);
     }
@@ -276,18 +290,6 @@ QModelIndex PersonEntityMergeModel::parent(const QModelIndex& child) const
 
     Item *parentParent = parent->parent;
     return createIndex(parentParent->children.indexOf(parent), 0, parentParent);
-}
-
-void PersonEntityMergeModel::clearSearchHits()
-{
-    kDebug() << "STUB!";
-}
-
-void PersonEntityMergeModel::setSearchHits(const Tpl::SearchHitList& searchHits)
-{
-    Q_UNUSED(searchHits);
-
-    kDebug() << "STUB!";
 }
 
 void PersonEntityMergeModel::initializeModel()

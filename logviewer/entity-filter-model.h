@@ -26,13 +26,13 @@
 
 typedef QPair< Tp::AccountPtr, Tpl::EntityPtr > AccountEntityPair;
 
-class EntityProxyModel : public QSortFilterProxyModel
+class EntityFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
-    explicit EntityProxyModel(QObject *parent = 0);
-    virtual ~EntityProxyModel();
+    explicit EntityFilterModel(QObject *parent = 0);
+    virtual ~EntityFilterModel();
 
     void setSearchHits(const Tpl::SearchHitList &searchHits);
     void clearSearchHits();

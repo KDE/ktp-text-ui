@@ -53,6 +53,7 @@
 #include "entity-model.h"
 #include "logs-import-dialog.h"
 #include "person-entity-merge-model.h"
+#include "entity-filter-model.h"
 
 Q_DECLARE_METATYPE(QModelIndex)
 
@@ -84,11 +85,14 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
 
     m_mergeModel = new PersonEntityMergeModel(m_personsModel, m_entityModel, this);
 
-    ui->entityList->setModel(m_mergeModel);
+    m_filterModel = new EntityFilterModel(this);
+    m_filterModel->setSourceModel(m_mergeModel);
+
+    ui->entityList->setModel(m_filterModel);
     ui->entityList->setItemsExpandable(true);
     ui->entityList->setRootIsDecorated(true);
     ui->entityList->setContextMenuPolicy(Qt::CustomContextMenu);
-    //ui->entityFilter->setProxy(m_mergeModel);
+    ui->entityFilter->setProxy(m_filterModel);
     ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
 
     connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
@@ -226,7 +230,7 @@ void LogViewer::slotStartGlobalSearch(const QString &term)
 {
     if (term.isEmpty()) {
         ui->messageView->clearHighlightText();
-        m_mergeModel->clearSearchHits();
+        m_filterModel->clearSearchHits();
         ui->datePicker->clearSearchHits();
         return;
     }
@@ -248,7 +252,7 @@ void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
     Tpl::PendingSearch *search = qobject_cast< Tpl::PendingSearch* >(operation);
     Q_ASSERT(search);
 
-    m_mergeModel->setSearchHits(search->hits());
+    m_filterModel->setSearchHits(search->hits());
     ui->datePicker->setSearchHits(search->hits());
 
     ui->globalSearch->setEnabled(true);
@@ -258,7 +262,7 @@ void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
 
 void LogViewer::slotClearGlobalSearch()
 {
-    m_mergeModel->clearSearchHits();
+    m_filterModel->clearSearchHits();
     ui->datePicker->clearSearchHits();
     ui->messageView->clearHighlightText();
 }

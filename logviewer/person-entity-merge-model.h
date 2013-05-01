@@ -39,7 +39,16 @@ class PersonEntityMergeModel : public QAbstractItemModel
 
   public:
     enum Roles {
-        EntityRole = PersonsModel::LastRole + 1
+        EntityRole = PersonsModel::LastRole + 1,
+        ContactRole,
+        AccountRole,
+        ItemTypeRole
+    };
+
+    enum ItemType {
+        Group,
+        Persona,
+        Entity
     };
 
     explicit PersonEntityMergeModel(PersonsModel *personsModel, EntityModel *entityModel,
@@ -52,9 +61,6 @@ class PersonEntityMergeModel : public QAbstractItemModel
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual QModelIndex parent(const QModelIndex& child) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-
-    void setSearchHits(const Tpl::SearchHitList &searchHits);
-    void clearSearchHits();
 
   private Q_SLOTS:
     void initializeModel();
