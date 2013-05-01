@@ -11,6 +11,7 @@ set(ktp-log-viewer_SRCS
         entity-model.cpp
         message-view.cpp
         entity-view.cpp
+        entity-view-delegate.cpp
         entity-filter-model.cpp
         conversation-date-picker.cpp
         person-entity-merge-model.cpp

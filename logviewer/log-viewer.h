@@ -47,6 +47,7 @@ public:
                        const Tp::ChannelFactoryPtr &channelFactory, const Tp::ContactFactoryPtr &contactFactory,
                        QWidget *parent = 0);
     ~LogViewer();
+
 private Q_SLOTS:
     void onAccountManagerReady();
 
@@ -84,6 +85,7 @@ private:
 
     QDate m_prevConversationDate;
     QDate m_nextConversationDate;
+
 };
 
 #endif // LOGVIEWER_H

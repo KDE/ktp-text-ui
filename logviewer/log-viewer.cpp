@@ -54,6 +54,7 @@
 #include "logs-import-dialog.h"
 #include "person-entity-merge-model.h"
 #include "entity-filter-model.h"
+#include "entity-view-delegate.h"
 
 Q_DECLARE_METATYPE(QModelIndex)
 
@@ -89,8 +90,11 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     m_filterModel->setSourceModel(m_mergeModel);
 
     ui->entityList->setModel(m_filterModel);
+    ui->entityList->setItemDelegate(new EntityViewDelegate(ui->entityList));
     ui->entityList->setItemsExpandable(true);
-    ui->entityList->setRootIsDecorated(true);
+    ui->entityList->setRootIsDecorated(false);
+    ui->entityList->setExpandsOnDoubleClick(false);
+    ui->entityList->setIndentation(0);
     ui->entityList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->entityFilter->setProxy(m_filterModel);
     ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
@@ -164,17 +168,33 @@ void LogViewer::onAccountManagerReady()
 
 void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &previous)
 {
-    Q_UNUSED(previous);
+    if (previous.data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Persona &&
+        current.parent() != previous)
+    {
+        ui->entityList->collapse(previous);
+    } else if (previous.parent().data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Persona) {
+        ui->entityList->collapse(previous.parent());
+    }
+
+    if (current.data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Group) {
+        if (ui->entityList->isExpanded(current)) {
+            ui->entityList->collapse(current);
+        } else {
+            ui->entityList->expand(current);
+        }
+        return;
+    }
 
     // FIXME: Show something fancy when selecting a persona
-    if (current.data(PersonsModel::ResourceTypeRole).toUInt() == PersonsModel::Person) {
+    if (current.data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Persona) {
+        ui->entityList->expand(current);
         ui->datePicker->clear();
         ui->messageView->clear();
         return;
     }
 
     Tpl::EntityPtr entity = current.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
-    Tp::AccountPtr account = current.data(PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
+    Tp::AccountPtr account = current.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
 
     /*
     if (!account.isNull() && !entity.isNull()) {
