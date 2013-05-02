@@ -1,5 +1,7 @@
 find_package(QJSON REQUIRED)
 
+include_directories(${QJSON_INCLUDE_DIRS})
+
 set (ktptextui_message_filter_urlexpansion_SRCS
      urlexpansion-filter.cpp
 )
