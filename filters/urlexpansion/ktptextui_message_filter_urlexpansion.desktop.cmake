@@ -1,7 +1,24 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Short URLs
+Name[cs]=Krátké URL
+Name[ia]=Monstra URLs
+Name[it]=URL brevi
+Name[nl]=Korte URL's
+Name[pt]=URL's Curtos
+Name[sl]=Kratki naslovi URL
+Name[sv]=Korta webbadresser
+Name[uk]=Короткі адреси
+Name[x-test]=xxShort URLsxx
 Comment=Shows the actual URL to which a shortened URL is redirecting to
+Comment[cs]=Zobrazí skutečné URL, na které je přesměrováno zkrácené URL
+Comment[it]=Mostra l'URL vero a cui si viene rediretti da un URL abbreviato
+Comment[nl]=Toont de actuele URL waarnaar de korte URL verwijst
+Comment[pt]=Mostra o URL real para onde aponta um URL curto
+Comment[sl]=Prikaže dejanski URL na katerega kaže skrajšan URL
+Comment[sv]=Visar den verkliga webbadressen som en avkortad webbadress leder till
+Comment[uk]=Показує справжню адресу, до якої переспрямовуватиме вас скорочена адреса
+Comment[x-test]=xxShows the actual URL to which a shortened URL is redirecting toxx
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
 X-KDE-Library=ktptextui_message_filter_urlexpansion
