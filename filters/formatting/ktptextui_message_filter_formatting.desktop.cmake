@@ -18,6 +18,7 @@ Name[lt]=Teksto formatavimas
 Name[mr]=मजकूर फॉर्मेटिंग
 Name[nb]=Tekstformatering
 Name[nl]=Tekstopmaak
+Name[pa]=ਟੈਕਸਟ ਫਾਰਮੈਟ
 Name[pt]=Formatação do Texto
 Name[pt_BR]=Formatação do texto
 Name[ro]=Formatarea textului

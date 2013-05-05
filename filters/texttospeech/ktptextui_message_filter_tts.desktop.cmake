@@ -18,6 +18,7 @@ Name[lt]=Tekstas balsu
 Name[mr]=पाठ्य-ते-भाष्य
 Name[nb]=Tekst til tale
 Name[nl]=Tekst-naar-spraak
+Name[pa]=ਸ਼ਬਦ ਤੋਂ ਬੋਲੀ
 Name[pl]=Tekst-na-mowę
 Name[pt]=Texto para Fala
 Name[pt_BR]=Sintetizador de voz

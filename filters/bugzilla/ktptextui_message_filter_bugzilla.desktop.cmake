@@ -16,6 +16,7 @@ Name[kk]=Bugzilla мәліметі
 Name[lt]=Bugzilla informacija
 Name[mr]=बगझिल्ला माहिती
 Name[nl]=Informatie in Bugzilla
+Name[pa]=ਬੱਗਜ਼ੀਲਾ ਜਾਣਕਾਰੀ
 Name[pt]=Informação do Bugzilla
 Name[pt_BR]=Informações do Bugzilla
 Name[ro]=Informații Bugzilla

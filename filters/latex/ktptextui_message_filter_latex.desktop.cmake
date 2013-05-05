@@ -28,6 +28,7 @@ Name[it]=Visualizzatore LaTeX
 Name[kk]=LaTeX кескіндегіші
 Name[lt]=LaTeX pateikimas
 Name[nl]=LaTeX-renderer
+Name[pa]=LaTeX ਰੈਂਡਰ
 Name[pt]=Representação em LaTeX
 Name[pt_BR]=Renderizador de LaTeX
 Name[ru]=Поддержка LaTeX

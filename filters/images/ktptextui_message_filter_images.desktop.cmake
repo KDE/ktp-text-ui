@@ -20,6 +20,7 @@ Name[lt]=Paveikslėlio peržiūra
 Name[mr]=प्रतिमा पूर्वावलोकन
 Name[nb]=Bildeforhåndsvisning
 Name[nl]=Afbeeldingsvoorbeeld
+Name[pa]=ਚਿੱਤਰ ਝਲਕ
 Name[pl]=Podgląd obrazu
 Name[pt]=Antevisão da Imagem
 Name[pt_BR]=Visualização de imagem

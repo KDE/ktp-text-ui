@@ -16,6 +16,7 @@ Name[kk]=YouTube алдың-аласы
 Name[lt]=YouTube peržiūra
 Name[mr]=यूट्यूब पूर्वावलोकन
 Name[nl]=Voorbeeld van YouTube
+Name[pa]=ਯੂਟਿਊਬ ਝਲਕ
 Name[pt]=Antevisão do YouTube
 Name[pt_BR]=Visualização do YouTube
 Name[ro]=Previzualizare YouTube

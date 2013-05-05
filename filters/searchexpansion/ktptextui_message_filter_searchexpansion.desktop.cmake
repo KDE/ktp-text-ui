@@ -22,6 +22,7 @@ Name[mr]=वेब शॉर्टकट
 Name[nb]=Nettsnarveier
 Name[nl]=Webkoppelingen
 Name[nn]=Vevsnarvegar
+Name[pa]=ਵੈੱਬ ਸ਼ਾਰਟਕੱਟ
 Name[pl]=Skróty sieciowe
 Name[pt]=Atalhos Web
 Name[pt_BR]=Atalhos da Internet
