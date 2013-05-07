@@ -23,6 +23,7 @@
 #include <KXmlGuiWindow>
 #include <TelepathyLoggerQt4/Types>
 
+class DatesModel;
 namespace Ui {
     class LogViewer;
 }
@@ -52,7 +53,6 @@ private Q_SLOTS:
     void onAccountManagerReady();
 
     void onEntitySelected(const QModelIndex &current, const QModelIndex &previous);
-    void onDateSelected();
 
     void slotUpdateMainWindow();
     void slotSetConversationDate(const QDate &date);
@@ -75,6 +75,7 @@ private:
 
     Ui::LogViewer *ui;
     Tp::AccountManagerPtr m_accountManager;
+    DatesModel *m_datesModel;
     PersonsModel *m_personsModel;
     EntityModel *m_entityModel;
     PersonsPresenceModel *m_presenceModel;

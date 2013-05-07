@@ -45,12 +45,12 @@
         <widget class="KFilterProxySearchLine" name="entityFilter"/>
        </item>
        <item>
-        <widget class="ConversationDatePicker" name="datePicker" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QTreeView" name="datesView">
+         <property name="rootIsDecorated">
+          <bool>false</bool>
+         </property>
+         <property name="headerHidden">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -82,12 +82,6 @@
    <class>MessageView</class>
    <extends>QWidget</extends>
    <header>message-view.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ConversationDatePicker</class>
-   <extends>QWidget</extends>
-   <header>conversation-date-picker.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

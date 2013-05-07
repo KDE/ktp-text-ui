@@ -8,12 +8,12 @@ set(ktp-log-viewer_SRCS
         main.cpp
         log-viewer.cpp
         logs-import-dialog.cpp
+        dates-model.cpp
         entity-model.cpp
         message-view.cpp
         entity-view.cpp
         entity-view-delegate.cpp
         entity-filter-model.cpp
-        conversation-date-picker.cpp
         person-entity-merge-model.cpp
 )
 

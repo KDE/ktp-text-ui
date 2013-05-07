@@ -55,6 +55,7 @@
 #include "person-entity-merge-model.h"
 #include "entity-filter-model.h"
 #include "entity-view-delegate.h"
+#include "dates-model.h"
 
 Q_DECLARE_METATYPE(QModelIndex)
 
@@ -101,8 +102,11 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     ui->entityFilter->setProxy(m_filterModel);
     ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
 
+    m_datesModel = new DatesModel(this);
+    ui->datesView->setModel(m_datesModel);
+
     connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
-    connect(ui->datePicker, SIGNAL(dateChanged(QDate)), SLOT(onDateSelected()));
+    connect(ui->datesView, SIGNAL(activated(QModelIndex)), SLOT(slotUpdateMainWindow()));
     connect(ui->messageView, SIGNAL(conversationSwitchRequested(QDate)), SLOT(slotSetConversationDate(QDate)));
     connect(ui->globalSearch, SIGNAL(returnPressed(QString)), SLOT(slotStartGlobalSearch(QString)));
     connect(ui->globalSearch, SIGNAL(clearButtonClicked()), SLOT(slotClearGlobalSearch()));
@@ -190,8 +194,13 @@ void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &
     // FIXME: Show something fancy when selecting a persona
     if (current.data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Persona) {
         ui->entityList->expand(current);
-        ui->datePicker->clear();
         ui->messageView->clear();
+        m_datesModel->clear();
+        for (int i = 0; i < current.model()->rowCount(current); ++i) {
+            const QModelIndex child = current.child(i, 0);
+            m_datesModel->addEntity(child.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>(),
+                                    child.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>());
+        }
         return;
     }
 
@@ -205,17 +214,12 @@ void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &
     }
     */
 
-    ui->datePicker->setEntity(account, entity);
-}
-
-void LogViewer::onDateSelected()
-{
-    slotUpdateMainWindow();
+    m_datesModel->setEntity(account, entity);
 }
 
 void LogViewer::slotUpdateMainWindow()
 {
-    QModelIndex currentIndex = ui->entityList->currentIndex();
+    const QModelIndex currentIndex = ui->entityList->currentIndex();
 
     if (!currentIndex.isValid()) {
         return;
@@ -223,13 +227,14 @@ void LogViewer::slotUpdateMainWindow()
 
     /* If the selected date is not within valid (highlighted) dates then display empty
      * conversation (even if there is a chat log for that particular date) */
-    QDate date = ui->datePicker->date();
-    if (!ui->datePicker->validDates().contains(date)) {
-        date = QDate();
+    QDate date;
+    const QModelIndex currentDateIndex = ui->datesView->currentIndex();
+    if (currentDateIndex.isValid()) {
+        date = currentDateIndex.data(DatesModel::DateRole).toDate();
     }
 
-    m_prevConversationDate = ui->datePicker->previousDate();
-    m_nextConversationDate = ui->datePicker->nextDate();
+    m_prevConversationDate = m_datesModel->previousDate(currentDateIndex);
+    m_nextConversationDate = m_datesModel->nextDate(currentDateIndex);
 
     actionCollection()->action(QLatin1String("jump-prev-conversation"))->setEnabled(m_prevConversationDate.isValid());
     actionCollection()->action(QLatin1String("jump-next-conversation"))->setEnabled(m_nextConversationDate.isValid());
@@ -238,15 +243,19 @@ void LogViewer::slotUpdateMainWindow()
     nearestDates.first = m_prevConversationDate;
     nearestDates.second = m_nextConversationDate;
 
-    Tpl::EntityPtr entity = currentIndex.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
+    Tpl::EntityPtr entity = currentDateIndex.data(DatesModel::EntityRole).value<Tpl::EntityPtr>();
+    Tp::AccountPtr account = currentDateIndex.data(DatesModel::AccountRole).value<Tp::AccountPtr>();
     Tp::ContactPtr contact = currentIndex.data(PersonEntityMergeModel::ContactRole).value<Tp::ContactPtr>();
-    Tp::AccountPtr account = currentIndex.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
     ui->messageView->loadLog(account, entity, contact, date, nearestDates);
 }
 
 void LogViewer::slotSetConversationDate(const QDate &date)
 {
-    ui->datePicker->setDate(date);
+    const QModelIndex index = m_datesModel->indexForDate(date);
+    if (index.isValid()) {
+        ui->datesView->setCurrentIndex(index);
+        slotUpdateMainWindow();
+    }
 }
 
 void LogViewer::slotStartGlobalSearch(const QString &term)
@@ -254,7 +263,7 @@ void LogViewer::slotStartGlobalSearch(const QString &term)
     if (term.isEmpty()) {
         ui->messageView->clearHighlightText();
         m_filterModel->clearSearchHits();
-        ui->datePicker->clearSearchHits();
+        m_datesModel->clearSearchHits();
         return;
     }
 
@@ -276,7 +285,7 @@ void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
     Q_ASSERT(search);
 
     m_filterModel->setSearchHits(search->hits());
-    ui->datePicker->setSearchHits(search->hits());
+    m_datesModel->setSearchHits(search->hits());
 
     ui->globalSearch->setEnabled(true);
     ui->busyAnimation->setSequence(KPixmapSequence());
@@ -286,7 +295,7 @@ void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
 void LogViewer::slotClearGlobalSearch()
 {
     m_filterModel->clearSearchHits();
-    ui->datePicker->clearSearchHits();
+    m_datesModel->clearSearchHits();
     ui->messageView->clearHighlightText();
 }
 
@@ -395,7 +404,11 @@ void LogViewer::slotJumpToNextConversation()
         return;
     }
 
-    ui->datePicker->setDate(m_nextConversationDate);
+    const QModelIndex index = m_datesModel->indexForDate(m_nextConversationDate);
+    if (index.isValid()) {
+        ui->datesView->setCurrentIndex(index);
+        slotUpdateMainWindow();
+    }
 }
 
 void LogViewer::slotJumpToPrevConversation()
@@ -404,5 +417,9 @@ void LogViewer::slotJumpToPrevConversation()
         return;
     }
 
-    ui->datePicker->setDate(m_prevConversationDate);
+    const QModelIndex index = m_datesModel->indexForDate(m_prevConversationDate);
+    if (index.isValid()) {
+        ui->datesView->setCurrentIndex(index);
+        slotUpdateMainWindow();
+    }
 }
