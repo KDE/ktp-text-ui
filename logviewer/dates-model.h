@@ -35,10 +35,17 @@ class DatesModel : public QAbstractItemModel
 
   public:
     enum Roles {
-        DateRole = Qt::UserRole + 1,
+        TypeRole = Qt::UserRole + 1,
+        DateRole,
         HintRole,
         AccountRole,
         EntityRole
+    };
+
+    enum RowTypes {
+        GroupRow,
+        DateRow,
+        ConversationRow
     };
 
     explicit DatesModel(QObject* parent = 0);
@@ -72,7 +79,7 @@ class DatesModel : public QAbstractItemModel
     int m_resetInProgress;
 
     class Date;
-    QList<Date*> m_dates;
+    QMultiMap<QDate, Date*> m_items;
 
     friend bool compareDates(const Date *date1, const Date *date2);
 };

@@ -21,7 +21,10 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QApplication>
-#include <KGlobalSettings>
+
+#include <KDE/KGlobalSettings>
+#include <KDE/KIconLoader>
+
 
 #include "dates-model.h"
 
@@ -36,10 +39,89 @@ DatesViewDelegate::~DatesViewDelegate()
 
 QSize DatesViewDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    return QStyledItemDelegate::sizeHint(option, index);
+    if (index.data(DatesModel::TypeRole).toUInt() == DatesModel::GroupRow) {
+        return QSize(0, qMax(22, KGlobalSettings::smallestReadableFont().pixelSize()) + 2 + 1);
+    } else {
+        return QStyledItemDelegate::sizeHint(option, index);
+    }
 }
 
 void DatesViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    if (index.data(DatesModel::TypeRole).toUInt() == DatesModel::GroupRow) {
+        paintGroup(painter, option, index);
+    } else {
+        paintItem(painter, option, index);
+    }
+}
+
+void DatesViewDelegate::paintGroup(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    QStyleOptionViewItemV4 optV4 = option;
+    initStyleOption(&optV4, index);
+
+    painter->save();
+
+    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
+    painter->setClipRect(optV4.rect);
+
+    QStyle *style = QApplication::style();
+    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
+
+    QRect groupRect = optV4.rect;
+
+    //paint the background
+    QBrush bgBrush(option.palette.color(QPalette::Active, QPalette::Button).lighter(105));
+    painter->fillRect(groupRect, bgBrush);
+
+    //paint very subtle line at the bottom
+    QPen thinLinePen;
+    thinLinePen.setWidth(0);
+    thinLinePen.setColor(option.palette.color(QPalette::Active, QPalette::Button));
+    painter->setPen(thinLinePen);
+    //to get nice sharp 1px line we need to turn AA off, otherwise it will be all blurry
+    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawLine(groupRect.bottomLeft(), groupRect.bottomRight());
+    painter->setRenderHint(QPainter::Antialiasing, true);
+
+    //remove spacing from the sides and one point to the bottom for the 1px line
+    groupRect.adjust(0, 0, 0, -1);
+
+    //get the proper rect for the expand sign
+    int iconSize = IconSize(KIconLoader::Toolbar);
+
+    QStyleOption expandSignOption = option;
+    expandSignOption.rect = groupRect;
+    expandSignOption.rect.setSize(QSize(iconSize, iconSize));
+    expandSignOption.rect.moveLeft(groupRect.left());
+    expandSignOption.rect.moveTop(groupRect.top() + groupRect.height()/2 - expandSignOption.rect.height()/2);
+
+    //paint the expand sign
+    if (option.state & QStyle::State_Open) {
+        style->drawPrimitive(QStyle::PE_IndicatorArrowDown, &expandSignOption, painter);
+    } else {
+        style->drawPrimitive(QStyle::PE_IndicatorArrowRight, &expandSignOption, painter);
+    }
+
+    QFont groupFont = KGlobalSettings::smallestReadableFont();
+    //paint the header string
+    QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + 2 * 2, 0, -2, 0);
+
+    QString groupHeaderString =  index.data(Qt::DisplayRole).toString();
+
+    QFontMetrics groupFontMetrics(groupFont);
+
+    painter->setFont(groupFont);
+
+    painter->setPen(option.palette.color(QPalette::Active, QPalette::Text));
+    painter->drawText(groupLabelRect, Qt::AlignVCenter | Qt::AlignLeft,
+                      groupFontMetrics.elidedText(groupHeaderString, Qt::ElideRight,
+                                                  groupLabelRect.width() - 2));
+
+    painter->restore();
+}
+
+void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     QStyleOptionViewItemV4 optV4 = option;
     initStyleOption(&optV4, index);
@@ -54,10 +136,36 @@ void DatesViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 
     const int itemWidth = option.rect.right();
 
+    int iconSize = IconSize(KIconLoader::KIconLoader::Toolbar);
+
+    QRect itemRect = optV4.rect;
+    if (index.data(DatesModel::TypeRole).toUInt() == DatesModel::ConversationRow) {
+        itemRect.setX(itemRect.x() + 20);
+        itemRect.setWidth(itemRect.width() - 20);
+    } else {
+        itemRect.setX(itemRect.x());
+        itemRect.setWidth(itemRect.width());
+    }
+
+    QStyleOption expandSignOption = option;
+    expandSignOption.rect = itemRect;
+    expandSignOption.rect.setSize(QSize(iconSize, iconSize));
+    expandSignOption.rect.moveLeft(itemRect.left());
+    expandSignOption.rect.moveTop(itemRect.top() + itemRect.height()/2 - expandSignOption.rect.height()/2);
+
+    if (index.model()->rowCount(index) > 0) {
+        if (option.state & QStyle::State_Open) {
+            style->drawPrimitive(QStyle::PE_IndicatorArrowDown, &expandSignOption, painter);
+        } else {
+            style->drawPrimitive(QStyle::PE_IndicatorArrowRight, &expandSignOption, painter);
+        }
+    }
+
     const QString date = index.data(Qt::DisplayRole).toString();
-    QRect dateRect = optV4.rect;
+    QRect dateRect = itemRect;
+    dateRect.setX(dateRect.x() + 20);
     dateRect.setY(dateRect.y() + (dateRect.height() / 2 - option.fontMetrics.height() / 2));
-    dateRect.setWidth(qMin((int) ceil(itemWidth * 2.0 / 3.0) - optV4.rect.x(), option.fontMetrics.width(date) + optV4.rect.x()));
+    dateRect.setWidth(qMin((int) ceil(itemWidth * 2.0 / 3.0) - itemRect.x(), option.fontMetrics.width(date) + itemRect.x()) - 20);
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(option.palette.color(QPalette::Active, QPalette::HighlightedText));
@@ -70,7 +178,7 @@ void DatesViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     QFontMetrics hintFontMetrics(hintFont);
 
     const QString hint = index.data(DatesModel::HintRole).toString();
-    QRect hintRect = optV4.rect;
+    QRect hintRect = itemRect;
     hintRect.setX(ceil((itemWidth * 2.0 / 3.0)) + 8);
     hintRect.setY(hintRect.y() + (hintRect.height() - hintFontMetrics.height()));
     hintRect.setWidth(itemWidth - hintRect.x());
@@ -85,6 +193,7 @@ void DatesViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 
     painter->restore();
 }
+
 
 
 #include "dates-view-delegate.moc"

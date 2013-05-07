@@ -53,6 +53,7 @@ private Q_SLOTS:
     void onAccountManagerReady();
 
     void onEntitySelected(const QModelIndex &current, const QModelIndex &previous);
+    void slotDateClicked(const QModelIndex &index);
 
     void slotUpdateMainWindow();
     void slotSetConversationDate(const QDate &date);

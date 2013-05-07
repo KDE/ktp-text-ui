@@ -106,9 +106,14 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     m_datesModel = new DatesModel(this);
     ui->datesView->setModel(m_datesModel);
     ui->datesView->setItemDelegate(new DatesViewDelegate(ui->datesView));
+    ui->datesView->setItemsExpandable(true);
+    ui->datesView->setRootIsDecorated(false);
+    ui->datesView->setExpandsOnDoubleClick(false);
+    ui->datesView->setIndentation(0);
 
     connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
-    connect(ui->datesView, SIGNAL(activated(QModelIndex)), SLOT(slotUpdateMainWindow()));
+    connect(ui->datesView, SIGNAL(clicked(QModelIndex)), SLOT(slotDateClicked(QModelIndex)));
+    connect(ui->datesView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(slotUpdateMainWindow()));
     connect(ui->messageView, SIGNAL(conversationSwitchRequested(QDate)), SLOT(slotSetConversationDate(QDate)));
     connect(ui->globalSearch, SIGNAL(returnPressed(QString)), SLOT(slotStartGlobalSearch(QString)));
     connect(ui->globalSearch, SIGNAL(clearButtonClicked()), SLOT(slotClearGlobalSearch()));
@@ -217,6 +222,15 @@ void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &
     */
 
     m_datesModel->setEntity(account, entity);
+}
+
+void LogViewer::slotDateClicked(const QModelIndex& index)
+{
+    if (ui->datesView->isExpanded(index)) {
+        ui->datesView->collapse(index);
+    } else {
+        ui->datesView->expand(index);
+    }
 }
 
 void LogViewer::slotUpdateMainWindow()

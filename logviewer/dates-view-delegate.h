@@ -33,6 +33,9 @@ class DatesViewDelegate : public QStyledItemDelegate
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
+  private:
+    void paintGroup(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    void paintItem(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 #endif // DATESVIEWDELEGATE_H
