@@ -248,7 +248,11 @@ void LogViewer::slotUpdateMainWindow()
     Tpl::EntityPtr entity = currentDateIndex.data(DatesModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::AccountPtr account = currentDateIndex.data(DatesModel::AccountRole).value<Tp::AccountPtr>();
     Tp::ContactPtr contact = currentIndex.data(PersonEntityMergeModel::ContactRole).value<Tp::ContactPtr>();
-    ui->messageView->loadLog(account, entity, contact, date, nearestDates);
+    if (entity.isNull() || account.isNull()) {
+        ui->messageView->clear();
+    } else {
+        ui->messageView->loadLog(account, entity, contact, date, nearestDates);
+    }
 }
 
 void LogViewer::slotSetConversationDate(const QDate &date)
