@@ -184,16 +184,8 @@ void EntityViewDelegate::paintHeader(QPainter* painter, const QStyleOptionViewIt
 
     QFont groupFont = KGlobalSettings::smallestReadableFont();
 
-    //paint the group icon
-    QRect groupIconRect;
-    groupIconRect.setSize(QSize(ACCOUNT_ICON_SIZE, ACCOUNT_ICON_SIZE));
-    groupIconRect.moveRight(groupRect.right());
-    groupIconRect.moveTop(groupRect.top() + groupRect.height()/2 - groupIconRect.height()/2);
-
-    groupIconRect.setWidth(0);
-
     //paint the header string
-    QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + SPACING * 2, 0, -groupIconRect.width() -SPACING, 0);
+    QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + SPACING * 2, 0, -SPACING, 0);
 
     QString groupHeaderString =  index.data(Qt::DisplayRole).toString();
 
