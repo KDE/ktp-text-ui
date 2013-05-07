@@ -56,6 +56,7 @@
 #include "entity-filter-model.h"
 #include "entity-view-delegate.h"
 #include "dates-model.h"
+#include "dates-view-delegate.h"
 
 Q_DECLARE_METATYPE(QModelIndex)
 
@@ -104,6 +105,7 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
 
     m_datesModel = new DatesModel(this);
     ui->datesView->setModel(m_datesModel);
+    ui->datesView->setItemDelegate(new DatesViewDelegate(ui->datesView));
 
     connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
     connect(ui->datesView, SIGNAL(activated(QModelIndex)), SLOT(slotUpdateMainWindow()));

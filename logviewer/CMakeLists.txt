@@ -9,6 +9,7 @@ set(ktp-log-viewer_SRCS
         log-viewer.cpp
         logs-import-dialog.cpp
         dates-model.cpp
+        dates-view-delegate.cpp
         entity-model.cpp
         message-view.cpp
         entity-view.cpp
