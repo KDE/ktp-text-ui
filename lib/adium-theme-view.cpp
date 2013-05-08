@@ -51,7 +51,7 @@
 #include <KProtocolInfo>
 
 AdiumThemeView::AdiumThemeView(QWidget *parent)
-        : KWebView(parent),
+        : KWebView(parent, false),
         // check iconPath docs for minus sign in -KIconLoader::SizeLarge
         m_defaultAvatar(KIconLoader::global()->iconPath(QLatin1String("im-user"),-KIconLoader::SizeLarge)),
         m_displayHeader(true)
