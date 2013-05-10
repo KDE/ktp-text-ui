@@ -256,13 +256,21 @@ void ChatWidget::setChatEnabled(bool enable)
 
 void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 {
-    onContactPresenceChange(d->channel->groupSelfContact(), KTp::Presence(d->channel->groupSelfContact()->presence()));
 
     d->channel = newTextChannelPtr;     // set the new channel
     d->contactModel->setTextChannel(newTextChannelPtr);
 
     // connect signals for the new textchannel
     setupChannelSignals();
+
+    //if the UI is ready process any messages in queue
+    if (d->chatViewInitialized) {
+        Q_FOREACH (const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
+            handleIncomingMessage(message, true);
+        }
+    }
+    setChatEnabled(true);
+    onContactPresenceChange(d->channel->groupSelfContact(), KTp::Presence(d->channel->groupSelfContact()->presence()));
 }
 
 Tp::TextChannelPtr ChatWidget::textChannel() const
