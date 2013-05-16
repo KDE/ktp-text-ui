@@ -718,7 +718,14 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const K
     bool isYou = (contact == d->channel->groupSelfContact());
 
     if (isYou) {
-        message = i18n("You are now marked as %1", presence.displayString());
+        if (presence.statusMessage().isEmpty()) {
+            message = i18nc("Your presence status", "You are now marked as %1",
+                            presence.displayString());
+        } else {
+            message = i18nc("Your presence status with status message",
+                            "You are now marked as %1 - %2",
+                            presence.displayString(), presence.statusMessage());
+        }
     }
     else {
         if (presence.statusMessage().isEmpty()) {
