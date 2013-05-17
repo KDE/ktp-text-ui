@@ -612,8 +612,6 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
 
             d->ui.chatArea->addStatusMessage(text, message.received());
         } else {
-            AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
-
             KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel));
 
             if (!alreadyNotified) {
