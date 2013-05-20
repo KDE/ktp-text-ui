@@ -632,6 +632,10 @@ QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const Adiu
     htmlTemplate.replace(QLatin1String("%senderStatusIcon%"), info.senderStatusIcon());
     //senderDisplayName
     htmlTemplate.replace(QLatin1String("%senderDisplayName%"), info.senderDisplayName());
+    //Few themes use this and it is IRC specific. It is also undocumented
+    //see https://bugs.kde.org/show_bug.cgi?id=316323 for details
+    //simply replace with an empty string
+    htmlTemplate.replace(QLatin1String("%senderPrefix%"), QString());
 
     //FIXME %textbackgroundcolor{X}%
     return replaceMessageKeywords(htmlTemplate, info);
