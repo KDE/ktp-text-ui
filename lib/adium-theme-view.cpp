@@ -607,7 +607,7 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
 
     //KTp-Renkoo specific hack to make "Conversation Began" translatable
     htmlTemplate.replace(QLatin1String("%conversationBegan%"), i18nc("Header at top of conversation view. %1 is the time format",
-                                                                     "Conversation began %1").arg(KGlobal::locale()->formatTime(info.timeOpened().time())));
+                                                                     "Conversation began %1", KGlobal::locale()->formatTime(info.timeOpened().time())));
 
     //FIXME time fields - remember to do both, steal the complicated one from Kopete code.
     // Look for %timeOpened{X}%
