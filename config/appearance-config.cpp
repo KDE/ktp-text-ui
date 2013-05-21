@@ -85,4 +85,6 @@ void AppearanceConfig::save()
     config->sync();
 
     KCModule::save();
+
+    Q_EMIT reloadTheme();
 }

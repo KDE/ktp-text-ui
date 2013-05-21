@@ -52,6 +52,8 @@
 #include <TelepathyQt/PendingChannelRequest>
 #include <TelepathyQt/OutgoingFileTransferChannel>
 #include <TelepathyLoggerQt4/TextEvent>
+#include <TelepathyLoggerQt4/LogWalker>
+#include <TelepathyLoggerQt4/PendingEvents>
 
 #include <KTp/presence.h>
 #include <KTp/actions.h>
@@ -65,7 +67,8 @@ public:
     ChatWidgetPrivate() :
         remoteContactChatState(Tp::ChannelChatStateInactive),
         isGroupChat(false),
-        logsLoaded(false)
+        logsLoaded(false),
+        exchangedMessagesCount(0)
     {
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
@@ -82,6 +85,7 @@ public:
     LogManager *logManager;
     QTimer *pausedStateTimer;
     bool logsLoaded;
+    uint exchangedMessagesCount;
 
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
@@ -173,7 +177,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     if (!d->isGroupChat) {
         KConfig config(QLatin1String("ktelepathyrc"));
         KConfigGroup tabConfig = config.group("Behavior");
-        d->logManager->setFetchAmount(tabConfig.readEntry<int>("scrollbackLength", 4));
+        d->logManager->setScrollbackLength(tabConfig.readEntry<int>("scrollbackLength", 4));
         d->logManager->setTextChannel(d->account, d->channel);
         m_previousConversationAvailable = d->logManager->exists();
     } else {
@@ -521,6 +525,8 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
 
     if (d->chatViewInitialized) {
 
+        d->exchangedMessagesCount++;
+
         //debug the message parts (looking for HTML etc)
 //        Q_FOREACH(Tp::MessagePart part, message.parts())
 //        {
@@ -637,12 +643,17 @@ void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
     d->notifyFilter->filterMessage(processedMessage,
                                    KTp::MessageContext(d->account, d->channel));
     d->ui.chatArea->addMessage(processedMessage);
+    d->exchangedMessagesCount++;
 }
 
 void ChatWidget::chatViewReady()
 {
-    if (!d->logsLoaded) {
-        d->logManager->fetchLast();
+    if (!d->logsLoaded || d->exchangedMessagesCount > 0) {
+        if (d->exchangedMessagesCount == 0) {
+            d->logManager->fetchScrollback();
+        } else {
+            d->logManager->fetchHistory(d->exchangedMessagesCount + d->logManager->scrollbackLength());
+        }
     }
 
     d->logsLoaded = true;
@@ -991,4 +1002,13 @@ void ChatWidget::addEmoticonToChat(const QString &emoticon)
     d->ui.sendMessageBox->insertPlainText(QLatin1String(" ") + emoticon);
     d->ui.sendMessageBox->setFocus();
 }
+
+void ChatWidget::reloadTheme()
+{
+    d->logsLoaded = false;
+    d->chatViewInitialized = false;
+
+    initChatArea();
+}
+
 #include "chat-widget.moc"

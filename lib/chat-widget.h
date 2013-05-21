@@ -113,6 +113,8 @@ public Q_SLOTS:
 
     void updateSendMessageShortcuts(const KShortcut &shortcuts);
 
+    void reloadTheme();
+
 protected:
     void changeEvent(QEvent *e);
     void resizeEvent(QResizeEvent *);

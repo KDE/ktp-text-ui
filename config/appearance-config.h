@@ -39,6 +39,9 @@ public Q_SLOTS:
     virtual void load();
     virtual void defaults();
 
+Q_SIGNALS:
+    void reloadTheme();
+
 protected:
     AppearanceConfigTab *m_singleTab;
     AppearanceConfigTab *m_groupTab;

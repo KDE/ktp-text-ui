@@ -109,6 +109,7 @@ private Q_SLOTS:
     void onZoomOut();
     void onZoomFactorChanged(qreal zoom);
     void updateSendMessageShortcuts();
+    void onReloadTheme();
 
 protected Q_SLOTS:
     void showSettingsDialog();
