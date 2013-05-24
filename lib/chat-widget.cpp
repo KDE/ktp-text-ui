@@ -147,7 +147,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     setAcceptDrops(true);
 
     /* Prepare the chat area */
-    connect(d->ui.chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()), Qt::QueuedConnection);
     connect(d->ui.chatArea, SIGNAL(zoomFactorChanged(qreal)), SIGNAL(zoomFactorChanged(qreal)));
     connect(d->ui.chatArea, SIGNAL(textPasted()), d->ui.sendMessageBox, SLOT(pasteSelection()));
     initChatArea();
@@ -648,6 +647,8 @@ void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendin
 
 void ChatWidget::chatViewReady()
 {
+    disconnect(d->ui.chatArea, SIGNAL(loadFinished(bool)), this, SLOT(chatViewReady()));
+
     if (!d->logsLoaded || d->exchangedMessagesCount > 0) {
         if (d->exchangedMessagesCount == 0) {
             d->logManager->fetchScrollback();
@@ -940,6 +941,8 @@ qreal ChatWidget::zoomFactor() const
 
 void ChatWidget::initChatArea()
 {
+    connect(d->ui.chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()), Qt::QueuedConnection);
+
     d->ui.chatArea->load((d->isGroupChat ? AdiumThemeView::GroupChat : AdiumThemeView::SingleUserChat));
 
     AdiumThemeHeaderInfo info;
