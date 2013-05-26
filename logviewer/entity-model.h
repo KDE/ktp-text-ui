@@ -54,8 +54,7 @@ public:
         IdRole = Qt::UserRole,
         TypeRole,
         EntityRole,
-        AccountRole,
-        ContactRole
+        AccountRole
     };
 
     explicit EntityModel(QObject *parent = 0);
@@ -74,7 +73,6 @@ public:
 
 private Q_SLOTS:
     void onEntitiesSearchFinished(Tpl::PendingOperation*);
-    void onEntityContactRetrieved(Tp::PendingOperation*);
 
 private:
     QList<EntityModelItem*> m_items;
@@ -82,6 +80,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(Tpl::EntityPtr)
-Q_DECLARE_METATYPE(Tp::ContactPtr)
 
 #endif // ENTITYMODEL_H

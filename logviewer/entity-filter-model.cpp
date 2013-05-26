@@ -80,7 +80,7 @@ bool EntityFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sour
             return matches_filter;
         }
 
-        const Tp::ContactPtr contact = index.data(PersonEntityMergeModel::ContactRole).value< Tp::ContactPtr >();
+        const KTp::ContactPtr contact = index.data(PersonEntityMergeModel::ContactRole).value< KTp::ContactPtr >();
 
         /* Check if contact's account name matches */
         if (entity->alias().contains(term, Qt::CaseInsensitive) && matches_filter) {

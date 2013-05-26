@@ -27,16 +27,12 @@
 
 #include <TelepathyQt/AccountManager>
 #include <TelepathyQt/Account>
-#include <TelepathyQt/ContactManager>
-#include <TelepathyQt/PendingOperation>
-#include <TelepathyQt/PendingContacts>
 
 class EntityModelItem
 {
   public:
     Tp::AccountPtr account;
     Tpl::EntityPtr entity;
-    Tp::ContactPtr contact;
 };
 
 EntityModel::EntityModel(QObject *parent) :
@@ -104,11 +100,9 @@ QVariant EntityModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
         case Qt::DisplayRole:
-            return item->contact ? item->contact->alias() : item->entity->alias();
+            return item->entity->alias();
         case EntityModel::AccountRole:
             return QVariant::fromValue(item->account);
-        case EntityModel::ContactRole:
-            return QVariant::fromValue(item->contact);
         case EntityModel::EntityRole:
             return QVariant::fromValue(item->entity);
         case EntityModel::IdRole:
@@ -142,27 +136,5 @@ void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
         item->entity = entity;
         m_items << item;
         endInsertRows();
-
-        if (pendingEntities->account()->connection()) {
-            Tp::PendingOperation *op =
-                pendingEntities->account()->connection()->contactManager()->contactsForIdentifiers(
-                                        QStringList() << entity->identifier());
-            connect(op, SIGNAL(finished(Tp::PendingOperation*)),
-                    this, SLOT(onEntityContactRetrieved(Tp::PendingOperation*)));
-        }
-    }
-}
-
-void EntityModel::onEntityContactRetrieved(Tp::PendingOperation *operation)
-{
-    Tp::PendingContacts *pendingContacts = qobject_cast<Tp::PendingContacts*>(operation);
-
-    Q_FOREACH (const Tp::ContactPtr &contact, pendingContacts->contacts()) {
-        for (int i = 0; i < m_items.count(); ++i) {
-            EntityModelItem *item = m_items.at(i);
-            if (item->entity->identifier() == contact->id()) {
-                item->contact = contact;
-            }
-        }
     }
 }
