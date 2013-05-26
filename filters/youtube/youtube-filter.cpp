@@ -21,7 +21,6 @@
 #include <KPluginFactory>
 #include <KDebug>
 #include <KUrl>
-#include <KUriFilter>
 
 YoutubeFilter::YoutubeFilter(QObject *parent, const QVariantList &) :
     AbstractMessageFilter(parent)
