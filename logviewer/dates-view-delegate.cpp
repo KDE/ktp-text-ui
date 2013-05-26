@@ -134,7 +134,7 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
     QStyle *style = QApplication::style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
 
-    const int itemWidth = option.rect.right();
+    const int itemWidth = option.rect.width();
 
     int iconSize = IconSize(KIconLoader::KIconLoader::Toolbar);
 
@@ -165,7 +165,7 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
     QRect dateRect = itemRect;
     dateRect.setX(dateRect.x() + 20);
     dateRect.setY(dateRect.y() + (dateRect.height() / 2 - option.fontMetrics.height() / 2));
-    dateRect.setWidth(qMin((int) ceil(itemWidth * 2.0 / 3.0) - itemRect.x(), option.fontMetrics.width(date) + itemRect.x()) - 20);
+    dateRect.setWidth(qMin(option.fontMetrics.width(date) + 8, static_cast<int>(itemWidth * 2.0 / 3.0)));
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(option.palette.color(QPalette::Active, QPalette::HighlightedText));
@@ -178,8 +178,10 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
     QFontMetrics hintFontMetrics(hintFont);
 
     const QString hint = index.data(DatesModel::HintRole).toString();
+    const int hintWidth = hintFontMetrics.width(hint);
+
     QRect hintRect = itemRect;
-    hintRect.setX(ceil((itemWidth * 2.0 / 3.0)) + 8);
+    hintRect.setX(qMax(itemWidth - 8 - hintWidth, dateRect.x() + dateRect.width()));
     hintRect.setY(hintRect.y() + (hintRect.height() - hintFontMetrics.height()));
     hintRect.setWidth(itemWidth - hintRect.x());
 
@@ -189,7 +191,7 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
     } else {
         painter->setPen(option.palette.color(QPalette::Disabled, QPalette::Text));
     }
-    painter->drawText(hintRect, hintFontMetrics.elidedText(hint, Qt::ElideRight, hintRect.width()));
+    painter->drawText(hintRect, hintFontMetrics.elidedText(hint, Qt::ElideLeft, hintRect.width()));
 
     painter->restore();
 }
