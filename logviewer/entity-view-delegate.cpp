@@ -182,7 +182,7 @@ void EntityViewDelegate::paintHeader(QPainter* painter, const QStyleOptionViewIt
     QRect groupRect = optV4.rect;
 
     //paint the background
-    QBrush bgBrush(option.palette.color(QPalette::Active, QPalette::Button).lighter(105));
+    const QBrush bgBrush(option.palette.color(QPalette::Active, QPalette::Button).lighter(105));
     painter->fillRect(groupRect, bgBrush);
 
     //paint very subtle line at the bottom
@@ -214,14 +214,12 @@ void EntityViewDelegate::paintHeader(QPainter* painter, const QStyleOptionViewIt
         style->drawPrimitive(QStyle::PE_IndicatorArrowRight, &expandSignOption, painter);
     }
 
-    QFont groupFont = KGlobalSettings::smallestReadableFont();
+    const QFont groupFont = KGlobalSettings::smallestReadableFont();
 
     //paint the header string
-    QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + SPACING * 2, 0, -SPACING, 0);
-
-    QString groupHeaderString =  index.data(Qt::DisplayRole).toString();
-
-    QFontMetrics groupFontMetrics(groupFont);
+    const QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + SPACING * 2, 0, -SPACING, 0);
+    const QString groupHeaderString =  index.data(Qt::DisplayRole).toString();
+    const QFontMetrics groupFontMetrics(groupFont);
 
     painter->setFont(groupFont);
 

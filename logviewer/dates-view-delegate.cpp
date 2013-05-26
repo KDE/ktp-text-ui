@@ -71,7 +71,7 @@ void DatesViewDelegate::paintGroup(QPainter* painter, const QStyleOptionViewItem
     QRect groupRect = optV4.rect;
 
     //paint the background
-    QBrush bgBrush(option.palette.color(QPalette::Active, QPalette::Button).lighter(105));
+    const QBrush bgBrush(option.palette.color(QPalette::Active, QPalette::Button).lighter(105));
     painter->fillRect(groupRect, bgBrush);
 
     //paint very subtle line at the bottom
@@ -103,13 +103,11 @@ void DatesViewDelegate::paintGroup(QPainter* painter, const QStyleOptionViewItem
         style->drawPrimitive(QStyle::PE_IndicatorArrowRight, &expandSignOption, painter);
     }
 
-    QFont groupFont = KGlobalSettings::smallestReadableFont();
+    const QFont groupFont = KGlobalSettings::smallestReadableFont();
     //paint the header string
-    QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + 2 * 2, 0, -2, 0);
-
-    QString groupHeaderString =  index.data(Qt::DisplayRole).toString();
-
-    QFontMetrics groupFontMetrics(groupFont);
+    const QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + 2 * 2, 0, -2, 0);
+    const QString groupHeaderString =  index.data(Qt::DisplayRole).toString();
+    const QFontMetrics groupFontMetrics(groupFont);
 
     painter->setFont(groupFont);
 
@@ -174,9 +172,8 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
     }
     painter->drawText(dateRect, option.fontMetrics.elidedText(date, Qt::ElideRight, dateRect.width()));
 
-    QFont hintFont = KGlobalSettings::smallestReadableFont();
-    QFontMetrics hintFontMetrics(hintFont);
-
+    const QFont hintFont = KGlobalSettings::smallestReadableFont();
+    const QFontMetrics hintFontMetrics(hintFont);
     const QString hint = index.data(DatesModel::HintRole).toString();
     const int hintWidth = hintFontMetrics.width(hint);
 
