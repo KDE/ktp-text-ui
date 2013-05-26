@@ -41,7 +41,6 @@ class DatesModel::Date
 
 bool sortDatesDescending(const DatesModel::Date* date1, const DatesModel::Date* date2)
 {
-    kDebug() << date1->date << date2->date;
     return date1->date > date2->date;
 }
 
