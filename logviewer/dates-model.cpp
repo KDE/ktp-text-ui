@@ -342,16 +342,9 @@ void DatesModel::onDatesReceived(Tpl::PendingOperation* operation)
 
     QList<QDate> newDates = op->dates();
     Q_FOREACH (const QDate &newDate, newDates) {
-        bool found = false;
-        Q_FOREACH (Date *modelDate, m_items.values()) {
-            if (modelDate->date == newDate) {
-                modelDate->matches << AccountEntityPair(op->account(), op->entity());
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
+        QMap<QDate, Date*>::Iterator iter = m_items.find(newDate);
+        if (iter != m_items.constEnd()) {
+            iter.value()->matches << AccountEntityPair(op->account(), op->entity());
             continue;
         }
 
@@ -364,11 +357,6 @@ void DatesModel::onDatesReceived(Tpl::PendingOperation* operation)
     }
 
     op->deleteLater();
-
-    /*
-    qSort(m_groups);
-    qSort(m_dates.begin(), m_dates.end(), compareDates);
-    */
 
     --m_resetInProgress;
     if (m_resetInProgress == 0) {
