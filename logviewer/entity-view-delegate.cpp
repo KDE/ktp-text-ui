@@ -26,12 +26,15 @@
 
 #include <KDE/KIconLoader>
 #include <KDE/KGlobalSettings>
+#include <KDE/KDebug>
 
+#include <TelepathyQt/Account>
 
 const int SPACING = 2;
 const int ACCOUNT_ICON_SIZE = 22;
 const qreal GROUP_ICON_OPACITY = 0.6;
 
+Q_DECLARE_METATYPE(Tp::AccountPtr);
 
 EntityViewDelegate::EntityViewDelegate(QObject* parent):
     QStyledItemDelegate(parent),
@@ -67,7 +70,8 @@ void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewI
     QStyleOptionViewItemV4 optV4 = option;
     initStyleOption(&optV4, index);
 
-    bool isSubcontact = index.parent().data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Persona;
+    const bool isSubcontact = index.parent().data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Persona;
+    const bool isEntity = index.data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Entity;
 
     painter->save();
 
@@ -101,8 +105,7 @@ void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewI
 
     style->drawItemPixmap(painter, iconRect, Qt::AlignCenter, avatar.scaled(iconRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    QFont nameFont = KGlobalSettings::generalFont();
-
+    const QFont nameFont = KGlobalSettings::generalFont();
     const QFontMetrics nameFontMetrics(nameFont);
 
     if (option.state & QStyle::State_Selected) {
@@ -111,19 +114,48 @@ void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewI
         painter->setPen(option.palette.color(QPalette::Active, QPalette::Text));
     }
 
+    const QString nameText = index.data(Qt::DisplayRole).toString();
+
     painter->setFont(nameFont);
 
     QRect userNameRect = optV4.rect;
     userNameRect.setX(iconRect.x() + iconRect.width() + m_spacing * 2);
-    userNameRect.setY(userNameRect.y() + (userNameRect.height()/2 - nameFontMetrics.height()/2));
-    userNameRect.setWidth(userNameRect.width());
-
-    QString nameText = index.data(Qt::DisplayRole).toString();
+    userNameRect.setY(userNameRect.y() + (userNameRect.height() / 2 - nameFontMetrics.height() / 2));
+    if (isEntity) {
+        userNameRect.setWidth(qMin(nameFontMetrics.width(nameText), static_cast<int>(optV4.rect.width() * 2.0 / 3.0)));
+    }
 
     painter->drawText(userNameRect,
                       nameFontMetrics.elidedText(nameText, Qt::ElideRight, userNameRect.width()));
 
     painter->restore();
+
+    if (isEntity) {
+        painter->save();
+
+        const QFont accountFont = KGlobalSettings::generalFont();
+        const QFontMetrics accountMetrics(accountFont);
+
+        if (option.state & QStyle::State_Selected) {
+            painter->setPen(option.palette.color(QPalette::Disabled, QPalette::HighlightedText));
+        } else {
+            painter->setPen(option.palette.color(QPalette::Disabled, QPalette::Text));
+        }
+
+        painter->setFont(accountFont);
+
+        const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
+        const QString accountName = account->displayName();
+        const int accountWidth = accountMetrics.width(accountName);
+
+        QRect accountRect = optV4.rect;
+        accountRect.setX(qMax(optV4.rect.width() - (2 * m_spacing) - accountWidth, userNameRect.x() + userNameRect.width()));
+        accountRect.setY(accountRect.y() + accountRect.height() / 2 - accountMetrics.height() / 2);
+        accountRect.setWidth(optV4.rect.width() - accountRect.x());
+        painter->drawText(accountRect, accountMetrics.elidedText(accountName, Qt::ElideLeft, accountRect.width()));
+
+        painter->restore();
+    }
 }
 
 QSize EntityViewDelegate::sizeHintContact(const QStyleOptionViewItem& option, const QModelIndex& index) const
