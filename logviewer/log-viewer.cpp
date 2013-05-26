@@ -107,7 +107,7 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     ui->datesView->setExpandsOnDoubleClick(false);
     ui->datesView->setIndentation(0);
 
-    connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
+    connect(ui->entityList, SIGNAL(clicked(QModelIndex)), SLOT(onEntityListClicked(QModelIndex)));
     connect(ui->datesView, SIGNAL(clicked(QModelIndex)), SLOT(slotDateClicked(QModelIndex)));
     connect(ui->datesView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(slotUpdateMainWindow()));
     connect(ui->messageView, SIGNAL(conversationSwitchRequested(QDate)), SLOT(slotSetConversationDate(QDate)));
@@ -175,49 +175,38 @@ void LogViewer::onAccountManagerReady()
     slotImportKopeteLogs(false);
 }
 
-void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &previous)
+void LogViewer::onEntityListClicked(const QModelIndex& index)
 {
-    if (previous.data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Persona &&
-        current.parent() != previous)
-    {
-        ui->entityList->collapse(previous);
-    } else if (previous.parent().data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Persona) {
-        ui->entityList->collapse(previous.parent());
-    }
+    const PersonEntityMergeModel::ItemType itemType =
+        static_cast<PersonEntityMergeModel::ItemType>(index.data(PersonEntityMergeModel::ItemTypeRole).toUInt());
 
-    if (current.data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Group) {
-        if (ui->entityList->isExpanded(current)) {
-            ui->entityList->collapse(current);
-        } else {
-            ui->entityList->expand(current);
+    if (itemType == PersonEntityMergeModel::Group) {
+        ui->entityList->setExpanded(index, !ui->entityList->isExpanded(index));
+    } else if (itemType == PersonEntityMergeModel::Persona) {
+        if (m_expandedPersona.isValid()) {
+            ui->entityList->collapse(m_expandedPersona);
         }
-        return;
-    }
-
-    // FIXME: Show something fancy when selecting a persona
-    if (current.data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Persona) {
-        ui->entityList->expand(current);
+        ui->entityList->expand(index);
+        m_expandedPersona = index;
         ui->messageView->clear();
+        // FIXME: Show something fancy when selecting a persona
         m_datesModel->clear();
-        for (int i = 0; i < current.model()->rowCount(current); ++i) {
-            const QModelIndex child = current.child(i, 0);
-            m_datesModel->addEntity(child.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>(),
-                                    child.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>());
+        for (int i = 0; i < index.model()->rowCount(index); ++i) {
+            const QModelIndex child = index.child(i, 0);
+            const Tpl::EntityPtr entity = child.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
+            const Tp::AccountPtr account = child.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
+            Q_ASSERT(!entity.isNull());
+            Q_ASSERT(!account.isNull());
+            m_datesModel->addEntity(account, entity);
         }
         return;
+    } else if (itemType == PersonEntityMergeModel::Entity) {
+        const Tpl::EntityPtr entity = index.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
+        const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
+        Q_ASSERT(!entity.isNull());
+        Q_ASSERT(!account.isNull());
+        m_datesModel->setEntity(account, entity);
     }
-
-    Tpl::EntityPtr entity = current.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
-    Tp::AccountPtr account = current.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
-    Q_ASSERT(!entity.isNull());
-    Q_ASSERT(!account.isNull());
-    /*
-    if (!account.isNull() && !entity.isNull()) {
-        actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
-    }
-    */
-
-    m_datesModel->setEntity(account, entity);
 }
 
 void LogViewer::slotDateClicked(const QModelIndex& index)

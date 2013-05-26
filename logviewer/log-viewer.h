@@ -51,7 +51,7 @@ public:
 private Q_SLOTS:
     void onAccountManagerReady();
 
-    void onEntitySelected(const QModelIndex &current, const QModelIndex &previous);
+    void onEntityListClicked(const QModelIndex &index);
     void slotDateClicked(const QModelIndex &index);
 
     void slotUpdateMainWindow();
@@ -80,6 +80,8 @@ private:
     EntityModel *m_entityModel;
     PersonEntityMergeModel *m_mergeModel;
     EntityFilterModel *m_filterModel;
+
+    QPersistentModelIndex m_expandedPersona;
 
     KMenu *m_entityListContextMenu;
 
