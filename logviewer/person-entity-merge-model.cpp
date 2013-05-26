@@ -294,6 +294,7 @@ QModelIndex PersonEntityMergeModel::parent(const QModelIndex& child) const
 
 void PersonEntityMergeModel::initializeModel()
 {
+    kDebug();
     beginResetModel();
     for (int i = 0; i < m_entityModel->rowCount(QModelIndex()); ++i) {
         const QModelIndex entityIndex = m_entityModel->index(i, 0);
@@ -307,29 +308,16 @@ void PersonEntityMergeModel::initializeModel()
         for (int j = 0; j < m_personsModel->rowCount(); ++j) {
             const QModelIndex index = m_personsModel->index(j, 0);
             bool found = false;
-
-            // Is it a contact...
-            if (m_personsModel->data(index, PersonsModel::ResourceTypeRole).toUInt() == PersonsModel::Contact) {
-                if (m_personsModel->data(index, PersonsModel::IMRole).toString() == entity->identifier()) {
-                    kDebug() << "\tFound matching contact" << m_personsModel->data(index, PersonsModel::IMRole).toString();
-                    parentItem = groupForName(m_personsModel->data(index, PersonsModel::ContactGroupsRole));
-                    contactIndex = index;
+            for (int k = 0; k < m_personsModel->rowCount(index); ++k) {
+                const QModelIndex childIndex = m_personsModel->index(k, 0, index);
+                if (m_personsModel->data(childIndex, PersonsModel::IMRole).toString() == entity->identifier()) {
+                    kDebug() << "\tFound matching persona" << m_personsModel->data(index, PersonsModel::UriRole).toString();
+                    kDebug() << "\t\tFound matching contact" << m_personsModel->data(childIndex, PersonsModel::IMRole).toString();
+                    parentItem = itemForPersona(index);
+                    personaIndex = index;
+                    contactIndex = childIndex;
+                    found = true;
                     break;
-                }
-
-            // ...or a persona?
-            } else {
-                for (int k = 0; k < m_personsModel->rowCount(index); ++k) {
-                    const QModelIndex childIndex = m_personsModel->index(k, 0, index);
-                    if (m_personsModel->data(childIndex, PersonsModel::IMRole).toString() == entity->identifier()) {
-                        kDebug() << "\tFound matching persona" << m_personsModel->data(index, PersonsModel::UriRole).toString();
-                        kDebug() << "\t\tFound matching contact" << m_personsModel->data(childIndex, PersonsModel::IMRole).toString();
-                        parentItem = itemForPersona(index);
-                        personaIndex = index;
-                        contactIndex = childIndex;
-                        found = true;
-                        break;
-                    }
                 }
             }
 

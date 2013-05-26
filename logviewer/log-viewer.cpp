@@ -33,8 +33,6 @@
 #include <KTp/logs-importer.h>
 
 #include <kpeople/persons-model.h>
-#include <kpeople/persons-presence-model.h>
-#include <kpeople/ktp-translation-proxy.h>
 
 #include <QSortFilterProxyModel>
 #include <QWebFrame>
@@ -82,9 +80,6 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     m_personsModel = new PersonsModel(PersonsModel::FeatureIM | PersonsModel::FeatureContactUID,
                                       PersonsModel::FeatureAvatars | PersonsModel::FeatureFullName | PersonsModel::FeatureGroups,
                                       this);
-
-    m_presenceModel = new PersonsPresenceModel(this);
-    m_presenceModel->setSourceModel(m_personsModel);
 
     m_entityModel = new EntityModel(this);
 

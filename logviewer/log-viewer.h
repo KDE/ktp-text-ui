@@ -35,7 +35,6 @@ namespace Tpl {
 class EntityModel;
 class EntityFilterModel;
 class PersonsModel;
-class PersonsPresenceModel;
 class PersonEntityMergeModel;
 class KMenu;
 
@@ -79,7 +78,6 @@ private:
     DatesModel *m_datesModel;
     PersonsModel *m_personsModel;
     EntityModel *m_entityModel;
-    PersonsPresenceModel *m_presenceModel;
     PersonEntityMergeModel *m_mergeModel;
     EntityFilterModel *m_filterModel;
 
