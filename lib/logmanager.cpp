@@ -26,12 +26,11 @@
 #include <KDebug>
 
 #include <TelepathyLoggerQt4/Init>
+#include <TelepathyLoggerQt4/LogWalker>
 #include <TelepathyLoggerQt4/Entity>
-#include <TelepathyLoggerQt4/PendingDates>
 #include <TelepathyLoggerQt4/PendingEvents>
 #include <TelepathyLoggerQt4/Event>
 #include <TelepathyLoggerQt4/TextEvent>
-#include <TelepathyLoggerQt4/CallEvent>
 #include <TelepathyLoggerQt4/LogManager>
 
 #include <TelepathyQt/Types>
@@ -41,7 +40,7 @@
 
 LogManager::LogManager(QObject *parent)
     : QObject(parent),
-    m_fetchAmount(10)
+    m_scrolbackLength(10)
 {
     Tpl::init();
 
@@ -77,52 +76,47 @@ void LogManager::setTextChannel(const Tp::AccountPtr &account, const Tp::TextCha
     m_account = account;
 }
 
-void LogManager::setFetchAmount(int n)
+void LogManager::setScrollbackLength(int n)
 {
-    m_fetchAmount = n;
+    m_scrolbackLength = n;
 }
 
-void LogManager::fetchLast()
+int LogManager::scrollbackLength() const
 {
-    kDebug();
-    if (m_fetchAmount > 0 && !m_account.isNull() && !m_textChannel.isNull() && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
+    return m_scrolbackLength;
+}
+
+void LogManager::fetchScrollback()
+{
+    fetchHistory(m_scrolbackLength);
+}
+
+void LogManager::fetchHistory(int n)
+{
+    // Skip if no messages are requested
+    if (n > 0 && !m_account.isNull() && !m_textChannel.isNull()
+        && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
         Tpl::EntityPtr contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
                                                 Tpl::EntityTypeContact,
                                                 NULL,
                                                 NULL);
 
-        Tpl::PendingDates* dates = m_logManager->queryDates(m_account, contactEntity, Tpl::EventTypeMaskText);
-        connect(dates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
+        Tpl::LogWalkerPtr walker = m_logManager->queryWalkFilteredEvents(
+            m_account, contactEntity, Tpl::EventTypeMaskText, 0, 0);
+        Tpl::PendingEvents *events = walker->queryEvents(n);
+        connect(events, SIGNAL(finished(Tpl::PendingOperation*)),
+                this, SLOT(onEventsFinished(Tpl::PendingOperation*)));
         return;
     }
 
     //in all other cases finish immediately.
-    QList<AdiumThemeContentInfo> messages;
+    QList<KTp::Message> messages;
     Q_EMIT fetched(messages);
 }
 
-void LogManager::onDatesFinished(Tpl::PendingOperation *po)
+bool operator<(const Tpl::EventPtr &e1, const Tpl::EventPtr &e2)
 {
-    Tpl::PendingDates *pd = (Tpl::PendingDates*) po;
-
-    if (pd->isError()) {
-        qWarning() << "error in PendingDates:" << pd->errorMessage();
-        return;
-    }
-
-    QList<QDate> dates = pd->dates();
-
-    if (!dates.isEmpty()) {
-        QDate date = dates.last();
-
-        kDebug() << pd->account()->uniqueIdentifier() << pd->entity()->identifier() << dates;
-
-        Tpl::PendingEvents *events = m_logManager->queryEvents( pd->account(), pd->entity(), Tpl::EventTypeMaskAny, date);
-        connect(events, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsFinished(Tpl::PendingOperation*)));
-    } else {
-        QList<AdiumThemeContentInfo> messages;
-        Q_EMIT fetched(messages);
-    }
+    return e1->timestamp() < e2->timestamp();
 }
 
 void LogManager::onEventsFinished(Tpl::PendingOperation *po)
@@ -145,57 +139,20 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
 
     // get last n (m_fetchLast) messages that are not queued
     QList<Tpl::EventPtr> allEvents = pe->events();
-    QList<Tpl::TextEventPtr> events;
-    QList<Tpl::EventPtr>::iterator i = allEvents.end();
-    while (i-- != allEvents.begin() && (events.count() < m_fetchAmount)) {
-        Tpl::TextEventPtr textEvent = (*i).dynamicCast<Tpl::TextEvent>();
+
+    // See https://bugs.kde.org/show_bug.cgi?id=317866
+    // Uses the operator< overload above
+    qSort(allEvents);
+
+    QList<KTp::Message> messages;
+    Q_FOREACH (const Tpl::EventPtr &event, allEvents) {
+        const Tpl::TextEventPtr textEvent = event.dynamicCast<Tpl::TextEvent>();
         if (!textEvent.isNull()) {
             if (!queuedMessageTokens.contains(textEvent->messageToken())) {
-                events.prepend(textEvent);
+                const KTp::Message message = KTp::MessageProcessor::instance()->processIncomingMessage(textEvent, m_account, m_textChannel);
+                messages.append(message);
             }
         }
-    }
-
-
-    QList<AdiumThemeContentInfo> messages;
-    Q_FOREACH(const Tpl::TextEventPtr &event, events) {
-        AdiumThemeMessageInfo::MessageType type;
-        Tp::ContactPtr contact;
-        if (event->sender()->identifier() == m_account->normalizedName()) {
-            type = AdiumThemeMessageInfo::HistoryLocalToRemote;
-            if (m_account->connection()) {
-                contact = m_account->connection()->selfContact();
-            }
-        } else {
-            type = AdiumThemeMessageInfo::HistoryRemoteToLocal;
-            contact = m_textChannel->targetContact();
-        }
-
-        /* When connection is dropped (account goes offline), we get an invalid
-         * contact, so we can't correctly create the message. There's no point
-         * emitting fetched() with only partial list of messages, so let's
-         * just terminate here. */
-        if (!contact) {
-            return;
-        }
-
-        AdiumThemeContentInfo message(type);
-
-        KTp::Message processedEvent = KTp::MessageProcessor::instance()->processIncomingMessage(event, m_account, m_textChannel);
-
-        message.setMessage(processedEvent.finalizedMessage());
-        message.setScript(processedEvent.finalizedScript());
-        message.setService(m_account->serviceName());
-        message.setSenderDisplayName(event->sender()->alias());
-        message.setSenderScreenName(event->sender()->alias());
-        message.setTime(event->timestamp());
-        message.setUserIconPath(contact->avatarData().fileName);
-        kDebug()    << event->timestamp()
-                    << "from" << event->sender()->identifier()
-                    << "to" << event->receiver()->identifier()
-                    << event->message();
-
-        messages.append(message);
     }
 
     kDebug() << "emit all messages" << messages.count();

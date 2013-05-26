@@ -27,6 +27,8 @@
 #include <TelepathyQt/AccountManager>
 #include <TelepathyLoggerQt4/Init>
 
+#include <KTp/contact-factory.h>
+
 int main(int argc, char *argv[])
 {
     KAboutData aboutData("ktp-log-viewer",
@@ -65,7 +67,7 @@ int main(int argc, char *argv[])
                                                     << Tp::Connection::FeatureSelfContact
                                                     << Tp::Connection::FeatureRoster);
 
-    Tp::ContactFactoryPtr contactFactory = Tp::ContactFactory::create(
+    Tp::ContactFactoryPtr contactFactory = KTp::ContactFactory::create(
                                                 Tp::Features()  << Tp::Contact::FeatureAlias
                                                     << Tp::Contact::FeatureAvatarData
                                                     << Tp::Contact::FeatureSimplePresence

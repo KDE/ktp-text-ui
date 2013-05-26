@@ -45,3 +45,10 @@ MessagesConfig::MessagesConfig(QWidget *parent, const QVariantList &args)
     layout->addWidget(pluginSelector());
     setLayout(layout);
 }
+
+void MessagesConfig::save()
+{
+    KSettings::PluginPage::save();
+
+    KTp::MessageFilterConfigManager::self()->reloadConfig();
+}

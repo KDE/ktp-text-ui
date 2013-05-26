@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2012  Lasath Fernando <kde@lasath.org>
+ *    Copyright (C) 2013  Anant Kamath <kamathanant@gmail.com>
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -16,22 +16,29 @@
  *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 */
 
-#ifndef KCM_MESSAGES_H
-#define KCM_MESSAGES_H
+#ifndef URLEXPANSION_FILTER_H
+#define URLEXPANSION_FILTER_H
 
-#include <KSettings/PluginPage>
+#include <KTp/abstract-message-filter.h>
 
-class MessagesConfig : public KSettings::PluginPage
+#include <KUrl>
+
+class UrlExpansionFilter : public KTp::AbstractMessageFilter
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    explicit MessagesConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
+    UrlExpansionFilter(QObject *parent, const QVariantList &);
+    virtual ~UrlExpansionFilter();
 
-    virtual void save();
+    virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
+    virtual QStringList requiredScripts();
 private:
+    void addExpandedUrl(KTp::Message &message, const KUrl &baseUrl);
+    void getSupportedServices();
+
     class Private;
-    Private* d;
+    Private *d;
 };
 
-#endif // KCM_MESSAGES_H
+#endif // URLEXPANSION_FILTER_H

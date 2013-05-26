@@ -352,7 +352,46 @@ void AdiumThemeView::clear()
     page()->mainFrame()->setHtml(QString());
 }
 
-void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessage)
+void AdiumThemeView::addMessage(const KTp::Message &message)
+{
+    if (message.type() == Tp::ChannelTextMessageTypeAction) {
+        addStatusMessage(QString::fromLatin1("%1 %2").arg(message.senderAlias(), message.mainMessagePart()));
+    } else {
+        AdiumThemeContentInfo messageInfo;
+        if (message.direction() == KTp::Message::RemoteToLocal) {
+            messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::RemoteToLocal);
+        } else {
+            messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::LocalToRemote);
+        }
+
+        messageInfo.setMessage(message.finalizedMessage());
+        messageInfo.setScript(message.finalizedScript());
+
+        messageInfo.setTime(message.time());
+
+        if (message.property("highlight").toBool()) {
+            messageInfo.appendMessageClass(QLatin1String("mention"));
+        }
+        messageInfo.setSenderDisplayName(message.senderAlias());
+        messageInfo.setSenderScreenName(message.senderId());
+        if (message.sender()) {
+            messageInfo.setUserIconPath(message.sender()->avatarData().fileName);
+        }
+
+        addAdiumContentMessage(messageInfo);
+    }
+}
+
+void AdiumThemeView::addStatusMessage(const QString &text, const QDateTime &time)
+{
+    AdiumThemeStatusInfo messageInfo;
+    messageInfo.setMessage(text);
+    messageInfo.setTime(time);
+//    messageInfo.setStatus(QLatin1String("error")); //port this?
+    addAdiumStatusMessage(messageInfo);
+}
+
+void AdiumThemeView::addAdiumContentMessage(const AdiumThemeContentInfo &contentMessage)
 {
     QString styleHtml;
     bool consecutiveMessage = false;
@@ -420,7 +459,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
     appendMessage(styleHtml, message.script(), mode);
 }
 
-void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
+void AdiumThemeView::addAdiumStatusMessage(const AdiumThemeStatusInfo& statusMessage)
 {
     QString styleHtml;
     bool consecutiveMessage = false;
@@ -564,6 +603,10 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
     htmlTemplate.replace(QLatin1String("%timeOpened%"), KGlobal::locale()->formatTime(info.timeOpened().time()));
     htmlTemplate.replace(QLatin1String("%dateOpened%"), KGlobal::locale()->formatDate(info.timeOpened().date(), KLocale::LongDate));
 
+    //KTp-Renkoo specific hack to make "Conversation Began" translatable
+    htmlTemplate.replace(QLatin1String("%conversationBegan%"), i18nc("Header at top of conversation view. %1 is the time format",
+                                                                     "Conversation began %1", KGlobal::locale()->formatTime(info.timeOpened().time())));
+
     //FIXME time fields - remember to do both, steal the complicated one from Kopete code.
     // Look for %timeOpened{X}%
     QRegExp timeRegExp(QLatin1String("%timeOpened\\{([^}]*)\\}%"));
@@ -591,6 +634,10 @@ QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const Adiu
     htmlTemplate.replace(QLatin1String("%senderStatusIcon%"), info.senderStatusIcon());
     //senderDisplayName
     htmlTemplate.replace(QLatin1String("%senderDisplayName%"), info.senderDisplayName());
+    //Few themes use this and it is IRC specific. It is also undocumented
+    //see https://bugs.kde.org/show_bug.cgi?id=316323 for details
+    //simply replace with an empty string
+    htmlTemplate.replace(QLatin1String("%senderPrefix%"), QString());
 
     //FIXME %textbackgroundcolor{X}%
     return replaceMessageKeywords(htmlTemplate, info);
@@ -711,3 +758,5 @@ const QString AdiumThemeView::variantPath() const
 {
     return m_variantPath;
 }
+
+

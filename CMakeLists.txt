@@ -1,6 +1,6 @@
 project(ktp-text-ui)
 
-set(KTP_TEXT_UI_VERSION "0.6.0")
+set(KTP_TEXT_UI_VERSION "0.6.2")
 set(KTP_MESSAGE_FILTER_FRAMEWORK_VERSION "4")
 set(IS_KTP_INTERNAL_MODULE TRUE)
 
@@ -15,7 +15,7 @@ set(KDE_MIN_VERSION "4.4.75")
 find_package (KDE4 ${KDE_MIN_VERSION} REQUIRED)
 find_package (TelepathyQt4 0.9.1 REQUIRED)
 find_package (KTp REQUIRED)
-find_package (TelepathyLoggerQt4 0.5.60 REQUIRED)
+find_package (TelepathyLoggerQt4 0.7.95 REQUIRED)
 
 
 # FUTURE: When we can depend on KDE 4.10, use emoticoncontexteditaction from here

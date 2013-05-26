@@ -31,6 +31,7 @@
 #include <TelepathyLoggerQt4/PendingSearch>
 
 #include <KTp/logs-importer.h>
+#include <KTp/contact.h>
 
 #include <kpeople/persons-model.h>
 

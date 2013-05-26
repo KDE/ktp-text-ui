@@ -29,6 +29,7 @@
 #include <TelepathyQt/Account>
 #include <TelepathyQt/Contact>
 
+#include <KTp/message.h>
 
 namespace Tpl {
     class PendingOperation;
@@ -46,14 +47,28 @@ public:
     bool exists() const;
 
     void setTextChannel(const Tp::AccountPtr &account, const Tp::TextChannelPtr &textChannel);
-    void setFetchAmount(int n);
-    void fetchLast();
+
+    /**
+     * Sets amount of messages to be fetched via @p fetchScrollback()
+     */
+    void setScrollbackLength(int n);
+
+    int scrollbackLength() const;
+
+    /**
+     * Fetches last N message,s as set via setFetchAmount()
+     */
+    void fetchScrollback();
+
+    /**
+     * Fetches last @p n messages
+     */
+    void fetchHistory(int n);
 
 Q_SIGNALS:
-    void fetched(const QList<AdiumThemeContentInfo> &messages);
+    void fetched(const QList<KTp::Message> &messages);
 
 private Q_SLOTS:
-    void onDatesFinished(Tpl::PendingOperation *po);
     void onEventsFinished(Tpl::PendingOperation *po);
 
 private:
@@ -62,7 +77,7 @@ private:
     Tpl::EntityPtr m_contactEntity;
     Tpl::LogManagerPtr m_logManager;
 
-    int m_fetchAmount;
+    int m_scrolbackLength;
 };
 
 #endif // LOGMANAGER_H

@@ -22,8 +22,6 @@
 #include <KPluginFactory>
 #include <KDebug>
 #include <KUrl>
-#include <KIO/Job>
-#include <QTextDocument>
 
 class BugzillaFilter::Private
 {

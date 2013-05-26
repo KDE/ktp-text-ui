@@ -46,6 +46,7 @@
 #include <KMenu>
 #include <KToolBar>
 #include <KToolInvocation>
+#include <KCModuleProxy>
 
 #include <QEvent>
 #include <QWidgetAction>
@@ -169,7 +170,7 @@ void ChatWindow::focusChat(ChatTab *tab)
     m_tabWidget->setCurrentWidget(tab);
 }
 
-ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
+ChatTab* ChatWindow::getTab(const Tp::AccountPtr &account, const Tp::TextChannelPtr &incomingTextChannel)
 {
     ChatTab *match = 0;
 
@@ -185,8 +186,9 @@ ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
             Q_ASSERT(auxChatTab);
 
             // check for duplicate chat
-            if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
-            && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
+            if (auxChatTab->account() == account
+                && auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
+                && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
                 match = auxChatTab;
             }
         }
@@ -590,7 +592,13 @@ void ChatWindow::showSettingsDialog()
 
     KSettings::Dialog *dialog = new KSettings::Dialog(this);
 
-    dialog->addModule(QLatin1String("kcm_ktp_chat_appearance"));
+    KPageWidgetItem *configPage = dialog->addModule(QLatin1String("kcm_ktp_chat_appearance"));
+    KCModuleProxy *proxy = qobject_cast<KCModuleProxy*>(configPage->widget());
+    Q_ASSERT(proxy);
+
+    connect(proxy->realModule(), SIGNAL(reloadTheme()),
+            this, SLOT(onReloadTheme()));
+
     dialog->addModule(QLatin1String("kcm_ktp_chat_behavior"));
     dialog->addModule(QLatin1String("kcm_ktp_chat_messages"));
 
@@ -955,6 +963,14 @@ void ChatWindow::updateSendMessageShortcuts()
     for (int i = 0; i < m_tabWidget->count(); i++) {
         ChatTab* tab = qobject_cast<ChatTab*>(m_tabWidget->widget(i));
         tab->updateSendMessageShortcuts(newSendMessageShortcuts);
+    }
+}
+
+void ChatWindow::onReloadTheme()
+{
+    for (int i = 0; i < m_tabWidget->count(); i++) {
+        ChatTab *tab = qobject_cast<ChatTab*>(m_tabWidget->widget(i));
+        tab->reloadTheme();
     }
 }
 

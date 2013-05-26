@@ -27,7 +27,7 @@
 
 #include <TelepathyLoggerQt4/Entity>
 #include <TelepathyQt/Account>
-
+#include <KTp/types.h>
 
 /**
     Lists all avilable entities.
@@ -81,9 +81,7 @@ private:
 
 };
 
-Q_DECLARE_METATYPE(Tpl::EntityPtr);
-Q_DECLARE_METATYPE(Tp::AccountPtr);
-Q_DECLARE_METATYPE(Tp::ContactPtr);
-
+Q_DECLARE_METATYPE(Tpl::EntityPtr)
+Q_DECLARE_METATYPE(Tp::ContactPtr)
 
 #endif // ENTITYMODEL_H

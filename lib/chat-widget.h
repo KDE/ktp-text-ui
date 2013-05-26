@@ -34,8 +34,8 @@
 #include <TelepathyQt/ReceivedMessage>
 
 #include <KTp/presence.h>
+#include <KTp/message.h>
 
-class AdiumThemeContentInfo;
 class ChatSearchBar;
 class ChatWidgetPrivate;
 class QShowEvent;
@@ -113,6 +113,8 @@ public Q_SLOTS:
 
     void updateSendMessageShortcuts(const KShortcut &shortcuts);
 
+    void reloadTheme();
+
 protected:
     void changeEvent(QEvent *e);
     void resizeEvent(QResizeEvent *);
@@ -180,7 +182,7 @@ private Q_SLOTS:
     void findTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findNextTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
-    void onHistoryFetched(const QList<AdiumThemeContentInfo> &messages);
+    void onHistoryFetched(const QList<KTp::Message> &messages);
     void onChatPausedTimerExpired();
     void currentPresenceChanged(const Tp::Presence &presence);
 

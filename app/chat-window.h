@@ -56,7 +56,7 @@ public:
     /** retrieves tab with given textChannel if it exists
      * @param incomingTextChannel textChannel to search for
      */
-    ChatTab* getTab(const Tp::TextChannelPtr &incomingTextChannel);
+    ChatTab* getTab(const Tp::AccountPtr &account, const Tp::TextChannelPtr &incomingTextChannel);
     ChatTab* getCurrentTab();
 
     void focusChat(ChatTab *tab);
@@ -109,6 +109,7 @@ private Q_SLOTS:
     void onZoomOut();
     void onZoomFactorChanged(qreal zoom);
     void updateSendMessageShortcuts();
+    void onReloadTheme();
 
 protected Q_SLOTS:
     void showSettingsDialog();

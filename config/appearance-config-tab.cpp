@@ -172,7 +172,7 @@ void AppearanceConfigTab::sendDemoMessages()
     message.setSenderScreenName(i18nc("Example name", "Larry Demo"));
     message.setService(i18nc("XMPP Protocol name" , "Jabber"));
     message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addContentMessage(message);
+    ui->chatView->addAdiumContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::HistoryRemoteToLocal);
     message.setMessage(i18nc("Example message in preview conversation","Bye Bye"));
@@ -180,7 +180,7 @@ void AppearanceConfigTab::sendDemoMessages()
     message.setSenderScreenName(i18nc("Example name", "Larry Demo"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addContentMessage(message);
+    ui->chatView->addAdiumContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::HistoryLocalToRemote);
     message.setMessage(i18nc("Example message in preview conversation","Have fun!"));
@@ -188,7 +188,7 @@ void AppearanceConfigTab::sendDemoMessages()
     message.setSenderScreenName(i18nc("Example name", "Ted Example"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addContentMessage(message);
+    ui->chatView->addAdiumContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::HistoryLocalToRemote);
     message.setMessage(i18nc("Example message in preview conversation","cya"));
@@ -196,20 +196,20 @@ void AppearanceConfigTab::sendDemoMessages()
     message.setSenderScreenName(i18nc("Example name", "Ted Example"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addContentMessage(message);
+    ui->chatView->addAdiumContentMessage(message);
 
     AdiumThemeStatusInfo statusMessage(true);
     statusMessage.setMessage(i18nc("Example message", "Ted Example waves."));
     statusMessage.setTime(QDateTime::currentDateTime());
     statusMessage.setService(i18n("Jabber"));
-    ui->chatView->addStatusMessage(statusMessage);
+    ui->chatView->addAdiumStatusMessage(statusMessage);
 
     statusMessage = AdiumThemeStatusInfo(true);
     statusMessage.setMessage(i18nc("Example message in preview conversation","Ted Example has left the chat.")); //FIXME sync this with chat text logic.
     statusMessage.setTime(QDateTime::currentDateTime());
     statusMessage.setService(i18n("Jabber"));
     statusMessage.setStatus(QLatin1String("away"));
-    ui->chatView->addStatusMessage(statusMessage);
+    ui->chatView->addAdiumStatusMessage(statusMessage);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
     message.setMessage(i18nc("Example message in preview conversation","Hello Ted"));
@@ -218,7 +218,7 @@ void AppearanceConfigTab::sendDemoMessages()
     message.setService(i18n("Jabber"));
     message.appendMessageClass(QLatin1String("mention"));
     message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addContentMessage(message);
+    ui->chatView->addAdiumContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
     message.setMessage(i18nc("Example message in preview conversation","What's up?"));
@@ -226,7 +226,7 @@ void AppearanceConfigTab::sendDemoMessages()
     message.setSenderScreenName(i18nc("Example name", "Larry Demo"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addContentMessage(message);
+    ui->chatView->addAdiumContentMessage(message);
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::LocalToRemote);
     message.setMessage(i18nc("Example message in preview conversation","Check out which cool adium themes work "
@@ -236,7 +236,7 @@ void AppearanceConfigTab::sendDemoMessages()
     message.setSenderScreenName(i18nc("Example name", "Ted Example"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addContentMessage(message);
+    ui->chatView->addAdiumContentMessage(message);
 
     if ( m_groupChat == true) {
         message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
@@ -245,7 +245,7 @@ void AppearanceConfigTab::sendDemoMessages()
         message.setSenderScreenName(i18nc("Example name", "Bob Example"));
         message.setService(i18n("Jabber"));
         message.setTime(QDateTime::currentDateTime());
-        ui->chatView->addContentMessage(message);
+        ui->chatView->addAdiumContentMessage(message);
     }
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::LocalToRemote);
@@ -254,7 +254,7 @@ void AppearanceConfigTab::sendDemoMessages()
     message.setSenderScreenName(i18nc("Example name", "Ted Example"));
     message.setService(i18n("Jabber"));
     message.setTime(QDateTime::currentDateTime());
-    ui->chatView->addContentMessage(message);
+    ui->chatView->addAdiumContentMessage(message);
 
     if (ui->chatView->showPresenceChanges()) {
         statusMessage = AdiumThemeStatusInfo();
@@ -262,14 +262,14 @@ void AppearanceConfigTab::sendDemoMessages()
         statusMessage.setTime(QDateTime::currentDateTime());
         statusMessage.setService(i18n("Jabber"));
         statusMessage.setStatus(QLatin1String("away"));
-        ui->chatView->addStatusMessage(statusMessage);
+        ui->chatView->addAdiumStatusMessage(statusMessage);
 
         statusMessage = AdiumThemeStatusInfo();
         statusMessage.setMessage(i18nc("Example message in preview conversations","Ted Example has left the chat.")); //FIXME sync this with chat text logic.
         statusMessage.setTime(QDateTime::currentDateTime());
         statusMessage.setService(i18n("Jabber"));
         statusMessage.setStatus(QLatin1String("away"));
-        ui->chatView->addStatusMessage(statusMessage);
+        ui->chatView->addAdiumStatusMessage(statusMessage);
     }
 }
 
