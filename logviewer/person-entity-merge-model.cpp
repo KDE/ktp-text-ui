@@ -208,7 +208,9 @@ int PersonEntityMergeModel::columnCount(const QModelIndex& parent) const
 
 Qt::ItemFlags PersonEntityMergeModel::flags(const QModelIndex& index) const
 {
-    // FIXME: Make Persons selectable and show some fancy stuff
+    Q_UNUSED(index)
+
+    // TODO: Make Persons selectable and show some fancy stuff
     /*
     if (index.data(PersonsModel::ResourceTypeRole).toUInt() == PersonsModel::Person) {
         return Qt::ItemIsEnabled;
