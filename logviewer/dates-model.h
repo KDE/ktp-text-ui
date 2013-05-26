@@ -87,6 +87,8 @@ class DatesModel : public QAbstractItemModel
     QList<QDate> m_groups;
     QMap<QDate, QList<Date*> > m_items;
 
+    QList<Tpl::PendingOperation*> m_pendingDates;
+
     friend bool sortDatesDescending(const Date *date1, const Date *date2);
 };
 

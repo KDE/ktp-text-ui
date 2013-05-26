@@ -65,6 +65,7 @@ void DatesModel::addEntity(const Tp::AccountPtr& account, const Tpl::EntityPtr& 
     Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
     Tpl::PendingDates *pendingDates = logManager->queryDates(account, entity,
                                                              Tpl::EventTypeMaskText);
+    m_pendingDates << pendingDates;
     connect(pendingDates, SIGNAL(finished(Tpl::PendingOperation*)),
             SLOT(onDatesReceived(Tpl::PendingOperation*)));
 }
@@ -89,6 +90,11 @@ void DatesModel::clear()
 {
     beginResetModel();
     m_resetInProgress = 0;
+    Q_FOREACH (Tpl::PendingOperation *op, m_pendingDates) {
+        disconnect(op, SIGNAL(finished(Tpl::PendingOperation*)));
+        op->deleteLater();
+    }
+    m_pendingDates.clear();
     m_groups.clear();
     Q_FOREACH (const QList<Date*> &list, m_items) {
         qDeleteAll(list);
@@ -340,12 +346,15 @@ void DatesModel::onDatesReceived(Tpl::PendingOperation* operation)
 {
     // Stop here if clear() was called meanwhile
     if (m_resetInProgress == 0) {
-        operation->deleteLater();
         return;
     }
 
     Tpl::PendingDates *op = qobject_cast<Tpl::PendingDates*>(operation);
     Q_ASSERT(op);
+    Q_ASSERT(m_pendingDates.contains(op));
+
+    m_pendingDates.removeOne(op);
+    op->deleteLater();
 
     QList<QDate> newDates = op->dates();
     Q_FOREACH (const QDate &newDate, newDates) {
@@ -378,8 +387,6 @@ void DatesModel::onDatesReceived(Tpl::PendingOperation* operation)
         qStableSort(dates.begin(), dates.end(), sortDatesDescending);
         m_items.insert(groupDate, dates);
     }
-
-    op->deleteLater();
 
     --m_resetInProgress;
     if (m_resetInProgress == 0) {
