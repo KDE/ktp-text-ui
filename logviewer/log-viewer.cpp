@@ -34,7 +34,6 @@
 
 #include <kpeople/persons-model.h>
 
-#include <QSortFilterProxyModel>
 #include <QWebFrame>
 #include <KLineEdit>
 #include <KPixmapSequence>
@@ -269,7 +268,7 @@ void LogViewer::slotSetConversationDate(const QDate &date)
     const QModelIndex index = m_datesModel->indexForDate(date);
     if (index.isValid()) {
         ui->datesView->setCurrentIndex(index);
-        slotUpdateMainWindow();
+        // slotUpdateMainWindow() is called through currentChanged() signal
     }
 }
 

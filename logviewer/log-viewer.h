@@ -23,7 +23,6 @@
 #include <KXmlGuiWindow>
 #include <TelepathyLoggerQt4/Types>
 
-class DatesModel;
 namespace Ui {
     class LogViewer;
 }
@@ -32,6 +31,7 @@ namespace Tpl {
     class PendingOperation;
 }
 
+class DatesModel;
 class EntityModel;
 class EntityFilterModel;
 class PersonsModel;

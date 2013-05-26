@@ -27,6 +27,7 @@
 
 #include <KDE/KLocalizedString>
 #include <KDE/KLocalizedDate>
+#include <KDE/KDebug>
 
 Q_DECLARE_METATYPE(Tp::AccountPtr)
 Q_DECLARE_METATYPE(Tpl::EntityPtr)
@@ -38,9 +39,10 @@ class DatesModel::Date
     QList<AccountEntityPair> matches;
 };
 
-bool compareDates(const DatesModel::Date* date1, const DatesModel::Date* date2)
+bool sortDatesDescending(const DatesModel::Date* date1, const DatesModel::Date* date2)
 {
-    return date1->date < date2->date;
+    kDebug() << date1->date << date2->date;
+    return date1->date > date2->date;
 }
 
 DatesModel::DatesModel(QObject* parent):
@@ -51,7 +53,7 @@ DatesModel::DatesModel(QObject* parent):
 
 DatesModel::~DatesModel()
 {
-    qDeleteAll(m_items);
+    clear();
 }
 
 void DatesModel::addEntity(const Tp::AccountPtr& account, const Tpl::EntityPtr& entity)
@@ -88,13 +90,17 @@ void DatesModel::clear()
 {
     beginResetModel();
     m_resetInProgress = 0;
+    m_groups.clear();
+    Q_FOREACH (const QList<Date*> &list, m_items) {
+        qDeleteAll(list);
+    }
     m_items.clear();
     m_pairs.clear();
     // Don't reset searchHits!
     endResetModel();
 }
 
-QDate DatesModel::previousDate(const QModelIndex& index) const
+QDate DatesModel::nextDate(const QModelIndex& index) const
 {
     if (!index.isValid()) {
         return QDate();
@@ -107,7 +113,7 @@ QDate DatesModel::previousDate(const QModelIndex& index) const
 
     // Date
     QModelIndex idx;
-    if (index.internalId() >= 0 && index.internalId() < m_items.uniqueKeys().count()) {
+    if (index.internalId() >= 0 && index.internalId() < m_groups.count()) {
         idx = index;
     } else {
         idx = index.parent();
@@ -133,7 +139,7 @@ QDate DatesModel::previousDate(const QModelIndex& index) const
     return QDate();
 }
 
-QDate DatesModel::nextDate(const QModelIndex& index) const
+QDate DatesModel::previousDate(const QModelIndex& index) const
 {
     if (!index.isValid()) {
         return QDate();
@@ -146,7 +152,7 @@ QDate DatesModel::nextDate(const QModelIndex& index) const
 
     // Date
     QModelIndex idx;
-    if (index.internalId() >= 0 && index.internalId() < m_items.uniqueKeys().count()) {
+    if (index.internalId() >= 0 && index.internalId() < m_groups.count()) {
         idx = index;
     } else {
         idx = index.parent();
@@ -175,9 +181,9 @@ QDate DatesModel::nextDate(const QModelIndex& index) const
 QModelIndex DatesModel::indexForDate(const QDate& date) const
 {
     const QDate groupDate(date.year(), date.month(), 1);
-    const QModelIndex parent = index(m_items.uniqueKeys().indexOf(groupDate), 0, QModelIndex());
+    const QModelIndex parent = index(m_groups.indexOf(groupDate), 0, QModelIndex());
 
-    QList<Date*> dates = m_items.values(groupDate);
+    QList<Date*> dates = m_items.value(groupDate);
     for (int i = 0; i < dates.count(); ++i) {
         if (dates[i]->date == date) {
             return index(i, 0, parent);
@@ -197,7 +203,9 @@ QVariant DatesModel::data(const QModelIndex& index, int role) const
     if (index.internalId() == -1) {
         switch (role) {
             case Qt::DisplayRole:
-                return m_items.uniqueKeys().at(index.row()).toString(QLatin1String("MMMM yyyy"));
+                return m_groups.at(index.row()).toString(QLatin1String("MMMM yyyy"));
+            case DateRole:
+                return m_groups.at(index.row());
             case TypeRole:
                 return DatesModel::GroupRow;
             default:
@@ -207,8 +215,8 @@ QVariant DatesModel::data(const QModelIndex& index, int role) const
 
     // It's a date node
     if (index.parent().internalId() == -1) {
-        const QDate key = m_items.uniqueKeys().at(index.internalId());
-        date = m_items.values(key).at(index.row());
+        const QDate key = m_groups.at(index.parent().row());
+        date = m_items.value(key).at(index.row());
         isDate = true;
         if (date->matches.count() == 1) {
             pair = date->matches.first();
@@ -253,20 +261,20 @@ int DatesModel::rowCount(const QModelIndex& parent) const
 {
     // Groups
     if (!parent.isValid()) {
-        return m_items.uniqueKeys().count();
+        return m_groups.count();
     }
 
     // Dates
     if (parent.internalId() == -1) {
-        const QDate key = m_items.uniqueKeys().at(parent.row());
-        const QList<Date*> dates = m_items.values(key);
+        const QDate key = m_groups.at(parent.row());
+        const QList<Date*> dates = m_items.value(key);
         return dates.count();
     }
 
     // Conversations
-    if ((parent.internalId() >= 0) && parent.internalId() < m_items.uniqueKeys().count()) {
-        const QDate key = m_items.uniqueKeys().at(parent.internalId());
-        const QList<Date*> dates = m_items.values(key);
+    if ((parent.internalId() >= 0) && parent.internalId() < m_groups.count()) {
+        const QDate key = m_groups.at(parent.parent().row());
+        const QList<Date*> dates = m_items.value(key);
         const Date *date = dates.at(parent.row());
         // Only make the date expandable if there is more than one account
         if (date->matches.count() == 1) {
@@ -298,8 +306,8 @@ QModelIndex DatesModel::parent(const QModelIndex& child) const
     // Child is a conversation
     Date *date = static_cast<Date*>(child.internalPointer());
     if (date) {
-        const QDate key = m_items.key(date);
-        const QList<Date*> dates = m_items.values(key);
+        const QDate key = QDate(date->date.year(), date->date.month(), 1);
+        const QList<Date*> dates = m_items.value(key);
         return createIndex(dates.indexOf(date), 0, m_items.uniqueKeys().indexOf(key));
     }
 
@@ -322,7 +330,7 @@ QModelIndex DatesModel::index(int row, int column, const QModelIndex& parent) co
     // Conversation, data is a pointer to parent date
     if (!parent.internalId() >= 0) {
         const QDate key = m_items.uniqueKeys().at(parent.internalId());
-        const QList<Date*> dates = m_items.values(key);
+        const QList<Date*> dates = m_items.value(key);
         return createIndex(row, column, dates.at(parent.row()));
     }
 
@@ -342,18 +350,34 @@ void DatesModel::onDatesReceived(Tpl::PendingOperation* operation)
 
     QList<QDate> newDates = op->dates();
     Q_FOREACH (const QDate &newDate, newDates) {
-        QMap<QDate, Date*>::Iterator iter = m_items.find(newDate);
-        if (iter != m_items.constEnd()) {
-            iter.value()->matches << AccountEntityPair(op->account(), op->entity());
+        const QDate groupDate(newDate.year(), newDate.month(), 1);
+        if (!m_groups.contains(groupDate)) {
+            m_groups << groupDate;
+            // Sort dates in descending order
+            qStableSort(m_groups.begin(), m_groups.end(), qGreater<QDate>());
+
+            Date *date = new Date;
+            date->date = newDate;
+            date->matches << AccountEntityPair(op->account(), op->entity());
+            m_items.insertMulti(groupDate, QList<Date*>() << date);
             continue;
+        }
+
+        QList<Date*> dates = m_items.value(groupDate);
+        Q_FOREACH (Date *date, dates) {
+            if (date->date == newDate) {
+                date->matches << AccountEntityPair(op->account(), op->entity());
+                continue;
+            }
         }
 
         Date *date = new Date;
         date->date = newDate;
         date->matches << AccountEntityPair(op->account(), op->entity());
+        dates.append(date);
 
-        QDate groupDate(newDate.year(), newDate.month(), 1);
-        m_items.insertMulti(groupDate, date);
+        qStableSort(dates.begin(), dates.end(), sortDatesDescending);
+        m_items.insert(groupDate, dates);
     }
 
     op->deleteLater();

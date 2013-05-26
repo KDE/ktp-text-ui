@@ -29,6 +29,11 @@ namespace Tpl {
 class PendingOperation;
 }
 
+/**
+ * Model with dates of all conversations between you and set entity
+ *
+ * The model automatically sorts dates in descending order
+ */
 class DatesModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -79,9 +84,10 @@ class DatesModel : public QAbstractItemModel
     int m_resetInProgress;
 
     class Date;
-    QMultiMap<QDate, Date*> m_items;
+    QList<QDate> m_groups;
+    QMap<QDate, QList<Date*> > m_items;
 
-    friend bool compareDates(const Date *date1, const Date *date2);
+    friend bool sortDatesDescending(const Date *date1, const Date *date2);
 };
 
 #endif // DATESMODEL_H
