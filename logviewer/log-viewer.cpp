@@ -412,7 +412,6 @@ void LogViewer::slotJumpToNextConversation()
     const QModelIndex index = m_datesModel->indexForDate(m_nextConversationDate);
     if (index.isValid()) {
         ui->datesView->setCurrentIndex(index);
-        slotUpdateMainWindow();
     }
 }
 
@@ -425,6 +424,5 @@ void LogViewer::slotJumpToPrevConversation()
     const QModelIndex index = m_datesModel->indexForDate(m_prevConversationDate);
     if (index.isValid()) {
         ui->datesView->setCurrentIndex(index);
-        slotUpdateMainWindow();
     }
 }
