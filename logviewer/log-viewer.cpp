@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2012 by David Edmundson <kde@davidedmundson.co.uk>      *
+ *   Copyright (C) 2013 by Daniel Vrátil <dvratil@redhat.com>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -256,7 +257,7 @@ void LogViewer::slotUpdateMainWindow()
 
     Tpl::EntityPtr entity = currentDateIndex.data(DatesModel::EntityRole).value<Tpl::EntityPtr>();
     Tp::AccountPtr account = currentDateIndex.data(DatesModel::AccountRole).value<Tp::AccountPtr>();
-    Tp::ContactPtr contact = currentIndex.data(PersonEntityMergeModel::ContactRole).value<Tp::ContactPtr>();
+    KTp::ContactPtr contact = currentIndex.data(PersonEntityMergeModel::ContactRole).value<KTp::ContactPtr>();
     if (entity.isNull() || account.isNull()) {
         ui->messageView->clear();
     } else {

@@ -36,7 +36,7 @@ public:
     explicit MessageView(QWidget *parent = 0);
 
     void loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
-                 const Tp::ContactPtr &contact, const QDate &date,
+                 const KTp::ContactPtr &contact, const QDate &date,
                  const QPair< QDate, QDate > &nearestDates);
 
     void setHighlightText(const QString &text);
@@ -56,7 +56,7 @@ Q_SIGNALS:
 private:
     Tpl::EntityPtr m_entity;
     Tp::AccountPtr m_account;
-    Tp::ContactPtr m_contact;
+    KTp::ContactPtr m_contact;
     QDate m_date;
     QDate m_prev;
     QDate m_next;

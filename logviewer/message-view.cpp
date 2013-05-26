@@ -38,7 +38,7 @@ MessageView::MessageView(QWidget *parent) :
 
 
 void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
-                          const Tp::ContactPtr &contact, const QDate &date,
+                          const KTp::ContactPtr &contact, const QDate &date,
                           const QPair< QDate, QDate > &nearestDates)
 {
     if (account.isNull() || entity.isNull()) {
