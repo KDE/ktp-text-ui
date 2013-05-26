@@ -36,7 +36,6 @@ MessageView::MessageView(QWidget *parent) :
     connect(this, SIGNAL(loadFinished(bool)), SLOT(processStoredEvents()));
 }
 
-
 void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
                           const KTp::ContactPtr &contact, const QDate &date,
                           const QPair< QDate, QDate > &nearestDates)
@@ -48,13 +47,17 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
     }
 
     m_account = account;
-    m_entity = entity;
+    // FIXME: Workaround for a bug, probably in QGlib which causes that
+    // m_entity = m_entity results in invalid m_entity->m_class being null
+    if (m_entity != entity) {
+        m_entity = entity;
+    }
     m_contact = contact;
     m_date = date;
     m_prev = nearestDates.first;
     m_next = nearestDates.second;
 
-    if (entity->entityType() == Tpl::EntityTypeRoom) {
+    if (m_entity->entityType() == Tpl::EntityTypeRoom) {
         load(AdiumThemeView::GroupChat);
     } else {
         load(AdiumThemeView::SingleUserChat);
@@ -165,6 +168,10 @@ void MessageView::onLinkClicked(const QUrl &link)
     AdiumThemeView::onLinkClicked(link);
 }
 
+void MessageView::reloadTheme()
+{
+    loadLog(m_account, m_entity, m_contact, m_date, qMakePair(m_prev, m_next));
+}
 
 void MessageView::doHighlightText()
 {

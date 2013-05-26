@@ -48,6 +48,9 @@
 #include <KAction>
 #include <KActionCollection>
 #include <KMenuBar>
+#include <KSettings/Dialog>
+
+#include <KDE/KCModuleProxy>
 
 #include "entity-model.h"
 #include "logs-import-dialog.h"
@@ -125,6 +128,9 @@ void LogViewer::setupActions()
     KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
     KStandardAction::showMenubar(this->menuBar(), SLOT(setVisible(bool)), actionCollection());
 
+    KAction *configure = new KAction(i18n("&Configure LogViewer"), this);
+    configure->setIcon(KIcon(QLatin1String("configure")));
+    connect(configure, SIGNAL(triggered(bool)), SLOT(slotConfigure()));
     /*
     KAction *clearAccHistory = new KAction(i18n("Clear &account history"), this);
     clearAccHistory->setIcon(KIcon(QLatin1String("edit-clear-history")));
@@ -158,6 +164,7 @@ void LogViewer::setupActions()
     actionCollection()->addAction(QLatin1String("import-kopete-logs"), importKopeteLogs);
     actionCollection()->addAction(QLatin1String("jump-prev-conversation"), prevConversation);
     actionCollection()->addAction(QLatin1String("jump-next-conversation"), nextConversation);
+    actionCollection()->addAction(QLatin1String("configure"), configure);
 
     /* Build the popup menu for entity list */
     m_entityListContextMenu = new KMenu(ui->entityList);
@@ -425,4 +432,21 @@ void LogViewer::slotJumpToPrevConversation()
     if (index.isValid()) {
         ui->datesView->setCurrentIndex(index);
     }
+}
+
+void LogViewer::slotConfigure()
+{
+    KSettings::Dialog *dialog = new KSettings::Dialog(this);
+
+    KPageWidgetItem *configPage = dialog->addModule(QLatin1String("kcm_ktp_chat_appearance"));
+    KCModuleProxy *proxy = qobject_cast<KCModuleProxy*>(configPage->widget());
+    Q_ASSERT(proxy);
+
+    connect(proxy->realModule(), SIGNAL(reloadTheme()),
+            ui->messageView, SLOT(reloadTheme()));
+
+    dialog->addModule(QLatin1String("kcm_ktp_logviewer_behavior"));
+
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
 }

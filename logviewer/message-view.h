@@ -44,6 +44,7 @@ public:
 
 public Q_SLOTS:
     void onLinkClicked(const QUrl &link);
+    void reloadTheme();
 
 private Q_SLOTS:
     void onEventsLoaded(Tpl::PendingOperation* po);
