@@ -38,11 +38,6 @@ public:
         SortNewestTop
     };
 
-    enum DisplayMode {
-        ModeByDays,
-        ModeScrollback
-    };
-
     explicit MessageView(QWidget *parent = 0);
 
     void loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
@@ -55,7 +50,6 @@ public:
 public Q_SLOTS:
     void onLinkClicked(const QUrl &link);
     void reloadTheme();
-    void reloadSettings();
 
 private Q_SLOTS:
     void onEventsLoaded(Tpl::PendingOperation* po);
@@ -69,7 +63,6 @@ private:
     void loadSettings();
 
     SortMode m_sortMode;
-    DisplayMode m_displaMode;
 
     Tpl::EntityPtr m_entity;
     Tp::AccountPtr m_account;

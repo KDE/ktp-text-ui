@@ -23,6 +23,8 @@
 #include <KXmlGuiWindow>
 #include <TelepathyLoggerQt4/Types>
 
+#include "message-view.h"
+
 namespace Ui {
     class LogViewer;
 }

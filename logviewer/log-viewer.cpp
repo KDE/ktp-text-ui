@@ -448,7 +448,7 @@ void LogViewer::slotConfigure()
     proxy = qobject_cast<KCModuleProxy*>(configPage->widget());
     Q_ASSERT(proxy);
     connect(proxy->realModule(), SIGNAL(reloadMessages()),
-            ui->messageView, SLOT(reloadSettings()));
+            ui->messageView, SLOT(reloadTheme()));
 
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();

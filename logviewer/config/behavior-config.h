@@ -21,7 +21,6 @@
 #define BEHAVIORCONFIG_H
 
 #include <KDE/KCModule>
-#include "message-view.h"
 
 namespace Ui
 {

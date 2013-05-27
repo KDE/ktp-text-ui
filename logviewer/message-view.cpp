@@ -194,20 +194,13 @@ void MessageView::loadSettings()
     const KConfig config(QLatin1String("ktelepathyrc"));
     const KConfigGroup group = config.group("LogViewer");
     m_sortMode = static_cast<SortMode>(group.readEntry("SortMode", static_cast<int>(SortOldestTop)));
-    m_displaMode = static_cast<DisplayMode>(group.readEntry("DisplayMode", static_cast<int>(ModeByDays)));
 }
 
 void MessageView::reloadTheme()
 {
-    loadLog(m_account, m_entity, m_contact, m_date, qMakePair(m_prev, m_next));
-}
-
-void MessageView::reloadSettings()
-{
     loadSettings();
     loadLog(m_account, m_entity, m_contact, m_date, qMakePair(m_prev, m_next));
 }
-
 
 void MessageView::doHighlightText()
 {

@@ -19,6 +19,7 @@
 
 #include "behavior-config.h"
 #include "ui_behavior-config.h"
+#include "message-view.h"
 
 #include <KDE/KConfig>
 #include <KDE/KConfigGroup>
@@ -37,13 +38,9 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
     ui->sortButtonGroup->setId(ui->sortOldestOnTop, MessageView::SortOldestTop);
     ui->sortButtonGroup->setId(ui->sortNewestOnTop, MessageView::SortNewestTop);
 
-    ui->modeButtonGroup->setId(ui->modeSplitByDays, MessageView::ModeByDays);
-    ui->modeButtonGroup->setId(ui->modeScrollback, MessageView::ModeScrollback);
-
     load();
 
     connect(ui->sortButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(onRadioChanged()));
-    connect(ui->modeButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(onRadioChanged()));
 }
 
 BehaviorConfig::~BehaviorConfig()
@@ -55,12 +52,6 @@ void BehaviorConfig::load()
 {
     const KConfig config(QLatin1String("ktelepathyrc"));
     const KConfigGroup group = config.group("LogViewer");
-    MessageView::DisplayMode displayMode;
-    displayMode = static_cast<MessageView::DisplayMode>(group.readEntry<int>(QLatin1String("DisplayMode"),
-                                                            static_cast<int>(MessageView::ModeByDays)));
-    ui->modeSplitByDays->setChecked(displayMode == MessageView::ModeByDays);
-    ui->modeScrollback->setChecked(displayMode == MessageView::ModeScrollback);
-
     MessageView::SortMode sortMode;
     sortMode = static_cast<MessageView::SortMode>(group.readEntry<int>(QLatin1String("SortMode"),
                                                         static_cast<int>(MessageView::SortOldestTop)));
@@ -74,7 +65,6 @@ void BehaviorConfig::save()
 
     KConfig config(QLatin1String("ktelepathyrc"));
     KConfigGroup group = config.group("LogViewer");
-    group.writeEntry(QLatin1String("DisplayMode"), ui->modeButtonGroup->checkedId());
     group.writeEntry(QLatin1String("SortMode"), ui->sortButtonGroup->checkedId());
     group.sync();
 

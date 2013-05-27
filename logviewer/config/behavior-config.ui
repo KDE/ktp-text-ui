@@ -51,38 +51,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>Display Mode</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QRadioButton" name="modeSplitByDays">
-        <property name="text">
-         <string>&amp;Split conversations by days</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">modeButtonGroup</string>
-        </attribute>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="modeScrollback">
-        <property name="text">
-         <string>Show &amp;all messages as an endless scrollback</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">modeButtonGroup</string>
-        </attribute>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -100,7 +68,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="sortButtonGroup"/>
   <buttongroup name="modeButtonGroup"/>
+  <buttongroup name="sortButtonGroup"/>
  </buttongroups>
 </ui>
