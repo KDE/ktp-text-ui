@@ -441,11 +441,14 @@ void LogViewer::slotConfigure()
     KPageWidgetItem *configPage = dialog->addModule(QLatin1String("kcm_ktp_chat_appearance"));
     KCModuleProxy *proxy = qobject_cast<KCModuleProxy*>(configPage->widget());
     Q_ASSERT(proxy);
-
     connect(proxy->realModule(), SIGNAL(reloadTheme()),
             ui->messageView, SLOT(reloadTheme()));
 
-    dialog->addModule(QLatin1String("kcm_ktp_logviewer_behavior"));
+    configPage = dialog->addModule(QLatin1String("kcm_ktp_logviewer_behavior"));
+    proxy = qobject_cast<KCModuleProxy*>(configPage->widget());
+    Q_ASSERT(proxy);
+    connect(proxy->realModule(), SIGNAL(reloadMessages()),
+            ui->messageView, SLOT(reloadSettings()));
 
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();

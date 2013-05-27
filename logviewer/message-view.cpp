@@ -33,6 +33,7 @@
 MessageView::MessageView(QWidget *parent) :
     AdiumThemeView(parent)
 {
+    loadSettings();
     connect(this, SIGNAL(loadFinished(bool)), SLOT(processStoredEvents()));
 }
 
@@ -40,7 +41,7 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
                           const KTp::ContactPtr &contact, const QDate &date,
                           const QPair< QDate, QDate > &nearestDates)
 {
-    if (account.isNull() || entity.isNull()) {
+if (account.isNull() || entity.isNull()) {
         //note contact can be null
         kWarning() << "invalid account/contact. Not loading log";
         return;
@@ -105,25 +106,47 @@ void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
     initialise(headerInfo);
 }
 
-bool operator<(const Tpl::EventPtr &e1, const Tpl::EventPtr &e2)
+bool sortEventsFromOldest(const Tpl::EventPtr &e1, const Tpl::EventPtr &e2)
 {
+    kDebug();
     return e1->timestamp() < e2->timestamp();
+}
+
+bool sortEventsFromNewest(const Tpl::EventPtr &e1, const Tpl::EventPtr &e2)
+{
+    kDebug();
+    return e1->timestamp() > e2->timestamp();
 }
 
 void MessageView::processStoredEvents()
 {
+    AdiumThemeStatusInfo prevConversation;
     if (m_prev.isValid()) {
-        AdiumThemeStatusInfo message(AdiumThemeMessageInfo::HistoryStatus);
-        message.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Previous conversation")));
-        message.setService(m_account->serviceName());
-        message.setTime(QDateTime(m_prev));
-
-        addAdiumStatusMessage(message);
+        prevConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
+        prevConversation.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Previous conversation")));
+        prevConversation.setService(m_account->serviceName());
+        prevConversation.setTime(QDateTime(m_prev));
     }
 
-    // See https://bugs.kde.org/show_bug.cgi?id=317866
-    // Uses the operator< overload above
-    qSort(m_events);
+    AdiumThemeStatusInfo nextConversation;
+    if (m_next.isValid()) {
+        nextConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
+        nextConversation.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Next conversation")));
+        nextConversation.setService(m_account->serviceName());
+        nextConversation.setTime(QDateTime(m_next));
+    }
+
+    if (m_sortMode == MessageView::SortOldestTop) {
+        if (m_prev.isValid()) {
+            addAdiumStatusMessage(prevConversation);
+        }
+        qSort(m_events.begin(), m_events.end(), sortEventsFromOldest);
+    } else if (m_sortMode == MessageView::SortNewestTop) {
+        if (m_next.isValid()) {
+            addAdiumStatusMessage(nextConversation);
+        }
+        qSort(m_events.begin(), m_events.end(), sortEventsFromNewest);
+    }
 
     while (!m_events.isEmpty()) {
         const Tpl::TextEventPtr textEvent(m_events.takeFirst().staticCast<Tpl::TextEvent>());
@@ -131,12 +154,10 @@ void MessageView::processStoredEvents()
         addMessage(message);
     }
 
-    if (m_next.isValid()) {
-        AdiumThemeStatusInfo message(AdiumThemeMessageInfo::HistoryStatus);
-        message.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Next conversation")));
-        message.setService(m_account->serviceName());
-        message.setTime(QDateTime(m_next));
-        addAdiumStatusMessage(message);
+    if (m_sortMode == MessageView::SortOldestTop && m_next.isValid()) {
+        addAdiumStatusMessage(nextConversation);
+    } else if (m_sortMode == MessageView::SortNewestTop && m_prev.isValid()) {
+        addAdiumStatusMessage(prevConversation);
     }
 
     /* Can't highlight the text directly, we need to wait for the JavaScript in
@@ -168,10 +189,25 @@ void MessageView::onLinkClicked(const QUrl &link)
     AdiumThemeView::onLinkClicked(link);
 }
 
+void MessageView::loadSettings()
+{
+    const KConfig config(QLatin1String("ktelepathyrc"));
+    const KConfigGroup group = config.group("LogViewer");
+    m_sortMode = static_cast<SortMode>(group.readEntry("SortMode", static_cast<int>(SortOldestTop)));
+    m_displaMode = static_cast<DisplayMode>(group.readEntry("DisplayMode", static_cast<int>(ModeByDays)));
+}
+
 void MessageView::reloadTheme()
 {
     loadLog(m_account, m_entity, m_contact, m_date, qMakePair(m_prev, m_next));
 }
+
+void MessageView::reloadSettings()
+{
+    loadSettings();
+    loadLog(m_account, m_entity, m_contact, m_date, qMakePair(m_prev, m_next));
+}
+
 
 void MessageView::doHighlightText()
 {

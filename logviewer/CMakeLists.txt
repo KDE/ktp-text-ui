@@ -18,6 +18,8 @@ set(ktp-log-viewer_SRCS
         person-entity-merge-model.cpp
 )
 
+add_subdirectory(config)
+
 kde4_add_ui_files(ktp-log-viewer_SRCS log-viewer.ui)
 
 kde4_add_executable(ktp-log-viewer ${ktp-log-viewer_SRCS})
