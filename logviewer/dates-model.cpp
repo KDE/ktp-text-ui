@@ -216,20 +216,20 @@ QVariant DatesModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
         }
+        return QVariant();
     }
 
     // It's a date node
-    if (index.parent().internalId() == -1) {
+    if (index.internalId() >= 0 && index.internalId() <= m_groups.count()) {
         const QDate key = m_groups.at(index.parent().row());
         date = m_items.value(key).at(index.row());
         isDate = true;
         if (date->matches.count() == 1) {
             pair = date->matches.first();
         }
-
     // It's an account/entity node
     } else {
-        date = static_cast<Date*>(index.internalPointer());
+        Date *date = static_cast<Date*>(index.internalPointer());
         pair = date->matches.at(index.row());
     }
 
@@ -277,7 +277,7 @@ int DatesModel::rowCount(const QModelIndex& parent) const
     }
 
     // Conversations
-    if ((parent.internalId() >= 0) && parent.internalId() < m_groups.count()) {
+    if (parent.internalId() >= 0) {
         const QDate key = m_groups.at(parent.parent().row());
         const QList<Date*> dates = m_items.value(key);
         const Date *date = dates.at(parent.row());
@@ -285,7 +285,6 @@ int DatesModel::rowCount(const QModelIndex& parent) const
         if (date->matches.count() == 1) {
             return 0;
         }
-
         return date->matches.count();
     }
 
@@ -367,16 +366,22 @@ void DatesModel::onDatesReceived(Tpl::PendingOperation* operation)
             Date *date = new Date;
             date->date = newDate;
             date->matches << AccountEntityPair(op->account(), op->entity());
-            m_items.insertMulti(groupDate, QList<Date*>() << date);
+            m_items.insert(groupDate, QList<Date*>() << date);
             continue;
         }
 
         QList<Date*> dates = m_items.value(groupDate);
+        bool found = false;
         Q_FOREACH (Date *date, dates) {
             if (date->date == newDate) {
                 date->matches << AccountEntityPair(op->account(), op->entity());
-                continue;
+                found = true;
+                break;
             }
+        }
+
+        if (found) {
+            continue;
         }
 
         Date *date = new Date;
