@@ -154,9 +154,11 @@ void ChannelContactModel::addContacts(const Tp::Contacts &contacts)
         connect(contact.data(), SIGNAL(blockStatusChanged(bool)), SLOT(onContactBlockStatusChanged(bool)));
     }
 
-    beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size() + newContacts.size());
-    m_contacts << newContacts;
-    endInsertRows();
+    if (newContacts.size() > 0) {
+        beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size() + newContacts.size() - 1);
+        m_contacts << newContacts;
+        endInsertRows();
+    }
 }
 
 void ChannelContactModel::removeContacts(const Tp::Contacts &contacts)
