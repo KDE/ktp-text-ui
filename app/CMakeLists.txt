@@ -9,7 +9,7 @@ set(ktp-text-ui_SRCS
         emoticon-text-edit-selector.cpp
         invite-contact-dialog.cpp
         abstract-contact-delegate.cpp
-        contact-delegate-compact.cpp
+        contact-delegate.cpp
 )
 
 kde4_add_executable(ktp-text-ui ${ktp-text-ui_SRCS})

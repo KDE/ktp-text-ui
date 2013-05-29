@@ -23,7 +23,7 @@
 #include "chat-search-bar.h"
 #include "chat-tab.h"
 #include "chat-widget.h"
-#include "contact-delegate-compact.h"
+#include "contact-delegate.h"
 
 #include <KTp/service-availability-checker.h>
 #include <KTp/actions.h>
@@ -110,13 +110,13 @@ ChatWindow::ChatWindow(const Tp::AccountManagerPtr &accountManager)
     KTp::ContactsModel *model = new KTp::ContactsModel(this);
     model->setTrackUnreadMessages(true);
     model->setAccountManager(accountManager);
+    model->setSortRole(Qt::DisplayRole);
+    model->setPresenceTypeFilterFlags(KTp::ContactsFilterModel::HideAllOffline);
 
     treeView->setModel(model);
-    treeView->setItemDelegate(new ContactDelegateCompact);
+    treeView->setItemDelegate(new ContactDelegate);
     treeView->setHeaderHidden(true);
     treeView->setRootIsDecorated(false);
-    model->setSortRole(KTp::ContactHasTextChannelRole);
-    model->setPresenceTypeFilterFlags(KTp::ContactsFilterModel::HideAllOffline);
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
