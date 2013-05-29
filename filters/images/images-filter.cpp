@@ -62,9 +62,7 @@ void ImagesFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
                 QLatin1Literal("<br/><a href=\"") % href % QLatin1Literal("\">") %
                     QLatin1Literal("<img src=\"") %
                     href %
-                    QLatin1Literal("\" style=\"max-width:100%;margin-top:3px\" alt=\"") %
-                    i18n("Click to view in browser") %
-                    QLatin1Literal("\" />") %
+                    QLatin1Literal("\" style=\"max-width:100%;margin-top:3px\"/>") %
                 QLatin1Literal("</a>")
             );
         }
