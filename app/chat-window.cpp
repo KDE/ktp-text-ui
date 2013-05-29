@@ -104,9 +104,6 @@ ChatWindow::ChatWindow(const Tp::AccountManagerPtr &accountManager)
     KStandardAction::zoomIn(this, SLOT(onZoomIn()), actionCollection());
     KStandardAction::zoomOut(this, SLOT(onZoomOut()), actionCollection());
 
-    // create custom actions
-    setupCustomActions();
-
     QWidget *widget = new QWidget(this);
 
     QTreeView *treeView = new QTreeView(this);
@@ -119,6 +116,7 @@ ChatWindow::ChatWindow(const Tp::AccountManagerPtr &accountManager)
     treeView->setHeaderHidden(true);
     treeView->setRootIsDecorated(false);
     model->setSortRole(KTp::ContactHasTextChannelRole);
+    model->setPresenceTypeFilterFlags(KTp::ContactsFilterModel::HideAllOffline);
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
@@ -891,8 +889,9 @@ bool ChatWindow::event(QEvent *e)
     if (e->type() == QEvent::WindowActivate) {
         //when the window is activated reset the message count on the active tab.
         ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
-        Q_ASSERT(currChat);
-        currChat->acknowledgeMessages();
+        if (currChat) {
+            currChat->acknowledgeMessages();
+        }
     }
 
     return KXmlGuiWindow::event(e);
