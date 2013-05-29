@@ -24,7 +24,7 @@
 #define BEHAVIOR_CONFIG_H
 
 #include <KCModule>
-#include "../app/telepathy-chat-ui.h"
+#include "text-chat-config.h"
 
 namespace Ui {
 class BehaviorConfigUi;
@@ -48,10 +48,14 @@ protected:
 private Q_SLOTS:
     void onRadioSelected(int id);
     void onScrollbackLengthChanged();
+    void onShowMeTypingChanged(bool state);
+    void onShowOthersTypingChanged(bool state);
 
 private:
-    int m_openMode;
+    TextChatConfig::TabOpenMode m_openMode;
     int m_scrollbackLength;
+    bool m_showMeTyping; // show others I am typing
+    bool m_showOthersTyping; // show me others are typing
     Ui::BehaviorConfigUi *ui;
 };
 

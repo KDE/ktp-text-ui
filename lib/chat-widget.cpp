@@ -26,9 +26,12 @@
 #include "adium-theme-status-info.h"
 #include "channel-contact-model.h"
 #include "logmanager.h"
+#include "notify-filter.h"
+#include "text-chat-config.h"
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
+#include <QSortFilterProxyModel>
 
 #include <KColorDialog>
 #include <KNotification>
@@ -54,6 +57,8 @@
 #include <KTp/actions.h>
 #include <KTp/message-processor.h>
 
+#include <sonnet/speller.h>
+
 class ChatWidgetPrivate
 {
 public:
@@ -64,7 +69,7 @@ public:
     {
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
-    bool chatviewlInitialised;
+    bool chatViewInitialized;
     Tp::ChannelChatState remoteContactChatState;
     bool isGroupChat;
     QString title;
@@ -81,6 +86,7 @@ public:
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
     KComponentData telepathyComponentData();
+    KTp::AbstractMessageFilter *notifyFilter;
 };
 
 
@@ -98,7 +104,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->channel = channel;
     d->account = account;
     d->logManager = new LogManager(this);
-    connect(d->logManager, SIGNAL(fetched(QList<AdiumThemeContentInfo>)), SLOT(onHistoryFetched(QList<AdiumThemeContentInfo>)));
+    connect(d->logManager, SIGNAL(fetched(QList<KTp::Message>)), SLOT(onHistoryFetched(QList<KTp::Message>)));
 
     connect(d->account.data(), SIGNAL(currentPresenceChanged(Tp::Presence)),
             this, SLOT(currentPresenceChanged(Tp::Presence)));
@@ -106,7 +112,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     //load translations for this library. keep this before any i18n() calls in library code
     KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
 
-    d->chatviewlInitialised = false;
+    d->chatViewInitialized = false;
     d->isGroupChat = (channel->targetHandleType() == Tp::HandleTypeContact ? false : true);
 
     d->ui.setupUi(this);
@@ -123,7 +129,12 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
         d->ui.sendMessageBox->setContactModel(d->contactModel);
     }
 
-    d->ui.contactsView->setModel(d->contactModel);
+    QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(this);
+    sortModel->setSourceModel(d->contactModel);
+    sortModel->setSortRole(Qt::DisplayRole);
+    sortModel->setDynamicSortFilter(true);
+
+    d->ui.contactsView->setModel(sortModel);
 
     d->yourName = channel->groupSelfContact()->alias();
 
@@ -134,12 +145,15 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     /* Prepare the chat area */
     connect(d->ui.chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()), Qt::QueuedConnection);
     connect(d->ui.chatArea, SIGNAL(zoomFactorChanged(qreal)), SIGNAL(zoomFactorChanged(qreal)));
+    connect(d->ui.chatArea, SIGNAL(textPasted()), d->ui.sendMessageBox, SLOT(pasteSelection()));
     initChatArea();
-
-    loadSpellCheckingOption();
 
     d->pausedStateTimer = new QTimer(this);
     d->pausedStateTimer->setSingleShot(true);
+
+    // Spellchecking set up will trigger textChanged() signal of d->ui.sendMessageBox
+    // and our handler checks state of the timer created above.
+    loadSpellCheckingOption();
 
     // make the sendMessageBox a focus proxy for the chatview
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
@@ -165,6 +179,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     } else {
         m_previousConversationAvailable = false;
     }
+
+    d->notifyFilter = new NotifyFilter(this);
 }
 
 ChatWidget::~ChatWidget()
@@ -246,13 +262,21 @@ void ChatWidget::setChatEnabled(bool enable)
 
 void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 {
-    onContactPresenceChange(d->channel->groupSelfContact(), KTp::Presence(d->channel->groupSelfContact()->presence()));
 
     d->channel = newTextChannelPtr;     // set the new channel
     d->contactModel->setTextChannel(newTextChannelPtr);
 
     // connect signals for the new textchannel
     setupChannelSignals();
+
+    //if the UI is ready process any messages in queue
+    if (d->chatViewInitialized) {
+        Q_FOREACH (const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
+            handleIncomingMessage(message, true);
+        }
+    }
+    setChatEnabled(true);
+    onContactPresenceChange(d->channel->groupSelfContact(), KTp::Presence(d->channel->groupSelfContact()->presence()));
 }
 
 Tp::TextChannelPtr ChatWidget::textChannel() const
@@ -264,11 +288,6 @@ void ChatWidget::keyPressEvent(QKeyEvent *e)
 {
     if (e->matches(QKeySequence::Copy)) {
         d->ui.chatArea->triggerPageAction(QWebPage::Copy);
-        return;
-    }
-
-    if (e->key() == Qt::Key_Escape && d->ui.searchBar->isVisible()) {
-        d->ui.searchBar->toggleView(false);
         return;
     }
 
@@ -325,7 +344,7 @@ void ChatWidget::dropEvent(QDropEvent *e)
     if (data->hasUrls()) {
         Q_FOREACH(const QUrl &url, data->urls()) {
             if (url.isLocalFile()) {
-		KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), url.toLocalFile());
+        KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), url.toLocalFile());
             } else {
                 d->ui.sendMessageBox->append(url.toString());
             }
@@ -354,7 +373,7 @@ void ChatWidget::dropEvent(QDropEvent *e)
         }
 
         Tp::PendingChannelRequest *request;
-	request = KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), tmpFile.fileName());
+    request = KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), tmpFile.fileName());
         connect(request, SIGNAL(finished(Tp::PendingOperation*)),
                 this, SLOT(temporaryFileTransferChannelCreated(Tp::PendingOperation*)));
 
@@ -391,7 +410,7 @@ QColor ChatWidget::titleColor() const
 
     KColorScheme scheme(QPalette::Active, KColorScheme::Window);
 
-    if (d->remoteContactChatState == Tp::ChannelChatStateComposing) {
+    if (TextChatConfig::instance()->showOthersTyping() && (d->remoteContactChatState == Tp::ChannelChatStateComposing)) {
         kDebug() << "remote is typing";
         return scheme.foreground(KColorScheme::PositiveText).color();
     }
@@ -430,8 +449,6 @@ void ChatWidget::setupChannelSignals()
 {
     connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
             SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
-    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
-            SLOT(notifyAboutIncomingMessage(Tp::ReceivedMessage)));
     connect(d->channel.data(), SIGNAL(pendingMessageRemoved(Tp::ReceivedMessage)),
             SIGNAL(unreadMessagesChanged()));
     connect(d->channel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
@@ -457,18 +474,18 @@ void ChatWidget::setupContactModelSignals()
 }
 
 
-void ChatWidget::onHistoryFetched(const QList<AdiumThemeContentInfo> &messages)
+void ChatWidget::onHistoryFetched(const QList<KTp::Message> &messages)
 {
-    kDebug() << "found" << messages.count() << "messages in history";
-    Q_FOREACH(const AdiumThemeContentInfo &message, messages) {
-        d->ui.chatArea->addContentMessage(message);
-    }
+    d->chatViewInitialized = true;
 
-    d->chatviewlInitialised = true;
+    kDebug() << "found" << messages.count() << "messages in history";
+    Q_FOREACH(const KTp::Message &message, messages) {
+        d->ui.chatArea->addMessage(message);
+    }
 
     //process any messages we've 'missed' whilst initialising.
     Q_FOREACH(const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
-        handleIncomingMessage(message);
+        handleIncomingMessage(message, true);
     }
 }
 
@@ -481,10 +498,15 @@ void ChatWidget::acknowledgeMessages()
 {
     kDebug();
     //if we're not initialised we can't have shown anything, even if we are on top, therefore ignore all requests to do so
-    if (d->chatviewlInitialised) {
+    if (d->chatViewInitialized) {
         //acknowledge everything in the message queue.
         d->channel->acknowledge(d->channel->messageQueue());
     }
+}
+
+void ChatWidget::updateSendMessageShortcuts(const KShortcut &shortcuts)
+{
+    d->ui.sendMessageBox->setSendMessageShortcuts(shortcuts);
 }
 
 bool ChatWidget::isOnTop() const
@@ -493,11 +515,11 @@ bool ChatWidget::isOnTop() const
     return ( isActiveWindow() && isVisible() );
 }
 
-void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
+void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified)
 {
     kDebug() << title() << message.text();
 
-    if (d->chatviewlInitialised) {
+    if (d->chatViewInitialized) {
 
         //debug the message parts (looking for HTML etc)
 //        Q_FOREACH(Tp::MessagePart part, message.parts())
@@ -512,7 +534,6 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
 
         if (message.isDeliveryReport()) {
             QString text;
-            AdiumThemeStatusInfo messageInfo;
             Tp::ReceivedMessage::DeliveryDetails reportDetails = message.deliveryDetails();
 
             if (reportDetails.hasDebugMessage()) {
@@ -589,49 +610,15 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
                 return;
             }
 
-            messageInfo.setMessage(text);
-            messageInfo.setTime(message.received());
-            messageInfo.setStatus(QLatin1String("error"));
-
-            d->ui.chatArea->addStatusMessage(messageInfo);
-        } else if (message.messageType() == Tp::ChannelTextMessageTypeAction) {
-            //a "/me " message
-
-            AdiumThemeStatusInfo statusMessage;
-            statusMessage.setTime(message.received());
-
-            QString senderName;
-            if (message.sender().isNull()) {
-                senderName = message.senderNickname();
-            } else {
-                senderName = message.sender()->alias();
-            }
-
-            statusMessage.setMessage(QString::fromLatin1("%1 %2").arg(senderName, message.text()));
-            d->ui.chatArea->addStatusMessage(statusMessage);
+            d->ui.chatArea->addStatusMessage(text, message.received());
         } else {
-            AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::RemoteToLocal);
+            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel));
 
-            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processMessage(message, d->account, d->channel));
-            messageInfo.setMessage(processedMessage.finalizedMessage());
-            messageInfo.setScript(processedMessage.finalizedScript());
-
-            QDateTime time = message.sent();
-            if (!time.isValid()) {
-                time = message.received();
+            if (!alreadyNotified) {
+                d->notifyFilter->filterMessage(processedMessage,
+                                               KTp::MessageContext(d->account, d->channel));
             }
-            messageInfo.setTime(time);
-
-            //sender can have just an ID or be a full contactPtr. Use full contact info if available.
-            if (message.sender().isNull()) {
-                messageInfo.setSenderDisplayName(message.senderNickname());
-            } else {
-                messageInfo.setUserIconPath(message.sender()->avatarData().fileName);
-                messageInfo.setSenderDisplayName(message.sender()->alias());
-                messageInfo.setSenderScreenName(message.sender()->id());
-            }
-
-            d->ui.chatArea->addContentMessage(messageInfo);
+            d->ui.chatArea->addMessage(processedMessage);
         }
 
         //if the window is on top, ack straight away. Otherwise they stay in the message queue for acking when activated..
@@ -644,112 +631,12 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message)
 
 }
 
-void ChatWidget::notifyAboutIncomingMessage(const Tp::ReceivedMessage & message)
+void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&)
 {
-    //send the correct notification:
-    QString notificationType;
-    //choose the correct notification type:
-    //options are:
-    // kde_telepathy_contact_incoming
-    // kde_telepathy_contact_incoming_active_window
-    // don't notify of messages sent by self from another computer
-    if (message.sender() == d->channel->groupSelfContact()) {
-        return;
-    }
-
-    if (message.isDeliveryReport()) {
-        return;
-    }
-
-    // kde_telepathy_contact_highlight (contains your name)
-    // kde_telepathy_info_event
-
-    //if the message text contains sender name, it's a "highlighted message"
-    //TODO DrDanz suggested this could be a configurable list of words that make it highlighted.(seems like a good idea to me)
-    if(message.text().contains(d->channel->groupSelfContact()->alias())) {
-        notificationType = QLatin1String("kde_telepathy_contact_highlight");
-    } else if(message.messageType() == Tp::ChannelTextMessageTypeNotice) {
-        notificationType = QLatin1String("kde_telepathy_info_event");
-    } else {
-        if (isOnTop()) {
-            notificationType = QLatin1String("kde_telepathy_contact_incoming_active_window");
-        } else {
-            notificationType = QLatin1String("kde_telepathy_contact_incoming");
-        }
-    }
-
-    KNotification *notification = new KNotification(notificationType, this,
-                                                    KNotification::RaiseWidgetOnActivation
-                                                    | KNotification::CloseWhenWidgetActivated
-                                                    | KNotification::Persistent);
-    notification->setComponentData(d->telepathyComponentData());
-   
-    QString senderName;
-
-    if (message.sender().isNull()) {
-        senderName = message.senderNickname();
-    } else {
-        senderName = message.sender()->alias();
-        QPixmap notificationPixmap;
-        if (notificationPixmap.load(message.sender()->avatarData().fileName)) {
-            notification->setPixmap(notificationPixmap);
-        }
-        //allows per contact notifications
-        notification->addContext(QLatin1String("contact"), message.sender()->id());
-    }
-    notification->setTitle(i18n("%1 has sent you a message", senderName));
-
-    // Remove empty lines from message
-    QString notifyText = message.text().simplified();
-    if (notifyText.length() > 170) {
-        //search for the closest space in text
-        QString truncatedMsg = notifyText.left(notifyText.indexOf(QLatin1Char(' '), 150)).append(QLatin1String("..."));
-        notification->setText(truncatedMsg);
-    } else {
-        notification->setText(notifyText);
-    }
-
-
-    notification->setActions(QStringList(i18n("View")));
-    connect(notification, SIGNAL(activated(uint)), this, SIGNAL(notificationClicked()));
-
-    notification->sendEvent();
-}
-
-void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&) /*Not sure what these other args are for*/
-{
-    Tp::ContactPtr sender = d->channel->groupSelfContact();
-
-    if (message.messageType() == Tp::ChannelTextMessageTypeAction) {
-        AdiumThemeStatusInfo statusMessage;
-        statusMessage.setTime(message.sent());
-        statusMessage.setMessage(QString::fromLatin1("%1 %2").arg(sender->alias(), message.text()));
-        d->ui.chatArea->addStatusMessage(statusMessage);
-    }
-    else {
-        AdiumThemeContentInfo messageInfo(AdiumThemeMessageInfo::LocalToRemote);
-        KTp::Message processedMessage(KTp::MessageProcessor::instance()->processMessage(message, d->account, d->channel));
-        messageInfo.setMessage(processedMessage.finalizedMessage());
-        messageInfo.setScript(processedMessage.finalizedScript());
-
-        messageInfo.setTime(message.sent());
-
-        messageInfo.setSenderDisplayName(sender->alias());
-        messageInfo.setSenderScreenName(sender->id());
-        messageInfo.setUserIconPath(sender->avatarData().fileName);
-        d->ui.chatArea->addContentMessage(messageInfo);
-    }
-
-    //send the notification that a message has been sent
-    KNotification *notification = new KNotification(QLatin1String("kde_telepathy_outgoing"), this);
-    notification->setComponentData(d->telepathyComponentData());
-    notification->setTitle(i18n("You have sent a message"));
-    QPixmap notificationPixmap;
-    if (notificationPixmap.load(sender->avatarData().fileName)) {
-        notification->setPixmap(notificationPixmap);
-    }
-    notification->setText(message.text());
-    notification->sendEvent();
+    KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel));
+    d->notifyFilter->filterMessage(processedMessage,
+                                   KTp::MessageContext(d->account, d->channel));
+    d->ui.chatArea->addMessage(processedMessage);
 }
 
 void ChatWidget::chatViewReady()
@@ -767,9 +654,13 @@ void ChatWidget::sendMessage()
     QString message = d->ui.sendMessageBox->toPlainText();
 
     if (!message.isEmpty()) {
+        message = KTp::MessageProcessor::instance()->processOutgoingMessage(
+                    message, d->account, d->channel).text();
+
         if (d->channel->supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
             //remove "/me " from the start of the message
             message.remove(0,4);
+
             d->channel->send(message, Tp::ChannelTextMessageTypeAction);
         } else {
             d->channel->send(message);
@@ -786,12 +677,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
     }
 
     if (state == Tp::ChannelChatStateGone) {
-        AdiumThemeStatusInfo statusMessage;
-        statusMessage.setMessage(i18n("%1 has left the chat", contact->alias()));
-        statusMessage.setService(d->channel->connection()->protocolName());
-        statusMessage.setStatus(QLatin1String("away"));
-        statusMessage.setTime(QDateTime::currentDateTime());
-        d->ui.chatArea->addStatusMessage(statusMessage);
+        d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()));
     }
 
     if (d->isGroupChat) {
@@ -830,7 +716,14 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const K
     bool isYou = (contact == d->channel->groupSelfContact());
 
     if (isYou) {
-        message = i18n("You are now marked as %1", presence.displayString());
+        if (presence.statusMessage().isEmpty()) {
+            message = i18nc("Your presence status", "You are now marked as %1",
+                            presence.displayString());
+        } else {
+            message = i18nc("Your presence status with status message",
+                            "You are now marked as %1 - %2",
+                            presence.displayString(), presence.statusMessage());
+        }
     }
     else {
         if (presence.statusMessage().isEmpty()) {
@@ -844,13 +737,8 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const K
     }
 
     if (!message.isNull()) {
-        if ((d->ui.chatArea->showPresenceMode() == AdiumThemeView::Always) ||
-            ((d->ui.chatArea->showPresenceMode() == AdiumThemeView::NeverInGroupChats) && d->isGroupChat)) {
-            AdiumThemeStatusInfo statusMessage;
-            statusMessage.setMessage(message);
-            statusMessage.setService(d->channel->connection()->protocolName());
-            statusMessage.setTime(QDateTime::currentDateTime());
-            d->ui.chatArea->addStatusMessage(statusMessage);
+        if (d->ui.chatArea->showPresenceChanges()) {
+            d->ui.chatArea->addStatusMessage(message);
         }
     }
 
@@ -883,11 +771,7 @@ void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QSt
     }
 
     if (!message.isEmpty()) {
-        AdiumThemeStatusInfo statusMessage;
-        statusMessage.setMessage(message);
-        statusMessage.setService(d->channel->connection()->protocolName());
-        statusMessage.setTime(QDateTime::currentDateTime());
-        d->ui.chatArea->addStatusMessage(statusMessage);
+        d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()));
     }
 
     //if in a non-group chat situation, and the other contact has changed alias...
@@ -905,11 +789,7 @@ void ChatWidget::onContactBlockStatusChanged(const Tp::ContactPtr &contact, bool
         message = i18n("%1 is now unblocked.", contact->alias());
     }
 
-    AdiumThemeStatusInfo statusMessage;
-    statusMessage.setMessage(message);
-    statusMessage.setService(d->channel->connection()->protocolName());
-    statusMessage.setTime(QDateTime::currentDateTime());
-    d->ui.chatArea->addStatusMessage(statusMessage);
+    d->ui.chatArea->addStatusMessage(message);
 
     Q_EMIT contactBlockStatusChanged(blocked);
 }
@@ -931,8 +811,14 @@ void ChatWidget::onInputBoxChanged()
             d->pausedStateTimer->start(5000);
         } else {
             //if the user has just typed some text, set state to Composing and start the timer
-            d->channel->requestChatState(Tp::ChannelChatStateComposing);
-            d->pausedStateTimer->start(5000);
+            //unless "show me typing" is off; in that case set state to Active and stop the timer
+            if (TextChatConfig::instance()->showMeTyping()) {
+                d->channel->requestChatState(Tp::ChannelChatStateComposing);
+                d->pausedStateTimer->start(5000);
+            } else {
+                d->channel->requestChatState(Tp::ChannelChatStateActive);
+                d->pausedStateTimer->stop();
+            }
         }
     } else {
         //if the user typed no text/cleared the input field, set Active and stop the timer
@@ -975,7 +861,7 @@ void ChatWidget::saveSpellCheckingOption()
     QString spellCheckingLanguage = spellDictionary();
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktp-text-uirc"));
     KConfigGroup configGroup = config->group(d->channel->targetId());
-    if (spellCheckingLanguage != KGlobal::locale()->language()) {
+    if (spellCheckingLanguage != Sonnet::Speller().defaultLanguage()) {
         configGroup.writeEntry("language", spellCheckingLanguage);
     } else {
         if (configGroup.exists()) {
@@ -990,13 +876,21 @@ void ChatWidget::saveSpellCheckingOption()
 
 void ChatWidget::loadSpellCheckingOption()
 {
+    // KTextEdit::setSpellCheckingLanguage() (see call below) does not do anything if there
+    // is no highlighter created yet, and KTextEdit::setCheckSpellingEnabled() does not create
+    // it if there is no focus on widget.
+    // Therefore d->ui.sendMessageBox->setSpellCheckingLanguage() call below would be is ignored.
+    // While this looks like KTextEditor bug (espesially taking into account its documentation),
+    // just a call to KTextEditor::createHighlighter() before setting language fixes this
+    d->ui.sendMessageBox->createHighlighter();
+
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktp-text-uirc"));
     KConfigGroup configGroup = config->group(d->channel->targetId());
     QString spellCheckingLanguage;
     if (configGroup.exists()) {
         spellCheckingLanguage = configGroup.readEntry("language");
     } else {
-	spellCheckingLanguage = KGlobal::locale()->language();
+        spellCheckingLanguage = Sonnet::Speller().defaultLanguage();
     }
     d->ui.sendMessageBox->setSpellCheckingLanguage(spellCheckingLanguage);
 }
@@ -1077,18 +971,17 @@ void ChatWidget::initChatArea()
 
 void ChatWidget::onChatPausedTimerExpired()
 {
-     d->channel->requestChatState(Tp::ChannelChatStatePaused);
+     if (TextChatConfig::instance()->showMeTyping()) {
+        d->channel->requestChatState(Tp::ChannelChatStatePaused);
+    } else {
+        d->channel->requestChatState(Tp::ChannelChatStateActive);
+    }
 }
 
 void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)
 {
     if (presence == Tp::Presence::offline()) {
-        // show a message informing the user
-        AdiumThemeStatusInfo statusMessage;
-        statusMessage.setMessage(i18n("You are now offline"));
-        statusMessage.setService(d->channel->connection()->protocolName());
-        statusMessage.setTime(QDateTime::currentDateTime());
-        d->ui.chatArea->addStatusMessage(statusMessage);
+        d->ui.chatArea->addStatusMessage(i18n("You are now offline"));
         Q_EMIT iconChanged(KTp::Presence(Tp::Presence::offline()).icon());
     }
 }

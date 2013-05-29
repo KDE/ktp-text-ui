@@ -41,8 +41,8 @@ class LogViewer : public KXmlGuiWindow
 
 public:
     explicit LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::ConnectionFactoryPtr &connectionFactory,
-		       const Tp::ChannelFactoryPtr &channelFactory, const Tp::ContactFactoryPtr &contactFactory,
-		       QWidget *parent = 0);
+                       const Tp::ChannelFactoryPtr &channelFactory, const Tp::ContactFactoryPtr &contactFactory,
+                       QWidget *parent = 0);
     ~LogViewer();
 private Q_SLOTS:
     void onAccountManagerReady();

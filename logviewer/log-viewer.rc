@@ -8,8 +8,8 @@
  <MenuBar>
   <Menu name="file"/>
   <Menu name="logs"><text>L&amp;ogs</text>
-    <Action name="clear-account-logs"/>
     <Action name="clear-contact-logs"/>
+    <Action name="clear-account-logs"/>
     <Separator />
     <Action name="import-kopete-logs"/>
   </Menu>

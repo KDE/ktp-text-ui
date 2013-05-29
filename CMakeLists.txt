@@ -1,7 +1,7 @@
 project(ktp-text-ui)
 
-set(KTP_TEXT_UI_VERSION "0.5.3")
-set(KTP_TEXT_UI_PLUGIN_FRAMEWORK_VERSION "1")
+set(KTP_TEXT_UI_VERSION "0.6.2")
+set(KTP_MESSAGE_FILTER_FRAMEWORK_VERSION "4")
 set(IS_KTP_INTERNAL_MODULE TRUE)
 
 # Include our extra FindFoo.cmake files.
@@ -9,6 +9,7 @@ set (CMAKE_MODULE_PATH
      "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules"
      ${CMAKE_MODULE_PATH}
 )
+cmake_policy(SET CMP0002 OLD)
 
 set(KDE_MIN_VERSION "4.4.75")
 find_package (KDE4 ${KDE_MIN_VERSION} REQUIRED)

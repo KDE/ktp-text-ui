@@ -29,12 +29,13 @@
 
 #include <KIcon>
 #include <KColorScheme>
+#include <KShortcut>
 
 #include <TelepathyQt/ReceivedMessage>
 
 #include <KTp/presence.h>
+#include <KTp/message.h>
 
-class AdiumThemeContentInfo;
 class ChatSearchBar;
 class ChatWidgetPrivate;
 class QShowEvent;
@@ -99,6 +100,9 @@ public:
 
     void setZoomFactor(qreal zoomFactor);
 
+    /** Is this widget visible and in the active window */
+    virtual bool isOnTop() const;
+
 public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
@@ -106,6 +110,8 @@ public Q_SLOTS:
     /** Mark that the following messages have been seen by the user.
       */
     void acknowledgeMessages();
+
+    void updateSendMessageShortcuts(const KShortcut &shortcuts);
 
 protected:
     void changeEvent(QEvent *e);
@@ -116,10 +122,7 @@ protected:
 
 protected Q_SLOTS:
     /** Show the received message in the chat window*/
-    void handleIncomingMessage(const Tp::ReceivedMessage &message);
-
-    /** Show notification about a received message */
-    void notifyAboutIncomingMessage(const Tp::ReceivedMessage &message);
+    void handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified = false);
 
     /** Show the message sent in the chat window*/
     void handleMessageSent(const Tp::Message &message,
@@ -177,7 +180,7 @@ private Q_SLOTS:
     void findTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findNextTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
-    void onHistoryFetched(const QList<AdiumThemeContentInfo> &messages);
+    void onHistoryFetched(const QList<KTp::Message> &messages);
     void onChatPausedTimerExpired();
     void currentPresenceChanged(const Tp::Presence &presence);
 
@@ -200,7 +203,6 @@ private:
     /** Loads theme into the the AdiumThemeView */
     void initChatArea();
 
-    virtual bool isOnTop() const;
     bool m_previousConversationAvailable;
 
     ChatWidgetPrivate * const d;

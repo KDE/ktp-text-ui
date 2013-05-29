@@ -27,6 +27,8 @@
 #include <TelepathyQt/Types>
 #include <TelepathyLoggerQt4/Entity>
 
+#include <KTp/contact.h>
+
 class EntityModelItem
 {
 
@@ -53,7 +55,7 @@ private:
 
     Tp::AccountPtr m_account;
     Tpl::EntityPtr m_entity;
-    Tp::ContactPtr m_contact;
+    KTp::ContactPtr m_contact;
 };
 
 #endif // ENTITY_MODEL_ITEM_H

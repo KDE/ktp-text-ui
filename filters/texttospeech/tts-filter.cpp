@@ -32,6 +32,8 @@ public:
     org::kde::KSpeech *kspeech;
 };
 
+static const KCatalogLoader loader(QLatin1String("ktp-filters"));
+
 TTSFilter::TTSFilter(QObject *parent, const QVariantList &)
     : KTp::AbstractMessageFilter(parent),
       d(new Private)
@@ -58,7 +60,7 @@ void TTSFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &
     }
 
     //FIXME with real name.
-    d->kspeech->say(i18n("New message. %1").arg(message.mainMessagePart()), KSpeech::soHtml);
+    d->kspeech->say(i18n("New message. %1", message.mainMessagePart()), KSpeech::soHtml);
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<TTSFilter>();)

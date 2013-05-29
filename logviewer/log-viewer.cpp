@@ -31,6 +31,7 @@
 #include <TelepathyLoggerQt4/PendingSearch>
 
 #include <KTp/logs-importer.h>
+#include <KTp/contact.h>
 
 #include <QSortFilterProxyModel>
 #include <QWebFrame>
@@ -54,8 +55,8 @@
 Q_DECLARE_METATYPE(QModelIndex)
 
 LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::ConnectionFactoryPtr &connectionFactory,
-		     const Tp::ChannelFactoryPtr &channelFactory, const Tp::ContactFactoryPtr &contactFactory,
-		     QWidget *parent):
+                     const Tp::ChannelFactoryPtr &channelFactory, const Tp::ContactFactoryPtr &contactFactory,
+                     QWidget *parent):
     KXmlGuiWindow(parent),
     ui(new Ui::LogViewer)
 {
@@ -133,8 +134,8 @@ void LogViewer::setupActions()
 
     /* Build the popup menu for entity list */
     m_entityListContextMenu = new KMenu(ui->entityList);
-    m_entityListContextMenu->addAction(clearAccHistory);
     m_entityListContextMenu->addAction(clearContactHistory);
+    m_entityListContextMenu->addAction(clearAccHistory);
 }
 
 void LogViewer::onAccountManagerReady()
@@ -153,7 +154,7 @@ void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &
 
     /* Ignore account nodes */
     if (current.parent() == QModelIndex()) {
-	actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(false);
+        actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(false);
         return;
     }
 
@@ -161,7 +162,7 @@ void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &
     Tp::AccountPtr account = current.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
 
     if (!account.isNull() && !entity.isNull()) {
-	actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
+        actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
     }
 
     ui->datePicker->setEntity(account, entity);
@@ -198,7 +199,7 @@ void LogViewer::slotUpdateMainWindow()
     nearestDates.second = m_nextConversationDate;
 
     Tpl::EntityPtr entity = currentIndex.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
-    Tp::ContactPtr contact = currentIndex.data(EntityModel::ContactRole).value<Tp::ContactPtr>();
+    KTp::ContactPtr contact = currentIndex.data(EntityModel::ContactRole).value<KTp::ContactPtr>();
     Tp::AccountPtr account = currentIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
     ui->messageView->loadLog(account, entity, contact, date, nearestDates);
 }
@@ -271,7 +272,7 @@ void LogViewer::slotClearAccountHistory()
     /* Usually and account node is selected, so traverse up to it's parent
      * account node */
     if (index.parent().isValid()) {
-	index = index.parent();
+        index = index.parent();
     }
 
     if (!index.isValid()) {
@@ -280,10 +281,10 @@ void LogViewer::slotClearAccountHistory()
 
     Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
     if (account.isNull()) {
-	return;
+        return;
     }
 
-    if (KMessageBox::questionYesNo(
+    if (KMessageBox::warningYesNo(
             this, i18n("Are you sure you want to remove all logs from account %1?", account->displayName()),
             i18n("Clear account history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
             QString(), KMessageBox::Dangerous) == KMessageBox::No) {
@@ -305,11 +306,11 @@ void LogViewer::slotClearContactHistory()
     Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
     Tpl::EntityPtr entity = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
     if (account.isNull() || entity.isNull()) {
-	return;
+        return;
     }
 
     QString name = index.data(Qt::DisplayRole).toString();
-    if (KMessageBox::questionYesNo(
+    if (KMessageBox::warningYesNo(
             this, i18n("Are you sure you want to remove history of all conversations with %1?", name),
             i18n("Clear contact history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
             QString(), KMessageBox::Dangerous) == KMessageBox::No) {
@@ -324,10 +325,10 @@ void LogViewer::slotClearContactHistory()
 void LogViewer::onLogClearingFinished(Tpl::PendingOperation *operation)
 {
     if (!operation->errorName().isEmpty() || !operation->errorMessage().isEmpty()) {
-	/* Make sure we display at least some message */
-	QString msg = (operation->errorMessage().isEmpty()) ? operation->errorName() : operation->errorMessage();
-	KMessageBox::sorry(this, msg, operation->errorName(), 0);
-	return;
+        /* Make sure we display at least some message */
+        QString msg = (operation->errorMessage().isEmpty()) ? operation->errorName() : operation->errorMessage();
+        KMessageBox::sorry(this, msg, operation->errorName(), 0);
+        return;
     }
 
     QModelIndex index = m_entityListContextMenu->property("index").value<QModelIndex>();
@@ -354,8 +355,8 @@ void LogViewer::slotImportKopeteLogs(bool force)
 
     bool importDone = logsConfig.readEntry(QLatin1String("InitialKopeteImportDone"), QVariant(false)).toBool();
     if (!force && importDone) {
-	kDebug() << "Skipping initial Kopete logs import, already done.";
-	return;
+        kDebug() << "Skipping initial Kopete logs import, already done.";
+        return;
     }
 
     QList<Tp::AccountPtr> accounts = m_accountManager->allAccounts();
@@ -363,16 +364,16 @@ void LogViewer::slotImportKopeteLogs(bool force)
     KTp::LogsImporter importer;
 
     Q_FOREACH (const Tp::AccountPtr &account, accounts) {
-	if (importer.hasKopeteLogs(account)) {
-	    matchingAccounts << account;
-	}
+        if (importer.hasKopeteLogs(account)) {
+            matchingAccounts << account;
+        }
     }
 
     kDebug() << "Initial Kopete logs import: found" << matchingAccounts.count() << "accounts to import";
 
     if (!matchingAccounts.isEmpty()) {
-	LogsImportDialog *dialog = new LogsImportDialog(this);
-	dialog->importLogs(matchingAccounts);
+        LogsImportDialog *dialog = new LogsImportDialog(this);
+        dialog->importLogs(matchingAccounts);
     }
 
     logsConfig.writeEntry(QLatin1String("InitialKopeteImportDone"), true);
@@ -381,7 +382,7 @@ void LogViewer::slotImportKopeteLogs(bool force)
 void LogViewer::slotJumpToNextConversation()
 {
     if (!m_nextConversationDate.isValid()) {
-	return;
+        return;
     }
 
     ui->datePicker->setDate(m_nextConversationDate);
@@ -390,7 +391,7 @@ void LogViewer::slotJumpToNextConversation()
 void LogViewer::slotJumpToPrevConversation()
 {
     if (!m_prevConversationDate.isValid()) {
-	return;
+        return;
     }
 
     ui->datePicker->setDate(m_prevConversationDate);

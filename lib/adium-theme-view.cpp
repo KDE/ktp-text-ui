@@ -51,7 +51,7 @@
 #include <KProtocolInfo>
 
 AdiumThemeView::AdiumThemeView(QWidget *parent)
-        : QWebView(parent),
+        : KWebView(parent),
         // check iconPath docs for minus sign in -KIconLoader::SizeLarge
         m_defaultAvatar(KIconLoader::global()->iconPath(QLatin1String("im-user"),-KIconLoader::SizeLarge)),
         m_displayHeader(true)
@@ -77,25 +77,25 @@ void AdiumThemeView::load(ChatType chatType) {
 
     //determine the chat window style to use
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
-    KConfigGroup appearanceConfig = config->group("Appearance");
+    KConfigGroup appearanceConfig;
 
-    QString chatStyleName;
     if (chatType == AdiumThemeView::SingleUserChat) {
-        chatStyleName = appearanceConfig.readEntry("styleName", "renkoo.AdiumMessageStyle");
+        appearanceConfig = config->group("Appearance");
+        m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(appearanceConfig.readEntry(QLatin1String("styleName"), "renkoo.AdiumMessageStyle"));
     } else {
-        chatStyleName = QLatin1String("SimKete.AdiumMessageStyle");
+        appearanceConfig = config->group("GroupAppearance");
+        m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(appearanceConfig.readEntry(QLatin1String("styleName"), "SimKete.AdiumMessageStyle"));
     }
 
-    m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(chatStyleName);
     if (m_chatStyle == 0 || !m_chatStyle->isValid()) {
         KMessageBox::error(this, i18n("Failed to load a valid theme. Your installation is broken. Check your kde path. "
                                       "Will now crash."));
     }
 
-    QString variant = appearanceConfig.readEntry("styleVariant");
+    QString variant = appearanceConfig.readEntry(QLatin1String("styleVariant"));
     if (!variant.isEmpty()) {
-        m_variantPath = QString(QLatin1String("Variants/%1.css")).arg(variant);
         m_variantName = variant;
+        m_variantPath = m_chatStyle->getVariants().value(variant);
 
         // keep m_variantPath, m_variantName empty if there is no variant
     } else if (!m_chatStyle->getVariants().isEmpty()) {
@@ -117,7 +117,7 @@ void AdiumThemeView::load(ChatType chatType) {
     m_fontFamily = appearanceConfig.readEntry("fontFamily", QWebSettings::globalSettings()->fontFamily(QWebSettings::StandardFont));
     m_fontSize = appearanceConfig.readEntry("fontSize", QWebSettings::globalSettings()->fontSize(QWebSettings::DefaultFontSize));
 
-    m_showPresenceMode = static_cast<AdiumThemeView::ShowPresenceMode>(appearanceConfig.readEntry("showPresenceMode", (int) AdiumThemeView::Always));
+    m_showPresenceChanges = appearanceConfig.readEntry("showPresenceChanges", true);
 }
 
 
@@ -156,6 +156,16 @@ void AdiumThemeView::wheelEvent(QWheelEvent* event)
     }
 
     QWebView::wheelEvent(event);
+}
+
+void AdiumThemeView::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->modifiers() == Qt::NoModifier && event->button() == Qt::MidButton) {
+        Q_EMIT textPasted();
+        event->accept();
+        return;
+    }
+    QWebView::mouseReleaseEvent(event);
 }
 
 void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
@@ -222,7 +232,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 
     int index = 0;
     index = templateHtml.indexOf(QLatin1String("%@"), index);
-    templateHtml.replace(index, 2, QString(QLatin1String("file:///")).append(m_chatStyle->getStyleBaseHref()));
+    templateHtml.replace(index, 2, QString(QLatin1String("file://")).append(m_chatStyle->getStyleBaseHref()));
 
     if (numberOfPlaceholders == 5) {
         index = templateHtml.indexOf(QLatin1String("%@"), index);
@@ -316,15 +326,15 @@ bool AdiumThemeView::isCustomFont() const
     return m_useCustomFont;
 }
 
-void AdiumThemeView::setShowPresenceMode(ShowPresenceMode showPresenceMode)
+void AdiumThemeView::setShowPresenceChanges(bool showPresenceChanges)
 {
     kDebug();
-    m_showPresenceMode = showPresenceMode;
+    m_showPresenceChanges = showPresenceChanges;
 }
 
-AdiumThemeView::ShowPresenceMode AdiumThemeView::showPresenceMode() const
+bool AdiumThemeView::showPresenceChanges() const
 {
-    return m_showPresenceMode;
+    return m_showPresenceChanges;
 }
 
 bool AdiumThemeView::isHeaderDisplayed() const
@@ -344,7 +354,46 @@ void AdiumThemeView::clear()
     }
 }
 
-void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessage)
+void AdiumThemeView::addMessage(const KTp::Message &message)
+{
+    if (message.type() == Tp::ChannelTextMessageTypeAction) {
+        addStatusMessage(QString::fromLatin1("%1 %2").arg(message.senderAlias(), message.mainMessagePart()));
+    } else {
+        AdiumThemeContentInfo messageInfo;
+        if (message.direction() == KTp::Message::RemoteToLocal) {
+            messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::RemoteToLocal);
+        } else {
+            messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::LocalToRemote);
+        }
+
+        messageInfo.setMessage(message.finalizedMessage());
+        messageInfo.setScript(message.finalizedScript());
+
+        messageInfo.setTime(message.time());
+
+        if (message.property("highlight").toBool()) {
+            messageInfo.appendMessageClass(QLatin1String("mention"));
+        }
+        messageInfo.setSenderDisplayName(message.senderAlias());
+        messageInfo.setSenderScreenName(message.senderId());
+        if (message.sender()) {
+            messageInfo.setUserIconPath(message.sender()->avatarData().fileName);
+        }
+
+        addAdiumContentMessage(messageInfo);
+    }
+}
+
+void AdiumThemeView::addStatusMessage(const QString &text, const QDateTime &time)
+{
+    AdiumThemeStatusInfo messageInfo;
+    messageInfo.setMessage(text);
+    messageInfo.setTime(time);
+//    messageInfo.setStatus(QLatin1String("error")); //port this?
+    addAdiumStatusMessage(messageInfo);
+}
+
+void AdiumThemeView::addAdiumContentMessage(const AdiumThemeContentInfo &contentMessage)
 {
     QString styleHtml;
     bool consecutiveMessage = false;
@@ -354,8 +403,14 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
     // contentMessage is const, we need a non-const one to append message classes
     AdiumThemeContentInfo message(contentMessage);
 
+    // 2 consecutive messages can be combined when:
+    //  * Sender is the same
+    //  * Message type is the same
+    //  * Both have the "mention" class, or none of them have it
+    //  * Theme does not disable consecutive messages
     if (m_lastContent.senderScreenName() == message.senderScreenName()
         && m_lastContent.type() == message.type()
+        && m_lastContent.messageClasses().contains(QLatin1String("mention")) == message.messageClasses().contains(QLatin1String("mention"))
         && !m_chatStyle->disableCombineConsecutive()) {
         consecutiveMessage = true;
         message.appendMessageClass(QLatin1String("consecutive"));
@@ -406,7 +461,7 @@ void AdiumThemeView::addContentMessage(const AdiumThemeContentInfo &contentMessa
     appendMessage(styleHtml, message.script(), mode);
 }
 
-void AdiumThemeView::addStatusMessage(const AdiumThemeStatusInfo& statusMessage)
+void AdiumThemeView::addAdiumStatusMessage(const AdiumThemeStatusInfo& statusMessage)
 {
     QString styleHtml;
     bool consecutiveMessage = false;
@@ -514,8 +569,10 @@ AdiumThemeView::AppendMode AdiumThemeView::appendMode(const AdiumThemeMessageInf
 
 void AdiumThemeView::appendMessage(QString &html, const QString &script, AppendMode mode)
 {
-    QString js = appendScript(mode).arg(html.replace(QLatin1Char('\"'), QLatin1String("\\\""))
-                                            .replace(QLatin1Char('\n'), QLatin1String("")));
+    QString js = appendScript(mode).arg(html.replace(QLatin1Char('\\'), QLatin1String("\\\\")) /* replace single \ with \\   */
+                                            .replace(QLatin1Char('\"'), QLatin1String("\\\"")) /* replace " with \"   */
+                                            .replace(QLatin1Char('\n'), QLatin1String(""))); /* remove new lines    */
+
     page()->mainFrame()->evaluateJavaScript(js);
 
     if (!script.isEmpty()) {
@@ -548,6 +605,10 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
     htmlTemplate.replace(QLatin1String("%timeOpened%"), KGlobal::locale()->formatTime(info.timeOpened().time()));
     htmlTemplate.replace(QLatin1String("%dateOpened%"), KGlobal::locale()->formatDate(info.timeOpened().date(), KLocale::LongDate));
 
+    //KTp-Renkoo specific hack to make "Conversation Began" translatable
+    htmlTemplate.replace(QLatin1String("%conversationBegan%"), i18nc("Header at top of conversation view. %1 is the time format",
+                                                                     "Conversation began %1", KGlobal::locale()->formatTime(info.timeOpened().time())));
+
     //FIXME time fields - remember to do both, steal the complicated one from Kopete code.
     // Look for %timeOpened{X}%
     QRegExp timeRegExp(QLatin1String("%timeOpened\\{([^}]*)\\}%"));
@@ -575,6 +636,10 @@ QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const Adiu
     htmlTemplate.replace(QLatin1String("%senderStatusIcon%"), info.senderStatusIcon());
     //senderDisplayName
     htmlTemplate.replace(QLatin1String("%senderDisplayName%"), info.senderDisplayName());
+    //Few themes use this and it is IRC specific. It is also undocumented
+    //see https://bugs.kde.org/show_bug.cgi?id=316323 for details
+    //simply replace with an empty string
+    htmlTemplate.replace(QLatin1String("%senderPrefix%"), QString());
 
     //FIXME %textbackgroundcolor{X}%
     return replaceMessageKeywords(htmlTemplate, info);
@@ -695,3 +760,5 @@ const QString AdiumThemeView::variantPath() const
 {
     return m_variantPath;
 }
+
+

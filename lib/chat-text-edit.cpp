@@ -25,8 +25,12 @@
 #include <QtGui/QAction>
 #include <QtCore/QTimer>
 #include <QtCore/QDebug>
+#include <QtCore/QString>
+#include <QApplication>
+#include <QClipboard>
 
 #include <KStandardShortcut>
+#include <KActionCollection>
 
 #define MAXHISTORY 100
 
@@ -74,8 +78,7 @@ void ChatTextEdit::setFontBold(bool isBold)
 QSize ChatTextEdit::minimumSizeHint() const
 {
     QSize sh = KTextEdit::minimumSizeHint();
-    sh.setHeight(fontMetrics().height() + 1);
-    sh += QSize(0, QFrame::lineWidth() * 2);
+    sh.setHeight(2 * fontMetrics().height() + fontMetrics().lineSpacing());
     return sh;
 }
 
@@ -89,16 +92,6 @@ QSize ChatTextEdit::sizeHint() const
 
 void ChatTextEdit::keyPressEvent(QKeyEvent *e)
 {
-    if ((e->key()==Qt::Key_Return ||  e->key()==Qt::Key_Enter) && !e->modifiers()) {
-	if (!toPlainText().isEmpty()) {
-	    addHistory(toPlainText());
-	}
-	m_continuousCompletion = false;
-
-        Q_EMIT returnKeyPressed();
-        return;
-    }
-
     if (e->matches(QKeySequence::Copy)) {
         if (!textCursor().hasSelection()) {
             QWidget::keyReleaseEvent(e); //skip internal trapping, and pass to parent.
@@ -139,8 +132,21 @@ void ChatTextEdit::keyPressEvent(QKeyEvent *e)
 bool ChatTextEdit::event(QEvent *e)
 {
     if (e->type() == QEvent::ShortcutOverride) {
+        // Extract key code for shortcut sequence comparison
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(e);
-        const int key = keyEvent->key() | keyEvent->modifiers();
+        int key = keyEvent->key();
+        if (keyEvent->modifiers() != Qt::KeypadModifier) {
+            // Keypad modifier is not used in KDE shortcuts setup, so, we need to skip it.
+            key |= keyEvent->modifiers();
+        }
+
+        if (m_sendMessageShortcuts.contains(key)) {
+            // keyPressEvent() handles Control modifier wrong, so we need that thing
+            // to be in event().
+            this->sendMessage();
+            e->setAccepted(true);
+            return false;
+        }
         if (KStandardShortcut::find().contains(key)) {
             return false; //never catch "find" sequence.
         }
@@ -169,6 +175,29 @@ void ChatTextEdit::updateScrollBar()
 {
     setVerticalScrollBarPolicy(sizeHint().height() > height() ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAlwaysOff);
     ensureCursorVisible();
+}
+
+void ChatTextEdit::pasteSelection()
+{
+    const QMimeData *md = QApplication::clipboard()->mimeData(QClipboard::Selection);
+    if (md) {
+        insertFromMimeData(md);
+    }
+}
+
+void ChatTextEdit::sendMessage()
+{
+    if (!toPlainText().isEmpty()) {
+        addHistory(toPlainText());
+    }
+    m_continuousCompletion = false;
+
+    Q_EMIT returnKeyPressed();
+}
+
+void ChatTextEdit::setSendMessageShortcuts(const KShortcut &shortcuts)
+{
+    m_sendMessageShortcuts = KShortcut(shortcuts);
 }
 
 // History of sent messages based on code from Konversation

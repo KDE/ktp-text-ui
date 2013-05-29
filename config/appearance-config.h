@@ -21,14 +21,9 @@
 #define APPEARANCE_CONFIG_H
 
 #include "adium-theme-header-info.h"
+#include "appearance-config-tab.h"
 
 #include <KCModule>
-
-namespace Ui
-{
-  class ChatWindowConfig;
-}
-
 
 class AppearanceConfig : public KCModule
 {
@@ -36,7 +31,7 @@ class AppearanceConfig : public KCModule
 
 public:
     explicit AppearanceConfig(QWidget *parent = 0,
-                              const QVariantList& args = QVariantList());
+                              const QVariantList &args = QVariantList());
     ~AppearanceConfig();
 
 public Q_SLOTS:
@@ -45,24 +40,8 @@ public Q_SLOTS:
     virtual void defaults();
 
 protected:
-    void changeEvent(QEvent *e);
-
-private Q_SLOTS:
-    void sendDemoMessages();
-    void onStylesLoaded();
-    void updateVariantsList();
-
-    void onStyleSelected(int index);
-    void onVariantSelected(const QString&);
-    void onShowHeaderChanged(bool);
-    void onFontGroupChanged(bool);
-    void onFontFamilyChanged(QFont);
-    void onFontSizeChanged(int);
-    void onShowPresenceModeSelected(int);
-
-private:
-    Ui::ChatWindowConfig *ui;
-    AdiumThemeHeaderInfo m_demoChatHeader;
+    AppearanceConfigTab *m_singleTab;
+    AppearanceConfigTab *m_groupTab;
 
 };
 

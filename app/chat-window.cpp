@@ -41,6 +41,7 @@
 #include <KColorScheme>
 #include <KTabBar>
 #include <KSettings/Dialog>
+#include <kcmodulecontainer.h>
 #include <KNotification>
 #include <KNotifyConfigWidget>
 #include <KMenuBar>
@@ -66,6 +67,7 @@
 #include "emoticon-text-edit-action.h"
 #include "invite-contact-dialog.h"
 #include "telepathy-chat-ui.h"
+#include "text-chat-config.h"
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
@@ -73,6 +75,8 @@ K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecke
                           (QLatin1String(PREFERRED_RFB_HANDLER)));
 
 ChatWindow::ChatWindow(const Tp::AccountManagerPtr &accountManager)
+    : m_sendMessage(0),
+      m_tabWidget(0)
 {
     //This effectively constructs the s_krfbAvailableChecker object the first
     //time that this code is executed. This is to start the d-bus query early, so
@@ -136,6 +140,10 @@ ChatWindow::ChatWindow(const Tp::AccountManagerPtr &accountManager)
 
     setCentralWidget(widget);
 
+    // create custom actions
+    // we must do it AFTER m_tabWidget is set up
+    setupCustomActions();
+
     setupGUI(QSize(460, 440), static_cast<StandardWindowOptions>(Default^StatusBar), QLatin1String("chatwindow.rc"));
 
     // Connects the toolbars iconSizeChanged to the custom toolbar item
@@ -189,7 +197,7 @@ void ChatWindow::focusChat(ChatTab *tab)
     m_tabWidget->setCurrentWidget(tab);
 }
 
-ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
+ChatTab* ChatWindow::getTab(const Tp::AccountPtr &account, const Tp::TextChannelPtr &incomingTextChannel)
 {
     ChatTab *match = 0;
 
@@ -205,13 +213,19 @@ ChatTab* ChatWindow::getTab(const Tp::TextChannelPtr& incomingTextChannel)
             Q_ASSERT(auxChatTab);
 
             // check for duplicate chat
-            if (auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
-            && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
+            if (auxChatTab->account() == account
+                && auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
+                && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
                 match = auxChatTab;
             }
         }
     }
     return match;
+}
+
+ChatTab *ChatWindow::getCurrentTab()
+{
+    return qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
 }
 
 void ChatWindow::removeTab(ChatTab *tab)
@@ -244,6 +258,8 @@ void ChatWindow::addTab(ChatTab *tab)
             m_tabWidget->setTabBarHidden(false);
         }
     }
+
+    tab->updateSendMessageShortcuts(m_sendMessage->shortcut());
 }
 
 void ChatWindow::destroyTab(QWidget* chatWidget)
@@ -440,7 +456,7 @@ void ChatWindow::onNextTabActionTriggered()
     if (m_tabWidget->count() == 1) {
         return;
     }
-    
+
     int currIndex = m_tabWidget->currentIndex();
 
     if (currIndex < m_tabWidget->count()-1) {
@@ -455,7 +471,7 @@ void ChatWindow::onPreviousTabActionTriggered()
     if (m_tabWidget->count() == 1) {
         return;
     }
-    
+
     int currIndex = m_tabWidget->currentIndex();
 
     if (currIndex > 0) {
@@ -486,7 +502,7 @@ void ChatWindow::onTabStateChanged()
         int tabIndex = m_tabWidget->indexOf(sender);
         setTabTextColor(tabIndex, sender->titleColor());
 
-        if (sender->remoteChatState() == Tp::ChannelChatStateComposing) {
+        if (TextChatConfig::instance()->showOthersTyping() && (sender->remoteChatState() == Tp::ChannelChatStateComposing)) {
             setTabIcon(tabIndex, KIcon(QLatin1String("document-edit")));
             if (sender == m_tabWidget->currentWidget()) {
                 windowIcon = KIcon(QLatin1String("document-edit"));
@@ -714,6 +730,14 @@ void ChatWindow::setupCustomActions()
     EmoticonTextEditAction *addEmoticonAction = new EmoticonTextEditAction(this);
     connect(addEmoticonAction, SIGNAL(emoticonActivated(QString)), this, SLOT(onAddEmoticon(QString)) );
 
+    m_sendMessage = new KAction(i18n("Send message"), this);
+    m_sendMessage->setShortcuts(
+                // Setting default shortcuts. Return will be a primary one, and Enter (on keypad) - alternate.
+                QList<QKeySequence>() << QKeySequence(Qt::Key_Return) << QKeySequence(Qt::Key_Enter),
+                KAction::DefaultShortcut);
+    m_sendMessage->setShortcutConfigurable(true);
+    connect(m_sendMessage, SIGNAL(changed()), SLOT(updateSendMessageShortcuts()));
+
     // add custom actions to the collection
     actionCollection()->addAction(QLatin1String("next-tab"), nextTabAction);
     actionCollection()->addAction(QLatin1String("previous-tab"), previousTabAction);
@@ -728,6 +752,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
     actionCollection()->addAction(QLatin1String("clear-chat-view"), clearViewAction);
     actionCollection()->addAction(QLatin1String("emoticons"), addEmoticonAction);
+    actionCollection()->addAction(QLatin1String("send-message"), m_sendMessage);
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
@@ -848,10 +873,14 @@ void ChatWindow::onUserTypingChanged(Tp::ChannelChatState state)
     Q_ASSERT(currChat);
     QString title = currChat->title();
 
-    if (state == Tp::ChannelChatStateComposing) {
-        setWindowTitle(i18nc("String prepended in window title, arg is contact's name", "Typing... %1", title));
-    } else if (state == Tp::ChannelChatStatePaused) {
-        setWindowTitle(i18nc("String appended in window title, arg is contact's name", "%1 has entered text", title));
+    if (TextChatConfig::instance()->showOthersTyping()) {
+        if (state == Tp::ChannelChatStateComposing) {
+            setWindowTitle(i18nc("String prepended in window title, arg is contact's name", "Typing... %1", title));
+        } else if (state == Tp::ChannelChatStatePaused) {
+            setWindowTitle(i18nc("String appended in window title, arg is contact's name", "%1 has entered text", title));
+        } else {
+            setWindowTitle(title);
+        }
     } else {
         setWindowTitle(title);
     }
@@ -947,7 +976,15 @@ void ChatWindow::onZoomFactorChanged(qreal zoom)
     KConfig config(QLatin1String("ktelepathyrc"));
     KConfigGroup group = config.group("Appearance");
     group.writeEntry("zoomFactor", m_zoomFactor);
+}
 
+void ChatWindow::updateSendMessageShortcuts()
+{
+    KShortcut newSendMessageShortcuts = m_sendMessage->shortcut();
+    for (int i = 0; i < m_tabWidget->count(); i++) {
+        ChatTab* tab = qobject_cast<ChatTab*>(m_tabWidget->widget(i));
+        tab->updateSendMessageShortcuts(newSendMessageShortcuts);
+    }
 }
 
 #include "chat-window.moc"

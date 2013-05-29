@@ -38,13 +38,20 @@ SearchexpansionFilter::~SearchexpansionFilter()
     delete d;
 }
 
-void SearchexpansionFilter::filterMessage(Message &message)
+void SearchexpansionFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
 {
-    KUriFilterData data(message.mainMessagePart().trimmed());
+    Q_UNUSED(message);
+    Q_UNUSED(context);
+}
+
+void SearchexpansionFilter::filterOutgoingMessage(KTp::OutgoingMessage &message, const KTp::MessageContext &context)
+{
+    Q_UNUSED(context);
+    KUriFilterData data(message.text().trimmed());
     if(KUriFilter::self()->filterSearchUri(data, KUriFilter::WebShortcutFilter)) {
 
 //         kDebug() << "Succesfully filtered" << data.typedString() << "to" << data.uri();
-        message.setMainMessagePart(data.uri().url());
+        message.setText(data.uri().url());
     }
 }
 

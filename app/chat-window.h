@@ -25,6 +25,7 @@
 
 #include <KXmlGuiWindow>
 #include <KTabWidget>
+#include <KAction>
 
 namespace Sonnet {
     class DictionaryComboBox;
@@ -55,7 +56,8 @@ public:
     /** retrieves tab with given textChannel if it exists
      * @param incomingTextChannel textChannel to search for
      */
-    ChatTab* getTab(const Tp::TextChannelPtr &incomingTextChannel);
+    ChatTab* getTab(const Tp::AccountPtr &account, const Tp::TextChannelPtr &incomingTextChannel);
+    ChatTab* getCurrentTab();
 
     void focusChat(ChatTab *tab);
 
@@ -106,6 +108,7 @@ private Q_SLOTS:
     void onZoomIn();
     void onZoomOut();
     void onZoomFactorChanged(qreal zoom);
+    void updateSendMessageShortcuts();
 
 protected Q_SLOTS:
     void showSettingsDialog();
@@ -166,6 +169,8 @@ private:
 
     /** Returns whether there's at least one tab with unread message */
     bool hasUnreadMessages() const;
+
+    KAction *m_sendMessage;
 
     KTabWidget *m_tabWidget;
 

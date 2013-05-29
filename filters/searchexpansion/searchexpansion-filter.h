@@ -28,7 +28,8 @@ class SearchexpansionFilter : public KTp::AbstractMessageFilter
 public:
     SearchexpansionFilter(QObject *parent, const QVariantList &);
     virtual ~SearchexpansionFilter();
-    virtual void filterMessage(KTp::Message &message);
+    virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
+    virtual void filterOutgoingMessage(KTp::OutgoingMessage &message, const KTp::MessageContext &context);
 
 private:
     class Private;

@@ -1,0 +1,4 @@
+File=latex.kcfg
+ClassName=LatexConfig
+Singleton=true
+Mutators=true

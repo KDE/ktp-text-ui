@@ -46,7 +46,7 @@ LogsImportDialog::LogsImportDialog(QObject *parent)
 
     QLabel *label = new QLabel(mainWidget);
     label->setText(i18n("We have found Kopete logs that seem to match some of your KDE Telepathy accounts.\n\n"
-			"Do you want to import these logs from Kopete to KDE Telepathy?"));
+                        "Do you want to import these logs from Kopete to KDE Telepathy?"));
     label->setWordWrap(true);
     layout->addWidget(label);
 
@@ -78,13 +78,13 @@ LogsImportDialog::~LogsImportDialog()
 void LogsImportDialog::importLogs(const QList< Tp::AccountPtr >& accounts)
 {
     Q_FOREACH(const Tp::AccountPtr &account, accounts) {
-	QListWidgetItem *item = new QListWidgetItem();
-	item->setText(account->displayName());
-	item->setIcon(KIcon(account->iconName()));
-	item->setCheckState(Qt::Checked);
-	item->setData(Qt::UserRole + 1, QVariant::fromValue(account));
+        QListWidgetItem *item = new QListWidgetItem();
+        item->setText(account->displayName());
+        item->setIcon(KIcon(account->iconName()));
+        item->setCheckState(Qt::Checked);
+        item->setData(Qt::UserRole + 1, QVariant::fromValue(account));
 
-	m_accountsList->addItem(item);
+        m_accountsList->addItem(item);
     }
 
     exec();
@@ -93,14 +93,14 @@ void LogsImportDialog::importLogs(const QList< Tp::AccountPtr >& accounts)
 void LogsImportDialog::slotButtonClicked(int button)
 {
     if (button == Ok) {
-	m_accountsList->setEnabled(false);
-	m_progressBar->setVisible(true);
-	enableButton(Ok, false);
-	enableButton(Close, false);
+        m_accountsList->setEnabled(false);
+        m_progressBar->setVisible(true);
+        enableButton(Ok, false);
+        enableButton(Close, false);
 
-	m_row = 0;
-	importFinished();
-	return;
+        m_row = 0;
+        importFinished();
+        return;
     }
 
     KDialog::slotButtonClicked(button);
@@ -110,24 +110,24 @@ void LogsImportDialog::importFinished()
 {
     if (m_row < m_accountsList->count()) {
 
-	/* If the account is not checked, skip to next one */
-	if (m_accountsList->item(m_row)->checkState() != Qt::Checked) {
-	    m_row++;
-	    importFinished();
-	    return;
-	}
+        /* If the account is not checked, skip to next one */
+        if (m_accountsList->item(m_row)->checkState() != Qt::Checked) {
+            m_row++;
+            importFinished();
+            return;
+        }
 
-	if (m_row > 0) {
-	    m_accountsList->item(m_row - 1)->setCheckState(Qt::Unchecked);
-	}
+        if (m_row > 0) {
+            m_accountsList->item(m_row - 1)->setCheckState(Qt::Unchecked);
+        }
 
-	Tp::AccountPtr account = m_accountsList->item(m_row)->data(Qt::UserRole + 1).value<Tp::AccountPtr>();
-	m_importer->startLogImport(account);
-	m_row++;
+        Tp::AccountPtr account = m_accountsList->item(m_row)->data(Qt::UserRole + 1).value<Tp::AccountPtr>();
+        m_importer->startLogImport(account);
+        m_row++;
     } else {
-	m_accountsList->item(m_row - 1)->setCheckState(Qt::Unchecked);
-	m_progressBar->setVisible(false);
-	enableButton(Close, true);
-	setButtonText(Close, i18n("Done"));
+        m_accountsList->item(m_row - 1)->setCheckState(Qt::Unchecked);
+        m_progressBar->setVisible(false);
+        enableButton(Close, true);
+        setButtonText(Close, i18n("Done"));
     }
 }

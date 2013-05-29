@@ -40,8 +40,8 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
 
     ui->setupUi(this);
 
-    ui->newTabButtonGroup->setId(ui->radioNew, TelepathyChatUi::NewWindow);
-    ui->newTabButtonGroup->setId(ui->radioZero, TelepathyChatUi::FirstWindow);
+    ui->newTabButtonGroup->setId(ui->radioNew, TextChatConfig::NewWindow);
+    ui->newTabButtonGroup->setId(ui->radioZero, TextChatConfig::FirstWindow);
 
     ui->newTabButtonGroup->button(m_openMode)->setChecked(true);
     connect(ui->newTabButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(onRadioSelected(int)));
@@ -49,6 +49,12 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
     ui->scrollbackLength->setSuffix(ki18ncp("Part of config 'show last [spin box] messages' This is the suffix to the spin box. Be sure to include leading space"," message", " messages"));
     ui->scrollbackLength->setValue(m_scrollbackLength);
     connect(ui->scrollbackLength, SIGNAL(valueChanged(int)), this, SLOT(onScrollbackLengthChanged()));
+
+    ui->checkBoxShowMeTyping->setChecked(m_showMeTyping);
+    connect(ui->checkBoxShowMeTyping, SIGNAL(toggled(bool)), this, SLOT(onShowMeTypingChanged(bool)));
+
+    ui->checkBoxShowOthersTyping->setChecked(m_showOthersTyping);
+    connect(ui->checkBoxShowOthersTyping, SIGNAL(toggled(bool)), this, SLOT(onShowOthersTypingChanged(bool)));
 }
 
 BehaviorConfig::~BehaviorConfig()
@@ -58,37 +64,19 @@ BehaviorConfig::~BehaviorConfig()
 
 void BehaviorConfig::load()
 {
-    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
-    KConfigGroup tabConfig = config->group("Behavior");
-
-    QString mode = tabConfig.readEntry("tabOpenMode", "NewWindow");
-    if(mode == QLatin1String("NewWindow")) {
-        m_openMode = TelepathyChatUi::NewWindow;
-    } else if (mode == QLatin1String("FirstWindow")) {
-        m_openMode = TelepathyChatUi::FirstWindow;
-    }
-
-    m_scrollbackLength = tabConfig.readEntry("scrollbackLength", 4);
+    m_openMode = TextChatConfig::instance()->openMode();
+    m_scrollbackLength = TextChatConfig::instance()->scrollbackLength();
+    m_showMeTyping = TextChatConfig::instance()->showMeTyping();
+    m_showOthersTyping = TextChatConfig::instance()->showOthersTyping();
 }
 
 void BehaviorConfig::save()
 {
-    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
-    KConfigGroup tabConfig = config->group("Behavior");
-
-    QString mode;
-    switch (m_openMode) {
-        case TelepathyChatUi::NewWindow :
-            mode = QLatin1String("NewWindow");
-            break;
-        case TelepathyChatUi::FirstWindow :
-            mode = QLatin1String("FirstWindow");
-            break;
-    }
-
-    tabConfig.writeEntry("tabOpenMode", mode);
-    tabConfig.writeEntry("scrollbackLength", m_scrollbackLength);
-    tabConfig.sync();
+    TextChatConfig::instance()->setOpenMode(m_openMode);
+    TextChatConfig::instance()->setScrollbackLength(m_scrollbackLength);
+    TextChatConfig::instance()->setShowMeTyping(m_showMeTyping);
+    TextChatConfig::instance()->setShowOthersTyping(m_showOthersTyping);
+    TextChatConfig::instance()->sync();
 }
 
 void BehaviorConfig::changeEvent(QEvent* e)
@@ -106,7 +94,7 @@ void BehaviorConfig::changeEvent(QEvent* e)
 void BehaviorConfig::onRadioSelected(int id)
 {
     kDebug() << "BehaviorConfig::m_openMode changed from " << id << " to " << m_openMode;
-    m_openMode = (TelepathyChatUi::TabOpenMode) id;
+    m_openMode = (TextChatConfig::TabOpenMode) id;
     kDebug() << "emitting changed(true)";
     Q_EMIT changed(true);
 }
@@ -114,5 +102,17 @@ void BehaviorConfig::onRadioSelected(int id)
 void BehaviorConfig::onScrollbackLengthChanged()
 {
     m_scrollbackLength = ui->scrollbackLength->value();
+    Q_EMIT changed(true);
+}
+
+void BehaviorConfig::onShowMeTypingChanged(bool state)
+{
+    m_showMeTyping = state;
+    Q_EMIT changed(true);
+}
+
+void BehaviorConfig::onShowOthersTypingChanged(bool state)
+{
+    m_showOthersTyping = state;
     Q_EMIT changed(true);
 }

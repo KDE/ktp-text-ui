@@ -20,12 +20,14 @@
 #ifndef ADIUMTHEMEVIEW_H
 #define ADIUMTHEMEVIEW_H
 
-#include <QtWebKit/QWebView>
+#include <KWebView>
 
 #include "adium-theme-header-info.h"
 #include "adium-theme-content-info.h"
 
 #include <KEmoticons>
+
+#include <KTp/message.h>
 
 #include "ktpchat_export.h"
 
@@ -38,7 +40,7 @@ class QContextMenuEvent;
 
 class KAction;
 
-class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public QWebView
+class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public KWebView
 {
     Q_OBJECT
 public:
@@ -57,12 +59,6 @@ public:
         AppendMessageNoScroll,
         AppendNextMessageNoScroll,
         ReplaceLastMessage
-    };
-
-    enum ShowPresenceMode {
-        Always = 0,
-        NeverInGroupChats = 1,
-        Never = 2
     };
 
     explicit AdiumThemeView(QWidget *parent = 0);
@@ -92,23 +88,28 @@ public:
     void setHeaderDisplayed(bool);
     /* .. font, backgrounds, everything else.*/
 
-    void setShowPresenceMode(ShowPresenceMode showPresenceMode);
-    ShowPresenceMode showPresenceMode() const;
+    void setShowPresenceChanges(bool showPresenceChanges);
+    bool showPresenceChanges() const;
 
     void clear();
 
 public Q_SLOTS:
-    void addContentMessage(const AdiumThemeContentInfo&);
-    void addStatusMessage(const AdiumThemeStatusInfo&);
+    void addMessage(const KTp::Message &message);
+    void addStatusMessage(const QString &text, const QDateTime &time=QDateTime::currentDateTime());
     void onOpenLinkActionTriggered();
     virtual void onLinkClicked(const QUrl &);
+
+    void addAdiumContentMessage(const AdiumThemeContentInfo&);
+    void addAdiumStatusMessage(const AdiumThemeStatusInfo&);
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void wheelEvent(QWheelEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
 
 Q_SIGNALS:
     void zoomFactorChanged(qreal zoomFactor);
+    void textPasted();
 
 private:
     ChatWindowStyle *m_chatStyle;
@@ -117,7 +118,7 @@ private:
     bool m_useCustomFont;
     QString m_fontFamily;
     int m_fontSize;
-    ShowPresenceMode m_showPresenceMode;
+    bool m_showPresenceChanges;
 
     QString appendScript(AppendMode mode);
     AppendMode appendMode(const AdiumThemeMessageInfo &message,

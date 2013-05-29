@@ -116,7 +116,7 @@ void EntityModelItem::setData(const QVariant &data, int role)
             m_account = data.value< Tp::AccountPtr >();
             break;
         case EntityModel::ContactRole:
-            m_contact = data.value< Tp::ContactPtr >();
+            m_contact = data.value< KTp::ContactPtr >();
             break;
         case EntityModel::EntityRole:
             m_entity = data.value< Tpl::EntityPtr >();

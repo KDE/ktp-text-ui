@@ -70,7 +70,7 @@ bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
         return matches_filter;
     }
 
-    Tp::ContactPtr contact = index.data(EntityModel::ContactRole).value< Tp::ContactPtr >();
+    KTp::ContactPtr contact = index.data(EntityModel::ContactRole).value< KTp::ContactPtr >();
 
     /* Check if contact's account name matches */
     if (entity->alias().contains(term, Qt::CaseInsensitive) && matches_filter) {

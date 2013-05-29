@@ -29,6 +29,7 @@
 #include <TelepathyQt/Account>
 #include <TelepathyQt/Contact>
 
+#include <KTp/message.h>
 
 namespace Tpl {
     class PendingOperation;
@@ -50,7 +51,7 @@ public:
     void fetchLast();
 
 Q_SIGNALS:
-    void fetched(const QList<AdiumThemeContentInfo> &messages);
+    void fetched(const QList<KTp::Message> &messages);
 
 private Q_SLOTS:
     void onDatesFinished(Tpl::PendingOperation *po);
