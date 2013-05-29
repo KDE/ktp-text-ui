@@ -273,7 +273,7 @@ void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
     setupChannelSignals();
 
     //if the UI is ready process any messages in queue
-    if (d->chatviewlInitialised) {
+    if (d->chatViewInitialized) {
         Q_FOREACH (const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
             handleIncomingMessage(message, true);
         }
