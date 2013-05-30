@@ -31,6 +31,7 @@ Name[nl]=LaTeX-renderer
 Name[pa]=LaTeX ਰੈਂਡਰ
 Name[pt]=Representação em LaTeX
 Name[pt_BR]=Renderizador de LaTeX
+Name[ro]=Randor LaTeX
 Name[ru]=Поддержка LaTeX
 Name[sk]=Vykresľovač LaTeX
 Name[sl]=Izrisovalnik za LaTeX
