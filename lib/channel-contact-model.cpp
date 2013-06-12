@@ -33,7 +33,7 @@ ChannelContactModel::ChannelContactModel(const Tp::TextChannelPtr &channel, QObj
 void ChannelContactModel::setTextChannel(const Tp::TextChannelPtr &channel)
 {
     m_channel = channel;
-    
+
     //remove existing contacts in list
     beginRemoveRows(QModelIndex(), 0, m_contacts.size());
     m_contacts.clear();
@@ -155,9 +155,11 @@ void ChannelContactModel::addContacts(const Tp::Contacts &contacts)
         connect(contact.data(), SIGNAL(blockStatusChanged(bool)), SLOT(onContactBlockStatusChanged(bool)));
     }
 
-    beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size() + newContacts.size());
-    m_contacts << newContacts;
-    endInsertRows();
+    if (!newContacts.isEmpty()) {
+        beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size() + newContacts.size() - 1);
+        m_contacts << newContacts;
+        endInsertRows();
+    }
 }
 
 void ChannelContactModel::removeContacts(const Tp::Contacts &contacts)
