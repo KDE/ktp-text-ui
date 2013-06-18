@@ -482,8 +482,20 @@ void ChatWidget::onHistoryFetched(const QList<KTp::Message> &messages)
     d->chatViewInitialized = true;
 
     kDebug() << "found" << messages.count() << "messages in history";
-    Q_FOREACH(const KTp::Message &message, messages) {
-        d->ui.chatArea->addMessage(message);
+    if (!messages.isEmpty()) {
+        QDate date = messages.first().time().date();
+        Q_FOREACH(const KTp::Message &message, messages) {
+            if (message.time().date() != date) {
+                date = message.time().date();
+                d->ui.chatArea->addStatusMessage(date.toString(Qt::LocaleDate));
+            }
+
+            d->ui.chatArea->addMessage(message);
+        }
+
+        if (date != QDate::currentDate()) {
+            d->ui.chatArea->addStatusMessage(QDate::currentDate().toString(Qt::LocaleDate));
+        }
     }
 
     //process any messages we've 'missed' whilst initialising.
