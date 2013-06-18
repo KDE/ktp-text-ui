@@ -25,17 +25,25 @@
 
 #include <KDebug>
 
+#include <QLabel>
+#include <QResizeEvent>
+
 #include <TelepathyLoggerQt4/LogManager>
 #include <TelepathyLoggerQt4/PendingEvents>
 #include <TelepathyLoggerQt4/TextEvent>
 #include <TelepathyQt/Account>
 
 MessageView::MessageView(QWidget *parent) :
-    AdiumThemeView(parent)
+    AdiumThemeView(parent),
+    m_infoLabel(new QLabel(this))
 {
+    QFont font = m_infoLabel->font();
+    font.setBold(true);
+    m_infoLabel->setFont(font);
+    m_infoLabel->setAlignment(Qt::AlignCenter);
+
     connect(this, SIGNAL(loadFinished(bool)), SLOT(processStoredEvents()));
 }
-
 
 void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
                           const Tp::ContactPtr &contact, const QDate &date,
@@ -43,10 +51,11 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
 {
     if (account.isNull() || entity.isNull()) {
         //note contact can be null
-        kWarning() << "invalid account/contact. Not loading log";
+        showInfoMessage(i18n("Unknown or invalid contact"));
         return;
     }
 
+    m_infoLabel->hide();
     m_account = account;
     m_entity = entity;
     m_contact = contact;
@@ -70,6 +79,21 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
     Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
     Tpl::PendingEvents *pendingEvents  = logManager->queryEvents(m_account, m_entity, Tpl::EventTypeMaskText, m_date);
     connect(pendingEvents, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsLoaded(Tpl::PendingOperation*)));
+}
+
+void MessageView::showInfoMessage(const QString& message)
+{
+    m_infoLabel->setText(message);
+    m_infoLabel->show();
+    m_infoLabel->raise();
+    m_infoLabel->setGeometry(0, 0, width(), height());
+}
+
+void MessageView::resizeEvent(QResizeEvent* e)
+{
+    m_infoLabel->setGeometry(0, 0, e->size().width(), e->size().height());
+
+    QWebView::resizeEvent(e);
 }
 
 void MessageView::setHighlightText(const QString &text)
@@ -116,6 +140,10 @@ void MessageView::processStoredEvents()
         message.setTime(QDateTime(m_prev));
 
         addAdiumStatusMessage(message);
+    }
+
+    if (m_events.isEmpty()) {
+        showInfoMessage(i18n("There are no logs for this day"));
     }
 
     // See https://bugs.kde.org/show_bug.cgi?id=317866
@@ -169,5 +197,8 @@ void MessageView::onLinkClicked(const QUrl &link)
 void MessageView::doHighlightText()
 {
     findText(QString());
-    findText(m_highlightedText, QWebPage::HighlightAllOccurrences | QWebPage::FindWrapsAroundDocument);
+    if (!m_highlightedText.isEmpty()) {
+        findText(m_highlightedText, QWebPage::HighlightAllOccurrences |
+                                    QWebPage::FindWrapsAroundDocument);
+    }
 }

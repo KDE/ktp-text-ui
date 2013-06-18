@@ -67,6 +67,8 @@ private Q_SLOTS:
     void slotJumpToPrevConversation();
     void slotJumpToNextConversation();
 
+    void slotNoLogsForContact();
+
 private:
     void setupActions();
 

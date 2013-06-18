@@ -30,7 +30,10 @@ class EntityView : public QTreeView
     Q_OBJECT
 public:
     explicit EntityView(QWidget *parent = 0);
-    
+
+Q_SIGNALS:
+    void noSuchContact();
+
 protected Q_SLOTS:
     void rowsInserted(const QModelIndex &parent, int start, int end);
 };
