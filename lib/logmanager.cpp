@@ -26,7 +26,11 @@
 #include <KDebug>
 
 #include <TelepathyLoggerQt4/Init>
+
+#if 0
 #include <TelepathyLoggerQt4/LogWalker>
+#endif
+
 #include <TelepathyLoggerQt4/Entity>
 #include <TelepathyLoggerQt4/PendingEvents>
 #include <TelepathyLoggerQt4/Event>
@@ -93,6 +97,8 @@ void LogManager::fetchScrollback()
 
 void LogManager::fetchHistory(int n)
 {
+    #if 0
+
     // Skip if no messages are requested
     if (n > 0 && !m_account.isNull() && !m_textChannel.isNull()
         && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
@@ -108,6 +114,7 @@ void LogManager::fetchHistory(int n)
                 this, SLOT(onEventsFinished(Tpl::PendingOperation*)));
         return;
     }
+#endif
 
     //in all other cases finish immediately.
     QList<KTp::Message> messages;
