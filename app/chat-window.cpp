@@ -858,8 +858,11 @@ bool ChatWindow::event(QEvent *e)
     if (e->type() == QEvent::WindowActivate) {
         //when the window is activated reset the message count on the active tab.
         ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
-        Q_ASSERT(currChat);
-        currChat->acknowledgeMessages();
+        //it is (apparently) possible to get a window activation event whilst we're closing down and have no tabs
+        //see https://bugs.kde.org/show_bug.cgi?id=322135
+        if (currChat) {
+            currChat->acknowledgeMessages();
+        }
     }
 
     return KXmlGuiWindow::event(e);
