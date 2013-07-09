@@ -60,7 +60,6 @@ int main(int argc, char *argv[])
         QDBusConnection::sessionBus(),
         Tp::Features() << Tp::Connection::FeatureSelfContact
                        << Tp::Connection::FeatureCore
-                       << Tp::Connection::FeatureRoster
     );
 
     Tp::ChannelFactoryPtr channelFactory = Tp::ChannelFactory::create(QDBusConnection::sessionBus());
