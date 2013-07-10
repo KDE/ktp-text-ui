@@ -28,6 +28,7 @@
 #include <TelepathyLoggerQt4/Entity>
 #include <TelepathyLoggerQt4/PendingOperation>
 
+class QLabel;
 
 class MessageView : public AdiumThemeView
 {
@@ -47,6 +48,8 @@ public:
     void setHighlightText(const QString &text);
     void clearHighlightText();
 
+    void showInfoMessage(const QString &message);
+
 public Q_SLOTS:
     void onLinkClicked(const QUrl &link);
     void reloadTheme();
@@ -58,6 +61,9 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void conversationSwitchRequested(const QDate &date);
+
+protected:
+    virtual void resizeEvent(QResizeEvent *e);
 
 private:
     void loadSettings();
@@ -76,6 +82,8 @@ private:
     Tpl::EventPtrList m_events;
 
     QString m_accountAvatar;
+
+    QLabel *m_infoLabel;
 };
 
 #endif // MESSAGEVIEW_H

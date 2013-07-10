@@ -57,8 +57,12 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
             if (selectAccountId == account->uniqueIdentifier() && selectContactId == contact->identifier()) {
                 setCurrentIndex(index);
                 loadedCurrentContact = true;
+                break;
             }
+        }
 
+        if (!loadedCurrentContact) {
+            Q_EMIT noSuchContact();
         }
     }
 

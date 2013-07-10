@@ -25,15 +25,26 @@
 
 #include <KDebug>
 
+#include <QLabel>
+#include <QResizeEvent>
+
 #include <TelepathyLoggerQt4/LogManager>
 #include <TelepathyLoggerQt4/PendingEvents>
 #include <TelepathyLoggerQt4/TextEvent>
 #include <TelepathyQt/Account>
 
 MessageView::MessageView(QWidget *parent) :
-    AdiumThemeView(parent)
+    AdiumThemeView(parent),
+    m_infoLabel(new QLabel(this))
 {
+
     loadSettings();
+
+    QFont font = m_infoLabel->font();
+    font.setBold(true);
+    m_infoLabel->setFont(font);
+    m_infoLabel->setAlignment(Qt::AlignCenter);
+
     connect(this, SIGNAL(loadFinished(bool)), SLOT(processStoredEvents()));
 }
 
@@ -43,10 +54,11 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
 {
 if (account.isNull() || entity.isNull()) {
         //note contact can be null
-        kWarning() << "invalid account/contact. Not loading log";
+        showInfoMessage(i18n("Unknown or invalid contact"));
         return;
     }
 
+    m_infoLabel->hide();
     m_account = account;
     // FIXME: Workaround for a bug, probably in QGlib which causes that
     // m_entity = m_entity results in invalid m_entity->m_class being null
@@ -74,6 +86,21 @@ if (account.isNull() || entity.isNull()) {
     Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
     Tpl::PendingEvents *pendingEvents  = logManager->queryEvents(m_account, m_entity, Tpl::EventTypeMaskText, m_date);
     connect(pendingEvents, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsLoaded(Tpl::PendingOperation*)));
+}
+
+void MessageView::showInfoMessage(const QString& message)
+{
+    m_infoLabel->setText(message);
+    m_infoLabel->show();
+    m_infoLabel->raise();
+    m_infoLabel->setGeometry(0, 0, width(), height());
+}
+
+void MessageView::resizeEvent(QResizeEvent* e)
+{
+    m_infoLabel->setGeometry(0, 0, e->size().width(), e->size().height());
+
+    QWebView::resizeEvent(e);
 }
 
 void MessageView::setHighlightText(const QString &text)
@@ -148,6 +175,10 @@ void MessageView::processStoredEvents()
         qSort(m_events.begin(), m_events.end(), sortEventsFromNewest);
     }
 
+    if (m_events.isEmpty()) {
+        showInfoMessage(i18n("There are no logs for this day"));
+    }
+
     while (!m_events.isEmpty()) {
         const Tpl::TextEventPtr textEvent(m_events.takeFirst().staticCast<Tpl::TextEvent>());
         KTp::Message message = KTp::MessageProcessor::instance()->processIncomingMessage(textEvent, m_account, Tp::TextChannelPtr());
@@ -205,5 +236,8 @@ void MessageView::reloadTheme()
 void MessageView::doHighlightText()
 {
     findText(QString());
-    findText(m_highlightedText, QWebPage::HighlightAllOccurrences | QWebPage::FindWrapsAroundDocument);
+    if (!m_highlightedText.isEmpty()) {
+        findText(m_highlightedText, QWebPage::HighlightAllOccurrences |
+                                    QWebPage::FindWrapsAroundDocument);
+    }
 }

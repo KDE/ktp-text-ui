@@ -117,6 +117,7 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     connect(ui->globalSearch, SIGNAL(returnPressed(QString)), SLOT(slotStartGlobalSearch(QString)));
     connect(ui->globalSearch, SIGNAL(clearButtonClicked()), SLOT(slotClearGlobalSearch()));
     connect(ui->entityList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotShowEntityListContextMenu(QPoint)));
+    connect(ui->entityList, SIGNAL(noSuchContact()), SLOT(slotNoLogsForContact()));
 }
 
 LogViewer::~LogViewer()
@@ -452,4 +453,9 @@ void LogViewer::slotConfigure()
 
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
+}
+
+void LogViewer::slotNoLogsForContact()
+{
+    ui->messageView->showInfoMessage(i18n("There are no logs for this contact"));
 }

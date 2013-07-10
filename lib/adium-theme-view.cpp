@@ -359,9 +359,17 @@ void AdiumThemeView::addMessage(const KTp::Message &message)
     } else {
         AdiumThemeContentInfo messageInfo;
         if (message.direction() == KTp::Message::RemoteToLocal) {
-            messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::RemoteToLocal);
+            if (message.isHistory()) {
+                messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::HistoryRemoteToLocal);
+            } else {
+                messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::RemoteToLocal);
+            }
         } else {
-            messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::LocalToRemote);
+            if (message.isHistory()) {
+                messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::HistoryLocalToRemote);
+            } else {
+                messageInfo = AdiumThemeContentInfo(AdiumThemeContentInfo::LocalToRemote);
+            }
         }
 
         messageInfo.setMessage(message.finalizedMessage());
