@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Short URLs
 Name[cs]=Krátké URL
 Name[da]=Korte URL'er
+Name[de]=Kurz-URLs
 Name[el]=Συντομευμένα URL
 Name[es]=URL abreviadas
 Name[fi]=Lyhyet verkko-osoitteet
