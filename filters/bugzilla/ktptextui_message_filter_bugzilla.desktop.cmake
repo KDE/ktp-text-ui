@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Bugzilla Information
+Name[bs]=Bugzilla informacije
 Name[ca]=Informació del Bugzilla
 Name[cs]=Informace z bugzilly
 Name[da]=Bugzilla-information
@@ -35,6 +36,7 @@ Name[x-test]=xxBugzilla Informationxx
 Name[zh_CN]=Bugzilla 信息
 Name[zh_TW]=Bugzilla 資訊
 Comment=When receiving a link to a bug on bugzilla show additional information such as the title and status
+Comment[bs]=Kada primite link na grešku na bugzilla, prikažite dodatnu informaciju kao što su naslov i status
 Comment[ca]=En rebre un enllaç a un error del Bugzilla mostra informació addicional com el títol i l'estat
 Comment[cs]=Pokud obdržíte odkaz na bugzillu zobrazí se v rozhovoru dodatečné informace jako stav a název
 Comment[da]=Viser yderligere information såsom titel og status, når du modtager et link til en fejlrapport på bugzilla

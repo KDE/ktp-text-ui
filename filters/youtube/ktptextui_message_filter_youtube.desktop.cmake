@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=YouTube Preview
+Name[bs]=YouTube pregled
 Name[ca]=Vista prèvia de YouTube
 Name[cs]=Náhled YouTube
 Name[da]=Forhåndsvisning af YouTube
@@ -35,6 +36,7 @@ Name[x-test]=xxYouTube Previewxx
 Name[zh_CN]=YouTube 预览
 Name[zh_TW]=YouTube 預覽
 Comment=If any messages contains a link to a YouTube video, it will embed a preview in the chat
+Comment[bs]=Ako poruka sadrži vezu na YouTube video, oma će se ugraditi u pregled ćaskanja
 Comment[ca]=Si qualsevol missatge conté un enllaç a un vídeo de YouTube, s'encastarà una vista prèvia en el xat
 Comment[cs]=Pokud zpráva obsahuje odkaz na video YouTube bude vložen jeho náhled do rozhovoru
 Comment[da]=If beskeder indeholder et link til en YouTube-video vil en forhåndsvisning blive indlejret i chatten
