@@ -25,7 +25,7 @@
 #include <TelepathyQt/Types>
 #include <TelepathyLoggerQt4/Types>
 
-#include <kpeople/persons-model.h>
+#include <kpeople/personsmodel.h>
 
 class EntityModel;
 
@@ -39,7 +39,7 @@ class PersonEntityMergeModel : public QAbstractItemModel
 
   public:
     enum Roles {
-        EntityRole = PersonsModel::LastRole + 1,
+        EntityRole = KPeople::PersonsModel::UserRole + 1,
         ContactRole,
         AccountRole,
         ItemTypeRole
@@ -51,7 +51,7 @@ class PersonEntityMergeModel : public QAbstractItemModel
         Entity
     };
 
-    explicit PersonEntityMergeModel(PersonsModel *personsModel, EntityModel *entityModel,
+    explicit PersonEntityMergeModel(KPeople::PersonsModel *personsModel, EntityModel *entityModel,
                                     QObject *parent);
     virtual ~PersonEntityMergeModel();
 
@@ -74,7 +74,7 @@ class PersonEntityMergeModel : public QAbstractItemModel
     ContactItem* itemForPersona(const QModelIndex &personsModel_personaIndex);
     Item* itemForIndex(const QModelIndex &index) const;
 
-    PersonsModel *m_personsModel;
+    KPeople::PersonsModel *m_personsModel;
     EntityModel *m_entityModel;
 
     ContactItem *m_rootItem;

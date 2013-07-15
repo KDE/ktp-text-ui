@@ -20,8 +20,10 @@
 #include "person-entity-merge-model.h"
 #include "entity-model.h"
 
-#include <kpeople/persons-model.h>
+#include <kpeople/personsmodel.h>
 #include <kpeople/persondata.h>
+#include <kpeople/personpluginmanager.h>
+#include <kpeople/basepersonsdatasource.h>
 
 #include <TelepathyLoggerQt4/LogManager>
 #include <TelepathyLoggerQt4/PendingEntities>
@@ -118,7 +120,7 @@ PersonEntityMergeModel::ContactItem* PersonEntityMergeModel::itemForPersona(cons
     ContactItem *item = new ContactItem;
     item->personaIndex = personsModel_personaIndex;
 
-    GroupItem *groupItem = groupForName(personsModel_personaIndex.data(PersonsModel::ContactGroupsRole));
+    GroupItem *groupItem = groupForName(personsModel_personaIndex.data(KPeople::PersonsModel::ContactGroupsRole));
     groupItem->addChild(item);
 
     return item;
@@ -176,7 +178,7 @@ PersonEntityMergeModel::Item* PersonEntityMergeModel::itemForIndex(const QModelI
     return item;
 }
 
-PersonEntityMergeModel::PersonEntityMergeModel(PersonsModel* personsModel,
+PersonEntityMergeModel::PersonEntityMergeModel(KPeople::PersonsModel* personsModel,
                                                EntityModel* entityModel,
                                                QObject* parent):
     QAbstractItemModel(parent),
@@ -249,7 +251,8 @@ QVariant PersonEntityMergeModel::data(const QModelIndex &index, int role) const
         case PersonEntityMergeModel::EntityRole:
             return item->entityIndex.data(EntityModel::EntityRole);
         case PersonEntityMergeModel::ContactRole:
-            return item->contactIndex.data(PersonsModel::IMContactRole);
+            //return item->contactIndex.data(PersonsModel::IMContactRole);
+            return QVariant();
         case PersonEntityMergeModel::AccountRole:
             return item->entityIndex.data(EntityModel::AccountRole);
         case PersonEntityMergeModel::ItemTypeRole:

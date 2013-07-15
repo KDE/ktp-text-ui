@@ -34,7 +34,8 @@
 #include <KTp/logs-importer.h>
 #include <KTp/contact.h>
 
-#include <kpeople/persons-model.h>
+#include <kpeople/personsmodel.h>
+#include <kpeople/personsmodelfeature.h>
 
 #include <QWebFrame>
 #include <KLineEdit>
@@ -81,9 +82,12 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     m_accountManager = Tp::AccountManager::create(accountFactory, connectionFactory, channelFactory, contactFactory);
     connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
 
-    m_personsModel = new PersonsModel(PersonsModel::FeatureIM | PersonsModel::FeatureContactUID,
-                                      PersonsModel::FeatureAvatars | PersonsModel::FeatureFullName | PersonsModel::FeatureGroups,
-                                      this);
+    m_personsModel = new KPeople::PersonsModel(this);
+    m_personsModel->startQuery(QList<KPeople::PersonsModelFeature>()
+                                    << KPeople::PersonsModelFeature::imModelFeature()
+                                    << KPeople::PersonsModelFeature::groupsModelFeature()
+                                    << KPeople::PersonsModelFeature::avatarModelFeature()
+                                    << KPeople::PersonsModelFeature::fullNameModelFeature());
 
     m_entityModel = new EntityModel(this);
 
@@ -332,7 +336,7 @@ void LogViewer::slotClearContactHistory()
         return;
     }
 
-    Tp::AccountPtr account = index.data(PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
+    Tp::AccountPtr account;// = index.data(KPeople::PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
     Tpl::EntityPtr entity = index.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
     if (account.isNull() || entity.isNull()) {
         return;

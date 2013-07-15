@@ -33,10 +33,13 @@ namespace Tpl {
     class PendingOperation;
 }
 
+namespace KPeople {
+    class PersonsModel;
+}
+
 class DatesModel;
 class EntityModel;
 class EntityFilterModel;
-class PersonsModel;
 class PersonEntityMergeModel;
 class KMenu;
 
@@ -81,7 +84,7 @@ private:
     Ui::LogViewer *ui;
     Tp::AccountManagerPtr m_accountManager;
     DatesModel *m_datesModel;
-    PersonsModel *m_personsModel;
+    KPeople::PersonsModel *m_personsModel;
     EntityModel *m_entityModel;
     PersonEntityMergeModel *m_mergeModel;
     EntityFilterModel *m_filterModel;
