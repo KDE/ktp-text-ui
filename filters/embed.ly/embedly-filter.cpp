@@ -32,13 +32,22 @@
 
 #include <qjson/parser.h>
 
-#define EMBEDLY_URL "http://api.embed.ly/1/oembed?key=2f5b868fc3c44c4ba3e6397d3d1606a3&url=%1&callback=showEmbedlyCallback"
-
 QJson::Parser qjson_parser;
 
 EmbedlyFilter::EmbedlyFilter(QObject *parent, const QVariantList &)
     : AbstractMessageFilter(parent)
 {
+    m_urlBlacklist   << QLatin1String("bugzilla.mozilla.org")
+                     << QLatin1String("bugzilla.kernel.org")
+                     << QLatin1String("bugzilla.gnome.org")
+                     << QLatin1String("bugs.kde.org")
+                     << QLatin1String("issues.apache.org")
+                     << QLatin1String("www.openoffice.org")
+                     << QLatin1String("bugs.eclipse.org/bugs")
+                     << QLatin1String("bugzilla.redhat.com/bugzilla")
+                     << QLatin1String("qa.mandriva.com")
+                     << QLatin1String("bugs.gentoo.org")
+                     << QLatin1String("bugzilla.novell.com");
 }
 
 EmbedlyFilter::~EmbedlyFilter()
@@ -50,8 +59,9 @@ void EmbedlyFilter::filterMessage(KTp::Message &message, const KTp::MessageConte
     QStringList processedUrls;
     Q_FOREACH (const QVariant &var, message.property("Urls").toList()) {
         KUrl url = qvariant_cast<KUrl>(var);
-
-        QUrl apiRequestUrl = QString::fromLatin1(EMBEDLY_URL).arg(url.url());
+        if (m_urlBlacklist.contains(url.host())) {
+            continue;
+        }
 
         QString part = message.mainMessagePart();
         part.replace(QString::fromLatin1("<a href=\"%1\">%1</a>").arg(url.url()),

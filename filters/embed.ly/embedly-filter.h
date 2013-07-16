@@ -38,6 +38,7 @@ protected Q_SLOTS:
     virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
 
 private:
+    QStringList m_urlBlacklist;
 };
 
 #endif // EMBEDLYFILTER_H
