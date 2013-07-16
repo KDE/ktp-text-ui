@@ -1,4 +1,5 @@
 add_subdirectory(bugzilla)
+add_subdirectory(embed.ly)
 add_subdirectory(emoticons)
 add_subdirectory(formatting)
 add_subdirectory(images)
