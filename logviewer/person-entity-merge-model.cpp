@@ -120,7 +120,9 @@ PersonEntityMergeModel::ContactItem* PersonEntityMergeModel::itemForPersona(cons
     ContactItem *item = new ContactItem;
     item->personaIndex = personsModel_personaIndex;
 
-    GroupItem *groupItem = groupForName(personsModel_personaIndex.data(KPeople::PersonsModel::ContactGroupsRole));
+    const QStringList groupNames = personsModel_personaIndex.data(KPeople::PersonsModel::GroupsRole).toStringList();
+    
+    GroupItem *groupItem = groupForName(groupNames.size() ? groupNames.first() : QString());
     groupItem->addChild(item);
 
     return item;
@@ -186,7 +188,7 @@ PersonEntityMergeModel::PersonEntityMergeModel(KPeople::PersonsModel* personsMod
     m_entityModel(entityModel),
     m_rootItem(new ContactItem)
 {
-    connect(m_personsModel, SIGNAL(peopleAdded()),
+    connect(m_personsModel, SIGNAL(modelInitialized()),
             this, SLOT(initializeModel()));
 }
 
@@ -301,6 +303,7 @@ void PersonEntityMergeModel::initializeModel()
 {
     kDebug();
     beginResetModel();
+
     for (int i = 0; i < m_entityModel->rowCount(QModelIndex()); ++i) {
         const QModelIndex entityIndex = m_entityModel->index(i, 0);
         QModelIndex contactIndex;
@@ -315,9 +318,9 @@ void PersonEntityMergeModel::initializeModel()
             bool found = false;
             for (int k = 0; k < m_personsModel->rowCount(index); ++k) {
                 const QModelIndex childIndex = m_personsModel->index(k, 0, index);
-                if (m_personsModel->data(childIndex, PersonsModel::IMRole).toString() == entity->identifier()) {
-                    kDebug() << "\tFound matching persona" << m_personsModel->data(index, PersonsModel::UriRole).toString();
-                    kDebug() << "\t\tFound matching contact" << m_personsModel->data(childIndex, PersonsModel::IMRole).toString();
+                if (m_personsModel->data(childIndex, KPeople::PersonsModel::IMsRole).toStringList().contains(entity->identifier())) {
+                    //kDebug() << "\tFound matching persona" << m_personsModel->data(index, PersonsModel::UriRole).toString();
+                    //kDebug() << "\t\tFound matching contact" << m_personsModel->data(childIndex, PersonsModel::IMRole).toString();
                     parentItem = itemForPersona(index);
                     personaIndex = index;
                     contactIndex = childIndex;
