@@ -58,16 +58,22 @@ LogManager::~LogManager()
 
 bool LogManager::exists() const
 {
-    if (!m_account.isNull() && !m_textChannel.isNull() && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
-        Tpl::EntityPtr contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
-                                                           Tpl::EntityTypeContact,
-                                                           NULL,
-                                                           NULL);
+    if (m_account.isNull() || m_textChannel.isNull() ) {
+        return false;
+    }
 
-        return m_logManager->exists(m_account, contactEntity, Tpl::EventTypeMaskText);
+    Tpl::EntityPtr contactEntity;
+    if (m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
+        contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
+                                            Tpl::EntityTypeContact, NULL, NULL);
+    } else if (m_textChannel->targetHandleType() == Tp::HandleTypeRoom) {
+        contactEntity = Tpl::Entity::create(m_textChannel->targetId().toLatin1().data(),
+                                            Tpl::EntityTypeRoom, NULL, NULL);
     } else {
         return false;
     }
+
+    return m_logManager->exists(m_account, contactEntity, Tpl::EventTypeMaskText);
 }
 
 void LogManager::setTextChannel(const Tp::AccountPtr &account, const Tp::TextChannelPtr &textChannel)
@@ -93,20 +99,24 @@ void LogManager::fetchScrollback()
 
 void LogManager::fetchHistory(int n)
 {
-    // Skip if no messages are requested
-    if (n > 0 && !m_account.isNull() && !m_textChannel.isNull()
-        && m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
-        Tpl::EntityPtr contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
-                                                Tpl::EntityTypeContact,
-                                                NULL,
-                                                NULL);
+    if (n > 0 && !m_account.isNull() && !m_textChannel.isNull()) {
+        Tpl::EntityPtr contactEntity;
+        if (m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
+            contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
+                                                Tpl::EntityTypeContact, NULL, NULL);
+        } else if (m_textChannel->targetHandleType() == Tp::HandleTypeRoom) {
+            contactEntity = Tpl::Entity::create(m_textChannel->targetId().toLatin1().data(),
+                                                Tpl::EntityTypeRoom, NULL, NULL);
+        }
 
-        Tpl::LogWalkerPtr walker = m_logManager->queryWalkFilteredEvents(
-            m_account, contactEntity, Tpl::EventTypeMaskText, 0, 0);
-        Tpl::PendingEvents *events = walker->queryEvents(n);
-        connect(events, SIGNAL(finished(Tpl::PendingOperation*)),
-                this, SLOT(onEventsFinished(Tpl::PendingOperation*)));
-        return;
+        if (!contactEntity.isNull()) {
+            Tpl::LogWalkerPtr walker = m_logManager->queryWalkFilteredEvents(
+                m_account, contactEntity, Tpl::EventTypeMaskText, 0, 0);
+            Tpl::PendingEvents *events = walker->queryEvents(n);
+            connect(events, SIGNAL(finished(Tpl::PendingOperation*)),
+                    this, SLOT(onEventsFinished(Tpl::PendingOperation*)));
+            return;
+        }
     }
 
     //in all other cases finish immediately.
