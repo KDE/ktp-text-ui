@@ -59,8 +59,12 @@ void TTSFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &
         return;
     }
 
-    //FIXME with real name.
-    d->kspeech->say(i18n("New message. %1", message.mainMessagePart()), KSpeech::soHtml);
+    if (message.type() == Tp::ChannelTextMessageTypeNormal) {
+        d->kspeech->say(i18nc("Text to Speech - text message %1 is name, %2 is message", "%1 says %2", message.mainMessagePart(), message.senderAlias()), KSpeech::soHtml);
+    }
+    else if (message.type() == Tp::ChannelTextMessageTypeAction) {
+        d->kspeech->say(i18nc("Text to Speech - text message %1 is name, %2 is message", "%1 %2", message.mainMessagePart(), message.senderAlias()), KSpeech::soHtml);
+    }
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<TTSFilter>();)
