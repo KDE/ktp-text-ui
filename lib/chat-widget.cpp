@@ -51,9 +51,6 @@
 #include <TelepathyQt/Presence>
 #include <TelepathyQt/PendingChannelRequest>
 #include <TelepathyQt/OutgoingFileTransferChannel>
-#include <TelepathyLoggerQt4/TextEvent>
-#include <TelepathyLoggerQt4/LogWalker>
-#include <TelepathyLoggerQt4/PendingEvents>
 
 #include <KTp/presence.h>
 #include <KTp/actions.h>

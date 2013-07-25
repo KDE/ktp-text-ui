@@ -38,14 +38,28 @@
 #include <TelepathyQt/TextChannel>
 #include <TelepathyQt/ReceivedMessage>
 
+class LogManager::Private
+{
+  public:
+    Private(): scrollbackLength(10)
+    {
+    }
+
+    Tp::AccountPtr account;
+    Tp::TextChannelPtr textChannel;
+    Tpl::EntityPtr contactEntity;
+    Tpl::LogManagerPtr logManager;
+    int scrollbackLength;
+};
+
 LogManager::LogManager(QObject *parent)
     : QObject(parent),
-    m_scrolbackLength(10)
+    d(new Private)
 {
     Tpl::init();
 
-    m_logManager = Tpl::LogManager::instance();
-    if (m_logManager.isNull()) {
+    d->logManager = Tpl::LogManager::instance();
+    if (d->logManager.isNull()) {
         qWarning() << "LogManager not found";
         Q_ASSERT(false);
     }
@@ -53,65 +67,65 @@ LogManager::LogManager(QObject *parent)
 
 LogManager::~LogManager()
 {
-
+    delete d;
 }
 
 bool LogManager::exists() const
 {
-    if (m_account.isNull() || m_textChannel.isNull() ) {
+    if (d->account.isNull() || d->textChannel.isNull() ) {
         return false;
     }
 
     Tpl::EntityPtr contactEntity;
-    if (m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
-        contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
+    if (d->textChannel->targetHandleType() == Tp::HandleTypeContact) {
+        contactEntity = Tpl::Entity::create(d->textChannel->targetContact()->id().toLatin1().data(),
                                             Tpl::EntityTypeContact, NULL, NULL);
-    } else if (m_textChannel->targetHandleType() == Tp::HandleTypeRoom) {
-        contactEntity = Tpl::Entity::create(m_textChannel->targetId().toLatin1().data(),
+    } else if (d->textChannel->targetHandleType() == Tp::HandleTypeRoom) {
+        contactEntity = Tpl::Entity::create(d->textChannel->targetId().toLatin1().data(),
                                             Tpl::EntityTypeRoom, NULL, NULL);
     } else {
         return false;
     }
 
-    return m_logManager->exists(m_account, contactEntity, Tpl::EventTypeMaskText);
+    return d->logManager->exists(d->account, contactEntity, Tpl::EventTypeMaskText);
 }
 
 void LogManager::setTextChannel(const Tp::AccountPtr &account, const Tp::TextChannelPtr &textChannel)
 {
-    m_textChannel = textChannel;
-    m_account = account;
+    d->textChannel = textChannel;
+    d->account = account;
 }
 
 void LogManager::setScrollbackLength(int n)
 {
-    m_scrolbackLength = n;
+    d->scrollbackLength = n;
 }
 
 int LogManager::scrollbackLength() const
 {
-    return m_scrolbackLength;
+    return d->scrollbackLength;
 }
 
 void LogManager::fetchScrollback()
 {
-    fetchHistory(m_scrolbackLength);
+    fetchHistory(d->scrollbackLength);
 }
 
 void LogManager::fetchHistory(int n)
 {
-    if (n > 0 && !m_account.isNull() && !m_textChannel.isNull()) {
+    if (n > 0 && !d->account.isNull() && !d->textChannel.isNull()) {
         Tpl::EntityPtr contactEntity;
-        if (m_textChannel->targetHandleType() == Tp::HandleTypeContact) {
-            contactEntity = Tpl::Entity::create(m_textChannel->targetContact()->id().toLatin1().data(),
+        if (d->textChannel->targetHandleType() == Tp::HandleTypeContact) {
+            contactEntity = Tpl::Entity::create(d->textChannel->targetContact()->id().toLatin1().data(),
                                                 Tpl::EntityTypeContact, NULL, NULL);
-        } else if (m_textChannel->targetHandleType() == Tp::HandleTypeRoom) {
-            contactEntity = Tpl::Entity::create(m_textChannel->targetId().toLatin1().data(),
+        } else if (d->textChannel->targetHandleType() == Tp::HandleTypeRoom) {
+            contactEntity = Tpl::Entity::create(d->textChannel->targetId().toLatin1().data(),
                                                 Tpl::EntityTypeRoom, NULL, NULL);
         }
 
         if (!contactEntity.isNull()) {
-            Tpl::LogWalkerPtr walker = m_logManager->queryWalkFilteredEvents(
-                m_account, contactEntity, Tpl::EventTypeMaskText, 0, 0);
+            Tpl::LogWalkerPtr walker = d->logManager->queryWalkFilteredEvents(
+                d->account, contactEntity, Tpl::EventTypeMaskText, 0, 0);
             Tpl::PendingEvents *events = walker->queryEvents(n);
             connect(events, SIGNAL(finished(Tpl::PendingOperation*)),
                     this, SLOT(onEventsFinished(Tpl::PendingOperation*)));
@@ -139,15 +153,15 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
     }
 
     QStringList queuedMessageTokens;
-    if (!m_textChannel.isNull()) {
-        Q_FOREACH(const Tp::ReceivedMessage &message, m_textChannel->messageQueue()) {
+    if (!d->textChannel.isNull()) {
+        Q_FOREACH(const Tp::ReceivedMessage &message, d->textChannel->messageQueue()) {
             queuedMessageTokens.append(message.messageToken());
         }
     }
     kDebug() << "queuedMessageTokens" << queuedMessageTokens;
 
 
-    // get last n (m_fetchLast) messages that are not queued
+    // get last n (d->fetchLast) messages that are not queued
     QList<Tpl::EventPtr> allEvents = pe->events();
 
     // See https://bugs.kde.org/show_bug.cgi?id=317866
@@ -159,7 +173,7 @@ void LogManager::onEventsFinished(Tpl::PendingOperation *po)
         const Tpl::TextEventPtr textEvent = event.dynamicCast<Tpl::TextEvent>();
         if (!textEvent.isNull()) {
             if (!queuedMessageTokens.contains(textEvent->messageToken())) {
-                const KTp::Message message = KTp::MessageProcessor::instance()->processIncomingMessage(textEvent, m_account, m_textChannel);
+                const KTp::Message message = KTp::MessageProcessor::instance()->processIncomingMessage(textEvent, d->account, d->textChannel);
                 messages.append(message);
             }
         }

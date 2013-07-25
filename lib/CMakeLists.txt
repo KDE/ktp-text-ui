@@ -13,7 +13,6 @@ set(ktpchat_SRCS
         chat-style-plist-file-reader.cpp
         chat-text-edit.cpp
         chat-search-bar.cpp
-        logmanager.cpp
         notify-filter.cpp
         text-chat-config.cpp
 )
@@ -47,6 +46,18 @@ set(ktpchat_PRETTY_HDRS
 set(ktpchat_UI
     chat-widget.ui
 )
+
+if (TELEPATHY_LOGGER_QT4_FOUND)
+    set(ktpchat_SRCS
+        ${ktpchat_SRCS}
+        logmanager.cpp
+        )
+else (TELEPATHY_LOGGER_QT4_FOUND)
+    set(ktpchat_SRCS
+        ${ktpchat_SRCS}
+        logmanager_dummy.cpp
+        )
+endif (TELEPATHY_LOGGER_QT4_FOUND)
 
 kde4_add_ui_files(ktpchat_SRCS ${ktpchat_UI})
 
