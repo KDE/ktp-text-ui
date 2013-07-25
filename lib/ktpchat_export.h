@@ -24,7 +24,7 @@
 #include <kdemacros.h>
 
 #ifndef KDE_TELEPATHY_CHAT_EXPORT
-# if defined(MAKE_KTELEPATHY_CHAT_LIB_LIB)
+# if defined(MAKE_KTPCHAT_LIB)
    /* We are building this library */
 #  define KDE_TELEPATHY_CHAT_EXPORT KDE_EXPORT
 # else
