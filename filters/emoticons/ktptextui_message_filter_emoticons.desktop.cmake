@@ -37,6 +37,7 @@ Name[sr@ijekavianlatin]=Emotikoni
 Name[sr@latin]=Emotikoni
 Name[sv]=Smilisar
 Name[tr]=İfadeler
+Name[ug]=چىراي ئىپادىلىرى
 Name[uk]=Емоційки
 Name[wa]=Xhinêyes
 Name[x-test]=xxEmoticonsxx

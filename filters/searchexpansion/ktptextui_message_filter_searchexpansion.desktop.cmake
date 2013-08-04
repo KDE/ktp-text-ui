@@ -37,6 +37,7 @@ Name[sr@ijekavianlatin]=Veb prečice
 Name[sr@latin]=Veb prečice
 Name[sv]=Webbgenvägar
 Name[tr]=Web Kısa Yolları
+Name[ug]=تور تېزلەتمىسى
 Name[uk]=Вебскорочення
 Name[wa]=Rascourtis waibe
 Name[x-test]=xxWeb Shortcutsxx
