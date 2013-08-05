@@ -66,6 +66,7 @@ Comment[es]=Esta opción resaltará en rojo cualquier mensaje entrante que conte
 Comment[fi]=Jos saapuvassa viestissä on nimimerkkisi, viesti korostetaan punaisella
 Comment[fr]=Si un quelconque message entrant contient votre pseudonyme, il le surlignera en rouge
 Comment[gl]=Se algunha mensaxe entrante contén o seu alcume hanse realzar en vermello
+Comment[hu]=Ha egy bejövő üzenet tartalmazza a becenevét, akkor az ki lesz emelve pirossal
 Comment[ia]=Si qualcunque messages in arrivata contine tu pseudonymo, illo essera evidentiate in rubie
 Comment[it]=Se in un messaggio ricevuto c'è scritto il tuo nick, sarà evidenziato in rosso
 Comment[kk]=Егер кіріс хабарларында бүркеншік атыңыз пайда болғанда оны бояп белгілейді
