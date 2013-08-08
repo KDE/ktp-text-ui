@@ -22,12 +22,12 @@
 
 #include <KDatePicker>
 
-#include <TelepathyLoggerQt4/Entity>
-#include <TelepathyLoggerQt4/SearchHit>
+#include <KTp/Logger/log-entity.h>
+
 #include <TelepathyQt/Types>
 
-namespace Tpl{
-    class PendingOperation;
+namespace KTp {
+class PendingLoggerOperation;
 }
 
 class ConversationDatePicker : public KDatePicker
@@ -36,26 +36,26 @@ class ConversationDatePicker : public KDatePicker
 public:
     explicit ConversationDatePicker(QWidget *parent = 0);
 
-    void setEntity(const Tp::AccountPtr &accout, const Tpl::EntityPtr &entity);
+    void setEntity(const Tp::AccountPtr &accout, const KTp::LogEntity &entity);
     void clear();
 
-    void setSearchHits(const Tpl::SearchHitList &searchHits);
-    void clearSearchHits();
+    //void setSearchHits(const Tpl::SearchHitList &searchHits);
+    //void clearSearchHits();
 
     QDate previousDate() const;
     QDate nextDate() const;
     const QList<QDate>& validDates() const;
 
 private Q_SLOTS:
-    void onDatesFinished(Tpl::PendingOperation*);
+    void onDatesFinished(KTp::PendingLoggerOperation *op);
 
 private:
     void updatePaintedDates();
     void setDatesFromSearchHits();
 
     Tp::AccountPtr m_account;
-    Tpl::EntityPtr m_entity;
-    Tpl::SearchHitList m_searchHits;
+    KTp::LogEntity m_entity;
+    //Tpl::SearchHitList m_searchHits;
 
     QList< QDate > m_setDates;
 };

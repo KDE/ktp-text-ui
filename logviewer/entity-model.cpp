@@ -21,10 +21,9 @@
 #include "entity-model.h"
 #include "entity-model-item.h"
 
-#include <TelepathyLoggerQt4/LogManager>
-#include <TelepathyLoggerQt4/PendingEntities>
-#include <TelepathyLoggerQt4/PendingOperation>
-#include <TelepathyLoggerQt4/Entity>
+#include <KTp/Logger/log-manager.h>
+#include <KTp/Logger/log-entity.h>
+#include <KTp/Logger/pending-logger-entities.h>
 
 #include <TelepathyQt/AccountManager>
 #include <TelepathyQt/Account>
@@ -35,6 +34,8 @@
 #include <KTp/contact.h>
 
 #include <QPixmap>
+
+Q_DECLARE_METATYPE(KTp::LogEntity)
 
 EntityModel::EntityModel(QObject *parent) :
     QAbstractItemModel(parent)
@@ -49,11 +50,11 @@ EntityModel::~EntityModel()
 
 void EntityModel::setAccountManager(const Tp::AccountManagerPtr &accountManager)
 {
-    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
+    KTp::LogManager *logManager = KTp::LogManager::instance();
     Q_FOREACH(const Tp::AccountPtr &account, accountManager->allAccounts()) {
         connect(logManager->queryEntities(account),
-                SIGNAL(finished(Tpl::PendingOperation*)),
-                SLOT(onEntitiesSearchFinished(Tpl::PendingOperation*)));
+                SIGNAL(finished(KTp::PendingLoggerOperation*)),
+                SLOT(onEntitiesSearchFinished(KTp::PendingLoggerOperation*)));
     }
 }
 
@@ -158,13 +159,12 @@ bool EntityModel::removeRows(int start, int count, const QModelIndex &parent)
     return true;
 }
 
-void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
+void EntityModel::onEntitiesSearchFinished(KTp::PendingLoggerOperation *operation)
 {
-    Tpl::PendingEntities *pendingEntities = qobject_cast<Tpl::PendingEntities*>(operation);
+    KTp::PendingLoggerEntities *pendingEntities = qobject_cast<KTp::PendingLoggerEntities*>(operation);
+    QList<KTp::LogEntity> newEntries = pendingEntities->entities();
 
-    Tpl::EntityPtrList newEntries = pendingEntities->entities();
-
-    Q_FOREACH(const Tpl::EntityPtr &entity, newEntries) {
+    Q_FOREACH(const KTp::LogEntity &entity, newEntries) {
         EntityModelItem *parent = m_rootItem->item(pendingEntities->account());
         if (!parent) {
             beginInsertRows(QModelIndex(), m_rootItem->itemCount(), m_rootItem->itemCount());
@@ -184,7 +184,7 @@ void EntityModel::onEntitiesSearchFinished(Tpl::PendingOperation *operation)
         if (pendingEntities->account()->connection()) {
             Tp::PendingOperation *op =
                 pendingEntities->account()->connection()->contactManager()->contactsForIdentifiers(
-                                        QStringList() << entity->identifier());
+                                        QStringList() << entity.id());
             connect(op, SIGNAL(finished(Tp::PendingOperation*)),
                     this, SLOT(onEntityContactRetrieved(Tp::PendingOperation*)));
         }

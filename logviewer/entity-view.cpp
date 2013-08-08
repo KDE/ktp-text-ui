@@ -21,10 +21,13 @@
 
 #include <KCmdLineArgs>
 
+#include <KTp/Logger/log-entity.h>
+
 #include <TelepathyQt/Account>
-#include <TelepathyLoggerQt4/Entity>
 
 #include "entity-model.h"
+
+Q_DECLARE_METATYPE(KTp::LogEntity)
 
 EntityView::EntityView(QWidget *parent) :
     QTreeView(parent)
@@ -48,13 +51,13 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
         for (int i = start; i <= end; i++) {
             QModelIndex index = model()->index(i, 0, parent);
             Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-            Tpl::EntityPtr contact = index.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
+            KTp::LogEntity entity = index.data(EntityModel::EntityRole).value<KTp::LogEntity>();
 
-            if (account.isNull() || contact.isNull()) {
+            if (account.isNull() || !entity.isValid()) {
                 continue;
             }
 
-            if (selectAccountId == account->uniqueIdentifier() && selectContactId == contact->identifier()) {
+            if (selectAccountId == account->uniqueIdentifier() && selectContactId == entity.id()) {
                 setCurrentIndex(index);
                 loadedCurrentContact = true;
                 break;

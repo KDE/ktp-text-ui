@@ -22,7 +22,8 @@
 #include "entity-model.h"
 
 #include <TelepathyQt/Types>
-#include <TelepathyLoggerQt4/SearchHit>
+
+Q_DECLARE_METATYPE(KTp::LogEntity)
 
 EntityProxyModel::EntityProxyModel(QObject *parent):
     QSortFilterProxyModel(parent)
@@ -42,16 +43,17 @@ bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
 
     QModelIndex index = source_parent.child(source_row, 0);
     Tp::AccountPtr account = source_parent.data(EntityModel::AccountRole).value< Tp::AccountPtr >();
-    Tpl::EntityPtr entity = index.data(EntityModel::EntityRole).value< Tpl::EntityPtr >();
+    KTp::LogEntity entity = index.data(EntityModel::EntityRole).value< KTp::LogEntity >();
 
     bool matches_filter = false;
 
+    /*
     if (!m_searchHits.isEmpty() && !account.isNull() && !entity.isNull()) {
         Q_FOREACH(const Tpl::SearchHit &searchHit, m_searchHits) {
             Tp::AccountPtr searchHitAccount = searchHit.account();
             Tpl::EntityPtr searchHitTarget = searchHit.target();
 
-            /* Don't display search hits with empty account or target */
+            // Don't display search hits with empty account or target
             if (searchHitAccount.isNull() || searchHitTarget.isNull()) {
                 continue;
             }
@@ -64,6 +66,7 @@ bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
     } else {
         matches_filter = true;
     }
+    */
 
     QString term = filterRegExp().pattern();
     if (term.isEmpty()) {
@@ -73,7 +76,7 @@ bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
     KTp::ContactPtr contact = index.data(EntityModel::ContactRole).value< KTp::ContactPtr >();
 
     /* Check if contact's account name matches */
-    if (entity->alias().contains(term, Qt::CaseInsensitive) && matches_filter) {
+    if (entity.alias().contains(term, Qt::CaseInsensitive) && matches_filter) {
         return true;
     }
 
@@ -87,6 +90,7 @@ bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
     return false;
 }
 
+/*
 void EntityProxyModel::setSearchHits(const Tpl::SearchHitList &searchHits)
 {
     m_searchHits = searchHits;
@@ -101,3 +105,4 @@ void EntityProxyModel::clearSearchHits()
 
     invalidate();
 }
+*/

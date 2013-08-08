@@ -21,14 +21,10 @@
 #define LOGVIEWER_H
 
 #include <KXmlGuiWindow>
-#include <TelepathyLoggerQt4/Types>
+#include <TelepathyQt/Types>
 
 namespace Ui {
     class LogViewer;
-}
-
-namespace Tpl {
-    class PendingOperation;
 }
 
 class EntityModel;
@@ -56,11 +52,11 @@ private Q_SLOTS:
     void slotShowEntityListContextMenu(const QPoint &coords);
     void slotClearGlobalSearch();
     void slotStartGlobalSearch(const QString &term);
-    void onGlobalSearchFinished(Tpl::PendingOperation *);
+    //void onGlobalSearchFinished(Tpl::PendingOperation *);
 
     void slotClearAccountHistory();
     void slotClearContactHistory();
-    void onLogClearingFinished(Tpl::PendingOperation *);
+    //void onLogClearingFinished(Tpl::PendingOperation *);
 
     void slotImportKopeteLogs(bool force = true);
 

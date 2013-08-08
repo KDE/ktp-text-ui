@@ -24,9 +24,9 @@
 
 #include <QDate>
 
-#include <TelepathyLoggerQt4/Event>
-#include <TelepathyLoggerQt4/Entity>
-#include <TelepathyLoggerQt4/PendingOperation>
+#include <KTp/Logger/log-entity.h>
+#include <KTp/Logger/log-message.h>
+#include <KTp/Logger/pending-logger-operation.h>
 
 class QLabel;
 
@@ -36,7 +36,7 @@ class MessageView : public AdiumThemeView
 public:
     explicit MessageView(QWidget *parent = 0);
 
-    void loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
+    void loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &entity,
                  const Tp::ContactPtr &contact, const QDate &date,
                  const QPair< QDate, QDate > &nearestDates);
 
@@ -49,7 +49,7 @@ public Q_SLOTS:
     void onLinkClicked(const QUrl &link);
 
 private Q_SLOTS:
-    void onEventsLoaded(Tpl::PendingOperation* po);
+    void onEventsLoaded(KTp::PendingLoggerOperation* po);
     void doHighlightText();
     void processStoredEvents();
 
@@ -60,7 +60,7 @@ protected:
     virtual void resizeEvent(QResizeEvent *e);
 
 private:
-    Tpl::EntityPtr m_entity;
+    KTp::LogEntity m_entity;
     Tp::AccountPtr m_account;
     Tp::ContactPtr m_contact;
     QDate m_date;
@@ -69,7 +69,7 @@ private:
 
     QString m_highlightedText;
 
-    Tpl::EventPtrList m_events;
+    QList<KTp::LogMessage> m_events;
 
     QString m_accountAvatar;
 
