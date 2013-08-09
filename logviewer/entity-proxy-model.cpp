@@ -65,6 +65,7 @@ bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
         matches_filter = true;
     }
     */
+    matches_filter = true;
 
     QString term = filterRegExp().pattern();
     if (term.isEmpty()) {

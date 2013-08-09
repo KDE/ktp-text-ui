@@ -160,7 +160,7 @@ bool EntityModel::removeRows(int start, int count, const QModelIndex &parent)
 void EntityModel::onEntitiesSearchFinished(KTp::PendingLoggerOperation *operation)
 {
     KTp::PendingLoggerEntities *pendingEntities = qobject_cast<KTp::PendingLoggerEntities*>(operation);
-    QList<KTp::LogEntity> newEntries = pendingEntities->entities();
+    const QList<KTp::LogEntity> newEntries = pendingEntities->entities();
 
     Q_FOREACH(const KTp::LogEntity &entity, newEntries) {
         EntityModelItem *parent = m_rootItem->item(pendingEntities->account());
