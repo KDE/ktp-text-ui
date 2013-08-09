@@ -24,8 +24,6 @@
 
 #include <QDebug>
 
-Q_DECLARE_METATYPE(KTp::LogEntity)
-
 EntityModelItem::EntityModelItem(EntityModelItem *parent):
     m_parent(parent)
 {

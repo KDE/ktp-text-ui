@@ -23,8 +23,6 @@
 
 #include <TelepathyQt/Types>
 
-Q_DECLARE_METATYPE(KTp::LogEntity)
-
 EntityProxyModel::EntityProxyModel(QObject *parent):
     QSortFilterProxyModel(parent)
 {

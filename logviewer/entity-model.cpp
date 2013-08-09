@@ -35,8 +35,6 @@
 
 #include <QPixmap>
 
-Q_DECLARE_METATYPE(KTp::LogEntity)
-
 EntityModel::EntityModel(QObject *parent) :
     QAbstractItemModel(parent)
 {

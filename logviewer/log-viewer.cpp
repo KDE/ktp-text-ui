@@ -50,7 +50,6 @@
 #include "logs-import-dialog.h"
 
 Q_DECLARE_METATYPE(QModelIndex)
-Q_DECLARE_METATYPE(KTp::LogEntity)
 
 LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::ConnectionFactoryPtr &connectionFactory,
                      const Tp::ChannelFactoryPtr &channelFactory, const Tp::ContactFactoryPtr &contactFactory,

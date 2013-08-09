@@ -27,8 +27,6 @@
 
 #include "entity-model.h"
 
-Q_DECLARE_METATYPE(KTp::LogEntity)
-
 EntityView::EntityView(QWidget *parent) :
     QTreeView(parent)
 {
