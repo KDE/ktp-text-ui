@@ -19,10 +19,7 @@
 
 #include "conversation-date-picker.h"
 
-//#include <TelepathyLoggerQt4/SearchHit>
-
 #include <KTp/Logger/log-manager.h>
-#include <KTp/Logger/log-entity.h>
 #include <KTp/Logger/pending-logger-dates.h>
 
 #include <KDateTable>
@@ -40,17 +37,15 @@ void ConversationDatePicker::setEntity(const Tp::AccountPtr &account, const KTp:
     m_account = account;
     m_entity = entity;
 
-    /*
     if (!m_searchHits.isEmpty()) {
         setDatesFromSearchHits();
         updatePaintedDates();
         Q_EMIT dateChanged(date());
     } else {
-    */
         KTp::LogManager *logManager = KTp::LogManager::instance();
         KTp::PendingLoggerDates* pendingDates = logManager->queryDates(account, entity);
         connect(pendingDates, SIGNAL(finished(KTp::PendingLoggerOperation*)), SLOT(onDatesFinished(KTp::PendingLoggerOperation*)));
-    //}
+    }
 }
 
 void ConversationDatePicker::clear()
@@ -64,8 +59,7 @@ void ConversationDatePicker::clear()
     }
 }
 
-/*
-void ConversationDatePicker::setSearchHits(const Tpl::SearchHitList &searchHits)
+void ConversationDatePicker::setSearchHits(const QList<KTp::LogSearchHit> &searchHits)
 {
     m_searchHits = searchHits;
 
@@ -79,7 +73,6 @@ void ConversationDatePicker::clearSearchHits()
     m_searchHits.clear();
     updatePaintedDates();
 }
-*/
 
 QDate ConversationDatePicker::nextDate() const
 {
@@ -128,24 +121,22 @@ void ConversationDatePicker::updatePaintedDates()
 
 void ConversationDatePicker::setDatesFromSearchHits()
 {
-    /*
     m_setDates.clear();
 
-    if (m_account.isNull() || m_entity.isNull()) {
+    if (m_account.isNull() || !m_entity.isValid()) {
         return;
     }
 
-    Q_FOREACH (const Tpl::SearchHit &searchHit, m_searchHits) {
-        if (searchHit.account().isNull() || searchHit.target().isNull()) {
+    Q_FOREACH (const KTp::LogSearchHit &searchHit, m_searchHits) {
+        if (searchHit.account().isNull() || !searchHit.entity().isValid()) {
             continue;
         }
 
         if ((searchHit.account()->uniqueIdentifier() == m_account->uniqueIdentifier()) &&
-            (searchHit.target()->identifier() == m_entity->identifier())) {
+            (searchHit.entity().id() == m_entity.id())) {
                 m_setDates << searchHit.date();
         }
     }
 
     qSort(m_setDates);
-    */
 }

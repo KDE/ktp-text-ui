@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2012 by David Edmundson <kde@davidedmundson.co.uk>      *
+ *   Copyright (C) 2013 by Daniel Vrátil <dvratil@redhat.com>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +24,7 @@
 #include <KDatePicker>
 
 #include <KTp/Logger/log-entity.h>
+#include <KTp/Logger/log-search-hit.h>
 
 #include <TelepathyQt/Types>
 
@@ -39,8 +41,8 @@ public:
     void setEntity(const Tp::AccountPtr &accout, const KTp::LogEntity &entity);
     void clear();
 
-    //void setSearchHits(const Tpl::SearchHitList &searchHits);
-    //void clearSearchHits();
+    void setSearchHits(const QList<KTp::LogSearchHit> &searchHits);
+    void clearSearchHits();
 
     QDate previousDate() const;
     QDate nextDate() const;
@@ -55,7 +57,7 @@ private:
 
     Tp::AccountPtr m_account;
     KTp::LogEntity m_entity;
-    //Tpl::SearchHitList m_searchHits;
+    QList<KTp::LogSearchHit> m_searchHits;
 
     QList< QDate > m_setDates;
 };

@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2012 by David Edmundson <kde@davidedmundson.co.uk>      *
+ *   Copyright (C) 2013 by Daniel Vrátil <dvratil@redhat.com>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +27,7 @@
 
 #include <KTp/Logger/log-manager.h>
 #include <KTp/Logger/log-entity.h>
+#include <KTp/Logger/pending-logger-search.h>
 
 #include <KTp/logs-importer.h>
 #include <KTp/contact.h>
@@ -139,6 +141,7 @@ void LogViewer::setupActions()
 void LogViewer::onAccountManagerReady()
 {
     KTp::LogManager *logManger = KTp::LogManager::instance();
+    logManger->setAccountManager(m_accountManager);
     m_entityModel->setAccountManager(m_accountManager);
 
     /* Try to run log import */
@@ -208,7 +211,6 @@ void LogViewer::slotSetConversationDate(const QDate &date)
 
 void LogViewer::slotStartGlobalSearch(const QString &term)
 {
-    /*
     if (term.isEmpty()) {
         ui->messageView->clearHighlightText();
         m_filterModel->clearSearchHits();
@@ -222,35 +224,30 @@ void LogViewer::slotStartGlobalSearch(const QString &term)
 
     ui->messageView->setHighlightText(term);
 
-    Tpl::LogManagerPtr manager = Tpl::LogManager::instance();
-    Tpl::PendingSearch *search = manager->search(term, Tpl::EventTypeMaskAny);
-    connect (search, SIGNAL(finished(Tpl::PendingOperation*)),
-             this, SLOT(onGlobalSearchFinished(Tpl::PendingOperation*)));
-    */
+    KTp::LogManager *manager = KTp::LogManager::instance();
+    KTp::PendingLoggerSearch *search = manager->search(term);
+    connect(search, SIGNAL(finished(KTp::PendingLoggerOperation*)),
+            this, SLOT(onGlobalSearchFinished(KTp::PendingLoggerOperation*)));
 }
 
-/*
-void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
+void LogViewer::onGlobalSearchFinished(KTp::PendingLoggerOperation *operation)
 {
-    Tpl::PendingSearch *search = qobject_cast< Tpl::PendingSearch* >(operation);
+    KTp::PendingLoggerSearch *search = qobject_cast<KTp::PendingLoggerSearch*>(operation);
     Q_ASSERT(search);
 
-    m_filterModel->setSearchHits(search->hits());
-    ui->datePicker->setSearchHits(search->hits());
+    m_filterModel->setSearchHits(search->searchHits());
+    ui->datePicker->setSearchHits(search->searchHits());
 
     ui->globalSearch->setEnabled(true);
     ui->busyAnimation->setSequence(KPixmapSequence());
     ui->busyAnimation->setVisible(false);
 }
-*/
 
 void LogViewer::slotClearGlobalSearch()
 {
-    /*
     m_filterModel->clearSearchHits();
     ui->datePicker->clearSearchHits();
     ui->messageView->clearHighlightText();
-    */
 }
 
 void LogViewer::slotShowEntityListContextMenu (const QPoint &coords)
@@ -272,7 +269,7 @@ void LogViewer::slotClearAccountHistory()
 {
     QModelIndex index = ui->entityList->currentIndex();
 
-    /* Usually and account node is selected, so traverse up to it's parent
+    /* Usually a contact node is selected, so traverse up to it's parent
      * account node */
     if (index.parent().isValid()) {
         index = index.parent();
@@ -294,11 +291,17 @@ void LogViewer::slotClearAccountHistory()
         return;
     }
 
-    /*
-    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-    Tpl::PendingOperation *operation = logManager->clearAccountHistory(account);
-    connect(operation, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onLogClearingFinished(Tpl::PendingOperation*)));
-    */
+    KTp::LogManager::instance()->clearAccountLogs(account);
+
+    QModelIndex parent = index.parent();
+    m_entityModel->removeRow(index.row(), parent);
+
+    // If last entity was removed then remove the account node as well
+    if (parent.isValid() && !m_entityModel->hasChildren(parent)) {
+        m_entityModel->removeRow(parent.row(), parent.parent());
+    }
+
+    m_entityListContextMenu->setProperty("index", QVariant());
 }
 
 void LogViewer::slotClearContactHistory()
@@ -322,28 +325,7 @@ void LogViewer::slotClearContactHistory()
         return;
     }
 
-    /*
-    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-    Tpl::PendingOperation *operation = logManager->clearEntityHistory(account, entity);
-    connect(operation, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onLogClearingFinished(Tpl::PendingOperation*)));
-    */
-}
-
-/*
-void LogViewer::onLogClearingFinished(Tpl::PendingOperation *operation)
-{
-    if (!operation->errorName().isEmpty() || !operation->errorMessage().isEmpty()) {
-        // Make sure we display at least some message
-        QString msg = (operation->errorMessage().isEmpty()) ? operation->errorName() : operation->errorMessage();
-        KMessageBox::sorry(this, msg, operation->errorName(), 0);
-        return;
-    }
-
-    QModelIndex index = m_entityListContextMenu->property("index").value<QModelIndex>();
-    if (!index.isValid()) {
-        m_entityListContextMenu->setProperty("index", QVariant());
-        return;
-    }
+    KTp::LogManager::instance()->clearContactLogs(account, entity);
 
     QModelIndex parent = index.parent();
     m_entityModel->removeRow(index.row(), parent);
@@ -355,7 +337,6 @@ void LogViewer::onLogClearingFinished(Tpl::PendingOperation *operation)
 
     m_entityListContextMenu->setProperty("index", QVariant());
 }
-*/
 
 void LogViewer::slotImportKopeteLogs(bool force)
 {

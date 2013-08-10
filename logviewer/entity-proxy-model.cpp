@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Dan Vratil <dan@progdan.cz>                     *
+ *   Copyright (C) 2013 by Dan Vratil <dan@progdan.cz>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,27 +45,24 @@ bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
 
     bool matches_filter = false;
 
-    /*
-    if (!m_searchHits.isEmpty() && !account.isNull() && !entity.isNull()) {
-        Q_FOREACH(const Tpl::SearchHit &searchHit, m_searchHits) {
+    if (!m_searchHits.isEmpty() && !account.isNull() && entity.isValid()) {
+        Q_FOREACH(const KTp::LogSearchHit &searchHit, m_searchHits) {
             Tp::AccountPtr searchHitAccount = searchHit.account();
-            Tpl::EntityPtr searchHitTarget = searchHit.target();
+            KTp::LogEntity searchHitTarget = searchHit.entity();
 
             // Don't display search hits with empty account or target
-            if (searchHitAccount.isNull() || searchHitTarget.isNull()) {
+            if (searchHitAccount.isNull() || !searchHitTarget.isValid()) {
                 continue;
             }
 
             if ((searchHitAccount->uniqueIdentifier() == account->uniqueIdentifier()) &&
-                (searchHitTarget->identifier() == entity->identifier())) {
+                (searchHitTarget.id() == entity.id())) {
                 matches_filter = true;
             }
         }
     } else {
         matches_filter = true;
     }
-    */
-    matches_filter = true;
 
     QString term = filterRegExp().pattern();
     if (term.isEmpty()) {
@@ -89,8 +86,7 @@ bool EntityProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
     return false;
 }
 
-/*
-void EntityProxyModel::setSearchHits(const Tpl::SearchHitList &searchHits)
+void EntityProxyModel::setSearchHits(const QList<KTp::LogSearchHit> &searchHits)
 {
     m_searchHits = searchHits;
 
@@ -104,4 +100,3 @@ void EntityProxyModel::clearSearchHits()
 
     invalidate();
 }
-*/
