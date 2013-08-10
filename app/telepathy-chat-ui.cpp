@@ -45,6 +45,8 @@ TelepathyChatUi::TelepathyChatUi(const Tp::AccountManagerPtr &accountManager)
       m_accountManager(accountManager)
 {
     kDebug();
+    ChatWindow *window = createWindow();
+    window->show();
 }
 
 void TelepathyChatUi::removeWindow(ChatWindow *window)
