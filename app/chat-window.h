@@ -96,7 +96,6 @@ private Q_SLOTS:
     void onTabTextChanged(const QString &newTitle);
     void onTabIconChanged(const KIcon &newIcon);
     void onVideoCallTriggered();                                /** start a video call */
-    void onUserTypingChanged(Tp::ChannelChatState state);
     void onUnblockContactTriggered();                           /** Unblocks contact when already blocked */
     void onShareDesktopTriggered();                             /** start a desktop share */
     void onOpenLogTriggered();                                  /** Starts ktp-log-viewer accountId contactId */

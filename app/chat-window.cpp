@@ -320,9 +320,6 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setWindowIcon(currentChatTab->icon());
     }
 
-    //call this to update the "Typing.." in window title
-    onUserTypingChanged(currentChatTab->remoteChatState());
-
     kDebug() << "Current spell dictionary is" << currentChatTab->spellDictionary();
     m_spellDictCombo->setCurrentByDictionary(currentChatTab->spellDictionary());
 
@@ -615,7 +612,6 @@ void ChatWindow::removeChatTabSignals(ChatTab *chatTab)
 {
     disconnect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
     disconnect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
-    disconnect(chatTab, SIGNAL(userTypingChanged(Tp::ChannelChatState)), this, SLOT(onTabStateChanged()));
     disconnect(chatTab, SIGNAL(unreadMessagesChanged()), this, SLOT(onTabStateChanged()));
     disconnect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
     disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
@@ -642,7 +638,6 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
     connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
     connect(chatTab, SIGNAL(userTypingChanged(Tp::ChannelChatState)), this, SLOT(onTabStateChanged()));
-    connect(chatTab, SIGNAL(userTypingChanged(Tp::ChannelChatState)), this, SLOT(onUserTypingChanged(Tp::ChannelChatState)));
     connect(chatTab, SIGNAL(unreadMessagesChanged()), this, SLOT(onTabStateChanged()));
     connect(chatTab, SIGNAL(contactPresenceChanged(KTp::Presence)), this, SLOT(onTabStateChanged()));
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
@@ -844,25 +839,6 @@ void ChatWindow::startShareDesktop(const Tp::AccountPtr& account, const Tp::Cont
 {
     Tp::PendingChannelRequest* channelRequest = KTp::Actions::startDesktopSharing(account, contact);
     connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
-}
-
-void ChatWindow::onUserTypingChanged(Tp::ChannelChatState state)
-{
-    ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
-    Q_ASSERT(currChat);
-    QString title = currChat->title();
-
-    if (TextChatConfig::instance()->showOthersTyping()) {
-        if (state == Tp::ChannelChatStateComposing) {
-            setWindowTitle(i18nc("String prepended in window title, arg is contact's name", "Typing... %1", title));
-        } else if (state == Tp::ChannelChatStatePaused) {
-            setWindowTitle(i18nc("String appended in window title, arg is contact's name", "%1 has entered text", title));
-        } else {
-            setWindowTitle(title);
-        }
-    } else {
-        setWindowTitle(title);
-    }
 }
 
 bool ChatWindow::event(QEvent *e)
