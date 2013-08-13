@@ -15,6 +15,7 @@ set(ktpchat_SRCS
         chat-search-bar.cpp
         notify-filter.cpp
         text-chat-config.cpp
+        logmanager.cpp
 )
 
 set(ktpchat_HDRS
@@ -47,18 +48,6 @@ set(ktpchat_UI
     chat-widget.ui
 )
 
-if (TELEPATHY_LOGGER_QT4_FOUND)
-    set(ktpchat_SRCS
-        ${ktpchat_SRCS}
-        logmanager.cpp
-        )
-else (TELEPATHY_LOGGER_QT4_FOUND)
-    set(ktpchat_SRCS
-        ${ktpchat_SRCS}
-        logmanager_dummy.cpp
-        )
-endif (TELEPATHY_LOGGER_QT4_FOUND)
-
 kde4_add_ui_files(ktpchat_SRCS ${ktpchat_UI})
 
 kde4_add_library(ktpchat SHARED ${ktpchat_SRCS})
@@ -71,7 +60,7 @@ target_link_libraries(ktpchat
     ${KDE4_KDEWEBKIT_LIBRARY}
     ${KDE4_KEMOTICONS_LIBS}
     ${KTP_LIBRARIES}
-    ${TELEPATHY_LOGGER_QT4_LIBRARIES}
+    ${KTP_LOGGER_LIBRARIES}
 )
 install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})
 
