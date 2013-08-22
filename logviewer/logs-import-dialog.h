@@ -39,6 +39,7 @@ class LogsImportDialog : public KDialog
     LogsImportDialog(QObject* parent);
     virtual ~LogsImportDialog();
 
+
     void importLogs(const QList<Tp::AccountPtr> &accounts);
 
   protected Q_SLOTS:
