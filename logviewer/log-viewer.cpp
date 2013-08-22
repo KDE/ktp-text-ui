@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2012 by David Edmundson <kde@davidedmundson.co.uk>      *
- *   Copyright (C) 2013 by Daniel Vrátil <dvratil@redhat.com>              *
+ *   Copyright (C) 2012,2013 by Daniel Vrátil <dvratil@redhat.com>         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

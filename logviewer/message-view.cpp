@@ -148,11 +148,10 @@ void MessageView::processStoredEvents()
 
     // See https://bugs.kde.org/show_bug.cgi?id=317866
     // Uses the operator< overload above
-   // qSort(m_events);
+    qSort(m_events);
 
     while (!m_events.isEmpty()) {
         const KTp::LogMessage msg = m_events.takeFirst();
-        //KTp::Message in = *const_cast<KTp::Message*>(dynamic_cast<const KTp::Message*>(&msg));
         KTp::MessageContext ctx(m_account, Tp::TextChannelPtr());
         KTp::Message message = KTp::MessageProcessor::instance()->processIncomingMessage(msg, ctx);
         addMessage(message);
