@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2011  Dominik Schmidt <kde@dominik-schmidt.de>
+    Copyright (C) 2013  Daniel Vrátil <dvratil@redhat.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -22,16 +23,12 @@
 #include "adium-theme-content-info.h"
 
 #include <KTp/message-processor.h>
+#include <KTp/Logger/log-entity.h>
+#include <KTp/Logger/log-manager.h>
+#include <KTp/Logger/pending-logger-dates.h>
+#include <KTp/Logger/pending-logger-logs.h>
 
 #include <KDebug>
-
-#include <TelepathyLoggerQt4/Init>
-#include <TelepathyLoggerQt4/LogWalker>
-#include <TelepathyLoggerQt4/Entity>
-#include <TelepathyLoggerQt4/PendingEvents>
-#include <TelepathyLoggerQt4/Event>
-#include <TelepathyLoggerQt4/TextEvent>
-#include <TelepathyLoggerQt4/LogManager>
 
 #include <TelepathyQt/Types>
 #include <TelepathyQt/AvatarData>
@@ -47,8 +44,7 @@ class LogManager::Private
 
     Tp::AccountPtr account;
     Tp::TextChannelPtr textChannel;
-    Tpl::EntityPtr contactEntity;
-    Tpl::LogManagerPtr logManager;
+    KTp::LogEntity contactEntity;
     int scrollbackLength;
 };
 
@@ -56,13 +52,6 @@ LogManager::LogManager(QObject *parent)
     : QObject(parent),
     d(new Private)
 {
-    Tpl::init();
-
-    d->logManager = Tpl::LogManager::instance();
-    if (d->logManager.isNull()) {
-        qWarning() << "LogManager not found";
-        Q_ASSERT(false);
-    }
 }
 
 LogManager::~LogManager()
@@ -76,24 +65,27 @@ bool LogManager::exists() const
         return false;
     }
 
-    Tpl::EntityPtr contactEntity;
-    if (d->textChannel->targetHandleType() == Tp::HandleTypeContact) {
-        contactEntity = Tpl::Entity::create(d->textChannel->targetContact()->id().toLatin1().data(),
-                                            Tpl::EntityTypeContact, NULL, NULL);
-    } else if (d->textChannel->targetHandleType() == Tp::HandleTypeRoom) {
-        contactEntity = Tpl::Entity::create(d->textChannel->targetId().toLatin1().data(),
-                                            Tpl::EntityTypeRoom, NULL, NULL);
-    } else {
-        return false;
-    }
-
-    return d->logManager->exists(d->account, contactEntity, Tpl::EventTypeMaskText);
+    return KTp::LogManager::instance()->logsExist(d->account, d->contactEntity);
 }
 
 void LogManager::setTextChannel(const Tp::AccountPtr &account, const Tp::TextChannelPtr &textChannel)
 {
     d->textChannel = textChannel;
     d->account = account;
+
+    if (d->account.isNull() || d->textChannel.isNull()) {
+        return;
+    }
+
+    KTp::LogEntity contactEntity;
+    if (d->textChannel->targetHandleType() == Tp::HandleTypeContact) {
+        d->contactEntity = KTp::LogEntity(d->textChannel->targetHandleType(),
+                                       d->textChannel->targetContact()->id(),
+                                       d->textChannel->targetContact()->alias());
+    } else if (d->textChannel->targetHandleType() == Tp::HandleTypeRoom) {
+        d->contactEntity = KTp::LogEntity(d->textChannel->targetHandleType(),
+                                       d->textChannel->targetId());
+    }
 }
 
 void LogManager::setScrollbackLength(int n)
@@ -114,21 +106,11 @@ void LogManager::fetchScrollback()
 void LogManager::fetchHistory(int n)
 {
     if (n > 0 && !d->account.isNull() && !d->textChannel.isNull()) {
-        Tpl::EntityPtr contactEntity;
-        if (d->textChannel->targetHandleType() == Tp::HandleTypeContact) {
-            contactEntity = Tpl::Entity::create(d->textChannel->targetContact()->id().toLatin1().data(),
-                                                Tpl::EntityTypeContact, NULL, NULL);
-        } else if (d->textChannel->targetHandleType() == Tp::HandleTypeRoom) {
-            contactEntity = Tpl::Entity::create(d->textChannel->targetId().toLatin1().data(),
-                                                Tpl::EntityTypeRoom, NULL, NULL);
-        }
-
-        if (!contactEntity.isNull()) {
-            Tpl::LogWalkerPtr walker = d->logManager->queryWalkFilteredEvents(
-                d->account, contactEntity, Tpl::EventTypeMaskText, 0, 0);
-            Tpl::PendingEvents *events = walker->queryEvents(n);
-            connect(events, SIGNAL(finished(Tpl::PendingOperation*)),
-                    this, SLOT(onEventsFinished(Tpl::PendingOperation*)));
+        if (d->contactEntity.isValid()) {
+            KTp::LogManager *manager = KTp::LogManager::instance();
+            KTp::PendingLoggerDates *dates = manager->queryDates(d->account, d->contactEntity);
+            connect(dates, SIGNAL(finished(KTp::PendingLoggerOperation*)),
+                    this, SLOT(onDatesFinished(KTp::PendingLoggerOperation*)));
             return;
         }
     }
@@ -138,45 +120,44 @@ void LogManager::fetchHistory(int n)
     Q_EMIT fetched(messages);
 }
 
-bool operator<(const Tpl::EventPtr &e1, const Tpl::EventPtr &e2)
+void LogManager::onDatesFinished(KTp::PendingLoggerOperation* po)
 {
-    return e1->timestamp() < e2->timestamp();
-}
-
-void LogManager::onEventsFinished(Tpl::PendingOperation *po)
-{
-    Tpl::PendingEvents *pe = (Tpl::PendingEvents*) po;
-
-    if (pe->isError()) {
-        qWarning() << "error in PendingEvents" << pe->errorMessage();
+    KTp::PendingLoggerDates *datesOp = qobject_cast<KTp::PendingLoggerDates*>(po);
+    if (datesOp->hasError()) {
+        kWarning() << "Failed to fetch dates:" << datesOp->error();
+        Q_EMIT fetched(QList<KTp::Message>());
         return;
     }
 
-    QStringList queuedMessageTokens;
-    if (!d->textChannel.isNull()) {
-        Q_FOREACH(const Tp::ReceivedMessage &message, d->textChannel->messageQueue()) {
-            queuedMessageTokens.append(message.messageToken());
-        }
+    const QList<QDate> dates = datesOp->dates();
+    if (dates.isEmpty()) {
+        Q_EMIT fetched(QList<KTp::Message>());
+        return;
     }
-    kDebug() << "queuedMessageTokens" << queuedMessageTokens;
 
+    KTp::LogManager *manager = KTp::LogManager::instance();
+    KTp::PendingLoggerLogs *logs = manager->queryLogs(datesOp->account(), datesOp->entity(),
+                                                      dates.last());
+    connect(logs, SIGNAL(finished(KTp::PendingLoggerOperation*)),
+            this, SLOT(onEventsFinished(KTp::PendingLoggerOperation*)));
+}
+
+void LogManager::onEventsFinished(KTp::PendingLoggerOperation *op)
+{
+    KTp::PendingLoggerLogs *logsOp = qobject_cast<KTp::PendingLoggerLogs*>(op);
+    if (logsOp->hasError()) {
+        kWarning() << "Failed to fetch events:" << logsOp->error();
+        Q_EMIT fetched(QList<KTp::Message>());
+        return;
+    }
 
     // get last n (d->fetchLast) messages that are not queued
-    QList<Tpl::EventPtr> allEvents = pe->events();
-
-    // See https://bugs.kde.org/show_bug.cgi?id=317866
-    // Uses the operator< overload above
-    qSort(allEvents);
-
+    const QList<KTp::LogMessage> allMessages = logsOp->logs();
     QList<KTp::Message> messages;
-    Q_FOREACH (const Tpl::EventPtr &event, allEvents) {
-        const Tpl::TextEventPtr textEvent = event.dynamicCast<Tpl::TextEvent>();
-        if (!textEvent.isNull()) {
-            if (!queuedMessageTokens.contains(textEvent->messageToken())) {
-                const KTp::Message message = KTp::MessageProcessor::instance()->processIncomingMessage(textEvent, d->account, d->textChannel);
-                messages.append(message);
-            }
-        }
+    const KTp::MessageContext ctx(d->account, d->textChannel);
+    for (int i = 0; i < d->scrollbackLength && i < allMessages.count(); ++i) {
+        const KTp::LogMessage message = allMessages[i];
+        messages << KTp::MessageProcessor::instance()->processIncomingMessage(message, ctx);
     }
 
     kDebug() << "emit all messages" << messages.count();

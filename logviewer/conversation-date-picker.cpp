@@ -19,11 +19,8 @@
 
 #include "conversation-date-picker.h"
 
-#include <TelepathyLoggerQt4/LogManager>
-#include <TelepathyLoggerQt4/PendingDates>
-#include <TelepathyLoggerQt4/PendingOperation>
-#include <TelepathyLoggerQt4/Entity>
-#include <TelepathyLoggerQt4/SearchHit>
+#include <KTp/Logger/log-manager.h>
+#include <KTp/Logger/pending-logger-dates.h>
 
 #include <KDateTable>
 #include <TelepathyQt/Account>
@@ -33,7 +30,7 @@ ConversationDatePicker::ConversationDatePicker(QWidget *parent) :
 {
 }
 
-void ConversationDatePicker::setEntity(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity)
+void ConversationDatePicker::setEntity(const Tp::AccountPtr &account, const KTp::LogEntity &entity)
 {
     clear();
 
@@ -45,9 +42,9 @@ void ConversationDatePicker::setEntity(const Tp::AccountPtr &account, const Tpl:
         updatePaintedDates();
         Q_EMIT dateChanged(date());
     } else {
-        Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-        Tpl::PendingDates *pendingDates = logManager->queryDates(account, entity, Tpl::EventTypeMaskText);
-        connect(pendingDates, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onDatesFinished(Tpl::PendingOperation*)));
+        KTp::LogManager *logManager = KTp::LogManager::instance();
+        KTp::PendingLoggerDates* pendingDates = logManager->queryDates(account, entity);
+        connect(pendingDates, SIGNAL(finished(KTp::PendingLoggerOperation*)), SLOT(onDatesFinished(KTp::PendingLoggerOperation*)));
     }
 }
 
@@ -62,7 +59,7 @@ void ConversationDatePicker::clear()
     }
 }
 
-void ConversationDatePicker::setSearchHits(const Tpl::SearchHitList &searchHits)
+void ConversationDatePicker::setSearchHits(const QList<KTp::LogSearchHit> &searchHits)
 {
     m_searchHits = searchHits;
 
@@ -76,7 +73,6 @@ void ConversationDatePicker::clearSearchHits()
     m_searchHits.clear();
     updatePaintedDates();
 }
-
 
 QDate ConversationDatePicker::nextDate() const
 {
@@ -103,9 +99,9 @@ const QList<QDate>& ConversationDatePicker::validDates() const
     return m_setDates;
 }
 
-void ConversationDatePicker::onDatesFinished(Tpl::PendingOperation *op)
+void ConversationDatePicker::onDatesFinished(KTp::PendingLoggerOperation *op)
 {
-    Tpl::PendingDates *pendingDates = qobject_cast<Tpl::PendingDates*>(op);
+    KTp::PendingLoggerDates *pendingDates = qobject_cast<KTp::PendingLoggerDates*>(op);
     m_setDates = pendingDates->dates();
 
     qSort(m_setDates);
@@ -127,17 +123,17 @@ void ConversationDatePicker::setDatesFromSearchHits()
 {
     m_setDates.clear();
 
-    if (m_account.isNull() || m_entity.isNull()) {
+    if (m_account.isNull() || !m_entity.isValid()) {
         return;
     }
 
-    Q_FOREACH (const Tpl::SearchHit &searchHit, m_searchHits) {
-        if (searchHit.account().isNull() || searchHit.target().isNull()) {
+    Q_FOREACH (const KTp::LogSearchHit &searchHit, m_searchHits) {
+        if (searchHit.account().isNull() || !searchHit.entity().isValid()) {
             continue;
         }
 
         if ((searchHit.account()->uniqueIdentifier() == m_account->uniqueIdentifier()) &&
-            (searchHit.target()->identifier() == m_entity->identifier())) {
+            (searchHit.entity().id() == m_entity.id())) {
                 m_setDates << searchHit.date();
         }
     }

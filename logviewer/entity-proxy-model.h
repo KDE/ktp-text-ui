@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Dan Vratil <dan@progdan.cz>                     *
+ *   Copyright (C) 2012,2013 by Dan Vratil <dan@progdan.cz>                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,9 +22,13 @@
 #define ENTITY_PROXY_MODEL_H
 
 #include <QSortFilterProxyModel>
-#include <TelepathyLoggerQt4/Types>
 
-typedef QPair< Tp::AccountPtr, Tpl::EntityPtr > AccountEntityPair;
+#include <TelepathyQt/Types>
+
+#include <KTp/Logger/log-entity.h>
+#include <KTp/Logger/log-search-hit.h>
+
+typedef QPair< Tp::AccountPtr, KTp::LogEntity > AccountEntityPair;
 
 class EntityProxyModel : public QSortFilterProxyModel
 {
@@ -34,14 +38,14 @@ public:
     explicit EntityProxyModel(QObject *parent = 0);
     virtual ~EntityProxyModel();
 
-    void setSearchHits(const Tpl::SearchHitList &searchHits);
+    void setSearchHits(const QList<KTp::LogSearchHit> &searchHits);
     void clearSearchHits();
 
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
 
 private:
-    Tpl::SearchHitList m_searchHits;
+    QList<KTp::LogSearchHit> m_searchHits;
 
 };
 

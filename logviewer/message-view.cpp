@@ -28,9 +28,9 @@
 #include <QLabel>
 #include <QResizeEvent>
 
-#include <TelepathyLoggerQt4/LogManager>
-#include <TelepathyLoggerQt4/PendingEvents>
-#include <TelepathyLoggerQt4/TextEvent>
+#include <KTp/Logger/log-manager.h>
+#include <KTp/Logger/pending-logger-logs.h>
+
 #include <TelepathyQt/Account>
 
 MessageView::MessageView(QWidget *parent) :
@@ -45,11 +45,11 @@ MessageView::MessageView(QWidget *parent) :
     connect(this, SIGNAL(loadFinished(bool)), SLOT(processStoredEvents()));
 }
 
-void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
+void MessageView::loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &entity,
                           const Tp::ContactPtr &contact, const QDate &date,
                           const QPair< QDate, QDate > &nearestDates)
 {
-    if (account.isNull() || entity.isNull()) {
+    if (account.isNull() || !entity.isValid()) {
         //note contact can be null
         showInfoMessage(i18n("Unknown or invalid contact"));
         return;
@@ -63,7 +63,7 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
     m_prev = nearestDates.first;
     m_next = nearestDates.second;
 
-    if (entity->entityType() == Tpl::EntityTypeRoom) {
+    if (entity.entityType() == Tp::HandleTypeRoom) {
         load(AdiumThemeView::GroupChat);
     } else {
         load(AdiumThemeView::SingleUserChat);
@@ -76,9 +76,9 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &e
                             arg(QString::fromLatin1(m_account->avatar().avatarData.toBase64().data()));
     }
 
-    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-    Tpl::PendingEvents *pendingEvents  = logManager->queryEvents(m_account, m_entity, Tpl::EventTypeMaskText, m_date);
-    connect(pendingEvents, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onEventsLoaded(Tpl::PendingOperation*)));
+    KTp::LogManager *logManager = KTp::LogManager::instance();
+    KTp::PendingLoggerLogs *pendingLogs = logManager->queryLogs(m_account, m_entity, m_date);
+    connect(pendingLogs, SIGNAL(finished(KTp::PendingLoggerOperation*)), SLOT(onEventsLoaded(KTp::PendingLoggerOperation*)));
 }
 
 void MessageView::showInfoMessage(const QString& message)
@@ -106,29 +106,29 @@ void MessageView::clearHighlightText()
     setHighlightText(QString());
 }
 
-void MessageView::onEventsLoaded(Tpl::PendingOperation *po)
+void MessageView::onEventsLoaded(KTp::PendingLoggerOperation *po)
 {
-    Tpl::PendingEvents *pe = qobject_cast<Tpl::PendingEvents*>(po);
-    m_events << pe->events();
+    KTp::PendingLoggerLogs *pl = qobject_cast<KTp::PendingLoggerLogs*>(po);
+    m_events << pl->logs();
 
     /* Wait with initialization for the first event so that we can know when the chat session started */
     AdiumThemeHeaderInfo headerInfo;
-    headerInfo.setDestinationDisplayName(m_contact.isNull() ? m_entity->alias() : m_contact->alias());
-    headerInfo.setChatName(m_contact.isNull() ? m_entity->alias() : m_contact->alias());
-    headerInfo.setGroupChat(m_entity->entityType() == Tpl::EntityTypeRoom);
+    headerInfo.setDestinationDisplayName(m_contact.isNull() ? m_entity.alias() : m_contact->alias());
+    headerInfo.setChatName(m_contact.isNull() ? m_entity.alias() : m_contact->alias());
+    headerInfo.setGroupChat(m_entity.entityType() == Tp::HandleTypeRoom);
     headerInfo.setSourceName(m_account->displayName());
     headerInfo.setIncomingIconPath(m_contact.isNull() ? QString() : m_contact->avatarData().fileName);
 
-    if (pe->events().count() > 0 && !pe->events().first().isNull()) {
-        headerInfo.setTimeOpened(pe->events().first()->timestamp());
+    if (pl->logs().count() > 0) {
+        headerInfo.setTimeOpened(pl->logs().first().time());
     }
 
     initialise(headerInfo);
 }
 
-bool operator<(const Tpl::EventPtr &e1, const Tpl::EventPtr &e2)
+bool logMessageOlderThan(const KTp::LogMessage &e1, const KTp::LogMessage &e2)
 {
-    return e1->timestamp() < e2->timestamp();
+    return e1.time() < e2.time();
 }
 
 void MessageView::processStoredEvents()
@@ -148,11 +148,12 @@ void MessageView::processStoredEvents()
 
     // See https://bugs.kde.org/show_bug.cgi?id=317866
     // Uses the operator< overload above
-    qSort(m_events);
+    qSort(m_events.begin(), m_events.end(), logMessageOlderThan);
 
     while (!m_events.isEmpty()) {
-        const Tpl::TextEventPtr textEvent(m_events.takeFirst().staticCast<Tpl::TextEvent>());
-        KTp::Message message = KTp::MessageProcessor::instance()->processIncomingMessage(textEvent, m_account, Tp::TextChannelPtr());
+        const KTp::LogMessage msg = m_events.takeFirst();
+        KTp::MessageContext ctx(m_account, Tp::TextChannelPtr());
+        KTp::Message message = KTp::MessageProcessor::instance()->processIncomingMessage(msg, ctx);
         addMessage(message);
     }
 

@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2012 by David Edmundson <kde@davidedmundson.co.uk>      *
+ *   Copyright (C) 2012,2013 by Daniel Vrátil <dvratil@redhat.com>         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,14 +22,14 @@
 #define LOGVIEWER_H
 
 #include <KXmlGuiWindow>
-#include <TelepathyLoggerQt4/Types>
+#include <TelepathyQt/Types>
+
+namespace KTp {
+class PendingLoggerOperation;
+}
 
 namespace Ui {
     class LogViewer;
-}
-
-namespace Tpl {
-    class PendingOperation;
 }
 
 class EntityModel;
@@ -56,11 +57,10 @@ private Q_SLOTS:
     void slotShowEntityListContextMenu(const QPoint &coords);
     void slotClearGlobalSearch();
     void slotStartGlobalSearch(const QString &term);
-    void onGlobalSearchFinished(Tpl::PendingOperation *);
+    void onGlobalSearchFinished(KTp::PendingLoggerOperation *);
 
     void slotClearAccountHistory();
     void slotClearContactHistory();
-    void onLogClearingFinished(Tpl::PendingOperation *);
 
     void slotImportKopeteLogs(bool force = true);
 

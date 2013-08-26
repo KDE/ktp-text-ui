@@ -25,7 +25,6 @@
 
 #include <TelepathyQt/Types>
 
-#include <TelepathyLoggerQt4/Entity>
 #include <TelepathyQt/Account>
 #include <KTp/types.h>
 
@@ -37,11 +36,11 @@
       - Qt::DecorationRole - avatar
       - EntityModel::IdRole
       - EntityModel::TypeRole - EntityType (EntityTypeContact/Room/Self/Unknown)
-      - EntityModel::EntityRole - relevant Tpl::EntityPtr
+      - EntityModel::EntityRole - relevant KTp::LogEntity
   */
 
-namespace Tpl{
-    class PendingOperation;
+namespace KTp {
+    class PendingLoggerOperation;
 }
 
 class EntityModelItem;
@@ -74,14 +73,12 @@ public:
     bool removeRows(int start, int count, const QModelIndex &parent = QModelIndex());
 
 private Q_SLOTS:
-    void onEntitiesSearchFinished(Tpl::PendingOperation*);
+    void onEntitiesSearchFinished(KTp::PendingLoggerOperation*);
     void onEntityContactRetrieved(Tp::PendingOperation*);
 
 private:
     EntityModelItem *m_rootItem;
 
 };
-
-Q_DECLARE_METATYPE(Tpl::EntityPtr);
 
 #endif // ENTITYMODEL_H

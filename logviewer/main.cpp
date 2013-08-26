@@ -25,7 +25,6 @@
 #include "version.h"
 
 #include <TelepathyQt/AccountManager>
-#include <TelepathyLoggerQt4/Init>
 
 #include <KTp/contact-factory.h>
 
@@ -53,7 +52,6 @@ int main(int argc, char *argv[])
     KApplication app;
 
     Tp::registerTypes();
-    Tpl::init();
 
     Tp::AccountFactoryPtr  accountFactory = Tp::AccountFactory::create(
                                                 QDBusConnection::sessionBus(),

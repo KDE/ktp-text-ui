@@ -21,7 +21,6 @@
 #include "entity-model.h"
 
 #include <TelepathyQt/Contact>
-#include <TelepathyLoggerQt4/Entity>
 
 #include <QDebug>
 
@@ -95,7 +94,7 @@ QVariant EntityModelItem::data(int role) const
 {
     switch (role) {
         case Qt::DisplayRole:
-            return m_contact ? m_contact->alias() : (m_entity ? m_entity->alias() : m_account->displayName());
+            return m_contact ? m_contact->alias() : (m_entity.isValid() ? m_entity.alias() : m_account->displayName());
         case EntityModel::AccountRole:
             return QVariant::fromValue(m_account);
         case EntityModel::ContactRole:
@@ -103,7 +102,7 @@ QVariant EntityModelItem::data(int role) const
         case EntityModel::EntityRole:
             return QVariant::fromValue(m_entity);
         case EntityModel::IdRole:
-            return m_entity->identifier();
+            return m_entity.id();
     }
 
     return QVariant();
@@ -119,7 +118,7 @@ void EntityModelItem::setData(const QVariant &data, int role)
             m_contact = data.value< KTp::ContactPtr >();
             break;
         case EntityModel::EntityRole:
-            m_entity = data.value< Tpl::EntityPtr >();
+            m_entity = data.value< KTp::LogEntity >();
             break;
     }
 }
