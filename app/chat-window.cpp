@@ -62,6 +62,7 @@
 #include "emoticon-text-edit-action.h"
 #include "invite-contact-dialog.h"
 #include "telepathy-chat-ui.h"
+#include "fileShareRequest.h"
 #include "text-chat-config.h"
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
@@ -352,7 +353,19 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setShareDesktopEnabled(false);
         setInviteToChatEnabled(true);
         setBlockEnabled(false);
+    }
 
+    if ( currentChatTab->account()->connection() ) {
+        const QString collab(QLatin1String("infinote"));
+        bool selfCanShare = currentChatTab->account()->connection()->selfContact()->capabilities().streamTubes(collab);
+        if (currentChatTab->isGroupChat()) {
+            // We can always share documents with a group chat if we support the service
+            setCollaborateDocumentEnabled(selfCanShare);
+        }
+        else {
+            bool otherCanShare = currentChatTab->textChannel()->targetContact()->capabilities().streamTubes(collab);
+            setCollaborateDocumentEnabled(selfCanShare && otherCanShare);
+        }
     }
 
     // only show enable the action if there are actually previous converstations
@@ -460,6 +473,21 @@ void ChatWindow::onSearchActionToggled()
         return;
     }
     currChat->toggleSearchBar();
+}
+
+void ChatWindow::onCollaborateDocumentTriggered()
+{
+    ChatTab *currChat = qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
+
+    if(!currChat) {
+        return;
+    }
+    if (currChat->isGroupChat()) {
+        offerDocumentToChatroom(currChat->account(), currChat->textChannel()->targetId());
+    }
+    else {
+        offerDocumentToContact(currChat->account(), currChat->textChannel()->targetContact());
+    }
 }
 
 void ChatWindow::onTabStateChanged()
@@ -680,6 +708,9 @@ void ChatWindow::setupCustomActions()
     shareDesktopAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an application that allows this contact to see your desktop"));
     connect(shareDesktopAction, SIGNAL(triggered()), this, SLOT(onShareDesktopTriggered()));
 
+    KAction* collaborateDocumentAction = new KAction(KIcon(QLatin1String("document-share")), i18n("&Collaboratively edit a document"), this);
+    connect(collaborateDocumentAction, SIGNAL(triggered()), this, SLOT(onCollaborateDocumentTriggered()));
+
     m_spellDictCombo = new Sonnet::DictionaryComboBox();
     connect(m_spellDictCombo, SIGNAL(dictionaryChanged(QString)),
             this, SLOT(setTabSpellDictionary(QString)));
@@ -727,6 +758,23 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("clear-chat-view"), clearViewAction);
     actionCollection()->addAction(QLatin1String("emoticons"), addEmoticonAction);
     actionCollection()->addAction(QLatin1String("send-message"), m_sendMessage);
+    actionCollection()->addAction(QLatin1String("collaborate-document"), collaborateDocumentAction);
+}
+
+void ChatWindow::setCollaborateDocumentEnabled(bool enable)
+{
+    QAction* action = actionCollection()->action(QLatin1String("collaborate-document"));
+
+    if (action) {
+        action->setEnabled(enable);
+        if ( enable ) {
+            action->setToolTip(i18nc("Toolbar icon tooltip", "Edit a plain-text document with this contact in real-time"));
+        }
+        else {
+            action->setToolTip(i18nc("Toolbar icon tooltip for a disabled action", "<p>Both you and the target contact "
+                                     "need to have the <i>kte-collaborative</i> package installed to share documents</p>"));
+        }
+    }
 }
 
 void ChatWindow::setAudioCallEnabled(bool enable)
@@ -826,6 +874,22 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
     Q_FOREACH(const QString& fileName, fileNames) {
         Tp::PendingChannelRequest* channelRequest = KTp::Actions::startFileTransfer(account, contact, fileName);
         connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
+    }
+}
+
+void ChatWindow::offerDocumentToContact(const Tp::AccountPtr& account, const Tp::ContactPtr& targetContact)
+{
+    const KUrl url = KFileDialog::getOpenUrl();
+    if ( ! url.isEmpty() ) {
+        KTp::Actions::startCollaborativeEditing(account, targetContact, QList<KUrl>() << url, true);
+    }
+}
+
+void ChatWindow::offerDocumentToChatroom(const Tp::AccountPtr& account, const QString& roomName)
+{
+   const KUrl url = KFileDialog::getOpenUrl();
+    if ( ! url.isEmpty() ) {
+        KTp::Actions::startCollaborativeEditing(account, roomName, QList<KUrl>() << url, true);
     }
 }
 
