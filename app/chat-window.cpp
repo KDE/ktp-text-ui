@@ -62,7 +62,6 @@
 #include "emoticon-text-edit-action.h"
 #include "invite-contact-dialog.h"
 #include "telepathy-chat-ui.h"
-#include "fileShareRequest.h"
 #include "text-chat-config.h"
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
