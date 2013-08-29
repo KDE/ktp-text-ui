@@ -155,7 +155,7 @@ void LogManager::onEventsFinished(KTp::PendingLoggerOperation *op)
     const QList<KTp::LogMessage> allMessages = logsOp->logs();
     QList<KTp::Message> messages;
     const KTp::MessageContext ctx(d->account, d->textChannel);
-    for (int i = 0; i < d->scrollbackLength && i < allMessages.count(); ++i) {
+    for (int i = qMax(allMessages.count() - d->scrollbackLength, 0) ; i < allMessages.count(); ++i) {
         const KTp::LogMessage message = allMessages[i];
         messages << KTp::MessageProcessor::instance()->processIncomingMessage(message, ctx);
     }
