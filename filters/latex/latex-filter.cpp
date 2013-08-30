@@ -53,6 +53,7 @@ void LatexFilter::filterMessage(KTp::Message &message, const KTp::MessageContext
     rg.setMinimal(true);
 
     int pos = 0;
+    int numberOfFormula = 0;
     while ((pos = rg.indexIn(messageText, pos)) != -1) {
         QString formula = rg.cap();
         // remove the $$ delimiters on start/end
@@ -65,7 +66,8 @@ void LatexFilter::filterMessage(KTp::Message &message, const KTp::MessageContext
             continue;
         }
 
-        QString image(QLatin1Literal("<img src=\"data:image/png;base64,") %
+        numberOfFormula++;
+        QString image(QLatin1Literal("<br/><img src=\"data:image/png;base64,") %
         handleLatex(formula) %
         QLatin1Literal("\" style=\"max-width:100%;margin-top:3px\"") %
         QLatin1Literal("alt=\"") %
@@ -73,11 +75,11 @@ void LatexFilter::filterMessage(KTp::Message &message, const KTp::MessageContext
         QLatin1Literal("\" isEmotion=\"true\"/>"));
 
         int length = rg.matchedLength();
-        messageText.replace(pos, length, image);
+        messageText.replace(pos, length);
 
         pos += length;
+        message.appendMessagePart(image);
     }
-
     message.setMainMessagePart(messageText);
 }
 
