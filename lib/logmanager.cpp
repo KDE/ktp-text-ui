@@ -151,12 +151,24 @@ void LogManager::onEventsFinished(KTp::PendingLoggerOperation *op)
         return;
     }
 
+    QStringList queuedMessageTokens;
+    if (!d->textChannel.isNull()) {
+        Q_FOREACH(const Tp::ReceivedMessage &message, d->textChannel->messageQueue()) {
+            queuedMessageTokens.append(message.messageToken());
+        }
+    }
+    kDebug() << "queuedMessageTokens" << queuedMessageTokens;
+
     // get last n (d->fetchLast) messages that are not queued
     const QList<KTp::LogMessage> allMessages = logsOp->logs();
     QList<KTp::Message> messages;
     const KTp::MessageContext ctx(d->account, d->textChannel);
     for (int i = qMax(allMessages.count() - d->scrollbackLength, 0) ; i < allMessages.count(); ++i) {
         const KTp::LogMessage message = allMessages[i];
+        if (queuedMessageTokens.contains(message.token())) {
+            continue;
+        }
+
         messages << KTp::MessageProcessor::instance()->processIncomingMessage(message, ctx);
     }
 
