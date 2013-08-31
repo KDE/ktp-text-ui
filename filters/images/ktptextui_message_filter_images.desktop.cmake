@@ -34,6 +34,7 @@ Name[sr@ijekavianlatin]=Pregled slike
 Name[sr@latin]=Pregled slike
 Name[sv]=Förhandsgranskning av bild
 Name[tr]=Resim Önizlemesi
+Name[ug]=سۈرەتنى ئالدىن كۆزەت
 Name[uk]=Перегляд зображення
 Name[wa]=Prévoeyaedje di l' imådje
 Name[x-test]=xxImage Previewxx

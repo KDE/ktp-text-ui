@@ -45,6 +45,8 @@ TelepathyChatUi::TelepathyChatUi(const Tp::AccountManagerPtr &accountManager)
       m_accountManager(accountManager)
 {
     kDebug();
+    ChatWindow *window = createWindow();
+    window->show();
 }
 
 void TelepathyChatUi::removeWindow(ChatWindow *window)
@@ -151,7 +153,13 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
                 window = m_chatWindows.count()?m_chatWindows[0]:createWindow();
                 break;
             case TextChatConfig::NewWindow:
-                window = createWindow();
+                //as we now create a window on load, if we are in one window per chat mode
+                //we need to check if the first made window is empty
+                if (m_chatWindows.count() == 1 && ! m_chatWindows[0]->getCurrentTab()) {
+                    window = m_chatWindows[0];
+                } else {
+                    window = createWindow();
+                }
                 break;
         }
 

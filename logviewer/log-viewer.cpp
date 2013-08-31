@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2012 by David Edmundson <kde@davidedmundson.co.uk>      *
- *   Copyright (C) 2013 by Daniel Vrátil <dvratil@redhat.com>              *
+ *   Copyright (C) 2012,2013 by Daniel Vrátil <dvratil@redhat.com>         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,11 +25,9 @@
 #include <TelepathyQt/PendingReady>
 #include <TelepathyQt/ContactManager>
 
-#include <TelepathyLoggerQt4/Init>
-#include <TelepathyLoggerQt4/Entity>
-#include <TelepathyLoggerQt4/LogManager>
-#include <TelepathyLoggerQt4/SearchHit>
-#include <TelepathyLoggerQt4/PendingSearch>
+#include <KTp/Logger/log-manager.h>
+#include <KTp/Logger/log-entity.h>
+#include <KTp/Logger/pending-logger-search.h>
 
 #include <KTp/logs-importer.h>
 #include <KTp/contact.h>
@@ -181,6 +179,8 @@ void LogViewer::setupActions()
 
 void LogViewer::onAccountManagerReady()
 {
+    KTp::LogManager *logManger = KTp::LogManager::instance();
+    logManger->setAccountManager(m_accountManager);
     m_entityModel->setAccountManager(m_accountManager);
 
     /* Try to run log import */
@@ -205,9 +205,9 @@ void LogViewer::onEntityListClicked(const QModelIndex& index)
         m_datesModel->clear();
         for (int i = 0; i < index.model()->rowCount(index); ++i) {
             const QModelIndex child = index.child(i, 0);
-            const Tpl::EntityPtr entity = child.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
+            const KTp::LogEntity entity = child.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
             const Tp::AccountPtr account = child.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
-            Q_ASSERT(!entity.isNull());
+            Q_ASSERT(entity.isValid());
             Q_ASSERT(!account.isNull());
             m_datesModel->addEntity(account, entity);
         }
@@ -256,10 +256,10 @@ void LogViewer::slotUpdateMainWindow()
     nearestDates.first = m_prevConversationDate;
     nearestDates.second = m_nextConversationDate;
 
-    Tpl::EntityPtr entity = currentDateIndex.data(DatesModel::EntityRole).value<Tpl::EntityPtr>();
+    KTp::LogEntity entity = currentDateIndex.data(DatesModel::EntityRole).value<KTp::LogEntity>();
     Tp::AccountPtr account = currentDateIndex.data(DatesModel::AccountRole).value<Tp::AccountPtr>();
     KTp::ContactPtr contact = currentIndex.data(PersonEntityMergeModel::ContactRole).value<KTp::ContactPtr>();
-    if (entity.isNull() || account.isNull()) {
+    if (!entity.isValid() || account.isNull()) {
         ui->messageView->clear();
     } else {
         ui->messageView->loadLog(account, entity, contact, date, nearestDates);
@@ -290,15 +290,15 @@ void LogViewer::slotStartGlobalSearch(const QString &term)
 
     ui->messageView->setHighlightText(term);
 
-    Tpl::LogManagerPtr manager = Tpl::LogManager::instance();
-    Tpl::PendingSearch *search = manager->search(term, Tpl::EventTypeMaskAny);
-    connect (search, SIGNAL(finished(Tpl::PendingOperation*)),
-             this, SLOT(onGlobalSearchFinished(Tpl::PendingOperation*)));
+    KTp::LogManager *manager = KTp::LogManager::instance();
+    KTp::PendingLoggerSearch *search = manager->search(term);
+    connect(search, SIGNAL(finished(KTp::PendingLoggerOperation*)),
+            this, SLOT(onGlobalSearchFinished(KTp::PendingLoggerOperation*)));
 }
 
-void LogViewer::onGlobalSearchFinished(Tpl::PendingOperation *operation)
+void LogViewer::onGlobalSearchFinished(KTp::PendingLoggerOperation *operation)
 {
-    Tpl::PendingSearch *search = qobject_cast< Tpl::PendingSearch* >(operation);
+    KTp::PendingLoggerSearch *search = qobject_cast<KTp::PendingLoggerSearch*>(operation);
     Q_ASSERT(search);
 
     m_filterModel->setSearchHits(search->hits());
@@ -329,6 +329,45 @@ void LogViewer::slotShowEntityListContextMenu (const QPoint &coords)
     */
 }
 
+void LogViewer::slotClearAccountHistory()
+{
+    QModelIndex index = ui->entityList->currentIndex();
+
+    /* Usually a contact node is selected, so traverse up to it's parent
+     * account node */
+    if (index.parent().isValid()) {
+        index = index.parent();
+    }
+
+    if (!index.isValid()) {
+        return;
+    }
+
+    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+    if (account.isNull()) {
+        return;
+    }
+
+    if (KMessageBox::warningYesNo(
+            this, i18n("Are you sure you want to remove all logs from account %1?", account->displayName()),
+            i18n("Clear account history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
+            QString(), KMessageBox::Dangerous) == KMessageBox::No) {
+        return;
+    }
+
+    KTp::LogManager::instance()->clearAccountLogs(account);
+
+    QModelIndex parent = index.parent();
+    m_entityModel->removeRow(index.row(), parent);
+
+    // If last entity was removed then remove the account node as well
+    if (parent.isValid() && !m_entityModel->hasChildren(parent)) {
+        m_entityModel->removeRow(parent.row(), parent.parent());
+    }
+
+    m_entityListContextMenu->setProperty("index", QVariant());
+}
+
 void LogViewer::slotClearContactHistory()
 {
     QModelIndex index = ui->entityList->currentIndex();
@@ -337,8 +376,8 @@ void LogViewer::slotClearContactHistory()
     }
 
     Tp::AccountPtr account;// = index.data(KPeople::PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
-    Tpl::EntityPtr entity = index.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
-    if (account.isNull() || entity.isNull()) {
+    KTp::LogEntity entity = index.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
+    if (account.isNull() || !entity.isValid()) {
         return;
     }
 
@@ -350,32 +389,12 @@ void LogViewer::slotClearContactHistory()
         return;
     }
 
-    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-    Tpl::PendingOperation *operation = logManager->clearEntityHistory(account, entity);
-    connect(operation, SIGNAL(finished(Tpl::PendingOperation*)), SLOT(onLogClearingFinished(Tpl::PendingOperation*)));
-}
-
-void LogViewer::onLogClearingFinished(Tpl::PendingOperation *operation)
-{
-    if (!operation->errorName().isEmpty() || !operation->errorMessage().isEmpty()) {
-        /* Make sure we display at least some message */
-        QString msg = (operation->errorMessage().isEmpty()) ? operation->errorName() : operation->errorMessage();
-        KMessageBox::sorry(this, msg, operation->errorName(), 0);
-        return;
-    }
-
-    QModelIndex index = m_entityListContextMenu->property("index").value<QModelIndex>();
-    if (!index.isValid()) {
-        m_entityListContextMenu->setProperty("index", QVariant());
-        return;
-    }
+    KTp::LogManager::instance()->clearContactLogs(account, entity);
 
     /*
     QModelIndex parent = index.parent();
     m_entityModel->removeRow(index.row(), parent);
-    */
-    /* If last entity was removed then remove the account node as well */
-    /*
+    // If last entity was removed then remove the account node as well
     if (parent.isValid() && !m_entityModel->hasChildren(parent)) {
         m_entityModel->removeRow(parent.row(), parent.parent());
     }

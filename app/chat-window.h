@@ -96,7 +96,6 @@ private Q_SLOTS:
     void onTabTextChanged(const QString &newTitle);
     void onTabIconChanged(const KIcon &newIcon);
     void onVideoCallTriggered();                                /** start a video call */
-    void onUserTypingChanged(Tp::ChannelChatState state);
     void onUnblockContactTriggered();                           /** Unblocks contact when already blocked */
     void onShareDesktopTriggered();                             /** start a desktop share */
     void onOpenLogTriggered();                                  /** Starts ktp-log-viewer accountId contactId */
@@ -110,6 +109,7 @@ private Q_SLOTS:
     void onZoomFactorChanged(qreal zoom);
     void updateSendMessageShortcuts();
     void onReloadTheme();
+    void onCollaborateDocumentTriggered();
 
 protected Q_SLOTS:
     void showSettingsDialog();
@@ -143,6 +143,7 @@ private:
     void setVideoCallEnabled(bool enable);
     void setShareDesktopEnabled(bool enable);
     void setPreviousConversationsEnabled(bool enable);
+    void setCollaborateDocumentEnabled(bool enable);
 
     /** starts audio call with given contact
      * @param account account sending the audio call request
@@ -170,6 +171,20 @@ private:
 
     /** Returns whether there's at least one tab with unread message */
     bool hasUnreadMessages() const;
+
+    /**
+     * Offers a collaborative document to a contact, asking the user for which document to offer first.
+     * @param account The account offering the document
+     * @param targetContact The contact to offer the document to
+     */
+    void offerDocumentToContact(const Tp::AccountPtr& account, const Tp::ContactPtr& targetContact);
+
+    /**
+     * @brief Offers a collaborative document to a chatroom.
+     * @param account The account offering the document
+     * @param roomName The chatroom identifier to offer the document to
+     */
+    void offerDocumentToChatroom(const Tp::AccountPtr& account, const QString& roomName);
 
     KAction *m_sendMessage;
 

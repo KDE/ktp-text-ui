@@ -13,9 +13,9 @@ set(ktpchat_SRCS
         chat-style-plist-file-reader.cpp
         chat-text-edit.cpp
         chat-search-bar.cpp
-        logmanager.cpp
         notify-filter.cpp
         text-chat-config.cpp
+        logmanager.cpp
 )
 
 set(ktpchat_HDRS
@@ -60,7 +60,7 @@ target_link_libraries(ktpchat
     ${KDE4_KDEWEBKIT_LIBRARY}
     ${KDE4_KEMOTICONS_LIBS}
     ${KTP_LIBRARIES}
-    ${TELEPATHY_LOGGER_QT4_LIBRARIES}
+    ${KTP_LOGGER_LIBRARIES}
 )
 install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})
 

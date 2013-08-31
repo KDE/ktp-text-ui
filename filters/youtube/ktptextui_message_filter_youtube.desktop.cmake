@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=YouTube Preview
+Name[bs]=YouTube pregled
 Name[ca]=Vista prèvia de YouTube
 Name[cs]=Náhled YouTube
 Name[da]=Forhåndsvisning af YouTube
@@ -35,6 +36,7 @@ Name[x-test]=xxYouTube Previewxx
 Name[zh_CN]=YouTube 预览
 Name[zh_TW]=YouTube 預覽
 Comment=If any messages contains a link to a YouTube video, it will embed a preview in the chat
+Comment[bs]=Ako poruka sadrži vezu na YouTube video, oma će se ugraditi u pregled ćaskanja
 Comment[ca]=Si qualsevol missatge conté un enllaç a un vídeo de YouTube, s'encastarà una vista prèvia en el xat
 Comment[cs]=Pokud zpráva obsahuje odkaz na video YouTube bude vložen jeho náhled do rozhovoru
 Comment[da]=If beskeder indeholder et link til en YouTube-video vil en forhåndsvisning blive indlejret i chatten
@@ -44,6 +46,7 @@ Comment[es]=Si un mensaje contiene un enlace a un vídeo de YouTube, esta opció
 Comment[fi]=Jos saapuvassa viestissä on linkki YouTube-videoon, keskusteluun upotetaan esikatselu videosta
 Comment[fr]=Si un quelconque message contient un lien vers une vidéo YouTube, il intégrera une miniature sur le forum de discussions
 Comment[gl]=Se algunha mensaxe contén unha ligazón a un vídeo en YouTube ha incluír unha vista previa na conversa
+Comment[hu]=Ha egy üzenet hivatkozást tartalmaz egy YouTube videóra, akkor az előnézet be lesz ágyazva a csevegésbe
 Comment[ia]=Si qualcunque messages contine un ligamine a tu video de YouTube, illlo incorporara un vista preliminar in le conversation.
 Comment[it]=Se in un messaggio c'è un collegamento ad un video di YouTube, sarà integrato come anteprima nella finestra di chat
 Comment[kk]=Егер хабарламада YouTube видеосына сілтеме болса, оның қарап-шығу мүмкіндігі чатта болады

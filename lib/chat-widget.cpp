@@ -51,9 +51,6 @@
 #include <TelepathyQt/Presence>
 #include <TelepathyQt/PendingChannelRequest>
 #include <TelepathyQt/OutgoingFileTransferChannel>
-#include <TelepathyLoggerQt4/TextEvent>
-#include <TelepathyLoggerQt4/LogWalker>
-#include <TelepathyLoggerQt4/PendingEvents>
 
 #include <KTp/presence.h>
 #include <KTp/actions.h>
@@ -173,15 +170,11 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(d->pausedStateTimer, SIGNAL(timeout()), this, SLOT(onChatPausedTimerExpired()));
 
     // initialize LogManager
-    if (!d->isGroupChat) {
-        KConfig config(QLatin1String("ktelepathyrc"));
-        KConfigGroup tabConfig = config.group("Behavior");
-        d->logManager->setScrollbackLength(tabConfig.readEntry<int>("scrollbackLength", 4));
-        d->logManager->setTextChannel(d->account, d->channel);
-        m_previousConversationAvailable = d->logManager->exists();
-    } else {
-        m_previousConversationAvailable = false;
-    }
+    KConfig config(QLatin1String("ktelepathyrc"));
+    KConfigGroup tabConfig = config.group("Behavior");
+    d->logManager->setScrollbackLength(tabConfig.readEntry<int>("scrollbackLength", 4));
+    d->logManager->setTextChannel(d->account, d->channel);
+    m_previousConversationAvailable = d->logManager->exists();
 
     d->notifyFilter = new NotifyFilter(this);
 }

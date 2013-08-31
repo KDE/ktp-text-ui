@@ -24,9 +24,9 @@
 
 #include <QDate>
 
-#include <TelepathyLoggerQt4/Event>
-#include <TelepathyLoggerQt4/Entity>
-#include <TelepathyLoggerQt4/PendingOperation>
+#include <KTp/Logger/log-entity.h>
+#include <KTp/Logger/log-message.h>
+#include <KTp/Logger/pending-logger-operation.h>
 
 class QLabel;
 
@@ -41,8 +41,8 @@ public:
 
     explicit MessageView(QWidget *parent = 0);
 
-    void loadLog(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity,
-                 const KTp::ContactPtr &contact, const QDate &date,
+    void loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &entity,
+                 const Tp::ContactPtr &contact, const QDate &date,
                  const QPair< QDate, QDate > &nearestDates);
 
     void setHighlightText(const QString &text);
@@ -55,7 +55,7 @@ public Q_SLOTS:
     void reloadTheme();
 
 private Q_SLOTS:
-    void onEventsLoaded(Tpl::PendingOperation* po);
+    void onEventsLoaded(KTp::PendingLoggerOperation* po);
     void doHighlightText();
     void processStoredEvents();
 
@@ -70,7 +70,7 @@ private:
 
     SortMode m_sortMode;
 
-    Tpl::EntityPtr m_entity;
+    KTp::LogEntity m_entity;
     Tp::AccountPtr m_account;
     KTp::ContactPtr m_contact;
     QDate m_date;
@@ -79,7 +79,7 @@ private:
 
     QString m_highlightedText;
 
-    Tpl::EventPtrList m_events;
+    QList<KTp::LogMessage> m_events;
 
     QString m_accountAvatar;
 

@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2011  Dominik Schmidt <kde@dominik-schmidt.de>
+    Copyright (C) 2013  Daniel Vrátil <dvratil@redhat.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -22,19 +23,11 @@
 
 #include "adium-theme-content-info.h"
 
-#include <TelepathyLoggerQt4/LogManager>
-#include <TelepathyLoggerQt4/Entity>
-
-#include <TelepathyQt/Types>
-#include <TelepathyQt/Account>
-#include <TelepathyQt/Contact>
-
 #include <KTp/message.h>
 
-namespace Tpl {
-    class PendingOperation;
+namespace KTp {
+class PendingLoggerOperation;
 }
-
 
 class LogManager : public QObject
 {
@@ -69,15 +62,12 @@ Q_SIGNALS:
     void fetched(const QList<KTp::Message> &messages);
 
 private Q_SLOTS:
-    void onEventsFinished(Tpl::PendingOperation *po);
+    void onDatesFinished(KTp::PendingLoggerOperation *po);
+    void onEventsFinished(KTp::PendingLoggerOperation *po);
 
 private:
-    Tp::AccountPtr m_account;
-    Tp::TextChannelPtr m_textChannel;
-    Tpl::EntityPtr m_contactEntity;
-    Tpl::LogManagerPtr m_logManager;
-
-    int m_scrolbackLength;
+    class Private;
+    Private * const d;
 };
 
 #endif // LOGMANAGER_H
