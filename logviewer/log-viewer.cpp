@@ -213,9 +213,9 @@ void LogViewer::onEntityListClicked(const QModelIndex& index)
         }
         return;
     } else if (itemType == PersonEntityMergeModel::Entity) {
-        const Tpl::EntityPtr entity = index.data(PersonEntityMergeModel::EntityRole).value<Tpl::EntityPtr>();
+        const KTp::LogEntity entity = index.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
         const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
-        Q_ASSERT(!entity.isNull());
+        Q_ASSERT(entity.isValid());
         Q_ASSERT(!account.isNull());
         m_datesModel->setEntity(account, entity);
     }
@@ -301,8 +301,8 @@ void LogViewer::onGlobalSearchFinished(KTp::PendingLoggerOperation *operation)
     KTp::PendingLoggerSearch *search = qobject_cast<KTp::PendingLoggerSearch*>(operation);
     Q_ASSERT(search);
 
-    m_filterModel->setSearchHits(search->hits());
-    m_datesModel->setSearchHits(search->hits());
+    m_filterModel->setSearchHits(search->searchHits());
+    m_datesModel->setSearchHits(search->searchHits());
 
     ui->globalSearch->setEnabled(true);
     ui->busyAnimation->setSequence(KPixmapSequence());

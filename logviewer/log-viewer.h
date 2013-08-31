@@ -69,6 +69,7 @@ private Q_SLOTS:
     void onGlobalSearchFinished(KTp::PendingLoggerOperation *);
 
     void slotClearContactHistory();
+    void slotClearAccountHistory();
 
     void slotImportKopeteLogs(bool force = true);
 

@@ -23,15 +23,10 @@
 #include <QtCore/QAbstractItemModel>
 
 #include <TelepathyQt/Types>
-#include <TelepathyLoggerQt4/Types>
 
 #include <kpeople/personsmodel.h>
 
 class EntityModel;
-
-namespace Tpl {
-class PendingOperation;
-}
 
 class PersonEntityMergeModel : public QAbstractItemModel
 {

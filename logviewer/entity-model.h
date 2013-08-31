@@ -72,7 +72,6 @@ public:
 
 private Q_SLOTS:
     void onEntitiesSearchFinished(KTp::PendingLoggerOperation*);
-    void onEntityContactRetrieved(Tp::PendingOperation*);
 
 private:
     QList<EntityModelItem*> m_items;

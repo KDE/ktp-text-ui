@@ -23,7 +23,6 @@
 #include "person-entity-merge-model.h"
 
 #include <TelepathyQt/Types>
-#include <TelepathyLoggerQt4/SearchHit>
 
 #include <KDE/KDebug>
 
@@ -49,23 +48,23 @@ bool EntityFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sour
         static_cast<PersonEntityMergeModel::ItemType>(index.data(PersonEntityMergeModel::ItemTypeRole).toUInt());
     if (itemType == PersonEntityMergeModel::Entity) {
         const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value< Tp::AccountPtr >();
-        const Tpl::EntityPtr entity = index.data(PersonEntityMergeModel::EntityRole).value< Tpl::EntityPtr >();
-        Q_ASSERT(!entity.isNull());
+        const KTp::LogEntity entity = index.data(PersonEntityMergeModel::EntityRole).value< KTp::LogEntity >();
+        Q_ASSERT(entity.isValid());
 
         bool matches_filter = false;
 
-        if (!m_searchHits.isEmpty() && !account.isNull() && !entity.isNull()) {
-            Q_FOREACH(const Tpl::SearchHit &searchHit, m_searchHits) {
+        if (!m_searchHits.isEmpty() && !account.isNull() && entity.isValid()) {
+            Q_FOREACH(const KTp::LogSearchHit &searchHit, m_searchHits) {
                 const Tp::AccountPtr searchHitAccount = searchHit.account();
-                const Tpl::EntityPtr searchHitTarget = searchHit.target();
+                const KTp::LogEntity searchHitTarget = searchHit.entity();
 
                 /* Don't display search hits with empty account or target */
-                if (searchHitAccount.isNull() || searchHitTarget.isNull()) {
+                if (searchHitAccount.isNull() || !searchHitTarget.isValid()) {
                     continue;
                 }
 
                 if ((searchHitAccount->uniqueIdentifier() == account->uniqueIdentifier()) &&
-                    (searchHitTarget->identifier() == entity->identifier()))
+                    (searchHitTarget.id() == entity.id()))
                 {
                     matches_filter = true;
                     break;
@@ -83,8 +82,8 @@ bool EntityFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sour
         const KTp::ContactPtr contact = index.data(PersonEntityMergeModel::ContactRole).value< KTp::ContactPtr >();
 
         /* Check if contact's account name matches */
-        if (entity->alias().contains(term, Qt::CaseInsensitive) && matches_filter) {
-            kDebug() << entity->alias() << "matches" << term;
+        if (entity.alias().contains(term, Qt::CaseInsensitive) && matches_filter) {
+            kDebug() << entity.alias() << "matches" << term;
             return matches_filter;
         }
 
@@ -110,7 +109,7 @@ bool EntityFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sour
     return false;
 }
 
-void EntityFilterModel::setSearchHits(const Tpl::SearchHitList &searchHits)
+void EntityFilterModel::setSearchHits(const QList<KTp::LogSearchHit> &searchHits)
 {
     m_searchHits = searchHits;
 

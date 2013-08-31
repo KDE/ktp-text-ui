@@ -65,7 +65,7 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &e
     if (m_entity != entity) {
         m_entity = entity;
     }
-    m_contact = contact;
+    m_contact = m_contact.dynamicCast<Tp::Contact>(contact);
     m_date = date;
     m_prev = nearestDates.first;
     m_next = nearestDates.second;

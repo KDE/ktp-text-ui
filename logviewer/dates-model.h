@@ -23,10 +23,11 @@
 #include <QtCore/QAbstractItemModel>
 
 #include <TelepathyQt/Types>
-#include <TelepathyLoggerQt4/Types>
 
-namespace Tpl {
-class PendingOperation;
+namespace KTp {
+    class PendingLoggerOperation;
+    class LogEntity;
+    class LogSearchHit;
 }
 
 /**
@@ -56,10 +57,10 @@ class DatesModel : public QAbstractItemModel
     explicit DatesModel(QObject* parent = 0);
     virtual ~DatesModel();
 
-    void addEntity(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity);
-    void setEntity(const Tp::AccountPtr &account, const Tpl::EntityPtr &entity);
+    void addEntity(const Tp::AccountPtr &account, const KTp::LogEntity &entity);
+    void setEntity(const Tp::AccountPtr &account, const KTp::LogEntity &entity);
 
-    void setSearchHits(const Tpl::SearchHitList &searchHits);
+    void setSearchHits(const QList<KTp::LogSearchHit> &searchHits);
     void clearSearchHits();
 
     void clear();
@@ -75,19 +76,19 @@ class DatesModel : public QAbstractItemModel
     virtual QModelIndex index(int row, int column, const QModelIndex& parent) const;
 
   private Q_SLOTS:
-    void onDatesReceived(Tpl::PendingOperation *operation);
+    void onDatesReceived(KTp::PendingLoggerOperation *operation);
 
   private:
-    typedef QPair<Tp::AccountPtr, Tpl::EntityPtr> AccountEntityPair;
+    typedef QPair<Tp::AccountPtr, KTp::LogEntity> AccountEntityPair;
     QList<AccountEntityPair> m_pairs;
-    Tpl::SearchHitList m_searchHits;
+    QList<KTp::LogSearchHit> m_searchHits;
     int m_resetInProgress;
 
     class Date;
     QList<QDate> m_groups;
     QMap<QDate, QList<Date*> > m_items;
 
-    QList<Tpl::PendingOperation*> m_pendingDates;
+    QList<KTp::PendingLoggerOperation*> m_pendingDates;
 
     friend bool sortDatesDescending(const Date *date1, const Date *date2);
 };

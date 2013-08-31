@@ -19,10 +19,10 @@
 
 #include "dates-model.h"
 
-#include <TelepathyLoggerQt4/LogManager>
-#include <TelepathyLoggerQt4/PendingDates>
-#include <TelepathyLoggerQt4/Entity>
-#include <TelepathyLoggerQt4/SearchHit>
+#include <KTp/Logger/log-manager.h>
+#include <KTp/Logger/log-entity.h>
+#include <KTp/Logger/log-search-hit.h>
+#include <KTp/Logger/pending-logger-dates.h>
 #include <TelepathyQt/Account>
 
 #include <KDE/KLocalizedString>
@@ -30,7 +30,6 @@
 #include <KDE/KDebug>
 
 Q_DECLARE_METATYPE(Tp::AccountPtr)
-Q_DECLARE_METATYPE(Tpl::EntityPtr)
 
 class DatesModel::Date
 {
@@ -55,28 +54,27 @@ DatesModel::~DatesModel()
     clear();
 }
 
-void DatesModel::addEntity(const Tp::AccountPtr& account, const Tpl::EntityPtr& entity)
+void DatesModel::addEntity(const Tp::AccountPtr &account, const KTp::LogEntity &entity)
 {
     if (m_resetInProgress == 0) {
         beginResetModel();
     }
     ++m_resetInProgress;
 
-    Tpl::LogManagerPtr logManager = Tpl::LogManager::instance();
-    Tpl::PendingDates *pendingDates = logManager->queryDates(account, entity,
-                                                             Tpl::EventTypeMaskText);
+    KTp::LogManager *logManager = KTp::LogManager::instance();
+    KTp::PendingLoggerDates *pendingDates = logManager->queryDates(account, entity);
     m_pendingDates << pendingDates;
-    connect(pendingDates, SIGNAL(finished(Tpl::PendingOperation*)),
-            SLOT(onDatesReceived(Tpl::PendingOperation*)));
+    connect(pendingDates, SIGNAL(finished(KTp::PendingLoggerOperation*)),
+            SLOT(onDatesReceived(KTp::PendingLoggerOperation*)));
 }
 
-void DatesModel::setEntity(const Tp::AccountPtr& account, const Tpl::EntityPtr& entity)
+void DatesModel::setEntity(const Tp::AccountPtr &account, const KTp::LogEntity &entity)
 {
     clear();
     addEntity(account, entity);
 }
 
-void DatesModel::setSearchHits(const Tpl::SearchHitList& searchHits)
+void DatesModel::setSearchHits(const QList<KTp::LogSearchHit> &searchHits)
 {
     m_searchHits = searchHits;
 }
@@ -90,8 +88,8 @@ void DatesModel::clear()
 {
     beginResetModel();
     m_resetInProgress = 0;
-    Q_FOREACH (Tpl::PendingOperation *op, m_pendingDates) {
-        disconnect(op, SIGNAL(finished(Tpl::PendingOperation*)));
+    Q_FOREACH (KTp::PendingLoggerOperation *op, m_pendingDates) {
+        disconnect(op, SIGNAL(finished(KTp::PendingLoggerOperation*)));
         op->deleteLater();
     }
     m_pendingDates.clear();
@@ -105,7 +103,7 @@ void DatesModel::clear()
     endResetModel();
 }
 
-QDate DatesModel::nextDate(const QModelIndex& index) const
+QDate DatesModel::nextDate(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return QDate();
@@ -144,7 +142,7 @@ QDate DatesModel::nextDate(const QModelIndex& index) const
     return QDate();
 }
 
-QDate DatesModel::previousDate(const QModelIndex& index) const
+QDate DatesModel::previousDate(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return QDate();
@@ -183,7 +181,7 @@ QDate DatesModel::previousDate(const QModelIndex& index) const
     return QDate();
 }
 
-QModelIndex DatesModel::indexForDate(const QDate& date) const
+QModelIndex DatesModel::indexForDate(const QDate &date) const
 {
     const QDate groupDate(date.year(), date.month(), 1);
     const QModelIndex parent = index(m_groups.indexOf(groupDate), 0, QModelIndex());
@@ -198,7 +196,7 @@ QModelIndex DatesModel::indexForDate(const QDate& date) const
     return QModelIndex();
 }
 
-QVariant DatesModel::data(const QModelIndex& index, int role) const
+QVariant DatesModel::data(const QModelIndex &index, int role) const
 {
     Date *date = 0;
     AccountEntityPair pair;
@@ -249,20 +247,20 @@ QVariant DatesModel::data(const QModelIndex& index, int role) const
         case AccountRole:
             return QVariant::fromValue<Tp::AccountPtr>(pair.first);
         case EntityRole:
-            return QVariant::fromValue<Tpl::EntityPtr>(pair.second);
+            return QVariant::fromValue<KTp::LogEntity>(pair.second);
     }
 
     return QVariant();
 }
 
-int DatesModel::columnCount(const QModelIndex& parent) const
+int DatesModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
 
     return 1;
 }
 
-int DatesModel::rowCount(const QModelIndex& parent) const
+int DatesModel::rowCount(const QModelIndex &parent) const
 {
     // Groups
     if (!parent.isValid()) {
@@ -291,7 +289,7 @@ int DatesModel::rowCount(const QModelIndex& parent) const
     return 0;
 }
 
-QModelIndex DatesModel::parent(const QModelIndex& child) const
+QModelIndex DatesModel::parent(const QModelIndex &child) const
 {
     if (!child.isValid()) {
         return QModelIndex();
@@ -319,7 +317,7 @@ QModelIndex DatesModel::parent(const QModelIndex& child) const
     return QModelIndex();
 }
 
-QModelIndex DatesModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex DatesModel::index(int row, int column, const QModelIndex &parent) const
 {
     // Group
     if (!parent.isValid()) {
@@ -341,14 +339,14 @@ QModelIndex DatesModel::index(int row, int column, const QModelIndex& parent) co
     return QModelIndex();
 }
 
-void DatesModel::onDatesReceived(Tpl::PendingOperation* operation)
+void DatesModel::onDatesReceived(KTp::PendingLoggerOperation *operation)
 {
     // Stop here if clear() was called meanwhile
     if (m_resetInProgress == 0) {
         return;
     }
 
-    Tpl::PendingDates *op = qobject_cast<Tpl::PendingDates*>(operation);
+    KTp::PendingLoggerDates *op = qobject_cast<KTp::PendingLoggerDates*>(operation);
     Q_ASSERT(op);
     Q_ASSERT(m_pendingDates.contains(op));
 
@@ -398,6 +396,5 @@ void DatesModel::onDatesReceived(Tpl::PendingOperation* operation)
         endResetModel();
     }
 }
-
 
 #include "dates-model.moc"

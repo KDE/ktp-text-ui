@@ -25,10 +25,7 @@
 #include <kpeople/personpluginmanager.h>
 #include <kpeople/basepersonsdatasource.h>
 
-#include <TelepathyLoggerQt4/LogManager>
-#include <TelepathyLoggerQt4/PendingEntities>
-#include <TelepathyLoggerQt4/Entity>
-#include <TelepathyLoggerQt4/SearchHit>
+#include <KTp/Logger/log-entity.h>
 
 #include <TelepathyQt/AccountManager>
 #include <TelepathyQt/Contact>
@@ -121,7 +118,7 @@ PersonEntityMergeModel::ContactItem* PersonEntityMergeModel::itemForPersona(cons
     item->personaIndex = personsModel_personaIndex;
 
     const QStringList groupNames = personsModel_personaIndex.data(KPeople::PersonsModel::GroupsRole).toStringList();
-    
+
     GroupItem *groupItem = groupForName(groupNames.size() ? groupNames.first() : QString());
     groupItem->addChild(item);
 
@@ -310,15 +307,15 @@ void PersonEntityMergeModel::initializeModel()
         QModelIndex personaIndex;
         Item *parentItem = 0;
 
-        const Tpl::EntityPtr entity = entityIndex.data(EntityModel::EntityRole).value<Tpl::EntityPtr>();
+        const KTp::LogEntity entity = entityIndex.data(EntityModel::EntityRole).value<KTp::LogEntity>();
         const Tp::AccountPtr account = entityIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-        kDebug() << "Searching for match for entity" << entity->identifier() << "@" << account->uniqueIdentifier();
+        kDebug() << "Searching for match for entity" << entity.id() << "@" << account->uniqueIdentifier();
         for (int j = 0; j < m_personsModel->rowCount(); ++j) {
             const QModelIndex index = m_personsModel->index(j, 0);
             bool found = false;
             for (int k = 0; k < m_personsModel->rowCount(index); ++k) {
                 const QModelIndex childIndex = m_personsModel->index(k, 0, index);
-                if (m_personsModel->data(childIndex, KPeople::PersonsModel::IMsRole).toStringList().contains(entity->identifier())) {
+                if (m_personsModel->data(childIndex, KPeople::PersonsModel::IMsRole).toStringList().contains(entity.id())) {
                     //kDebug() << "\tFound matching persona" << m_personsModel->data(index, PersonsModel::UriRole).toString();
                     //kDebug() << "\t\tFound matching contact" << m_personsModel->data(childIndex, PersonsModel::IMRole).toString();
                     parentItem = itemForPersona(index);

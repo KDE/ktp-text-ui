@@ -99,13 +99,13 @@ QVariant EntityModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
         case Qt::DisplayRole:
-            return item->entity->alias();
+            return item->entity.alias();
         case EntityModel::AccountRole:
             return QVariant::fromValue(item->account);
         case EntityModel::EntityRole:
             return QVariant::fromValue(item->entity);
         case EntityModel::IdRole:
-            return item->entity->identifier();
+            return item->entity.id();
     }
 
     return QVariant();
