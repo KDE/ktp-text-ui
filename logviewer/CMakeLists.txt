@@ -1,9 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/lib)
 
-find_package(KPeople REQUIRED)
-
-include_directories(${KPEOPLE_INCLUDES})
-
 set(ktp-log-viewer_SRCS
         main.cpp
         log-viewer.cpp
