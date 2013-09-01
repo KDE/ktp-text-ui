@@ -85,7 +85,8 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
                                     << KPeople::PersonsModelFeature::imModelFeature()
                                     << KPeople::PersonsModelFeature::groupsModelFeature()
                                     << KPeople::PersonsModelFeature::avatarModelFeature()
-                                    << KPeople::PersonsModelFeature::fullNameModelFeature());
+                                    << KPeople::PersonsModelFeature::fullNameModelFeature()
+                                    << KPeople::PersonsModelFeature::nicknameModelFeature());
 
     m_entityModel = new EntityModel(this);
 

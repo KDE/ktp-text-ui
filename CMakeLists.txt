@@ -15,6 +15,16 @@ set(KDE_MIN_VERSION "4.4.75")
 find_package (KDE4 ${KDE_MIN_VERSION} REQUIRED)
 find_package (TelepathyQt4 0.9.1 REQUIRED)
 find_package (KTp REQUIRED)
+find_package (KPeople QUIET)
+
+macro_log_feature(KPEOPLE_FOUND "KPeople" "Support for KDE Contact Aggregation" "https://projects.kde.org/libkpeople" FALSE "" "")
+macro_display_feature_log()
+
+if (KPEOPLE_FOUND)
+    add_definitions(-DHAVE_KPEOPLE)
+    include_directories(${KPEOPLE_INCLUDES})
+endif (KPEOPLE_FOUND)
+
 
 # FUTURE: When we can depend on KDE 4.10, use emoticoncontexteditaction from here
 # find_package(KdepimLibs 4.10 REQUIRED)

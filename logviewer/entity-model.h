@@ -70,11 +70,17 @@ public:
 
     bool removeRows(int start, int count, const QModelIndex &parent = QModelIndex());
 
+Q_SIGNALS:
+    void modelInitialized();
+
 private Q_SLOTS:
     void onEntitiesSearchFinished(KTp::PendingLoggerOperation*);
+    void onEntityContactRetrieved(Tp::PendingOperation*);
 
 private:
-    QList<EntityModelItem*> m_items;
+    QMap<QString /* id */,EntityModelItem*> m_items;
+    QList<KTp::PendingLoggerOperation*> m_pendingOperations;
+    Tp::AccountManagerPtr m_accountManager;
 
 };
 

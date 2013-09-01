@@ -20,10 +20,12 @@
 #include "person-entity-merge-model.h"
 #include "entity-model.h"
 
+#ifdef HAVE_KPEOPLE
 #include <kpeople/personsmodel.h>
 #include <kpeople/persondata.h>
 #include <kpeople/personpluginmanager.h>
 #include <kpeople/basepersonsdatasource.h>
+#endif
 
 #include <KTp/Logger/log-entity.h>
 
@@ -95,7 +97,7 @@ class PersonEntityMergeModel::ContactItem: public Item
 
 };
 
-PersonEntityMergeModel::ContactItem* PersonEntityMergeModel::itemForPersona(const QModelIndex& personsModel_personaIndex)
+PersonEntityMergeModel::ContactItem* PersonEntityMergeModel::itemForPersona(const QModelIndex &personsModel_personaIndex)
 {
     if (!personsModel_personaIndex.isValid()) {
         return 0;
@@ -117,7 +119,11 @@ PersonEntityMergeModel::ContactItem* PersonEntityMergeModel::itemForPersona(cons
     ContactItem *item = new ContactItem;
     item->personaIndex = personsModel_personaIndex;
 
+#ifdef HAVE_KPEOPLE
     const QStringList groupNames = personsModel_personaIndex.data(KPeople::PersonsModel::GroupsRole).toStringList();
+#else
+    const QStringList groupNames;
+#endif
 
     GroupItem *groupItem = groupForName(groupNames.size() ? groupNames.first() : QString());
     groupItem->addChild(item);
@@ -161,20 +167,48 @@ PersonEntityMergeModel::GroupItem* PersonEntityMergeModel::groupForName(const QV
     return group;
 }
 
-PersonEntityMergeModel::Item* PersonEntityMergeModel::itemForIndex(const QModelIndex& index) const
+PersonEntityMergeModel::Item* PersonEntityMergeModel::itemForIndex(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return m_rootItem;
     }
 
-    Item *parent = static_cast<Item*>(index.internalPointer());
-    Q_ASSERT(parent != 0);
+    if (index.model() == this) {
+        Item *parent = static_cast<Item*>(index.internalPointer());
+        Q_ASSERT(parent != 0);
 
-    Q_ASSERT(index.row() < parent->children.count());
-    Item *item = parent->children.at(index.row());
-    Q_ASSERT(item != 0);
+        Q_ASSERT(index.row() < parent->children.count());
+        Item *item = parent->children.at(index.row());
+        Q_ASSERT(item != 0);
 
-    return item;
+        return item;
+    } else if (index.model() == m_entityModel) {
+        const QString id = index.data(EntityModel::IdRole).toString();
+        // FIXME: We should create a faster lookup method, like having a QHash<QString /*id*/,Item*>
+        Q_FOREACH (Item *group, m_rootItem->children) {
+            Q_FOREACH (Item *item, group->children) {
+                ContactItem *contactItem = static_cast<ContactItem*>(item);
+                if (contactItem->isPersona()) {
+                    Q_FOREACH (Item *subItem, contactItem->children) {
+                        ContactItem *realContact = static_cast<ContactItem*>(subItem);
+                        if (realContact->entityIndex.data(EntityModel::IdRole).toString() == id) {
+                            return realContact;
+                        }
+                    }
+                } else {
+                    if (contactItem->entityIndex.data(EntityModel::IdRole).toString() == id) {
+                        return contactItem;
+                    }
+                }
+            }
+        }
+
+        Q_ASSERT(false);
+        return 0;
+    }
+
+    Q_ASSERT(false && "Invalid index model");
+    return 0;
 }
 
 PersonEntityMergeModel::PersonEntityMergeModel(KPeople::PersonsModel* personsModel,
@@ -183,10 +217,18 @@ PersonEntityMergeModel::PersonEntityMergeModel(KPeople::PersonsModel* personsMod
     QAbstractItemModel(parent),
     m_personsModel(personsModel),
     m_entityModel(entityModel),
-    m_rootItem(new ContactItem)
+    m_rootItem(new ContactItem),
+    m_initializedSources(0)
 {
-    connect(m_personsModel, SIGNAL(modelInitialized()),
-            this, SLOT(initializeModel()));
+    if (KTp::kpeopleEnabled()) {
+        #ifdef HAVE_KPEOPLE
+        connect(m_personsModel, SIGNAL(modelInitialized()),
+                this, SLOT(sourceModelInitialized()));
+        #endif
+    }
+
+    connect(m_entityModel, SIGNAL(modelInitialized()),
+            this, SLOT(sourceModelInitialized()));
 }
 
 PersonEntityMergeModel::~PersonEntityMergeModel()
@@ -262,9 +304,13 @@ QVariant PersonEntityMergeModel::data(const QModelIndex &index, int role) const
     // Extract role from respective parent model
     QVariant value;
     if (item->isPersona()) {
+        #ifdef HAVE_KPEOPLE
         value = m_personsModel->data(item->personaIndex, role);
+        #endif
     } else if (item->contactIndex.isValid()) {
+        #ifdef HAVE_KPEOPLE
         value = m_personsModel->data(item->contactIndex, role);
+        #endif
         if (value.isNull()) {
             value = m_entityModel->data(item->entityIndex, role);
         }
@@ -296,6 +342,21 @@ QModelIndex PersonEntityMergeModel::parent(const QModelIndex& child) const
     return createIndex(parentParent->children.indexOf(parent), 0, parentParent);
 }
 
+void PersonEntityMergeModel::sourceModelInitialized()
+{
+    Q_ASSERT(m_initializedSources <= 2);
+
+    m_initializedSources++;
+    if (!KTp::kpeopleEnabled() || m_initializedSources == 2) {
+        initializeModel();
+        // Don't listen to change notifications until we have populated the model
+        // TODO: Listen to changes from KPeople too
+        connect(m_entityModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                this, SLOT(entityModelDataChanged(QModelIndex,QModelIndex)));
+    }
+}
+
+
 void PersonEntityMergeModel::initializeModel()
 {
     kDebug();
@@ -310,30 +371,40 @@ void PersonEntityMergeModel::initializeModel()
         const KTp::LogEntity entity = entityIndex.data(EntityModel::EntityRole).value<KTp::LogEntity>();
         const Tp::AccountPtr account = entityIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
         kDebug() << "Searching for match for entity" << entity.id() << "@" << account->uniqueIdentifier();
-        for (int j = 0; j < m_personsModel->rowCount(); ++j) {
-            const QModelIndex index = m_personsModel->index(j, 0);
-            bool found = false;
-            for (int k = 0; k < m_personsModel->rowCount(index); ++k) {
-                const QModelIndex childIndex = m_personsModel->index(k, 0, index);
-                if (m_personsModel->data(childIndex, KPeople::PersonsModel::IMsRole).toStringList().contains(entity.id())) {
-                    //kDebug() << "\tFound matching persona" << m_personsModel->data(index, PersonsModel::UriRole).toString();
-                    //kDebug() << "\t\tFound matching contact" << m_personsModel->data(childIndex, PersonsModel::IMRole).toString();
-                    parentItem = itemForPersona(index);
-                    personaIndex = index;
-                    contactIndex = childIndex;
-                    found = true;
+        if (KTp::kpeopleEnabled()) {
+            #ifdef HAVE_KPEOPLE
+            for (int j = 0; j < m_personsModel->rowCount(); ++j) {
+                const QModelIndex index = m_personsModel->index(j, 0);
+                bool found = false;
+                for (int k = 0; k < m_personsModel->rowCount(index); ++k) {
+                    const QModelIndex childIndex = m_personsModel->index(k, 0, index);
+                    if (m_personsModel->data(childIndex, KPeople::PersonsModel::IMsRole).toStringList().contains(entity.id())) {
+                        //kDebug() << "\tFound matching persona" << m_personsModel->data(index, PersonsModel::UriRole).toString();
+                        //kDebug() << "\t\tFound matching contact" << m_personsModel->data(childIndex, PersonsModel::IMRole).toString();
+                        parentItem = itemForPersona(index);
+                        personaIndex = index;
+                        contactIndex = childIndex;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) {
                     break;
                 }
             }
-
-            if (found) {
-                break;
-            }
+            #endif
         }
 
         if (!contactIndex.isValid() && !personaIndex.isValid()) {
             kDebug() << "\tNo match";
-            parentItem = groupForName(QString());
+            // If we don't have kpeople, we don't have information about group
+            // membership, so fallback to grouping by account
+            if (KTp::kpeopleEnabled()) {
+                parentItem = groupForName(QString());
+            } else {
+                parentItem = groupForName(account->displayName());
+            }
         }
 
         ContactItem *item = new ContactItem;
@@ -343,6 +414,20 @@ void PersonEntityMergeModel::initializeModel()
         parentItem->addChild(item);
     }
     endResetModel();
+}
+
+void PersonEntityMergeModel::entityModelDataChanged(const QModelIndex &topLeft,
+                                                    const QModelIndex &bottomRight)
+{
+    // EntityModel always notified about single item change
+    Q_ASSERT(bottomRight == topLeft);
+    Q_UNUSED(bottomRight);
+
+    Item *item = itemForIndex(topLeft);
+    Item *parent = item->parent;
+
+    const QModelIndex changedIndex = index(parent->children.indexOf(item), 0);
+    Q_EMIT dataChanged(changedIndex, changedIndex);
 }
 
 #include "person-entity-merge-model.moc"

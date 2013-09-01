@@ -58,6 +58,11 @@ class PersonEntityMergeModel : public QAbstractItemModel
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
   private Q_SLOTS:
+    void sourceModelInitialized();
+    void entityModelDataChanged(const QModelIndex &topLeft,
+                                const QModelIndex &bottomRight);
+
+  protected:
     void initializeModel();
 
   private:
@@ -73,6 +78,9 @@ class PersonEntityMergeModel : public QAbstractItemModel
     EntityModel *m_entityModel;
 
     ContactItem *m_rootItem;
+
+    int m_initializedSources;
+
 };
 
 #endif // PERSONENTITYMERGEMODEL_H
