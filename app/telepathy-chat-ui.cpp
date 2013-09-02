@@ -2,6 +2,7 @@
     Copyright (C) 2010  David Edmundson    <kde@davidedmundson.co.uk>
     Copyright (C) 2011  Dominik Schmidt    <dev@dominik-schmidt.de>
     Copyright (C) 2011  Francesco Nwokeka  <francesco.nwokeka@gmail.com>
+    Copyright (C) 2013  Daniel Cohen  <analoguecolour@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,16 +22,19 @@
 #include "chat-tab.h"
 #include "chat-window.h"
 #include "text-chat-config.h"
+#include "KTpTextChatPart.h"
 
+#include <kmainwindow.h>
+#include <KTp/types.h>
 #include <KDebug>
 #include <KConfigGroup>
 #include <KWindowSystem>
+#include <kservice.h>
 
 #include <TelepathyQt/ChannelClassSpec>
 #include <TelepathyQt/TextChannel>
 #include <TelepathyQt/ChannelRequest>
 #include <TelepathyQt/ChannelRequestHints>
-
 
 inline Tp::ChannelClassSpecList channelClassList()
 {
@@ -165,9 +169,19 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
 
         Q_ASSERT(window);
 
-        ChatTab* tab = new ChatTab(textChannel, account);
-        tab->setChatWindow(window);
-        window->show();
+        KMainWindow* mainWindow = new KMainWindow();
+        KService::Ptr service = KService::serviceByDesktopPath(QString::fromLatin1("KTpTextChatPart.desktop"));
+        KParts::Part* m_part;
+        QVariantList args;
+        QVariant storeChan;
+        QVariant storeAcc;
+        storeChan.setValue(textChannel);
+        storeAcc.setValue(account);
+        args.append(storeAcc);
+        args.append(storeChan);
+        m_part = service->createInstance<KParts::Part>(0,  args);
+        mainWindow->setCentralWidget(m_part->widget());
+        mainWindow->show();
 
         if (windowRaise) {
             KWindowSystem::forceActiveWindow(window->winId());
