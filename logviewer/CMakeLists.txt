@@ -29,7 +29,7 @@ target_link_libraries(ktp-log-viewer
             ${KDE4_KCMUTILS_LIBS}
             ${KDE4_KDEWEBKIT_LIBRARY}
             ${KTP_LIBRARIES}
-            ${KPEOPLE_LIBS}
+            ${KTP_MODELS_LIBRARIES}
             ${KTP_LOGGER_LIBRARIES}
             ktpchat)
 
