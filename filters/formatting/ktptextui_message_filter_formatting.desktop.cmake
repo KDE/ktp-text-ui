@@ -33,6 +33,7 @@ Name[sr@ijekavianlatin]=Formatiranje teksta
 Name[sr@latin]=Formatiranje teksta
 Name[sv]=Textformatering
 Name[tr]=Metin Biçimlendirme
+Name[ug]=تېكىست فورماتى
 Name[uk]=Форматування тексту
 Name[x-test]=xxText Formattingxx
 Name[zh_CN]=文本格式化
