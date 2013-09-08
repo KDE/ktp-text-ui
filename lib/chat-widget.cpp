@@ -955,7 +955,12 @@ void ChatWidget::initChatArea()
     info.setGroupChat(d->isGroupChat);
     //normal chat - self and one other person.
     if (d->isGroupChat) {
-        info.setChatName(d->channel->targetId());
+        // A temporary solution to display a roomname instead of a full jid
+        // This should be reworked as soon as QtTp is offering the
+        // room name property
+        QString roomName = d->channel->targetId();
+        roomName = roomName.left(roomName.indexOf(QLatin1Char('@')));
+        info.setChatName(roomName);
     } else {
         Tp::ContactPtr otherContact = d->channel->targetContact();
 
