@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Short URLs
+Name[ca]=URL breus
 Name[cs]=Krátké URL
 Name[da]=Korte URL'er
 Name[de]=Kurz-URLs
@@ -30,6 +31,7 @@ Name[uk]=Короткі адреси
 Name[x-test]=xxShort URLsxx
 Name[zh_TW]=短網址
 Comment=Shows the actual URL to which a shortened URL is redirecting to
+Comment[ca]=Mostra l'URL real al que es redirigeix un URL breu
 Comment[cs]=Zobrazí skutečné URL, na které je přesměrováno zkrácené URL
 Comment[da]=Viser den faktiske URL som en afkortet URL videresender til
 Comment[el]=Εμφανίζει το πραγματικό URL στο οποίο ανακατευθύνεται το συντομευμένο
