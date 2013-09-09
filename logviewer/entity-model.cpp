@@ -26,6 +26,9 @@
 
 #include <TelepathyQt/AccountManager>
 #include <TelepathyQt/Account>
+#include <TelepathyQt/ContactManager>
+#include <TelepathyQt/PendingOperation>
+#include <TelepathyQt/PendingContacts>
 
 #include <KDebug>
 
@@ -34,6 +37,7 @@ class EntityModelItem
   public:
     Tp::AccountPtr account;
     KTp::LogEntity entity;
+    QString displayName;
 };
 
 EntityModel::EntityModel(QObject *parent) :
@@ -50,6 +54,7 @@ void EntityModel::setAccountManager(const Tp::AccountManagerPtr &accountManager)
 {
     KTp::LogManager *logManager = KTp::LogManager::instance();
     logManager->setAccountManager(accountManager);
+    m_accountManager = accountManager;
     Q_FOREACH(const Tp::AccountPtr &account, accountManager->allAccounts()) {
         KTp::PendingLoggerEntities *op = logManager->queryEntities(account);
         m_pendingOperations << op;
@@ -78,7 +83,8 @@ QModelIndex EntityModel::index(int row, int column, const QModelIndex &parent) c
         return QModelIndex();
     }
 
-    EntityModelItem *childItem = m_items.at(row);
+    const QStringList keys = m_items.uniqueKeys();
+    EntityModelItem *childItem = m_items.value(keys.at(row));
     if (childItem) {
         return createIndex(row, column, childItem);
     }
@@ -103,7 +109,7 @@ QVariant EntityModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
         case Qt::DisplayRole:
-            return item->entity.alias();
+            return !item->displayName.isEmpty() ? item->displayName : item->entity.alias();
         case EntityModel::AccountRole:
             return QVariant::fromValue(item->account);
         case EntityModel::EntityRole:
@@ -118,8 +124,10 @@ QVariant EntityModel::data(const QModelIndex &index, int role) const
 bool EntityModel::removeRows(int start, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, start, start + count - 1);
+    const QStringList keys = m_items.uniqueKeys();
     for (int row = 0; row < count; ++row) {
-        m_items.removeAt(start);
+        const QString key = keys.at(start + row);
+        m_items.remove(key);
     }
     endRemoveRows();
     return true;
@@ -130,18 +138,52 @@ void EntityModel::onEntitiesSearchFinished(KTp::PendingLoggerOperation *operatio
     KTp::PendingLoggerEntities *pendingEntities = qobject_cast<KTp::PendingLoggerEntities*>(operation);
     const QList<KTp::LogEntity> newEntries = pendingEntities->entities();
 
+    QStringList ids;
     Q_FOREACH (const KTp::LogEntity &entity, newEntries) {
         beginInsertRows(QModelIndex(), m_items.count(), m_items.count());
         EntityModelItem *item = new EntityModelItem();
         item->account = pendingEntities->account();
         item->entity = entity;
-        m_items << item;
+        m_items.insert(entity.id(), item);
+        ids << entity.id();
         endInsertRows();
     }
+
+// Fetch the names only when we don't have KPeople.
+#ifdef HAVE_KPEOPLE
+    if (!KTp::kpeopleEnabled()) {
+#endif
+        if (pendingEntities->account()->connection()) {
+            Tp::PendingOperation *op =
+            pendingEntities->account()->connection()->contactManager()->contactsForIdentifiers(ids);
+            connect(op, SIGNAL(finished(Tp::PendingOperation*)),
+                    this, SLOT(onEntityContactRetrieved(Tp::PendingOperation*)));
+        }
+#ifdef HAVE_KPEOPLE
+    }
+#endif
 
     Q_ASSERT(m_pendingOperations.contains(operation));
     m_pendingOperations.removeAll(operation);
     if (m_pendingOperations.isEmpty()) {
         Q_EMIT modelInitialized();
     }
+}
+
+void EntityModel::onEntityContactRetrieved(Tp::PendingOperation *op)
+{
+    Tp::PendingContacts *pc = qobject_cast<Tp::PendingContacts*>(op);
+    Q_ASSERT(pc);
+
+    const QStringList keys = m_items.uniqueKeys();
+    Q_FOREACH (const Tp::ContactPtr &contact, pc->contacts()) {
+        EntityModelItem *item = m_items.value(contact->id());
+        Q_ASSERT(item);
+
+        item->displayName = contact->alias();
+
+        const QModelIndex changedIndex = index(keys.indexOf(contact->id()), 0);
+        Q_EMIT dataChanged(changedIndex, changedIndex);
+    }
+
 }

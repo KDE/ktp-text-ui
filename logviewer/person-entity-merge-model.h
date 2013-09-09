@@ -24,7 +24,7 @@
 
 #include <TelepathyQt/Types>
 
-#include <KTp/Models/contacts-model.h>
+#include <kpeople/personsmodel.h>
 
 class EntityModel;
 
@@ -34,7 +34,7 @@ class PersonEntityMergeModel : public QAbstractItemModel
 
   public:
     enum Roles {
-        EntityRole = KTp::CustomRole + 1,
+        EntityRole = KPeople::PersonsModel::UserRole + 1,
         ContactRole,
         AccountRole,
         ItemTypeRole
@@ -46,45 +46,40 @@ class PersonEntityMergeModel : public QAbstractItemModel
         Entity
     };
 
-    explicit PersonEntityMergeModel(KTp::ContactsModel *contactsModel, EntityModel *entityModel,
+    explicit PersonEntityMergeModel(KPeople::PersonsModel *personsModel, EntityModel *entityModel,
                                     QObject *parent);
     virtual ~PersonEntityMergeModel();
 
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    virtual QModelIndex parent(const QModelIndex &child) const;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex& index, int role) const;
+    virtual QModelIndex parent(const QModelIndex& child) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
   private Q_SLOTS:
-    void contactsModelRowsInserted(const QModelIndex &parent, int start, int end);
-    void contactsModelRowsRemoved(const QModelIndex &parent, int start, int end);
-    void contactsModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-    void entityModelRowsInserted(const QModelIndex &parent, int start, int end);
-    void entityModelRowsRemoved(const QModelIndex &parent, int start, int end);
-    void entityModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void sourceModelInitialized();
+    void entityModelDataChanged(const QModelIndex &topLeft,
+                                const QModelIndex &bottomRight);
+
+  protected:
+    void initializeModel();
 
   private:
     class Item;
     class ContactItem;
     class GroupItem;
 
-    GroupItem* groupForName(const QString &name);
-    ContactItem* itemForPerson(const QModelIndex &personsModel_personaIndex);
-    Item* itemForMergeModelIndex(const QModelIndex &index) const;
-    Item* itemForEntityModelIndex(const QModelIndex &index) const;
-    Item* itemForContactsModelIndex(const QModelIndex &index) const;
-    QModelIndex indexForItem(Item *item) const;
-    void findPersonForId(const QString &entityId, Item **parentItem,
-                         QModelIndex &personaIndex, QModelIndex &contactIndex);
+    GroupItem* groupForName(const QVariant &name);
+    ContactItem* itemForPersona(const QModelIndex &personsModel_personaIndex);
+    Item* itemForIndex(const QModelIndex &index) const;
 
-    KTp::ContactsModel *m_contactsModel;
+    KPeople::PersonsModel *m_personsModel;
     EntityModel *m_entityModel;
 
     ContactItem *m_rootItem;
 
-    QHash<QString, Item*> m_contactLookup;
+    int m_initializedSources;
 
 };
 

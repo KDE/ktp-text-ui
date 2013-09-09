@@ -24,16 +24,18 @@
 #include <QAbstractItemModel>
 
 #include <TelepathyQt/Types>
-#include <TelepathyQt/Account>
 
+#include <TelepathyQt/Account>
 #include <KTp/types.h>
 
 /**
     Lists all avilable entities.
 
     roles:
-      - Qt::DisplayRole - alias
+      - Qt::DisplayRole - name
+      - Qt::DecorationRole - avatar
       - EntityModel::IdRole
+      - EntityModel::TypeRole - EntityType (EntityTypeContact/Room/Self/Unknown)
       - EntityModel::EntityRole - relevant KTp::LogEntity
   */
 
@@ -49,6 +51,7 @@ class EntityModel : public QAbstractItemModel
 public:
     enum Role {
         IdRole = Qt::UserRole,
+        TypeRole,
         EntityRole,
         AccountRole
     };
@@ -72,10 +75,12 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void onEntitiesSearchFinished(KTp::PendingLoggerOperation*);
+    void onEntityContactRetrieved(Tp::PendingOperation*);
 
 private:
-    QList<EntityModelItem*> m_items;
+    QMap<QString /* id */,EntityModelItem*> m_items;
     QList<KTp::PendingLoggerOperation*> m_pendingOperations;
+    Tp::AccountManagerPtr m_accountManager;
 
 };
 

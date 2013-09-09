@@ -34,6 +34,7 @@ const int SPACING = 2;
 const int ACCOUNT_ICON_SIZE = 22;
 const qreal GROUP_ICON_OPACITY = 0.6;
 
+Q_DECLARE_METATYPE(Tp::AccountPtr);
 
 EntityViewDelegate::EntityViewDelegate(QObject* parent):
     QStyledItemDelegate(parent),
@@ -144,7 +145,7 @@ void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewI
         painter->setFont(accountFont);
 
         const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
-        const QString accountName =  account.isNull() ? QString() : account->displayName();
+        const QString accountName = account->displayName();
         const int accountWidth = accountMetrics.width(accountName);
 
         QRect accountRect = optV4.rect;

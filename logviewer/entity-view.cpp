@@ -67,8 +67,5 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
         }
     }
 
-    // Group has been inserted, expand it
-    if (!parent.isValid()) {
-        expand(model()->index(start, 0, parent));
-    }
+    expandAll();
 }
