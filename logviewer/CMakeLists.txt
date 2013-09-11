@@ -29,8 +29,8 @@ target_link_libraries(ktp-log-viewer
             ${KDE4_KCMUTILS_LIBS}
             ${KDE4_KDEWEBKIT_LIBRARY}
             ${KTP_LIBRARIES}
-            ${KPEOPLE_LIBS}
             ${KTP_LOGGER_LIBRARIES}
+            ${KTP_MODELS_LIBRARIES}
             ktpchat)
 
 install(TARGETS ktp-log-viewer DESTINATION ${BIN_INSTALL_DIR})

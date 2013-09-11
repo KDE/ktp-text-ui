@@ -32,8 +32,7 @@
 #include <KTp/logs-importer.h>
 #include <KTp/contact.h>
 
-#include <kpeople/personsmodel.h>
-#include <kpeople/personsmodelfeature.h>
+#include <KTp/Models/contacts-model.h>
 
 #include <QWebFrame>
 #include <KLineEdit>
@@ -80,17 +79,10 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     m_accountManager = Tp::AccountManager::create(accountFactory, connectionFactory, channelFactory, contactFactory);
     connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
 
-    m_personsModel = new KPeople::PersonsModel(this);
-    m_personsModel->startQuery(QList<KPeople::PersonsModelFeature>()
-                                    << KPeople::PersonsModelFeature::imModelFeature()
-                                    << KPeople::PersonsModelFeature::groupsModelFeature()
-                                    << KPeople::PersonsModelFeature::avatarModelFeature()
-                                    << KPeople::PersonsModelFeature::fullNameModelFeature()
-                                    << KPeople::PersonsModelFeature::nicknameModelFeature());
-
+    m_contactsModel = new KTp::ContactsModel(this);
     m_entityModel = new EntityModel(this);
 
-    m_mergeModel = new PersonEntityMergeModel(m_personsModel, m_entityModel, this);
+    m_mergeModel = new PersonEntityMergeModel(m_contactsModel, m_entityModel, this);
 
     m_filterModel = new EntityFilterModel(this);
     m_filterModel->setSourceModel(m_mergeModel);
@@ -182,6 +174,8 @@ void LogViewer::onAccountManagerReady()
 {
     KTp::LogManager *logManger = KTp::LogManager::instance();
     logManger->setAccountManager(m_accountManager);
+
+    m_contactsModel->setAccountManager(m_accountManager);
     m_entityModel->setAccountManager(m_accountManager);
 
     /* Try to run log import */

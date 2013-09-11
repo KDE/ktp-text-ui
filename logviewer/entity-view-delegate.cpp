@@ -34,8 +34,6 @@ const int SPACING = 2;
 const int ACCOUNT_ICON_SIZE = 22;
 const qreal GROUP_ICON_OPACITY = 0.6;
 
-Q_DECLARE_METATYPE(Tp::AccountPtr);
-
 EntityViewDelegate::EntityViewDelegate(QObject* parent):
     QStyledItemDelegate(parent),
     m_avatarSize(IconSize(KIconLoader::Toolbar)),

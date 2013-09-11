@@ -28,14 +28,11 @@
 
 namespace KTp {
     class PendingLoggerOperation;
+    class ContactsModel;
 }
 
 namespace Ui {
     class LogViewer;
-}
-
-namespace KPeople {
-    class PersonsModel;
 }
 
 class DatesModel;
@@ -85,7 +82,7 @@ private:
     Ui::LogViewer *ui;
     Tp::AccountManagerPtr m_accountManager;
     DatesModel *m_datesModel;
-    KPeople::PersonsModel *m_personsModel;
+    KTp::ContactsModel *m_contactsModel;
     EntityModel *m_entityModel;
     PersonEntityMergeModel *m_mergeModel;
     EntityFilterModel *m_filterModel;
