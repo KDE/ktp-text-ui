@@ -4,13 +4,17 @@ set(ktp-log-viewer_SRCS
         main.cpp
         log-viewer.cpp
         logs-import-dialog.cpp
+        dates-model.cpp
+        dates-view-delegate.cpp
         entity-model.cpp
-        entity-model-item.cpp
         message-view.cpp
         entity-view.cpp
-        entity-proxy-model.cpp
-        conversation-date-picker.cpp
+        entity-view-delegate.cpp
+        entity-filter-model.cpp
+        person-entity-merge-model.cpp
 )
+
+add_subdirectory(config)
 
 kde4_add_ui_files(ktp-log-viewer_SRCS log-viewer.ui)
 
@@ -26,6 +30,7 @@ target_link_libraries(ktp-log-viewer
             ${KDE4_KDEWEBKIT_LIBRARY}
             ${KTP_LIBRARIES}
             ${KTP_LOGGER_LIBRARIES}
+            ${KTP_MODELS_LIBRARIES}
             ktpchat)
 
 install(TARGETS ktp-log-viewer DESTINATION ${BIN_INSTALL_DIR})

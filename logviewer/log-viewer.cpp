@@ -32,7 +32,8 @@
 #include <KTp/logs-importer.h>
 #include <KTp/contact.h>
 
-#include <QSortFilterProxyModel>
+#include <KTp/Models/contacts-model.h>
+
 #include <QWebFrame>
 #include <KLineEdit>
 #include <KPixmapSequence>
@@ -45,11 +46,17 @@
 #include <KAction>
 #include <KActionCollection>
 #include <KMenuBar>
+#include <KSettings/Dialog>
+
+#include <KDE/KCModuleProxy>
 
 #include "entity-model.h"
-#include "entity-proxy-model.h"
-#include "entity-model-item.h"
 #include "logs-import-dialog.h"
+#include "person-entity-merge-model.h"
+#include "entity-filter-model.h"
+#include "entity-view-delegate.h"
+#include "dates-model.h"
+#include "dates-view-delegate.h"
 
 Q_DECLARE_METATYPE(QModelIndex)
 
@@ -72,19 +79,35 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     m_accountManager = Tp::AccountManager::create(accountFactory, connectionFactory, channelFactory, contactFactory);
     connect(m_accountManager->becomeReady(), SIGNAL(finished(Tp::PendingOperation*)), SLOT(onAccountManagerReady()));
 
+    m_contactsModel = new KTp::ContactsModel(this);
     m_entityModel = new EntityModel(this);
-    m_filterModel = new EntityProxyModel(this);
-    m_filterModel->setSourceModel(m_entityModel);
+
+    m_mergeModel = new PersonEntityMergeModel(m_contactsModel, m_entityModel, this);
+
+    m_filterModel = new EntityFilterModel(this);
+    m_filterModel->setSourceModel(m_mergeModel);
 
     ui->entityList->setModel(m_filterModel);
+    ui->entityList->setItemDelegate(new EntityViewDelegate(ui->entityList));
     ui->entityList->setItemsExpandable(true);
-    ui->entityList->setRootIsDecorated(true);
+    ui->entityList->setRootIsDecorated(false);
+    ui->entityList->setExpandsOnDoubleClick(false);
+    ui->entityList->setIndentation(0);
     ui->entityList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->entityFilter->setProxy(m_filterModel);
     ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
 
-    connect(ui->entityList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onEntitySelected(QModelIndex,QModelIndex)));
-    connect(ui->datePicker, SIGNAL(dateChanged(QDate)), SLOT(onDateSelected()));
+    m_datesModel = new DatesModel(this);
+    ui->datesView->setModel(m_datesModel);
+    ui->datesView->setItemDelegate(new DatesViewDelegate(ui->datesView));
+    ui->datesView->setItemsExpandable(true);
+    ui->datesView->setRootIsDecorated(false);
+    ui->datesView->setExpandsOnDoubleClick(false);
+    ui->datesView->setIndentation(0);
+
+    connect(ui->entityList, SIGNAL(clicked(QModelIndex)), SLOT(onEntityListClicked(QModelIndex)));
+    connect(ui->datesView, SIGNAL(clicked(QModelIndex)), SLOT(slotDateClicked(QModelIndex)));
+    connect(ui->datesView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(slotUpdateMainWindow()));
     connect(ui->messageView, SIGNAL(conversationSwitchRequested(QDate)), SLOT(slotSetConversationDate(QDate)));
     connect(ui->globalSearch, SIGNAL(returnPressed(QString)), SLOT(slotStartGlobalSearch(QString)));
     connect(ui->globalSearch, SIGNAL(clearButtonClicked()), SLOT(slotClearGlobalSearch()));
@@ -100,6 +123,10 @@ void LogViewer::setupActions()
 {
     KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
     KStandardAction::showMenubar(this->menuBar(), SLOT(setVisible(bool)), actionCollection());
+
+    KAction *configure = new KAction(i18n("&Configure LogViewer"), this);
+    configure->setIcon(KIcon(QLatin1String("configure")));
+    connect(configure, SIGNAL(triggered(bool)), SLOT(slotConfigure()));
 
     KAction *clearAccHistory = new KAction(i18n("Clear &account history"), this);
     clearAccHistory->setIcon(KIcon(QLatin1String("edit-clear-history")));
@@ -131,6 +158,7 @@ void LogViewer::setupActions()
     actionCollection()->addAction(QLatin1String("import-kopete-logs"), importKopeteLogs);
     actionCollection()->addAction(QLatin1String("jump-prev-conversation"), prevConversation);
     actionCollection()->addAction(QLatin1String("jump-next-conversation"), nextConversation);
+    actionCollection()->addAction(QLatin1String("configure"), configure);
 
     /* Build the popup menu for entity list */
     m_entityListContextMenu = new KMenu(ui->entityList);
@@ -142,40 +170,68 @@ void LogViewer::onAccountManagerReady()
 {
     KTp::LogManager *logManger = KTp::LogManager::instance();
     logManger->setAccountManager(m_accountManager);
+
+    m_contactsModel->setAccountManager(m_accountManager);
     m_entityModel->setAccountManager(m_accountManager);
 
     /* Try to run log import */
     slotImportKopeteLogs(false);
 }
 
-void LogViewer::onEntitySelected(const QModelIndex &current, const QModelIndex &previous)
+void LogViewer::onEntityListClicked(const QModelIndex& index)
 {
-    Q_UNUSED(previous);
+    const PersonEntityMergeModel::ItemType itemType =
+        static_cast<PersonEntityMergeModel::ItemType>(index.data(PersonEntityMergeModel::ItemTypeRole).toUInt());
 
-    /* Ignore account nodes */
-    if (current.parent() == QModelIndex()) {
+    if (itemType == PersonEntityMergeModel::Group) {
+        ui->entityList->setExpanded(index, !ui->entityList->isExpanded(index));
+        // Enable clear-account-logs only when grouping by accounts (i.e. in non-kpeople mode)
+        const bool enabled = !index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>().isNull();
+        actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(enabled);
         actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(false);
-        return;
-    }
-
-    KTp::LogEntity entity = current.data(EntityModel::EntityRole).value<KTp::LogEntity>();
-    Tp::AccountPtr account = current.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-
-    if (!account.isNull() && entity.isValid()) {
+    } else if (itemType == PersonEntityMergeModel::Persona) {
+        if (m_expandedPersona.isValid()) {
+            ui->entityList->collapse(m_expandedPersona);
+        }
+        ui->entityList->expand(index);
+        m_expandedPersona = index;
+        ui->messageView->clear();
+        // FIXME: Show something fancy when selecting a persona
+        m_datesModel->clear();
+        for (int i = 0; i < index.model()->rowCount(index); ++i) {
+            const QModelIndex child = index.child(i, 0);
+            const KTp::LogEntity entity = child.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
+            const Tp::AccountPtr account = child.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
+            Q_ASSERT(entity.isValid());
+            Q_ASSERT(!account.isNull());
+            m_datesModel->addEntity(account, entity);
+        }
         actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
+        actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(false);
+        return;
+    } else if (itemType == PersonEntityMergeModel::Entity) {
+        const KTp::LogEntity entity = index.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
+        const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
+        Q_ASSERT(entity.isValid());
+        Q_ASSERT(!account.isNull());
+        m_datesModel->setEntity(account, entity);
+        actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
+        actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(true);
     }
-
-    ui->datePicker->setEntity(account, entity);
 }
 
-void LogViewer::onDateSelected()
+void LogViewer::slotDateClicked(const QModelIndex& index)
 {
-    slotUpdateMainWindow();
+    if (ui->datesView->isExpanded(index)) {
+        ui->datesView->collapse(index);
+    } else {
+        ui->datesView->expand(index);
+    }
 }
 
 void LogViewer::slotUpdateMainWindow()
 {
-    QModelIndex currentIndex = ui->entityList->currentIndex();
+    const QModelIndex currentIndex = ui->entityList->currentIndex();
 
     if (!currentIndex.isValid()) {
         return;
@@ -183,13 +239,14 @@ void LogViewer::slotUpdateMainWindow()
 
     /* If the selected date is not within valid (highlighted) dates then display empty
      * conversation (even if there is a chat log for that particular date) */
-    QDate date = ui->datePicker->date();
-    if (!ui->datePicker->validDates().contains(date)) {
-        date = QDate();
+    QDate date;
+    const QModelIndex currentDateIndex = ui->datesView->currentIndex();
+    if (currentDateIndex.isValid()) {
+        date = currentDateIndex.data(DatesModel::DateRole).toDate();
     }
 
-    m_prevConversationDate = ui->datePicker->previousDate();
-    m_nextConversationDate = ui->datePicker->nextDate();
+    m_prevConversationDate = m_datesModel->previousDate(currentDateIndex);
+    m_nextConversationDate = m_datesModel->nextDate(currentDateIndex);
 
     actionCollection()->action(QLatin1String("jump-prev-conversation"))->setEnabled(m_prevConversationDate.isValid());
     actionCollection()->action(QLatin1String("jump-next-conversation"))->setEnabled(m_nextConversationDate.isValid());
@@ -198,15 +255,23 @@ void LogViewer::slotUpdateMainWindow()
     nearestDates.first = m_prevConversationDate;
     nearestDates.second = m_nextConversationDate;
 
-    KTp::LogEntity entity = currentIndex.data(EntityModel::EntityRole).value<KTp::LogEntity>();
-    KTp::ContactPtr contact = currentIndex.data(EntityModel::ContactRole).value<KTp::ContactPtr>();
-    Tp::AccountPtr account = currentIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-    ui->messageView->loadLog(account, entity, contact, date, nearestDates);
+    KTp::LogEntity entity = currentDateIndex.data(DatesModel::EntityRole).value<KTp::LogEntity>();
+    Tp::AccountPtr account = currentDateIndex.data(DatesModel::AccountRole).value<Tp::AccountPtr>();
+    KTp::ContactPtr contact = currentIndex.data(PersonEntityMergeModel::ContactRole).value<KTp::ContactPtr>();
+    if (!entity.isValid() || account.isNull()) {
+        ui->messageView->clear();
+    } else {
+        ui->messageView->loadLog(account, entity, contact, date, nearestDates);
+    }
 }
 
 void LogViewer::slotSetConversationDate(const QDate &date)
 {
-    ui->datePicker->setDate(date);
+    const QModelIndex index = m_datesModel->indexForDate(date);
+    if (index.isValid()) {
+        ui->datesView->setCurrentIndex(index);
+        // slotUpdateMainWindow() is called through currentChanged() signal
+    }
 }
 
 void LogViewer::slotStartGlobalSearch(const QString &term)
@@ -214,7 +279,7 @@ void LogViewer::slotStartGlobalSearch(const QString &term)
     if (term.isEmpty()) {
         ui->messageView->clearHighlightText();
         m_filterModel->clearSearchHits();
-        ui->datePicker->clearSearchHits();
+        m_datesModel->clearSearchHits();
         return;
     }
 
@@ -236,7 +301,7 @@ void LogViewer::onGlobalSearchFinished(KTp::PendingLoggerOperation *operation)
     Q_ASSERT(search);
 
     m_filterModel->setSearchHits(search->searchHits());
-    ui->datePicker->setSearchHits(search->searchHits());
+    m_datesModel->setSearchHits(search->searchHits());
 
     ui->globalSearch->setEnabled(true);
     ui->busyAnimation->setSequence(KPixmapSequence());
@@ -246,7 +311,7 @@ void LogViewer::onGlobalSearchFinished(KTp::PendingLoggerOperation *operation)
 void LogViewer::slotClearGlobalSearch()
 {
     m_filterModel->clearSearchHits();
-    ui->datePicker->clearSearchHits();
+    m_datesModel->clearSearchHits();
     ui->messageView->clearHighlightText();
 }
 
@@ -256,10 +321,19 @@ void LogViewer::slotShowEntityListContextMenu (const QPoint &coords)
     if (!index.isValid()) {
         return;
     }
-    index = m_filterModel->mapToSource(index);
 
-    /* Whether the node is an account or a contact */
-    actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled((index.parent() != QModelIndex()));
+    PersonEntityMergeModel::ItemType type =
+        static_cast<PersonEntityMergeModel::ItemType>(index.data(PersonEntityMergeModel::ItemTypeRole).toInt());
+    if (type == PersonEntityMergeModel::Group) {
+        const bool enabled = !index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>().isNull();
+        actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(enabled);
+    } else {
+        const bool enabled = ((type != PersonEntityMergeModel::Persona) &&
+                              (static_cast<PersonEntityMergeModel::ItemType>(
+                                    index.parent().data(PersonEntityMergeModel::ItemTypeRole).toInt()) != PersonEntityMergeModel::Persona));
+        actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(enabled);
+        actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
+    }
 
     m_entityListContextMenu->setProperty("index", QVariant::fromValue(index));
     m_entityListContextMenu->popup(ui->entityList->mapToGlobal(coords));
@@ -267,7 +341,7 @@ void LogViewer::slotShowEntityListContextMenu (const QPoint &coords)
 
 void LogViewer::slotClearAccountHistory()
 {
-    QModelIndex index = ui->entityList->currentIndex();
+    QModelIndex index = m_filterModel->mapToSource(ui->entityList->currentIndex());
 
     /* Usually a contact node is selected, so traverse up to it's parent
      * account node */
@@ -279,7 +353,7 @@ void LogViewer::slotClearAccountHistory()
         return;
     }
 
-    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+    const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
     if (account.isNull()) {
         return;
     }
@@ -294,46 +368,53 @@ void LogViewer::slotClearAccountHistory()
     KTp::LogManager::instance()->clearAccountLogs(account);
 
     QModelIndex parent = index.parent();
-    m_entityModel->removeRow(index.row(), parent);
-
-    // If last entity was removed then remove the account node as well
-    if (parent.isValid() && !m_entityModel->hasChildren(parent)) {
-        m_entityModel->removeRow(parent.row(), parent.parent());
-    }
+    m_mergeModel->removeRow(index.row(), parent);
 
     m_entityListContextMenu->setProperty("index", QVariant());
 }
 
 void LogViewer::slotClearContactHistory()
 {
-    QModelIndex index = ui->entityList->currentIndex();
+    const QModelIndex index = m_filterModel->mapToSource(ui->entityList->currentIndex());
     if (!index.isValid()) {
         return;
     }
 
-    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-    KTp::LogEntity entity = index.data(EntityModel::EntityRole).value<KTp::LogEntity>();
-    if (account.isNull() || !entity.isValid()) {
-        return;
+    if (static_cast<PersonEntityMergeModel::ItemType>(index.data(PersonEntityMergeModel::ItemTypeRole).toInt()) == PersonEntityMergeModel::Persona) {
+        QString name = index.data(Qt::DisplayRole).toString();
+        if (KMessageBox::warningYesNo(
+                this, i18nc("%1 is contactdisplay name", "Are you sure you want to remove history of all conversations with %1?", name),
+                i18n("Clear contact history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
+                QString(), KMessageBox::Dangerous) == KMessageBox::No) {
+            return;
+        }
+
+        for (int i = 0; i < m_entityModel->rowCount(index); i++) {
+            const QModelIndex child = m_entityModel->index(i, 0, index);
+            const Tp::AccountPtr account = child.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
+            const KTp::LogEntity entity = child.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
+
+            KTp::LogManager::instance()->clearContactLogs(account, entity);
+        }
+    } else {
+        const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
+        const KTp::LogEntity entity = index.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
+        if (account.isNull() || !entity.isValid()) {
+            return;
+        }
+
+        QString name = index.data(Qt::DisplayRole).toString();
+        if (KMessageBox::warningYesNo(
+                this, i18nc("%1 is contact display name, %2 is contact UID", "Are you sure you want to remove history of all conversations with %1 (%2)?", name, entity.id()),
+                i18n("Clear contact history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
+                QString(), KMessageBox::Dangerous) == KMessageBox::No) {
+            return;
+        }
+
+        KTp::LogManager::instance()->clearContactLogs(account, entity);
     }
 
-    QString name = index.data(Qt::DisplayRole).toString();
-    if (KMessageBox::warningYesNo(
-            this, i18n("Are you sure you want to remove history of all conversations with %1?", name),
-            i18n("Clear contact history"), KStandardGuiItem::del(), KStandardGuiItem::cancel(),
-            QString(), KMessageBox::Dangerous) == KMessageBox::No) {
-        return;
-    }
-
-    KTp::LogManager::instance()->clearContactLogs(account, entity);
-
-    QModelIndex parent = index.parent();
-    m_entityModel->removeRow(index.row(), parent);
-
-    // If last entity was removed then remove the account node as well
-    if (parent.isValid() && !m_entityModel->hasChildren(parent)) {
-        m_entityModel->removeRow(parent.row(), parent.parent());
-    }
+    m_mergeModel->removeRow(index.row(), index.parent());
 
     m_entityListContextMenu->setProperty("index", QVariant());
 }
@@ -375,7 +456,10 @@ void LogViewer::slotJumpToNextConversation()
         return;
     }
 
-    ui->datePicker->setDate(m_nextConversationDate);
+    const QModelIndex index = m_datesModel->indexForDate(m_nextConversationDate);
+    if (index.isValid()) {
+        ui->datesView->setCurrentIndex(index);
+    }
 }
 
 void LogViewer::slotJumpToPrevConversation()
@@ -384,7 +468,30 @@ void LogViewer::slotJumpToPrevConversation()
         return;
     }
 
-    ui->datePicker->setDate(m_prevConversationDate);
+    const QModelIndex index = m_datesModel->indexForDate(m_prevConversationDate);
+    if (index.isValid()) {
+        ui->datesView->setCurrentIndex(index);
+    }
+}
+
+void LogViewer::slotConfigure()
+{
+    KSettings::Dialog *dialog = new KSettings::Dialog(this);
+
+    KPageWidgetItem *configPage = dialog->addModule(QLatin1String("kcm_ktp_chat_appearance"));
+    KCModuleProxy *proxy = qobject_cast<KCModuleProxy*>(configPage->widget());
+    Q_ASSERT(proxy);
+    connect(proxy->realModule(), SIGNAL(reloadTheme()),
+            ui->messageView, SLOT(reloadTheme()));
+
+    configPage = dialog->addModule(QLatin1String("kcm_ktp_logviewer_behavior"));
+    proxy = qobject_cast<KCModuleProxy*>(configPage->widget());
+    Q_ASSERT(proxy);
+    connect(proxy->realModule(), SIGNAL(reloadMessages()),
+            ui->messageView, SLOT(reloadTheme()));
+
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
 }
 
 void LogViewer::slotNoLogsForContact()

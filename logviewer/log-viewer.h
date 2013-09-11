@@ -24,16 +24,21 @@
 #include <KXmlGuiWindow>
 #include <TelepathyQt/Types>
 
+#include "message-view.h"
+
 namespace KTp {
-class PendingLoggerOperation;
+    class PendingLoggerOperation;
+    class ContactsModel;
 }
 
 namespace Ui {
     class LogViewer;
 }
 
+class DatesModel;
 class EntityModel;
-class EntityProxyModel;
+class EntityFilterModel;
+class PersonEntityMergeModel;
 class KMenu;
 
 class LogViewer : public KXmlGuiWindow
@@ -45,11 +50,12 @@ public:
                        const Tp::ChannelFactoryPtr &channelFactory, const Tp::ContactFactoryPtr &contactFactory,
                        QWidget *parent = 0);
     ~LogViewer();
+
 private Q_SLOTS:
     void onAccountManagerReady();
 
-    void onEntitySelected(const QModelIndex &current, const QModelIndex &previous);
-    void onDateSelected();
+    void onEntityListClicked(const QModelIndex &index);
+    void slotDateClicked(const QModelIndex &index);
 
     void slotUpdateMainWindow();
     void slotSetConversationDate(const QDate &date);
@@ -59,14 +65,15 @@ private Q_SLOTS:
     void slotStartGlobalSearch(const QString &term);
     void onGlobalSearchFinished(KTp::PendingLoggerOperation *);
 
-    void slotClearAccountHistory();
     void slotClearContactHistory();
+    void slotClearAccountHistory();
 
     void slotImportKopeteLogs(bool force = true);
 
     void slotJumpToPrevConversation();
     void slotJumpToNextConversation();
 
+    void slotConfigure();
     void slotNoLogsForContact();
 
 private:
@@ -74,13 +81,19 @@ private:
 
     Ui::LogViewer *ui;
     Tp::AccountManagerPtr m_accountManager;
+    DatesModel *m_datesModel;
+    KTp::ContactsModel *m_contactsModel;
     EntityModel *m_entityModel;
-    EntityProxyModel *m_filterModel;
+    PersonEntityMergeModel *m_mergeModel;
+    EntityFilterModel *m_filterModel;
+
+    QPersistentModelIndex m_expandedPersona;
 
     KMenu *m_entityListContextMenu;
 
     QDate m_prevConversationDate;
     QDate m_nextConversationDate;
+
 };
 
 #endif // LOGVIEWER_H

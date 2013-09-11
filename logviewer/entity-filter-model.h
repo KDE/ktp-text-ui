@@ -1,6 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012 by David Edmundson <kde@davidedmundson.co.uk>      *
- *   Copyright (C) 2013 by Daniel Vrátil <dvratil@redhat.com>              *
+ *   Copyright (C) 2012,2013 by Dan Vratil <dan@progdan.cz>                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,48 +17,36 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef CONVERSATIONDATEPICKER_H
-#define CONVERSATIONDATEPICKER_H
 
-#include <KDatePicker>
+#ifndef ENTITY_PROXY_MODEL_H
+#define ENTITY_PROXY_MODEL_H
+
+#include <QSortFilterProxyModel>
+
+#include <TelepathyQt/Types>
 
 #include <KTp/Logger/log-entity.h>
 #include <KTp/Logger/log-search-hit.h>
 
-#include <TelepathyQt/Types>
+typedef QPair< Tp::AccountPtr, KTp::LogEntity > AccountEntityPair;
 
-namespace KTp {
-class PendingLoggerOperation;
-}
-
-class ConversationDatePicker : public KDatePicker
+class EntityFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
-public:
-    explicit ConversationDatePicker(QWidget *parent = 0);
 
-    void setEntity(const Tp::AccountPtr &accout, const KTp::LogEntity &entity);
-    void clear();
+public:
+    explicit EntityFilterModel(QObject *parent = 0);
+    virtual ~EntityFilterModel();
 
     void setSearchHits(const QList<KTp::LogSearchHit> &searchHits);
     void clearSearchHits();
 
-    QDate previousDate() const;
-    QDate nextDate() const;
-    const QList<QDate>& validDates() const;
-
-private Q_SLOTS:
-    void onDatesFinished(KTp::PendingLoggerOperation *op);
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
 
 private:
-    void updatePaintedDates();
-    void setDatesFromSearchHits();
-
-    Tp::AccountPtr m_account;
-    KTp::LogEntity m_entity;
     QList<KTp::LogSearchHit> m_searchHits;
 
-    QList< QDate > m_setDates;
 };
 
-#endif // CONVERSATIONDATEPICKER_H
+#endif // ENTITY_PROXY_MODEL_H

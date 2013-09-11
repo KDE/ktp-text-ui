@@ -17,7 +17,9 @@
     <Action name="jump-prev-conversation"/>
     <Action name="jump-next-conversation"/>
   </Menu>
-  <Menu name="settings"/>
+  <Menu name="settings">
+    <Action name="configure"/>
+  </Menu>
  </MenuBar>
 
  </gui>

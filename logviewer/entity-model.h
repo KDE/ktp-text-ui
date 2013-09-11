@@ -53,8 +53,7 @@ public:
         IdRole = Qt::UserRole,
         TypeRole,
         EntityRole,
-        AccountRole,
-        ContactRole
+        AccountRole
     };
 
     explicit EntityModel(QObject *parent = 0);
@@ -64,7 +63,6 @@ public:
 
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
 
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
@@ -72,12 +70,17 @@ public:
 
     bool removeRows(int start, int count, const QModelIndex &parent = QModelIndex());
 
+Q_SIGNALS:
+    void modelInitialized();
+
 private Q_SLOTS:
     void onEntitiesSearchFinished(KTp::PendingLoggerOperation*);
     void onEntityContactRetrieved(Tp::PendingOperation*);
 
 private:
-    EntityModelItem *m_rootItem;
+    QMap<QString /* id */,EntityModelItem*> m_items;
+    QList<KTp::PendingLoggerOperation*> m_pendingOperations;
+    Tp::AccountManagerPtr m_accountManager;
 
 };
 

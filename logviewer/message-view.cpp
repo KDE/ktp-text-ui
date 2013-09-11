@@ -37,6 +37,9 @@ MessageView::MessageView(QWidget *parent) :
     AdiumThemeView(parent),
     m_infoLabel(new QLabel(this))
 {
+
+    loadSettings();
+
     QFont font = m_infoLabel->font();
     font.setBold(true);
     m_infoLabel->setFont(font);
@@ -57,8 +60,12 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &e
 
     m_infoLabel->hide();
     m_account = account;
-    m_entity = entity;
-    m_contact = contact;
+    // FIXME: Workaround for a bug, probably in QGlib which causes that
+    // m_entity = m_entity results in invalid m_entity->m_class being null
+    if (m_entity != entity) {
+        m_entity = entity;
+    }
+    m_contact = m_contact.dynamicCast<Tp::Contact>(contact);
     m_date = date;
     m_prev = nearestDates.first;
     m_next = nearestDates.second;
@@ -131,24 +138,44 @@ bool logMessageOlderThan(const KTp::LogMessage &e1, const KTp::LogMessage &e2)
     return e1.time() < e2.time();
 }
 
+bool logMessageNewerThan(const KTp::LogMessage &e1, const KTp::LogMessage &e2)
+{
+    return e1.time() > e2.time();
+}
+
 void MessageView::processStoredEvents()
 {
+    AdiumThemeStatusInfo prevConversation;
     if (m_prev.isValid()) {
-        AdiumThemeStatusInfo message(AdiumThemeMessageInfo::HistoryStatus);
-        message.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Previous conversation")));
-        message.setService(m_account->serviceName());
-        message.setTime(QDateTime(m_prev));
+        prevConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
+        prevConversation.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Previous conversation")));
+        prevConversation.setService(m_account->serviceName());
+        prevConversation.setTime(QDateTime(m_prev));
+    }
 
-        addAdiumStatusMessage(message);
+    AdiumThemeStatusInfo nextConversation;
+    if (m_next.isValid()) {
+        nextConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
+        nextConversation.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Next conversation")));
+        nextConversation.setService(m_account->serviceName());
+        nextConversation.setTime(QDateTime(m_next));
+    }
+
+    if (m_sortMode == MessageView::SortOldestTop) {
+        if (m_prev.isValid()) {
+            addAdiumStatusMessage(prevConversation);
+        }
+        qSort(m_events.begin(), m_events.end(), logMessageOlderThan);
+    } else if (m_sortMode == MessageView::SortNewestTop) {
+        if (m_next.isValid()) {
+            addAdiumStatusMessage(nextConversation);
+        }
+        qSort(m_events.begin(), m_events.end(), logMessageNewerThan);
     }
 
     if (m_events.isEmpty()) {
         showInfoMessage(i18n("There are no logs for this day"));
     }
-
-    // See https://bugs.kde.org/show_bug.cgi?id=317866
-    // Uses the operator< overload above
-    qSort(m_events.begin(), m_events.end(), logMessageOlderThan);
 
     while (!m_events.isEmpty()) {
         const KTp::LogMessage msg = m_events.takeFirst();
@@ -157,12 +184,10 @@ void MessageView::processStoredEvents()
         addMessage(message);
     }
 
-    if (m_next.isValid()) {
-        AdiumThemeStatusInfo message(AdiumThemeMessageInfo::HistoryStatus);
-        message.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Next conversation")));
-        message.setService(m_account->serviceName());
-        message.setTime(QDateTime(m_next));
-        addAdiumStatusMessage(message);
+    if (m_sortMode == MessageView::SortOldestTop && m_next.isValid()) {
+        addAdiumStatusMessage(nextConversation);
+    } else if (m_sortMode == MessageView::SortNewestTop && m_prev.isValid()) {
+        addAdiumStatusMessage(prevConversation);
     }
 
     /* Can't highlight the text directly, we need to wait for the JavaScript in
@@ -194,6 +219,18 @@ void MessageView::onLinkClicked(const QUrl &link)
     AdiumThemeView::onLinkClicked(link);
 }
 
+void MessageView::loadSettings()
+{
+    const KConfig config(QLatin1String("ktelepathyrc"));
+    const KConfigGroup group = config.group("LogViewer");
+    m_sortMode = static_cast<SortMode>(group.readEntry("SortMode", static_cast<int>(SortOldestTop)));
+}
+
+void MessageView::reloadTheme()
+{
+    loadSettings();
+    loadLog(m_account, m_entity, m_contact, m_date, qMakePair(m_prev, m_next));
+}
 
 void MessageView::doHighlightText()
 {

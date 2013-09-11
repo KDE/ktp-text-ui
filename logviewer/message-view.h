@@ -34,6 +34,11 @@ class MessageView : public AdiumThemeView
 {
     Q_OBJECT
 public:
+    enum SortMode {
+        SortOldestTop,
+        SortNewestTop
+    };
+
     explicit MessageView(QWidget *parent = 0);
 
     void loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &entity,
@@ -47,6 +52,7 @@ public:
 
 public Q_SLOTS:
     void onLinkClicked(const QUrl &link);
+    void reloadTheme();
 
 private Q_SLOTS:
     void onEventsLoaded(KTp::PendingLoggerOperation* po);
@@ -60,9 +66,13 @@ protected:
     virtual void resizeEvent(QResizeEvent *e);
 
 private:
+    void loadSettings();
+
+    SortMode m_sortMode;
+
     KTp::LogEntity m_entity;
     Tp::AccountPtr m_account;
-    Tp::ContactPtr m_contact;
+    KTp::ContactPtr m_contact;
     QDate m_date;
     QDate m_prev;
     QDate m_next;
