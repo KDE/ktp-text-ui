@@ -60,6 +60,7 @@ class PersonEntityMergeModel : public QAbstractItemModel
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual QModelIndex parent(const QModelIndex& child) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
   private Q_SLOTS:
     void sourceModelInitialized();

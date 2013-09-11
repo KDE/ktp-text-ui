@@ -127,7 +127,7 @@ void LogViewer::setupActions()
     KAction *configure = new KAction(i18n("&Configure LogViewer"), this);
     configure->setIcon(KIcon(QLatin1String("configure")));
     connect(configure, SIGNAL(triggered(bool)), SLOT(slotConfigure()));
-    /*
+
     KAction *clearAccHistory = new KAction(i18n("Clear &account history"), this);
     clearAccHistory->setIcon(KIcon(QLatin1String("edit-clear-history")));
     connect(clearAccHistory, SIGNAL(triggered(bool)), SLOT(slotClearAccountHistory()));
@@ -136,7 +136,6 @@ void LogViewer::setupActions()
     clearContactHistory->setIcon(KIcon(QLatin1String("edit-clear-history")));
     clearContactHistory->setEnabled(false);
     connect(clearContactHistory, SIGNAL(triggered(bool)), SLOT(slotClearContactHistory()));
-    */
 
     KAction *importKopeteLogs = new KAction(i18n("&Import Kopete Logs"), this);
     importKopeteLogs->setIcon(KIcon(QLatin1String("document-import")));
@@ -154,9 +153,8 @@ void LogViewer::setupActions()
     nextConversation->setEnabled(false);
     connect(nextConversation, SIGNAL(triggered(bool)), SLOT(slotJumpToNextConversation()));
 
-    /*
+    actionCollection()->addAction(QLatin1String("clear-account-logs"), clearAccHistory);
     actionCollection()->addAction(QLatin1String("clear-contact-logs"), clearContactHistory);
-    */
     actionCollection()->addAction(QLatin1String("import-kopete-logs"), importKopeteLogs);
     actionCollection()->addAction(QLatin1String("jump-prev-conversation"), prevConversation);
     actionCollection()->addAction(QLatin1String("jump-next-conversation"), nextConversation);
@@ -164,10 +162,8 @@ void LogViewer::setupActions()
 
     /* Build the popup menu for entity list */
     m_entityListContextMenu = new KMenu(ui->entityList);
-    /*
     m_entityListContextMenu->addAction(clearContactHistory);
     m_entityListContextMenu->addAction(clearAccHistory);
-    */
 }
 
 void LogViewer::onAccountManagerReady()
@@ -189,6 +185,10 @@ void LogViewer::onEntityListClicked(const QModelIndex& index)
 
     if (itemType == PersonEntityMergeModel::Group) {
         ui->entityList->setExpanded(index, !ui->entityList->isExpanded(index));
+        // Enable clear-account-logs only when grouping by accounts (i.e. in non-kpeople mode)
+        const bool enabled = !index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>().isNull();
+        actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(enabled);
+        actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(false);
     } else if (itemType == PersonEntityMergeModel::Persona) {
         if (m_expandedPersona.isValid()) {
             ui->entityList->collapse(m_expandedPersona);
@@ -206,6 +206,8 @@ void LogViewer::onEntityListClicked(const QModelIndex& index)
             Q_ASSERT(!account.isNull());
             m_datesModel->addEntity(account, entity);
         }
+        actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
+        actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(false);
         return;
     } else if (itemType == PersonEntityMergeModel::Entity) {
         const KTp::LogEntity entity = index.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
@@ -213,6 +215,8 @@ void LogViewer::onEntityListClicked(const QModelIndex& index)
         Q_ASSERT(entity.isValid());
         Q_ASSERT(!account.isNull());
         m_datesModel->setEntity(account, entity);
+        actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
+        actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(true);
     }
 }
 
@@ -313,20 +317,28 @@ void LogViewer::slotClearGlobalSearch()
 
 void LogViewer::slotShowEntityListContextMenu (const QPoint &coords)
 {
-    /*
     QModelIndex index = ui->entityList->indexAt(coords);
     if (!index.isValid()) {
         return;
     }
 
+    PersonEntityMergeModel::ItemType type =
+        static_cast<PersonEntityMergeModel::ItemType>(index.data(PersonEntityMergeModel::ItemTypeRole).toInt());
+    if (type == PersonEntityMergeModel::Group) {
+        const bool enabled = !index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>().isNull();
+        actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(enabled);
+    } else {
+        actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(type != PersonEntityMergeModel::Persona);
+        actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
+    }
+
     m_entityListContextMenu->setProperty("index", QVariant::fromValue(index));
     m_entityListContextMenu->popup(ui->entityList->mapToGlobal(coords));
-    */
 }
 
 void LogViewer::slotClearAccountHistory()
 {
-    QModelIndex index = ui->entityList->currentIndex();
+    QModelIndex index = m_filterModel->mapToSource(ui->entityList->currentIndex());
 
     /* Usually a contact node is selected, so traverse up to it's parent
      * account node */
@@ -338,7 +350,7 @@ void LogViewer::slotClearAccountHistory()
         return;
     }
 
-    Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
+    const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
     if (account.isNull()) {
         return;
     }
@@ -353,25 +365,20 @@ void LogViewer::slotClearAccountHistory()
     KTp::LogManager::instance()->clearAccountLogs(account);
 
     QModelIndex parent = index.parent();
-    m_entityModel->removeRow(index.row(), parent);
-
-    // If last entity was removed then remove the account node as well
-    if (parent.isValid() && !m_entityModel->hasChildren(parent)) {
-        m_entityModel->removeRow(parent.row(), parent.parent());
-    }
+    m_mergeModel->removeRow(index.row(), parent);
 
     m_entityListContextMenu->setProperty("index", QVariant());
 }
 
 void LogViewer::slotClearContactHistory()
 {
-    QModelIndex index = ui->entityList->currentIndex();
+    const QModelIndex index = m_filterModel->mapToSource(ui->entityList->currentIndex());
     if (!index.isValid()) {
         return;
     }
 
-    Tp::AccountPtr account;// = index.data(KPeople::PersonsModel::IMAccountRole).value<Tp::AccountPtr>();
-    KTp::LogEntity entity = index.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
+    const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
+    const KTp::LogEntity entity = index.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
     if (account.isNull() || !entity.isValid()) {
         return;
     }
@@ -386,14 +393,7 @@ void LogViewer::slotClearContactHistory()
 
     KTp::LogManager::instance()->clearContactLogs(account, entity);
 
-    /*
-    QModelIndex parent = index.parent();
-    m_entityModel->removeRow(index.row(), parent);
-    // If last entity was removed then remove the account node as well
-    if (parent.isValid() && !m_entityModel->hasChildren(parent)) {
-        m_entityModel->removeRow(parent.row(), parent.parent());
-    }
-    */
+    m_mergeModel->removeRow(index.row(), index.parent());
 
     m_entityListContextMenu->setProperty("index", QVariant());
 }

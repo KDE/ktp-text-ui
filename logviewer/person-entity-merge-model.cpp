@@ -67,6 +67,7 @@ class PersonEntityMergeModel::GroupItem: public Item
     }
 
     QString label;
+    Tp::AccountPtr account; // when grouping by accounts
 };
 
 class PersonEntityMergeModel::ContactItem: public Item
@@ -196,6 +197,7 @@ PersonEntityMergeModel::Item* PersonEntityMergeModel::itemForIndex(const QModelI
         return 0;
     }
 
+    kDebug() << index;
     Q_ASSERT(false && "Invalid index model");
     return 0;
 }
@@ -262,6 +264,8 @@ QVariant PersonEntityMergeModel::data(const QModelIndex &index, int role) const
             return item->label;
         } else if (role == PersonEntityMergeModel::ItemTypeRole) {
             return PersonEntityMergeModel::Group;
+        } else if (role == PersonEntityMergeModel::AccountRole) {
+            return qVariantFromValue<Tp::AccountPtr>(item->account);
         }
 
         // FIXME: We could support more roles?
@@ -276,8 +280,7 @@ QVariant PersonEntityMergeModel::data(const QModelIndex &index, int role) const
         case PersonEntityMergeModel::EntityRole:
             return item->entityIndex.data(EntityModel::EntityRole);
         case PersonEntityMergeModel::ContactRole:
-            //return item->contactIndex.data(PersonsModel::IMContactRole);
-            return QVariant();
+            return item->contactIndex.data(KTp::ContactRole);
         case PersonEntityMergeModel::AccountRole:
             return item->entityIndex.data(EntityModel::AccountRole);
         case PersonEntityMergeModel::ItemTypeRole:
@@ -321,6 +324,53 @@ QModelIndex PersonEntityMergeModel::parent(const QModelIndex &child) const
     Item *parentParent = parent->parent;
     return createIndex(parentParent->children.indexOf(parent), 0, parentParent);
 }
+
+bool PersonEntityMergeModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    Q_UNUSED(count); // count == 1
+
+    const QModelIndex itemIndex = index(row, 0, parent);
+    Item *item = itemForIndex(itemIndex);
+    Q_ASSERT(item);
+    if (!item) {
+        return false;
+    }
+
+    if (item->parent == m_rootItem) {
+        // Removing account
+        beginRemoveRows(itemIndex, 0, rowCount(itemIndex));
+        while (!item->children.isEmpty()) {
+            ContactItem *child = static_cast<ContactItem*>(item->children.takeFirst());
+            m_entityModel->removeRows(child->entityIndex.row(), 1, child->entityIndex.parent());
+            delete child;
+        }
+        endRemoveRows();
+
+        beginRemoveRows(parent, row, row);
+        delete item->parent->children.takeAt(row);
+        endRemoveRows();
+
+    } else {
+        // If there's only one contact, remove it the entire group
+        if (rowCount(parent) == 1) {
+            removeRows(parent.row(), 1, parent.parent());
+        } else {
+            ContactItem *contactItem = static_cast<ContactItem*>(item);
+            if (!contactItem->entityIndex.isValid()) {
+                // ??
+                return false;
+            }
+            beginRemoveRows(parent, row, row);
+            m_entityModel->removeRows(contactItem->entityIndex.row(), 1,
+                                    contactItem->entityIndex.parent());
+            delete contactItem->parent->children.takeAt(row);
+            endRemoveRows();
+        }
+    }
+
+    return true;
+}
+
 
 void PersonEntityMergeModel::sourceModelInitialized()
 {
@@ -382,6 +432,7 @@ void PersonEntityMergeModel::initializeModel()
                 parentItem = groupForName(QString());
             } else {
                 parentItem = groupForName(account->displayName());
+                static_cast<GroupItem*>(parentItem)->account = account;
             }
         }
 
@@ -407,5 +458,7 @@ void PersonEntityMergeModel::entityModelDataChanged(const QModelIndex &topLeft,
     const QModelIndex changedIndex = index(parent->children.indexOf(item), 0);
     Q_EMIT dataChanged(changedIndex, changedIndex);
 }
+
+
 
 #include "person-entity-merge-model.moc"
