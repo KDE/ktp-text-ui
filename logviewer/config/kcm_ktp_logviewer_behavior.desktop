@@ -12,8 +12,10 @@ X-KDE-RootOnly=false
 Categories=Qt;KDE;X-KDE-settings-network;
 
 Name=LogViewer Behavior
+Name[nl]=Gedrag van logviewer
 Name[pt]=Comportamento do Visualizador de Registos
 Name[pt_BR]=Comportamento do visualizador de registros
+Name[sl]=Obnašanje pregledovalnika dnevnikov
 Name[sv]=Loggvisningens beteende
 Name[uk]=Поведінка засобу перегляду журналу
 Name[x-test]=xxLogViewer Behaviorxx
