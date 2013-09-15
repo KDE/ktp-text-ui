@@ -24,8 +24,8 @@
 #include <QAbstractItemModel>
 
 #include <TelepathyQt/Types>
-
 #include <TelepathyQt/Account>
+
 #include <KTp/types.h>
 
 /**
@@ -75,7 +75,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void onEntitiesSearchFinished(KTp::PendingLoggerOperation*);
-    void onEntityContactRetrieved(Tp::PendingOperation*);
 
 private:
     QMap<QString /* id */,EntityModelItem*> m_items;

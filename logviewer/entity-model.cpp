@@ -149,41 +149,9 @@ void EntityModel::onEntitiesSearchFinished(KTp::PendingLoggerOperation *operatio
         endInsertRows();
     }
 
-// Fetch the names only when we don't have KPeople.
-#ifdef HAVE_KPEOPLE
-    if (!KTp::kpeopleEnabled()) {
-#endif
-        if (pendingEntities->account()->connection()) {
-            Tp::PendingOperation *op =
-            pendingEntities->account()->connection()->contactManager()->contactsForIdentifiers(ids);
-            connect(op, SIGNAL(finished(Tp::PendingOperation*)),
-                    this, SLOT(onEntityContactRetrieved(Tp::PendingOperation*)));
-        }
-#ifdef HAVE_KPEOPLE
-    }
-#endif
-
     Q_ASSERT(m_pendingOperations.contains(operation));
     m_pendingOperations.removeAll(operation);
     if (m_pendingOperations.isEmpty()) {
         Q_EMIT modelInitialized();
     }
-}
-
-void EntityModel::onEntityContactRetrieved(Tp::PendingOperation *op)
-{
-    Tp::PendingContacts *pc = qobject_cast<Tp::PendingContacts*>(op);
-    Q_ASSERT(pc);
-
-    const QStringList keys = m_items.uniqueKeys();
-    Q_FOREACH (const Tp::ContactPtr &contact, pc->contacts()) {
-        EntityModelItem *item = m_items.value(contact->id());
-        Q_ASSERT(item);
-
-        item->displayName = contact->alias();
-
-        const QModelIndex changedIndex = index(keys.indexOf(contact->id()), 0);
-        Q_EMIT dataChanged(changedIndex, changedIndex);
-    }
-
 }
