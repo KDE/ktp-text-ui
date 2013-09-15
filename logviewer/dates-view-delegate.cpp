@@ -24,12 +24,17 @@
 
 #include <KDE/KGlobalSettings>
 #include <KDE/KIconLoader>
+#include <KDE/KIcon>
 
+#include <TelepathyQt/Account>
 
 #include "dates-model.h"
 
+Q_DECLARE_METATYPE(Tp::AccountPtr)
+
 DatesViewDelegate::DatesViewDelegate(QObject* parent):
-    QStyledItemDelegate(parent)
+    QStyledItemDelegate(parent),
+    m_spacing(2)
 {
 }
 
@@ -39,10 +44,13 @@ DatesViewDelegate::~DatesViewDelegate()
 
 QSize DatesViewDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
+    Q_UNUSED(option);
+
     if (index.data(DatesModel::TypeRole).toUInt() == DatesModel::GroupRow) {
         return QSize(0, qMax(22, KGlobalSettings::smallestReadableFont().pixelSize()) + 2 + 1);
     } else {
-        return QStyledItemDelegate::sizeHint(option, index);
+        return QSize(0, qMax(KIconLoader::global()->currentSize(KIconLoader::Small) + m_spacing,
+                             KGlobalSettings::smallestReadableFont().pixelSize() + 2 + 1));
     }
 }
 
@@ -132,8 +140,6 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
     QStyle *style = QApplication::style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
 
-    const int itemWidth = option.rect.width();
-
     int iconSize = IconSize(KIconLoader::KIconLoader::Toolbar);
 
     QRect itemRect = optV4.rect;
@@ -159,11 +165,12 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
         }
     }
 
+    iconSize = IconSize(KIconLoader::KIconLoader::Small);
     const QString date = index.data(Qt::DisplayRole).toString();
     QRect dateRect = itemRect;
     dateRect.setX(dateRect.x() + 20);
     dateRect.setY(dateRect.y() + (dateRect.height() / 2 - option.fontMetrics.height() / 2));
-    dateRect.setWidth(qMin(option.fontMetrics.width(date) + 8, static_cast<int>(itemWidth * 2.0 / 3.0)));
+    dateRect.setWidth(qMin(option.fontMetrics.width(date) + 8, optV4.rect.width() - iconSize - (2 * m_spacing)));
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(option.palette.color(QPalette::Active, QPalette::HighlightedText));
@@ -172,25 +179,15 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
     }
     painter->drawText(dateRect, option.fontMetrics.elidedText(date, Qt::ElideRight, dateRect.width()));
 
-    const QFont hintFont = KGlobalSettings::smallestReadableFont();
-    const QFontMetrics hintFontMetrics(hintFont);
-    const QString hint = index.data(DatesModel::HintRole).toString();
-    const int hintWidth = hintFontMetrics.width(hint);
-
-    QRect hintRect = itemRect;
-    hintRect.setX(qMax(itemWidth - 8 - hintWidth, dateRect.x() + dateRect.width()));
-    hintRect.setY(hintRect.y() + (hintRect.height() - hintFontMetrics.height()));
-    hintRect.setWidth(itemWidth - hintRect.x());
-
-    painter->setFont(hintFont);
-    if (option.state & QStyle::State_Selected) {
-        painter->setPen(option.palette.color(QPalette::QPalette::Disabled, QPalette::HighlightedText));
-    } else {
-        painter->setPen(option.palette.color(QPalette::Disabled, QPalette::Text));
-    }
-    painter->drawText(hintRect, hintFontMetrics.elidedText(hint, Qt::ElideLeft, hintRect.width()));
-
     painter->restore();
+
+    const Tp::AccountPtr &account = index.data(DatesModel::AccountRole).value<Tp::AccountPtr>();
+    if (account) {
+        const QPixmap accountIcon = KIcon(account->iconName()).pixmap(iconSize);
+        QRect accountIconRect = optV4.rect;
+        accountIconRect.adjust(optV4.rect.width() - iconSize - m_spacing, 0, 0, 0);
+        style->drawItemPixmap(painter, accountIconRect, 0, accountIcon);
+    }
 }
 
 

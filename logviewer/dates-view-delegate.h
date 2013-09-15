@@ -36,6 +36,9 @@ class DatesViewDelegate : public QStyledItemDelegate
   private:
     void paintGroup(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void paintItem(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+  private:
+    int m_spacing;
 };
 
 #endif // DATESVIEWDELEGATE_H

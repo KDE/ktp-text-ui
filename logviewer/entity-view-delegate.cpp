@@ -30,14 +30,12 @@
 
 #include <TelepathyQt/Account>
 
-const int SPACING = 2;
-const int ACCOUNT_ICON_SIZE = 22;
 const qreal GROUP_ICON_OPACITY = 0.6;
 
 EntityViewDelegate::EntityViewDelegate(QObject* parent):
     QStyledItemDelegate(parent),
     m_avatarSize(IconSize(KIconLoader::Toolbar)),
-    m_spacing(4)
+    m_spacing(2)
 {
 }
 
@@ -119,40 +117,23 @@ void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewI
     QRect userNameRect = optV4.rect;
     userNameRect.setX(iconRect.x() + iconRect.width() + m_spacing * 2);
     userNameRect.setY(userNameRect.y() + (userNameRect.height() / 2 - nameFontMetrics.height() / 2));
+    userNameRect.setHeight(nameFontMetrics.height());
     if (isEntity) {
-        userNameRect.setWidth(qMin(nameFontMetrics.width(nameText), static_cast<int>(optV4.rect.width() * 2.0 / 3.0)));
+        userNameRect.setWidth(qMin(nameFontMetrics.width(nameText), optV4.rect.width() - m_avatarSize - (2 * m_spacing)));
     }
 
+    QTextOption textOption;
+    textOption.setWrapMode(QTextOption::NoWrap);
     painter->drawText(userNameRect,
-                      nameFontMetrics.elidedText(nameText, Qt::ElideRight, userNameRect.width()));
-
+                      nameFontMetrics.elidedText(nameText, Qt::ElideRight, userNameRect.width()), textOption);
     painter->restore();
 
-    if (isEntity) {
-        painter->save();
-
-        const QFont accountFont = KGlobalSettings::generalFont();
-        const QFontMetrics accountMetrics(accountFont);
-
-        if (option.state & QStyle::State_Selected) {
-            painter->setPen(option.palette.color(QPalette::Disabled, QPalette::HighlightedText));
-        } else {
-            painter->setPen(option.palette.color(QPalette::Disabled, QPalette::Text));
-        }
-
-        painter->setFont(accountFont);
-
-        const Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
-        const QString accountName = account->displayName();
-        const int accountWidth = accountMetrics.width(accountName);
-
-        QRect accountRect = optV4.rect;
-        accountRect.setX(qMax(optV4.rect.width() - (2 * m_spacing) - accountWidth, userNameRect.x() + userNameRect.width()));
-        accountRect.setY(accountRect.y() + accountRect.height() / 2 - accountMetrics.height() / 2);
-        accountRect.setWidth(optV4.rect.width() - accountRect.x());
-        painter->drawText(accountRect, accountMetrics.elidedText(accountName, Qt::ElideLeft, accountRect.width()));
-
-        painter->restore();
+    const Tp::AccountPtr &account = index.data(KTp::AccountRole).value<Tp::AccountPtr>();
+    if (isEntity && account) {
+        const QPixmap accountIcon = KIcon(account->iconName()).pixmap(m_avatarSize);
+        QRect accountIconRect = optV4.rect;
+        accountIconRect.adjust(optV4.rect.width() - m_avatarSize - m_spacing, 0, 0, 0);
+        style->drawItemPixmap(painter, accountIconRect, 0, accountIcon);
     }
 }
 
@@ -194,7 +175,7 @@ void EntityViewDelegate::paintHeader(QPainter* painter, const QStyleOptionViewIt
     painter->setRenderHint(QPainter::Antialiasing, true);
 
     //remove spacing from the sides and one point to the bottom for the 1px line
-    groupRect.adjust(SPACING, 0, -SPACING, -1);
+    groupRect.adjust(m_spacing, 0, -m_spacing, -1);
 
     //get the proper rect for the expand sign
     int iconSize = IconSize(KIconLoader::Toolbar);
@@ -215,7 +196,7 @@ void EntityViewDelegate::paintHeader(QPainter* painter, const QStyleOptionViewIt
     const QFont groupFont = KGlobalSettings::smallestReadableFont();
 
     //paint the header string
-    const QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + SPACING * 2, 0, -SPACING, 0);
+    const QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + m_spacing * 2, 0, -m_spacing, 0);
     const QString groupHeaderString =  index.data(Qt::DisplayRole).toString();
     const QFontMetrics groupFontMetrics(groupFont);
 
@@ -224,7 +205,7 @@ void EntityViewDelegate::paintHeader(QPainter* painter, const QStyleOptionViewIt
     painter->setPen(option.palette.color(QPalette::Active, QPalette::Text));
     painter->drawText(groupLabelRect, Qt::AlignVCenter | Qt::AlignLeft,
                       groupFontMetrics.elidedText(groupHeaderString, Qt::ElideRight,
-                                                  groupLabelRect.width() - SPACING));
+                                                  groupLabelRect.width() - m_spacing));
 
     painter->restore();
 }
@@ -234,7 +215,7 @@ QSize EntityViewDelegate::sizeHintHeader(const QStyleOptionViewItem& option, con
     Q_UNUSED(option)
     Q_UNUSED(index)
     // Add one point to the bottom for the 1px line
-    return QSize(0, qMax(ACCOUNT_ICON_SIZE, KGlobalSettings::smallestReadableFont().pixelSize()) + SPACING + 1);
+    return QSize(0, qMax(m_avatarSize, KGlobalSettings::smallestReadableFont().pixelSize()) + m_spacing + 1);
 }
 
 
