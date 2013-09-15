@@ -34,6 +34,7 @@ Comment=Shows the actual URL to which a shortened URL is redirecting to
 Comment[ca]=Mostra l'URL real al que es redirigeix un URL breu
 Comment[cs]=Zobrazí skutečné URL, na které je přesměrováno zkrácené URL
 Comment[da]=Viser den faktiske URL som en afkortet URL videresender til
+Comment[de]=Zeigt die tatsächliche Adresse (URL), auf die eine gekürzte URL umgeleitet wird
 Comment[el]=Εμφανίζει το πραγματικό URL στο οποίο ανακατευθύνεται το συντομευμένο
 Comment[es]=Muestra la URL real a la que redirecciona una URL abreviada
 Comment[fi]=Näyttää, mihin osoitteeseen lyhennetty verkko-osoite ohjaa
