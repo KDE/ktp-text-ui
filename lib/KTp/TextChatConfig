@@ -1,6 +1,0 @@
-#ifndef KDE_TELEPATHY_TEXT_UI_TEXT_CHAT_CONFIG
-#define KDE_TELEPATHY_TEXT_UI_TEXT_CHAT_CONFIG
-
-#include "text-chat-config.h"
-
-#endif
