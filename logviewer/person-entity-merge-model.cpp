@@ -92,6 +92,23 @@ class PersonEntityMergeModel::ContactItem: public Item
 
 };
 
+void PersonEntityMergeModel::addItem(PersonEntityMergeModel::Item* item, PersonEntityMergeModel::Item* parent)
+{
+    const int pos = parent->children.count();
+    beginInsertRows(indexForItem(parent), pos, pos);
+    parent->addChild(item);
+    endInsertRows();
+}
+
+QModelIndex PersonEntityMergeModel::indexForItem(PersonEntityMergeModel::Item *item) const
+{
+    if (item == m_rootItem) {
+        return QModelIndex();
+    }
+
+    return index(item->parent->children.indexOf(item), 0, indexForItem(item->parent));
+}
+
 PersonEntityMergeModel::ContactItem* PersonEntityMergeModel::itemForPersona(const QModelIndex &personsModel_personaIndex)
 {
     if (!personsModel_personaIndex.isValid()) {
@@ -116,7 +133,7 @@ PersonEntityMergeModel::ContactItem* PersonEntityMergeModel::itemForPersona(cons
 
     const QStringList groupNames = personsModel_personaIndex.data(KTp::ContactGroupsRole).toStringList();
     GroupItem *groupItem = groupForName(groupNames.size() ? groupNames.first() : QString());
-    groupItem->addChild(item);
+    addItem(item, groupItem);
 
     return item;
 }
@@ -152,7 +169,7 @@ PersonEntityMergeModel::GroupItem* PersonEntityMergeModel::groupForName(const QV
     kDebug() << "\tCreating a new group" << groupName;
     GroupItem *group = new GroupItem;
     group->label = groupName;
-    m_rootItem->addChild(group);
+    addItem(group, m_rootItem);
 
     return group;
 }
@@ -382,6 +399,8 @@ void PersonEntityMergeModel::sourceModelInitialized()
         // TODO: Listen to changes from KPeople too
         connect(m_entityModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
                 this, SLOT(entityModelDataChanged(QModelIndex,QModelIndex)));
+
+        Q_EMIT modelInitialized();
     }
 }
 
@@ -389,7 +408,6 @@ void PersonEntityMergeModel::sourceModelInitialized()
 void PersonEntityMergeModel::initializeModel()
 {
     kDebug();
-    beginResetModel();
 
     for (int i = 0; i < m_entityModel->rowCount(QModelIndex()); ++i) {
         const QModelIndex entityIndex = m_entityModel->index(i, 0);
@@ -439,9 +457,8 @@ void PersonEntityMergeModel::initializeModel()
         item->entityIndex = entityIndex;
         item->contactIndex = contactIndex;
         item->personaIndex = personaIndex;
-        parentItem->addChild(item);
+        addItem(item, parentItem);
     }
-    endResetModel();
 }
 
 void PersonEntityMergeModel::entityModelDataChanged(const QModelIndex &topLeft,

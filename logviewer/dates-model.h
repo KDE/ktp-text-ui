@@ -75,6 +75,9 @@ class DatesModel : public QAbstractItemModel
     virtual QModelIndex parent(const QModelIndex& child) const;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent) const;
 
+  Q_SIGNALS:
+    void datesReceived();
+
   private Q_SLOTS:
     void onDatesReceived(KTp::PendingLoggerOperation *operation);
 

@@ -83,6 +83,8 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     m_entityModel = new EntityModel(this);
 
     m_mergeModel = new PersonEntityMergeModel(m_contactsModel, m_entityModel, this);
+    connect(m_mergeModel, SIGNAL(modelInitialized()),
+            this, SLOT(slotMergeModelInitialized()));
 
     m_filterModel = new EntityFilterModel(this);
     m_filterModel->setSourceModel(m_mergeModel);
@@ -104,6 +106,8 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     ui->datesView->setRootIsDecorated(false);
     ui->datesView->setExpandsOnDoubleClick(false);
     ui->datesView->setIndentation(0);
+    connect(m_datesModel, SIGNAL(datesReceived()),
+            this, SLOT(onDatesReceived()));
 
     connect(ui->entityList, SIGNAL(clicked(QModelIndex)), SLOT(onEntityListClicked(QModelIndex)));
     connect(ui->datesView, SIGNAL(clicked(QModelIndex)), SLOT(slotDateClicked(QModelIndex)));
@@ -178,7 +182,17 @@ void LogViewer::onAccountManagerReady()
     slotImportKopeteLogs(false);
 }
 
-void LogViewer::onEntityListClicked(const QModelIndex& index)
+void LogViewer::slotMergeModelInitialized()
+{
+    // Make sure we cal onEntityListClicked now - this ensures that if EntityView
+    // has selected a person or contact (because user has passed it via arguments
+    // on command line) it will correctly list all dates for all subcontacts
+    if (!ui->entityList->selectionModel()->selectedIndexes().isEmpty()) {
+        onEntityListClicked(ui->entityList->selectionModel()->selectedIndexes().first());
+    }
+}
+
+void LogViewer::onEntityListClicked(const QModelIndex &index)
 {
     const PersonEntityMergeModel::ItemType itemType =
         static_cast<PersonEntityMergeModel::ItemType>(index.data(PersonEntityMergeModel::ItemTypeRole).toUInt());
@@ -217,6 +231,19 @@ void LogViewer::onEntityListClicked(const QModelIndex& index)
         m_datesModel->setEntity(account, entity);
         actionCollection()->action(QLatin1String("clear-contact-logs"))->setEnabled(true);
         actionCollection()->action(QLatin1String("clear-account-logs"))->setEnabled(true);
+    }
+}
+
+void LogViewer::onDatesReceived()
+{
+    const QModelIndex groupIndex = m_datesModel->index(0, 0, QModelIndex());
+    if (groupIndex.isValid()) {
+         // expand group
+        slotDateClicked(groupIndex);
+
+        // call slotUpdateMainWindow
+        const QModelIndex dateIndex = m_datesModel->index(0, 0, groupIndex);
+        ui->datesView->selectionModel()->setCurrentIndex(dateIndex, QItemSelectionModel::Select);
     }
 }
 

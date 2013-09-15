@@ -36,6 +36,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void rowsInserted(const QModelIndex &parent, int start, int end);
+
 };
 
 #endif // ENTITYVIEW_H

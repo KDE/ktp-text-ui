@@ -62,6 +62,9 @@ class PersonEntityMergeModel : public QAbstractItemModel
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
+  Q_SIGNALS:
+    void modelInitialized();
+
   private Q_SLOTS:
     void sourceModelInitialized();
     void entityModelDataChanged(const QModelIndex &topLeft,
@@ -75,6 +78,8 @@ class PersonEntityMergeModel : public QAbstractItemModel
     class ContactItem;
     class GroupItem;
 
+    void addItem(Item *item, Item *parent);
+    QModelIndex indexForItem(Item *item) const;
     GroupItem* groupForName(const QVariant &name);
     ContactItem* itemForPersona(const QModelIndex &personsModel_personaIndex);
     Item* itemForIndex(const QModelIndex &index) const;

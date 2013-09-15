@@ -97,6 +97,10 @@ bool EntityFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sour
 
         return false;
     } else if (itemType == PersonEntityMergeModel::Persona) {
+        if (sourceModel()->rowCount(index) == 0) {
+            return true;
+        }
+
         for (int i = 0; i < sourceModel()->rowCount(index); ++i) {
             if (filterAcceptsRow(i, index)) {
                 return true;

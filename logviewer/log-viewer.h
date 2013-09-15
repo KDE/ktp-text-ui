@@ -54,7 +54,11 @@ public:
 private Q_SLOTS:
     void onAccountManagerReady();
 
+    void slotMergeModelInitialized();
+
     void onEntityListClicked(const QModelIndex &index);
+    void onDatesReceived();
+
     void slotDateClicked(const QModelIndex &index);
 
     void slotUpdateMainWindow();

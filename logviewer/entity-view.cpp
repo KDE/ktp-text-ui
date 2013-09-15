@@ -25,7 +25,7 @@
 
 #include <TelepathyQt/Account>
 
-#include "entity-model.h"
+#include "person-entity-merge-model.h"
 
 EntityView::EntityView(QWidget *parent) :
     QTreeView(parent)
@@ -42,30 +42,42 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
         return;
     }
 
-    if (KCmdLineArgs::parsedArgs()->count() == 2) {
+    QModelIndex selectedIndex;
+    if (KCmdLineArgs::parsedArgs()->count() == 1 && KTp::kpeopleEnabled()) {
+        const QString selectedPersonaId = KCmdLineArgs::parsedArgs()->arg(0);
+        for (int i = start; i <= end; i++) {
+            const QModelIndex index = model()->index(i, 0, parent);
+            if (index.data(KTp::NepomukUriRole).toUrl() == selectedPersonaId) {
+                selectedIndex = index;
+                break;
+            }
+        }
+    } else if (KCmdLineArgs::parsedArgs()->count() == 2) {
         QString selectAccountId = KCmdLineArgs::parsedArgs()->arg(0);
         QString selectContactId = KCmdLineArgs::parsedArgs()->arg(1);
 
         for (int i = start; i <= end; i++) {
             QModelIndex index = model()->index(i, 0, parent);
-            Tp::AccountPtr account = index.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-            KTp::LogEntity entity = index.data(EntityModel::EntityRole).value<KTp::LogEntity>();
-
+            Tp::AccountPtr account = index.data(PersonEntityMergeModel::AccountRole).value<Tp::AccountPtr>();
+            KTp::LogEntity entity = index.data(PersonEntityMergeModel::EntityRole).value<KTp::LogEntity>();
             if (account.isNull() || !entity.isValid()) {
                 continue;
             }
 
             if (selectAccountId == account->uniqueIdentifier() && selectContactId == entity.id()) {
-                setCurrentIndex(index);
-                loadedCurrentContact = true;
+                selectedIndex = index;
                 break;
             }
         }
+    }
 
-        if (!loadedCurrentContact) {
-            Q_EMIT noSuchContact();
-        }
+    if (selectedIndex.isValid()) {
+        loadedCurrentContact = true;
+        setCurrentIndex(selectedIndex);
+    } else {
+        Q_EMIT noSuchContact();
     }
 
     expandAll();
+
 }

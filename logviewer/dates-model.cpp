@@ -395,6 +395,10 @@ void DatesModel::onDatesReceived(KTp::PendingLoggerOperation *operation)
     if (m_resetInProgress == 0) {
         endResetModel();
     }
+
+    if (m_pendingDates.isEmpty()) {
+        Q_EMIT datesReceived();
+    }
 }
 
 #include "dates-model.moc"
