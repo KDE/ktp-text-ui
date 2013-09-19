@@ -131,6 +131,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
                 && auxChatTab->textChannel()->targetHandleType() == textChannel->targetHandleType()) {
                 tabFound = true;
                 partTabWidget->setCurrentIndex(j);
+
                 KWindowSystem::forceActiveWindow(window->winId());
             }
         }
@@ -159,7 +160,9 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
             window = createWindow();
         }
         KTabWidget* partTabWidget = window->findChild<KTabWidget*>();
-        partTabWidget->addTab(m_part->widget(), i18n("tab"));
+        partTabWidget->addTab(m_part->widget(),  textChannel->targetContact()->alias());
+
+
     }
 //      TODO make this work
 //        Q_ASSERT(window);
