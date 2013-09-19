@@ -38,10 +38,7 @@ KTpTextChatPart::KTpTextChatPart( QWidget *parentWidget, QObject *parent, const 
     setComponentData( KTpTextChatPartFactory::componentData() );
     Tp::AccountPtr account = args[0].value<Tp::AccountPtr>();
     Tp::TextChannelPtr textChannel = args[1].value<Tp::TextChannelPtr>();
-    QWidget* myMainWidget = new QWidget();
-    myMainWidget->setLayout(new QVBoxLayout());
-    myMainWidget->layout()->addWidget(new ChatWidget(textChannel, account, myMainWidget));
-    setWidget(myMainWidget);
+    setWidget(new ChatWidget(textChannel, account, 0));
 }
 
 KTpTextChatPart::~KTpTextChatPart()

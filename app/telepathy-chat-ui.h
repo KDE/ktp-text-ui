@@ -24,6 +24,7 @@
 #include <TelepathyQt/AbstractClientHandler>
 #include <TelepathyQt/AccountManager>
 
+#include <kmainwindow.h>
 #include <KTp/telepathy-handler-application.h>
 
 class ChatTab;
@@ -44,6 +45,7 @@ public:
             const QDateTime &userActionTime,
             const Tp::AbstractClientHandler::HandlerInfo &handlerInfo);
 
+    void createPartWindow();
     virtual bool bypassApproval() const;
 
     Tp::AccountManagerPtr accountManager() const;
@@ -53,10 +55,10 @@ private Q_SLOTS:
     void dettachTab(ChatTab *tab);
 
 private:
-    ChatWindow* createWindow();
+    KMainWindow* createWindow();
 
     Tp::AccountManagerPtr m_accountManager;
-    QList<ChatWindow*> m_chatWindows;
+    QList<KMainWindow*> m_chatWindows;
 };
 
 #endif // TELEPATHYCHATUI_H

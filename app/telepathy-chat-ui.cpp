@@ -30,6 +30,7 @@
 #include <KConfigGroup>
 #include <KWindowSystem>
 #include <kservice.h>
+ #include <QStackedWidget>
 
 #include <TelepathyQt/ChannelClassSpec>
 #include <TelepathyQt/TextChannel>
@@ -49,32 +50,31 @@ TelepathyChatUi::TelepathyChatUi(const Tp::AccountManagerPtr &accountManager)
       m_accountManager(accountManager)
 {
     kDebug();
-    ChatWindow *window = createWindow();
+    KMainWindow* window = createWindow();
     window->show();
 }
 
+//FIX ME does this behave correctly?
 void TelepathyChatUi::removeWindow(ChatWindow *window)
 {
     Q_ASSERT(window);
     m_chatWindows.removeOne(window);
 }
 
-ChatWindow* TelepathyChatUi::createWindow()
+KMainWindow* TelepathyChatUi::createWindow()
 {
-    ChatWindow* window = new ChatWindow();
-
-    connect(window, SIGNAL(detachRequested(ChatTab*)), this, SLOT(dettachTab(ChatTab*)));
-    connect(window, SIGNAL(aboutToClose(ChatWindow*)), this, SLOT(removeWindow(ChatWindow*)));
-
+    KMainWindow* window = new KMainWindow();  
+    KTabWidget* partTabWidget = new KTabWidget;
+    window->setCentralWidget(partTabWidget);
+    window->show();
     m_chatWindows.push_back(window);
-
     return window;
 }
 
+//FIX ME this totally doesn't work yet
 void TelepathyChatUi::dettachTab(ChatTab* tab)
 {
-    ChatWindow* window = createWindow();
-    tab->setChatWindow(window);
+    KMainWindow* window = createWindow();
     window->show();
 }
 
@@ -119,26 +119,19 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     }
 
     kDebug() << "raise window hint set to: " << windowRaise;
-
     bool tabFound = false;
-
     //search for any tabs which are already handling this channel.
     for (int i = 0; i < m_chatWindows.count() && !tabFound; ++i) {
-        ChatWindow *window = m_chatWindows.at(i);
-        ChatTab* tab = window->getTab(account, textChannel);
-
-        if (tab) {
-            tabFound = true;
-            if (windowRaise) {
-                window->focusChat(tab);                 // set focus on selected tab
+        KMainWindow* window = m_chatWindows.at(i);
+        KTabWidget* partTabWidget = window->findChild<KTabWidget*>();
+        for (int j = 0; j < partTabWidget->count() ; ++j){
+            ChatWidget* auxChatTab = qobject_cast<ChatWidget*>(partTabWidget->widget(j));
+            if (auxChatTab->account() == account
+                && auxChatTab->textChannel()->targetId() == textChannel->targetId()
+                && auxChatTab->textChannel()->targetHandleType() == textChannel->targetHandleType()) {
+                tabFound = true;
+                partTabWidget->setCurrentIndex(j);
                 KWindowSystem::forceActiveWindow(window->winId());
-            }
-
-            // check if channel is invalid. Replace only if invalid
-            // You get this status if user goes offline and then back on without closing the chat
-            if (!tab->textChannel()->isValid()) {
-                tab->setTextChannel(textChannel);    // replace with new one
-                tab->setChatEnabled(true);           // re-enable chat
             }
         }
     }
@@ -151,43 +144,29 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     //if there is currently no tab containing the incoming channel.
 
     if (!tabFound) {
-        ChatWindow* window = 0;
-        switch (TextChatConfig::instance()->openMode()) {
-            case TextChatConfig::FirstWindow:
-                window = m_chatWindows.count()?m_chatWindows[0]:createWindow();
-                break;
-            case TextChatConfig::NewWindow:
-                //as we now create a window on load, if we are in one window per chat mode
-                //we need to check if the first made window is empty
-                if (m_chatWindows.count() == 1 && ! m_chatWindows[0]->getCurrentTab()) {
-                    window = m_chatWindows[0];
-                } else {
-                    window = createWindow();
-                }
-                break;
-        }
-
-        Q_ASSERT(window);
-
-        KMainWindow* mainWindow = new KMainWindow();
         KService::Ptr service = KService::serviceByDesktopPath(QString::fromLatin1("KTpTextChatPart.desktop"));
-        KParts::Part* m_part;
         QVariantList args;
-        QVariant storeChan;
-        QVariant storeAcc;
+        QVariant storeChan, storeAcc;
         storeChan.setValue(textChannel);
         storeAcc.setValue(account);
-        args.append(storeAcc);
-        args.append(storeChan);
-        m_part = service->createInstance<KParts::Part>(0,  args);
-        mainWindow->setCentralWidget(m_part->widget());
-        mainWindow->show();
-
-        if (windowRaise) {
-            KWindowSystem::forceActiveWindow(window->winId());
+        args << storeAcc << storeChan;
+        KMainWindow* window;
+        KParts::Part* m_part = service->createInstance<KParts::Part>(0,  args);
+        if (m_chatWindows.count() == 1){
+            window = m_chatWindows.at(0);
         }
+        else {
+            window = createWindow();
+        }
+        KTabWidget* partTabWidget = window->findChild<KTabWidget*>();
+        partTabWidget->addTab(m_part->widget(), i18n("tab"));
     }
-
+//      TODO make this work
+//        Q_ASSERT(window);
+//
+//         if (windowRaise) {
+//             KWindowSystem::forceActiveWindow(window->winId());
+//         }
     context->setFinished();
 }
 
