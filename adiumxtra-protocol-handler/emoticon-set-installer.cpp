@@ -18,7 +18,7 @@
 
 #include "emoticon-set-installer.h"
 
-#include <KTp/ChatStylePlistFileReader>
+#include "chat-style-plist-file-reader.h"
 
 #include <KDebug>
 #include <KTemporaryFile>

@@ -18,8 +18,8 @@
 
 #include "chat-style-installer.h"
 
-#include <KTp/ChatWindowStyleManager>
-#include <KTp/ChatStylePlistFileReader>
+#include "chat-window-style-manager.h"
+#include "chat-style-plist-file-reader.h"
 
 #include <KDebug>
 #include <KTemporaryFile>

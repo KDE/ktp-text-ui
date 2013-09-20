@@ -20,11 +20,12 @@
 #include "appearance-config-tab.h"
 #include "ui_appearance-config.h"
 
-#include <KTp/ChatWindowStyleManager>
-#include <KTp/ChatWindowStyle>
-#include <KTp/AdiumThemeHeaderInfo>
-#include <KTp/AdiumThemeContentInfo>
-#include <KTp/AdiumThemeStatusInfo>
+#include "chat-window-style-manager.h"
+#include "chat-window-style.h"
+#include "adium-theme-header-info.h"
+#include "adium-theme-content-info.h"
+#include "adium-theme-status-info.h"
+
 #include <KMessageBox>
 
 AppearanceConfigTab::AppearanceConfigTab(QWidget *parent, TabMode mode)
