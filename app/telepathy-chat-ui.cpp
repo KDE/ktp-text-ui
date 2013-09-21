@@ -65,6 +65,7 @@ KMainWindow* TelepathyChatUi::createWindow()
 {
     KMainWindow* window = new KMainWindow();  
     KTabWidget* partTabWidget = new KTabWidget;
+    partTabWidget->setDocumentMode(true);
     window->setCentralWidget(partTabWidget);
     window->show();
     m_chatWindows.push_back(window);
