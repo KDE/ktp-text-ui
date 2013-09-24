@@ -122,6 +122,14 @@ void ChatTextEdit::keyPressEvent(QKeyEvent *e)
         return;
     }
 
+    if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
+        // keyPressEvent() handles Control modifier wrong, so we need that thing
+        // to be in event().
+        this->sendMessage();
+        e->setAccepted(true);
+        return;
+    }
+
     if(!e->text().isEmpty() || ((e->key() >= Qt::Key_Home) && (e->key() <= Qt::Key_Down))) {
         m_continuousCompletion = false;
     }
@@ -139,13 +147,7 @@ bool ChatTextEdit::event(QEvent *e)
             // Keypad modifier is not used in KDE shortcuts setup, so, we need to skip it.
             key |= keyEvent->modifiers();
         }
-        if (key == Qt::Key_Return || key == Qt::Key_Enter) {
-            // keyPressEvent() handles Control modifier wrong, so we need that thing
-            // to be in event().
-            this->sendMessage();
-            e->setAccepted(true);
-            return false;
-        }
+
         if (KStandardShortcut::find().contains(key)) {
             return false; //never catch "find" sequence.
         }
