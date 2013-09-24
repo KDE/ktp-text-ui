@@ -21,6 +21,8 @@
 #ifndef TELEPATHYCHATUI_H
 #define TELEPATHYCHATUI_H
 
+#include "chat-window.h"
+
 #include <TelepathyQt/AbstractClientHandler>
 #include <TelepathyQt/AccountManager>
 
@@ -51,14 +53,14 @@ public:
     Tp::AccountManagerPtr accountManager() const;
 
 private Q_SLOTS:
-    void removeWindow(ChatWindow *window);
-    void dettachTab(ChatTab *tab);
+   // void removeWindow(ChatWindow *window);
+   // void dettachTab(ChatTab *tab);
 
 private:
-    KMainWindow* createWindow();
+    ChatWindow* createWindow();
 
     Tp::AccountManagerPtr m_accountManager;
-    QList<KMainWindow*> m_chatWindows;
+    QList<ChatWindow*> m_chatWindows;
 };
 
 #endif // TELEPATHYCHATUI_H

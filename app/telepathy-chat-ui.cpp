@@ -19,7 +19,6 @@
 */
 
 #include "telepathy-chat-ui.h"
-#include "chat-tab.h"
 #include "chat-window.h"
 #include "text-chat-config.h"
 #include "KTpTextChatPart.h"
@@ -54,30 +53,30 @@ TelepathyChatUi::TelepathyChatUi(const Tp::AccountManagerPtr &accountManager)
     window->show();
 }
 
-//FIX ME does this behave correctly?
-void TelepathyChatUi::removeWindow(ChatWindow *window)
-{
-    Q_ASSERT(window);
-    m_chatWindows.removeOne(window);
-}
+//FIXME does this behave correctly?
+// void TelepathyChatUi::removeWindow(ChatWindow *window)
+// {
+//     Q_ASSERT(window);
+//     m_chatWindows.removeOne(window);
+// }
 
-KMainWindow* TelepathyChatUi::createWindow()
+ChatWindow* TelepathyChatUi::createWindow()
 {
-    KMainWindow* window = new KMainWindow();  
-    KTabWidget* partTabWidget = new KTabWidget;
-    partTabWidget->setDocumentMode(true);
-    window->setCentralWidget(partTabWidget);
+    ChatWindow* window = new ChatWindow();
+    window->partTabWidget->setDocumentMode(true);
+    window->setCentralWidget(window->partTabWidget);
     window->show();
     m_chatWindows.push_back(window);
     return window;
+    QObject::connect(window->partTabWidget, SIGNAL(tabCloseRequested(int)), window->partTabWidget, SLOT(removeTab(int)));
 }
 
-//FIX ME this totally doesn't work yet
-void TelepathyChatUi::dettachTab(ChatTab* tab)
-{
-    KMainWindow* window = createWindow();
-    window->show();
-}
+//FIXME this totally doesn't work yet
+// void TelepathyChatUi::dettachTab(ChatTab* tab)
+// {
+//     KMainWindow* window = createWindow();
+//     window->show();
+// }
 
 TelepathyChatUi::~TelepathyChatUi()
 {
@@ -161,6 +160,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
             window = createWindow();
         }
         KTabWidget* partTabWidget = window->findChild<KTabWidget*>();
+        partTabWidget->setTabsClosable(true);
         partTabWidget->addTab(m_part->widget(),  textChannel->targetContact()->alias());
 
 
