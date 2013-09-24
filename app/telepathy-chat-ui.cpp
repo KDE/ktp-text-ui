@@ -67,8 +67,9 @@ ChatWindow* TelepathyChatUi::createWindow()
     window->setCentralWidget(window->partTabWidget);
     window->show();
     m_chatWindows.push_back(window);
-    return window;
     QObject::connect(window->partTabWidget, SIGNAL(tabCloseRequested(int)), window->partTabWidget, SLOT(removeTab(int)));
+    return window;
+
 }
 
 //FIXME this totally doesn't work yet
