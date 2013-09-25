@@ -26,7 +26,7 @@
 #include <TelepathyQt/Account>
 
 #include <KDE/KLocalizedString>
-#include <KDE/KLocalizedDate>
+#include <klocalizeddate.h>
 #include <KDE/KDebug>
 
 Q_DECLARE_METATYPE(Tp::AccountPtr)
