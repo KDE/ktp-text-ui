@@ -62,6 +62,7 @@ Comment[gl]=Se unha mensaxe de entrada contén LaTeX entre «$$», debuxarase di
 Comment[hu]=Ha a bejövő üzenetek LaTeX-et tartalmaznak $$ között, akkor azok közvetlenül a csevegésben lesznek renderelve.
 Comment[ia]=Si messages in arrivata contine  LaTeX $$, illo essera rendite directemente in le conversation.
 Comment[it]=Se in un messaggio c'è codice LaTeX dentro $$...$$, sarà visualizzato direttamente nella finestra di chat
+Comment[kk]=Егер кіріс хабарламада $$ де қоршалған LaTex болса, ол чатта тікелей кескінделеді.
 Comment[lt]=Jei gautos žinutės turi LaTeX tarp $$, jis bus išvestas tiesiai į pokalbį
 Comment[nb]=Hvis innkommende meldinger inneholder LaTeX-kode mellom $$ så blir den tegnet opp direkte i praten.
 Comment[nl]=Als een inkomend bericht LaTeX tussen $$ bevat, zal het direct in de chat worden weergegeven
