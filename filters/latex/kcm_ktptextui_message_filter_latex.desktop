@@ -7,3 +7,13 @@ X-KDE-ParentApp=latex
 X-KDE-ParentComponents=latex
 
 Name=LaTeX
+Name[bs]=LaTeX
+Name[ca]=LaTeX
+Name[de]=LaTeX
+Name[fr]=LaTeX
+Name[it]=LaTeX
+Name[kk]=LaTeX
+Name[nl]=LaTeX
+Name[sv]=Latex
+Name[uk]=LaTeX
+Name[x-test]=xxLaTeXxx
