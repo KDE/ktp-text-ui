@@ -64,6 +64,7 @@ ChatWindow* TelepathyChatUi::createWindow()
 {
     ChatWindow* window = new ChatWindow();
     window->partTabWidget->setDocumentMode(true);
+    window->partTabWidget-> setTabBarHidden(true);
     window->setCentralWidget(window->partTabWidget);
     window->show();
     m_chatWindows.push_back(window);
@@ -162,6 +163,9 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
         }
         KTabWidget* partTabWidget = window->findChild<KTabWidget*>();
         partTabWidget->setTabsClosable(true);
+        if(partTabWidget->count() == 1){
+            partTabWidget->setTabBarHidden(false);
+        }
         partTabWidget->addTab(m_part->widget(),  textChannel->targetContact()->alias());
 
 
