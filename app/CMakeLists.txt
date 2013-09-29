@@ -35,3 +35,5 @@ install(TARGETS ktp-text-ui DESTINATION ${LIBEXEC_INSTALL_DIR})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KTp.TextUi.service
         DESTINATION ${DBUS_SERVICES_INSTALL_DIR})
 install(FILES KTp.TextUi.client DESTINATION ${SHARE_INSTALL_PREFIX}/telepathy/clients/)
+install(FILES chat-window.rc
+        DESTINATION  ${DATA_INSTALL_DIR}/ktp-text-ui/)

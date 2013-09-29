@@ -27,6 +27,12 @@
 #include <TelepathyQt/Account>
 #include <TelepathyQt/TextChannel>
 
+#include <KApplication>
+#include <KAction>
+#include <KLocale>
+#include <KActionCollection>
+#include <KStandardAction>
+
 K_PLUGIN_FACTORY(KTpTextChatPartFactory, registerPlugin<KTpTextChatPart>();)  // produce a factory
 K_EXPORT_PLUGIN(KTpTextChatPartFactory("KTpTextChatPart", "ktp-text-ui") )
 
@@ -38,12 +44,12 @@ KTpTextChatPart::KTpTextChatPart( QWidget *parentWidget, QObject *parent, const 
     setComponentData( KTpTextChatPartFactory::componentData() );
     Tp::AccountPtr account = args[0].value<Tp::AccountPtr>();
     Tp::TextChannelPtr textChannel = args[1].value<Tp::TextChannelPtr>();
-    setWidget(new ChatWidget(textChannel, account, 0));
+    tabWidget = new ChatTabWidget(textChannel, account, 0);
+    setWidget(tabWidget);
 }
 
 KTpTextChatPart::~KTpTextChatPart()
 {
 }
 
-
-
+#include "KTpTextChatPart.moc"

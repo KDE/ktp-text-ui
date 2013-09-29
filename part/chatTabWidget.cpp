@@ -1,4 +1,4 @@
-/*
+ /*
     Copyright (C) 2013  Daniel Cohen    <analoguecolour@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
@@ -15,28 +15,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CHATWINDOW_H
-#define CHATWINDOW_H
+#include "chatTabWidget.h"
 
-#include <kxmlguiwindow.h>
-#include <KTabWidget>
-#include <kparts/part.h>
-#include "KTpTextChatPart.h"
+#include <KApplication>
+#include <KAction>
+#include <KLocale>
+#include <KActionCollection>
+#include <KStandardAction>
+#include <KDebug>
 
-class ChatWindow : public KXmlGuiWindow
+ChatTabWidget::ChatTabWidget(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, KXmlGuiWindow* parent): ChatWidget(channel, account, parent), KXMLGUIClient()
 {
-Q_OBJECT
+  KAction* findAction = new KAction(this);
+  findAction->setText(i18n("&find"));
+  findAction->setShortcut(Qt::CTRL + Qt::Key_F);
+  actionCollection()->addAction(QLatin1String("find"), findAction);
+  setXMLFile(QLatin1String("chatTabWidget.rc"));
 
-public:
-    explicit ChatWindow();
-    virtual ~ChatWindow();
-    void setupWindow();
-    void addTab(QVariantList args, QString channelalias);
+}
 
-private:
-    void setupActions(KTpTextChatPart* part);
-    KTabWidget* partTabWidget = new KTabWidget;
+ChatTabWidget::~ChatTabWidget()
+{
+}
 
-};
-
-#endif // CHATWINDOW_H
+#include "chatTabWidget.moc"

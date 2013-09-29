@@ -49,8 +49,6 @@ TelepathyChatUi::TelepathyChatUi(const Tp::AccountManagerPtr &accountManager)
       m_accountManager(accountManager)
 {
     kDebug();
-    KMainWindow* window = createWindow();
-    window->show();
 }
 
 //FIXME does this behave correctly?
@@ -63,14 +61,9 @@ TelepathyChatUi::TelepathyChatUi(const Tp::AccountManagerPtr &accountManager)
 ChatWindow* TelepathyChatUi::createWindow()
 {
     ChatWindow* window = new ChatWindow();
-    window->partTabWidget->setDocumentMode(true);
-    window->partTabWidget-> setTabBarHidden(true);
-    window->setCentralWidget(window->partTabWidget);
-    window->show();
+    window->setupWindow();
     m_chatWindows.push_back(window);
-    QObject::connect(window->partTabWidget, SIGNAL(tabCloseRequested(int)), window->partTabWidget, SLOT(removeTab(int)));
     return window;
-
 }
 
 //FIXME this totally doesn't work yet
@@ -124,7 +117,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     bool tabFound = false;
     //search for any tabs which are already handling this channel.
     for (int i = 0; i < m_chatWindows.count() && !tabFound; ++i) {
-        KMainWindow* window = m_chatWindows.at(i);
+        ChatWindow* window = m_chatWindows.at(i);
         KTabWidget* partTabWidget = window->findChild<KTabWidget*>();
         for (int j = 0; j < partTabWidget->count() ; ++j){
             ChatWidget* auxChatTab = qobject_cast<ChatWidget*>(partTabWidget->widget(j));
@@ -147,26 +140,20 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     //if there is currently no tab containing the incoming channel.
 
     if (!tabFound) {
-        KService::Ptr service = KService::serviceByDesktopPath(QString::fromLatin1("KTpTextChatPart.desktop"));
+//         KService::Ptr service = KService::serviceByDesktopPath(QString::fromLatin1("KTpTextChatPart.desktop"));
         QVariantList args;
         QVariant storeChan, storeAcc;
         storeChan.setValue(textChannel);
         storeAcc.setValue(account);
         args << storeAcc << storeChan;
-        KMainWindow* window;
-        KParts::Part* m_part = service->createInstance<KParts::Part>(0,  args);
+        ChatWindow* window;
         if (m_chatWindows.count() == 1){
             window = m_chatWindows.at(0);
         }
         else {
             window = createWindow();
         }
-        KTabWidget* partTabWidget = window->findChild<KTabWidget*>();
-        partTabWidget->setTabsClosable(true);
-        if(partTabWidget->count() == 1){
-            partTabWidget->setTabBarHidden(false);
-        }
-        partTabWidget->addTab(m_part->widget(),  textChannel->targetContact()->alias());
+            window->addTab(args, textChannel->targetContact()->alias());
 
 
     }

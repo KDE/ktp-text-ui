@@ -16,14 +16,55 @@
 */
 
 #include "chat-window.h"
+#include "chatTabWidget.h"
+#include "kxmlguiclient.h"
 
-ChatWindow::ChatWindow()
+#include <kservice.h>
+#include <KApplication>
+#include <KAction>
+#include <KLocale>
+#include <KActionCollection>
+#include <KStandardAction>
+#include <KDebug>
+
+ChatWindow::ChatWindow() : KXmlGuiWindow(0)
 {
-
+    setXMLFile(QLatin1String("chat-window.rc"));
 }
 
 ChatWindow::~ChatWindow()
 {
-    
 }
+
+void ChatWindow::setupWindow()
+{
+   partTabWidget->setDocumentMode(true);
+   partTabWidget->setTabBarHidden(true);
+   setCentralWidget(partTabWidget);
+   QObject::connect(partTabWidget, SIGNAL(tabCloseRequested(int)), partTabWidget, SLOT(removeTab(int)));
+   show();
+}
+
+void ChatWindow::addTab(QVariantList args, QString channelalias)
+{
+    KService::Ptr service = KService::serviceByDesktopPath(QString::fromLatin1("KTpTextChatPart.desktop"));
+    KTpTextChatPart* part = static_cast<KTpTextChatPart*>(service->createInstance<KParts::Part>(0,  args));
+    Q_ASSERT(part);
+    partTabWidget->addTab(part->widget(), channelalias);
+    setupActions(part);
+}
+
+void ChatWindow::setupActions(KTpTextChatPart* part)
+{
+    KStandardAction::close(this, SLOT(close()), actionCollection());
+    KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
+    KAction* closeAction = new KAction(this);
+    closeAction->setText(i18n("&Close"));
+    closeAction->setShortcut(Qt::CTRL + Qt::Key_W);
+    actionCollection()->addAction(QLatin1String("close"), closeAction);
+    ChatTabWidget* widget = static_cast<ChatTabWidget*>(part->widget());
+    insertChildClient(widget);
+    setupGUI(Default, QLatin1String("chat-window.rc"));
+}
+
 #include "chat-window.moc"

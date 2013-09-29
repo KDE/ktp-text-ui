@@ -1,4 +1,4 @@
-/***************************************************************************
+ /***************************************************************************
  *   Copyright (C) 2013 by Daniel Cohen <analoguecolour@gmail.com>        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,25 +17,24 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef _KTPTEXTCHATPART_H_ 
-#define _KTPTEXTCHATPART_H_
+#ifndef _CHATTABWIDGET_H_
+#define _CHATTABWIDGET_H_
 
 #include <kparts/part.h>
 #include <kparts/factory.h>
 
 #include "chat-widget.h"
-#include "chatTabWidget.h"
+#include "kxmlguiclient.h"
+#include "kxmlguiwindow.h"
 
-class KTpTextChatPart : public KParts::Part
+class ChatTabWidget : public ChatWidget, public KXMLGUIClient
 {
   Q_OBJECT
 
 public:
-    KTpTextChatPart(QWidget *parentWidget, QObject *parent, const QVariantList&);
-    virtual ~KTpTextChatPart();
+    explicit ChatTabWidget(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, KXmlGuiWindow* parent);
+    virtual ~ChatTabWidget();
 
-private:
-    ChatTabWidget* tabWidget;
 };
 
-#endif // _KTPTEXTCHATPART_H_
+#endif // CHATTABWIDGET_H
