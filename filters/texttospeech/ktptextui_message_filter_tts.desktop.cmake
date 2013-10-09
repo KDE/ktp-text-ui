@@ -2,6 +2,7 @@
 Name=Text To Speech
 Name[bs]=Tekst u govor
 Name[ca]=Text a veu
+Name[ca@valencia]=Text a veu
 Name[cs]=Hlasová syntéza
 Name[da]=Tekst-til-tale
 Name[de]=Sprachausgabe
@@ -42,6 +43,7 @@ Encoding=UTF-8
 Comment=Read out incoming messages using text-to-speech service
 Comment[bs]=Čitaj ulazne poruke pomoću usluge konverzije teksta u govor
 Comment[ca]=Llegeix els missatges entrats utilitzant el servei de text a veu
+Comment[ca@valencia]=Llig els missatges entrats utilitzant el servei de text a veu
 Comment[cs]=Předčítat příchozí zprávy pomocí služby hlasové syntézy
 Comment[da]=Læs indkommende beskeder op med tekst-til-tale-tjenesten
 Comment[de]=Eingehende Nachrichten mit dem Sprachausgabedienst vorlesen

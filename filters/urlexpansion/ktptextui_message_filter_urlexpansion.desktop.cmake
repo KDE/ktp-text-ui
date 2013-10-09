@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Short URLs
 Name[ca]=URL breus
+Name[ca@valencia]=URL breus
 Name[cs]=Krátké URL
 Name[da]=Korte URL'er
 Name[de]=Kurz-URLs
@@ -35,6 +36,7 @@ Name[zh_CN]=短 URL
 Name[zh_TW]=短網址
 Comment=Shows the actual URL to which a shortened URL is redirecting to
 Comment[ca]=Mostra l'URL real al que es redirigeix un URL breu
+Comment[ca@valencia]=Mostra l'URL real al que es redirigeix un URL breu
 Comment[cs]=Zobrazí skutečné URL, na které je přesměrováno zkrácené URL
 Comment[da]=Viser den faktiske URL som en afkortet URL videresender til
 Comment[de]=Zeigt die tatsächliche Adresse (URL), auf die eine gekürzte URL umgeleitet wird
