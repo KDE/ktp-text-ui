@@ -30,6 +30,16 @@
 #include <KNotification>
 #include <KIcon>
 #include <KMimeType>
+#include <KAboutData>
+#include <KComponentData>
+
+// FIXME: Part of a hack to let adiumxtra-protocol-handler use the main ktelepathy.notifyrc because
+// the string freeze does not permit adding a new notifyrc only for adiumxtra-protocol-handler.
+// Remove this after 0.7 is released.
+static KComponentData ktelepathyComponentData() {
+    KAboutData telepathySharedAboutData("ktelepathy",0,KLocalizedString(),0);
+    return KComponentData(telepathySharedAboutData);
+}
 
 AdiumxtraProtocolHandler::AdiumxtraProtocolHandler()
     : QObject()
@@ -58,7 +68,8 @@ void AdiumxtraProtocolHandler::install()
 
     KTemporaryFile *tmpFile = new KTemporaryFile();
     if (tmpFile->open()) {
-        KIO::Job* getJob = KIO::file_copy(url.prettyUrl(), KUrl(tmpFile->fileName()), -1, KIO::Overwrite);
+        KIO::Job* getJob = KIO::file_copy(url.prettyUrl(), KUrl(tmpFile->fileName()), -1,
+                                          KIO::Overwrite | KIO::HideProgressInfo);
         if (!KIO::NetAccess::synchronousRun(getJob, 0)) {
             kDebug() << "Download failed";
             Q_EMIT finished();
@@ -81,11 +92,9 @@ void AdiumxtraProtocolHandler::install()
         KNotification *notification = new KNotification(QLatin1String("packagenotrecognized"), NULL, KNotification::Persistent);
         notification->setText( i18n("Package type not recognized or not supported") );
         notification->setActions( QStringList() << i18n("OK") );
-        QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));
         QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
-
-        QObject::connect(notification, SIGNAL(ignored()), this, SLOT(ignoreRequest()));
         QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
+        notification->setComponentData(ktelepathyComponentData());
         notification->sendEvent();
         kDebug() << "Unsupported file type" << currentBundleMimeType;
         kDebug() << tmpFile->fileName();
@@ -100,56 +109,50 @@ void AdiumxtraProtocolHandler::install()
         return;// BundleInstaller::BundleCannotOpen;
     }
 
-    ChatStyleInstaller chatStyleInstaller(archive, tmpFile);
-    if (chatStyleInstaller.validate() == BundleInstaller::BundleValid) {
-        chatStyleInstaller.showRequest();
+    ChatStyleInstaller *chatStyleInstaller = new ChatStyleInstaller(archive, tmpFile);
+    if (chatStyleInstaller->validate() == BundleInstaller::BundleValid) {
+        chatStyleInstaller->showRequest();
         kDebug() << "Sent messagestyle request";
 
-        QObject::connect(&chatStyleInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
-                         &chatStyleInstaller, SLOT(showResult()));
-        QObject::connect(&chatStyleInstaller, SIGNAL(showedResult()), this, SIGNAL(finished()));
-        QObject::connect(&chatStyleInstaller, SIGNAL(showedResult()),
-                         &chatStyleInstaller, SLOT(deleteLater()));
-        QObject::connect(&chatStyleInstaller, SIGNAL(ignoredRequest()), this, SIGNAL(finished()));
-        QObject::connect(&chatStyleInstaller, SIGNAL(ignoredRequest()),
-                         &chatStyleInstaller, SLOT(deleteLater()));
-
-        kDebug() << "Starting installation";
-        chatStyleInstaller.install();
+        QObject::connect(chatStyleInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
+                         chatStyleInstaller, SLOT(showResult()));
+        QObject::connect(chatStyleInstaller, SIGNAL(showedResult()), this, SIGNAL(finished()));
+        QObject::connect(chatStyleInstaller, SIGNAL(showedResult()),
+                         chatStyleInstaller, SLOT(deleteLater()));
+        QObject::connect(chatStyleInstaller, SIGNAL(ignoredRequest()), this, SIGNAL(finished()));
+        QObject::connect(chatStyleInstaller, SIGNAL(ignoredRequest()),
+                         chatStyleInstaller, SLOT(deleteLater()));
 
         return;// BundleInstaller::BundleValid;
     }
+    delete chatStyleInstaller;
 
-    EmoticonSetInstaller emoticonSetInstaller(archive, tmpFile);
-    if(emoticonSetInstaller.validate() == BundleInstaller::BundleValid) {
-        emoticonSetInstaller.showRequest();
+    EmoticonSetInstaller *emoticonSetInstaller = new EmoticonSetInstaller(archive, tmpFile);
+    if(emoticonSetInstaller->validate() == BundleInstaller::BundleValid) {
+        emoticonSetInstaller->showRequest();
         kDebug() << "Sent emoticonset request";
 
-        QObject::connect(&emoticonSetInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
-                         &emoticonSetInstaller, SLOT(showResult()));
-        QObject::connect(&emoticonSetInstaller, SIGNAL(showedResult()), this, SIGNAL(finished()));
-        QObject::connect(&emoticonSetInstaller, SIGNAL(showedResult()),
-                         &emoticonSetInstaller, SLOT(deleteLater()));
-        QObject::connect(&emoticonSetInstaller, SIGNAL(ignoredRequest()), this, SIGNAL(finished()));
-        QObject::connect(&emoticonSetInstaller, SIGNAL(ignoredRequest()),
-                         &emoticonSetInstaller, SLOT(deleteLater()));
-
-        kDebug() << "Starting installation";
-        emoticonSetInstaller.install();
+        QObject::connect(emoticonSetInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
+                         emoticonSetInstaller, SLOT(showResult()));
+        QObject::connect(emoticonSetInstaller, SIGNAL(showedResult()), this, SIGNAL(finished()));
+        QObject::connect(emoticonSetInstaller, SIGNAL(showedResult()),
+                         emoticonSetInstaller, SLOT(deleteLater()));
+        QObject::connect(emoticonSetInstaller, SIGNAL(ignoredRequest()), this, SIGNAL(finished()));
+        QObject::connect(emoticonSetInstaller, SIGNAL(ignoredRequest()),
+                         emoticonSetInstaller, SLOT(deleteLater()));
 
         return;// BundleInstaller::BundleValid;
     }
+    delete emoticonSetInstaller;
 
     KNotification *notification = new KNotification(QLatin1String("packagenotrecognized"),
                                                     NULL,
                                                     KNotification::Persistent);
     notification->setText( i18n("Package type not recognized or not supported") );
-    QObject::connect(notification, SIGNAL(action1Activated()), this, SLOT(install()));
     QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
-
-    QObject::connect(notification, SIGNAL(ignored()), this, SLOT(ignoreRequest()));
     QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
     notification->setActions( QStringList() << i18n("OK") );
+    notification->setComponentData(ktelepathyComponentData());
     notification->sendEvent();
     kDebug() << "Sent error";
 
