@@ -27,6 +27,16 @@
 #include <KArchiveDirectory>
 #include <KNotification>
 #include <KLocale>
+#include <KAboutData>
+#include <KComponentData>
+
+// FIXME: Part of a hack to let adiumxtra-protocol-handler use the main ktelepathy.notifyrc because
+// the string freeze does not permit adding a new notifyrc only for adiumxtra-protocol-handler.
+// Remove this after 0.7 is released.
+static KComponentData ktelepathyComponentData() {
+    KAboutData telepathySharedAboutData("ktelepathy",0,KLocalizedString(),0);
+    return KComponentData(telepathySharedAboutData);
+}
 
 EmoticonSetInstaller::EmoticonSetInstaller(KArchive *archive, KTemporaryFile *tmpFile)
 {
@@ -113,6 +123,7 @@ void EmoticonSetInstaller::showRequest()
     QObject::connect(notification, SIGNAL(action2Activated()), this, SLOT(ignoreRequest()));
     QObject::connect(notification, SIGNAL(action2Activated()), notification, SLOT(close()));
 
+    notification->setComponentData(ktelepathyComponentData());
     notification->sendEvent();
 }
 
@@ -120,13 +131,9 @@ void EmoticonSetInstaller::showResult()
 {
     kDebug();
 
-    KNotification *notification = new KNotification(QLatin1String("emoticonsSuccess"), NULL, KNotification::Persistent);
+    KNotification *notification = new KNotification(QLatin1String("emoticonsSuccess"));
     notification->setText( i18n("Installed Emoticonset %1 successfully.", this->bundleName()) );
-
-    notification->setActions( QStringList() << i18n("OK") );
-    QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
-    QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
-
+    notification->setComponentData(ktelepathyComponentData());
     notification->sendEvent();
 
     Q_EMIT showedResult();
