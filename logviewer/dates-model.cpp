@@ -227,7 +227,7 @@ QVariant DatesModel::data(const QModelIndex &index, int role) const
         }
     // It's an account/entity node
     } else {
-        Date *date = static_cast<Date*>(index.internalPointer());
+        date = static_cast<Date*>(index.internalPointer());
         pair = date->matches.at(index.row());
     }
 
