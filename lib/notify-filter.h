@@ -28,7 +28,9 @@ class NotifyFilter : public KTp::AbstractMessageFilter
     Q_OBJECT
 public:
     explicit NotifyFilter(ChatWidget *widget);
-    void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
+
+public Q_SLOTS:
+    void sendMessageNotification(KTp::Message &message);
 
 private:
     ChatWidget *m_widget;

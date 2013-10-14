@@ -35,20 +35,17 @@ MessageView::MessageView(QWidget *parent)
   m_chatViewInitialized(false),
   m_logsLoaded(false),
   m_exchangedMessagesCount(0),
-//   m_notifyFilter(new NotifyFilter(this)),
   m_logManager(new LogManager(this))
 {
     // initialize LogManager
     KConfig config(QLatin1String("ktelepathyrc"));
     KConfigGroup tabConfig = config.group("Behavior");
     m_logManager->setScrollbackLength(tabConfig.readEntry<int>("scrollbackLength", 4));
-    m_logManager->setTextChannel(m_account, m_channel);
 
     //FIXME
 //     m_previousConversationAvailable = m_logManager->exists();
     connect(m_logManager, SIGNAL(fetched(QList<KTp::Message>)), SLOT(onHistoryFetched(QList<KTp::Message>)));
 
-    m_notifyFilter = new NotifyFilter(qobject_cast<ChatWidget*>(parent));
 }
 
 MessageView::~MessageView()
@@ -59,7 +56,7 @@ MessageView::~MessageView()
 void MessageView::initChatArea()
 {
     bool isGroupChat = m_channel->targetHandleType() != Tp::HandleTypeContact;
-    connect(this, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()), Qt::QueuedConnection);
+    connect(this, SIGNAL(loadFinished(bool)), SLOT(onChatViewReady()), Qt::QueuedConnection);
 
     this->load(isGroupChat ? AdiumThemeView::GroupChat : AdiumThemeView::SingleUserChat);
 
@@ -84,7 +81,6 @@ void MessageView::initChatArea()
         info.setDestinationName(otherContact->id());
         info.setChatName(otherContact->alias());
         info.setIncomingIconPath(otherContact->avatarData().fileName);
-//         m_ui.contactsView->hide(); //TODO
     }
 
     info.setSourceName(m_channel->connection()->protocolName());
@@ -118,9 +114,12 @@ void MessageView::acknowledgeMessages()
     }
 }
 
-void MessageView::setTextChannel(const Tp::TextChannelPtr& textChannel)
+void MessageView::setTextChannel(const Tp::AccountPtr &account, const Tp::TextChannelPtr &textChannel)
 {
+    bool isFirstRun = m_channel.isNull();
     m_channel = textChannel;
+    m_account = account;
+
     //if the UI is ready process any messages in queue
     if (m_chatViewInitialized) {
         Q_FOREACH (const Tp::ReceivedMessage &message, m_channel->messageQueue()) {
@@ -129,16 +128,19 @@ void MessageView::setTextChannel(const Tp::TextChannelPtr& textChannel)
     }
 
     connect(textChannel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
-            SLOT(handleIncomingMessage(Tp::ReceivedMessage,bool)));
-    connect(textChannel.data(), SIGNAL(pendingMessageRemoved(Tp::ReceivedMessage)),
+            SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
+    connect(textChannel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
             SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
+
+    if (isFirstRun) {
+        m_logManager->setTextChannel(m_account, m_channel);
+        initChatArea();
+    }
 }
 
 
 void MessageView::handleIncomingMessage(const Tp::ReceivedMessage& message, bool alreadyNotified)
 {
-    kDebug() << title() << message.text();
-
     if (m_chatViewInitialized) {
         if (message.isDeliveryReport()) {
             QString text;
@@ -224,18 +226,12 @@ void MessageView::handleIncomingMessage(const Tp::ReceivedMessage& message, bool
 
             KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, m_account, m_channel));
 
-            if (!alreadyNotified) {
-                m_notifyFilter->filterMessage(processedMessage,
-                                               KTp::MessageContext(m_account, m_channel));
-            }
             addMessage(processedMessage);
         }
 
-        //if the window is on top, ack straight away. Otherwise they stay in the message queue for acking when activated..
+        //if the window is on top, ack str.channel()aight away. Otherwise they stay in the message queue for acking when activated..
         if (isActiveWindow() && isVisible()) {
             m_channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
-        } else {
-//             Q_EMIT unreadMessagesChanged(); //FIXME
         }
     }
 }
@@ -244,8 +240,6 @@ void MessageView::handleMessageSent(const Tp::Message& message, Tp::MessageSendi
 {
     Q_UNUSED(sentMessageToken)
     KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, m_account, m_channel));
-    m_notifyFilter->filterMessage(processedMessage,
-                                   KTp::MessageContext(m_account, m_channel));
     addMessage(processedMessage);
     m_exchangedMessagesCount++;
 }
@@ -280,7 +274,7 @@ void MessageView::onHistoryFetched(const QList< KTp::Message >& messages)
 
 void MessageView::onChatViewReady()
 {
-    disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(chatViewReady()));
+    disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(onChatViewReady()));
 
     if (!m_logsLoaded || m_exchangedMessagesCount > 0) {
         if (m_exchangedMessagesCount == 0) {
@@ -289,7 +283,7 @@ void MessageView::onChatViewReady()
             m_logManager->fetchHistory(m_exchangedMessagesCount + m_logManager->scrollbackLength());
         }
     }
-
+    m_chatViewInitialized = true;
     m_logsLoaded = true;
 }
 

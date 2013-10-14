@@ -45,8 +45,8 @@ public:
     explicit MessageView(QWidget *parent = 0);
     virtual ~MessageView();
 
-    void setAccount(const Tp::AccountPtr &account);
-    void setTextChannel(const Tp::TextChannelPtr &textChannel);
+    //FIXME I neeed the account set once, text channel multiple times, the name is a bit rubbish.
+    void setTextChannel(const Tp::AccountPtr &account, const Tp::TextChannelPtr &textChannel);
 
     void acknowledgeMessages();
 
@@ -56,9 +56,15 @@ public:
 
     void clear();
 
+Q_SIGNALS:
+    //notify that a message has been recieved or sent, this is needed for notifications in the parent app
+    void newMessage(const KTp::Message &message);
+
 private Q_SLOTS:
     /** Show the received message in the chat window*/
-    void handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified = false);
+
+    //FIXME can we drop this last parameter?
+    void handleIncomingMessage(const Tp::ReceivedMessage& message, bool alreadyNotified=false);
 
     /** Show the message sent in the chat window*/
     void handleMessageSent(const Tp::Message &message,
@@ -75,7 +81,6 @@ private:
     bool m_chatViewInitialized;
     bool m_logsLoaded;
     uint m_exchangedMessagesCount;
-    KTp::AbstractMessageFilter *m_notifyFilter;
     LogManager *m_logManager;
 };
 

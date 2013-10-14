@@ -78,6 +78,7 @@ public:
     QTimer *pausedStateTimer;
     bool isGroupChat;
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
+    NotifyFilter *filter;
 
     KComponentData telepathyComponentData();
     KTp::AbstractMessageFilter *notifyFilter;
@@ -95,17 +96,27 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     : QWidget(parent),
       d(new ChatWidgetPrivate)
 {
+    //load translations for this library. keep this before any i18n() calls in library code
+    KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
+
     d->channel = channel;
     d->account = account;
+    d->ui.setupUi(this);
+    d->notifyFilter = new NotifyFilter(this);
+    connect(d->ui.chatArea, SIGNAL(newMessage(KTp::Message)), d->notifyFilter, SLOT(sendMessageNotification(KTp::Message)));
 
     connect(d->account.data(), SIGNAL(currentPresenceChanged(Tp::Presence)),
             this, SLOT(currentPresenceChanged(Tp::Presence)));
 
-    //load translations for this library. keep this before any i18n() calls in library code
-    KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
+    if (channel->targetHandleType() == Tp::HandleTypeContact) {
+        d->isGroupChat = false;
+        d->ui.contactsView->hide();
+    } else {
+        d->isGroupChat = true;
+        d->ui.sendMessageBox->setContactModel(d->contactModel);
+    }
 
-    d->isGroupChat = (channel->targetHandleType() == Tp::HandleTypeContact ? false : true);
-    d->ui.setupUi(this);
+    d->ui.chatArea->setTextChannel(account, channel);
 
     // connect channel signals
     setupChannelSignals();
@@ -113,11 +124,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     // create contactModel and start keeping track of contacts.
     d->contactModel = new ChannelContactModel(d->channel, this);
     setupContactModelSignals();
-
-    /* Enable nick completion only in group chats */
-    if (d->isGroupChat) {
-        d->ui.sendMessageBox->setContactModel(d->contactModel);
-    }
 
     QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(this);
     sortModel->setSourceModel(d->contactModel);
@@ -240,6 +246,7 @@ void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 
     d->channel = newTextChannelPtr;     // set the new channel
     d->contactModel->setTextChannel(newTextChannelPtr);
+    d->ui.chatArea->setTextChannel(d->account, newTextChannelPtr);
 
     // connect signals for the new textchannel
     setupChannelSignals();

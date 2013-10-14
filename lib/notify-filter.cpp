@@ -37,7 +37,7 @@ static KComponentData telepathyComponentData() {
     return KComponentData(telepathySharedAboutData);
 }
 
-void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context) {
+void NotifyFilter::sendMessageNotification(KTp::Message &message) {
 
     // don't notify of past messages
     if (message.isHistory()) {
@@ -48,7 +48,7 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
         return;
     }
     // don't notify of messages sent by self from another location
-    if (message.senderId() == context.channel()->groupSelfContact()->id()) {
+    if (message.senderId() == m_widget->textChannel()->groupSelfContact()->id()) {
         return;
     }
 
