@@ -19,7 +19,7 @@
 
 #include "behavior-config.h"
 #include "ui_behavior-config.h"
-#include "message-view.h"
+#include "log-message-view.h"
 
 #include <KDE/KConfig>
 #include <KDE/KConfigGroup>
@@ -35,8 +35,8 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
 
     ui->setupUi(this);
 
-    ui->sortButtonGroup->setId(ui->sortOldestOnTop, MessageView::SortOldestTop);
-    ui->sortButtonGroup->setId(ui->sortNewestOnTop, MessageView::SortNewestTop);
+    ui->sortButtonGroup->setId(ui->sortOldestOnTop, LogMessageView::SortOldestTop);
+    ui->sortButtonGroup->setId(ui->sortNewestOnTop, LogMessageView::SortNewestTop);
 
     load();
 
@@ -52,11 +52,11 @@ void BehaviorConfig::load()
 {
     const KConfig config(QLatin1String("ktelepathyrc"));
     const KConfigGroup group = config.group("LogViewer");
-    MessageView::SortMode sortMode;
-    sortMode = static_cast<MessageView::SortMode>(group.readEntry<int>(QLatin1String("SortMode"),
-                                                        static_cast<int>(MessageView::SortOldestTop)));
-    ui->sortOldestOnTop->setChecked(sortMode == MessageView::SortOldestTop);
-    ui->sortNewestOnTop->setChecked(sortMode == MessageView::SortNewestTop);
+    LogMessageView::SortMode sortMode;
+    sortMode = static_cast<LogMessageView::SortMode>(group.readEntry<int>(QLatin1String("SortMode"),
+                                                        static_cast<int>(LogMessageView::SortOldestTop)));
+    ui->sortOldestOnTop->setChecked(sortMode == LogMessageView::SortOldestTop);
+    ui->sortNewestOnTop->setChecked(sortMode == LogMessageView::SortNewestTop);
 }
 
 void BehaviorConfig::save()

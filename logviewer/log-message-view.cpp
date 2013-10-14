@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "message-view.h"
+#include "log-message-view.h"
 
 #include "adium-theme-view.h"
 #include "adium-theme-status-info.h"
@@ -33,7 +33,7 @@
 
 #include <TelepathyQt/Account>
 
-MessageView::MessageView(QWidget *parent) :
+LogMessageView::LogMessageView(QWidget *parent) :
     AdiumThemeView(parent),
     m_infoLabel(new QLabel(this))
 {
@@ -48,7 +48,7 @@ MessageView::MessageView(QWidget *parent) :
     connect(this, SIGNAL(loadFinished(bool)), SLOT(processStoredEvents()));
 }
 
-void MessageView::loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &entity,
+void LogMessageView::loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &entity,
                           const Tp::ContactPtr &contact, const QDate &date,
                           const QPair< QDate, QDate > &nearestDates)
 {
@@ -88,7 +88,7 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &e
     connect(pendingLogs, SIGNAL(finished(KTp::PendingLoggerOperation*)), SLOT(onEventsLoaded(KTp::PendingLoggerOperation*)));
 }
 
-void MessageView::showInfoMessage(const QString& message)
+void LogMessageView::showInfoMessage(const QString& message)
 {
     m_infoLabel->setText(message);
     m_infoLabel->show();
@@ -96,24 +96,24 @@ void MessageView::showInfoMessage(const QString& message)
     m_infoLabel->setGeometry(0, 0, width(), height());
 }
 
-void MessageView::resizeEvent(QResizeEvent* e)
+void LogMessageView::resizeEvent(QResizeEvent* e)
 {
     m_infoLabel->setGeometry(0, 0, e->size().width(), e->size().height());
 
     QWebView::resizeEvent(e);
 }
 
-void MessageView::setHighlightText(const QString &text)
+void LogMessageView::setHighlightText(const QString &text)
 {
     m_highlightedText = text;
 }
 
-void MessageView::clearHighlightText()
+void LogMessageView::clearHighlightText()
 {
     setHighlightText(QString());
 }
 
-void MessageView::onEventsLoaded(KTp::PendingLoggerOperation *po)
+void LogMessageView::onEventsLoaded(KTp::PendingLoggerOperation *po)
 {
     KTp::PendingLoggerLogs *pl = qobject_cast<KTp::PendingLoggerLogs*>(po);
     m_events << pl->logs();
@@ -143,7 +143,7 @@ bool logMessageNewerThan(const KTp::LogMessage &e1, const KTp::LogMessage &e2)
     return e1.time() > e2.time();
 }
 
-void MessageView::processStoredEvents()
+void LogMessageView::processStoredEvents()
 {
     AdiumThemeStatusInfo prevConversation;
     if (m_prev.isValid()) {
@@ -161,12 +161,12 @@ void MessageView::processStoredEvents()
         nextConversation.setTime(QDateTime(m_next));
     }
 
-    if (m_sortMode == MessageView::SortOldestTop) {
+    if (m_sortMode == LogMessageView::SortOldestTop) {
         if (m_prev.isValid()) {
             addAdiumStatusMessage(prevConversation);
         }
         qSort(m_events.begin(), m_events.end(), logMessageOlderThan);
-    } else if (m_sortMode == MessageView::SortNewestTop) {
+    } else if (m_sortMode == LogMessageView::SortNewestTop) {
         if (m_next.isValid()) {
             addAdiumStatusMessage(nextConversation);
         }
@@ -184,9 +184,9 @@ void MessageView::processStoredEvents()
         addMessage(message);
     }
 
-    if (m_sortMode == MessageView::SortOldestTop && m_next.isValid()) {
+    if (m_sortMode == LogMessageView::SortOldestTop && m_next.isValid()) {
         addAdiumStatusMessage(nextConversation);
-    } else if (m_sortMode == MessageView::SortNewestTop && m_prev.isValid()) {
+    } else if (m_sortMode == LogMessageView::SortNewestTop && m_prev.isValid()) {
         addAdiumStatusMessage(prevConversation);
     }
 
@@ -195,7 +195,7 @@ void MessageView::processStoredEvents()
     QTimer::singleShot(100, this, SLOT(doHighlightText()));
 }
 
-void MessageView::onLinkClicked(const QUrl &link)
+void LogMessageView::onLinkClicked(const QUrl &link)
 {
     // Don't emit the signal directly, KWebView does not like when we reload the
     // page from an event handler (and then chain up) and we can't guarantee
@@ -219,20 +219,20 @@ void MessageView::onLinkClicked(const QUrl &link)
     AdiumThemeView::onLinkClicked(link);
 }
 
-void MessageView::loadSettings()
+void LogMessageView::loadSettings()
 {
     const KConfig config(QLatin1String("ktelepathyrc"));
     const KConfigGroup group = config.group("LogViewer");
     m_sortMode = static_cast<SortMode>(group.readEntry("SortMode", static_cast<int>(SortOldestTop)));
 }
 
-void MessageView::reloadTheme()
+void LogMessageView::reloadTheme()
 {
     loadSettings();
     loadLog(m_account, m_entity, m_contact, m_date, qMakePair(m_prev, m_next));
 }
 
-void MessageView::doHighlightText()
+void LogMessageView::doHighlightText()
 {
     findText(QString());
     if (!m_highlightedText.isEmpty()) {

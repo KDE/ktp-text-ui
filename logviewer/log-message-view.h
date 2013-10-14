@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef MESSAGEVIEW_H
-#define MESSAGEVIEW_H
+#ifndef LOGMESSAGEVIEW_H
+#define LOGMESSAGEVIEW_H
 
 #include "adium-theme-view.h"
 
@@ -30,7 +30,7 @@
 
 class QLabel;
 
-class MessageView : public AdiumThemeView
+class LogMessageView : public AdiumThemeView
 {
     Q_OBJECT
 public:
@@ -39,7 +39,7 @@ public:
         SortNewestTop
     };
 
-    explicit MessageView(QWidget *parent = 0);
+    explicit LogMessageView(QWidget *parent = 0);
 
     void loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &entity,
                  const Tp::ContactPtr &contact, const QDate &date,

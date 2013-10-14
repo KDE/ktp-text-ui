@@ -7,7 +7,7 @@ set(ktp-log-viewer_SRCS
         dates-model.cpp
         dates-view-delegate.cpp
         entity-model.cpp
-        message-view.cpp
+        log-message-view.cpp
         entity-view.cpp
         entity-view-delegate.cpp
         entity-filter-model.cpp
