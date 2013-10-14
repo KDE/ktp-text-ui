@@ -123,7 +123,7 @@ void MessageView::setTextChannel(const Tp::AccountPtr &account, const Tp::TextCh
     //if the UI is ready process any messages in queue
     if (m_chatViewInitialized) {
         Q_FOREACH (const Tp::ReceivedMessage &message, m_channel->messageQueue()) {
-            handleIncomingMessage(message, true);
+            handleIncomingMessage(message);
         }
     }
 
@@ -139,7 +139,7 @@ void MessageView::setTextChannel(const Tp::AccountPtr &account, const Tp::TextCh
 }
 
 
-void MessageView::handleIncomingMessage(const Tp::ReceivedMessage& message, bool alreadyNotified)
+void MessageView::handleIncomingMessage(const Tp::ReceivedMessage& message)
 {
     if (m_chatViewInitialized) {
         if (message.isDeliveryReport()) {
@@ -227,6 +227,7 @@ void MessageView::handleIncomingMessage(const Tp::ReceivedMessage& message, bool
             KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, m_account, m_channel));
 
             addMessage(processedMessage);
+            Q_EMIT newMessage(processedMessage);
         }
 
         //if the window is on top, ack str.channel()aight away. Otherwise they stay in the message queue for acking when activated..
@@ -242,6 +243,7 @@ void MessageView::handleMessageSent(const Tp::Message& message, Tp::MessageSendi
     KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, m_account, m_channel));
     addMessage(processedMessage);
     m_exchangedMessagesCount++;
+    Q_EMIT newMessage(processedMessage);
 }
 
 
@@ -268,7 +270,7 @@ void MessageView::onHistoryFetched(const QList< KTp::Message >& messages)
 
     //process any messages we've 'missed' whilst initialising.
     Q_FOREACH(const Tp::ReceivedMessage &message, m_channel->messageQueue()) {
-        handleIncomingMessage(message, true);
+        handleIncomingMessage(message);
     }
 }
 

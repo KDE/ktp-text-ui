@@ -62,9 +62,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     /** Show the received message in the chat window*/
-
-    //FIXME can we drop this last parameter?
-    void handleIncomingMessage(const Tp::ReceivedMessage& message, bool alreadyNotified=false);
+    void handleIncomingMessage(const Tp::ReceivedMessage& message);
 
     /** Show the message sent in the chat window*/
     void handleMessageSent(const Tp::Message &message,
