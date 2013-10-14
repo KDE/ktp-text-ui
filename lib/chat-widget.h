@@ -122,15 +122,7 @@ protected:
     virtual void dropEvent(QDropEvent *e);
     virtual void dragEnterEvent(QDragEnterEvent *e);
 
-protected Q_SLOTS:
-    /** Show the received message in the chat window*/
-    void handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified = false);
-
-    /** Show the message sent in the chat window*/
-    void handleMessageSent(const Tp::Message &message,
-                           Tp::MessageSendingFlags flags,
-                           const QString &sentMessageToken);
-
+private Q_SLOTS:
     /** send the text in the text area widget to the client handler*/
     void sendMessage();
 
@@ -146,17 +138,12 @@ protected Q_SLOTS:
 
     void onInputBoxChanged();
 
-    void chatViewReady();
-
 Q_SIGNALS:
     /** Emitted whenever the title for the chat changes, normally the name of the contact or a topic*/
     void titleChanged(const QString &title);
 
     /** Emmitted if the icon for this channel changes*/
     void iconChanged(const KIcon &icon);
-
-    /** Emmited whenever a message is received in this channel. It is up to the parent application to acknowledge these messages*/
-    void messageReceived(const Tp::ReceivedMessage &message);
 
     /** emitted when searching for text */
     void searchTextComplete(bool found);
@@ -182,7 +169,6 @@ private Q_SLOTS:
     void findTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findNextTextInChat(const QString &text, QWebPage::FindFlags flags);
     void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
-    void onHistoryFetched(const QList<KTp::Message> &messages);
     void onChatPausedTimerExpired();
     void currentPresenceChanged(const Tp::Presence &presence);
 
@@ -201,9 +187,6 @@ private:
 
     /** Loads language option for specified target Id */
     void loadSpellCheckingOption();
-
-    /** Loads theme into the the AdiumThemeView */
-    void initChatArea();
 
     bool m_previousConversationAvailable;
 

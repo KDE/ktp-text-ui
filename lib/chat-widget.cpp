@@ -63,15 +63,11 @@ class ChatWidgetPrivate
 public:
     ChatWidgetPrivate() :
         remoteContactChatState(Tp::ChannelChatStateInactive),
-        isGroupChat(false),
-        logsLoaded(false),
-        exchangedMessagesCount(0)
+        isGroupChat(false)
     {
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
-    bool chatViewInitialized;
     Tp::ChannelChatState remoteContactChatState;
-    bool isGroupChat;
     QString title;
     QString contactName;
     QString yourName;
@@ -79,11 +75,8 @@ public:
     Tp::AccountPtr account;
     Ui::ChatWidget ui;
     ChannelContactModel *contactModel;
-    LogManager *logManager;
     QTimer *pausedStateTimer;
-    bool logsLoaded;
-    uint exchangedMessagesCount;
-
+    bool isGroupChat;
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
     KComponentData telepathyComponentData();
@@ -104,8 +97,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 {
     d->channel = channel;
     d->account = account;
-    d->logManager = new LogManager(this);
-    connect(d->logManager, SIGNAL(fetched(QList<KTp::Message>)), SLOT(onHistoryFetched(QList<KTp::Message>)));
 
     connect(d->account.data(), SIGNAL(currentPresenceChanged(Tp::Presence)),
             this, SLOT(currentPresenceChanged(Tp::Presence)));
@@ -113,9 +104,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     //load translations for this library. keep this before any i18n() calls in library code
     KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
 
-    d->chatViewInitialized = false;
     d->isGroupChat = (channel->targetHandleType() == Tp::HandleTypeContact ? false : true);
-
     d->ui.setupUi(this);
 
     // connect channel signals
@@ -146,7 +135,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     /* Prepare the chat area */
     connect(d->ui.chatArea, SIGNAL(zoomFactorChanged(qreal)), SIGNAL(zoomFactorChanged(qreal)));
     connect(d->ui.chatArea, SIGNAL(textPasted()), d->ui.sendMessageBox, SLOT(pasteSelection()));
-    initChatArea();
 
     d->pausedStateTimer = new QTimer(this);
     d->pausedStateTimer->setSingleShot(true);
@@ -168,21 +156,12 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(this, SIGNAL(searchTextComplete(bool)), d->ui.searchBar, SLOT(onSearchTextComplete(bool)));
 
     connect(d->pausedStateTimer, SIGNAL(timeout()), this, SLOT(onChatPausedTimerExpired()));
-
-    // initialize LogManager
-    KConfig config(QLatin1String("ktelepathyrc"));
-    KConfigGroup tabConfig = config.group("Behavior");
-    d->logManager->setScrollbackLength(tabConfig.readEntry<int>("scrollbackLength", 4));
-    d->logManager->setTextChannel(d->account, d->channel);
-    m_previousConversationAvailable = d->logManager->exists();
-
-    d->notifyFilter = new NotifyFilter(this);
 }
 
 ChatWidget::~ChatWidget()
 {
     saveSpellCheckingOption();
-    d->channel->requestClose(); // ensure closing; does nothing, if already closed
+    d->channel->requestClose(); //tell Tp we are no longer want to handle this channel; does nothing if already closed
     delete d;
 }
 
@@ -265,12 +244,6 @@ void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
     // connect signals for the new textchannel
     setupChannelSignals();
 
-    //if the UI is ready process any messages in queue
-    if (d->chatViewInitialized) {
-        Q_FOREACH (const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
-            handleIncomingMessage(message, true);
-        }
-    }
     setChatEnabled(true);
     onContactPresenceChange(d->channel->groupSelfContact(), KTp::Presence(d->channel->groupSelfContact()->presence()));
 }
@@ -444,11 +417,9 @@ void ChatWidget::toggleSearchBar() const
 void ChatWidget::setupChannelSignals()
 {
     connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
-            SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
+            SIGNAL(unreadMessagesChanged()));
     connect(d->channel.data(), SIGNAL(pendingMessageRemoved(Tp::ReceivedMessage)),
             SIGNAL(unreadMessagesChanged()));
-    connect(d->channel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
-            SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
     connect(d->channel.data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
             SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
     connect(d->channel.data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
@@ -469,34 +440,6 @@ void ChatWidget::setupContactModelSignals()
        SLOT(onContactBlockStatusChanged(Tp::ContactPtr,bool)));
 }
 
-
-void ChatWidget::onHistoryFetched(const QList<KTp::Message> &messages)
-{
-    d->chatViewInitialized = true;
-
-    kDebug() << "found" << messages.count() << "messages in history";
-    if (!messages.isEmpty()) {
-        QDate date = messages.first().time().date();
-        Q_FOREACH(const KTp::Message &message, messages) {
-            if (message.time().date() != date) {
-                date = message.time().date();
-                d->ui.chatArea->addStatusMessage(date.toString(Qt::LocaleDate));
-            }
-
-            d->ui.chatArea->addMessage(message);
-        }
-
-        if (date != QDate::currentDate()) {
-            d->ui.chatArea->addStatusMessage(QDate::currentDate().toString(Qt::LocaleDate));
-        }
-    }
-
-    //process any messages we've 'missed' whilst initialising.
-    Q_FOREACH(const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
-        handleIncomingMessage(message, true);
-    }
-}
-
 int ChatWidget::unreadMessageCount() const
 {
     return d->channel->messageQueue().size();
@@ -504,12 +447,7 @@ int ChatWidget::unreadMessageCount() const
 
 void ChatWidget::acknowledgeMessages()
 {
-    kDebug();
-    //if we're not initialised we can't have shown anything, even if we are on top, therefore ignore all requests to do so
-    if (d->chatViewInitialized) {
-        //acknowledge everything in the message queue.
-        d->channel->acknowledge(d->channel->messageQueue());
-    }
+    d->ui.chatArea->acknowledgeMessages();
 }
 
 void ChatWidget::updateSendMessageShortcuts(const KShortcut &shortcuts)
@@ -522,149 +460,6 @@ bool ChatWidget::isOnTop() const
     kDebug() << ( isActiveWindow() && isVisible() );
     return ( isActiveWindow() && isVisible() );
 }
-
-void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified)
-{
-    kDebug() << title() << message.text();
-
-    if (d->chatViewInitialized) {
-
-        d->exchangedMessagesCount++;
-
-        //debug the message parts (looking for HTML etc)
-//        Q_FOREACH(Tp::MessagePart part, message.parts())
-//        {
-//            qDebug() << "***";
-//            Q_FOREACH(QString key, part.keys())
-//            {
-//                qDebug() << key << part.value(key).variant();
-//            }
-//        }
-//      turns out we have no HTML, because no CM supports it yet
-
-        if (message.isDeliveryReport()) {
-            QString text;
-            Tp::ReceivedMessage::DeliveryDetails reportDetails = message.deliveryDetails();
-
-            if (reportDetails.hasDebugMessage()) {
-                kDebug() << "delivery report debug message: " << reportDetails.debugMessage();
-            }
-
-            if (reportDetails.isError()) {
-                switch (reportDetails.error()) {
-                case Tp::ChannelTextSendErrorOffline:
-                    if (reportDetails.hasEchoedMessage()) {
-                        if(message.sender() && message.sender()->isBlocked()) {
-                            text = i18n("Delivery of the message \"%1\" "
-                                        "failed because the remote contact is blocked",
-                                        reportDetails.echoedMessage().text());
-                         } else {
-                            text = i18n("Delivery of the message \"%1\" "
-                                        "failed because the remote contact is offline",
-                                        reportDetails.echoedMessage().text());
-                         }
-                    } else {
-                        if(message.sender() && message.sender()->isBlocked()) {
-                            text = i18n("Delivery of a message failed "
-                                        "because the remote contact is blocked");
-                        } else {
-                            text = i18n("Delivery of a message failed "
-                                        "because the remote contact is offline");
-                        }
-                    }
-                    break;
-                case Tp::ChannelTextSendErrorInvalidContact:
-                    if (reportDetails.hasEchoedMessage()) {
-                        text = i18n("Delivery of the message \"%1\" "
-                                    "failed because the remote contact is not valid",
-                                    reportDetails.echoedMessage().text());
-                    } else {
-                        text = i18n("Delivery of a message failed "
-                                    "because the remote contact is not valid");
-                    }
-                    break;
-                case Tp::ChannelTextSendErrorPermissionDenied:
-                    if (reportDetails.hasEchoedMessage()) {
-                        text = i18n("Delivery of the message \"%1\" failed because "
-                                    "you do not have permission to speak in this room",
-                                    reportDetails.echoedMessage().text());
-                    } else {
-                        text = i18n("Delivery of a message failed because "
-                                    "you do not have permission to speak in this room");
-                    }
-                    break;
-                case Tp::ChannelTextSendErrorTooLong:
-                    if (reportDetails.hasEchoedMessage()) {
-                        text = i18n("Delivery of the message \"%1\" "
-                                    "failed because it was too long",
-                                    reportDetails.echoedMessage().text());
-                    } else {
-                        text = i18n("Delivery of a message failed "
-                                    "because it was too long");
-                    }
-                    break;
-                default:
-                    if (reportDetails.hasEchoedMessage()) {
-                        text = i18n("Delivery of the message \"%1\" failed: %2",
-                                    reportDetails.echoedMessage().text(),
-                                    message.text());
-                    } else {
-                        text = i18n("Delivery of a message failed: %1", message.text());
-                    }
-                    break;
-                }
-            } else {
-                //TODO: handle delivery reports properly
-                kWarning() << "Ignoring delivery report";
-                d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
-                return;
-            }
-
-            d->ui.chatArea->addStatusMessage(text, message.received());
-        } else {
-            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel));
-
-            if (!alreadyNotified) {
-                d->notifyFilter->filterMessage(processedMessage,
-                                               KTp::MessageContext(d->account, d->channel));
-            }
-            d->ui.chatArea->addMessage(processedMessage);
-        }
-
-        //if the window is on top, ack straight away. Otherwise they stay in the message queue for acking when activated..
-        if (isOnTop()) {
-            d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
-        } else {
-            Q_EMIT unreadMessagesChanged();
-        }
-    }
-
-}
-
-void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&)
-{
-    KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel));
-    d->notifyFilter->filterMessage(processedMessage,
-                                   KTp::MessageContext(d->account, d->channel));
-    d->ui.chatArea->addMessage(processedMessage);
-    d->exchangedMessagesCount++;
-}
-
-void ChatWidget::chatViewReady()
-{
-    disconnect(d->ui.chatArea, SIGNAL(loadFinished(bool)), this, SLOT(chatViewReady()));
-
-    if (!d->logsLoaded || d->exchangedMessagesCount > 0) {
-        if (d->exchangedMessagesCount == 0) {
-            d->logManager->fetchScrollback();
-        } else {
-            d->logManager->fetchHistory(d->exchangedMessagesCount + d->logManager->scrollbackLength());
-        }
-    }
-
-    d->logsLoaded = true;
-}
-
 
 void ChatWidget::sendMessage()
 {
@@ -929,9 +724,7 @@ bool ChatWidget::previousConversationAvailable()
 
 void ChatWidget::clear()
 {
-    // Don't reload logs when re-initializing */
-    d->logsLoaded = true;
-    initChatArea();
+    d->ui.chatArea->clear();
 }
 
 void ChatWidget::setZoomFactor(qreal zoomFactor)
@@ -942,55 +735,6 @@ void ChatWidget::setZoomFactor(qreal zoomFactor)
 qreal ChatWidget::zoomFactor() const
 {
     return d->ui.chatArea->zoomFactor();
-}
-
-void ChatWidget::initChatArea()
-{
-    connect(d->ui.chatArea, SIGNAL(loadFinished(bool)), SLOT(chatViewReady()), Qt::QueuedConnection);
-
-    d->ui.chatArea->load((d->isGroupChat ? AdiumThemeView::GroupChat : AdiumThemeView::SingleUserChat));
-
-    AdiumThemeHeaderInfo info;
-
-    info.setGroupChat(d->isGroupChat);
-    //normal chat - self and one other person.
-    if (d->isGroupChat) {
-        // A temporary solution to display a roomname instead of a full jid
-        // This should be reworked as soon as QtTp is offering the
-        // room name property
-        QString roomName = d->channel->targetId();
-        roomName = roomName.left(roomName.indexOf(QLatin1Char('@')));
-        info.setChatName(roomName);
-    } else {
-        Tp::ContactPtr otherContact = d->channel->targetContact();
-
-        Q_ASSERT(otherContact);
-
-        d->contactName = otherContact->alias();
-        info.setDestinationDisplayName(otherContact->alias());
-        info.setDestinationName(otherContact->id());
-        info.setChatName(otherContact->alias());
-        info.setIncomingIconPath(otherContact->avatarData().fileName);
-        d->ui.contactsView->hide();
-    }
-
-    info.setSourceName(d->channel->connection()->protocolName());
-
-    //set up anything related to 'self'
-    info.setOutgoingIconPath(d->channel->groupSelfContact()->avatarData().fileName);
-
-    //set the message time
-    if (!d->channel->messageQueue().isEmpty()) {
-        info.setTimeOpened(d->channel->messageQueue().first().received());
-    } else {
-        info.setTimeOpened(QDateTime::currentDateTime());
-    }
-
-    info.setServiceIconImage(KIconLoader::global()->iconPath(d->account->iconName(), KIconLoader::Panel));
-    d->ui.chatArea->initialise(info);
-
-    //set the title of this chat.
-    d->title = info.chatName();
 }
 
 void ChatWidget::onChatPausedTimerExpired()
@@ -1018,10 +762,7 @@ void ChatWidget::addEmoticonToChat(const QString &emoticon)
 
 void ChatWidget::reloadTheme()
 {
-    d->logsLoaded = false;
-    d->chatViewInitialized = false;
-
-    initChatArea();
+    d->ui.chatArea->reloadTheme();
 }
 
 #include "chat-widget.moc"

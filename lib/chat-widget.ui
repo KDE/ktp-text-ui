@@ -25,7 +25,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="AdiumThemeView" name="chatArea" native="true">
+     <widget class="MessageView" name="chatArea" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -75,9 +75,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>AdiumThemeView</class>
+   <class>MessageView</class>
    <extends>QWidget</extends>
-   <header>adium-theme-view.h</header>
+   <header>message-view.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
