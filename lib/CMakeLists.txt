@@ -36,6 +36,7 @@ target_link_libraries(ktpchat
     ${KDE4_KEMOTICONS_LIBS}
     ${KTP_LIBRARIES}
     ${KTP_LOGGER_LIBRARIES}
+    ${QT_QTDECLARATIVE_LIBRARIES}
 )
 install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})
 

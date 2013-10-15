@@ -32,6 +32,8 @@
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
 #include <QSortFilterProxyModel>
+#include <QDeclarativeEngine>
+#include <QDeclarativeContext>
 
 #include <KColorDialog>
 #include <KNotification>
@@ -55,6 +57,7 @@
 #include <KTp/presence.h>
 #include <KTp/actions.h>
 #include <KTp/message-processor.h>
+#include <KTp/conversation.h>
 
 #include <sonnet/speller.h>
 
@@ -103,7 +106,14 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->account = account;
     d->ui.setupUi(this);
     d->notifyFilter = new NotifyFilter(this);
-    connect(d->ui.chatArea, SIGNAL(newMessage(KTp::Message)), d->notifyFilter, SLOT(sendMessageNotification(KTp::Message)));
+//     connect(d->ui.chatArea, SIGNAL(newMessage(KTp::Message)), d->notifyFilter, SLOT(sendMessageNotification(KTp::Message)));
+
+
+    Conversation *conv = new Conversation(channel, account, this);
+    d->ui.declarativeView->engine()->rootContext()->setContextProperty(QLatin1String("conversation"), conv);
+
+    d->ui.declarativeView->engine()->addImportPath(QLatin1String("/opt/kde4/lib/kde4/imports")); //FIXME. KDeclarative??
+    d->ui.declarativeView->setSource(QUrl(QLatin1String("/home/david/projects/temp/ktp_text_qml/take2/take2.qml")));
 
     connect(d->account.data(), SIGNAL(currentPresenceChanged(Tp::Presence)),
             this, SLOT(currentPresenceChanged(Tp::Presence)));
@@ -116,7 +126,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
         d->ui.sendMessageBox->setContactModel(d->contactModel);
     }
 
-    d->ui.chatArea->setTextChannel(account, channel);
+//     d->ui.chatArea->setTextChannel(account, channel);
 
     // connect channel signals
     setupChannelSignals();
@@ -135,12 +145,12 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->yourName = channel->groupSelfContact()->alias();
 
     d->ui.sendMessageBox->setAcceptDrops(false);
-    d->ui.chatArea->setAcceptDrops(false);
+//     d->ui.chatArea->setAcceptDrops(false);
     setAcceptDrops(true);
 
     /* Prepare the chat area */
-    connect(d->ui.chatArea, SIGNAL(zoomFactorChanged(qreal)), SIGNAL(zoomFactorChanged(qreal)));
-    connect(d->ui.chatArea, SIGNAL(textPasted()), d->ui.sendMessageBox, SLOT(pasteSelection()));
+//     connect(d->ui.chatArea, SIGNAL(zoomFactorChanged(qreal)), SIGNAL(zoomFactorChanged(qreal)));
+//     connect(d->ui.chatArea, SIGNAL(textPasted()), d->ui.sendMessageBox, SLOT(pasteSelection()));
 
     d->pausedStateTimer = new QTimer(this);
     d->pausedStateTimer->setSingleShot(true);
@@ -150,7 +160,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     loadSpellCheckingOption();
 
     // make the sendMessageBox a focus proxy for the chatview
-    d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
+//     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
 
     connect(d->ui.sendMessageBox, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
 
@@ -246,7 +256,7 @@ void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 
     d->channel = newTextChannelPtr;     // set the new channel
     d->contactModel->setTextChannel(newTextChannelPtr);
-    d->ui.chatArea->setTextChannel(d->account, newTextChannelPtr);
+//     d->ui.chatArea->setTextChannel(d->account, newTextChannelPtr);
 
     // connect signals for the new textchannel
     setupChannelSignals();
@@ -263,13 +273,13 @@ Tp::TextChannelPtr ChatWidget::textChannel() const
 void ChatWidget::keyPressEvent(QKeyEvent *e)
 {
     if (e->matches(QKeySequence::Copy)) {
-        d->ui.chatArea->triggerPageAction(QWebPage::Copy);
+//         d->ui.chatArea->triggerPageAction(QWebPage::Copy);
         return;
     }
 
     if (e->key() == Qt::Key_PageUp ||
         e->key() == Qt::Key_PageDown) {
-        d->ui.chatArea->event(e);
+//         d->ui.chatArea->event(e);
         return;
     }
 
@@ -454,7 +464,7 @@ int ChatWidget::unreadMessageCount() const
 
 void ChatWidget::acknowledgeMessages()
 {
-    d->ui.chatArea->acknowledgeMessages();
+//     d->ui.chatArea->acknowledgeMessages();
 }
 
 void ChatWidget::updateSendMessageShortcuts(const KShortcut &shortcuts)
@@ -496,7 +506,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
     }
 
     if (state == Tp::ChannelChatStateGone) {
-        d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()));
+//         d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()));
     }
 
     if (d->isGroupChat) {
@@ -556,17 +566,17 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const K
     }
 
     if (!message.isNull()) {
-        if (d->ui.chatArea->showPresenceChanges()) {
-            d->ui.chatArea->addStatusMessage(message);
-        }
+//         if (d->ui.chatArea->showPresenceChanges()) {
+//             d->ui.chatArea->addStatusMessage(message);
+//         }
     }
 
     //if in a non-group chat situation, and the other contact has changed state...
-    if (!d->isGroupChat && !isYou) {
-        Q_EMIT iconChanged(presence.icon());
-    }
+//     if (!d->isGroupChat && !isYou) {
+//         Q_EMIT iconChanged(presence.icon());
+//     }
 
-    Q_EMIT contactPresenceChanged(presence);
+//     Q_EMIT contactPresenceChanged(presence);
 }
 
 void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QString& alias)
@@ -590,7 +600,7 @@ void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QSt
     }
 
     if (!message.isEmpty()) {
-        d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()));
+//         d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()));
     }
 
     //if in a non-group chat situation, and the other contact has changed alias...
@@ -608,7 +618,7 @@ void ChatWidget::onContactBlockStatusChanged(const Tp::ContactPtr &contact, bool
         message = i18n("%1 is now unblocked.", contact->alias());
     }
 
-    d->ui.chatArea->addStatusMessage(message);
+//     d->ui.chatArea->addStatusMessage(message);
 
     Q_EMIT contactBlockStatusChanged(blocked);
 }
@@ -649,25 +659,25 @@ void ChatWidget::onInputBoxChanged()
 void ChatWidget::findTextInChat(const QString& text, QWebPage::FindFlags flags)
 {
     // reset highlights
-    d->ui.chatArea->findText(QString(), flags);
+//     d->ui.chatArea->findText(QString(), flags);
 
-    if(d->ui.chatArea->findText(text, flags)) {
-        Q_EMIT searchTextComplete(true);
-    } else {
-        Q_EMIT searchTextComplete(false);
-    }
+//     if(d->ui.chatArea->findText(text, flags)) {
+//         Q_EMIT searchTextComplete(true);
+//     } else {
+//         Q_EMIT searchTextComplete(false);
+//     }
 }
 
 void ChatWidget::findNextTextInChat(const QString& text, QWebPage::FindFlags flags)
 {
-    d->ui.chatArea->findText(text, flags);
+//     d->ui.chatArea->findText(text, flags);
 }
 
 void ChatWidget::findPreviousTextInChat(const QString& text, QWebPage::FindFlags flags)
 {
     // for "backwards" search
-    flags |= QWebPage::FindBackward;
-    d->ui.chatArea->findText(text, flags);
+//     flags |= QWebPage::FindBackward;
+//     d->ui.chatArea->findText(text, flags);
 }
 
 void ChatWidget::setSpellDictionary(const QString &dict)
@@ -731,17 +741,18 @@ bool ChatWidget::previousConversationAvailable()
 
 void ChatWidget::clear()
 {
-    d->ui.chatArea->clear();
+//     d->ui.chatArea->clear();
 }
 
 void ChatWidget::setZoomFactor(qreal zoomFactor)
 {
-    d->ui.chatArea->setZoomFactor(zoomFactor);
+//     d->ui.chatArea->setZoomFactor(zoomFactor);
 }
 
 qreal ChatWidget::zoomFactor() const
 {
-    return d->ui.chatArea->zoomFactor();
+//     return d->ui.chatArea->zoomFactor();
+    return 1.0; //FIXME
 }
 
 void ChatWidget::onChatPausedTimerExpired()
@@ -756,8 +767,8 @@ void ChatWidget::onChatPausedTimerExpired()
 void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)
 {
     if (presence == Tp::Presence::offline()) {
-        d->ui.chatArea->addStatusMessage(i18n("You are now offline"));
-        Q_EMIT iconChanged(KTp::Presence(Tp::Presence::offline()).icon());
+//         d->ui.chatArea->addStatusMessage(i18n("You are now offline"));
+//         Q_EMIT iconChanged(KTp::Presence(Tp::Presence::offline()).icon());
     }
 }
 
@@ -769,7 +780,7 @@ void ChatWidget::addEmoticonToChat(const QString &emoticon)
 
 void ChatWidget::reloadTheme()
 {
-    d->ui.chatArea->reloadTheme();
+//     d->ui.chatArea->reloadTheme();
 }
 
 #include "chat-widget.moc"
