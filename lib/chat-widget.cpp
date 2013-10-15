@@ -931,6 +931,8 @@ void ChatWidget::clear()
 {
     // Don't reload logs when re-initializing */
     d->logsLoaded = true;
+    d->exchangedMessagesCount = 0;
+    d->ui.sendMessageBox->clearHistory();
     initChatArea();
 }
 

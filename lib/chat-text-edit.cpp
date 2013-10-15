@@ -52,8 +52,7 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
     setAcceptRichText(false);
 
     // Initialize the history
-    m_history.prepend(QString());
-    m_historyPos = 0;
+    clearHistory();
 
     connect(this, SIGNAL(textChanged()), SLOT(recalculateSize()));
 }
@@ -88,6 +87,13 @@ QSize ChatTextEdit::sizeHint() const
     sh.setHeight(int (document()->size().height()));
     sh += QSize(0, (QFrame::lineWidth() * 2) + 1);
     return sh;
+}
+
+void ChatTextEdit::clearHistory()
+{
+    m_history.clear();
+    m_history.prepend(QString());
+    m_historyPos = 0;
 }
 
 void ChatTextEdit::keyPressEvent(QKeyEvent *e)
