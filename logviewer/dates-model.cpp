@@ -267,15 +267,15 @@ int DatesModel::rowCount(const QModelIndex &parent) const
         return m_groups.count();
     }
 
-    // Dates
+    // parent is a group, list dates
     if (parent.internalId() == -1) {
         const QDate key = m_groups.at(parent.row());
         const QList<Date*> dates = m_items.value(key);
         return dates.count();
     }
 
-    // Conversations
-    if (parent.internalId() >= 0) {
+    // parent is a date, list conversations
+    if (parent.internalId() >= 0 && parent.internalId() <= m_groups.count()) {
         const QDate key = m_groups.at(parent.parent().row());
         const QList<Date*> dates = m_items.value(key);
         const Date *date = dates.at(parent.row());
@@ -286,6 +286,7 @@ int DatesModel::rowCount(const QModelIndex &parent) const
         return date->matches.count();
     }
 
+    // parent is a conversation
     return 0;
 }
 
