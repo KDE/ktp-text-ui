@@ -82,18 +82,8 @@ class DatesModel : public QAbstractItemModel
     void onDatesReceived(KTp::PendingLoggerOperation *operation);
 
   private:
-    typedef QPair<Tp::AccountPtr, KTp::LogEntity> AccountEntityPair;
-    QList<AccountEntityPair> m_pairs;
-    QList<KTp::LogSearchHit> m_searchHits;
-    int m_resetInProgress;
-
-    class Date;
-    QList<QDate> m_groups;
-    QMap<QDate, QList<Date*> > m_items;
-
-    QList<KTp::PendingLoggerOperation*> m_pendingDates;
-
-    friend bool sortDatesDescending(const Date *date1, const Date *date2);
+    class Private;
+    Private * const d;
 };
 
 #endif // DATESMODEL_H
