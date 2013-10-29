@@ -4,7 +4,7 @@ set(textuipart_PART_SRCS KTpTextChatPart.cpp chatTabWidget.cpp)
 
 kde4_add_plugin(KTpTextChatPart ${textuipart_PART_SRCS})
 
-target_link_libraries(KTpTextChatPart ${KDE4_KPARTS_LIBS} ktpchat)
+target_link_libraries(KTpTextChatPart ${KDE4_KPARTS_LIBS} ktpchat  ${TELEPATHY_QT4_LIBRARIES} ${KTP_LIBRARIES})
 
 install(TARGETS KTpTextChatPart  DESTINATION ${PLUGIN_INSTALL_DIR})
 

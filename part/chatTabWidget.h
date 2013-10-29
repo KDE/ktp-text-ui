@@ -22,10 +22,14 @@
 
 #include <kparts/part.h>
 #include <kparts/factory.h>
+#include <KConfigGroup>
+#include <chat-search-bar.h>
 
 #include "chat-widget.h"
 #include "kxmlguiclient.h"
 #include "kxmlguiwindow.h"
+
+
 
 class ChatTabWidget : public ChatWidget, public KXMLGUIClient
 {
@@ -34,7 +38,28 @@ class ChatTabWidget : public ChatWidget, public KXMLGUIClient
 public:
     explicit ChatTabWidget(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, KXmlGuiWindow* parent);
     virtual ~ChatTabWidget();
+    void SetupActions();
 
+    enum NotificationType {
+        SystemErrorMessage,
+        SystemInfoMessage
+    };
+
+private:
+    Tp::TextChannelPtr chatChannel;
+    Tp::AccountPtr chatAccount;
+
+private Q_SLOTS:
+//     void onEnableSearchActions(bool enable);
+//     void onFindPreviousText();
+//     void onFindNextText();
+//     void onSearchActionToggled();
+    void onOpenLogTriggered();                                  /** Starts ktp-log-viewer accountId contactId */
+    void onFileTransferTriggered();
+    void setFileTransferEnabled(bool enable);
+    void startFileTransfer(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
+    void onGenericOperationFinished(Tp::PendingOperation* op);
+    void sendNotificationToUser(ChatTabWidget::NotificationType type, const QString& errorMsg);
 };
 
 #endif // CHATTABWIDGET_H

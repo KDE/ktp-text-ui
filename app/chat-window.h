@@ -33,9 +33,18 @@ public:
     void setupWindow();
     void addTab(QVariantList args, QString channelalias);
 
+
+private Q_SLOTS:
+    void onZoomFactorChanged(qreal zoom);
+    void onZoomIn();
+    void onZoomOut();
+    void onTabStateChanged();
+
 private:
     void setupActions(KTpTextChatPart* part);
     KTabWidget* partTabWidget = new KTabWidget;
+    qreal m_zoomFactor;
+    int currTab;
 
 };
 

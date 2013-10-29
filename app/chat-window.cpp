@@ -30,6 +30,7 @@
 ChatWindow::ChatWindow() : KXmlGuiWindow(0)
 {
     setXMLFile(QLatin1String("chat-window.rc"));
+    currTab = 0;
 }
 
 ChatWindow::~ChatWindow()
@@ -39,10 +40,10 @@ ChatWindow::~ChatWindow()
 void ChatWindow::setupWindow()
 {
    partTabWidget->setDocumentMode(true);
-   partTabWidget->setTabBarHidden(true);
    setCentralWidget(partTabWidget);
    QObject::connect(partTabWidget, SIGNAL(tabCloseRequested(int)), partTabWidget, SLOT(removeTab(int)));
    show();
+   connect(partTabWidget, SIGNAL(currentChanged(int)), SLOT(onTabStateChanged()));
 }
 
 void ChatWindow::addTab(QVariantList args, QString channelalias)
@@ -56,15 +57,68 @@ void ChatWindow::addTab(QVariantList args, QString channelalias)
 
 void ChatWindow::setupActions(KTpTextChatPart* part)
 {
-    KStandardAction::close(this, SLOT(close()), actionCollection());
-    KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
-    KAction* closeAction = new KAction(this);
-    closeAction->setText(i18n("&Close"));
-    closeAction->setShortcut(Qt::CTRL + Qt::Key_W);
-    actionCollection()->addAction(QLatin1String("close"), closeAction);
     ChatTabWidget* widget = static_cast<ChatTabWidget*>(part->widget());
-    insertChildClient(widget);
+
+    KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
+    KStandardAction::close(this, SLOT(close()), actionCollection());
+    KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
+    KStandardAction::configureNotifications(this, SLOT(showNotificationsDialog()), actionCollection());
+
+    KConfig config(QLatin1String("ktelepathyrc"));
+    KConfigGroup group = config.group("Appearance");
+    m_zoomFactor = group.readEntry("zoomFactor", (qreal) 1.0);
+    widget->setZoomFactor(m_zoomFactor);
+    KStandardAction::zoomIn(this, SLOT(onZoomIn()), actionCollection());
+    KStandardAction::zoomOut(this, SLOT(onZoomOut()), actionCollection());
+    connect(widget, SIGNAL(zoomFactorChanged(qreal)), this, SLOT(onZoomFactorChanged(qreal)));
+    kDebug() << "startstart" << partTabWidget->currentWidget() << "end";
+        kDebug() << "childverifyfirst" << childClients();
     setupGUI(Default, QLatin1String("chat-window.rc"));
+}
+
+void ChatWindow::onTabStateChanged()
+{
+    kDebug() << "onTabStateChanged is being called";
+    kDebug() << "startremove" << partTabWidget->widget(currTab) << "end";
+    ChatTabWidget* prevWidget = static_cast<ChatTabWidget*>(partTabWidget->widget(currTab));
+    kDebug() << "starttt" << currTab << "end";
+    kDebug() << "start" << prevWidget << "end";
+    if (prevWidget != 0)
+    {
+        removeChildClient(prevWidget);
+    }
+    kDebug() << "childverifyremove" << childClients();
+    ChatTabWidget* widget = static_cast<ChatTabWidget*>(partTabWidget->currentWidget());
+    insertChildClient(widget);
+    currTab = partTabWidget->currentIndex();
+        kDebug() << "childverifyadd" << childClients();
+}
+
+void ChatWindow::onZoomIn()
+{
+    onZoomFactorChanged(m_zoomFactor + 0.1);
+}
+
+void ChatWindow::onZoomOut()
+{
+    onZoomFactorChanged(m_zoomFactor - 0.1);
+}
+
+void ChatWindow::onZoomFactorChanged(qreal zoom)
+{
+    m_zoomFactor = zoom;
+
+    for (int i = 0; i < partTabWidget->count(); i++) {
+        ChatTabWidget* widget = static_cast<ChatTabWidget*>(partTabWidget->widget(i));
+        if (!widget) {
+            continue;
+        }
+        widget->setZoomFactor(zoom);
+    }
+
+    KConfig config(QLatin1String("ktelepathyrc"));
+    KConfigGroup group = config.group("Appearance");
+    group.writeEntry("zoomFactor", m_zoomFactor);
 }
 
 #include "chat-window.moc"
