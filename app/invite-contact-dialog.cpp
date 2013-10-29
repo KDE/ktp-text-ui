@@ -54,7 +54,7 @@ InviteContactDialog::InviteContactDialog(const Tp::AccountManagerPtr &accountMan
     setWindowTitle(i18n("Select Contacts to Invite to Group Chat"));
 
     connect(m_contactGridWidget,
-            SIGNAL(selectionChanged(Tp::AccountPtr,Tp::ContactPtr)),
+            SIGNAL(selectionChanged(Tp::AccountPtr,KTp::ContactPtr)),
             SLOT(onChanged()));
 
     button(KDialog::Ok)->setDisabled(true);
