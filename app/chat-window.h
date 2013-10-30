@@ -18,12 +18,13 @@
 #ifndef CHATWINDOW_H
 #define CHATWINDOW_H
 
-#include <kxmlguiwindow.h>
 #include <KTabWidget>
 #include <kparts/part.h>
+#include <KParts/MainWindow>
+
 #include "KTpTextChatPart.h"
 
-class ChatWindow : public KXmlGuiWindow
+class ChatWindow : public KParts::MainWindow
 {
 Q_OBJECT
 
@@ -45,6 +46,8 @@ private:
     KTabWidget* partTabWidget = new KTabWidget;
     qreal m_zoomFactor;
     int currTab;
+    KParts::PartManager *m_partManager;
+    QMap<QWidget*, KParts::Part*> m_tabsPartsMap;
 
 };
 

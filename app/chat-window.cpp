@@ -27,9 +27,22 @@
 #include <KStandardAction>
 #include <KDebug>
 
-ChatWindow::ChatWindow() : KXmlGuiWindow(0)
+#include <KParts/PartManager>
+
+ChatWindow::ChatWindow() :
+    KParts::MainWindow(0, 0),
+    m_partManager(new KParts::PartManager(this))
 {
     setXMLFile(QLatin1String("chat-window.rc"));
+//     setupActions();
+
+    connect( m_partManager, SIGNAL( activePartChanged( KParts::Part * ) ),
+            this, SLOT( createGUI( KParts::Part * ) ) );
+
+    // Creates the GUI with a null part to make appear the main app menus and tools
+    createGUI(0);
+    setupGUI();
+
     currTab = 0;
 }
 
@@ -49,8 +62,12 @@ void ChatWindow::setupWindow()
 void ChatWindow::addTab(QVariantList args, QString channelalias)
 {
     KService::Ptr service = KService::serviceByDesktopPath(QString::fromLatin1("KTpTextChatPart.desktop"));
-    KTpTextChatPart* part = static_cast<KTpTextChatPart*>(service->createInstance<KParts::Part>(0,  args));
+    KTpTextChatPart* part = static_cast<KTpTextChatPart*>(service->createInstance<KParts::Part>(this,  args));
     Q_ASSERT(part);
+    createGUI(part);
+
+    m_partManager->addPart(part, true);
+    m_tabsPartsMap[part->widget()] = part;
     partTabWidget->addTab(part->widget(), channelalias);
     setupActions(part);
 }
@@ -72,26 +89,32 @@ void ChatWindow::setupActions(KTpTextChatPart* part)
     KStandardAction::zoomOut(this, SLOT(onZoomOut()), actionCollection());
     connect(widget, SIGNAL(zoomFactorChanged(qreal)), this, SLOT(onZoomFactorChanged(qreal)));
     kDebug() << "startstart" << partTabWidget->currentWidget() << "end";
-        kDebug() << "childverifyfirst" << childClients();
-    setupGUI(Default, QLatin1String("chat-window.rc"));
+    kDebug() << "childverifyfirst" << childClients();
 }
 
 void ChatWindow::onTabStateChanged()
 {
     kDebug() << "onTabStateChanged is being called";
-    kDebug() << "startremove" << partTabWidget->widget(currTab) << "end";
-    ChatTabWidget* prevWidget = static_cast<ChatTabWidget*>(partTabWidget->widget(currTab));
-    kDebug() << "starttt" << currTab << "end";
-    kDebug() << "start" << prevWidget << "end";
-    if (prevWidget != 0)
-    {
-        removeChildClient(prevWidget);
-    }
-    kDebug() << "childverifyremove" << childClients();
-    ChatTabWidget* widget = static_cast<ChatTabWidget*>(partTabWidget->currentWidget());
-    insertChildClient(widget);
-    currTab = partTabWidget->currentIndex();
-        kDebug() << "childverifyadd" << childClients();
+//     kDebug() << "startremove" << partTabWidget->widget(currTab) << "end";
+//     ChatTabWidget* prevWidget = static_cast<ChatTabWidget*>(partTabWidget->widget(currTab));
+//     kDebug() << "starttt" << currTab << "end";
+//     kDebug() << "start" << prevWidget << "end";
+//     if (prevWidget != 0)
+//     {
+//         removeChildClient(prevWidget);
+//     }
+//     kDebug() << "childverifyremove" << childClients();
+//     KTpTextChatPart* widget = static_cast<KTpTextChatPart*>(partTabWidget->currentWidget()->parent());
+//     m_partManager->setSelectedPart(widget);
+
+    qDebug() << m_tabsPartsMap;
+    qDebug() << partTabWidget->currentWidget();
+
+    m_partManager->setActivePart(m_tabsPartsMap[partTabWidget->currentWidget()]);
+
+//     insertChildClient(widget);
+//     currTab = partTabWidget->currentIndex();
+    kDebug() << "childverifyadd" << childClients();
 }
 
 void ChatWindow::onZoomIn()

@@ -39,12 +39,14 @@ K_EXPORT_PLUGIN(KTpTextChatPartFactory("KTpTextChatPart", "ktp-text-ui") )
 KTpTextChatPart::KTpTextChatPart( QWidget *parentWidget, QObject *parent, const QVariantList& args )
     : KParts::Part(parent)
 {
+    setObjectName(QLatin1String("cheese"));
     KGlobal::locale()->insertCatalog(QLatin1String("textUI"));
     // we need an instance
     setComponentData( KTpTextChatPartFactory::componentData() );
     Tp::AccountPtr account = args[0].value<Tp::AccountPtr>();
     Tp::TextChannelPtr textChannel = args[1].value<Tp::TextChannelPtr>();
     tabWidget = new ChatTabWidget(textChannel, account, 0);
+    tabWidget->setFocusPolicy(Qt::StrongFocus);
     setWidget(tabWidget);
 }
 
