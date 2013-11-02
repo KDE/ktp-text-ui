@@ -133,7 +133,10 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(this);
     sortModel->setSourceModel(d->contactModel);
     sortModel->setSortRole(Qt::DisplayRole);
+    sortModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    sortModel->setSortLocaleAware(true);
     sortModel->setDynamicSortFilter(true);
+    sortModel->sort(0);
 
     d->ui.contactsView->setModel(sortModel);
 
