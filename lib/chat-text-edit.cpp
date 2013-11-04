@@ -227,6 +227,7 @@ void ChatTextEdit::getHistory(bool up)
     }
 
     setText(m_history[m_historyPos]);
+    moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
 void ChatTextEdit::addHistory(const QString &text)
