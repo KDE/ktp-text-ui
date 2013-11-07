@@ -83,8 +83,7 @@ void ChatWindow::onTabStateChanged()
     ChatTabWidget* prevWidget = static_cast<ChatTabWidget*>(partTabWidget->widget(currTab));
     kDebug() << "starttt" << currTab << "end";
     kDebug() << "start" << prevWidget << "end";
-    if (prevWidget != 0)
-    {
+    if (prevWidget != 0 && childClients().contains(prevWidget)) {
         removeChildClient(prevWidget);
     }
     kDebug() << "childverifyremove" << childClients();
