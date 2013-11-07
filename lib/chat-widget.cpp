@@ -25,7 +25,6 @@
 #include "adium-theme-message-info.h"
 #include "adium-theme-status-info.h"
 #include "channel-contact-model.h"
-#include "logmanager.h"
 #include "notify-filter.h"
 #include "text-chat-config.h"
 
@@ -55,6 +54,7 @@
 #include <KTp/presence.h>
 #include <KTp/actions.h>
 #include <KTp/message-processor.h>
+#include <KTp/Logger/scrollback-manager.h>
 
 #include <sonnet/speller.h>
 
@@ -79,7 +79,7 @@ public:
     Tp::AccountPtr account;
     Ui::ChatWidget ui;
     ChannelContactModel *contactModel;
-    LogManager *logManager;
+    ScrollbackManager *logManager;
     QTimer *pausedStateTimer;
     bool logsLoaded;
     uint exchangedMessagesCount;
@@ -104,7 +104,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 {
     d->channel = channel;
     d->account = account;
-    d->logManager = new LogManager(this);
+    d->logManager = new ScrollbackManager(this);
     connect(d->logManager, SIGNAL(fetched(QList<KTp::Message>)), SLOT(onHistoryFetched(QList<KTp::Message>)));
 
     connect(d->account.data(), SIGNAL(currentPresenceChanged(Tp::Presence)),

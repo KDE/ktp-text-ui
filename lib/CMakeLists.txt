@@ -15,7 +15,6 @@ set(ktpchat_SRCS
         chat-search-bar.cpp
         notify-filter.cpp
         text-chat-config.cpp
-        logmanager.cpp
 )
 
 set(ktpchat_UI
