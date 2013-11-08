@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui name="chatTabWidget"
-     version="17"
+     version="18"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -9,6 +9,11 @@
   <MenuBar>
     <Menu name="edit" ><text>&amp;Edit</text>
       <Action name="open-log" />
+    </Menu>
+    <Menu name="actions"><text>&amp;Actions</text>
+        <Action name="send-file"/>
+        <Action name="share-desktop"/>
+        <Action name="block-contact"/>
     </Menu>
   </MenuBar>
 

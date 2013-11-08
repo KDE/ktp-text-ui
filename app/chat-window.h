@@ -21,6 +21,8 @@
 #include <kxmlguiwindow.h>
 #include <KTabWidget>
 #include <kparts/part.h>
+#include <kparts/mainwindow.h>
+
 #include "KTpTextChatPart.h"
 
 class ChatWindow : public KXmlGuiWindow
@@ -29,7 +31,6 @@ Q_OBJECT
 
 public:
     explicit ChatWindow();
-    virtual ~ChatWindow();
     void setupWindow();
     void addTab(QVariantList args, QString channelalias);
 
@@ -38,13 +39,13 @@ private Q_SLOTS:
     void onZoomFactorChanged(qreal zoom);
     void onZoomIn();
     void onZoomOut();
-    void onTabStateChanged();
+    void onActiveTabChanged();
 
 private:
     void setupActions(KTpTextChatPart* part);
     KTabWidget* partTabWidget = new KTabWidget;
     qreal m_zoomFactor;
-    int currTab;
+    int currTab = 0;
 
 };
 

@@ -1,5 +1,8 @@
 /*
-    Copyright (C) 2013  Daniel Cohen    <analoguecolour@gmail.com>
+    Copyright (C) 2010  David Edmundson   <kde@davidedmundson.co.uk>
+    Copyright (C) 2011  Dominik Schmidt   <dev@dominik-schmidt.de>
+    Copyright (C) 2011  Francesco Nwokeka <francesco.nwokeka@gmail.com>
+    Copyright (C) 2013  Daniel Cohen      <analoguecolour@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,16 +28,12 @@
 #include <KLocale>
 #include <KActionCollection>
 #include <KStandardAction>
-#include <KDebug>
+#include <kparts/mainwindow.h>
 
 ChatWindow::ChatWindow() : KXmlGuiWindow(0)
 {
     setXMLFile(QLatin1String("chat-window.rc"));
-    currTab = 0;
-}
-
-ChatWindow::~ChatWindow()
-{
+    currTab;
 }
 
 void ChatWindow::setupWindow()
@@ -43,15 +42,15 @@ void ChatWindow::setupWindow()
    setCentralWidget(partTabWidget);
    QObject::connect(partTabWidget, SIGNAL(tabCloseRequested(int)), partTabWidget, SLOT(removeTab(int)));
    show();
-   connect(partTabWidget, SIGNAL(currentChanged(int)), SLOT(onTabStateChanged()));
+   connect(partTabWidget, SIGNAL(currentChanged(int)), SLOT(onActiveTabChanged()));
 }
 
-void ChatWindow::addTab(QVariantList args, QString channelalias)
+void ChatWindow::addTab(const QVariantList args, const QString ChannelAlias)
 {
     KService::Ptr service = KService::serviceByDesktopPath(QString::fromLatin1("KTpTextChatPart.desktop"));
     KTpTextChatPart* part = static_cast<KTpTextChatPart*>(service->createInstance<KParts::Part>(0,  args));
     Q_ASSERT(part);
-    partTabWidget->addTab(part->widget(), channelalias);
+    partTabWidget->addTab(part->widget(), ChannelAlias);
     setupActions(part);
 }
 
@@ -71,26 +70,18 @@ void ChatWindow::setupActions(KTpTextChatPart* part)
     KStandardAction::zoomIn(this, SLOT(onZoomIn()), actionCollection());
     KStandardAction::zoomOut(this, SLOT(onZoomOut()), actionCollection());
     connect(widget, SIGNAL(zoomFactorChanged(qreal)), this, SLOT(onZoomFactorChanged(qreal)));
-    kDebug() << "startstart" << partTabWidget->currentWidget() << "end";
-        kDebug() << "childverifyfirst" << childClients();
     setupGUI(Default, QLatin1String("chat-window.rc"));
 }
 
-void ChatWindow::onTabStateChanged()
+void ChatWindow::onActiveTabChanged()
 {
-    kDebug() << "onTabStateChanged is being called";
-    kDebug() << "startremove" << partTabWidget->widget(currTab) << "end";
     ChatTabWidget* prevWidget = static_cast<ChatTabWidget*>(partTabWidget->widget(currTab));
-    kDebug() << "starttt" << currTab << "end";
-    kDebug() << "start" << prevWidget << "end";
     if (prevWidget != 0 && childClients().contains(prevWidget)) {
         removeChildClient(prevWidget);
     }
-    kDebug() << "childverifyremove" << childClients();
     ChatTabWidget* widget = static_cast<ChatTabWidget*>(partTabWidget->currentWidget());
     insertChildClient(widget);
     currTab = partTabWidget->currentIndex();
-        kDebug() << "childverifyadd" << childClients();
 }
 
 void ChatWindow::onZoomIn()

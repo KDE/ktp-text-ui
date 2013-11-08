@@ -37,8 +37,7 @@ class ChatTabWidget : public ChatWidget, public KXMLGUIClient
 
 public:
     explicit ChatTabWidget(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, KXmlGuiWindow* parent);
-    virtual ~ChatTabWidget();
-    void SetupActions();
+    void setupActions();
 
     enum NotificationType {
         SystemErrorMessage,
@@ -54,12 +53,18 @@ private Q_SLOTS:
 //     void onFindPreviousText();
 //     void onFindNextText();
 //     void onSearchActionToggled();
-    void onOpenLogTriggered();                                  /** Starts ktp-log-viewer accountId contactId */
+    void onOpenLogTriggered();
     void onFileTransferTriggered();
     void setFileTransferEnabled(bool enable);
     void startFileTransfer(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
     void onGenericOperationFinished(Tp::PendingOperation* op);
     void sendNotificationToUser(ChatTabWidget::NotificationType type, const QString& errorMsg);
+    void onShareDesktopTriggered();
+    void startShareDesktop(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
+    void setBlockEnabled(bool enable);
+    void onBlockContactTriggered();
+    void onUnblockContactTriggered();
+    void toggleBlockButton(bool contactIsBlocked);
 };
 
 #endif // CHATTABWIDGET_H

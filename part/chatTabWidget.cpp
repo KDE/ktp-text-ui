@@ -1,5 +1,6 @@
  /*
-    Copyright (C) 2013  Daniel Cohen    <analoguecolour@gmail.com>
+    Copyright (C) 2010 by David Edmundson <kde@davidedmundson.co.uk>
+    Copyright (C) 2013  Daniel Cohen      <analoguecolour@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,33 +23,59 @@
 #include <KLocale>
 #include <KActionCollection>
 #include <KStandardAction>
-#include <KDebug>
 #include <KFileDialog>
 #include <ktoolinvocation.h>
 #include <KTp/actions.h>
+#include <KTp/service-availability-checker.h>
 #include <KNotification>
 #include <TelepathyQt/PendingChannelRequest>
 
-ChatTabWidget::ChatTabWidget(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, KXmlGuiWindow* parent): ChatWidget(channel, account, parent), KXMLGUIClient()
+#define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
+
+K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
+                          (QLatin1String(PREFERRED_RFB_HANDLER)));
+
+ChatTabWidget::ChatTabWidget(const Tp::TextChannelPtr& channel,
+                             const Tp::AccountPtr& account,
+                             KXmlGuiWindow* parent)
+    : ChatWidget(channel, account, parent)
+    , KXMLGUIClient()
 {
+    //This effectively constructs the s_krfbAvailableChecker object the first
+    //time that this code is executed. This is to start the d-bus query early, so
+    //that data are available when we need them later in desktopSharingCapability()
+    (void) s_krfbAvailableChecker.operator->();
+
     chatAccount = account;
     chatChannel = channel;
-    SetupActions();
+    setupActions();
 }
 
-ChatTabWidget::~ChatTabWidget()
+void ChatTabWidget::setupActions()
 {
-}
-
-void ChatTabWidget::SetupActions()
-{
-    KAction *openLogAction = new KAction(KIcon(QLatin1String("view-pim-journal")), i18nc("Action to open the log viewer with a specified contact","&Previous Conversations"), this);
-    connect(openLogAction, SIGNAL(triggered()), this, SLOT(onOpenLogTriggered()));
-    actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
+    KAction *openLogAction = new KAction(KIcon(QLatin1String("view-pim-journal")),
+                                         i18nc("Action to open the log viewer with a "
+                                               "specified contact", "&Previous Conversations"),
+                                         this);
     KAction *fileTransferAction = new KAction(KIcon(QLatin1String("mail-attachment")), i18n("&Send File"), this);
-    fileTransferAction->setToolTip(i18nc("Toolbar icon tooltip", "Send a file to this contact"));
+    KAction *shareDesktopAction = new KAction(KIcon(QLatin1String("krfb")), i18n("Share My &Desktop"), this);
+    KAction *blockContactAction = new KAction(KIcon(QLatin1String("im-ban-kick-user")), i18n("&Block Contact"), this);
+    connect(openLogAction, SIGNAL(triggered()), this, SLOT(onOpenLogTriggered()));
     connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
+    connect(shareDesktopAction, SIGNAL(triggered()), this, SLOT(onShareDesktopTriggered()));
+    connect(blockContactAction, SIGNAL(triggered()), this, SLOT(onBlockContactTriggered()));
+    connect(this, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
+    fileTransferAction->setToolTip(i18nc("Toolbar icon tooltip", "Send a file to this contact"));
+    shareDesktopAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an application that "
+                                                                 "allows this contact to see your desktop"));
+    blockContactAction->setToolTip(i18nc("Toolbar icon tooltip", "Blocking means that this contact "
+                                                                 "will not see you online and you will not"
+                                                                 "receive any messages from this contact"));
+    actionCollection()->addAction(QLatin1String("block-contact"), blockContactAction);
+    actionCollection()->addAction(QLatin1String("share-desktop"), shareDesktopAction);
     actionCollection()->addAction(QLatin1String("send-file"), fileTransferAction);
+    actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
+
     setXMLFile(QLatin1String("chatTabWidget.rc"));
 }
 
@@ -126,6 +153,65 @@ void ChatTabWidget::sendNotificationToUser(ChatTabWidget::NotificationType type,
 
     notification->setText(errorMsg);
     notification->sendEvent();
+}
+
+void ChatTabWidget::onShareDesktopTriggered()
+{
+    startShareDesktop(chatAccount, chatChannel->targetContact());
+}
+
+void ChatTabWidget::startShareDesktop(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
+{
+    Tp::PendingChannelRequest* channelRequest = KTp::Actions::startDesktopSharing(account, contact);
+    connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)),
+            this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
+}
+
+void ChatTabWidget::setBlockEnabled(bool enable)
+{
+    QAction *action = actionCollection()->action(QLatin1String("block-contact"));
+
+    if (action) {
+        action->setEnabled(enable);
+    }
+}
+
+void ChatTabWidget::onBlockContactTriggered()
+{
+    Tp::ContactPtr contact = chatChannel->targetContact();
+    if(!contact.isNull()) {
+        contact->block();
+     }
+}
+
+void ChatTabWidget::onUnblockContactTriggered()
+{
+    Tp::ContactPtr contact = chatChannel->targetContact();
+    contact->unblock();
+}
+
+void ChatTabWidget::toggleBlockButton(bool contactIsBlocked)
+{
+    QAction *action = actionCollection()->action(QLatin1String("block-contact"));
+    if(contactIsBlocked) {
+        //Change the name of the action to "Unblock Contact"
+        //and disconnect it with the block slot and reconnect it with unblock slot
+        disconnect(action, SIGNAL(triggered()), this, SLOT(onBlockContactTriggered()));
+        action->setText(i18n("&Unblock Contact"));
+
+        connect(action, SIGNAL(triggered()), this, SLOT(onUnblockContactTriggered()));
+    } else {
+        //Change the name of the action to "Block Contact"
+        //and disconnect it with the unblock slot and reconnect it with block slot
+        disconnect(action, SIGNAL(triggered()), this, SLOT(onUnblockContactTriggered()));
+        action->setText(i18n("&Block Contact"));
+
+        connect(action, SIGNAL(triggered()), this, SLOT(onBlockContactTriggered()));
+    }
+    //Reset the WindowTitle
+    setWindowTitle(this->title());
+
+    setBlockEnabled(true);
 }
 
 #include "chatTabWidget.moc"
