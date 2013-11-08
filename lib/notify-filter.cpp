@@ -54,15 +54,21 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
 
     // choose correct notification type
     QString notificationType;
-    if(message.property("highlight").toBool()) {
-        notificationType = QLatin1String("kde_telepathy_contact_highlight");
-    } else if(message.type() == Tp::ChannelTextMessageTypeNotice) {
+    if(message.type() == Tp::ChannelTextMessageTypeNotice) {
         notificationType = QLatin1String("kde_telepathy_info_event");
     } else {
-        if (m_widget->isOnTop()) {
-            notificationType = QLatin1String("kde_telepathy_contact_incoming_active_window");
+        if (m_widget->isGroupChat()) {
+            if(message.property("highlight").toBool()) {
+                notificationType = QLatin1String("kde_telepathy_group_chat_highlight");
+            } else {
+                notificationType = QLatin1String("kde_telepathy_group_chat_incoming");
+            }
         } else {
             notificationType = QLatin1String("kde_telepathy_contact_incoming");
+        }
+
+        if (m_widget->isOnTop()) {
+            notificationType += QLatin1String("_active_window");
         }
     }
 
