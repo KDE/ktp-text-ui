@@ -58,6 +58,12 @@ private Q_SLOTS:
     void setFileTransferEnabled(bool enable);
     void startFileTransfer(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
     void onGenericOperationFinished(Tp::PendingOperation* op);
+    void onAudioCallTriggered();
+    void setAudioCallEnabled(bool enable);
+    void startAudioCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
+    void onVideoCallTriggered();
+    void setVideoCallEnabled(bool enable);
+    void startVideoCall(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
     void sendNotificationToUser(ChatTabWidget::NotificationType type, const QString& errorMsg);
     void onShareDesktopTriggered();
     void startShareDesktop(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);

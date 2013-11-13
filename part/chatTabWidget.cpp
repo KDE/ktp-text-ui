@@ -60,21 +60,29 @@ void ChatTabWidget::setupActions()
     KAction *fileTransferAction = new KAction(KIcon(QLatin1String("mail-attachment")), i18n("&Send File"), this);
     KAction *shareDesktopAction = new KAction(KIcon(QLatin1String("krfb")), i18n("Share My &Desktop"), this);
     KAction *blockContactAction = new KAction(KIcon(QLatin1String("im-ban-kick-user")), i18n("&Block Contact"), this);
+    KAction *audioCallAction = new KAction(KIcon(QLatin1String("audio-headset")), i18n("&Audio Call"), this);
+    KAction *videoCallAction = new KAction(KIcon(QLatin1String("camera-web")), i18n("&Video Call"), this);
     connect(openLogAction, SIGNAL(triggered()), this, SLOT(onOpenLogTriggered()));
     connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
     connect(shareDesktopAction, SIGNAL(triggered()), this, SLOT(onShareDesktopTriggered()));
     connect(blockContactAction, SIGNAL(triggered()), this, SLOT(onBlockContactTriggered()));
     connect(this, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
+    connect(audioCallAction, SIGNAL(triggered()), this, SLOT(onAudioCallTriggered()));
+    connect(videoCallAction, SIGNAL(triggered()), this, SLOT(onVideoCallTriggered()));
     fileTransferAction->setToolTip(i18nc("Toolbar icon tooltip", "Send a file to this contact"));
     shareDesktopAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an application that "
                                                                  "allows this contact to see your desktop"));
     blockContactAction->setToolTip(i18nc("Toolbar icon tooltip", "Blocking means that this contact "
                                                                  "will not see you online and you will not"
                                                                  "receive any messages from this contact"));
+    audioCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an audio call with this contact"));
+    videoCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start a video call with this contact"));
     actionCollection()->addAction(QLatin1String("block-contact"), blockContactAction);
     actionCollection()->addAction(QLatin1String("share-desktop"), shareDesktopAction);
     actionCollection()->addAction(QLatin1String("send-file"), fileTransferAction);
     actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
+    actionCollection()->addAction(QLatin1String("audio-call"), audioCallAction);
+    actionCollection()->addAction(QLatin1String("video-call"), videoCallAction);
 
     setXMLFile(QLatin1String("chatTabWidget.rc"));
 }
@@ -138,6 +146,47 @@ void ChatTabWidget::onGenericOperationFinished(Tp::PendingOperation* op)
         QString errorMsg(op->errorName() + QLatin1String(": ") + op->errorMessage());
         sendNotificationToUser(SystemErrorMessage, errorMsg);
     }
+}
+
+void ChatTabWidget::onAudioCallTriggered()
+{
+    startAudioCall(chatAccount, chatChannel->targetContact());
+}
+
+void ChatTabWidget::setAudioCallEnabled(bool enable)
+{
+    QAction *action = actionCollection()->action(QLatin1String("audio-call"));
+
+    // don't want to segfault. Should never happen
+    if (action) {
+        action->setEnabled(enable);
+    }
+}
+
+void ChatTabWidget::startAudioCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
+{
+    Tp::PendingChannelRequest *channelRequest = KTp::Actions::startAudioCall(account, contact);
+    connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
+}
+
+void ChatTabWidget::setVideoCallEnabled(bool enable)
+{
+    QAction *action = actionCollection()->action(QLatin1String("video-call"));
+
+    if (action) {
+        action->setEnabled(enable);
+    }
+}
+
+void ChatTabWidget::startVideoCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
+{
+    Tp::PendingChannelRequest* channelRequest = KTp::Actions::startAudioVideoCall(account, contact);
+    connect(channelRequest, SIGNAL(finished(Tp::PendingOperation*)), this, SLOT(onGenericOperationFinished(Tp::PendingOperation*)));
+}
+
+void ChatTabWidget::onVideoCallTriggered()
+{
+    startVideoCall(chatAccount, chatChannel->targetContact());
 }
 
 void ChatTabWidget::sendNotificationToUser(ChatTabWidget::NotificationType type, const QString& errorMsg)
