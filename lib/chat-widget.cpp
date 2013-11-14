@@ -223,11 +223,8 @@ KIcon ChatWidget::icon() const
         //normal chat - self and one other person.
         if (!d->isGroupChat) {
             //find the other contact which isn't self.
-            Q_FOREACH(const Tp::ContactPtr & contact, d->channel->groupContacts()) {
-                if (contact != d->channel->groupSelfContact()) {
-                    return KTp::Presence(contact->presence()).icon();
-                }
-            }
+            Tp::ContactPtr otherContact = d->channel->targetContact();
+            return KTp::Presence(otherContact->presence()).icon();
         }
         else {
             //group chat
