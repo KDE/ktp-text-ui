@@ -76,7 +76,7 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
                 notificationType, m_widget,
                 KNotification::RaiseWidgetOnActivation
                 | KNotification::CloseWhenWidgetActivated
-                | KNotification::Persistent);
+                | KNotification::CloseOnTimeout);
 
     notification->setComponentData(telepathyComponentData());
     notification->setTitle(i18n("%1 has sent you a message",
