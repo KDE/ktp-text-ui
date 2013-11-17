@@ -73,6 +73,7 @@ Comment[sr@ijekavian]=Проширите КДЕ‑скраћени УРИ у У�
 Comment[sr@ijekavianlatin]=Proširite KDE-skraćeni URI u URL (npr. unos wp:KDE postaje http://en.wikipedia.org/wiki/KDE).
 Comment[sr@latin]=Proširite KDE-skraćeni URI u URL (npr. unos wp:KDE postaje http://en.wikipedia.org/wiki/KDE).
 Comment[sv]=Expandera webbadress avkortad av KDE (dvs. att skriva wp:KDE översätts till http://en.wikipedia.org/wiki/KDE)
+Comment[tr]=KDE kısaltılmış bir URI'i URL'ye genişlet (örn. wp:KDE yazmak bunu http://en.wikipedia.org/wiki/KDE haline getirecektir)
 Comment[uk]=Доповнення вебскорочень адрес KDE до повноцінних адрес (тобто текст wp:KDE буде доповнено до http://en.wikipedia.org/wiki/KDE)
 Comment[x-test]=xxExpand a KDE-shortened URI into a URL (i.e. typing wp:KDE will translate to http://en.wikipedia.org/wiki/KDE)xx
 Comment[zh_CN]=展开 KDE 的短连接为完整链接 (例如输入 wp:KDE 将会转换为 http://en.wikipedia.org/wiki/KDE)
