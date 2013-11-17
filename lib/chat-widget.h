@@ -35,6 +35,7 @@
 
 #include <KTp/presence.h>
 #include <KTp/message.h>
+#include <akonadi/item.h>
 
 class ChatSearchBar;
 class ChatWidgetPrivate;
@@ -188,6 +189,8 @@ private Q_SLOTS:
 
     void temporaryFileTransferChannelCreated(Tp::PendingOperation *operation);
     void temporaryFileTransferStateChanged(Tp::FileTransferState, Tp::FileTransferStateChangeReason);
+
+    void onNewAkonadiItem(const Akonadi::Item &item);
 
 private:
     /** connects necessary signals for the channel */

@@ -1,4 +1,8 @@
-include_directories (${KTP_INCLUDE_DIR})
+find_package(KdepimLibs REQUIRED)
+find_package(KPeople REQUIRED)
+
+
+include_directories (${KTP_INCLUDE_DIR}     ${KDEPIMLIBS_INCLUDE_DIRS} ${KPEOPLE_INCLUDE_DIR})
 
 set(ktpchat_SRCS
         chat-widget.cpp
@@ -35,6 +39,12 @@ target_link_libraries(ktpchat
     ${KDE4_KEMOTICONS_LIBS}
     ${KTP_LIBRARIES}
     ${KTP_LOGGER_LIBRARIES}
+    ${KDEPIMLIBS_AKONADI_LIBS}
+    ${KDEPIMLIBS_AKONADI_KMIME_LIBS}
+    ${KDEPIMLIBS_KMIME_LIBS}
+    ${KDEPIMLIBS_KABC_LIBS}
+    ${KPEOPLE_LIBS}
+
 )
 install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})
 

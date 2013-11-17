@@ -58,6 +58,13 @@
 
 #include <sonnet/speller.h>
 
+#include <KPeople/PersonData>
+#include <Akonadi/Monitor>
+#include <Akonadi/KMime/MessageParts>
+#include <Akonadi/ItemFetchScope>
+#include <KMime/Message>
+
+
 class ChatWidgetPrivate
 {
 public:
@@ -83,6 +90,8 @@ public:
     QTimer *pausedStateTimer;
     bool logsLoaded;
     uint exchangedMessagesCount;
+
+    KPeople::PersonData *person;
 
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
@@ -160,6 +169,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     // make the sendMessageBox a focus proxy for the chatview
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
+    d->ui.sendMessageBox->setFocus();
 
     connect(d->ui.sendMessageBox, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
 
@@ -180,6 +190,21 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     m_previousConversationAvailable = d->logManager->exists();
 
     d->notifyFilter = new NotifyFilter(this);
+
+
+    d->person = new KPeople::PersonData(QString::fromLatin1("ktp://%1").arg(d->channel->targetId()), this);
+    Akonadi::Monitor* monitor = new Akonadi::Monitor(this);
+    monitor->setMimeTypeMonitored(KMime::Message::mimeType()); //TODO restrict to email mimetype
+    monitor->itemFetchScope().fetchPayloadPart(Akonadi::MessagePart::Envelope);
+    connect(monitor, SIGNAL(itemAdded(Akonadi::Item,Akonadi::Collection)), SLOT(onNewAkonadiItem(Akonadi::Item)));
+
+
+    qDebug() << "******************************";
+    qDebug() << QString::fromLatin1("ktp://%1").arg(d->channel->targetId());
+    qDebug() << d->person->contacts().size();
+    qDebug() << d->person->person().emails();
+    qDebug() << "******************************";
+
 }
 
 ChatWidget::~ChatWidget()
@@ -187,6 +212,22 @@ ChatWidget::~ChatWidget()
     saveSpellCheckingOption();
     d->channel->requestClose(); // ensure closing; does nothing, if already closed
     delete d;
+}
+
+void ChatWidget::onNewAkonadiItem(const Akonadi::Item& item)
+{
+    qDebug() << "NEW AKONADI ITEM" << item.id();
+    if (item.hasPayload<KMime::Message::Ptr>()) {
+        qDebug() << "payload deserialised";
+        KMime::Message::Ptr msg = item.payload<KMime::Message::Ptr>();
+        qDebug() << msg->subject();
+        Q_FOREACH(const QByteArray &from, msg->from()->addresses()) {
+            qDebug() << "NEW AKONADI ITEM - is from " << from;
+            if (d->person->person().emails().contains(QString::fromLatin1(from))) {
+                d->ui.chatArea->addStatusMessage(i18n("<img src='/usr/share/icons/oxygen/./32x32/status/mail-unread.png' />  New Email from %1 - %2").arg(QString::fromLatin1(from), msg->subject()->asUnicodeString()));
+            }
+        }
+    }
 }
 
 void ChatWidget::changeEvent(QEvent *e)
