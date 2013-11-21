@@ -43,6 +43,7 @@ void ChatWindow::setupWindow()
    QObject::connect(partTabWidget, SIGNAL(tabCloseRequested(int)), partTabWidget, SLOT(removeTab(int)));
    show();
    connect(partTabWidget, SIGNAL(currentChanged(int)), SLOT(onActiveTabChanged()));
+   partTabWidget->setTabsClosable(true);
 }
 
 void ChatWindow::addTab(const QVariantList args, const QString ChannelAlias)
@@ -75,6 +76,10 @@ void ChatWindow::setupActions(KTpTextChatPart* part)
 
 void ChatWindow::onActiveTabChanged()
 {
+    if (partTabWidget->count() == 0){
+      this->close();
+      return;
+    }
     ChatTabWidget* prevWidget = static_cast<ChatTabWidget*>(partTabWidget->widget(currTab));
     if (prevWidget != 0 && childClients().contains(prevWidget)) {
         removeChildClient(prevWidget);
