@@ -163,12 +163,12 @@ void MessageView::processStoredEvents()
 
     if (m_sortMode == MessageView::SortOldestTop) {
         if (m_prev.isValid()) {
-            addAdiumStatusMessage(prevConversation);
+            addAdiumStatusMessage(nextConversation);
         }
         qSort(m_events.begin(), m_events.end(), logMessageOlderThan);
     } else if (m_sortMode == MessageView::SortNewestTop) {
         if (m_next.isValid()) {
-            addAdiumStatusMessage(nextConversation);
+            addAdiumStatusMessage(prevConversation);
         }
         qSort(m_events.begin(), m_events.end(), logMessageNewerThan);
     }
@@ -185,9 +185,9 @@ void MessageView::processStoredEvents()
     }
 
     if (m_sortMode == MessageView::SortOldestTop && m_next.isValid()) {
-        addAdiumStatusMessage(nextConversation);
-    } else if (m_sortMode == MessageView::SortNewestTop && m_prev.isValid()) {
         addAdiumStatusMessage(prevConversation);
+    } else if (m_sortMode == MessageView::SortNewestTop && m_prev.isValid()) {
+        addAdiumStatusMessage(nextConversation);
     }
 
     /* Can't highlight the text directly, we need to wait for the JavaScript in
