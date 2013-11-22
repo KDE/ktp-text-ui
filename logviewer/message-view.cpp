@@ -148,7 +148,7 @@ void MessageView::processStoredEvents()
     AdiumThemeStatusInfo prevConversation;
     if (m_prev.isValid()) {
         prevConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
-        prevConversation.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Previous conversation")));
+        prevConversation.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Older conversation")));
         prevConversation.setService(m_account->serviceName());
         prevConversation.setTime(QDateTime(m_prev));
     }
@@ -156,7 +156,7 @@ void MessageView::processStoredEvents()
     AdiumThemeStatusInfo nextConversation;
     if (m_next.isValid()) {
         nextConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
-        nextConversation.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Next conversation")));
+        nextConversation.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Newer conversation")));
         nextConversation.setService(m_account->serviceName());
         nextConversation.setTime(QDateTime(m_next));
     }
