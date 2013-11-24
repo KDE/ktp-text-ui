@@ -105,6 +105,7 @@ ChatWindow::ChatWindow()
     m_tabWidget->setDocumentMode(true);
     m_tabWidget->setTabsClosable(true);
     m_tabWidget->setTabBarHidden(true);
+    m_tabWidget->setElideMode(Qt::ElideRight);
 
     connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(destroyTab(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
