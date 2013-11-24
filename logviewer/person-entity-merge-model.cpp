@@ -424,7 +424,7 @@ void PersonEntityMergeModel::initializeModel()
                 bool found = false;
                 for (int k = 0; k < m_contactsModel->rowCount(index); ++k) {
                     const QModelIndex childIndex = m_contactsModel->index(k, 0, index);
-                    if (m_contactsModel->data(childIndex, KTp::IdRole).toStringList().contains(entity.id())) {
+                    if (m_contactsModel->data(childIndex, KTp::IdRole).toString() == entity.id()) {
                         //kDebug() << "\tFound matching persona" << m_personsModel->data(index, PersonsModel::UriRole).toString();
                         //kDebug() << "\t\tFound matching contact" << m_personsModel->data(childIndex, PersonsModel::IMRole).toString();
                         parentItem = itemForPersona(index);
