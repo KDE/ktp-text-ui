@@ -26,6 +26,7 @@
 
 #include <KTp/service-availability-checker.h>
 #include <KTp/actions.h>
+#include <KTp/contact.h>
 
 #include <KStandardAction>
 #include <KIcon>
@@ -335,17 +336,14 @@ void ChatWindow::onCurrentIndexChanged(int index)
     //always disabled for group chats and offline accounts.
     if (!currentChatTab->isGroupChat() && currentChatTab->account()->connection()) {
         // check which capabilities the contact and user supports
-        Tp::ContactCapabilities contactCapabilites = currentChatTab->textChannel()->targetContact()->capabilities();
-        Tp::ContactCapabilities selfCapabilities = currentChatTab->textChannel()->groupSelfContact()->capabilities();
+        KTp::ContactPtr targetContact = KTp::ContactPtr::qObjectCast(currentChatTab->textChannel()->targetContact());
 
-        setAudioCallEnabled(selfCapabilities.streamedMediaAudioCalls() && contactCapabilites.streamedMediaAudioCalls());
-        setFileTransferEnabled(selfCapabilities.fileTransfers() && contactCapabilites.fileTransfers());
-        setVideoCallEnabled(selfCapabilities.streamedMediaVideoCalls() && contactCapabilites.streamedMediaVideoCalls());
-        setShareDesktopEnabled(s_krfbAvailableChecker->isAvailable() && contactCapabilites.streamTubes(QLatin1String("rfb")));
+        setAudioCallEnabled(targetContact->audioCallCapability());
+        setFileTransferEnabled(targetContact->fileTransferCapability());
+        setVideoCallEnabled(targetContact->videoCallCapability());
+        setShareDesktopEnabled(targetContact->streamTubeServicesCapability().contains(QLatin1String("rfb")));
         setInviteToChatEnabled(true);
-
-        toggleBlockButton(currentChatTab->textChannel()->targetContact()->isBlocked());
-
+        toggleBlockButton(targetContact->isBlocked());
     } else {
         setAudioCallEnabled(false);
         setFileTransferEnabled(false);
