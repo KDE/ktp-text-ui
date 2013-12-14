@@ -58,10 +58,9 @@ private:
     void startShareDesktop(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
 
 private Q_SLOTS:
-//     void onEnableSearchActions(bool enable);
-//     void onFindPreviousText();
-//     void onFindNextText();
-//     void onSearchActionToggled();
+    void onFindPreviousText();
+    void onFindNextText();
+    void onSearchActionToggled();
     void onOpenLogTriggered();
     void onFileTransferTriggered();
     void startFileTransfer(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);

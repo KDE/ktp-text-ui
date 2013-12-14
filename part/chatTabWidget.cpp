@@ -53,6 +53,9 @@ ChatTabWidget::ChatTabWidget(const Tp::TextChannelPtr& channel,
 
 void ChatTabWidget::setupActions()
 {
+    KStandardAction::find(this, SLOT(onSearchActionToggled()), actionCollection());
+    KStandardAction::findNext(this, SLOT(onFindNextText()), actionCollection());
+    KStandardAction::findPrev(this, SLOT(onFindPreviousText()), actionCollection());
     KAction *openLogAction = new KAction(KIcon(QLatin1String("view-pim-journal")),
                                          i18nc("Action to open the log viewer with a "
                                                "specified contact", "&Previous Conversations"),
@@ -92,8 +95,22 @@ void ChatTabWidget::setupActions()
     actionCollection()->addAction(QLatin1String("video-call"), videoCallAction);
     actionCollection()->addAction(QLatin1String("clear-chat-view"), clearViewAction);
     actionCollection()->addAction(QLatin1String("collaborate-document"), collaborateDocumentAction);
-
     setXMLFile(QLatin1String("chatTabWidget.rc"));
+}
+
+void ChatTabWidget::onFindNextText()
+{
+    this->chatSearchBar()->onNextButtonClicked();
+}
+
+void ChatTabWidget::onFindPreviousText()
+{
+    this->chatSearchBar()->onPreviousButtonClicked();
+}
+
+void ChatTabWidget::onSearchActionToggled()
+{
+    this->toggleSearchBar();
 }
 
 void ChatTabWidget::setCollaborateDocumentEnabled(bool enable)
