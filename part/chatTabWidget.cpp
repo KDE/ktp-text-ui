@@ -62,6 +62,7 @@ void ChatTabWidget::setupActions()
     KAction *blockContactAction = new KAction(KIcon(QLatin1String("im-ban-kick-user")), i18n("&Block Contact"), this);
     KAction *audioCallAction = new KAction(KIcon(QLatin1String("audio-headset")), i18n("&Audio Call"), this);
     KAction *videoCallAction = new KAction(KIcon(QLatin1String("camera-web")), i18n("&Video Call"), this);
+    KAction *clearViewAction = new KAction(KIcon(QLatin1String("edit-clear-history")), i18n("&Clear View"), this);
     connect(openLogAction, SIGNAL(triggered()), this, SLOT(onOpenLogTriggered()));
     connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
     connect(shareDesktopAction, SIGNAL(triggered()), this, SLOT(onShareDesktopTriggered()));
@@ -69,6 +70,7 @@ void ChatTabWidget::setupActions()
     connect(this, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
     connect(audioCallAction, SIGNAL(triggered()), this, SLOT(onAudioCallTriggered()));
     connect(videoCallAction, SIGNAL(triggered()), this, SLOT(onVideoCallTriggered()));
+    connect(clearViewAction, SIGNAL(triggered()), this, SLOT(onClearViewTriggered()));
     fileTransferAction->setToolTip(i18nc("Toolbar icon tooltip", "Send a file to this contact"));
     shareDesktopAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an application that "
                                                                  "allows this contact to see your desktop"));
@@ -77,14 +79,21 @@ void ChatTabWidget::setupActions()
                                                                  "receive any messages from this contact"));
     audioCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an audio call with this contact"));
     videoCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start a video call with this contact"));
+    clearViewAction->setToolTip(i18nc("Toolbar icon tooltip", "Clear all messages from current chat tab"));
     actionCollection()->addAction(QLatin1String("block-contact"), blockContactAction);
     actionCollection()->addAction(QLatin1String("share-desktop"), shareDesktopAction);
     actionCollection()->addAction(QLatin1String("send-file"), fileTransferAction);
     actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
     actionCollection()->addAction(QLatin1String("audio-call"), audioCallAction);
     actionCollection()->addAction(QLatin1String("video-call"), videoCallAction);
+    actionCollection()->addAction(QLatin1String("clear-chat-view"), clearViewAction);
 
     setXMLFile(QLatin1String("chatTabWidget.rc"));
+}
+
+void ChatTabWidget::onClearViewTriggered()
+{
+    clear();
 }
 
 void ChatTabWidget::onOpenLogTriggered()

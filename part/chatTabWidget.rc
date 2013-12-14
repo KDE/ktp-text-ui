@@ -16,6 +16,8 @@
         <Action name="video-call"/>
         <Action name="share-desktop"/>
         <Action name="block-contact"/>
+        <Separator />
+        <Action name="clear-chat-view"/>
     </Menu>
   </MenuBar>
 

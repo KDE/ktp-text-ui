@@ -64,6 +64,7 @@ private Q_SLOTS:
     void onVideoCallTriggered();
     void setVideoCallEnabled(bool enable);
     void startVideoCall(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
+    void onClearViewTriggered();
     void sendNotificationToUser(ChatTabWidget::NotificationType type, const QString& errorMsg);
     void onShareDesktopTriggered();
     void startShareDesktop(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
