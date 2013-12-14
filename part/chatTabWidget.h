@@ -47,6 +47,15 @@ public:
 private:
     Tp::TextChannelPtr chatChannel;
     Tp::AccountPtr chatAccount;
+    void setFileTransferEnabled(bool enable);
+    void setAudioCallEnabled(bool enable);
+    void setVideoCallEnabled(bool enable);
+    void setBlockEnabled(bool enable);
+    void setCollaborateDocumentEnabled(bool enable);
+    void offerDocumentToContact(const Tp::AccountPtr& account, const Tp::ContactPtr& targetContact);
+    void offerDocumentToChatroom(const Tp::AccountPtr& account, const QString& roomName);
+    void sendNotificationToUser(ChatTabWidget::NotificationType type, const QString& errorMsg);
+    void startShareDesktop(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
 
 private Q_SLOTS:
 //     void onEnableSearchActions(bool enable);
@@ -55,20 +64,15 @@ private Q_SLOTS:
 //     void onSearchActionToggled();
     void onOpenLogTriggered();
     void onFileTransferTriggered();
-    void setFileTransferEnabled(bool enable);
     void startFileTransfer(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
     void onGenericOperationFinished(Tp::PendingOperation* op);
     void onAudioCallTriggered();
-    void setAudioCallEnabled(bool enable);
     void startAudioCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
     void onVideoCallTriggered();
-    void setVideoCallEnabled(bool enable);
     void startVideoCall(const Tp::AccountPtr &account, const Tp::ContactPtr &contact);
     void onClearViewTriggered();
-    void sendNotificationToUser(ChatTabWidget::NotificationType type, const QString& errorMsg);
+    void onCollaborateDocumentTriggered();
     void onShareDesktopTriggered();
-    void startShareDesktop(const Tp::AccountPtr& account, const Tp::ContactPtr& contact);
-    void setBlockEnabled(bool enable);
     void onBlockContactTriggered();
     void onUnblockContactTriggered();
     void toggleBlockButton(bool contactIsBlocked);

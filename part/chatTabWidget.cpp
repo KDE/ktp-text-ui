@@ -63,6 +63,8 @@ void ChatTabWidget::setupActions()
     KAction *audioCallAction = new KAction(KIcon(QLatin1String("audio-headset")), i18n("&Audio Call"), this);
     KAction *videoCallAction = new KAction(KIcon(QLatin1String("camera-web")), i18n("&Video Call"), this);
     KAction *clearViewAction = new KAction(KIcon(QLatin1String("edit-clear-history")), i18n("&Clear View"), this);
+    KAction* collaborateDocumentAction = new KAction(KIcon(QLatin1String("document-share")),
+                                                     i18n("&Collaboratively edit a document"), this);
     connect(openLogAction, SIGNAL(triggered()), this, SLOT(onOpenLogTriggered()));
     connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
     connect(shareDesktopAction, SIGNAL(triggered()), this, SLOT(onShareDesktopTriggered()));
@@ -71,6 +73,7 @@ void ChatTabWidget::setupActions()
     connect(audioCallAction, SIGNAL(triggered()), this, SLOT(onAudioCallTriggered()));
     connect(videoCallAction, SIGNAL(triggered()), this, SLOT(onVideoCallTriggered()));
     connect(clearViewAction, SIGNAL(triggered()), this, SLOT(onClearViewTriggered()));
+    connect(collaborateDocumentAction, SIGNAL(triggered()), this, SLOT(onCollaborateDocumentTriggered()));
     fileTransferAction->setToolTip(i18nc("Toolbar icon tooltip", "Send a file to this contact"));
     shareDesktopAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an application that "
                                                                  "allows this contact to see your desktop"));
@@ -80,6 +83,7 @@ void ChatTabWidget::setupActions()
     audioCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an audio call with this contact"));
     videoCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start a video call with this contact"));
     clearViewAction->setToolTip(i18nc("Toolbar icon tooltip", "Clear all messages from current chat tab"));
+    clearViewAction->setToolTip(i18nc("Toolbar icon tooltip", "Clear all messages from current chat tab"));
     actionCollection()->addAction(QLatin1String("block-contact"), blockContactAction);
     actionCollection()->addAction(QLatin1String("share-desktop"), shareDesktopAction);
     actionCollection()->addAction(QLatin1String("send-file"), fileTransferAction);
@@ -87,8 +91,54 @@ void ChatTabWidget::setupActions()
     actionCollection()->addAction(QLatin1String("audio-call"), audioCallAction);
     actionCollection()->addAction(QLatin1String("video-call"), videoCallAction);
     actionCollection()->addAction(QLatin1String("clear-chat-view"), clearViewAction);
+    actionCollection()->addAction(QLatin1String("collaborate-document"), collaborateDocumentAction);
 
     setXMLFile(QLatin1String("chatTabWidget.rc"));
+}
+
+void ChatTabWidget::setCollaborateDocumentEnabled(bool enable)
+{
+    QAction* action = actionCollection()->action(QLatin1String("collaborate-document"));
+
+    if (action) {
+        action->setEnabled(enable);
+        if ( enable ) {
+            action->setToolTip(i18nc("Toolbar icon tooltip",
+                                     "Edit a plain-text document with this contact in real-time"));
+        }
+        else {
+            action->setToolTip(i18nc("Toolbar icon tooltip for a disabled action",
+                                     "<p>Both you and the target contact "
+                                     "need to have the <i>kte-collaborative</i> package"
+                                     "installed to share documents</p>"));
+        }
+    }
+}
+
+void ChatTabWidget::onCollaborateDocumentTriggered()
+{
+     if (this->isGroupChat()) {
+         offerDocumentToChatroom(chatAccount, chatChannel->targetId());
+     }
+     else {
+        offerDocumentToContact(chatAccount, chatChannel->targetContact());
+     }
+}
+
+void ChatTabWidget::offerDocumentToContact(const Tp::AccountPtr& account, const Tp::ContactPtr& targetContact)
+{
+    const KUrl url = KFileDialog::getOpenUrl();
+    if ( ! url.isEmpty() ) {
+        KTp::Actions::startCollaborativeEditing(account, targetContact, QList<KUrl>() << url, true);
+    }
+}
+
+void ChatTabWidget::offerDocumentToChatroom(const Tp::AccountPtr& account, const QString& roomName)
+{
+   const KUrl url = KFileDialog::getOpenUrl();
+    if ( ! url.isEmpty() ) {
+        KTp::Actions::startCollaborativeEditing(account, roomName, QList<KUrl>() << url, true);
+    }
 }
 
 void ChatTabWidget::onClearViewTriggered()
