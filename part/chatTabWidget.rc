@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui name="chatTabWidget"
-     version="21"
+     version="29"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
                          http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd" >
 
-  <MenuBar>
-    <Menu name="edit" ><text>&amp;Edit</text>
-      <Action name="open-log" />
-    </Menu>
-    <Menu name="actions"><text>&amp;Actions</text>
-        <Action name="audio-call"/>
-        <Action name="video-call"/>
-        <Action name="send-file"/>
-        <Action name="share-desktop"/>
-        <Action name="collaborate-document"/>
-        <Action name="open-log" />
-        <Separator />
-        <Action name="block-contact"/>
-        <Separator />
-        <Action name="clear-chat-view"/>
-    </Menu>
-  </MenuBar>
+    <MenuBar>
+        <Menu name="file">
+            <Action name="file_close"/>
+        </Menu>
+        <Menu name="edit" ><text>&amp;Edit</text>
+            <Action name="open-log" />
+        </Menu>
+        <Menu name="actions"><text>&amp;Actions</text>
+            <Action name="audio-call"/>
+            <Action name="video-call"/>
+            <Action name="send-file"/>
+            <Action name="share-desktop"/>
+            <Action name="collaborate-document"/>
+            <Action name="open-log" />
+            <Separator />
+            <Action name="block-contact"/>
+            <Separator />
+            <Action name="clear-chat-view"/>
+        </Menu>
+        <Menu name="settings"/>
+        <Menu name="help"/>
+    </MenuBar>
 
-  <ToolBar name="mainToolBar" >
-    <text>Main Toolbar</text>
-    <Action name="audio-call"/>
-    <Action name="video-call"/>
-    <Action name="send-file"/>
-    <Action name="collaborate-document"/>
-    <Separator />
-    <Action name="edit_find"/>
-  </ToolBar>
+    <ToolBar name="mainToolBar" >
+      <text>Main Toolbar</text>
+      <Action name="audio-call"/>
+      <Action name="video-call"/>
+      <Action name="send-file"/>
+      <Action name="collaborate-document"/>
+      <Separator />
+      <Action name="edit_find"/>
+    </ToolBar>
 
 </gui>

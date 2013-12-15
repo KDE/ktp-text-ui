@@ -36,6 +36,7 @@ public:
 
 
 private Q_SLOTS:
+    void closeCurrentTab();
     void onZoomFactorChanged(qreal zoom);
     void onZoomIn();
     void onZoomOut();

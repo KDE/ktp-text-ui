@@ -40,7 +40,7 @@ void ChatWindow::setupWindow()
 {
    partTabWidget->setDocumentMode(true);
    setCentralWidget(partTabWidget);
-   QObject::connect(partTabWidget, SIGNAL(tabCloseRequested(int)), partTabWidget, SLOT(removeTab(int)));
+   connect(partTabWidget, SIGNAL(tabCloseRequested(int)), partTabWidget, SLOT(removeTab(int)));
    show();
    connect(partTabWidget, SIGNAL(currentChanged(int)), SLOT(onActiveTabChanged()));
    partTabWidget->setTabsClosable(true);
@@ -60,7 +60,7 @@ void ChatWindow::setupActions(KTpTextChatPart* part)
     ChatTabWidget* widget = static_cast<ChatTabWidget*>(part->widget());
 
     KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
-    KStandardAction::close(this, SLOT(close()), actionCollection());
+    KStandardAction::close(this, SLOT(closeCurrentTab()), actionCollection());
     KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
     KStandardAction::configureNotifications(this, SLOT(showNotificationsDialog()), actionCollection());
 
@@ -72,6 +72,11 @@ void ChatWindow::setupActions(KTpTextChatPart* part)
     KStandardAction::zoomOut(this, SLOT(onZoomOut()), actionCollection());
     connect(widget, SIGNAL(zoomFactorChanged(qreal)), this, SLOT(onZoomFactorChanged(qreal)));
     setupGUI(Default, QLatin1String("chat-window.rc"));
+}
+
+void ChatWindow::closeCurrentTab()
+{
+    partTabWidget->removeTab(partTabWidget->currentIndex());
 }
 
 void ChatWindow::onActiveTabChanged()

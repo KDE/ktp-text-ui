@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui name="chat-window"
-     version="10"
+     version="17"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
                          http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd" >
 
+    <MenuBar>
+        <Menu name="file"/>
+        <Menu name="edit"><text>&amp;Edit</text></Menu>
+        <Menu name="actions"><text>&amp;Actions</text></Menu>
+        <Menu name="settings"/>
+        <Menu name="help"/>
+    </MenuBar>
 
+    <ToolBar name="mainToolBar"/>
 </gui>
