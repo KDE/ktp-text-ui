@@ -101,6 +101,8 @@ ChatWindow::ChatWindow()
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
+    //clicking on the close button can result in the tab bar getting focus, this works round that
+    m_tabWidget->setFocusPolicy(Qt::TabFocus);
     m_tabWidget->setMovable(true);
     m_tabWidget->setDocumentMode(true);
     m_tabWidget->setTabsClosable(true);
@@ -232,6 +234,7 @@ void ChatWindow::addTab(ChatTab *tab)
         }
     }
 
+    tab->setFocus();
     tab->updateSendMessageShortcuts(m_sendMessage->shortcut());
 }
 

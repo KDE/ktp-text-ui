@@ -158,8 +158,10 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     // and our handler checks state of the timer created above.
     loadSpellCheckingOption();
 
-    // make the sendMessageBox a focus proxy for the chatview
+    // make clicking in the main HTML area put focus in the input text box
     d->ui.chatArea->setFocusProxy(d->ui.sendMessageBox);
+    //make activating the tab select the text area
+    setFocusProxy(d->ui.sendMessageBox);
 
     connect(d->ui.sendMessageBox, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
 
