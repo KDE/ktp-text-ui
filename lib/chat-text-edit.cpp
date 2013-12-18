@@ -19,6 +19,7 @@
 
 #include "chat-text-edit.h"
 #include "channel-contact-model.h"
+#include "text-chat-config.h"
 
 #include <QtGui/QMenu>
 #include <QtGui/QContextMenuEvent>
@@ -357,7 +358,8 @@ void ChatTextEdit::completeNick()
                 } else if ((pos == 0) && complete) {
                     // no, it was at the beginning
                     m_lastCompletion = foundNick;
-                    newLine.insert(pos, foundNick + QLatin1String(", "));
+                    const QString &nicknameCompletionSuffix = TextChatConfig::instance()->nicknameCompletionSuffix();
+                    newLine.insert(pos, foundNick + nicknameCompletionSuffix);
                     pos = pos + foundNick.length() + 2; /* 2 = strlen(", ") */
                 } else {
                     // the nick wasn't complete
