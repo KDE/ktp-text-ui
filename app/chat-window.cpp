@@ -53,6 +53,7 @@ void ChatWindow::addTab(const QVariantList args, const QString ChannelAlias)
     Q_ASSERT(part);
     partTabWidget->addTab(part->widget(), ChannelAlias);
     setupActions(part);
+    partTabWidget->setCurrentIndex((partTabWidget->count()-1));
 }
 
 void ChatWindow::setupActions(KTpTextChatPart* part)
@@ -63,7 +64,6 @@ void ChatWindow::setupActions(KTpTextChatPart* part)
     KStandardAction::close(this, SLOT(closeCurrentTab()), actionCollection());
     KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
     KStandardAction::configureNotifications(this, SLOT(showNotificationsDialog()), actionCollection());
-
     KConfig config(QLatin1String("ktelepathyrc"));
     KConfigGroup group = config.group("Appearance");
     m_zoomFactor = group.readEntry("zoomFactor", (qreal) 1.0);
@@ -77,13 +77,14 @@ void ChatWindow::setupActions(KTpTextChatPart* part)
 void ChatWindow::closeCurrentTab()
 {
     partTabWidget->removeTab(partTabWidget->currentIndex());
+
 }
 
 void ChatWindow::onActiveTabChanged()
 {
     if (partTabWidget->count() == 0){
-      this->close();
-      return;
+        this->close();
+        return;
     }
     ChatTabWidget* prevWidget = static_cast<ChatTabWidget*>(partTabWidget->widget(currTab));
     if (prevWidget != 0 && childClients().contains(prevWidget)) {
