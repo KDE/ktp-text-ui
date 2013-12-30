@@ -429,8 +429,7 @@ void ChatWindow::onInviteToChatTriggered()
 {
     ChatTab *currChat = qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
 
-    TelepathyChatUi *app = qobject_cast<TelepathyChatUi*>(KApplication::instance());
-    InviteContactDialog *dialog = new InviteContactDialog(app->accountManager(), currChat->account(), currChat->textChannel(), this);
+    InviteContactDialog *dialog = new InviteContactDialog(KTp::accountManager(), currChat->account(), currChat->textChannel(), this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
