@@ -188,6 +188,9 @@ private:
     /** Loads language option for specified target Id */
     void loadSpellCheckingOption();
 
+    void showEvent(QShowEvent *);
+    void hideEvent(QHideEvent *);
+
     bool m_previousConversationAvailable;
 
     ChatWidgetPrivate * const d;

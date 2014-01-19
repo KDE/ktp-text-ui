@@ -71,7 +71,6 @@ public:
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
     Tp::ChannelChatState remoteContactChatState;
-    QString title;
     QString contactName;
     QString yourName;
     Tp::TextChannelPtr channel;
@@ -82,10 +81,10 @@ public:
     QTimer *pausedStateTimer;
     bool isGroupChat;
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
-    NotifyFilter *filter;
 
     KComponentData telepathyComponentData();
-    KTp::AbstractMessageFilter *notifyFilter;
+    NotifyFilter *notifyFilter;
+    Conversation *conversation;
 };
 
 
@@ -106,12 +105,13 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->channel = channel;
     d->account = account;
     d->ui.setupUi(this);
+
+    d->conversation = new Conversation(channel, account, this);
+
     d->notifyFilter = new NotifyFilter(this);
-//     connect(d->ui.chatArea, SIGNAL(newMessage(KTp::Message)), d->notifyFilter, SLOT(sendMessageNotification(KTp::Message)));
+    connect(d->conversation->messages(), SIGNAL(messageReceived(KTp::Message)), d->notifyFilter, SLOT(sendMessageNotification(KTp::Message)));
 
-
-    Conversation *conv = new Conversation(channel, account, this);
-    d->ui.declarativeView->engine()->rootContext()->setContextProperty(QLatin1String("conversation"), conv);
+    d->ui.declarativeView->engine()->rootContext()->setContextProperty(QLatin1String("conversation"), d->conversation);
 
     d->ui.declarativeView->engine()->addImportPath(QLatin1String("/opt/kde4/lib/kde4/imports")); //FIXME. KDeclarative??
     d->ui.declarativeView->setSource(QUrl(QLatin1String("/home/david/projects/temp/ktp_text_qml/take2/take2.qml")));
@@ -200,6 +200,16 @@ void ChatWidget::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void ChatWidget::showEvent(QShowEvent *)
+{
+    d->conversation->setVisibleToUser(true);
+}
+
+void ChatWidget::hideEvent(QHideEvent *)
+{
+    d->conversation->setVisibleToUser(false);
 }
 
 void ChatWidget::resizeEvent(QResizeEvent *e)
@@ -388,7 +398,7 @@ void ChatWidget::dragEnterEvent(QDragEnterEvent *e)
 
 QString ChatWidget::title() const
 {
-    return d->title;
+    return d->conversation->title();
 }
 
 QColor ChatWidget::titleColor() const
@@ -470,7 +480,7 @@ int ChatWidget::unreadMessageCount() const
 
 void ChatWidget::acknowledgeMessages()
 {
-//     d->ui.chatArea->acknowledgeMessages();
+    d->conversation->messages()->acknowledgeAllMessages();
 }
 
 void ChatWidget::updateSendMessageShortcuts(const KShortcut &shortcuts)
