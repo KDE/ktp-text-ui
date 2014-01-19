@@ -188,7 +188,7 @@ void LogMessageView::processStoredEvents()
         addAdiumStatusMessage(nextConversation);
     } else if (m_sortMode == LogMessageView::SortNewestTop && m_prev.isValid()) {
         addAdiumStatusMessage(prevConversation);
-    } else if (m_sortMode == MessageView::SortNewestTop && m_prev.isValid()) {
+    } else if (m_sortMode == LogMessageView::SortNewestTop && m_prev.isValid()) {
         addAdiumStatusMessage(nextConversation);
     }
 
