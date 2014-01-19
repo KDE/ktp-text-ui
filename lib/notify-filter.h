@@ -30,7 +30,7 @@ public:
     explicit NotifyFilter(ChatWidget *widget);
 
 public Q_SLOTS:
-    void sendMessageNotification(KTp::Message &message);
+    void sendMessageNotification(const KTp::Message &message);
 
 private:
     ChatWidget *m_widget;

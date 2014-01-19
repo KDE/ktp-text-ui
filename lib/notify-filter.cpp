@@ -37,7 +37,7 @@ static KComponentData telepathyComponentData() {
     return KComponentData(telepathySharedAboutData);
 }
 
-void NotifyFilter::sendMessageNotification(KTp::Message &message) {
+void NotifyFilter::sendMessageNotification(const KTp::Message &message) {
 
     // don't notify of past messages
     if (message.isHistory()) {
