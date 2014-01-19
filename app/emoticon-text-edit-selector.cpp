@@ -97,9 +97,11 @@ void EmoticonTextEditSelector::slotCreateEmoticonList()
   }
   const QHash<QString, QStringList> list = sEmoticons->theme( cachedEmoticonsThemeName ).emoticonsMap();
 
-  QHash<QString, QStringList>::const_iterator end = list.constEnd();
-  for ( QHash<QString, QStringList>::const_iterator it = list.constBegin(); it != end; ++it ) {
-    new EmoticonTextEditItem( it.value().first(), it.key(), d->listEmoticon );
+  QStringList emoticonKeys = list.keys();
+  qSort(emoticonKeys);
+
+  Q_FOREACH(const QString &emoticonPath, emoticonKeys) {
+    new EmoticonTextEditItem(list[emoticonPath].first(), emoticonPath, d->listEmoticon);
   }
 
   d->listEmoticon->setIconSize( QSize( 32, 32 ) );

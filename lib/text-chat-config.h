@@ -55,6 +55,9 @@ class KDE_TELEPATHY_CHAT_EXPORT TextChatConfig : QObject
     bool showOthersTyping();
     void setShowOthersTyping(bool showTyping);
 
+    QString nicknameCompletionSuffix() const;
+    void setNicknameCompletionSuffix(const QString &suffix);
+
 private:
     TextChatConfig();
 

@@ -55,7 +55,21 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
 
     ui->checkBoxShowOthersTyping->setChecked(m_showOthersTyping);
     connect(ui->checkBoxShowOthersTyping, SIGNAL(toggled(bool)), this, SLOT(onShowOthersTypingChanged(bool)));
+
+    QStringList nicknameCompletionStyles;
+    const QString namePlaceholder = ki18nc("Placeholder for contact name in completion suffix selector", "Nickname").toString();
+    Q_FOREACH(const QString &suffix, BehaviorConfig::nicknameCompletionSuffixes) {
+        nicknameCompletionStyles.append(namePlaceholder + suffix);
+    }
+    ui->nicknameCompletionStyle->addItems(nicknameCompletionStyles);
+    ui->nicknameCompletionStyle->setCurrentIndex(BehaviorConfig::nicknameCompletionSuffixes.indexOf(m_nicknameCompletionSuffix));
+    connect(ui->nicknameCompletionStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(onNicknameCompletionStyleChanged(int)));
 }
+
+const QStringList BehaviorConfig::nicknameCompletionSuffixes = QStringList()
+        << QLatin1String(", ")
+        << QLatin1String(": ")
+        << QLatin1String(" ");
 
 BehaviorConfig::~BehaviorConfig()
 {
@@ -68,6 +82,7 @@ void BehaviorConfig::load()
     m_scrollbackLength = TextChatConfig::instance()->scrollbackLength();
     m_showMeTyping = TextChatConfig::instance()->showMeTyping();
     m_showOthersTyping = TextChatConfig::instance()->showOthersTyping();
+    m_nicknameCompletionSuffix = TextChatConfig::instance()->nicknameCompletionSuffix();
 }
 
 void BehaviorConfig::save()
@@ -76,6 +91,7 @@ void BehaviorConfig::save()
     TextChatConfig::instance()->setScrollbackLength(m_scrollbackLength);
     TextChatConfig::instance()->setShowMeTyping(m_showMeTyping);
     TextChatConfig::instance()->setShowOthersTyping(m_showOthersTyping);
+    TextChatConfig::instance()->setNicknameCompletionSuffix(m_nicknameCompletionSuffix);
     TextChatConfig::instance()->sync();
 }
 
@@ -114,5 +130,12 @@ void BehaviorConfig::onShowMeTypingChanged(bool state)
 void BehaviorConfig::onShowOthersTypingChanged(bool state)
 {
     m_showOthersTyping = state;
+    Q_EMIT changed(true);
+}
+
+
+void BehaviorConfig::onNicknameCompletionStyleChanged(int index)
+{
+    m_nicknameCompletionSuffix = BehaviorConfig::nicknameCompletionSuffixes[index];
     Q_EMIT changed(true);
 }

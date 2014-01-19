@@ -12,6 +12,7 @@ X-KDE-RootOnly=false
 Categories=Qt;KDE;X-KDE-settings-network;
 
 Name=LogViewer Behavior
+Name[bs]=Ponašanje preglednika dnevnika
 Name[ca]=Comportament del visor del registre
 Name[ca@valencia]=Comportament del visor del registre
 Name[cs]=Chování prohlížeče záznamů
@@ -19,6 +20,8 @@ Name[da]=Logfremviserens opførsel
 Name[de]=Verhalten des Protokollbetrachters
 Name[es]=Comportamiento del visor de registros
 Name[fi]=Lokikatselimen toiminta
+Name[fr]=Comportement de l'afficheur du journal
+Name[gl]=Comportamento de LogViewer
 Name[hu]=Naplómegjelenítő viselkedése
 Name[ia]=Comportamento de LogViewer
 Name[it]=Comportamento del visore registri

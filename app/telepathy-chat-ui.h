@@ -33,7 +33,7 @@ class TelepathyChatUi : public KTp::TelepathyHandlerApplication, public Tp::Abst
 {
     Q_OBJECT
 public:
-    TelepathyChatUi(const Tp::AccountManagerPtr &accountManager);
+    TelepathyChatUi();
     ~TelepathyChatUi();
 
     virtual void handleChannels(const Tp::MethodInvocationContextPtr<> & context,
@@ -45,8 +45,6 @@ public:
             const Tp::AbstractClientHandler::HandlerInfo &handlerInfo);
 
     virtual bool bypassApproval() const;
-
-    Tp::AccountManagerPtr accountManager() const;
 
 private Q_SLOTS:
     void removeWindow(ChatWindow *window);

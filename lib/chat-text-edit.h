@@ -39,6 +39,8 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
+    void clearHistory();
+
 protected:
     void keyPressEvent(QKeyEvent *e);
 

@@ -19,6 +19,7 @@
 
 #include "chat-text-edit.h"
 #include "channel-contact-model.h"
+#include "text-chat-config.h"
 
 #include <QtGui/QMenu>
 #include <QtGui/QContextMenuEvent>
@@ -52,8 +53,7 @@ ChatTextEdit::ChatTextEdit(QWidget *parent) :
     setAcceptRichText(false);
 
     // Initialize the history
-    m_history.prepend(QString());
-    m_historyPos = 0;
+    clearHistory();
 
     connect(this, SIGNAL(textChanged()), SLOT(recalculateSize()));
 }
@@ -88,6 +88,13 @@ QSize ChatTextEdit::sizeHint() const
     sh.setHeight(int (document()->size().height()));
     sh += QSize(0, (QFrame::lineWidth() * 2) + 1);
     return sh;
+}
+
+void ChatTextEdit::clearHistory()
+{
+    m_history.clear();
+    m_history.prepend(QString());
+    m_historyPos = 0;
 }
 
 void ChatTextEdit::keyPressEvent(QKeyEvent *e)
@@ -227,6 +234,7 @@ void ChatTextEdit::getHistory(bool up)
     }
 
     setText(m_history[m_historyPos]);
+    moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
 void ChatTextEdit::addHistory(const QString &text)
@@ -350,7 +358,8 @@ void ChatTextEdit::completeNick()
                 } else if ((pos == 0) && complete) {
                     // no, it was at the beginning
                     m_lastCompletion = foundNick;
-                    newLine.insert(pos, foundNick + QLatin1String(", "));
+                    const QString &nicknameCompletionSuffix = TextChatConfig::instance()->nicknameCompletionSuffix();
+                    newLine.insert(pos, foundNick + nicknameCompletionSuffix);
                     pos = pos + foundNick.length() + 2; /* 2 = strlen(", ") */
                 } else {
                     // the nick wasn't complete

@@ -148,7 +148,7 @@ void LogMessageView::processStoredEvents()
     AdiumThemeStatusInfo prevConversation;
     if (m_prev.isValid()) {
         prevConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
-        prevConversation.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Previous conversation")));
+        prevConversation.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Older conversation")));
         prevConversation.setService(m_account->serviceName());
         prevConversation.setTime(QDateTime(m_prev));
     }
@@ -156,19 +156,19 @@ void LogMessageView::processStoredEvents()
     AdiumThemeStatusInfo nextConversation;
     if (m_next.isValid()) {
         nextConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
-        nextConversation.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Next conversation")));
+        nextConversation.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Newer conversation")));
         nextConversation.setService(m_account->serviceName());
         nextConversation.setTime(QDateTime(m_next));
     }
 
     if (m_sortMode == LogMessageView::SortOldestTop) {
         if (m_prev.isValid()) {
-            addAdiumStatusMessage(prevConversation);
+            addAdiumStatusMessage(nextConversation);
         }
         qSort(m_events.begin(), m_events.end(), logMessageOlderThan);
     } else if (m_sortMode == LogMessageView::SortNewestTop) {
         if (m_next.isValid()) {
-            addAdiumStatusMessage(nextConversation);
+            addAdiumStatusMessage(prevConversation);
         }
         qSort(m_events.begin(), m_events.end(), logMessageNewerThan);
     }
@@ -188,6 +188,8 @@ void LogMessageView::processStoredEvents()
         addAdiumStatusMessage(nextConversation);
     } else if (m_sortMode == LogMessageView::SortNewestTop && m_prev.isValid()) {
         addAdiumStatusMessage(prevConversation);
+    } else if (m_sortMode == MessageView::SortNewestTop && m_prev.isValid()) {
+        addAdiumStatusMessage(nextConversation);
     }
 
     /* Can't highlight the text directly, we need to wait for the JavaScript in

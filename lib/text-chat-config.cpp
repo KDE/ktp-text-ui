@@ -36,6 +36,7 @@ public:
     int m_scrollbackLength;
     bool m_showMeTyping;
     bool m_showOthersTyping;
+    QString m_nicknameCompletionSuffix;
 };
 
 
@@ -79,6 +80,8 @@ void TextChatConfig::sync()
     behaviorConfig.writeEntry("showMeTyping", d->m_showMeTyping);
 
     behaviorConfig.writeEntry("showOthersTyping", d->m_showOthersTyping);
+
+    behaviorConfig.writeEntry("nicknameCompletionSuffix", d->m_nicknameCompletionSuffix);
 
     behaviorConfig.sync();
 
@@ -166,6 +169,16 @@ void TextChatConfig::setShowOthersTyping(bool showTyping)
 }
 
 
+QString TextChatConfig::nicknameCompletionSuffix() const {
+    return d->m_nicknameCompletionSuffix;
+}
+
+void TextChatConfig::setNicknameCompletionSuffix(const QString &suffix) {
+    mutex.lock();
+    d->m_nicknameCompletionSuffix = suffix;
+    mutex.unlock();
+}
+
 TextChatConfig::TextChatConfig() :
     d(new TextChatConfigPrivate())
 {
@@ -187,6 +200,8 @@ TextChatConfig::TextChatConfig() :
     d->m_showMeTyping = behaviorConfig.readEntry("showMeTyping", true);
 
     d->m_showOthersTyping = behaviorConfig.readEntry("showOthersTyping", true);
+
+    d->m_nicknameCompletionSuffix = behaviorConfig.readEntry("nicknameCompletionSuffix", ", ");
 }
 
 

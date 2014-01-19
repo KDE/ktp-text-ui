@@ -26,6 +26,7 @@
 
 #include <KTp/service-availability-checker.h>
 #include <KTp/actions.h>
+#include <KTp/contact.h>
 
 #include <KStandardAction>
 #include <KIcon>
@@ -101,10 +102,13 @@ ChatWindow::ChatWindow()
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
+    //clicking on the close button can result in the tab bar getting focus, this works round that
+    m_tabWidget->setFocusPolicy(Qt::TabFocus);
     m_tabWidget->setMovable(true);
     m_tabWidget->setDocumentMode(true);
     m_tabWidget->setTabsClosable(true);
     m_tabWidget->setTabBarHidden(true);
+    m_tabWidget->setElideMode(Qt::ElideRight);
 
     connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(destroyTab(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
@@ -232,6 +236,7 @@ void ChatWindow::addTab(ChatTab *tab)
         }
     }
 
+    tab->setFocus();
     tab->updateSendMessageShortcuts(m_sendMessage->shortcut());
 }
 
@@ -334,17 +339,14 @@ void ChatWindow::onCurrentIndexChanged(int index)
     //always disabled for group chats and offline accounts.
     if (!currentChatTab->isGroupChat() && currentChatTab->account()->connection()) {
         // check which capabilities the contact and user supports
-        Tp::ContactCapabilities contactCapabilites = currentChatTab->textChannel()->targetContact()->capabilities();
-        Tp::ContactCapabilities selfCapabilities = currentChatTab->textChannel()->groupSelfContact()->capabilities();
+        KTp::ContactPtr targetContact = KTp::ContactPtr::qObjectCast(currentChatTab->textChannel()->targetContact());
 
-        setAudioCallEnabled(selfCapabilities.streamedMediaAudioCalls() && contactCapabilites.streamedMediaAudioCalls());
-        setFileTransferEnabled(selfCapabilities.fileTransfers() && contactCapabilites.fileTransfers());
-        setVideoCallEnabled(selfCapabilities.streamedMediaVideoCalls() && contactCapabilites.streamedMediaVideoCalls());
-        setShareDesktopEnabled(s_krfbAvailableChecker->isAvailable() && contactCapabilites.streamTubes(QLatin1String("rfb")));
+        setAudioCallEnabled(targetContact->audioCallCapability());
+        setFileTransferEnabled(targetContact->fileTransferCapability());
+        setVideoCallEnabled(targetContact->videoCallCapability());
+        setShareDesktopEnabled(targetContact->streamTubeServicesCapability().contains(QLatin1String("rfb")));
         setInviteToChatEnabled(true);
-
-        toggleBlockButton(currentChatTab->textChannel()->targetContact()->isBlocked());
-
+        toggleBlockButton(targetContact->isBlocked());
     } else {
         setAudioCallEnabled(false);
         setFileTransferEnabled(false);
@@ -427,8 +429,7 @@ void ChatWindow::onInviteToChatTriggered()
 {
     ChatTab *currChat = qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
 
-    TelepathyChatUi *app = qobject_cast<TelepathyChatUi*>(KApplication::instance());
-    InviteContactDialog *dialog = new InviteContactDialog(app->accountManager(), currChat->account(), currChat->textChannel(), this);
+    InviteContactDialog *dialog = new InviteContactDialog(KTp::accountManager(), currChat->account(), currChat->textChannel(), this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }

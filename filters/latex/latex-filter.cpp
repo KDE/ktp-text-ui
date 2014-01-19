@@ -32,9 +32,6 @@
 #include <KStandardDirs>
 #include <KProcess>
 
-#ifndef Q_OS_WIN
-#include <X11/Xproto.h>
-#endif
 LatexFilter::LatexFilter(QObject* parent, const QVariantList &)
     : AbstractMessageFilter(parent)
 {

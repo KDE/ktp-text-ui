@@ -50,13 +50,17 @@ private Q_SLOTS:
     void onScrollbackLengthChanged();
     void onShowMeTypingChanged(bool state);
     void onShowOthersTypingChanged(bool state);
+    void onNicknameCompletionStyleChanged(int index);
 
 private:
     TextChatConfig::TabOpenMode m_openMode;
     int m_scrollbackLength;
     bool m_showMeTyping; // show others I am typing
     bool m_showOthersTyping; // show me others are typing
+    QString m_nicknameCompletionSuffix;
     Ui::BehaviorConfigUi *ui;
+
+    static const QStringList nicknameCompletionSuffixes;
 };
 
 #endif // BEHAVIOR_CONFIG_H
