@@ -26,7 +26,7 @@
 #include <KIconLoader>
 
 #include "notify-filter.h"
-#include "logmanager.h"
+//#include "logmanager.h"
 
 #include <KTp/message-processor.h>
 
@@ -34,17 +34,17 @@ MessageView::MessageView(QWidget *parent)
 : AdiumThemeView(parent),
   m_chatViewInitialized(false),
   m_logsLoaded(false),
-  m_exchangedMessagesCount(0),
-  m_logManager(new LogManager(this))
+  m_exchangedMessagesCount(0)
+//  m_logManager(new LogManager(this))
 {
     // initialize LogManager
     KConfig config(QLatin1String("ktelepathyrc"));
     KConfigGroup tabConfig = config.group("Behavior");
-    m_logManager->setScrollbackLength(tabConfig.readEntry<int>("scrollbackLength", 4));
+//    m_logManager->setScrollbackLength(tabConfig.readEntry<int>("scrollbackLength", 4));
 
     //FIXME
 //     m_previousConversationAvailable = m_logManager->exists();
-    connect(m_logManager, SIGNAL(fetched(QList<KTp::Message>)), SLOT(onHistoryFetched(QList<KTp::Message>)));
+//    connect(m_logManager, SIGNAL(fetched(QList<KTp::Message>)), SLOT(onHistoryFetched(QList<KTp::Message>)));
 
 }
 
@@ -133,7 +133,7 @@ void MessageView::setTextChannel(const Tp::AccountPtr &account, const Tp::TextCh
             SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
 
     if (isFirstRun) {
-        m_logManager->setTextChannel(m_account, m_channel);
+        //m_logManager->setTextChannel(m_account, m_channel);
         initChatArea();
     }
 }
@@ -280,9 +280,9 @@ void MessageView::onChatViewReady()
 
     if (!m_logsLoaded || m_exchangedMessagesCount > 0) {
         if (m_exchangedMessagesCount == 0) {
-            m_logManager->fetchScrollback();
+            //m_logManager->fetchScrollback();
         } else {
-            m_logManager->fetchHistory(m_exchangedMessagesCount + m_logManager->scrollbackLength());
+            //m_logManager->fetchHistory(m_exchangedMessagesCount + m_logManager->scrollbackLength());
         }
     }
     m_chatViewInitialized = true;
