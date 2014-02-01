@@ -15,7 +15,7 @@ X-KDE-PluginInfo-Weight=10
 X-KTp-PluginInfo-Version=@KTP_MESSAGE_FILTER_FRAMEWORK_VERSION@
 
 Name=LaTeX Renderer
-Name[bs]=LaTeX Obrađivač
+Name[bs]=LaTeX Renderer
 Name[ca]=Renderitzador LaTeX
 Name[ca@valencia]=Renderitzador LaTeX
 Name[cs]=Vykreslování Latex
@@ -52,7 +52,7 @@ Name[x-test]=xxLaTeX Rendererxx
 Name[zh_CN]=LaTeX 渲染器
 Name[zh_TW]=LaTeX 成像器
 Comment=If incoming messages contain LaTeX between $$, it will render it directly into the chat.
-Comment[bs]=Ako poruka sadrži Latex između $$, ona će se ugraditi u ćaskanje.
+Comment[bs]=Ako dolazne poruke sadrže LaTeX između $$, crtaće se direktno u ćaskanju.
 Comment[ca]=Si els missatges entrants conten LaTeX entre $$, es representarà directament en el xat.
 Comment[ca@valencia]=Si els missatges entrants conten LaTeX entre $$, es representarà directament en el xat.
 Comment[cs]=Pokud příchozí zpráva obsahuje kód latex mezi $$ bude vykreslena přímo do rozhovoru
