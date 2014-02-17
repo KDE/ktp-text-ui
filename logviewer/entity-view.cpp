@@ -22,6 +22,7 @@
 #include <KCmdLineArgs>
 
 #include <KTp/Logger/log-entity.h>
+#include <KTp/types.h>
 
 #include <TelepathyQt/Account>
 
