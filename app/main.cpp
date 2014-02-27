@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     aboutData.addAuthor(ki18n("Francesco Nwokeka"), ki18n("Developer"), "francesco.nwokeka@gmail.com");
     aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
     aboutData.setLicense(KAboutData::License_GPL_V2);
+    aboutData.setProgramIconName("telepathy-kde");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 
