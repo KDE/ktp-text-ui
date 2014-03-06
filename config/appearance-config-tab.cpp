@@ -49,7 +49,7 @@ AppearanceConfigTab::AppearanceConfigTab(QWidget *parent, TabMode mode)
     //loading theme settings.
     loadTab();
 
-    connect(ui->chatView, SIGNAL(loadFinished(bool)), SLOT(sendDemoMessages()));
+    connect(ui->chatView, SIGNAL(viewReady()), SLOT(sendDemoMessages()));
     connect(ui->styleComboBox, SIGNAL(activated(int)), SLOT(onStyleSelected(int)));
     connect(ui->variantComboBox, SIGNAL(activated(QString)), SLOT(onVariantSelected(QString)));
     connect(ui->showHeader, SIGNAL(clicked(bool)), SLOT(onShowHeaderChanged(bool)));
@@ -57,8 +57,6 @@ AppearanceConfigTab::AppearanceConfigTab(QWidget *parent, TabMode mode)
     connect(ui->fontFamily, SIGNAL(currentFontChanged(QFont)), SLOT(onFontFamilyChanged(QFont)));
     connect(ui->fontSize, SIGNAL(valueChanged(int)), SLOT(onFontSizeChanged(int)));
     connect(ui->showPresenceCheckBox, SIGNAL(stateChanged(int)), SLOT(onShowPresenceChangesChanged(int)));
-
-    sendDemoMessages();
 }
 
 AppearanceConfigTab::~AppearanceConfigTab()

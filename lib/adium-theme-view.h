@@ -40,6 +40,13 @@ class QContextMenuEvent;
 
 class KAction;
 
+class AdiumThemeViewProxy : public QObject
+{
+    Q_OBJECT
+Q_SIGNALS:
+    void viewReady();
+};
+
 class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public KWebView
 {
     Q_OBJECT
@@ -98,9 +105,11 @@ public Q_SLOTS:
     void addStatusMessage(const QString &text, const QDateTime &time=QDateTime::currentDateTime());
     void onOpenLinkActionTriggered();
     virtual void onLinkClicked(const QUrl &);
+    void injectProxyIntoJavascript();
 
     void addAdiumContentMessage(const AdiumThemeContentInfo&);
     void addAdiumStatusMessage(const AdiumThemeStatusInfo&);
+    void viewLoadFinished();
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -110,6 +119,7 @@ protected:
 Q_SIGNALS:
     void zoomFactorChanged(qreal zoomFactor);
     void textPasted();
+    void viewReady();
 
 private:
     ChatWindowStyle *m_chatStyle;
@@ -141,6 +151,9 @@ private:
 
 
     bool m_webInspector;
+
+    AdiumThemeViewProxy *jsproxy;
+    QString themeOnLoadJS;
 };
 
 #endif // ADIUMTHEMEVIEW_H

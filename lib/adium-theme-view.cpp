@@ -54,7 +54,8 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
         : KWebView(parent),
         // check iconPath docs for minus sign in -KIconLoader::SizeLarge
         m_defaultAvatar(KIconLoader::global()->iconPath(QLatin1String("im-user"),-KIconLoader::SizeLarge)),
-        m_displayHeader(true)
+        m_displayHeader(true),
+        jsproxy(new AdiumThemeViewProxy())
 {
     //blocks QWebView functionality which allows you to change page by dragging a URL onto it.
     setAcceptDrops(false);
@@ -68,7 +69,9 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
             this, SLOT(onOpenLinkActionTriggered()));
 
     connect(this, SIGNAL(linkClicked(QUrl)), this, SLOT(onLinkClicked(QUrl)));
-
+    connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),
+            this, SLOT(injectProxyIntoJavascript()));
+    connect(jsproxy, SIGNAL(viewReady()), this, SLOT(viewLoadFinished()));
     QWebSettings *ws = settings();
     ws->setAttribute(QWebSettings::ZoomTextOnly, true);
 }
@@ -120,6 +123,18 @@ void AdiumThemeView::load(ChatType chatType) {
     m_showPresenceChanges = appearanceConfig.readEntry("showPresenceChanges", true);
 }
 
+void AdiumThemeView::viewLoadFinished()
+{
+    if (themeOnLoadJS.length()) {
+        page()->mainFrame()->evaluateJavaScript(themeOnLoadJS);
+    }
+    viewReady();
+}
+
+void AdiumThemeView::injectProxyIntoJavascript()
+{
+    page()->mainFrame()->addToJavaScriptWindowObject(QLatin1String("AdiumThemeViewProxy"), jsproxy);
+}
 
 void AdiumThemeView::contextMenuEvent(QContextMenuEvent *event)
 {
@@ -252,6 +267,31 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     index = templateHtml.indexOf(QLatin1String("</head>"));
     templateHtml.insert(index, KTp::MessageProcessor::instance()->header());
 
+    // The purpose of this regular expression is to find the body tag in the template
+    // and make it possible to replace the onload event.
+    // The [^>]* expression is to match things that are not the end tag
+    // the (onload=\"...\")? expression is to make easy for me to do
+    // a string replace and replace the entire onload event (as cap(1).
+    // the trailing ? makes it optional in case a theme doesn't actually
+    // use the onload event.
+    // the inner ([^\"]*) expression attempts to match the javascript
+    // that is actually being called by the onLoad event so after we replace
+    // it with our C++ function that can call whatever javascript code the theme
+    // actually intended.
+    // Note: styles that use \" or > in unexpected places in their body tag will break
+    // this regexp.
+    QRegExp body(QLatin1String("<body[^>]*(onload=\"([^\"]*)\")?[^>]*>"), Qt::CaseInsensitive);
+    const QString onload(QLatin1String(" onload=\"AdiumThemeViewProxy.viewReady();\" "));
+    index = templateHtml.indexOf(body);
+    if (0 <= index ) {
+        if (body.cap(1).length() == 0) {
+            templateHtml.insert(index + 5, onload);
+        } else {
+            themeOnLoadJS = body.cap(2);
+            //kDebug() << "Captured js onLoad" << themeOnLoadJS;
+            templateHtml.replace(body.pos(1), body.cap(1).length(), onload);
+        }
+    }
     //kDebug() << templateHtml;
 
     setHtml(templateHtml);
