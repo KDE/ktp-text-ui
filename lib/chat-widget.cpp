@@ -534,7 +534,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
         d->exchangedMessagesCount++;
 
         //debug the message parts (looking for HTML etc)
-//        Q_FOREACH(Tp::MessagePart part, message.parts())
+//        Q_FOREACH(TpDBus::MessagePart part, message.parts())
 //        {
 //            qDebug() << "***";
 //            Q_FOREACH(QString key, part.keys())

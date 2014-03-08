@@ -76,7 +76,7 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &e
         load(AdiumThemeView::SingleUserChat);
     }
 
-    Tp::Avatar avatar = m_account->avatar();
+    TpDBus::Avatar avatar = m_account->avatar();
     if (!avatar.avatarData.isEmpty()) {
         m_accountAvatar = QString(QLatin1String("data:%1;base64,%2")).
                             arg(avatar.MIMEType.isEmpty() ? QLatin1String("image/*") : avatar.MIMEType).
