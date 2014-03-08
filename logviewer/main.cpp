@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     Tp::ContactFactoryPtr contactFactory = KTp::ContactFactory::create(
                                                 Tp::Features()  << Tp::Contact::FeatureAlias
                                                     << Tp::Contact::FeatureAvatarData
-                                                    << Tp::Contact::FeatureSimplePresence
+                                                    << Tp::Contact::FeaturePresence
                                                     << Tp::Contact::FeatureCapabilities);
 
     Tp::ChannelFactoryPtr channelFactory = Tp::ChannelFactory::create(QDBusConnection::sessionBus());
