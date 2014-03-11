@@ -229,6 +229,7 @@ void ChatWindow::addTab(ChatTab *tab)
 
     m_tabWidget->addTab(tab, tab->icon(), tab->title());
     m_tabWidget->setCurrentWidget(tab);
+    m_tabWidget->setTabToolTip(m_tabWidget->indexOf(tab), tab->title());
 
     if (m_tabWidget->isTabBarHidden()) {
         if (m_tabWidget->count() > 1) {
