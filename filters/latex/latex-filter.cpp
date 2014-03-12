@@ -26,6 +26,7 @@
 #include "latexconfig.h"
 
 #include <QImage>
+#include <QTextDocument>
 
 #include <KPluginFactory>
 #include <KDebug>
@@ -68,7 +69,7 @@ void LatexFilter::filterMessage(KTp::Message &message, const KTp::MessageContext
         handleLatex(formula) %
         QLatin1Literal("\" style=\"max-width:100%;margin-top:3px\"") %
         QLatin1Literal("alt=\"") %
-        formula %
+        Qt::escape(formula) %
         QLatin1Literal("\" isEmotion=\"true\"/>"));
 
         int length = rg.matchedLength();
