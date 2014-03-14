@@ -111,7 +111,7 @@ void AdiumThemeView::load(ChatType chatType) {
         }
     }
 
-    m_displayHeader = appearanceConfig.readEntry("displayHeader", false);
+    m_displayHeader = appearanceConfig.readEntry("displayHeader", true);
 
     //special HTML debug mode. Debugging/Profiling only (or theme creating) should have no visible way to turn this flag on.
     m_webInspector = appearanceConfig.readEntry("debug", false);
