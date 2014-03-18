@@ -19,6 +19,7 @@ Name[ko]=YouTube 미리 보기
 Name[lt]=YouTube peržiūra
 Name[mr]=यूट्यूब पूर्वावलोकन
 Name[nb]=YouTube forhåndsvisning
+Name[nds]=YouTube-Vöransicht
 Name[nl]=Voorbeeld van YouTube
 Name[pl]=Podgląd YouTube
 Name[pt]=Antevisão do YouTube

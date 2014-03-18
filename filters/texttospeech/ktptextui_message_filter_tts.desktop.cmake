@@ -20,6 +20,7 @@ Name[ko]=텍스트 읽어주기
 Name[lt]=Tekstas balsu
 Name[mr]=पाठ्य-ते-भाष्य
 Name[nb]=Tekst til tale
+Name[nds]=Vörleser
 Name[nl]=Tekst-naar-spraak
 Name[pl]=Tekst-na-mowę
 Name[pt]=Texto para Fala
