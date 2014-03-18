@@ -21,6 +21,7 @@ Name[ko]=이모티콘
 Name[lt]=Jaustukai
 Name[mr]=भावप्रतिमा
 Name[nb]=Humørfjes
+Name[nds]=Snuten
 Name[nl]=Emoticons
 Name[nn]=Fjesingar
 Name[pa]=ਈਮੋਸ਼ਨ

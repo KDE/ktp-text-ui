@@ -20,6 +20,7 @@ Name[ko]=그림 미리 보기
 Name[lt]=Paveikslėlio peržiūra
 Name[mr]=प्रतिमा पूर्वावलोकन
 Name[nb]=Bildeforhåndsvisning
+Name[nds]=Bild-Vöransicht
 Name[nl]=Afbeeldingsvoorbeeld
 Name[pa]=ਚਿੱਤਰ ਝਲਕ
 Name[pl]=Podgląd obrazu

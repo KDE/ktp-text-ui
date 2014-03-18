@@ -35,6 +35,7 @@ Name[ko]=강조
 Name[lt]=Paryškinti
 Name[mr]=ठसवा
 Name[nb]=Fremhev
+Name[nds]=Rutheven
 Name[nl]=Accentueren
 Name[nn]=Markert melding
 Name[pa]=ਉਭਾਰਨਾ
