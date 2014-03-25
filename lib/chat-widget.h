@@ -87,6 +87,10 @@ public:
 
     void setSpellDictionary(const QString &dict);
 
+    QString currentKeyboardLayoutLanguage() const;
+
+    void setCurrentKeyboardLayoutLanguage(const QString &language);
+
     void addEmoticonToChat(const QString &emoticon);
 
     /** Returns the chat state of remote contact */

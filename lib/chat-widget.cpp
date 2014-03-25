@@ -75,6 +75,7 @@ public:
     QString title;
     QString contactName;
     QString yourName;
+    QString currentKeyboardLayoutLanguage;
     Tp::TextChannelPtr channel;
     Tp::AccountPtr account;
     Ui::ChatWidget ui;
@@ -873,6 +874,16 @@ void ChatWidget::findPreviousTextInChat(const QString& text, QWebPage::FindFlags
 void ChatWidget::setSpellDictionary(const QString &dict)
 {
     d->ui.sendMessageBox->setSpellCheckingLanguage(dict);
+}
+
+QString ChatWidget::currentKeyboardLayoutLanguage() const
+{
+    return d->currentKeyboardLayoutLanguage;
+}
+
+void ChatWidget::setCurrentKeyboardLayoutLanguage(const QString &language)
+{
+    d->currentKeyboardLayoutLanguage = language;
 }
 
 void ChatWidget::saveSpellCheckingOption()

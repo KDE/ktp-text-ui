@@ -72,7 +72,8 @@ K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecke
 
 ChatWindow::ChatWindow()
     : m_sendMessage(0),
-      m_tabWidget(0)
+      m_tabWidget(0),
+      m_keyboardLayoutInterface(0)
 {
     //This effectively constructs the s_krfbAvailableChecker object the first
     //time that this code is executed. This is to start the d-bus query early, so
@@ -99,6 +100,11 @@ ChatWindow::ChatWindow()
 
     KStandardAction::zoomIn(this, SLOT(onZoomIn()), actionCollection());
     KStandardAction::zoomOut(this, SLOT(onZoomOut()), actionCollection());
+
+    m_keyboardLayoutInterface = new QDBusInterface(QLatin1String("org.kde.keyboard"), QLatin1String("/Layouts"),
+						   QLatin1String("org.kde.KeyboardLayouts"), QDBusConnection::sessionBus(), this);
+
+    connect(m_keyboardLayoutInterface, SIGNAL(currentLayoutChanged(QString)), this, SLOT(onKeyboardLayoutChange(QString)));
 
     // set up m_tabWidget
     m_tabWidget = new KTabWidget(this);
@@ -227,6 +233,10 @@ void ChatWindow::addTab(ChatTab *tab)
     setupChatTabSignals(tab);
     tab->setZoomFactor(m_zoomFactor);
 
+    QDBusPendingCall dbusPendingCall = m_keyboardLayoutInterface->asyncCall(QLatin1String("getCurrentLayout"));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(dbusPendingCall, this);
+    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(onGetCurrentKeyboardLayoutFinished(QDBusPendingCallWatcher*)));
+
     m_tabWidget->addTab(tab, tab->icon(), tab->title());
     m_tabWidget->setCurrentWidget(tab);
     m_tabWidget->setTabToolTip(m_tabWidget->indexOf(tab), tab->title());
@@ -329,6 +339,8 @@ void ChatWindow::onCurrentIndexChanged(int index)
     kDebug() << "Current spell dictionary is" << currentChatTab->spellDictionary();
     m_spellDictCombo->setCurrentByDictionary(currentChatTab->spellDictionary());
 
+    restoreKeyboardLayout(currentChatTab);
+
     // when the tab changes I need to "refresh" the window's findNext and findPrev actions
     if (currentChatTab->chatSearchBar()->searchBar()->text().isEmpty()) {
         onEnableSearchActions(false);
@@ -426,6 +438,19 @@ void ChatWindow::onGenericOperationFinished(Tp::PendingOperation* op)
     }
 }
 
+void ChatWindow::onGetCurrentKeyboardLayoutFinished(QDBusPendingCallWatcher* watcher)
+{
+    if (!watcher->isError()) {
+	QDBusMessage replyMessage = watcher->reply();
+	ChatTab *chatTab = getCurrentTab();
+	if (chatTab) {
+	    QString layout = replyMessage.arguments().first().toString();
+	    chatTab->setCurrentKeyboardLayoutLanguage(layout);
+	}
+    }
+    watcher->deleteLater();
+}
+
 void ChatWindow::onInviteToChatTriggered()
 {
     ChatTab *currChat = qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
@@ -433,6 +458,17 @@ void ChatWindow::onInviteToChatTriggered()
     InviteContactDialog *dialog = new InviteContactDialog(KTp::accountManager(), currChat->account(), currChat->textChannel(), this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
+}
+
+void ChatWindow::onKeyboardLayoutChange(const QString& keyboardLayout)
+{
+    ChatTab *currChat = getCurrentTab();
+    if (currChat) {
+	// To prevent keyboard layout change when the ChatWindow is minimized or not active
+	if (currChat->isActiveWindow()) {
+	    currChat->setCurrentKeyboardLayoutLanguage(keyboardLayout);
+	}
+    }
 }
 
 void ChatWindow::onNextTabActionTriggered()
@@ -894,6 +930,16 @@ void ChatWindow::offerDocumentToChatroom(const Tp::AccountPtr& account, const QS
     }
 }
 
+void ChatWindow::restoreKeyboardLayout(ChatTab *chatTab)
+{
+    if (chatTab) {
+	QString currentKeyboardLayout = chatTab->currentKeyboardLayoutLanguage();
+	if (!currentKeyboardLayout.isEmpty()) {
+	    m_keyboardLayoutInterface->asyncCall(QLatin1String("setLayout"), currentKeyboardLayout);
+	}
+    }
+}
+
 void ChatWindow::startVideoCall(const Tp::AccountPtr& account, const Tp::ContactPtr& contact)
 {
     Tp::PendingChannelRequest* channelRequest = KTp::Actions::startAudioVideoCall(account, contact);
@@ -910,11 +956,12 @@ bool ChatWindow::event(QEvent *e)
 {
     if (e->type() == QEvent::WindowActivate) {
         //when the window is activated reset the message count on the active tab.
-        ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+        ChatTab *currChat =  qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
         //it is (apparently) possible to get a window activation event whilst we're closing down and have no tabs
         //see https://bugs.kde.org/show_bug.cgi?id=322135
         if (currChat) {
             currChat->acknowledgeMessages();
+	    restoreKeyboardLayout(currChat);
         }
     }
 

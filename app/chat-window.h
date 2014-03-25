@@ -34,6 +34,7 @@ namespace Sonnet {
 class KIcon;
 class ChatTab;
 class QLabel;
+class QDBusPendingCallWatcher;
 
 class ChatWindow : public KXmlGuiWindow
 {
@@ -88,7 +89,9 @@ private Q_SLOTS:
     void onFindNextText();                                      /** go to next text the user is searching for */
     void onFindPreviousText();                                  /** go to previous text the user is searching for */
     void onGenericOperationFinished(Tp::PendingOperation *op);
+    void onGetCurrentKeyboardLayoutFinished(QDBusPendingCallWatcher *watcher);
     void onInviteToChatTriggered();                             /** invite contact(s) to chat */
+    void onKeyboardLayoutChange(const QString& keyboardLayout);
     void onNextTabActionTriggered();                            /** go to next tab in the tabwidget */
     void onPreviousTabActionTriggered();                        /** go to previous tab in the tabwidget */
     void onSearchActionToggled();                               /** toggle search bar visibility */
@@ -186,10 +189,17 @@ private:
      */
     void offerDocumentToChatroom(const Tp::AccountPtr& account, const QString& roomName);
 
+    /**
+     * @brief Restores the System's keyboard layout to the layout of the current ChatTab
+     * @param chatTab The tab that the language is going to be restored from
+     */
+    void restoreKeyboardLayout(ChatTab *chatTab);
+
     KAction *m_sendMessage;
 
     KTabWidget *m_tabWidget;
 
+    QDBusInterface *m_keyboardLayoutInterface;
     Sonnet::DictionaryComboBox *m_spellDictCombo;
     QLabel *m_accountIconLabel;
     qreal m_zoomFactor;
