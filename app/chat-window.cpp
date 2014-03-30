@@ -658,6 +658,11 @@ void ChatWindow::onShowInfoTriggered()
     }
 }
 
+void ChatWindow::onOpenContactListTriggered()
+{
+    KToolInvocation::kdeinitExec(QLatin1String("ktp-contactlist"));
+}
+
 void ChatWindow::onOpenLogTriggered()
 {
     int index = m_tabWidget->currentIndex();
@@ -805,6 +810,9 @@ void ChatWindow::setupCustomActions()
     KAction *openLogAction = new KAction(KIcon(QLatin1String("view-pim-journal")), i18nc("Action to open the log viewer with a specified contact","&Previous Conversations"), this);
     connect(openLogAction, SIGNAL(triggered()), SLOT(onOpenLogTriggered()));
 
+    KAction *openContactListAction = new KAction(KIcon(QLatin1String("telepathy-kde")), i18nc("Action to open the contact list","Contact &List"), this);
+    connect(openContactListAction, SIGNAL(triggered()), SLOT(onOpenContactListTriggered()));
+
     KAction *accountIconAction = new KAction(KIcon(QLatin1String("telepathy-kde")), i18n("Account Icon"), this);
     m_accountIconLabel = new QLabel(this);
     accountIconAction->setDefaultWidget(m_accountIconLabel);
@@ -836,6 +844,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("account-icon"), accountIconAction);
     actionCollection()->addAction(QLatin1String("block-contact"), blockContactAction);
     actionCollection()->addAction(QLatin1String("open-log"), openLogAction);
+    actionCollection()->addAction(QLatin1String("open-contact-list"), openContactListAction);
     actionCollection()->addAction(QLatin1String("clear-chat-view"), clearViewAction);
     actionCollection()->addAction(QLatin1String("emoticons"), addEmoticonAction);
     actionCollection()->addAction(QLatin1String("send-message"), m_sendMessage);

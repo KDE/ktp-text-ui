@@ -103,6 +103,7 @@ private Q_SLOTS:
     void onShareDesktopTriggered();                             /** start a desktop share */
     void onShowInfoTriggered();                                 /** show contact info */
     void onOpenLogTriggered();                                  /** Starts ktp-log-viewer accountId contactId */
+    void onOpenContactListTriggered();                          /** Opens contact list */
     void onClearViewTriggered();                                /** Clears current view */
     void setTabSpellDictionary(const QString &dict);            /** set the spelling language for the current chat tab*/
     void toggleBlockButton(bool contactIsBlocked);              /** Toggle block/unblock action according to the flag */
