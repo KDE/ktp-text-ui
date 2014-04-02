@@ -65,6 +65,14 @@
 #include "telepathy-chat-ui.h"
 #include "text-chat-config.h"
 
+#ifdef HAVE_KPEOPLE
+#include <kpeople/widgets/persondetailsdialog.h>
+#include <kpeople/global.h>
+#include <kpeople/persondata.h>
+#endif
+
+#include <KTp/contact-info-dialog.h>
+
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
 K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
@@ -359,6 +367,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setVideoCallEnabled(targetContact->videoCallCapability());
         setShareDesktopEnabled(targetContact->streamTubeServicesCapability().contains(QLatin1String("rfb")));
         setInviteToChatEnabled(true);
+        setShowInfoEnabled(true);
         toggleBlockButton(targetContact->isBlocked());
     } else {
         setAudioCallEnabled(false);
@@ -367,6 +376,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setShareDesktopEnabled(false);
         setInviteToChatEnabled(true);
         setBlockEnabled(false);
+        setShowInfoEnabled(false);
     }
 
     if ( currentChatTab->account()->connection() ) {
@@ -617,6 +627,37 @@ void ChatWindow::onShareDesktopTriggered()
     startShareDesktop(currChat->account(), currChat->textChannel()->targetContact());
 }
 
+void ChatWindow::onShowInfoTriggered()
+{
+    ChatWidget *currChat =  qobject_cast<ChatWidget*>(m_tabWidget->currentWidget());
+    const Tp::ContactPtr contact = currChat->textChannel()->targetContact();
+
+    if(!currChat || !currChat->account() || !contact) {
+        return;
+    }
+
+    if (KTp::kpeopleEnabled()) {
+        #ifdef HAVE_KPEOPLE
+        QString personId(QLatin1String("ktp://"));
+        personId.append(currChat->account()->uniqueIdentifier());
+        personId.append(QLatin1String("?"));
+        personId.append(contact->id());
+
+        if (!personId.isEmpty()) {
+            KPeople::PersonDetailsDialog *view = new KPeople::PersonDetailsDialog(currChat);
+            KPeople::PersonData *person = new KPeople::PersonData(personId, view);
+            view->setPerson(person);
+            view->setAttribute(Qt::WA_DeleteOnClose);
+            view->show();
+        }
+        #endif
+    } else {
+        KTp::ContactInfoDialog* contactInfoDialog = new KTp::ContactInfoDialog(currChat->account(), contact, currChat);
+        contactInfoDialog->setAttribute(Qt::WA_DeleteOnClose);
+        contactInfoDialog->show();
+    }
+}
+
 void ChatWindow::onOpenLogTriggered()
 {
     int index = m_tabWidget->currentIndex();
@@ -748,6 +789,9 @@ void ChatWindow::setupCustomActions()
     KAction* collaborateDocumentAction = new KAction(KIcon(QLatin1String("document-share")), i18n("&Collaboratively edit a document"), this);
     connect(collaborateDocumentAction, SIGNAL(triggered()), this, SLOT(onCollaborateDocumentTriggered()));
 
+    KAction* showInfoAction = new KAction(KIcon(QLatin1String("")), i18n("&Contact info"), this);
+    connect(showInfoAction, SIGNAL(triggered()), this, SLOT(onShowInfoTriggered()));
+
     m_spellDictCombo = new Sonnet::DictionaryComboBox();
     connect(m_spellDictCombo, SIGNAL(dictionaryChanged(QString)),
             this, SLOT(setTabSpellDictionary(QString)));
@@ -796,6 +840,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("emoticons"), addEmoticonAction);
     actionCollection()->addAction(QLatin1String("send-message"), m_sendMessage);
     actionCollection()->addAction(QLatin1String("collaborate-document"), collaborateDocumentAction);
+    actionCollection()->addAction(QLatin1String("contact-info"), showInfoAction);
 }
 
 void ChatWindow::setCollaborateDocumentEnabled(bool enable)
@@ -872,6 +917,15 @@ void ChatWindow::setShareDesktopEnabled(bool enable)
 void ChatWindow::setPreviousConversationsEnabled ( bool enable )
 {
     QAction *action = actionCollection()->action(QLatin1String("open-log"));
+
+    if (action) {
+        action->setEnabled(enable);
+    }
+}
+
+void ChatWindow::setShowInfoEnabled ( bool enable )
+{
+    QAction *action = actionCollection()->action(QLatin1String("contact-info"));
 
     if (action) {
         action->setEnabled(enable);

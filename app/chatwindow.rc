@@ -22,6 +22,8 @@
    <Action name="block-contact"/>
    <Separator />
    <Action name="clear-chat-view"/>
+   <Separator />
+   <Action name="contact-info"/>
   </Menu>
   <Menu name="settings"/>
   <Menu name="help"/>

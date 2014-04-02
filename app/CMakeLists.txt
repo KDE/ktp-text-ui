@@ -7,25 +7,38 @@ set(ktp-text-ui_SRCS
         chat-tab.cpp
         emoticon-text-edit-action.cpp
         emoticon-text-edit-selector.cpp
-        invite-contact-dialog.cpp       
+        invite-contact-dialog.cpp
 )
+
+set (ktp-text-ui_LIBS
+        ${KDE4_KDECORE_LIBS}
+        ${KDE4_KDEUI_LIBS}
+        ${KDE4_KIO_LIBS}
+        ${KDE4_KEMOTICONS_LIBS}
+        ${TELEPATHY_QT4_LIBRARIES}
+        ${KTP_LIBRARIES}
+        ${KTP_MODELS_LIBRARIES}
+        ${KTP_WIDGETS_LIBRARIES}
+        ${QT_QTWEBKIT_LIBRARY}
+        ${KDE4_KNOTIFYCONFIG_LIBS}
+        ${KDE4_KCMUTILS_LIBS}
+        ${KDEPIMLIBS_KPIMTEXTEDIT_LIBS}
+        ktpchat
+)
+
+if(KPEOPLE_FOUND)
+set (ktp-text-ui_LIBS
+    ${ktp-text-ui_LIBS}
+    ${KPEOPLE_LIBRARY}
+    ${KDEPIMLIBS_KABC_LIBS}
+    ${KPEOPLEWIDGETS_LIBRARY}
+)
+endif(KPEOPLE_FOUND)
 
 kde4_add_executable(ktp-text-ui ${ktp-text-ui_SRCS})
 
 target_link_libraries(ktp-text-ui
-            ${KDE4_KDECORE_LIBS}
-            ${KDE4_KDEUI_LIBS}
-            ${KDE4_KIO_LIBS}
-            ${KDE4_KEMOTICONS_LIBS}
-            ${TELEPATHY_QT4_LIBRARIES}
-            ${KTP_LIBRARIES}
-            ${KTP_MODELS_LIBRARIES}
-            ${KTP_WIDGETS_LIBRARIES}
-            ${QT_QTWEBKIT_LIBRARY}
-            ${KDE4_KNOTIFYCONFIG_LIBS}
-            ${KDE4_KCMUTILS_LIBS}
-            ${KDEPIMLIBS_KPIMTEXTEDIT_LIBS}
-            ktpchat)
+            ${ktp-text-ui_LIBS})
 
 configure_file(org.freedesktop.Telepathy.Client.KTp.TextUi.service.in
                ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KTp.TextUi.service)

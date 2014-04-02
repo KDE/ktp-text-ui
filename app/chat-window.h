@@ -101,6 +101,7 @@ private Q_SLOTS:
     void onVideoCallTriggered();                                /** start a video call */
     void onUnblockContactTriggered();                           /** Unblocks contact when already blocked */
     void onShareDesktopTriggered();                             /** start a desktop share */
+    void onShowInfoTriggered();                                 /** show contact info */
     void onOpenLogTriggered();                                  /** Starts ktp-log-viewer accountId contactId */
     void onClearViewTriggered();                                /** Clears current view */
     void setTabSpellDictionary(const QString &dict);            /** set the spelling language for the current chat tab*/
@@ -147,6 +148,7 @@ private:
     void setShareDesktopEnabled(bool enable);
     void setPreviousConversationsEnabled(bool enable);
     void setCollaborateDocumentEnabled(bool enable);
+    void setShowInfoEnabled(bool enable);
 
     /** starts audio call with given contact
      * @param account account sending the audio call request
