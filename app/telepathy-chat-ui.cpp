@@ -77,27 +77,22 @@ TelepathyChatUi::~TelepathyChatUi()
 {
 }
 
-void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & context,
+void TelepathyChatUi::handleChannel(const Tp::MethodInvocationContextPtr<> &context,
         const Tp::AccountPtr &account,
         const Tp::ConnectionPtr &connection,
-        const QList<Tp::ChannelPtr> &channels,
-        const QList<Tp::ChannelRequestPtr> &channelRequests,
+        const Tp::ChannelPtr &channel,
+        const QVariantMap &channelProperties,
+        const QList<Tp::ChannelRequestPtr> &requestsSatisfied,
         const QDateTime &userActionTime,
-        const Tp::AbstractClientHandler::HandlerInfo &handlerInfo)
+        const HandlerInfo &handlerInfo)
 {
     kDebug();
     Q_UNUSED(connection);
     Q_UNUSED(userActionTime);
     Q_UNUSED(handlerInfo);
+    Q_UNUSED(channelProperties);
 
-    Tp::TextChannelPtr textChannel;
-    Q_FOREACH(const Tp::ChannelPtr & channel, channels) {
-        textChannel = Tp::TextChannelPtr::dynamicCast(channel);
-        if (textChannel) {
-            break;
-        }
-    }
-
+    Tp::TextChannelPtr textChannel = Tp::TextChannelPtr::dynamicCast(channel);
     Q_ASSERT(textChannel);
 
     /*this works round a "bug" in which kwin will _deliberately_ stop the TextUi claiming focus
@@ -108,7 +103,7 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
     bool windowRaise = true;
 
     //find the relevant channelRequest
-    Q_FOREACH(const Tp::ChannelRequestPtr channelRequest, channelRequests) {
+    Q_FOREACH(const Tp::ChannelRequestPtr channelRequest, requestsSatisfied) {
         kDebug() << channelRequest->hints().allHints();
         windowRaise = !channelRequest->hints().hint(QLatin1String("org.kde.telepathy"), QLatin1String("suppressWindowRaise")).toBool();
     }
