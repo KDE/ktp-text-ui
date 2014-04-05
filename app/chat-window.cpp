@@ -179,7 +179,7 @@ ChatTab* ChatWindow::getTab(const Tp::AccountPtr &account, const Tp::TextChannel
     ChatTab *match = 0;
 
     // if targetHandle is None, targetId is also "", therefore we won't be able to find it.
-    if (!incomingTextChannel->targetHandleType() == Tp::HandleTypeNone) {
+    if (!incomingTextChannel->targetEntityType() == Tp::EntityTypeNone) {
 
         //loop through all tabs checking for matches
         for (int index = 0; index < m_tabWidget->count() && !match; ++index) {
@@ -192,7 +192,7 @@ ChatTab* ChatWindow::getTab(const Tp::AccountPtr &account, const Tp::TextChannel
             // check for duplicate chat
             if (auxChatTab->account() == account
                 && auxChatTab->textChannel()->targetId() == incomingTextChannel->targetId()
-                && auxChatTab->textChannel()->targetHandleType() == incomingTextChannel->targetHandleType()) {
+                && auxChatTab->textChannel()->targetEntityType() == incomingTextChannel->targetEntityType()) {
                 match = auxChatTab;
             }
         }

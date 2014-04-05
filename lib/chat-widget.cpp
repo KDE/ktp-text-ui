@@ -114,7 +114,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
 
     d->chatViewInitialized = false;
-    d->isGroupChat = (channel->targetHandleType() == Tp::HandleTypeContact ? false : true);
+    d->isGroupChat = (channel->targetEntityType() == Tp::EntityTypeContact ? false : true);
 
     d->ui.setupUi(this);
 

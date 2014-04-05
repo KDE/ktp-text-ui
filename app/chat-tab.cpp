@@ -88,12 +88,12 @@ void ChatTab::onConnectionStatusChanged(Tp::ConnectionStatus status)
     hints.setHint(QLatin1String("org.kde.telepathy"),QLatin1String("suppressWindowRaise"), QVariant(true));
 
     if (status == Tp::ConnectionStatusConnected) {
-        if (textChannel()->targetHandleType() == Tp::HandleTypeContact) {
+        if (textChannel()->targetEntityType() == Tp::EntityTypeContact) {
             account()->ensureTextChat(textChannel()->targetId(),
                                       QDateTime::currentDateTime(),
                                       QLatin1String(KTP_TEXTUI_CLIENT_PATH),
                                       hints);
-        } else if (textChannel()->targetHandleType() == Tp::HandleTypeRoom) {
+        } else if (textChannel()->targetEntityType() == Tp::EntityTypeRoom) {
 
             account()->ensureTextChatroom(textChannel()->targetId(),
                                           QDateTime::currentDateTime(),

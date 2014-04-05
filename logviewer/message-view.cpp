@@ -70,7 +70,7 @@ void MessageView::loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &e
     m_prev = nearestDates.first;
     m_next = nearestDates.second;
 
-    if (entity.entityType() == Tp::HandleTypeRoom) {
+    if (entity.entityType() == Tp::EntityTypeRoom) {
         load(AdiumThemeView::GroupChat);
     } else {
         load(AdiumThemeView::SingleUserChat);
@@ -122,7 +122,7 @@ void MessageView::onEventsLoaded(KTp::PendingLoggerOperation *po)
     AdiumThemeHeaderInfo headerInfo;
     headerInfo.setDestinationDisplayName(m_contact.isNull() ? m_entity.alias() : m_contact->alias());
     headerInfo.setChatName(m_contact.isNull() ? m_entity.alias() : m_contact->alias());
-    headerInfo.setGroupChat(m_entity.entityType() == Tp::HandleTypeRoom);
+    headerInfo.setGroupChat(m_entity.entityType() == Tp::EntityTypeRoom);
     headerInfo.setSourceName(m_account->displayName());
     headerInfo.setIncomingIconPath(m_contact.isNull() ? QString() : m_contact->avatarData().fileName);
 
