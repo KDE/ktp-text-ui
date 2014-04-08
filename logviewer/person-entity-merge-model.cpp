@@ -228,7 +228,7 @@ PersonEntityMergeModel::PersonEntityMergeModel(KTp::ContactsModel* contactsModel
     m_rootItem(new ContactItem),
     m_initializedSources(0)
 {
-    connect(m_contactsModel, SIGNAL(modelInitialized()),
+    connect(m_contactsModel, SIGNAL(modelInitialized(bool)),
                 this, SLOT(sourceModelInitialized()));
     connect(m_entityModel, SIGNAL(modelInitialized()),
             this, SLOT(sourceModelInitialized()));
