@@ -33,10 +33,12 @@
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QFontDatabase>
 #include <QtGui/QMenu>
+#include <QtGui/QDesktopWidget>
 #include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebElement>
 #include <QtWebKit/QWebInspector>
 #include <QtWebKit/QWebSettings>
+#include <QApplication>
 
 #include <KAction>
 #include <KDebug>
@@ -210,14 +212,17 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     if (m_useCustomFont) {
         // use user specified fontFamily and Size
         settings()->setFontFamily(QWebSettings::StandardFont, m_fontFamily);
-        settings()->setFontSize(QWebSettings::DefaultFontSize, m_fontSize);
+        // We get desktop's DPI and divide it 96, which is the DPI that WebKit has hardcoded in
+        // Then we can just scale the fonts using the obtained coefficient and they should look
+        // good/better on high-dpi screens
+        settings()->setFontSize(QWebSettings::DefaultFontSize, m_fontSize * (QApplication::desktop()->logicalDpiY() / 96.0 ));
 
         // since some themes are pretty odd and hardcode fonts to the css we need to override that
         // with some extra css. this may not work for all themes!
         extraStyleHtml.append (
             QString(QLatin1String("\n* {font-family:\"%1\" !important;font-size:%2pt !important};"))
             .arg( m_fontFamily )
-            .arg( m_fontSize )
+            .arg( m_fontSize * (QApplication::desktop()->logicalDpiY() / 96.0 ))
         );
     } else {
         // FIXME: we should inform the user if the chatStyle want's to use a fontFamily which is not present on the system
@@ -227,7 +232,8 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 
         // use theme fontFamily/Size, if not existent, it falls back to systems default font
         settings()->setFontFamily(QWebSettings::StandardFont, m_chatStyle->defaultFontFamily());
-        settings()->setFontSize(QWebSettings::DefaultFontSize, m_chatStyle->defaultFontSize());
+        // Computing the font size can result in floats and have some rounding errors, so add 0.5 and floor
+        settings()->setFontSize(QWebSettings::DefaultFontSize, qFloor(0.5 + m_chatStyle->defaultFontSize() * (QApplication::desktop()->logicalDpiY() / 96.0 )));
     }
 
     //The templateHtml is in a horrific NSString format.
