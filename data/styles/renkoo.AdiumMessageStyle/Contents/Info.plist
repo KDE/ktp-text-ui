@@ -26,8 +26,6 @@
 	<string>Blue on Green No Names Alt</string>
 	<key>DefaultFontFamily</key>
 	<string>Lucida Grande</string>
-	<key>DefaultFontSize</key>
-	<integer>13</integer>
 	<key>DefaultBackgroundColor</key>
 	<string>ffffff</string>
 	<key>AllowTextColors</key>
