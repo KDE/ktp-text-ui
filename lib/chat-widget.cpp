@@ -58,6 +58,11 @@
 
 #include <sonnet/speller.h>
 
+
+const QString groupChatOnlineIcon(QLatin1String("im-irc"));
+// FIXME We should have a proper icon for this
+const QString groupChatOfflineIcon(QLatin1String("im-irc"));
+
 class ChatWidgetPrivate
 {
 public:
@@ -222,19 +227,23 @@ Tp::AccountPtr ChatWidget::account() const
 
 KIcon ChatWidget::icon() const
 {
-    if (d->account->currentPresence() != Tp::Presence::offline()) {
-        //normal chat - self and one other person.
-        if (!d->isGroupChat) {
+    if (!d->isGroupChat) {
+        if (d->account->currentPresence() != Tp::Presence::offline()) {
+            //normal chat - self and one other person.
             //find the other contact which isn't self.
             Tp::ContactPtr otherContact = d->channel->targetContact();
             return KTp::Presence(otherContact->presence()).icon();
+        } else {
+            return KTp::Presence(Tp::Presence::offline()).icon();
         }
-        else {
-            //group chat
-            return KTp::Presence(Tp::Presence::available()).icon();
+    } else {
+        //group chat
+        if (d->account->currentPresence() != Tp::Presence::offline()) {
+            return KIcon(groupChatOnlineIcon);
+        } else {
+            return KIcon(groupChatOfflineIcon);
         }
     }
-    return KTp::Presence(Tp::Presence::offline()).icon();
 }
 
 KIcon ChatWidget::accountIcon() const
@@ -1021,7 +1030,11 @@ void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)
 {
     if (presence == Tp::Presence::offline()) {
         d->ui.chatArea->addStatusMessage(i18n("You are now offline"));
-        Q_EMIT iconChanged(KTp::Presence(Tp::Presence::offline()).icon());
+        if(!d->isGroupChat) {
+            Q_EMIT iconChanged(KTp::Presence(Tp::Presence::offline()).icon());
+        } else {
+            Q_EMIT iconChanged(KIcon(groupChatOfflineIcon));
+        }
     }
 }
 
