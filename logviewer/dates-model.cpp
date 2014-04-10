@@ -415,6 +415,10 @@ QModelIndex DatesModel::index(int row, int column, const QModelIndex &parent) co
         parentNode = static_cast<Node*>(parent.internalPointer());
     }
 
+    if (row >= parentNode->children.count()) {
+        return QModelIndex();
+    }
+
     return createIndex(row, column, parentNode->children.at(row));
 }
 
