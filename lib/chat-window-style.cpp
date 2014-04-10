@@ -25,11 +25,14 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
+#include <QtCore/qmath.h>
+#include <QFont>
 
 // KDE includes
 #include <KDebug>
 #include <KLocale>
 #include <KStandardDirs>
+#include <KGlobalSettings>
 
 class ChatWindowStyle::Private
 {
@@ -349,8 +352,14 @@ void ChatWindowStyle::readStyleFiles()
         d->defaultVariantName = i18nc("Normal style variant menu item", "Normal");
     }
     kDebug() << "defaultVariantName = " << d->defaultVariantName;
-    d->defaultFontFamily  = plistReader.defaultFontFamily();
-    d->defaultFontSize    = plistReader.defaultFontSize();
+    d->defaultFontFamily  = plistReader.defaultFontFamily().isEmpty() ? KGlobalSettings::generalFont().family()
+                                                                      : plistReader.defaultFontFamily();
+
+    // If the theme has no default font size, use the system font size, but since that is in points (pt), we need to convert
+    // it to pixel size (and using pixelSize() does not work if the QFont was not set up using setPixelSize), so we use the
+    // rough conversion ratio 4/3 and floor the number
+    d->defaultFontSize    = plistReader.defaultFontSize() == 0 ? qFloor(KGlobalSettings::generalFont().pointSizeF() * (4.0/3.0))
+                                                               : plistReader.defaultFontSize();
     d->disableCombineConsecutive = plistReader.disableCombineConsecutive();
     d->messageViewVersion = plistReader.messageViewVersion();
 
