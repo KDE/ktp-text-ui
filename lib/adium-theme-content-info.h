@@ -49,8 +49,7 @@ public:
     /** The name of the sender of this message as the user's preferences request it.*/
     QString sender() const;
 
-    /** A color derived from the user's name*/
-    //FIXME what is this talking about...?
+    /** A color derived from the user's name.*/
     QString senderColor() const;
     void setSenderColor(const QString& senderColor);
 
