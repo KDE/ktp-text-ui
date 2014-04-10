@@ -236,6 +236,11 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
         settings()->setFontSize(QWebSettings::DefaultFontSize, qFloor(0.5 + m_chatStyle->defaultFontSize() * (QApplication::desktop()->logicalDpiY() / 96.0 )));
     }
 
+    //hidden HTML debugging mode. Should have no visible way to turn it on.
+    if (m_webInspector) {
+        QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+    }
+
     //The templateHtml is in a horrific NSString format.
     //Want to use this rather than roll our own, as that way we can get templates from themes too
     //"%@" is each argument.
@@ -302,10 +307,6 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 
     setHtml(templateHtml);
 
-    //hidden HTML debugging mode. Should have no visible way to turn it on.
-    if (m_webInspector) {
-        QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-    }
 }
 
 void AdiumThemeView::setVariant(const QString &variant)
