@@ -57,6 +57,7 @@ AppearanceConfigTab::AppearanceConfigTab(QWidget *parent, TabMode mode)
     connect(ui->fontFamily, SIGNAL(currentFontChanged(QFont)), SLOT(onFontFamilyChanged(QFont)));
     connect(ui->fontSize, SIGNAL(valueChanged(int)), SLOT(onFontSizeChanged(int)));
     connect(ui->showPresenceCheckBox, SIGNAL(stateChanged(int)), SLOT(onShowPresenceChangesChanged(int)));
+    connect(ui->showLeaveCheckBox, SIGNAL(stateChanged(int)), SLOT(onShowLeaveChangesChanged(int)));
 }
 
 AppearanceConfigTab::~AppearanceConfigTab()
@@ -103,6 +104,17 @@ void AppearanceConfigTab::onShowPresenceChangesChanged(int state)
         ui->chatView->setShowPresenceChanges(true);
     } else {
         ui->chatView->setShowPresenceChanges(false);
+    }
+    ui->chatView->initialise(m_demoChatHeader);
+    tabChanged();
+}
+
+void AppearanceConfigTab::onShowLeaveChangesChanged(int state)
+{
+    if (state == Qt::Checked) {
+        ui->chatView->setShowLeaveChanges(true);
+    } else {
+        ui->chatView->setShowLeaveChanges(false);
     }
     ui->chatView->initialise(m_demoChatHeader);
     tabChanged();
@@ -203,12 +215,14 @@ void AppearanceConfigTab::sendDemoMessages()
     statusMessage.setService(i18n("Jabber"));
     ui->chatView->addAdiumStatusMessage(statusMessage);
 
-    statusMessage = AdiumThemeStatusInfo(true);
-    statusMessage.setMessage(i18nc("Example message in preview conversation","Ted Example has left the chat.")); //FIXME sync this with chat text logic.
-    statusMessage.setTime(QDateTime::currentDateTime());
-    statusMessage.setService(i18n("Jabber"));
-    statusMessage.setStatus(QLatin1String("away"));
-    ui->chatView->addAdiumStatusMessage(statusMessage);
+    if (ui->chatView->showLeaveChanges()) {
+        statusMessage = AdiumThemeStatusInfo(true);
+        statusMessage.setMessage(i18nc("Example message in preview conversation","Ted Example has left the chat.")); //FIXME sync this with chat text logic.
+        statusMessage.setTime(QDateTime::currentDateTime());
+        statusMessage.setService(i18n("Jabber"));
+        statusMessage.setStatus(QLatin1String("away"));
+        ui->chatView->addAdiumStatusMessage(statusMessage);
+    }
 
     message = AdiumThemeContentInfo(AdiumThemeMessageInfo::RemoteToLocal);
     message.setMessage(i18nc("Example message in preview conversation","Hello Ted"));
@@ -288,7 +302,8 @@ void AppearanceConfigTab::saveTab(KConfigGroup appearanceConfigGroup)
     appearanceConfigGroup.writeEntry(QLatin1String("useCustomFont"), ui->customFontBox->isChecked());
     appearanceConfigGroup.writeEntry(QLatin1String("fontFamily"), ui->fontFamily->currentFont().family());
     appearanceConfigGroup.writeEntry(QLatin1String("fontSize"), ui->fontSize->value());
-    appearanceConfigGroup.writeEntry(QLatin1String("showPresenceChanges"), ui->showPresenceCheckBox->checkState() == Qt::Checked ? true : false);
+    appearanceConfigGroup.writeEntry(QLatin1String("showPresenceChanges"), ui->showPresenceCheckBox->isChecked());
+    appearanceConfigGroup.writeEntry(QLatin1String("showLeaveChanges"), ui->showLeaveCheckBox->isChecked());
 
     appearanceConfigGroup.sync();
 }
@@ -314,6 +329,7 @@ void AppearanceConfigTab::loadTab()
     ui->fontFamily->setCurrentFont(QFont(ui->chatView->fontFamily()));
     ui->fontSize->setValue(ui->chatView->fontSize());
     ui->showPresenceCheckBox->setChecked(ui->chatView->showPresenceChanges());
+    ui->showLeaveCheckBox->setChecked(ui->chatView->showLeaveChanges());
 }
 
 void AppearanceConfigTab::defaultTab()
@@ -333,5 +349,9 @@ void AppearanceConfigTab::defaultTab()
     ui->chatView->setUseCustomFont(false);
     ui->fontFamily->setCurrentFont(KGlobalSettings::generalFont());
     ui->fontSize->setValue(QWebSettings::DefaultFontSize);
-    ui->showPresenceCheckBox->setChecked(true);
+    if (m_groupChat) {
+        ui->showPresenceCheckBox->setChecked(false);
+    } else {
+        ui->showPresenceCheckBox->setChecked(true);
+    }
 }

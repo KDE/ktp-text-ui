@@ -706,7 +706,9 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
     }
 
     if (state == Tp::ChannelChatStateGone) {
-        d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()));
+        if (d->ui.chatArea->showLeaveChanges()) {
+	    d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()));
+	}
     }
 
     if (d->isGroupChat) {

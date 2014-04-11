@@ -97,6 +97,8 @@ public:
 
     void setShowPresenceChanges(bool showPresenceChanges);
     bool showPresenceChanges() const;
+    void setShowLeaveChanges(bool showLeaveChanges);
+    bool showLeaveChanges() const;
 
     void clear();
 
@@ -129,6 +131,7 @@ private:
     QString m_fontFamily;
     int m_fontSize;
     bool m_showPresenceChanges;
+    bool m_showLeaveChanges;
 
     QString appendScript(AppendMode mode);
     AppendMode appendMode(const AdiumThemeMessageInfo &message,

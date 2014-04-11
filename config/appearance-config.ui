@@ -43,6 +43,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <layout class="QFormLayout" name="formLayout_2">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::ExpandingFieldsGrow</enum>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="styleLabel">
             <property name="text">
@@ -95,6 +98,9 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <widget class="QWidget" name="widget" native="true"/>
+          </item>
           <item row="2" column="1">
            <widget class="QCheckBox" name="showHeader">
             <property name="sizePolicy">
@@ -107,6 +113,9 @@
              <string>Show Header</string>
             </property>
            </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QWidget" name="widget_2" native="true"/>
           </item>
           <item row="3" column="1">
            <widget class="QCheckBox" name="showPresenceCheckBox">
@@ -121,11 +130,21 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QWidget" name="widget" native="true"/>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="showLeaveCheckBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Show when contacts leave chat</string>
+            </property>
+           </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QWidget" name="widget_2" native="true"/>
+          <item row="4" column="0">
+           <widget class="QWidget" name="widget_3" native="true"/>
           </item>
          </layout>
         </item>
@@ -136,7 +155,7 @@
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>77</width>
+            <width>40</width>
             <height>20</height>
            </size>
           </property>
@@ -157,38 +176,42 @@
         <property name="fieldGrowthPolicy">
          <enum>QFormLayout::ExpandingFieldsGrow</enum>
         </property>
-        <item row="1" column="0">
-         <widget class="QLabel" name="fontFamilyLabel">
-          <property name="text">
-           <string>Select Font:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
+        <item row="0" column="0">
+         <layout class="QFormLayout" name="formLayout_3">
+          <item row="1" column="0">
+           <widget class="QLabel" name="fontFamilyLabel">
+            <property name="text">
+             <string>Select Font:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="KFontComboBox" name="fontFamily"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="fontSizeLabel">
+            <property name="text">
+             <string>Select Size:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="KIntNumInput" name="fontSize"/>
+          </item>
+         </layout>
         </item>
-        <item row="1" column="1">
-         <widget class="KFontComboBox" name="fontFamily"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="fontSizeLabel">
-          <property name="text">
-           <string>Select Size:</string>
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
           </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="KIntNumInput" name="fontSize">
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>128</number>
-          </property>
-         </widget>
+         </spacer>
         </item>
        </layout>
       </widget>
