@@ -366,7 +366,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setFileTransferEnabled(targetContact->fileTransferCapability());
         setVideoCallEnabled(targetContact->videoCallCapability());
         setShareDesktopEnabled(targetContact->streamTubeServicesCapability().contains(QLatin1String("rfb")));
-        setInviteToChatEnabled(true);
+        setInviteToChatEnabled(currentChatTab->account()->capabilities().textChatrooms());
         setShowInfoEnabled(true);
         toggleBlockButton(targetContact->isBlocked());
     } else {
@@ -374,7 +374,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setFileTransferEnabled(false);
         setVideoCallEnabled(false);
         setShareDesktopEnabled(false);
-        setInviteToChatEnabled(true);
+        setInviteToChatEnabled(false);
         setBlockEnabled(false);
         setShowInfoEnabled(false);
     }
