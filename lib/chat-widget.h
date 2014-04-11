@@ -193,6 +193,11 @@ private Q_SLOTS:
     void temporaryFileTransferChannelCreated(Tp::PendingOperation *operation);
     void temporaryFileTransferStateChanged(Tp::FileTransferState, Tp::FileTransferStateChangeReason);
 
+    void onContactsViewContextMenuRequested(const QPoint &point);
+    void onOpenContactChatWindowClicked();
+    void onShowContactDetailsClicked();
+    void onSendFileClicked();
+
 private:
     /** connects necessary signals for the channel */
     void setupChannelSignals();

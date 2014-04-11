@@ -30,6 +30,7 @@
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
+#include <QtGui/QMenu>
 #include <QSortFilterProxyModel>
 
 #include <KColorDialog>
@@ -41,6 +42,7 @@
 #include <KLineEdit>
 #include <KMimeType>
 #include <KTemporaryFile>
+#include <KFileDialog>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/Message>
@@ -55,9 +57,11 @@
 #include <KTp/actions.h>
 #include <KTp/message-processor.h>
 #include <KTp/Logger/scrollback-manager.h>
+#include <KTp/contact-info-dialog.h>
 
 #include <sonnet/speller.h>
 
+Q_DECLARE_METATYPE(Tp::ContactPtr)
 
 const QString groupChatOnlineIcon(QLatin1String("im-irc"));
 // FIXME We should have a proper icon for this
@@ -69,6 +73,7 @@ public:
     ChatWidgetPrivate() :
         remoteContactChatState(Tp::ChannelChatStateInactive),
         isGroupChat(false),
+        contactsMenu(0),
         logsLoaded(false),
         exchangedMessagesCount(0)
     {
@@ -85,6 +90,7 @@ public:
     Tp::AccountPtr account;
     Ui::ChatWidget ui;
     ChannelContactModel *contactModel;
+    QMenu *contactsMenu;
     ScrollbackManager *logManager;
     QTimer *pausedStateTimer;
     bool logsLoaded;
@@ -123,6 +129,23 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->isGroupChat = (channel->targetHandleType() == Tp::HandleTypeContact ? false : true);
 
     d->ui.setupUi(this);
+    if (d->isGroupChat) {
+        d->contactsMenu = new QMenu(this);
+        d->contactsMenu->addAction(KIcon::fromTheme(QLatin1String("text-x-generic")),
+                                   i18n("Open chat window"),
+                                   this, SLOT(onOpenContactChatWindowClicked()));
+        QAction *action = d->contactsMenu->addAction(KIcon::fromTheme(QLatin1String("mail-attachment")),
+                                                     i18n("Send file"),
+                                                     this, SLOT(onSendFileClicked()));
+        action->setObjectName(QLatin1String("SendFileAction"));
+        d->contactsMenu->addSeparator();
+        d->contactsMenu->addAction(i18n("Show info..."),
+                                   this, SLOT(onShowContactDetailsClicked()));
+
+        d->ui.contactsView->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(d->ui.contactsView, SIGNAL(customContextMenuRequested(QPoint)),
+                this, SLOT(onContactsViewContextMenuRequested(QPoint)));
+    }
 
     // connect channel signals
     setupChannelSignals();
@@ -1052,6 +1075,49 @@ void ChatWidget::reloadTheme()
     d->chatViewInitialized = false;
 
     initChatArea();
+}
+
+void ChatWidget::onContactsViewContextMenuRequested(const QPoint& point)
+{
+    const QModelIndex index = d->ui.contactsView->indexAt(point);
+    if (!index.isValid()) {
+        return;
+    }
+
+    const KTp::ContactPtr contact = KTp::ContactPtr::qObjectCast<Tp::Contact>(index.data(ChannelContactModel::ContactRole).value<Tp::ContactPtr>());
+    d->contactsMenu->findChild<QAction*>(QLatin1String("SendFileAction"))->setEnabled(contact->fileTransferCapability());
+
+    d->contactsMenu->setProperty("Contact", QVariant::fromValue(contact));
+    d->contactsMenu->popup(d->ui.contactsView->mapToGlobal(point));
+}
+
+void ChatWidget::onShowContactDetailsClicked()
+{
+    const KTp::ContactPtr contact = d->contactsMenu->property("Contact").value<KTp::ContactPtr>();
+    Q_ASSERT(!contact.isNull());
+
+    KTp::ContactInfoDialog *dlg = new KTp::ContactInfoDialog(d->account, contact, this);
+    connect(dlg, SIGNAL(finished()), dlg, SLOT(deleteLater()));
+    dlg->show();
+}
+
+void ChatWidget::onOpenContactChatWindowClicked()
+{
+    const KTp::ContactPtr contact = d->contactsMenu->property("Contact").value<KTp::ContactPtr>();
+    Q_ASSERT(!contact.isNull());
+    KTp::Actions::startChat(d->account, contact);
+}
+
+void ChatWidget::onSendFileClicked()
+{
+    const KTp::ContactPtr contact = d->contactsMenu->property("Contact").value<KTp::ContactPtr>();
+    Q_ASSERT(!contact.isNull());
+    const QString filename = KFileDialog::getOpenFileName();
+    if (filename.isEmpty() || !QFile::exists(filename)) {
+        return;
+    }
+
+    KTp::Actions::startFileTransfer(d->account, contact, filename);
 }
 
 #include "chat-widget.moc"

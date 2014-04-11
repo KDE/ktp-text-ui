@@ -23,6 +23,8 @@
 #include <KDebug>
 #include <KIcon>
 
+Q_DECLARE_METATYPE(Tp::ContactPtr)
+
 ChannelContactModel::ChannelContactModel(const Tp::TextChannelPtr &channel, QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -94,6 +96,10 @@ QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
         }
         return KTp::Presence(contact->presence()).icon();
     }
+
+    case ContactRole:
+        return QVariant::fromValue(m_contacts[row]);
+
     default:
         return QVariant();
     }
