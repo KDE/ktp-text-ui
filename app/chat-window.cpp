@@ -374,7 +374,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setFileTransferEnabled(false);
         setVideoCallEnabled(false);
         setShareDesktopEnabled(false);
-        setInviteToChatEnabled(false);
+        setInviteToChatEnabled(currentChatTab->account()->capabilities().textChatrooms());
         setBlockEnabled(false);
         setShowInfoEnabled(false);
     }
