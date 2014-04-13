@@ -73,9 +73,9 @@ public:
     QDateTime timeOpened() const;
     void setTimeOpened(const QDateTime &timeOpened);
 
-    /** The protocol image of the service */
-    QString serviceIconImg() const;
-    void setServiceIconImage(const QString &serviceIconImg);
+    /** Path to the protocol image of the service */
+    QString serviceIconPath() const;
+    void setServiceIconPath(const QString &serviceIconPath);
 
     /** The chat is a group chat */
     bool isGroupChat() const;

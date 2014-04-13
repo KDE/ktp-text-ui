@@ -33,7 +33,7 @@ public:
     QUrl incomingIconPath;
     QUrl outgoingIconPath;
     QDateTime timeOpened;
-    QString serviceIconImg;
+    QString serviceIconPath;
     bool isGroupChat;
 };
 
@@ -133,14 +133,14 @@ void AdiumThemeHeaderInfo::setTimeOpened(const QDateTime& timeOpened)
     d->timeOpened = timeOpened;
 };
 
-QString AdiumThemeHeaderInfo::serviceIconImg() const
+QString AdiumThemeHeaderInfo::serviceIconPath() const
 {
-    return d->serviceIconImg;
+    return d->serviceIconPath;
 }
 
-void AdiumThemeHeaderInfo::setServiceIconImage(const QString& serviceIconImg)
+void AdiumThemeHeaderInfo::setServiceIconPath(const QString& serviceIconPath)
 {
-    d->serviceIconImg = serviceIconImg;
+    d->serviceIconPath = serviceIconPath;
 }
 
 bool AdiumThemeHeaderInfo::isGroupChat() const

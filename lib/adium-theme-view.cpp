@@ -685,7 +685,8 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
         htmlTemplate.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
     }
     htmlTemplate.replace(QLatin1String("%serviceIconImg%"),
-                         QString::fromLatin1("<img src=\"%1\" class=\"serviceIcon\" />").arg(info.serviceIconImg()));
+                         QString::fromLatin1("<img src=\"%1\" class=\"serviceIcon\" />").arg(info.serviceIconPath()));
+    htmlTemplate.replace(QLatin1String("%serviceIconPath%"), info.serviceIconPath());
     return htmlTemplate;
 }
 
