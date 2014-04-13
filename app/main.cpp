@@ -39,7 +39,7 @@
 int main(int argc, char *argv[])
 {
     KAboutData aboutData("ktp-text-ui", 0,
-                         ki18n("Telepathy Text Ui"),
+                         ki18n("Chat Application"),
                          KTP_TEXT_UI_VERSION);
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "david@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
