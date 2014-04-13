@@ -758,6 +758,9 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
 
 void ChatWindow::setupCustomActions()
 {
+    KStandardAction::close(this, SLOT(closeCurrentTab()), this);
+    KStandardAction::quit(this, SLOT(close()), this);
+
     KAction *nextTabAction = new KAction(KIcon(QLatin1String("go-next-view")), i18n("&Next Tab"), this);
     nextTabAction->setShortcuts(KStandardShortcut::tabNext());
     connect(nextTabAction, SIGNAL(triggered()), this, SLOT(onNextTabActionTriggered()));
@@ -794,7 +797,7 @@ void ChatWindow::setupCustomActions()
     KAction* collaborateDocumentAction = new KAction(KIcon(QLatin1String("document-share")), i18n("&Collaboratively edit a document"), this);
     connect(collaborateDocumentAction, SIGNAL(triggered()), this, SLOT(onCollaborateDocumentTriggered()));
 
-    KAction* showInfoAction = new KAction(KIcon(QLatin1String("")), i18n("&Contact info"), this);
+    KAction* showInfoAction = new KAction(KIcon(QLatin1String("view-pim-contacts")), i18n("&Contact info"), this);
     connect(showInfoAction, SIGNAL(triggered()), this, SLOT(onShowInfoTriggered()));
 
     m_spellDictCombo = new Sonnet::DictionaryComboBox();
