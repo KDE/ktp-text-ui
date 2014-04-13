@@ -151,6 +151,16 @@ void ChannelContactModel::onContactBlockStatusChanged(bool blocked)
     Q_EMIT contactBlockStatusChanged(contact, blocked);
 }
 
+void ChannelContactModel::onContactClientTypesChanged(const QStringList &clientTypes)
+{
+    Tp::ContactPtr contact(qobject_cast<Tp::Contact*>(sender()));
+
+    QModelIndex index = createIndex(m_contacts.lastIndexOf(contact), 0);
+    Q_EMIT dataChanged(index, index);
+
+    Q_EMIT contactClientTypesChanged(contact, clientTypes);
+}
+
 void ChannelContactModel::addContacts(const Tp::Contacts &contacts)
 {
     QList<Tp::ContactPtr> newContacts = contacts.toList();
@@ -159,6 +169,10 @@ void ChannelContactModel::addContacts(const Tp::Contacts &contacts)
         connect(contact.data(), SIGNAL(aliasChanged(QString)), SLOT(onContactAliasChanged(QString)));
         connect(contact.data(), SIGNAL(presenceChanged(Tp::Presence)), SLOT(onContactPresenceChanged(Tp::Presence)));
         connect(contact.data(), SIGNAL(blockStatusChanged(bool)), SLOT(onContactBlockStatusChanged(bool)));
+        connect(contact.data(),
+                SIGNAL(clientTypesChanged(QStringList)),
+                SLOT(onContactClientTypesChanged(QStringList)));
+
     }
 
     if (!newContacts.isEmpty()) {

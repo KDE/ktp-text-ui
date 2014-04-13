@@ -256,7 +256,17 @@ KIcon ChatWidget::icon() const
             //normal chat - self and one other person.
             //find the other contact which isn't self.
             Tp::ContactPtr otherContact = d->channel->targetContact();
-            return KTp::Presence(otherContact->presence()).icon();
+            KIcon presenceIcon = KTp::Presence(otherContact->presence()).icon();
+
+            if (otherContact->clientTypes().contains(QLatin1String("phone"))) {
+                //we paint a warning symbol in the right-bottom corner
+                QPixmap phonePixmap = KIconLoader::global()->loadIcon(QLatin1String("phone"), KIconLoader::NoGroup, 16);
+                QPixmap pixmap = presenceIcon.pixmap(32, 32);
+                QPainter painter(&pixmap);
+                painter.drawPixmap(8, 8, 24, 24, phonePixmap);
+                return KIcon(pixmap);
+            }
+            return presenceIcon;
         } else {
             return KTp::Presence(Tp::Presence::offline()).icon();
         }
@@ -509,8 +519,9 @@ void ChatWidget::setupContactModelSignals()
             SLOT(onContactAliasChanged(Tp::ContactPtr,QString)));
     connect(d->contactModel, SIGNAL(contactBlockStatusChanged(Tp::ContactPtr,bool)),
        SLOT(onContactBlockStatusChanged(Tp::ContactPtr,bool)));
+    connect(d->contactModel,SIGNAL(contactClientTypesChanged(Tp::ContactPtr,QStringList)),
+            SLOT(onContactClientTypesChanged(Tp::ContactPtr,QStringList)));
 }
-
 
 void ChatWidget::onHistoryFetched(const QList<KTp::Message> &messages)
 {
@@ -805,7 +816,7 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const K
 
     //if in a non-group chat situation, and the other contact has changed state...
     if (!d->isGroupChat && !isYou) {
-        Q_EMIT iconChanged(presence.icon());
+        Q_EMIT iconChanged(icon());
     }
 
     Q_EMIT contactPresenceChanged(presence);
@@ -853,6 +864,16 @@ void ChatWidget::onContactBlockStatusChanged(const Tp::ContactPtr &contact, bool
     d->ui.chatArea->addStatusMessage(message);
 
     Q_EMIT contactBlockStatusChanged(blocked);
+}
+
+void ChatWidget::onContactClientTypesChanged(const Tp::ContactPtr &contact, const QStringList &clientTypes)
+{
+    Q_UNUSED(clientTypes)
+    bool isYou = (contact == d->channel->groupSelfContact());
+
+    if (!d->isGroupChat && !isYou) {
+        Q_EMIT iconChanged(icon());
+    }
 }
 
 void ChatWidget::onParticipantsChanged()
@@ -1116,11 +1137,7 @@ void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)
 {
     if (presence == Tp::Presence::offline()) {
         d->ui.chatArea->addStatusMessage(i18n("You are now offline"), d->yourName);
-        if(!d->isGroupChat) {
-            Q_EMIT iconChanged(KTp::Presence(Tp::Presence::offline()).icon());
-        } else {
-            Q_EMIT iconChanged(KIcon(groupChatOfflineIcon));
-        }
+        iconChanged(icon());
     }
 }
 

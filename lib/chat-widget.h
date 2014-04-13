@@ -146,6 +146,8 @@ protected Q_SLOTS:
 
     void onContactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
 
+    void onContactClientTypesChanged(const Tp::ContactPtr &contact, const QStringList &clientTypes);
+
     void onParticipantsChanged();
 
     void onChannelInvalidated();

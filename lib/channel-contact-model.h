@@ -57,6 +57,7 @@ Q_SIGNALS:
     void contactPresenceChanged(const Tp::ContactPtr &contact, const KTp::Presence &presence);
     void contactAliasChanged(const Tp::ContactPtr &contact, const QString &alias);
     void contactBlockStatusChanged(const Tp::ContactPtr &contact, bool blocked);
+    void contactClientTypesChanged(const Tp::ContactPtr &contact, const QStringList &clientTypes);
 
 private Q_SLOTS:
     void onGroupMembersChanged(const Tp::Contacts &groupMembersAdded,
@@ -67,6 +68,7 @@ private Q_SLOTS:
     void onContactPresenceChanged(const Tp::Presence &presence);
     void onContactAliasChanged(const QString &alias);
     void onContactBlockStatusChanged(bool blocked);
+    void onContactClientTypesChanged(const QStringList &clientTypes);
     void onChatStateChanged(const Tp::ContactPtr &contact, Tp::ChannelChatState state);
 
 
