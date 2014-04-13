@@ -73,6 +73,10 @@ public:
     QDateTime timeOpened() const;
     void setTimeOpened(const QDateTime &timeOpened);
 
+    /** The service name */
+    QString service() const;
+    void setService(const QString &service);
+
     /** Path to the protocol image of the service */
     QString serviceIconPath() const;
     void setServiceIconPath(const QString &serviceIconPath);

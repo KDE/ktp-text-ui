@@ -154,6 +154,8 @@ private:
     bool m_displayHeader;
     KAction *m_openLinkAction;
 
+    QString m_service;
+    QString m_serviceIconPath;
 
     bool m_webInspector;
 

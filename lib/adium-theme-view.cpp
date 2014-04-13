@@ -307,6 +307,8 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
 
     setHtml(templateHtml);
 
+    m_service = chatInfo.service();
+    m_serviceIconPath = chatInfo.serviceIconPath();
 }
 
 void AdiumThemeView::setVariant(const QString &variant)
@@ -683,9 +685,10 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
         QString timeKeyword = formatTime(timeRegExp.cap(1), info.timeOpened());
         htmlTemplate.replace(pos , timeRegExp.cap(0).length() , timeKeyword);
     }
+    htmlTemplate.replace(QLatin1String("%service%"), info.service());
+    htmlTemplate.replace(QLatin1String("%serviceIconPath%"), info.serviceIconPath());
     htmlTemplate.replace(QLatin1String("%serviceIconImg%"),
                          QString::fromLatin1("<img src=\"%1\" class=\"serviceIcon\" />").arg(info.serviceIconPath()));
-    htmlTemplate.replace(QLatin1String("%serviceIconPath%"), info.serviceIconPath());
     return htmlTemplate;
 }
 
@@ -735,7 +738,7 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     htmlTemplate.replace(QLatin1String("%message%"), message);
 
     //service
-    htmlTemplate.replace(QLatin1String("%service%"), info.service());
+    htmlTemplate.replace(QLatin1String("%service%"), m_service);
     //time
     htmlTemplate.replace(QLatin1String("%time%"), KGlobal::locale()->formatLocaleTime(info.time().time()));
     //shortTime
