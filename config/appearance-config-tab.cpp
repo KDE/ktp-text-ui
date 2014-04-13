@@ -56,8 +56,8 @@ AppearanceConfigTab::AppearanceConfigTab(QWidget *parent, TabMode mode)
     connect(ui->customFontBox, SIGNAL(clicked(bool)), SLOT(onFontGroupChanged(bool)));
     connect(ui->fontFamily, SIGNAL(currentFontChanged(QFont)), SLOT(onFontFamilyChanged(QFont)));
     connect(ui->fontSize, SIGNAL(valueChanged(int)), SLOT(onFontSizeChanged(int)));
-    connect(ui->showPresenceCheckBox, SIGNAL(stateChanged(int)), SLOT(onShowPresenceChangesChanged(int)));
-    connect(ui->showLeaveCheckBox, SIGNAL(stateChanged(int)), SLOT(onShowLeaveChangesChanged(int)));
+    connect(ui->showPresenceCheckBox, SIGNAL(toggled(bool)), SLOT(onShowPresenceChangesChanged(bool)));
+    connect(ui->showLeaveCheckBox, SIGNAL(toggled(bool)), SLOT(onShowLeaveChangesChanged(bool)));
 }
 
 AppearanceConfigTab::~AppearanceConfigTab()
@@ -98,24 +98,16 @@ void AppearanceConfigTab::onFontSizeChanged(int fontSize)
     tabChanged();
 }
 
-void AppearanceConfigTab::onShowPresenceChangesChanged(int state)
+void AppearanceConfigTab::onShowPresenceChangesChanged(bool stateChanged)
 {
-    if (state == Qt::Checked) {
-        ui->chatView->setShowPresenceChanges(true);
-    } else {
-        ui->chatView->setShowPresenceChanges(false);
-    }
+    ui->chatView->setShowPresenceChanges(stateChanged);
     ui->chatView->initialise(m_demoChatHeader);
     tabChanged();
 }
 
-void AppearanceConfigTab::onShowLeaveChangesChanged(int state)
+void AppearanceConfigTab::onShowLeaveChangesChanged(bool leaveChanged)
 {
-    if (state == Qt::Checked) {
-        ui->chatView->setShowLeaveChanges(true);
-    } else {
-        ui->chatView->setShowLeaveChanges(false);
-    }
+    ui->chatView->setShowLeaveChanges(leaveChanged);
     ui->chatView->initialise(m_demoChatHeader);
     tabChanged();
 }
@@ -349,9 +341,6 @@ void AppearanceConfigTab::defaultTab()
     ui->chatView->setUseCustomFont(false);
     ui->fontFamily->setCurrentFont(KGlobalSettings::generalFont());
     ui->fontSize->setValue(QWebSettings::DefaultFontSize);
-    if (m_groupChat) {
-        ui->showPresenceCheckBox->setChecked(false);
-    } else {
-        ui->showPresenceCheckBox->setChecked(true);
-    }
+    ui->showPresenceCheckBox->setChecked(!m_groupChat);
+
 }

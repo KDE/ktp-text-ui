@@ -65,8 +65,8 @@ private Q_SLOTS:
     void onFontGroupChanged(bool useCustomFont);
     void onFontFamilyChanged(const QFont &font);
     void onFontSizeChanged(int fontSize);
-    void onShowPresenceChangesChanged(int stateChanged);
-    void onShowLeaveChangesChanged(int joinLeaveChanged);
+    void onShowPresenceChangesChanged(bool stateChanged);
+    void onShowLeaveChangesChanged(bool leaveChanged);
 
 private:
     Ui::ChatWindowConfig *ui;
