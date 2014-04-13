@@ -193,7 +193,7 @@ ChatTab* ChatWindow::getTab(const Tp::AccountPtr &account, const Tp::TextChannel
     ChatTab *match = 0;
 
     // if targetHandle is None, targetId is also "", therefore we won't be able to find it.
-    if (!incomingTextChannel->targetHandleType() == Tp::HandleTypeNone) {
+    if (incomingTextChannel->targetHandleType() != Tp::HandleTypeNone) {
 
         //loop through all tabs checking for matches
         for (int index = 0; index < m_tabWidget->count() && !match; ++index) {
