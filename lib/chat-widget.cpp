@@ -1035,9 +1035,7 @@ void ChatWidget::initChatArea()
         info.setTimeOpened(QDateTime::currentDateTime());
     }
 
-    info.setService(d->account->serviceName());
-    info.setServiceIconPath(KIconLoader::global()->iconPath(d->account->iconName(),
-            -KIconLoader::SizeMedium)); // KIconLoader::iconPath searches on size if group_or_size is < 0;
+    info.setServiceIconPath(KIconLoader::global()->iconPath(d->account->iconName(), KIconLoader::Panel));
     d->ui.chatArea->initialise(info);
 
     //set the title of this chat.

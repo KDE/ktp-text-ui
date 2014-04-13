@@ -24,7 +24,6 @@
 #include <KTp/message-processor.h>
 
 #include <KDebug>
-#include <KIconLoader>
 
 #include <QLabel>
 #include <QResizeEvent>
@@ -126,8 +125,7 @@ void MessageView::onEventsLoaded(KTp::PendingLoggerOperation *po)
     headerInfo.setGroupChat(m_entity.entityType() == Tp::HandleTypeRoom);
     headerInfo.setSourceName(m_account->displayName());
     headerInfo.setIncomingIconPath(m_contact.isNull() ? QString() : m_contact->avatarData().fileName);
-    headerInfo.setService(m_account->serviceName());
-    headerInfo.setServiceIconPath(KIconLoader::global()->iconPath(m_account->iconName(), -KIconLoader::SizeMedium));
+
     if (pl->logs().count() > 0) {
         headerInfo.setTimeOpened(pl->logs().first().time());
     }
@@ -151,6 +149,7 @@ void MessageView::processStoredEvents()
     if (m_prev.isValid()) {
         prevConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
         prevConversation.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Older conversation")));
+        prevConversation.setService(m_account->serviceName());
         prevConversation.setTime(QDateTime(m_prev));
     }
 
@@ -158,6 +157,7 @@ void MessageView::processStoredEvents()
     if (m_next.isValid()) {
         nextConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
         nextConversation.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Newer conversation")));
+        nextConversation.setService(m_account->serviceName());
         nextConversation.setTime(QDateTime(m_next));
     }
 
