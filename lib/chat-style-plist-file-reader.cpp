@@ -74,8 +74,10 @@ ChatStylePlistFileReader::Status ChatStylePlistFileReader::parse(const QDomDocum
         if (keyElements.at(i).nextSibling().toElement().tagName() != QLatin1String("key")) {
             key = keyElements.at(i).toElement().text();
             QDomElement nextElement= keyElements.at(i).nextSibling().toElement();
-            if(nextElement.tagName() == QLatin1String("true") || nextElement.tagName() == QLatin1String("false")) {
-                value = nextElement.tagName();
+            if (!nextElement.tagName().compare(QLatin1String("true"), Qt::CaseInsensitive)) {
+                value = QLatin1String("1");
+            } else if(!nextElement.tagName().compare(QLatin1String("false"), Qt::CaseInsensitive)) {
+                value = QLatin1String("0");
             } else {
                 value = nextElement.text();
             }
