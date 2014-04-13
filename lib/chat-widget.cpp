@@ -131,12 +131,13 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->ui.setupUi(this);
     if (d->isGroupChat) {
         d->contactsMenu = new QMenu(this);
-        d->contactsMenu->addAction(KIcon::fromTheme(QLatin1String("text-x-generic")),
+        QAction *action = d->contactsMenu->addAction(KIcon::fromTheme(QLatin1String("text-x-generic")),
                                    i18n("Open chat window"),
                                    this, SLOT(onOpenContactChatWindowClicked()));
-        QAction *action = d->contactsMenu->addAction(KIcon::fromTheme(QLatin1String("mail-attachment")),
-                                                     i18n("Send file"),
-                                                     this, SLOT(onSendFileClicked()));
+        action->setObjectName(QLatin1String("OpenChatWindowAction"));
+        action = d->contactsMenu->addAction(KIcon::fromTheme(QLatin1String("mail-attachment")),
+                                            i18n("Send file"),
+                                            this, SLOT(onSendFileClicked()));
         action->setObjectName(QLatin1String("SendFileAction"));
         d->contactsMenu->addSeparator();
         d->contactsMenu->addAction(i18n("Show info..."),
@@ -1085,6 +1086,10 @@ void ChatWidget::onContactsViewContextMenuRequested(const QPoint& point)
     }
 
     const KTp::ContactPtr contact = KTp::ContactPtr::qObjectCast<Tp::Contact>(index.data(ChannelContactModel::ContactRole).value<Tp::ContactPtr>());
+
+    bool isSelfContact = ((Tp::ContactPtr) contact == textChannel()->groupSelfContact());
+    d->contactsMenu->findChild<QAction*>(QLatin1String("OpenChatWindowAction"))->setEnabled(!isSelfContact);
+
     d->contactsMenu->findChild<QAction*>(QLatin1String("SendFileAction"))->setEnabled(contact->fileTransferCapability());
 
     d->contactsMenu->setProperty("Contact", QVariant::fromValue(contact));
