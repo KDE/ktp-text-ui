@@ -55,6 +55,10 @@ public:
     QDateTime time() const;
     void setTime(const QDateTime& time);
 
+    /** The sender of the message */
+    QString sender() const;
+    void setSender(const QString& sender);
+
     QString service() const;
     void setService(const QString& service);
 

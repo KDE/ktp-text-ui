@@ -415,7 +415,7 @@ void AdiumThemeView::clear()
 void AdiumThemeView::addMessage(const KTp::Message &message)
 {
     if (message.type() == Tp::ChannelTextMessageTypeAction) {
-        addStatusMessage(QString::fromLatin1("%1 %2").arg(message.senderAlias(), message.mainMessagePart()));
+        addStatusMessage(QString::fromLatin1("%1 %2").arg(message.senderAlias(), message.mainMessagePart()), message.senderAlias());
     } else {
         AdiumThemeContentInfo messageInfo;
         if (message.direction() == KTp::Message::RemoteToLocal) {
@@ -450,11 +450,12 @@ void AdiumThemeView::addMessage(const KTp::Message &message)
     }
 }
 
-void AdiumThemeView::addStatusMessage(const QString &text, const QDateTime &time)
+void AdiumThemeView::addStatusMessage(const QString &text, const QString &sender, const QDateTime &time)
 {
     AdiumThemeStatusInfo messageInfo;
     messageInfo.setMessage(text);
     messageInfo.setTime(time);
+    messageInfo.setSender(sender);
 //    messageInfo.setStatus(QLatin1String("error")); //port this?
     addAdiumStatusMessage(messageInfo);
 }
@@ -713,7 +714,11 @@ QString AdiumThemeView::replaceContentKeywords(QString& htmlTemplate, const Adiu
 
 QString AdiumThemeView::replaceStatusKeywords(QString &htmlTemplate, const AdiumThemeStatusInfo& info)
 {
+    // status
     htmlTemplate.replace(QLatin1String("%status%"), info.status());
+    // sender
+    htmlTemplate.replace(QLatin1String("%sender%"), info.sender());
+
     return replaceMessageKeywords(htmlTemplate, info);
 }
 

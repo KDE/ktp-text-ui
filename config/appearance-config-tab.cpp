@@ -203,6 +203,7 @@ void AppearanceConfigTab::sendDemoMessages()
 
     AdiumThemeStatusInfo statusMessage(true);
     statusMessage.setMessage(i18nc("Example message", "Ted Example waves."));
+    statusMessage.setSender(i18nc("Example name", "Ted Example"));
     statusMessage.setTime(QDateTime::currentDateTime());
     statusMessage.setService(i18n("Jabber"));
     ui->chatView->addAdiumStatusMessage(statusMessage);
@@ -210,6 +211,7 @@ void AppearanceConfigTab::sendDemoMessages()
     if (ui->chatView->showLeaveChanges()) {
         statusMessage = AdiumThemeStatusInfo(true);
         statusMessage.setMessage(i18nc("Example message in preview conversation","Ted Example has left the chat.")); //FIXME sync this with chat text logic.
+        statusMessage.setSender(i18nc("Example name", "Ted Example"));
         statusMessage.setTime(QDateTime::currentDateTime());
         statusMessage.setService(i18n("Jabber"));
         statusMessage.setStatus(QLatin1String("away"));
@@ -264,6 +266,7 @@ void AppearanceConfigTab::sendDemoMessages()
     if (ui->chatView->showPresenceChanges()) {
         statusMessage = AdiumThemeStatusInfo();
         statusMessage.setMessage(i18nc("Example message in preview conversation","Ted Example is now Away.")); //FIXME sync this with chat text logic.
+        statusMessage.setSender(i18nc("Example name", "Ted Example"));
         statusMessage.setTime(QDateTime::currentDateTime());
         statusMessage.setService(i18n("Jabber"));
         statusMessage.setStatus(QLatin1String("away"));
@@ -271,6 +274,7 @@ void AppearanceConfigTab::sendDemoMessages()
 
         statusMessage = AdiumThemeStatusInfo();
         statusMessage.setMessage(i18nc("Example message in preview conversations","Ted Example has left the chat.")); //FIXME sync this with chat text logic.
+        statusMessage.setSender(i18nc("Example name", "Ted Example"));
         statusMessage.setTime(QDateTime::currentDateTime());
         statusMessage.setService(i18n("Jabber"));
         statusMessage.setStatus(QLatin1String("away"));

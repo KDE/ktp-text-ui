@@ -28,6 +28,7 @@ class AdiumThemeMessageInfoPrivate
 public:
     QString message;
     QDateTime time;
+    QString sender;
     QString service;
     QStringList messageClasses;
     AdiumThemeMessageInfo::MessageType type;
@@ -87,6 +88,16 @@ QDateTime AdiumThemeMessageInfo::time() const
 void AdiumThemeMessageInfo::setTime(const QDateTime& time)
 {
     d->time = time;
+}
+
+QString AdiumThemeMessageInfo::sender() const
+{
+    return d->sender;
+}
+
+void AdiumThemeMessageInfo::setSender(const QString& sender)
+{
+    d->sender = sender;
 }
 
 QString AdiumThemeMessageInfo::service() const

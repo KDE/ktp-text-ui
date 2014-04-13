@@ -46,9 +46,6 @@ public:
     QString senderScreenName() const;
     void setSenderScreenName(const QString & senderScreenName);
 
-    /** The name of the sender of this message as the user's preferences request it.*/
-    QString sender() const;
-
     /** A color derived from the user's name.*/
     QString senderColor() const;
     void setSenderColor(const QString& senderColor);

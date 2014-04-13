@@ -104,7 +104,9 @@ public:
 
 public Q_SLOTS:
     void addMessage(const KTp::Message &message);
-    void addStatusMessage(const QString &text, const QDateTime &time=QDateTime::currentDateTime());
+    void addStatusMessage(const QString &text,
+                          const QString &sender=QString(),
+                          const QDateTime &time=QDateTime::currentDateTime());
     void onOpenLinkActionTriggered();
     virtual void onLinkClicked(const QUrl &);
     void injectProxyIntoJavascript();

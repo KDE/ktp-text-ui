@@ -49,11 +49,9 @@ class AdiumThemeContentInfoPrivate
 {
 public:
     QString userIconPath;
-    QString senderScreenName;
-    QString sender;
     QString senderColor;
     QString senderStatusIcon;
-    QString senderDisplayName;
+    QString senderScreenName;
     QString textbackgroundcolor;
 };
 
@@ -109,11 +107,6 @@ void AdiumThemeContentInfo::setSenderScreenName(const QString & senderScreenName
     d->senderScreenName = senderScreenName;
 }
 
-QString AdiumThemeContentInfo::sender() const
-{
-    return d->senderDisplayName;
-}
-
 QString AdiumThemeContentInfo::senderColor() const
 {
     return d->senderColor;
@@ -136,12 +129,14 @@ void AdiumThemeContentInfo::setSenderStatusIcon(const QString &senderStatusIcon)
 
 QString AdiumThemeContentInfo::senderDisplayName() const
 {
-    return d->senderDisplayName;
+    return sender();
+
 }
 
 void AdiumThemeContentInfo::setSenderDisplayName(const QString &senderDisplayName)
 {
-    d->senderDisplayName = senderDisplayName;
+    setSender(senderDisplayName);
+
     // FIXME Themes can have a SenderColors.txt file to specify which colors to
     //       use instead of the default ones.
     d->senderColor = defaultColorList.at(qHash(senderDisplayName) % defaultColorList.size());

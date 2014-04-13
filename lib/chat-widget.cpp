@@ -655,7 +655,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
                 return;
             }
 
-            d->ui.chatArea->addStatusMessage(text, message.received());
+            d->ui.chatArea->addStatusMessage(text, message.sender()->alias(), message.received());
         } else {
             KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel));
 
@@ -730,7 +730,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
 
     if (state == Tp::ChannelChatStateGone) {
         if (d->ui.chatArea->showLeaveChanges()) {
-	    d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()));
+	    d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()), contact->alias());
 	}
     }
 
@@ -792,7 +792,7 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const K
 
     if (!message.isNull()) {
         if (d->ui.chatArea->showPresenceChanges()) {
-            d->ui.chatArea->addStatusMessage(message);
+            d->ui.chatArea->addStatusMessage(message, contact->alias());
         }
     }
 
@@ -825,7 +825,7 @@ void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QSt
     }
 
     if (!message.isEmpty()) {
-        d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()));
+        d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()), contact->alias());
     }
 
     //if in a non-group chat situation, and the other contact has changed alias...
@@ -1054,7 +1054,7 @@ void ChatWidget::onChatPausedTimerExpired()
 void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)
 {
     if (presence == Tp::Presence::offline()) {
-        d->ui.chatArea->addStatusMessage(i18n("You are now offline"));
+        d->ui.chatArea->addStatusMessage(i18n("You are now offline"), d->yourName);
         if(!d->isGroupChat) {
             Q_EMIT iconChanged(KTp::Presence(Tp::Presence::offline()).icon());
         } else {
