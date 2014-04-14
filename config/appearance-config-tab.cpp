@@ -262,13 +262,6 @@ void AppearanceConfigTab::sendDemoMessages()
         statusMessage.setTime(QDateTime::currentDateTime());
         statusMessage.setStatus(QLatin1String("away"));
         ui->chatView->addAdiumStatusMessage(statusMessage);
-
-        statusMessage = AdiumThemeStatusInfo();
-        statusMessage.setMessage(i18nc("Example message in preview conversations","Ted Example has left the chat.")); //FIXME sync this with chat text logic.
-        statusMessage.setSender(i18nc("Example name", "Ted Example"));
-        statusMessage.setTime(QDateTime::currentDateTime());
-        statusMessage.setStatus(QLatin1String("away"));
-        ui->chatView->addAdiumStatusMessage(statusMessage);
     }
 }
 
@@ -336,5 +329,6 @@ void AppearanceConfigTab::defaultTab()
     ui->fontFamily->setCurrentFont(KGlobalSettings::generalFont());
     ui->fontSize->setValue(QWebSettings::DefaultFontSize);
     ui->showPresenceCheckBox->setChecked(!m_groupChat);
+    ui->showLeaveCheckBox->setChecked(!m_groupChat);
 
 }
