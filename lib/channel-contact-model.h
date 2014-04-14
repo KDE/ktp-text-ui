@@ -40,10 +40,6 @@ class ChannelContactModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    enum Roles {
-        ContactRole = Qt::UserRole + 1
-    };
-
     explicit ChannelContactModel(const Tp::TextChannelPtr &channel, QObject *parent = 0);
 
     void setTextChannel(const Tp::TextChannelPtr &channel);

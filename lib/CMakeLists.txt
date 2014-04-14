@@ -13,6 +13,7 @@ set(ktpchat_SRCS
         chat-style-plist-file-reader.cpp
         chat-text-edit.cpp
         chat-search-bar.cpp
+        contact-delegate.cpp
         notify-filter.cpp
         text-chat-config.cpp
 )

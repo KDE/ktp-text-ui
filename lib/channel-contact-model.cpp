@@ -23,6 +23,8 @@
 #include <KDebug>
 #include <KIcon>
 
+#include <KTp/types.h>
+
 Q_DECLARE_METATYPE(Tp::ContactPtr)
 
 ChannelContactModel::ChannelContactModel(const Tp::TextChannelPtr &channel, QObject *parent)
@@ -77,27 +79,40 @@ int ChannelContactModel::rowCount(const QModelIndex &parent) const
 
 QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid()) {
+    if (!index.isValid()) {
         return QVariant();
     }
 
     int row = index.row();
 
-    switch (role) {
-    case Qt::DisplayRole:
-        return QVariant(m_contacts[row]->alias());
-
-    case Qt::DecorationRole:
-    {
-        const Tp::ContactPtr contact = m_contacts[row];
-        if (TextChatConfig::instance()->showOthersTyping() && (m_channel->chatState(contact) == Tp::ChannelChatStateComposing)) {
-            return KIcon(QLatin1String("document-edit"));
-
-        }
-        return KTp::Presence(contact->presence()).icon();
+    KTp::ContactPtr contact = KTp::ContactPtr::qObjectCast(m_contacts[row]);
+    if (!contact) {
+        return QVariant();
     }
 
-    case ContactRole:
+    switch (role) {
+    case Qt::DisplayRole:
+        return QVariant(contact->alias());
+
+    case KTp::ContactClientTypesRole:
+        return contact->clientTypes();
+    case KTp::ContactAvatarPathRole:
+        return contact->avatarData().fileName;
+    case KTp::ContactAvatarPixmapRole:
+        return contact->avatarPixmap();
+    case KTp::ContactGroupsRole:
+        return contact->groups();
+
+    case KTp::ContactPresenceNameRole:
+        return contact->presence().displayString();
+    case KTp::ContactPresenceMessageRole:
+        return contact->presence().statusMessage();
+    case KTp::ContactPresenceTypeRole:
+        return contact->presence().type();
+    case KTp::ContactPresenceIconRole:
+        return contact->presence().iconName();
+
+    case KTp::ContactRole:
         return QVariant::fromValue(m_contacts[row]);
 
     default:

@@ -27,6 +27,7 @@
 #include "channel-contact-model.h"
 #include "notify-filter.h"
 #include "text-chat-config.h"
+#include "contact-delegate.h"
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
@@ -144,6 +145,8 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
                                    this, SLOT(onShowContactDetailsClicked()));
 
         d->ui.contactsView->setContextMenuPolicy(Qt::CustomContextMenu);
+        d->ui.contactsView->setItemDelegate(new ContactDelegate(this));
+
         connect(d->ui.contactsView, SIGNAL(customContextMenuRequested(QPoint)),
                 this, SLOT(onContactsViewContextMenuRequested(QPoint)));
     }
@@ -1162,7 +1165,7 @@ void ChatWidget::onContactsViewContextMenuRequested(const QPoint& point)
         return;
     }
 
-    const KTp::ContactPtr contact = KTp::ContactPtr::qObjectCast<Tp::Contact>(index.data(ChannelContactModel::ContactRole).value<Tp::ContactPtr>());
+    const KTp::ContactPtr contact = KTp::ContactPtr::qObjectCast<Tp::Contact>(index.data(KTp::ContactRole).value<Tp::ContactPtr>());
 
     bool isSelfContact = ((Tp::ContactPtr) contact == textChannel()->groupSelfContact());
     d->contactsMenu->findChild<QAction*>(QLatin1String("OpenChatWindowAction"))->setEnabled(!isSelfContact);
