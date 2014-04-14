@@ -489,6 +489,12 @@ void ChatWidget::setupChannelSignals()
             SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
     connect(d->channel.data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
             this, SLOT(onChannelInvalidated()));
+    connect(d->channel.data(), SIGNAL(groupMembersChanged(Tp::Contacts,
+                                                          Tp::Contacts,
+                                                          Tp::Contacts,
+                                                          Tp::Contacts,
+                                                          Tp::Channel::GroupMemberChangeDetails)),
+            this, SLOT(onParticipantsChanged()));
 
     if (d->channel->hasChatStateInterface()) {
         connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
@@ -849,6 +855,52 @@ void ChatWidget::onContactBlockStatusChanged(const Tp::ContactPtr &contact, bool
     Q_EMIT contactBlockStatusChanged(blocked);
 }
 
+void ChatWidget::onParticipantsChanged()
+{
+    // Temporarily detect on-demand rooms by checking for gabble-created string "private-chat"
+    if (d->isGroupChat && d->channel->targetId().startsWith(QLatin1String("private-chat"))) {
+        QList<QString> contactAliasList;
+        if (d->channel->groupContacts().count() > 0) {
+            Q_FOREACH (const Tp::ContactPtr &contact, d->channel->groupContacts()) {
+                contactAliasList.append(contact->alias());
+            }
+            contactAliasList.removeAll(d->channel->groupSelfContact()->alias());
+            qSort(contactAliasList);
+
+            int aliasesToShow = qMin(contactAliasList.length(), 2);
+            QString newTitle;
+
+            //This filters each contact alias and tries to make a best guess at intelligently
+            //shortening their alias to ensure the tab isn't too long, (hard-limited to 10) e.g.:
+            //Robert@kdetalk.net is filtered at the @, giving Robert, and
+            //Fred Jones is filtered by the ' ', giving Fred.
+            Q_FOREACH (const QString &contactAlias, contactAliasList) {
+                aliasesToShow--;
+                if (contactAlias.indexOf(QLatin1Char(' ')) != -1) {
+                    newTitle += contactAlias.left(contactAlias.indexOf(QLatin1Char(' '))).left(10);
+                } else if (contactAlias.indexOf(QLatin1Char('@')) != -1) {
+                    newTitle += contactAlias.left(contactAlias.indexOf(QLatin1Char('@'))).left(10);
+                } else {
+                    newTitle += contactAlias.left(10);
+                }
+                if (aliasesToShow > 0) {
+                    newTitle += QLatin1String(", ");
+                } else {
+                    break;
+                }
+            }
+            if (contactAliasList.count() > 2) {
+                newTitle.append(QLatin1String(" +")).append(QString::number(contactAliasList.size()-2));
+            }
+
+            Q_EMIT titleChanged(newTitle);
+        }
+        if (contactAliasList.count() == 0) {
+                Q_EMIT titleChanged(i18n("Group Chat"));
+        }
+    }
+}
+
 void ChatWidget::onChannelInvalidated()
 {
     setChatEnabled(false);
@@ -1006,11 +1058,17 @@ void ChatWidget::initChatArea()
     //normal chat - self and one other person.
     if (d->isGroupChat) {
         // A temporary solution to display a roomname instead of a full jid
-        // This should be reworked as soon as QtTp is offering the
+        // This should be reworked as soon as TpQt is offering the
         // room name property
-        QString roomName = d->channel->targetId();
-        roomName = roomName.left(roomName.indexOf(QLatin1Char('@')));
-        info.setChatName(roomName);
+        // Temporarily detect on-demand rooms by checking for
+        // gabble-created string "private-chat"
+        if (d->channel->targetId().contains(QLatin1String("private-chat"))) {
+            info.setChatName(i18n("Group Chat"));
+        } else {
+            QString roomName = d->channel->targetId();
+            roomName = roomName.left(roomName.indexOf(QLatin1Char('@')));
+            info.setChatName(roomName);
+        }
     } else {
         Tp::ContactPtr otherContact = d->channel->targetContact();
 
