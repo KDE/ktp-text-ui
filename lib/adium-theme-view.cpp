@@ -677,6 +677,12 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
     htmlTemplate.replace(QLatin1String("%conversationBegan%"), i18nc("Header at top of conversation view. %1 is the time format",
                                                                      "Conversation began %1", KGlobal::locale()->formatTime(info.timeOpened().time())));
 
+    //KTp-WoshiChat specific hack to make "Joined at" translatable
+    htmlTemplate.replace(QLatin1String("%conversationJoined%"), i18nc("Header at top of conversation view. %1 is the time format",
+                                                                      "Joined at %1", KGlobal::locale()->formatTime(info.timeOpened().time())));
+
+    htmlTemplate.replace(QLatin1String("%groupChatIcon%"), KIconLoader::global()->iconPath(QLatin1String("telepathy-kde"), -48));
+
     //FIXME time fields - remember to do both, steal the complicated one from Kopete code.
     // Look for %timeOpened{X}%
     QRegExp timeRegExp(QLatin1String("%timeOpened\\{([^}]*)\\}%"));
