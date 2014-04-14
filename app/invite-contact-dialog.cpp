@@ -22,6 +22,8 @@
 
 #include "invite-contact-dialog.h"
 
+#include <QtCore/QPointer>
+
 #include <KDE/KLineEdit>
 #include <KDE/KPushButton>
 #include <KDE/KLocalizedString>
@@ -50,6 +52,8 @@ InviteContactDialog::InviteContactDialog(const Tp::AccountManagerPtr &accountMan
     m_contactGridWidget->contactFilterLineEdit()->setClickMessage(i18n("Search in Contacts..."));
     m_contactGridWidget->filter()->setPresenceTypeFilterFlags(KTp::ContactsFilterModel::ShowOnlyConnected);
     m_contactGridWidget->filter()->setAccountFilter(account);
+    m_contactGridWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+
     setMainWidget(m_contactGridWidget);
     setWindowTitle(i18n("Select Contacts to Invite to Group Chat"));
 
@@ -80,19 +84,19 @@ void InviteContactDialog::onOkClicked()
         return;
     }
 
-    Tp::ContactPtr contact = m_contactGridWidget->selectedContact();
+    QList<Tp::ContactPtr> contacts;
+    Q_FOREACH (const KTp::ContactPtr &contact, m_contactGridWidget->selectedContacts()) {
+        contacts << contact;
+    }
 
-    if (contact.isNull() || m_channel.isNull() || m_account.isNull()) {
+    if (contacts.isEmpty() || m_channel.isNull() || m_account.isNull()) {
         return;
     }
 
     //if can invite do so, otherwise make a new channel with the new contacts
     if (m_channel->canInviteContacts()) {
-        m_channel->inviteContacts(QList<Tp::ContactPtr>() << contact);
-    }
-    else {
-        QList<Tp::ContactPtr> contacts;
-        contacts << contact;
+        m_channel->inviteContacts(contacts);
+    } else {
         m_account->createConferenceTextChat(QList<Tp::ChannelPtr>() << m_channel, contacts);
     }
 }
