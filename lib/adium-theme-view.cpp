@@ -89,7 +89,7 @@ void AdiumThemeView::load(ChatType chatType) {
         m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(appearanceConfig.readEntry(QLatin1String("styleName"), "renkoo.AdiumMessageStyle"));
     } else {
         appearanceConfig = config->group("GroupAppearance");
-        m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(appearanceConfig.readEntry(QLatin1String("styleName"), "SimKete.AdiumMessageStyle"));
+        m_chatStyle = ChatWindowStyleManager::self()->getValidStyleFromPool(appearanceConfig.readEntry(QLatin1String("styleName"), "WoshiChat.AdiumMessageStyle"));
     }
 
     if (m_chatStyle == 0 || !m_chatStyle->isValid()) {
