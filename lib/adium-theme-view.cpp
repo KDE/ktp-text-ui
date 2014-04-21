@@ -123,7 +123,7 @@ void AdiumThemeView::load(ChatType chatType) {
     m_fontSize = appearanceConfig.readEntry("fontSize", QWebSettings::globalSettings()->fontSize(QWebSettings::DefaultFontSize));
 
     m_showPresenceChanges = appearanceConfig.readEntry("showPresenceChanges", true);
-    m_showLeaveChanges = appearanceConfig.readEntry("showLeaveChanges", true);
+    m_showJoinLeaveChanges = appearanceConfig.readEntry("showJoinLeaveChanges", true);
 }
 
 void AdiumThemeView::viewLoadFinished()
@@ -386,14 +386,14 @@ bool AdiumThemeView::showPresenceChanges() const
     return m_showPresenceChanges;
 }
 
-void AdiumThemeView::setShowLeaveChanges(bool showLeaveChanges)
+void AdiumThemeView::setShowJoinLeaveChanges(bool showLeaveChanges)
 {
-    m_showLeaveChanges = showLeaveChanges;
+    m_showJoinLeaveChanges = showLeaveChanges;
 }
 
-bool AdiumThemeView::showLeaveChanges() const
+bool AdiumThemeView::showJoinLeaveChanges() const
 {
-    return m_showLeaveChanges;
+    return m_showJoinLeaveChanges;
 }
 
 bool AdiumThemeView::isHeaderDisplayed() const

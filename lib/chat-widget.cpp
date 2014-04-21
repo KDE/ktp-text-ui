@@ -507,7 +507,11 @@ void ChatWidget::setupChannelSignals()
                                                           Tp::Contacts,
                                                           Tp::Contacts,
                                                           Tp::Channel::GroupMemberChangeDetails)),
-            this, SLOT(onParticipantsChanged()));
+            this, SLOT(onParticipantsChanged(Tp::Contacts,
+                                             Tp::Contacts,
+                                             Tp::Contacts,
+                                             Tp::Contacts,
+                                             Tp::Channel::GroupMemberChangeDetails)));
 
     if (d->channel->hasChatStateInterface()) {
         connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
@@ -750,7 +754,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
     }
 
     if (state == Tp::ChannelChatStateGone) {
-        if (d->ui.chatArea->showLeaveChanges()) {
+        if (d->ui.chatArea->showJoinLeaveChanges()) {
 	    d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()), contact->alias());
 	}
     }
@@ -782,8 +786,6 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
         Q_EMIT userTypingChanged(state);
     }
 }
-
-
 
 void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const KTp::Presence &presence)
 {
@@ -879,8 +881,19 @@ void ChatWidget::onContactClientTypesChanged(const Tp::ContactPtr &contact, cons
     }
 }
 
-void ChatWidget::onParticipantsChanged()
-{
+void ChatWidget::onParticipantsChanged(Tp::Contacts groupMembersAdded,
+                                       Tp::Contacts groupLocalPendingMembersAdded,
+                                       Tp::Contacts groupRemotePendingMembersAdded,
+                                       Tp::Contacts groupMembersRemoved,
+                                       Tp::Channel::GroupMemberChangeDetails details) {
+    Q_UNUSED(groupLocalPendingMembersAdded);
+    Q_UNUSED(groupRemotePendingMembersAdded);
+    Q_UNUSED(groupMembersRemoved);
+    Q_UNUSED(details);
+
+    if (groupMembersAdded.count() > 0 && (d->ui.chatArea->showJoinLeaveChanges())) {
+        d->ui.chatArea->addStatusMessage(i18n("%1 has joined the chat", groupMembersAdded.toList().value(0).data()->alias()), groupMembersAdded.toList().value(0).data()->alias());
+    }
     // Temporarily detect on-demand rooms by checking for gabble-created string "private-chat"
     if (d->isGroupChat && d->channel->targetId().startsWith(QLatin1String("private-chat"))) {
         QList<QString> contactAliasList;

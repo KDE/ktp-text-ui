@@ -60,7 +60,7 @@ AppearanceConfigTab::AppearanceConfigTab(QWidget *parent, TabMode mode)
     connect(ui->fontFamily, SIGNAL(currentFontChanged(QFont)), SLOT(onFontFamilyChanged(QFont)));
     connect(ui->fontSize, SIGNAL(valueChanged(int)), SLOT(onFontSizeChanged(int)));
     connect(ui->showPresenceCheckBox, SIGNAL(toggled(bool)), SLOT(onShowPresenceChangesChanged(bool)));
-    connect(ui->showLeaveCheckBox, SIGNAL(toggled(bool)), SLOT(onShowLeaveChangesChanged(bool)));
+    connect(ui->showJoinLeaveCheckBox, SIGNAL(toggled(bool)), SLOT(onShowJoinLeaveChangesChanged(bool)));
 }
 
 AppearanceConfigTab::~AppearanceConfigTab()
@@ -108,9 +108,9 @@ void AppearanceConfigTab::onShowPresenceChangesChanged(bool stateChanged)
     tabChanged();
 }
 
-void AppearanceConfigTab::onShowLeaveChangesChanged(bool leaveChanged)
+void AppearanceConfigTab::onShowJoinLeaveChangesChanged(bool joinLeaveChanged)
 {
-    ui->chatView->setShowLeaveChanges(leaveChanged);
+    ui->chatView->setShowJoinLeaveChanges(joinLeaveChanged);
     ui->chatView->initialise(m_demoChatHeader);
     tabChanged();
 }
@@ -206,9 +206,16 @@ void AppearanceConfigTab::sendDemoMessages()
     statusMessage.setTime(QDateTime::currentDateTime());
     ui->chatView->addAdiumStatusMessage(statusMessage);
 
-    if (ui->chatView->showLeaveChanges()) {
+    if (ui->chatView->showJoinLeaveChanges()) {
         statusMessage = AdiumThemeStatusInfo(true);
         statusMessage.setMessage(i18nc("Example message in preview conversation","Ted Example has left the chat.")); //FIXME sync this with chat text logic.
+        statusMessage.setSender(i18nc("Example name", "Ted Example"));
+        statusMessage.setTime(QDateTime::currentDateTime());
+        statusMessage.setStatus(QLatin1String("away"));
+        ui->chatView->addAdiumStatusMessage(statusMessage);
+
+        statusMessage = AdiumThemeStatusInfo(false);
+        statusMessage.setMessage(i18nc("Example message in preview conversation","Ted Example has joined the chat.")); //FIXME sync this with chat text logic.
         statusMessage.setSender(i18nc("Example name", "Ted Example"));
         statusMessage.setTime(QDateTime::currentDateTime());
         statusMessage.setStatus(QLatin1String("away"));
@@ -282,7 +289,7 @@ void AppearanceConfigTab::saveTab(KConfigGroup appearanceConfigGroup)
     appearanceConfigGroup.writeEntry(QLatin1String("fontFamily"), ui->fontFamily->currentFont().family());
     appearanceConfigGroup.writeEntry(QLatin1String("fontSize"), ui->fontSize->value());
     appearanceConfigGroup.writeEntry(QLatin1String("showPresenceChanges"), ui->showPresenceCheckBox->isChecked());
-    appearanceConfigGroup.writeEntry(QLatin1String("showLeaveChanges"), ui->showLeaveCheckBox->isChecked());
+    appearanceConfigGroup.writeEntry(QLatin1String("showJoinLeaveChanges"), ui->showJoinLeaveCheckBox->isChecked());
 
     appearanceConfigGroup.sync();
 }
@@ -308,7 +315,7 @@ void AppearanceConfigTab::loadTab()
     ui->fontFamily->setCurrentFont(QFont(ui->chatView->fontFamily()));
     ui->fontSize->setValue(ui->chatView->fontSize());
     ui->showPresenceCheckBox->setChecked(ui->chatView->showPresenceChanges());
-    ui->showLeaveCheckBox->setChecked(ui->chatView->showLeaveChanges());
+    ui->showJoinLeaveCheckBox->setChecked(ui->chatView->showJoinLeaveChanges());
 }
 
 void AppearanceConfigTab::defaultTab()
@@ -329,6 +336,6 @@ void AppearanceConfigTab::defaultTab()
     ui->fontFamily->setCurrentFont(KGlobalSettings::generalFont());
     ui->fontSize->setValue(QWebSettings::DefaultFontSize);
     ui->showPresenceCheckBox->setChecked(!m_groupChat);
-    ui->showLeaveCheckBox->setChecked(!m_groupChat);
+    ui->showJoinLeaveCheckBox->setChecked(!m_groupChat);
 
 }

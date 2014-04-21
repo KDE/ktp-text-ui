@@ -148,7 +148,11 @@ protected Q_SLOTS:
 
     void onContactClientTypesChanged(const Tp::ContactPtr &contact, const QStringList &clientTypes);
 
-    void onParticipantsChanged();
+    void onParticipantsChanged(Tp::Contacts groupMembersAdded,
+                               Tp::Contacts groupLocalPendingMembersAdded,
+                               Tp::Contacts groupRemotePendingMembersAdded,
+                               Tp::Contacts groupMembersRemoved,
+                               Tp::Channel::GroupMemberChangeDetails details);
 
     void onChannelInvalidated();
 
