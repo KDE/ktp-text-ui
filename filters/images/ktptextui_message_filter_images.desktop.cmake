@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Image Preview
 Name[bs]=Pregled slike
-Name[ca]=Vista prèvia d'imatge
+Name[ca]=Vista prèvia de la imatge
 Name[ca@valencia]=Vista prèvia d'imatge
 Name[cs]=Náhled obrázku
 Name[da]=Forhåndsvisning af billede
