@@ -40,6 +40,7 @@ class ChatSearchBar;
 class ChatWidgetPrivate;
 class QShowEvent;
 class QKeyEvent;
+class ShareProvider;
 
 class KDE_TELEPATHY_CHAT_EXPORT ChatWidget : public QWidget
 {
@@ -202,8 +203,12 @@ private Q_SLOTS:
     void temporaryFileTransferStateChanged(Tp::FileTransferState, Tp::FileTransferStateChangeReason);
 
     void onContactsViewContextMenuRequested(const QPoint &point);
+    void onFileTransferMenuActionTriggered();
+    void onShareImageMenuActionTriggered();
     void onOpenContactChatWindowClicked();
     void onShowContactDetailsClicked();
+    void onShareProviderFinishedSuccess(ShareProvider *provider, const QString &imageUrl);
+    void onShareProviderFinishedFailure(ShareProvider *provider, const QString &errorMessage);
     void onSendFileClicked();
 
 private:

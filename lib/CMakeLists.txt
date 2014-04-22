@@ -1,4 +1,5 @@
 include_directories (${KTP_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/image-sharer)
 
 set(ktpchat_SRCS
         chat-widget.cpp
@@ -16,7 +17,7 @@ set(ktpchat_SRCS
         contact-delegate.cpp
         notify-filter.cpp
         text-chat-config.cpp
-)
+        )
 
 set(ktpchat_UI
     chat-widget.ui
@@ -35,6 +36,7 @@ target_link_libraries(ktpchat
     ${KDE4_KEMOTICONS_LIBS}
     ${KTP_LIBRARIES}
     ${KTP_LOGGER_LIBRARIES}
+    ktpimagesharer
 )
 install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})
 

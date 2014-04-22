@@ -75,6 +75,9 @@ public:
         remoteContactChatState(Tp::ChannelChatStateInactive),
         isGroupChat(false),
         contactsMenu(0),
+        fileResourceTransferMenu(0),
+        fileTransferMenuAction(0),
+        shareImageMenuAction(0),
         logsLoaded(false),
         exchangedMessagesCount(0)
     {
@@ -89,9 +92,15 @@ public:
     QString currentKeyboardLayoutLanguage;
     Tp::TextChannelPtr channel;
     Tp::AccountPtr account;
+    ShareProvider *shareProvider;
     Ui::ChatWidget ui;
     ChannelContactModel *contactModel;
     QMenu *contactsMenu;
+    QMenu *fileResourceTransferMenu;
+    // Used with imageShareMenu
+    QAction *fileTransferMenuAction;
+    QAction *shareImageMenuAction;
+    QString fileToTransferPath;
     ScrollbackManager *logManager;
     QTimer *pausedStateTimer;
     bool logsLoaded;
@@ -123,6 +132,11 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(d->account.data(), SIGNAL(currentPresenceChanged(Tp::Presence)),
             this, SLOT(currentPresenceChanged(Tp::Presence)));
 
+    ShareProvider::ShareService serviceType = static_cast<ShareProvider::ShareService>(TextChatConfig::instance()->imageShareServiceType());
+    d->shareProvider = new ShareProvider(serviceType, this);
+    connect(d->shareProvider, SIGNAL(finishedSuccess(ShareProvider*,QString)), this, SLOT(onShareProviderFinishedSuccess(ShareProvider*,QString)));
+    connect(d->shareProvider, SIGNAL(finishedError(ShareProvider*,QString)), this, SLOT(onShareProviderFinishedFailure(ShareProvider*,QString)));
+
     //load translations for this library. keep this before any i18n() calls in library code
     KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
 
@@ -150,6 +164,18 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
         connect(d->ui.contactsView, SIGNAL(customContextMenuRequested(QPoint)),
                 this, SLOT(onContactsViewContextMenuRequested(QPoint)));
     }
+
+    KTp::ContactPtr targetContact = KTp::ContactPtr::qObjectCast(d->channel->targetContact());
+
+    d->fileResourceTransferMenu = new QMenu(this);
+    // This action's text is going to be changed in the dropEvent method to add the destination image service.
+    d->shareImageMenuAction = new QAction(KIcon::fromTheme(QLatin1String("insert-image")), i18n("Share Image"), this);
+    connect(d->shareImageMenuAction, SIGNAL(triggered(bool)), this, SLOT(onShareImageMenuActionTriggered()));
+    d->fileTransferMenuAction = new QAction(KIcon::fromTheme(QLatin1String("mail-attachment")), i18n("Send File"), this);
+
+    d->fileTransferMenuAction->setEnabled(targetContact->fileTransferCapability());
+    d->fileResourceTransferMenu->addAction(d->fileTransferMenuAction);
+    connect(d->fileTransferMenuAction, SIGNAL(triggered(bool)), this, SLOT(onFileTransferMenuActionTriggered()));
 
     // connect channel signals
     setupChannelSignals();
@@ -385,11 +411,29 @@ void ChatWidget::temporaryFileTransferChannelCreated(Tp::PendingOperation *opera
 void ChatWidget::dropEvent(QDropEvent *e)
 {
     const QMimeData *data = e->mimeData();
+    ShareProvider::ShareService shareServiceType = TextChatConfig::instance()->imageShareServiceType();
+    d->shareProvider->setShareServiceType(shareServiceType);
+
+    d->shareImageMenuAction->setText(i18n("Share Image via %1", ShareProvider::availableShareServices().key(shareServiceType)));
+    d->fileResourceTransferMenu->clear();
 
     if (data->hasUrls()) {
         Q_FOREACH(const QUrl &url, data->urls()) {
             if (url.isLocalFile()) {
-        KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), url.toLocalFile());
+		 // Not sure if this the best way to determine the MIME type of the file
+		 KMimeType::Ptr ptr = KMimeType::findByUrl(url);
+		 QString mime       = ptr->name();
+		 if (mime.startsWith(QLatin1String("image/"))) {
+		    d->fileTransferMenuAction->setText(i18n("Send Image via File Transfer"));
+		    d->fileResourceTransferMenu->addAction(d->shareImageMenuAction);
+		    d->fileResourceTransferMenu->addAction(d->fileTransferMenuAction);
+		 } else {
+		   QFileInfo fileInfo(url.toLocalFile());
+		   d->fileTransferMenuAction->setText(i18n("Send File"));
+		   d->fileResourceTransferMenu->addAction(d->fileTransferMenuAction);
+		 }
+		 d->fileToTransferPath = url.toLocalFile();
+		 d->fileResourceTransferMenu->popup(mapToGlobal(e->pos()));
             } else {
                 d->ui.sendMessageBox->append(url.toString());
             }
@@ -417,12 +461,10 @@ void ChatWidget::dropEvent(QDropEvent *e)
             return;
         }
 
-        Tp::PendingChannelRequest *request;
-    request = KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), tmpFile.fileName());
-        connect(request, SIGNAL(finished(Tp::PendingOperation*)),
-                this, SLOT(temporaryFileTransferChannelCreated(Tp::PendingOperation*)));
+	d->fileToTransferPath = tmpFile.fileName();
+	d->fileResourceTransferMenu->popup(mapToGlobal(e->pos()));
 
-        kDebug() << "Starting transfer of" << tmpFile.fileName();
+        kDebug() << "Starting Uploading of" << tmpFile.fileName();
         e->acceptProposedAction();
     }
 
@@ -1189,6 +1231,20 @@ void ChatWidget::onContactsViewContextMenuRequested(const QPoint& point)
     d->contactsMenu->popup(d->ui.contactsView->mapToGlobal(point));
 }
 
+void ChatWidget::onFileTransferMenuActionTriggered()
+{
+    if (!d->fileToTransferPath.isEmpty()) {
+	KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), d->fileToTransferPath);
+    }
+}
+
+void ChatWidget::onShareImageMenuActionTriggered()
+{
+    if (!d->fileToTransferPath.isEmpty()) {
+	d->shareProvider->publish(d->fileToTransferPath);
+    }
+}
+
 void ChatWidget::onShowContactDetailsClicked()
 {
     const KTp::ContactPtr contact = d->contactsMenu->property("Contact").value<KTp::ContactPtr>();
@@ -1198,6 +1254,21 @@ void ChatWidget::onShowContactDetailsClicked()
     connect(dlg, SIGNAL(finished()), dlg, SLOT(deleteLater()));
     dlg->show();
 }
+
+void ChatWidget::onShareProviderFinishedSuccess(ShareProvider* provider, const QString& imageUrl)
+{
+    Q_UNUSED(provider);
+    if (!imageUrl.isEmpty()) {
+	d->channel->send(imageUrl);
+    }
+}
+
+void ChatWidget::onShareProviderFinishedFailure(ShareProvider* provider, const QString& errorMessage)
+{
+    Q_UNUSED(provider);
+    d->ui.chatArea->addStatusMessage(i18n("Uploading Image has Failed with Error: %1", errorMessage));
+}
+
 
 void ChatWidget::onOpenContactChatWindowClicked()
 {
