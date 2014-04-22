@@ -25,6 +25,7 @@
 #include <KPluginFactory>
 #include <KLocalizedString>
 
+#include "shareprovider.h"
 
 K_PLUGIN_FACTORY(KCMTelepathyChatBehaviorConfigFactory, registerPlugin<BehaviorConfig>();)
 K_EXPORT_PLUGIN(KCMTelepathyChatBehaviorConfigFactory("ktp_chat_behavior", "kcm_ktp_chat_behavior"))
@@ -64,6 +65,13 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
     ui->nicknameCompletionStyle->addItems(nicknameCompletionStyles);
     ui->nicknameCompletionStyle->setCurrentIndex(BehaviorConfig::nicknameCompletionSuffixes.indexOf(m_nicknameCompletionSuffix));
     connect(ui->nicknameCompletionStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(onNicknameCompletionStyleChanged(int)));
+
+    QMap<QString, ShareProvider::ShareService> availableShareServices = ShareProvider::availableShareServices();
+    QStringList sharingServicesList = availableShareServices.keys();
+    ui->imageSharingService->addItems(sharingServicesList);
+    QString shareServiceName = availableShareServices.key(static_cast<ShareProvider::ShareService>(m_imageShareServiceType));
+    ui->imageSharingService->setCurrentIndex(sharingServicesList.indexOf(shareServiceName));
+    connect(ui->imageSharingService, SIGNAL(currentIndexChanged(int)), this, SLOT(onImageSharingServiceChanged(int)));
 }
 
 const QStringList BehaviorConfig::nicknameCompletionSuffixes = QStringList()
@@ -83,6 +91,7 @@ void BehaviorConfig::load()
     m_showMeTyping = TextChatConfig::instance()->showMeTyping();
     m_showOthersTyping = TextChatConfig::instance()->showOthersTyping();
     m_nicknameCompletionSuffix = TextChatConfig::instance()->nicknameCompletionSuffix();
+    m_imageShareServiceType = TextChatConfig::instance()->imageShareServiceType();
 }
 
 void BehaviorConfig::save()
@@ -92,6 +101,7 @@ void BehaviorConfig::save()
     TextChatConfig::instance()->setShowMeTyping(m_showMeTyping);
     TextChatConfig::instance()->setShowOthersTyping(m_showOthersTyping);
     TextChatConfig::instance()->setNicknameCompletionSuffix(m_nicknameCompletionSuffix);
+    TextChatConfig::instance()->setImageShareServiceName(m_imageShareServiceType);
     TextChatConfig::instance()->sync();
 }
 
@@ -137,5 +147,14 @@ void BehaviorConfig::onShowOthersTypingChanged(bool state)
 void BehaviorConfig::onNicknameCompletionStyleChanged(int index)
 {
     m_nicknameCompletionSuffix = BehaviorConfig::nicknameCompletionSuffixes[index];
+    Q_EMIT changed(true);
+}
+
+void BehaviorConfig::onImageSharingServiceChanged(int index)
+{
+    Q_UNUSED(index);
+    QString imageShareServiceName = ui->imageSharingService->currentText();
+    kDebug() << imageShareServiceName;
+    m_imageShareServiceType = ShareProvider::availableShareServices()[imageShareServiceName];
     Q_EMIT changed(true);
 }

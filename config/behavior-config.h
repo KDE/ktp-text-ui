@@ -51,6 +51,7 @@ private Q_SLOTS:
     void onShowMeTypingChanged(bool state);
     void onShowOthersTypingChanged(bool state);
     void onNicknameCompletionStyleChanged(int index);
+    void onImageSharingServiceChanged(int index);
 
 private:
     TextChatConfig::TabOpenMode m_openMode;
@@ -58,6 +59,7 @@ private:
     bool m_showMeTyping; // show others I am typing
     bool m_showOthersTyping; // show me others are typing
     QString m_nicknameCompletionSuffix;
+    ShareProvider::ShareService m_imageShareServiceType;
     Ui::BehaviorConfigUi *ui;
 
     static const QStringList nicknameCompletionSuffixes;

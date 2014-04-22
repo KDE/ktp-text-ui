@@ -1,4 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/lib)
+include_directories(${CMAKE_SOURCE_DIR}/image-sharer)
 
 set(kcm_ktp_chat_appearance_SRCS appearance-config-tab.cpp appearance-config.cpp)
 set(kcm_ktp_chat_behavior_SRCS behavior-config.cpp)
@@ -26,6 +27,7 @@ target_link_libraries(kcm_ktp_chat_behavior
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KCMUTILS_LIBS}
     ktpchat
+    ktpimagesharer
 )
 target_link_libraries(kcm_ktp_chat_messages
     ${KDE4_KDECORE_LIBS}

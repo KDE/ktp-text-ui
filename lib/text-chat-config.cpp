@@ -25,6 +25,7 @@
 
 #include "text-chat-config.h"
 
+#include "shareprovider.h"
 
 QMutex TextChatConfig::mutex(QMutex::Recursive);
 
@@ -37,6 +38,7 @@ public:
     bool m_showMeTyping;
     bool m_showOthersTyping;
     QString m_nicknameCompletionSuffix;
+    ShareProvider::ShareService m_imageShareServiceType;
 };
 
 
@@ -82,6 +84,8 @@ void TextChatConfig::sync()
     behaviorConfig.writeEntry("showOthersTyping", d->m_showOthersTyping);
 
     behaviorConfig.writeEntry("nicknameCompletionSuffix", d->m_nicknameCompletionSuffix);
+
+    behaviorConfig.writeEntry("imageShareServiceType", static_cast<int>(d->m_imageShareServiceType));
 
     behaviorConfig.sync();
 
@@ -179,6 +183,19 @@ void TextChatConfig::setNicknameCompletionSuffix(const QString &suffix) {
     mutex.unlock();
 }
 
+ShareProvider::ShareService TextChatConfig::imageShareServiceType() const
+{
+    return d->m_imageShareServiceType;
+}
+
+void TextChatConfig::setImageShareServiceName(ShareProvider::ShareService serviceType)
+{
+    mutex.lock();
+    d->m_imageShareServiceType = serviceType;
+    mutex.unlock();
+}
+
+
 TextChatConfig::TextChatConfig() :
     d(new TextChatConfigPrivate())
 {
@@ -202,6 +219,10 @@ TextChatConfig::TextChatConfig() :
     d->m_showOthersTyping = behaviorConfig.readEntry("showOthersTyping", true);
 
     d->m_nicknameCompletionSuffix = behaviorConfig.readEntry("nicknameCompletionSuffix", ", ");
+
+    // Imgur is the default image sharing service
+    int shareServiceType = behaviorConfig.readEntry("imageShareServiceType", static_cast<int>(ShareProvider::Imgur));
+    d->m_imageShareServiceType = static_cast<ShareProvider::ShareService>(shareServiceType);
 }
 
 

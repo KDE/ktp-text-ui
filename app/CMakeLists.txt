@@ -1,4 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/lib)
+include_directories(${CMAKE_SOURCE_DIR}/image-sharer)
 
 set(ktp-text-ui_SRCS
         main.cpp

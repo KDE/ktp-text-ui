@@ -23,6 +23,8 @@
 #include <QtCore/QMutex>
 #include <QtCore/QObject>
 
+#include "shareprovider.h"
+
 #include "ktpchat_export.h"
 
 class TextChatConfigPrivate;
@@ -57,6 +59,9 @@ class KDE_TELEPATHY_CHAT_EXPORT TextChatConfig : QObject
 
     QString nicknameCompletionSuffix() const;
     void setNicknameCompletionSuffix(const QString &suffix);
+
+    ShareProvider::ShareService imageShareServiceType() const;
+    void setImageShareServiceName(ShareProvider::ShareService serviceType);
 
 private:
     TextChatConfig();
