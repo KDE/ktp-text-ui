@@ -347,7 +347,9 @@ void ChatWindow::onCurrentIndexChanged(int index)
     kDebug() << "Current spell dictionary is" << currentChatTab->spellDictionary();
     m_spellDictCombo->setCurrentByDictionary(currentChatTab->spellDictionary());
 
-    restoreKeyboardLayout(currentChatTab);
+    if (currentChatTab->isActiveWindow()) {
+	restoreKeyboardLayout(currentChatTab);
+    }
 
     // when the tab changes I need to "refresh" the window's findNext and findPrev actions
     if (currentChatTab->chatSearchBar()->searchBar()->text().isEmpty()) {
