@@ -21,7 +21,6 @@ Name[lt]=Bugzilla informacija
 Name[mr]=बगझिल्ला माहिती
 Name[nb]=Bugzilla-informasjon
 Name[nl]=Informatie in Bugzilla
-Name[pa]=ਬੱਗਜ਼ੀਲਾ ਜਾਣਕਾਰੀ
 Name[pl]=Informacje Bugzilla
 Name[pt]=Informação do Bugzilla
 Name[pt_BR]=Informações do Bugzilla
