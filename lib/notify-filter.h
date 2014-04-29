@@ -20,14 +20,15 @@
 #define NOTIFYFILTER_H
 
 #include "chat-widget.h"
+#include "ktpchat_export.h"
 
 #include <KTp/abstract-message-filter.h>
 
-class NotifyFilter : public KTp::AbstractMessageFilter
+class KDE_TELEPATHY_CHAT_EXPORT NotifyFilter : public KTp::AbstractMessageFilter
 {
     Q_OBJECT
 public:
-    explicit NotifyFilter(ChatWidget *widget);
+    explicit NotifyFilter(ChatWidget *widget = 0);
     void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
 
 private:

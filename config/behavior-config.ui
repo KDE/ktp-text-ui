@@ -190,6 +190,28 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="groupChatsGroup">
+     <property name="title">
+      <string>Group Chats</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="dontLeaveGroupChats">
+        <property name="toolTip">
+         <string extracomment="When enabled, you will remain connected to a chat room even when you close the chat window and you will still receive notifications, for example when someone highlights your name."/>
+        </property>
+        <property name="text">
+         <string>Stay connected to group chat even when tab is closed</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

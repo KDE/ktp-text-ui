@@ -59,6 +59,7 @@ public:
      */
     ChatTab* getTab(const Tp::AccountPtr &account, const Tp::TextChannelPtr &incomingTextChannel);
     ChatTab* getCurrentTab();
+    QList<ChatTab*> tabs() const;
 
     void focusChat(ChatTab *tab);
 
@@ -115,6 +116,7 @@ private Q_SLOTS:
     void updateSendMessageShortcuts();
     void onReloadTheme();
     void onCollaborateDocumentTriggered();
+    void onLeaveChannelTriggered();
 
 protected Q_SLOTS:
     void showSettingsDialog();

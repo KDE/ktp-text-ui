@@ -50,6 +50,9 @@ public:
 public Q_SLOTS:
     void showOnTop();
 
+Q_SIGNALS:
+    void aboutToClose(ChatTab *tab);
+
 private Q_SLOTS:
     /** connect account's connection status.
      * This re-enables open chats if user goes offline and then back online */

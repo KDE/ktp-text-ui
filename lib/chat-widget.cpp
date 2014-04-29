@@ -246,7 +246,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 ChatWidget::~ChatWidget()
 {
     saveSpellCheckingOption();
-    d->channel->requestClose(); // ensure closing; does nothing, if already closed
     delete d;
 }
 

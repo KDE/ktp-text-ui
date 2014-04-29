@@ -57,6 +57,9 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
     ui->checkBoxShowOthersTyping->setChecked(m_showOthersTyping);
     connect(ui->checkBoxShowOthersTyping, SIGNAL(toggled(bool)), this, SLOT(onShowOthersTypingChanged(bool)));
 
+    ui->dontLeaveGroupChats->setChecked(m_dontLeaveGroupChats);
+    connect(ui->dontLeaveGroupChats, SIGNAL(toggled(bool)), this, SLOT(onDontLeaveGroupChatsChanged(bool)));
+
     QStringList nicknameCompletionStyles;
     const QString namePlaceholder = ki18nc("Placeholder for contact name in completion suffix selector", "Nickname").toString();
     Q_FOREACH(const QString &suffix, BehaviorConfig::nicknameCompletionSuffixes) {
@@ -92,6 +95,7 @@ void BehaviorConfig::load()
     m_showOthersTyping = TextChatConfig::instance()->showOthersTyping();
     m_nicknameCompletionSuffix = TextChatConfig::instance()->nicknameCompletionSuffix();
     m_imageShareServiceType = TextChatConfig::instance()->imageShareServiceType();
+    m_dontLeaveGroupChats = TextChatConfig::instance()->dontLeaveGroupChats();
 }
 
 void BehaviorConfig::save()
@@ -102,6 +106,7 @@ void BehaviorConfig::save()
     TextChatConfig::instance()->setShowOthersTyping(m_showOthersTyping);
     TextChatConfig::instance()->setNicknameCompletionSuffix(m_nicknameCompletionSuffix);
     TextChatConfig::instance()->setImageShareServiceName(m_imageShareServiceType);
+    TextChatConfig::instance()->setDontLeaveGroupChats(m_dontLeaveGroupChats);
     TextChatConfig::instance()->sync();
 }
 
@@ -156,5 +161,11 @@ void BehaviorConfig::onImageSharingServiceChanged(int index)
     QString imageShareServiceName = ui->imageSharingService->currentText();
     kDebug() << imageShareServiceName;
     m_imageShareServiceType = ShareProvider::availableShareServices()[imageShareServiceName];
+    Q_EMIT changed(true);
+}
+
+void BehaviorConfig::onDontLeaveGroupChatsChanged(bool state)
+{
+    m_dontLeaveGroupChats = state;
     Q_EMIT changed(true);
 }

@@ -45,6 +45,7 @@ ChatTab::ChatTab(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& accoun
 
 ChatTab::~ChatTab()
 {
+    Q_EMIT aboutToClose(this);
 }
 
 void ChatTab::setChatWindow(ChatWindow* window)

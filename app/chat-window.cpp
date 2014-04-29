@@ -217,6 +217,17 @@ ChatTab* ChatWindow::getTab(const Tp::AccountPtr &account, const Tp::TextChannel
 ChatTab *ChatWindow::getCurrentTab()
 {
     return qobject_cast<ChatTab*>(m_tabWidget->currentWidget());
+
+}
+
+QList<ChatTab*> ChatWindow::tabs() const
+{
+    QList<ChatTab*> tabs;
+    tabs.reserve(m_tabWidget->count());
+    for (int i = 0; i < m_tabWidget->count(); ++i) {
+        tabs << qobject_cast<ChatTab*>(m_tabWidget->widget(i));
+    }
+    return tabs;
 }
 
 void ChatWindow::removeTab(ChatTab *tab)
@@ -380,6 +391,11 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setBlockEnabled(false);
         setShowInfoEnabled(false);
     }
+
+    // Allow "Leaving" rooms only in group chat, and when persistent rooms are enabled
+    actionCollection()->action(QLatin1String("leave-chat"))->setEnabled(currentChatTab->isGroupChat() && TextChatConfig::instance()->dontLeaveGroupChats());
+    // No point having "Close" action with only one tab, it behaves exactly like "Quit"
+    actionCollection()->action(QLatin1String("file_close"))->setVisible(m_tabWidget->count() > 1);
 
     if ( currentChatTab->account()->connection() ) {
         const QString collab(QLatin1String("infinote"));
@@ -802,6 +818,9 @@ void ChatWindow::setupCustomActions()
     KAction* showInfoAction = new KAction(KIcon(QLatin1String("view-pim-contacts")), i18n("&Contact info"), this);
     connect(showInfoAction, SIGNAL(triggered()), this, SLOT(onShowInfoTriggered()));
 
+    KAction* leaveAction = new KAction(KIcon(QLatin1String("irc-close-channel")), i18n("&Leave room"), this);
+    connect(leaveAction, SIGNAL(triggered()), this, SLOT(onLeaveChannelTriggered()));
+
     m_spellDictCombo = new Sonnet::DictionaryComboBox();
     connect(m_spellDictCombo, SIGNAL(dictionaryChanged(QString)),
             this, SLOT(setTabSpellDictionary(QString)));
@@ -855,6 +874,7 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("send-message"), m_sendMessage);
     actionCollection()->addAction(QLatin1String("collaborate-document"), collaborateDocumentAction);
     actionCollection()->addAction(QLatin1String("contact-info"), showInfoAction);
+    actionCollection()->addAction(QLatin1String("leave-chat"), leaveAction);
 }
 
 void ChatWindow::setCollaborateDocumentEnabled(bool enable)
@@ -1131,6 +1151,13 @@ void ChatWindow::onReloadTheme()
         ChatTab *tab = qobject_cast<ChatTab*>(m_tabWidget->widget(i));
         tab->reloadTheme();
     }
+}
+
+void ChatWindow::onLeaveChannelTriggered()
+{
+    ChatTab *tab = getCurrentTab();
+    tab->textChannel()->requestLeave();
+    closeCurrentTab();
 }
 
 #include "chat-window.moc"

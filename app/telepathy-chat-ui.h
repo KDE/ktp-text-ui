@@ -26,6 +26,14 @@
 
 #include <KTp/telepathy-handler-application.h>
 
+namespace KTp {
+class AbstractMessageFilter;
+}
+
+namespace Tp {
+class ReceivedMessage;
+}
+
 class ChatTab;
 class ChatWindow;
 
@@ -47,14 +55,28 @@ public:
     virtual bool bypassApproval() const;
 
 private Q_SLOTS:
-    void removeWindow(ChatWindow *window);
     void dettachTab(ChatTab *tab);
 
+    void onTabAboutToClose(ChatTab *tab);
+    void onWindowAboutToClose(ChatWindow *window);
+    void onGroupChatMessageReceived(const Tp::ReceivedMessage &msg);
+    void onChannelInvalidated();
+    void onConnectionStatusChanged(Tp::ConnectionStatus);
+
 private:
+    void takeChannel(const Tp::TextChannelPtr &channel, const Tp::AccountPtr &account, bool ref = true);
+    void releaseChannel(const Tp::TextChannelPtr &channel, const Tp::AccountPtr &account, bool unref = true);
+    void connectChannelNotifications(const Tp::TextChannelPtr &textChannel, bool enable);
+    void connectAccountNotifications(const Tp::AccountPtr &account, bool enable);
+    bool isHiddenChannel(const Tp::AccountPtr &account, const Tp::TextChannelPtr &channel,
+                         Tp::TextChannelPtr *oldChannel) const;
     ChatWindow* createWindow();
 
     Tp::AccountManagerPtr m_accountManager;
     QList<ChatWindow*> m_chatWindows;
+
+    QHash<Tp::TextChannelPtr, Tp::AccountPtr> m_channelAccountMap;
+    KTp::AbstractMessageFilter *m_notifyFilter;
 };
 
 #endif // TELEPATHYCHATUI_H

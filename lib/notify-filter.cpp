@@ -57,7 +57,7 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
     if(message.type() == Tp::ChannelTextMessageTypeNotice) {
         notificationType = QLatin1String("kde_telepathy_info_event");
     } else {
-        if (m_widget->isGroupChat()) {
+        if (context.channel()->targetHandleType() == Tp::HandleTypeRoom) {
             if(message.property("highlight").toBool()) {
                 notificationType = QLatin1String("kde_telepathy_group_chat_highlight");
             } else {
@@ -67,7 +67,7 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
             notificationType = QLatin1String("kde_telepathy_contact_incoming");
         }
 
-        if (m_widget->isOnTop()) {
+        if (m_widget && m_widget->isOnTop()) {
             notificationType += QLatin1String("_active_window");
         }
     }
@@ -93,7 +93,9 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
     notification->setText(message.mainMessagePart().simplified());
 
     notification->setActions(QStringList(i18n("View")));
-    connect(notification, SIGNAL(activated(uint)), m_widget, SIGNAL(notificationClicked()));
+    if (m_widget) {
+        connect(notification, SIGNAL(activated(uint)), m_widget, SIGNAL(notificationClicked()));
+    }
 
     notification->sendEvent();
 }

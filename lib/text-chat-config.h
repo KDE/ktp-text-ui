@@ -63,6 +63,9 @@ class KDE_TELEPATHY_CHAT_EXPORT TextChatConfig : QObject
     ShareProvider::ShareService imageShareServiceType() const;
     void setImageShareServiceName(ShareProvider::ShareService serviceType);
 
+    bool dontLeaveGroupChats() const;
+    void setDontLeaveGroupChats(bool dontLeaveGroupChats);
+
 private:
     TextChatConfig();
 
