@@ -44,6 +44,7 @@
 #include <KMimeType>
 #include <KTemporaryFile>
 #include <KFileDialog>
+#include <KMessageWidget>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/Message>
@@ -78,6 +79,7 @@ public:
         fileResourceTransferMenu(0),
         fileTransferMenuAction(0),
         shareImageMenuAction(0),
+        messageWidgetSwitchOnlineAction(0),
         logsLoaded(false),
         exchangedMessagesCount(0)
     {
@@ -101,6 +103,7 @@ public:
     QAction *fileTransferMenuAction;
     QAction *shareImageMenuAction;
     QString fileToTransferPath;
+    QAction *messageWidgetSwitchOnlineAction;
     ScrollbackManager *logManager;
     QTimer *pausedStateTimer;
     bool logsLoaded;
@@ -188,6 +191,15 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     if (d->isGroupChat) {
         d->ui.sendMessageBox->setContactModel(d->contactModel);
     }
+
+    d->ui.messageWidget->setText(i18n("Your message cannot be sent because the account %1 is offline. Please try again when the account is connected again.", d->account->displayName()));
+    d->ui.messageWidget->setMessageType(KMessageWidget::Warning);
+    d->ui.messageWidget->setCloseButtonVisible(true);
+    // Hide for the first time
+    d->ui.messageWidget->hide();
+    d->messageWidgetSwitchOnlineAction = new QAction(i18n("Connect %1", d->account->displayName()), d->ui.messageWidget);
+    connect(d->messageWidgetSwitchOnlineAction, SIGNAL(triggered(bool)), d->ui.messageWidget, SLOT(animatedHide()));
+    connect(d->messageWidgetSwitchOnlineAction, SIGNAL(triggered(bool)), this, SLOT(onMessageWidgetSwitchOnlineActionTriggered()));
 
     QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(this);
     sortModel->setSourceModel(d->contactModel);
@@ -326,7 +338,6 @@ ChatSearchBar *ChatWidget::chatSearchBar() const
 void ChatWidget::setChatEnabled(bool enable)
 {
     d->ui.contactsView->setEnabled(enable);
-    d->ui.sendMessageBox->setEnabled(enable);
     Q_EMIT iconChanged(icon());
 }
 
@@ -775,15 +786,25 @@ void ChatWidget::sendMessage()
         message = KTp::MessageProcessor::instance()->processOutgoingMessage(
                     message, d->account, d->channel).text();
 
-        if (d->channel->supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
-            //remove "/me " from the start of the message
-            message.remove(0,4);
+	if (d->channel->isValid()) {
+	    if (d->channel->supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
+		//remove "/me " from the start of the message
+		message.remove(0,4);
 
-            d->channel->send(message, Tp::ChannelTextMessageTypeAction);
-        } else {
-            d->channel->send(message);
-        }
-        d->ui.sendMessageBox->clear();
+		d->channel->send(message, Tp::ChannelTextMessageTypeAction);
+	    } else {
+		d->channel->send(message);
+	    }
+	    d->ui.sendMessageBox->clear();
+	} else {
+	    d->ui.messageWidget->removeAction(d->messageWidgetSwitchOnlineAction);
+	    if (d->account->requestedPresence().type() == Tp::ConnectionPresenceTypeOffline) {
+		d->ui.messageWidget->addAction(d->messageWidgetSwitchOnlineAction);
+	    }
+
+	    d->ui.messageWidget->animatedShow();
+
+	}
     }
 }
 
@@ -1195,6 +1216,10 @@ void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)
     if (presence == Tp::Presence::offline()) {
         d->ui.chatArea->addStatusMessage(i18n("You are now offline"), d->yourName);
         iconChanged(icon());
+    } else {
+	if (d->ui.messageWidget && d->ui.messageWidget->isVisible()) {
+	    d->ui.messageWidget->animatedHide();
+	}
     }
 }
 
@@ -1235,6 +1260,11 @@ void ChatWidget::onFileTransferMenuActionTriggered()
     if (!d->fileToTransferPath.isEmpty()) {
 	KTp::Actions::startFileTransfer(d->account, d->channel->targetContact(), d->fileToTransferPath);
     }
+}
+
+void ChatWidget::onMessageWidgetSwitchOnlineActionTriggered()
+{
+    d->account->setRequestedPresence(Tp::Presence::available());
 }
 
 void ChatWidget::onShareImageMenuActionTriggered()

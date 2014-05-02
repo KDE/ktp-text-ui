@@ -204,9 +204,10 @@ private Q_SLOTS:
 
     void onContactsViewContextMenuRequested(const QPoint &point);
     void onFileTransferMenuActionTriggered();
-    void onShareImageMenuActionTriggered();
+    void onMessageWidgetSwitchOnlineActionTriggered();
     void onOpenContactChatWindowClicked();
     void onShowContactDetailsClicked();
+    void onShareImageMenuActionTriggered();
     void onShareProviderFinishedSuccess(ShareProvider *provider, const QString &imageUrl);
     void onShareProviderFinishedFailure(ShareProvider *provider, const QString &errorMessage);
     void onSendFileClicked();
