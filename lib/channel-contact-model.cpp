@@ -115,6 +115,9 @@ QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
     case KTp::ContactRole:
         return QVariant::fromValue(m_contacts[row]);
 
+    case ChannelContactModel::IsTypingRole:
+        return TextChatConfig::instance()->showOthersTyping() && (m_channel->chatState(contact) == Tp::ChannelChatStateComposing);
+
     default:
         return QVariant();
     }

@@ -38,6 +38,8 @@
 
 #include <KTp/types.h>
 
+#include "channel-contact-model.h"
+
 ContactDelegate::ContactDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
@@ -69,7 +71,13 @@ void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     iconRect.setSize(QSize(m_avatarSize, m_avatarSize));
     iconRect.moveTo(QPoint(iconRect.x() + m_spacing, iconRect.y() + m_spacing));
 
-    QPixmap avatar(qvariant_cast<QPixmap>(index.data(KTp::ContactAvatarPixmapRole)));
+    QPixmap avatar;
+
+    if (index.data(ChannelContactModel::IsTypingRole).toBool()) {
+        avatar = KIcon(QLatin1String("document-edit")).pixmap(KIconLoader::SizeSmallMedium);
+    } else {
+        avatar = qvariant_cast<QPixmap>(index.data(KTp::ContactAvatarPixmapRole));
+    }
 
     if (!avatar.isNull()) {
         style->drawItemPixmap(painter, iconRect, Qt::AlignCenter, avatar.scaled(iconRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));

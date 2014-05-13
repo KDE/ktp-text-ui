@@ -29,6 +29,7 @@
 #include <TelepathyQt/Presence>
 
 #include <KTp/presence.h>
+#include <KTp/types.h>
 
 /** A model of all users in the channel.
   Also acts as a proxy for emiting presence and alias changes of any contacts in the channel
@@ -39,7 +40,12 @@
 class ChannelContactModel : public QAbstractListModel
 {
     Q_OBJECT
+
 public:
+    enum contactRoles {
+        IsTypingRole = KTp::CustomRole
+    };
+
     explicit ChannelContactModel(const Tp::TextChannelPtr &channel, QObject *parent = 0);
 
     void setTextChannel(const Tp::TextChannelPtr &channel);
