@@ -176,7 +176,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(d->shareImageMenuAction, SIGNAL(triggered(bool)), this, SLOT(onShareImageMenuActionTriggered()));
     d->fileTransferMenuAction = new QAction(KIcon::fromTheme(QLatin1String("mail-attachment")), i18n("Send File"), this);
 
-    d->fileTransferMenuAction->setEnabled(targetContact->fileTransferCapability());
+    d->fileTransferMenuAction->setEnabled(targetContact && targetContact->fileTransferCapability());
     d->fileResourceTransferMenu->addAction(d->fileTransferMenuAction);
     connect(d->fileTransferMenuAction, SIGNAL(triggered(bool)), this, SLOT(onFileTransferMenuActionTriggered()));
 
