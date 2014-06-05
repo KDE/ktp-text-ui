@@ -77,6 +77,7 @@ Comment[kk]=Егер кіріс хабарларында бүркеншік ат
 Comment[ko]=별명을 포함하는 메시지를 받았을 때 붉은색으로 강조하기
 Comment[lt]=Jei bet kuri gauta žinutė turi Jūsų slapyvardį, ji paryškins juos raudonai
 Comment[nb]=Hvis noen meldinger inneholder kallenavnet ditt blir de fremhevet med rødt
+Comment[nds]=Bargt en rinkamen Naricht Dien Ökelnaam, warrt he in root rutheevt
 Comment[nl]=Als een inkomend bericht uw schermnaam bevat, zal deze in rood geaccentueerd worden
 Comment[pa]=ਜੇ ਆ ਰਹੇ ਕਿਸੇ ਸੁਨੇਹੇ ਵਿੱਚ ਤੁਹਾਡਾ ਨਾਂ ਹੋਵੇ ਤਾਂ ਉਸਨੂੰ ਲਾਲ ਰਾਹੀਂ ਉਭਾਰੋ
 Comment[pl]=Jeśli przychodząca wiadomość będzie zawierać twój pseudonim, to zostanie ona podświetlona na czerwono

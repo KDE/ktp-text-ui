@@ -58,6 +58,7 @@ Comment[kk]=Егер хабарламада YouTube видеосына сілт�
 Comment[ko]=YouTube 동영상 링크를 포함하는 경우 대화 창에 미리 보기를 표시
 Comment[lt]=Jei bet kuri žinutė turi nuorodą į YouTube vaizdo įrašą, bus įterpta peržiūra pokalbyje
 Comment[nb]=Hvis en melding inneholder en lenke til en YouTube-video, så blir en forhåndsvisning av videoen bygget inn i praten
+Comment[nds]=För elkeen binnen en Naricht vörhannen Link op en YouTube-Video en Vöransicht inbetten
 Comment[nl]=Als een bericht een koppeling bevat naar een YouTube video, zal het ingebed worden als een voorbeeld in de chat
 Comment[pl]=Jeśli jakakolwiek wiadomość zawiera odnośnik do filmu na YouTube, to zostanie osadzony jej podgląd w oknie rozmowy
 Comment[pt]=Se alguma das mensagens tiver um endereço de um vídeo do YouTube, irá incorporar uma antevisão na conversa
