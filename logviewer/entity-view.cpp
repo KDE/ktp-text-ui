@@ -87,6 +87,7 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
     if (selectedIndex.isValid()) {
         loadedCurrentContact = true;
         setCurrentIndex(selectedIndex);
+        scrollTo(selectedIndex);
     } else {
         Q_EMIT noSuchContact();
     }
