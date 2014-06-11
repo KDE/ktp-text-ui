@@ -24,6 +24,8 @@
 #include <KTp/Logger/log-entity.h>
 #include <KTp/types.h>
 
+#include <QAbstractItemModel>
+
 #include <TelepathyQt/Account>
 
 #include "person-entity-merge-model.h"
@@ -32,6 +34,16 @@ EntityView::EntityView(QWidget *parent) :
     QTreeView(parent)
 {
     setHeaderHidden(true);
+}
+
+void EntityView::setModel(QAbstractItemModel *model)
+{
+    QTreeView::setModel(model);
+
+    //check if any existing items contain the selected contact
+    if (model->rowCount() > 0) {
+        rowsInserted(QModelIndex(), 0, model->rowCount() -1);
+    }
 }
 
 void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
@@ -75,6 +87,7 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
     if (selectedIndex.isValid()) {
         loadedCurrentContact = true;
         setCurrentIndex(selectedIndex);
+        scrollTo(selectedIndex);
     } else {
         Q_EMIT noSuchContact();
     }

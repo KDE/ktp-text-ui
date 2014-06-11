@@ -31,6 +31,8 @@ class EntityView : public QTreeView
 public:
     explicit EntityView(QWidget *parent = 0);
 
+    void setModel(QAbstractItemModel *model);
+
 Q_SIGNALS:
     void noSuchContact();
 
