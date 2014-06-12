@@ -61,6 +61,7 @@ Comment[kk]=Чаттағы жіберілген кескін URL-інде ноб
 Comment[ko]=대화에서 주고받은 그림 URL의 미리 보기 그림 보이기
 Comment[lt]=Įjungti miniatiūras kiekvieno paveikslėlio URL atsiuntame pokalbyje
 Comment[nb]=Bygg inn et minibilde av enhver bilde-URL sent i en prat
+Comment[nds]=En Vöransicht för elkeen binnen en Klöönsnack loosstüert Bild-URL inbetten
 Comment[nl]=Een miniatuur of elke verzonden URL van een afbeelding inbedden in een chat
 Comment[pl]=Osadź miniaturę jakiegokolwiek adresu URL obrazu w oknie rozmowy
 Comment[pt]=Incorporar uma miniatura de qualquer URL de imagens numa conversa

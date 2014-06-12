@@ -61,6 +61,7 @@ Comment[kk]=Келген хабарламаларды мәтінді дауыс�
 Comment[ko]=받은 메시지를 음성 합성 서비스로 읽어주기
 Comment[lt]=Skaityti gaunamas žinutes naudojant tekstas-į-kalbą paslaugą
 Comment[nb]=Les opp innkommende meldinger med tekst-til-tale-tjeneste
+Comment[nds]=Rinkamen Narichten mit den Vörleesdeenst vörlesen laten
 Comment[nl]=Spreek het inkomende bericht uit met de tekst-tot-spraak-dienst
 Comment[pl]=Odczytuj przychodzące wiadomości używając usługi tekstu-na-mowę
 Comment[pt]=Ler as mensagens recebidas com o serviço de texto-para-fala
