@@ -67,6 +67,7 @@ Comment[da]=Hvis indkommende beskeder indeholder dit kaldenavn, vil de blive fre
 Comment[de]=Wenn eine eingehende Nachricht Ihren Spitznamen enthält, wird sie rot hervorgehoben
 Comment[el]=Τα εισερχόμενα μηνύματα που περιέχουν το ψευδώνυμό σας, θα τονίζονται με κόκκινο
 Comment[es]=Esta opción resaltará en rojo cualquier mensaje entrante que contenga su apodo.
+Comment[et]=Kui sisenevas sõnumis esineb sinu hüüdnimi, tõstetakse see punasega esile
 Comment[fi]=Jos saapuvassa viestissä on nimimerkkisi, viesti korostetaan punaisella
 Comment[fr]=Si un quelconque message entrant contient votre pseudonyme, il le surlignera en rouge
 Comment[gl]=Se algunha mensaxe entrante contén o seu alcume hanse realzar en vermello
