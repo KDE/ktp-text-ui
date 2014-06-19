@@ -22,6 +22,7 @@
 #define CHATWIDGET_H
 
 #include "ktpchat_export.h"
+#include "otr-utils.h"
 
 #include <QtCore/QString>
 #include <QtGui/QWidget>
@@ -108,6 +109,18 @@ public:
     /** Is this widget visible and in the active window */
     virtual bool isOnTop() const;
 
+    /** Starts otr session */
+    void startOtrSession();
+
+    /** Stops otr session */
+    void stopOtrSession();
+
+    /** Athenticates contact in the context of otr conversation */
+    void authenticateBuddy();
+
+    /** Returns OtrStatus linked to the channel represented by this tab */
+    OtrStatus otrStatus() const;
+
 public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;
@@ -190,6 +203,9 @@ Q_SIGNALS:
     /** Emitted when zoom level in chat view changes */
     void zoomFactorChanged(qreal zoomFactor);
 
+    /** Emitted when OTRTrustLevel changes in the channel */
+    void otrStatusChanged(OtrStatus otrStatus, ChatWidget *chatTab);
+
 private Q_SLOTS:
     /** received when user changes search criteria or when searching for text */
     void findTextInChat(const QString &text, QWebPage::FindFlags flags);
@@ -211,6 +227,7 @@ private Q_SLOTS:
     void onShareProviderFinishedSuccess(ShareProvider *provider, const QString &imageUrl);
     void onShareProviderFinishedFailure(ShareProvider *provider, const QString &errorMessage);
     void onSendFileClicked();
+    void onOtrChannelPropertiesChanged(QVariantMap props, QStringList ignored);
 
 private:
     /** connects necessary signals for the channel */
@@ -227,6 +244,9 @@ private:
 
     /** Loads theme into the the AdiumThemeView */
     void initChatArea();
+
+    /** connects necessary signals for the otr channel */
+    void setupOtrChannel();
 
     bool m_previousConversationAvailable;
 

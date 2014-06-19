@@ -28,6 +28,7 @@
 #include "notify-filter.h"
 #include "text-chat-config.h"
 #include "contact-delegate.h"
+#include "otr-channel-interface.h"
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
@@ -45,6 +46,7 @@
 #include <KTemporaryFile>
 #include <KFileDialog>
 #include <KMessageWidget>
+#include <KMessageBox>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/Message>
@@ -81,7 +83,8 @@ public:
         shareImageMenuAction(0),
         messageWidgetSwitchOnlineAction(0),
         logsLoaded(false),
-        exchangedMessagesCount(0)
+        exchangedMessagesCount(0),
+        otrChannel(0)
     {
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
@@ -108,6 +111,8 @@ public:
     QTimer *pausedStateTimer;
     bool logsLoaded;
     uint exchangedMessagesCount;
+    OtrStatus otrStatus;
+    Tp::Client::ChannelInterfaceOTR1Interface* otrChannel;
 
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
@@ -182,6 +187,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     // connect channel signals
     setupChannelSignals();
+
+    // setup new otr channel along with connecting to signals
+    setupOtrChannel();
 
     // create contactModel and start keeping track of contacts.
     d->contactModel = new ChannelContactModel(d->channel, this);
@@ -349,6 +357,9 @@ void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 
     // connect signals for the new textchannel
     setupChannelSignals();
+
+    // setup new otr channel along with connecting to signals
+    setupOtrChannel();
 
     //if the UI is ready process any messages in queue
     if (d->chatViewInitialized) {
@@ -633,6 +644,87 @@ bool ChatWidget::isOnTop() const
 {
     kDebug() << ( isActiveWindow() && isVisible() );
     return ( isActiveWindow() && isVisible() );
+}
+
+OtrStatus ChatWidget::otrStatus() const {
+    return d->otrStatus;
+}
+
+void ChatWidget::startOtrSession() {
+    if(!d->otrStatus) return;
+    d->otrChannel->Initialize();
+}
+
+void ChatWidget::stopOtrSession() {
+    if(!d->otrStatus) return;
+    d->otrChannel->Stop();
+}
+
+void ChatWidget::authenticateBuddy() {
+    if(!d->otrStatus) return;
+
+    QVariant fpReply = Tp::Utils::waitForOperation(d->otrChannel->requestPropertyRemoteFingerprint());
+    if(!fpReply.isValid()) {
+        kWarning() << "Could not get remote fingerprint for: " << d->channel->objectPath();
+        return;
+    } 
+    QDBusArgument dbusArg = fpReply.value<QDBusArgument>();
+    Tp::Fingerprint fingerprint;
+    dbusArg >> fingerprint;
+
+    QString question = QString::fromLatin1("Is the following fingerprint for the contact ") 
+        + d->contactName + QString::fromLatin1(" correct?\n") + fingerprint.humanReadableFingerprint;
+
+    int askResult = KMessageBox::questionYesNoCancel(this, question);
+    switch(askResult) {
+        case KMessageBox::Yes:
+            d->otrChannel->TrustFingerprint(fingerprint.fingerprintRawData, true);
+            return;
+        case KMessageBox::No:
+            d->otrChannel->TrustFingerprint(fingerprint.fingerprintRawData, false);
+            return;
+        default:
+            return;
+    }
+}
+
+void ChatWidget::setupOtrChannel() {
+
+    QString busName = d->channel->connection()->objectPath();
+    busName = busName.replace(QChar::fromAscii('/'), QChar::fromAscii('.')).mid(1) + QString::fromLatin1(".OTR");
+
+    if(QDBusConnection::sessionBus().interface()->isServiceRegistered(busName)) {
+        d->otrChannel = new Tp::Client::ChannelInterfaceOTR1Interface(busName, d->channel->objectPath(), this);
+
+        d->otrChannel->setMonitorProperties(true);
+        connect(d->otrChannel, SIGNAL(propertiesChanged(QVariantMap, QStringList)), 
+                this, SLOT(onOtrChannelPropertiesChanged(QVariantMap, QStringList)));
+
+        QVariant reply = Tp::Utils::waitForOperation(d->otrChannel->requestPropertyTrustLevel());
+        if(reply.isValid()) {
+            Tp::OTRTrustLevel trustLevel = static_cast<Tp::OTRTrustLevel>(reply.value<int>());
+            d->otrStatus = OtrStatus(trustLevel);
+            kDebug() << "Channel: " << d->channel->objectPath() << " implements OTR";
+        } else {
+            d->otrStatus.otrImplemented = false;
+            kWarning() << "Could not get OTR status for channel: " << d->channel->objectPath();
+        }
+    } else {
+        d->otrStatus.otrImplemented = false;
+    }
+}
+
+void ChatWidget::onOtrChannelPropertiesChanged(QVariantMap props, QStringList /* ignored */) {
+
+    Q_FOREACH(const QString& key, props.keys()) {
+        if(key == QString::fromLatin1("TrustLevel")) {
+            d->otrStatus.trustLevel = static_cast<Tp::OTRTrustLevel>(props[key].toInt(0));
+            kDebug() << "Otr status changed for channel: " << d->channel->objectPath() 
+                << " to: " << (int) d->otrStatus.trustLevel;
+
+            Q_EMIT(otrStatusChanged(d->otrStatus, this));
+        }
+    }
 }
 
 void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified)

@@ -81,7 +81,8 @@ K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecke
 ChatWindow::ChatWindow()
     : m_sendMessage(0),
       m_tabWidget(0),
-      m_keyboardLayoutInterface(0)
+      m_keyboardLayoutInterface(0),
+      otrActionMenu(0)
 {
     //This effectively constructs the s_krfbAvailableChecker object the first
     //time that this code is executed. This is to start the d-bus query early, so
@@ -134,6 +135,9 @@ ChatWindow::ChatWindow()
     // create custom actions
     // we must do it AFTER m_tabWidget is set up
     setupCustomActions();
+
+    // create otr actions for otr popup menu
+    setupOtrActions();
 
     setupGUI(QSize(460, 440), static_cast<StandardWindowOptions>(Default^StatusBar), QLatin1String("chatwindow.rc"));
 
@@ -391,6 +395,8 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setBlockEnabled(false);
         setShowInfoEnabled(false);
     }
+
+    onOtrStatusChanged(currentChatTab->otrStatus(), currentChatTab);
 
     // Allow "Leaving" rooms only in group chat, and when persistent rooms are enabled
     actionCollection()->action(QLatin1String("leave-chat"))->setEnabled(currentChatTab->isGroupChat() && TextChatConfig::instance()->dontLeaveGroupChats());
@@ -745,6 +751,8 @@ void ChatWindow::removeChatTabSignals(ChatTab *chatTab)
     disconnect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
     disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
     disconnect(chatTab, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
+    if(chatTab->otrStatus())
+        disconnect(chatTab, SIGNAL(otrStatusChanged(OtrStatus, ChatWidget*)), this, SLOT(onOtrStatusChanged(OtrStatus, ChatWidget*)));
 }
 
 void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const QString& errorMsg)
@@ -772,6 +780,8 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
     connect(chatTab, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
     connect(chatTab, SIGNAL(zoomFactorChanged(qreal)), this, SLOT(onZoomFactorChanged(qreal)));
+    if(chatTab->otrStatus()) 
+        connect(chatTab, SIGNAL(otrStatusChanged(OtrStatus, ChatWidget*)), this, SLOT(onOtrStatusChanged(OtrStatus, ChatWidget*)));
 }
 
 void ChatWindow::setupCustomActions()
@@ -875,6 +885,107 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("collaborate-document"), collaborateDocumentAction);
     actionCollection()->addAction(QLatin1String("contact-info"), showInfoAction);
     actionCollection()->addAction(QLatin1String("leave-chat"), leaveAction);
+}
+
+
+void ChatWindow::setupOtrActions() {
+
+    otrActionMenu = new KActionMenu(KIcon(QLatin1String("object-unlocked")), i18n("&OTR"), this);
+    otrActionMenu->setDelayed(false);
+    
+    KAction *startRestartOtrAction = new KAction(KIcon(QLatin1String("object-locked")), i18n("&Start session"), this);
+    startRestartOtrAction->setEnabled(false);
+    connect(startRestartOtrAction, SIGNAL(triggered()), this, SLOT(onStartRestartOtrTriggered()));
+
+    KAction *stopOtrAction = new KAction(KIcon(QLatin1String("object-unlocked")), i18n("&Stop session"), this);
+    stopOtrAction->setEnabled(false);
+    connect(stopOtrAction, SIGNAL(triggered()), this, SLOT(onStopOtrTriggered()));
+
+    KAction *authenticateBuddyAction = new KAction(KIcon(QLatin1String("application-pgp-signature")), i18n("&Authenticate contact"), this);
+    authenticateBuddyAction->setEnabled(false);
+    connect(authenticateBuddyAction, SIGNAL(triggered()), this, SLOT(onAuthenticateBuddyTriggered()));
+
+    otrActionMenu->addAction(startRestartOtrAction);
+    otrActionMenu->addAction(stopOtrAction);
+    otrActionMenu->addAction(authenticateBuddyAction);
+    otrActionMenu->setEnabled(false);
+
+    actionCollection()->addAction(QLatin1String("start-restart-otr"), startRestartOtrAction);
+    actionCollection()->addAction(QLatin1String("stop-otr"), stopOtrAction);
+    actionCollection()->addAction(QLatin1String("authenticate-otr"), authenticateBuddyAction);
+    actionCollection()->addAction(QLatin1String("otr-actions"), otrActionMenu);
+}
+
+void ChatWindow::onOtrStatusChanged(OtrStatus status, ChatWidget *chatTab) {
+
+    if(chatTab != getCurrentTab()) return;
+
+    if(!status) {
+        otrActionMenu->setEnabled(false);
+        otrActionMenu->menu()->setIcon(KIcon(QLatin1String("object-unlocked")));
+        return;
+    }
+
+    QAction* srAction = actionCollection()->action(QLatin1String("start-restart-otr"));
+    QAction* stopAction = actionCollection()->action(QLatin1String("stop-otr"));
+    QAction* authenticateBuddyAction = actionCollection()->action(QLatin1String("authenticate-otr"));
+
+    otrActionMenu->setEnabled(true);
+
+    switch(status.otrTrustLevel()) {
+
+        case Tp::OTRTrustLevelNotPrivate:
+            otrActionMenu->setIcon(KIcon(QLatin1String("object-unlocked")));
+            srAction->setEnabled(true);
+            srAction->setText(i18n("&Start session"));
+            stopAction->setEnabled(false);
+            authenticateBuddyAction->setEnabled(false);
+            return;
+
+        case Tp::OTRTrustLevelUnverified:
+            otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-unverified")));
+            srAction->setEnabled(true);
+            srAction->setText(i18n("&Restart session"));
+            stopAction->setEnabled(true);
+            authenticateBuddyAction->setEnabled(true);
+            return;
+
+        case Tp::OTRTrustLevelPrivate:
+            otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-verified")));
+            srAction->setEnabled(true);
+            srAction->setText(i18n("&Restart session"));
+            stopAction->setEnabled(true);
+            authenticateBuddyAction->setEnabled(true);
+            return;
+
+        case Tp::OTRTrustLevelFinished:
+            otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-finished")));
+            srAction->setEnabled(true);
+            srAction->setText(i18n("&Restart session"));
+            stopAction->setEnabled(true);
+            authenticateBuddyAction->setEnabled(false);
+            return;
+
+        default: return;
+    }
+}
+
+void ChatWindow::onStartRestartOtrTriggered() {
+
+    ChatTab* chat = getCurrentTab();
+    chat->startOtrSession();
+}
+
+void ChatWindow::onStopOtrTriggered() {
+
+    ChatTab* chat = getCurrentTab();
+    chat->stopOtrSession();
+}
+
+void ChatWindow::onAuthenticateBuddyTriggered() {
+
+    ChatTab* chat = getCurrentTab();
+    chat->authenticateBuddy();
 }
 
 void ChatWindow::setCollaborateDocumentEnabled(bool enable)

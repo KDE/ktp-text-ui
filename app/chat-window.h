@@ -26,6 +26,7 @@
 #include <KXmlGuiWindow>
 #include <KTabWidget>
 #include <KAction>
+#include <KActionMenu>
 
 namespace Sonnet {
     class DictionaryComboBox;
@@ -117,6 +118,11 @@ private Q_SLOTS:
     void onReloadTheme();
     void onCollaborateDocumentTriggered();
     void onLeaveChannelTriggered();
+    /** otr related handlers */
+    void onOtrStatusChanged(OtrStatus status, ChatWidget *chatTab);
+    void onStartRestartOtrTriggered();
+    void onStopOtrTriggered();
+    void onAuthenticateBuddyTriggered();
 
 protected Q_SLOTS:
     void showSettingsDialog();
@@ -141,6 +147,9 @@ private:
 
     /** creates and adds custom actions for the chat window */
     void setupCustomActions();
+
+    /** sets up otr actions */
+    void setupOtrActions();
 
     /** setters for chat actions */
     void setAudioCallEnabled(bool enable);
@@ -208,6 +217,7 @@ private:
     Sonnet::DictionaryComboBox *m_spellDictCombo;
     QLabel *m_accountIconLabel;
     qreal m_zoomFactor;
+    KActionMenu *otrActionMenu;
 };
 
 #endif // CHATWINDOW_H

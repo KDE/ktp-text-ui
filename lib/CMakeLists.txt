@@ -17,6 +17,9 @@ set(ktpchat_SRCS
         contact-delegate.cpp
         notify-filter.cpp
         text-chat-config.cpp
+        otr-types.cpp
+        otr-channel-interface.cpp
+        otr-utils.cpp
         )
 
 set(ktpchat_UI
