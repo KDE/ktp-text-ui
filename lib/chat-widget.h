@@ -23,6 +23,7 @@
 
 #include "ktpchat_export.h"
 #include "otr-utils.h"
+#include "otr-types.h"
 
 #include <QtCore/QString>
 #include <QtGui/QWidget>
@@ -228,6 +229,7 @@ private Q_SLOTS:
     void onShareProviderFinishedFailure(ShareProvider *provider, const QString &errorMessage);
     void onSendFileClicked();
     void onOtrChannelPropertiesChanged(QVariantMap props, QStringList ignored);
+    void onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous);
 
 private:
     /** connects necessary signals for the channel */

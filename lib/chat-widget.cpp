@@ -188,9 +188,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     // connect channel signals
     setupChannelSignals();
 
-    // setup new otr channel along with connecting to signals
-    setupOtrChannel();
-
     // create contactModel and start keeping track of contacts.
     d->contactModel = new ChannelContactModel(d->channel, this);
     setupContactModelSignals();
@@ -261,6 +258,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     m_previousConversationAvailable = d->logManager->exists();
 
     d->notifyFilter = new NotifyFilter(this);
+
+    // setup new otr channel along with connecting to signals
+    setupOtrChannel();
 }
 
 ChatWidget::~ChatWidget()
@@ -646,21 +646,30 @@ bool ChatWidget::isOnTop() const
     return ( isActiveWindow() && isVisible() );
 }
 
-OtrStatus ChatWidget::otrStatus() const {
+OtrStatus ChatWidget::otrStatus() const 
+{
     return d->otrStatus;
 }
 
-void ChatWidget::startOtrSession() {
+void ChatWidget::startOtrSession() 
+{
     if(!d->otrStatus) return;
     d->otrChannel->Initialize();
+    if(d->otrStatus.otrTrustLevel() == Tp::OTRTrustLevelNotPrivate)
+        d->ui.chatArea->addStatusMessage(i18n("Attempting to start a private OTR session with %1", d->contactName));
+    else
+        d->ui.chatArea->addStatusMessage(i18n("Attempting to restart a private OTR session with %1", d->contactName));
 }
 
-void ChatWidget::stopOtrSession() {
+void ChatWidget::stopOtrSession() 
+{
     if(!d->otrStatus) return;
     d->otrChannel->Stop();
+    d->ui.chatArea->addStatusMessage(i18n("Terminating OTR session"));
 }
 
-void ChatWidget::authenticateBuddy() {
+void ChatWidget::authenticateBuddy() 
+{
     if(!d->otrStatus) return;
 
     QVariant fpReply = Tp::Utils::waitForOperation(d->otrChannel->requestPropertyRemoteFingerprint());
@@ -688,7 +697,8 @@ void ChatWidget::authenticateBuddy() {
     }
 }
 
-void ChatWidget::setupOtrChannel() {
+void ChatWidget::setupOtrChannel() 
+{
 
     QString busName = d->channel->connection()->objectPath();
     busName = busName.replace(QChar::fromAscii('/'), QChar::fromAscii('.')).mid(1) + QString::fromLatin1(".OTR");
@@ -704,6 +714,7 @@ void ChatWidget::setupOtrChannel() {
         if(reply.isValid()) {
             Tp::OTRTrustLevel trustLevel = static_cast<Tp::OTRTrustLevel>(reply.value<int>());
             d->otrStatus = OtrStatus(trustLevel);
+            onOTRTrustLevelChanged(trustLevel, trustLevel);
             kDebug() << "Channel: " << d->channel->objectPath() << " implements OTR";
         } else {
             d->otrStatus.otrImplemented = false;
@@ -714,16 +725,43 @@ void ChatWidget::setupOtrChannel() {
     }
 }
 
-void ChatWidget::onOtrChannelPropertiesChanged(QVariantMap props, QStringList /* ignored */) {
+void ChatWidget::onOtrChannelPropertiesChanged(QVariantMap props, QStringList /* ignored */) 
+{
 
     Q_FOREACH(const QString& key, props.keys()) {
         if(key == QString::fromLatin1("TrustLevel")) {
-            d->otrStatus.trustLevel = static_cast<Tp::OTRTrustLevel>(props[key].toInt(0));
-            kDebug() << "Otr status changed for channel: " << d->channel->objectPath() 
-                << " to: " << (int) d->otrStatus.trustLevel;
+            Tp::OTRTrustLevel trustLevel = static_cast<Tp::OTRTrustLevel>(props[key].toInt(0));
+
+            onOTRTrustLevelChanged(trustLevel, d->otrStatus.otrTrustLevel());
+            d->otrStatus.trustLevel = trustLevel;
 
             Q_EMIT(otrStatusChanged(d->otrStatus, this));
+            kDebug() << "Otr status changed for channel: " << d->channel->objectPath() 
+                << " to: " << (int) d->otrStatus.trustLevel;
         }
+    }
+}
+
+void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous) 
+{
+    switch(trustLevel) {
+        case Tp::OTRTrustLevelUnverified:
+            if(previous == Tp::OTRTrustLevelPrivate) 
+                d->ui.chatArea->addStatusMessage(i18n("The OTR session is unverified now"));
+            else
+                d->ui.chatArea->addStatusMessage(i18n("Unverified OTR session started"));
+            return;
+        case Tp::OTRTrustLevelPrivate:
+            if(previous == Tp::OTRTrustLevelUnverified) 
+                d->ui.chatArea->addStatusMessage(i18n("The OTR session is private now"));
+            else
+                d->ui.chatArea->addStatusMessage(i18n("Private OTR session started"));
+            return;
+        case Tp::OTRTrustLevelFinished:
+            d->ui.chatArea->addStatusMessage(i18n("%1 has ended the OTR session. You should do the same", d->contactName));
+            return;
+
+        default: return;
     }
 }
 
@@ -826,13 +864,19 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
 
             d->ui.chatArea->addStatusMessage(text, message.sender()->alias(), message.received());
         } else {
-            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel));
 
-            if (!alreadyNotified) {
-                d->notifyFilter->filterMessage(processedMessage,
-                                               KTp::MessageContext(d->account, d->channel));
+            if(Tp::Utils::isOtrEvent(message)) {
+                // TODO use notify filter to present to user when unencrypted message was received
+                d->ui.chatArea->addStatusMessage(Tp::Utils::processOtrMessage(message));
+            } else {
+                KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel));
+
+                if (!alreadyNotified) {
+                    d->notifyFilter->filterMessage(processedMessage,
+                                                   KTp::MessageContext(d->account, d->channel));
+                }
+                d->ui.chatArea->addMessage(processedMessage);
             }
-            d->ui.chatArea->addMessage(processedMessage);
         }
 
         //if the window is on top, ack straight away. Otherwise they stay in the message queue for acking when activated..
@@ -872,6 +916,12 @@ void ChatWidget::chatViewReady()
 
 void ChatWidget::sendMessage()
 {
+    if(d->otrStatus && d->otrStatus.trustLevel == Tp::OTRTrustLevelFinished) {
+        d->ui.chatArea->addStatusMessage(i18n("%1 has already closed his/her private connection to you."
+                    "Your message was not sent. Either end your private conversation, or restart it.", d->contactName));
+        return;
+    }
+
     QString message = d->ui.sendMessageBox->toPlainText();
 
     if (!message.isEmpty()) {

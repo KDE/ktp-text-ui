@@ -1,6 +1,8 @@
 #ifndef OTR_CONSTANTS_HEADER
 #define OTR_CONSTANTS_HEADER
 
+#include <KGlobal>
+
 namespace Tp
 {
     
@@ -49,6 +51,30 @@ enum OTRTrustLevel
  */
 const int NUM_OTR_TRUST_LEVELS = (3+1);
 
+
+/**
+ * OTR message event enum type - the same as OtrlMessageEvent in libotr
+ */
+enum OTRMessageEvent 
+{
+    OTRL_MSGEVENT_NONE,
+    OTRL_MSGEVENT_ENCRYPTION_REQUIRED,
+    OTRL_MSGEVENT_ENCRYPTION_ERROR,
+    OTRL_MSGEVENT_CONNECTION_ENDED,
+    OTRL_MSGEVENT_SETUP_ERROR,
+    OTRL_MSGEVENT_MSG_REFLECTED,
+    OTRL_MSGEVENT_MSG_RESENT,
+    OTRL_MSGEVENT_RCVDMSG_NOT_IN_PRIVATE,
+    OTRL_MSGEVENT_RCVDMSG_UNREADABLE,
+    OTRL_MSGEVENT_RCVDMSG_MALFORMED,
+    OTRL_MSGEVENT_LOG_HEARTBEAT_RCVD,
+    OTRL_MSGEVENT_LOG_HEARTBEAT_SENT,
+    OTRL_MSGEVENT_RCVDMSG_GENERAL_ERR,
+    OTRL_MSGEVENT_RCVDMSG_UNENCRYPTED,
+    OTRL_MSGEVENT_RCVDMSG_UNRECOGNIZED,
+    OTRL_MSGEVENT_RCVDMSG_FOR_OTHER_INSTANCE
+};
+
 }
 
 /**
@@ -58,5 +84,14 @@ const int NUM_OTR_TRUST_LEVELS = (3+1);
  * building with Q_NO_CAST_FROM_ASCII defined.
  */
 #define TP_QT_IFACE_CHANNEL_INTERFACE_OTR1 (QLatin1String("org.freedesktop.Telepathy.Channel.Interface.OTR1"))
+
+
+/**
+ * OTR message headers
+ */
+#define OTR_MESSAGE_EVENT_HEADER       (QLatin1String("otr-message-event"))
+#define OTR_REMOTE_FINGERPRINT_HEADER  (QLatin1String("otr-remote-fingerprint"))
+#define OTR_ERROR_HEADER               (QLatin1String("otr-error"))
+#define OTR_UNENCRYPTED_MESSAGE_HEADER (QLatin1String("otr-unencrypted-message"))
 
 #endif
