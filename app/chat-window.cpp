@@ -2,6 +2,7 @@
     Copyright (C) 2010  David Edmundson   <kde@davidedmundson.co.uk>
     Copyright (C) 2011  Dominik Schmidt   <dev@dominik-schmidt.de>
     Copyright (C) 2011  Francesco Nwokeka <francesco.nwokeka@gmail.com>
+    Copyright (C) 2014  Marcin Ziemiński   <zieminn@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

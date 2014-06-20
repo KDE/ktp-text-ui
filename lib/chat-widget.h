@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2010 by David Edmundson <kde@davidedmundson.co.uk>      *
  *   Copyright (C) 2011 by Francesco Nwokeka <francesco.nwokeka@gmail.com> *
+ *   Copyright (C) 2014 by Marcin Ziemiński <zieminn@gmail.com>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

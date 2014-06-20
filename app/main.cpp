@@ -1,6 +1,7 @@
 /*
-    Copyright (C) 2010  David Edmundson <kde@davidedmundson.co.uk>
-    Copyright (C) 2011  Dominik Schmidt <dev@dominik-schmidt.de>
+    Copyright (C) 2010  David Edmundson    <kde@davidedmundson.co.uk>
+    Copyright (C) 2011  Dominik Schmidt    <dev@dominik-schmidt.de>
+    Copyright (C) 2014  Marcin Ziemiński   <zieminn@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "david@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
     aboutData.addAuthor(ki18n("Francesco Nwokeka"), ki18n("Developer"), "francesco.nwokeka@gmail.com");
+    aboutData.addAuthor(ki18n("Marcin Ziemiński"), ki18n("Developer"), "zieminn@gmail.com");
     aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
     aboutData.setLicense(KAboutData::License_GPL_V2);
     aboutData.setProgramIconName(QLatin1String("telepathy-kde"));
