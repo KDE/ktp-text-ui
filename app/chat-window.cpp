@@ -888,7 +888,8 @@ void ChatWindow::setupCustomActions()
 }
 
 
-void ChatWindow::setupOtrActions() {
+void ChatWindow::setupOtrActions() 
+{
 
     otrActionMenu = new KActionMenu(KIcon(QLatin1String("object-unlocked")), i18n("&OTR"), this);
     otrActionMenu->setDelayed(false);
@@ -916,7 +917,8 @@ void ChatWindow::setupOtrActions() {
     actionCollection()->addAction(QLatin1String("otr-actions"), otrActionMenu);
 }
 
-void ChatWindow::onOtrStatusChanged(OtrStatus status, ChatWidget *chatTab) {
+void ChatWindow::onOtrStatusChanged(OtrStatus status, ChatWidget *chatTab) 
+{
 
     if(chatTab != getCurrentTab()) return;
 
@@ -970,7 +972,8 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status, ChatWidget *chatTab) {
     }
 }
 
-void ChatWindow::onStartRestartOtrTriggered() {
+void ChatWindow::onStartRestartOtrTriggered() 
+{
 
     ChatTab* chat = getCurrentTab();
     chat->startOtrSession();
@@ -982,7 +985,8 @@ void ChatWindow::onStopOtrTriggered() {
     chat->stopOtrSession();
 }
 
-void ChatWindow::onAuthenticateBuddyTriggered() {
+void ChatWindow::onAuthenticateBuddyTriggered() 
+{
 
     ChatTab* chat = getCurrentTab();
     chat->authenticateBuddy();

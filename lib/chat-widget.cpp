@@ -266,6 +266,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 ChatWidget::~ChatWidget()
 {
     saveSpellCheckingOption();
+    if(d->otrStatus && (d->otrStatus.otrTrustLevel() != Tp::OTRTrustLevelNotPrivate)) {
+        stopOtrSession();
+    }
     delete d;
 }
 
