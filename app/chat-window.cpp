@@ -734,6 +734,7 @@ void ChatWindow::showSettingsDialog()
 
     dialog->addModule(QLatin1String("kcm_ktp_chat_behavior"));
     dialog->addModule(QLatin1String("kcm_ktp_chat_messages"));
+    dialog->addModule(QLatin1String("kcm_ktp_chat_otr"));
 
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();

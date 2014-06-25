@@ -32,6 +32,7 @@
 
 #include <QDBusPendingReply>
 
+#include <TelepathyQt/ChannelInterface>
 #include <TelepathyQt/AbstractInterface>
 #include <TelepathyQt/DBusProxy>
 #include <TelepathyQt/Global>
