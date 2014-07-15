@@ -19,11 +19,15 @@
 #define OTR_UTILS_HEADER
 
 #include "otr-constants.h"
+#include "otr-channel-proxy.h"
+
 #include <ktpchat_export.h>
 #include <TelepathyQt/PendingVariant>
 #include <TelepathyQt/Message>
+#include <TelepathyQt/Types>
+#include <TelepathyQt/ReceivedMessage>
 
-class KDE_TELEPATHY_CHAT_EXPORT OtrStatus 
+class KDE_TELEPATHY_CHAT_EXPORT OtrStatus
 {
     public:
         /** Creates OtrStatus with bool() returning false */
@@ -42,17 +46,21 @@ class KDE_TELEPATHY_CHAT_EXPORT OtrStatus
         Tp::OTRTrustLevel otrTrustLevel() const;
 
     private:
-        bool otrImplemented;
+        bool otrConnected;
         Tp::OTRTrustLevel trustLevel;
-
-        friend class ChatWidget;
 };
 
 namespace Tp {
 namespace Utils {
 
-    /** Makes a block on pending operation with timout and returns its result */
-    QVariant waitForOperation(const Tp::PendingVariant *pendingVariant, int timout = 3000);
+    /** Extracts pending-messages-ids from message list */
+    Tp::UIntList getPendingMessagesIDs(const QList<Tp::ReceivedMessage> &messageQueue);
+
+    /** Extracts pending-mesage-id from message */
+    uint getId(const Tp::MessagePartList &message);
+
+    /** Returns an object path for the otr proxy channel given a text channel it corresponds to */
+    QString getOtrProxyObjectPathFor(const Tp::TextChannelPtr &textChannel);
 
     /** Returns true if message is generated internally by OTR implementation */
     bool isOtrEvent(const Tp::ReceivedMessage &message);

@@ -21,37 +21,41 @@
 #include <QEventLoop>
 #include <QTimer>
 #include <KLocalizedString>
+#include <KDebug>
 
-OtrStatus::OtrStatus() 
-    : otrImplemented(false) { }
+#include <TelepathyQt/TextChannel>
+#include <TelepathyQt/Connection>
 
-OtrStatus::OtrStatus(Tp::OTRTrustLevel trustLevel) 
-    : otrImplemented(true), trustLevel(trustLevel) { }
+OtrStatus::OtrStatus()
+    : otrConnected(false) { }
 
-OtrStatus::operator bool() const 
+OtrStatus::OtrStatus(Tp::OTRTrustLevel trustLevel)
+    : otrConnected(true), trustLevel(trustLevel) { }
+
+OtrStatus::operator bool() const
 {
-    return otrImplemented;
+    return otrConnected;
 }
 
-bool OtrStatus::operator!() const 
+bool OtrStatus::operator!() const
 {
     return !(OtrStatus::operator bool());
 }
 
-bool OtrStatus::operator==(const OtrStatus &other) const 
+bool OtrStatus::operator==(const OtrStatus &other) const
 {
 
-    if(otrImplemented != other.otrImplemented) return false;
-    else if(otrImplemented) return trustLevel == other.trustLevel;
+    if(otrConnected != other.otrConnected) return false;
+    else if(otrConnected) return trustLevel == other.trustLevel;
     else return true;
 }
 
-bool OtrStatus::operator!=(const OtrStatus &other) const 
+bool OtrStatus::operator!=(const OtrStatus &other) const
 {
     return !(*this == other);
 }
 
-Tp::OTRTrustLevel OtrStatus::otrTrustLevel() const 
+Tp::OTRTrustLevel OtrStatus::otrTrustLevel() const
 {
     return trustLevel;
 }
@@ -59,26 +63,39 @@ Tp::OTRTrustLevel OtrStatus::otrTrustLevel() const
 namespace Tp {
 namespace Utils {
 
-    QVariant waitForOperation(const Tp::PendingVariant *pendingVariant, int timeout) 
+    Tp::UIntList getPendingMessagesIDs(const QList<Tp::ReceivedMessage> &messageQueue)
     {
-        QEventLoop loop;
-        QTimer timer;
-        timer.setSingleShot(true);
-        loop.connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
-        loop.connect(pendingVariant, SIGNAL(finished(Tp::PendingOperation*)), &loop, SLOT(quit()));
-        timer.start(timeout); // 3s
-        loop.exec();
-
-        if(timer.isActive()) timer.stop();
-        return pendingVariant->result();
+        Tp::UIntList ids;
+        Q_FOREACH(const Tp::ReceivedMessage &mes, messageQueue) {
+            ids << getId(mes.parts());
+        }
+        return ids;
     }
 
-    bool isOtrEvent(const Tp::ReceivedMessage &message) 
+    uint getId(const Tp::MessagePartList &message) {
+        return message.first()[QLatin1String("pending-message-id")].variant().toUInt(NULL);
+    }
+
+    QString getOtrProxyObjectPathFor(const Tp::TextChannelPtr &textChannel)
+    {
+        int index;
+        QString connectionId = textChannel->connection()->objectPath();
+        index = connectionId.lastIndexOf(QChar::fromLatin1('/'));
+        connectionId = connectionId.mid(index+1);
+
+        QString channelId = textChannel->objectPath();
+        index = channelId.lastIndexOf(QChar::fromLatin1('/'));
+        channelId = channelId.mid(index+1);
+
+        return QString::fromLatin1("%1%2/%3").arg(KTP_PROXY_CHANNEL_OBJECT_PATH_PREFIX, connectionId, channelId);
+    }
+
+    bool isOtrEvent(const Tp::ReceivedMessage &message)
     {
         return message.part(0).contains(OTR_MESSAGE_EVENT_HEADER);
     }
 
-    QString processOtrMessage(const Tp::ReceivedMessage &message) 
+    QString processOtrMessage(const Tp::ReceivedMessage &message)
     {
         Tp::MessagePart messagePart = message.part(0);
         OTRMessageEvent otrEvent = static_cast<OTRMessageEvent>(
@@ -96,7 +113,7 @@ namespace Utils {
             case Tp::OTRL_MSGEVENT_RCVDMSG_UNENCRYPTED:
                 {
                     QString unencryptedMessage = messagePart[OTR_UNENCRYPTED_MESSAGE_HEADER].variant().toString();
-                    return i18n("Received unencrypted message: [%1]", unencryptedMessage); 
+                    return i18n("Received unencrypted message: [%1]", unencryptedMessage);
                 }
 
             default:

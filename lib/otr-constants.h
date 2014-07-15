@@ -99,14 +99,13 @@ enum OTRMessageEvent
 
 }
 
-/**
- * \ingroup ifacestrconsts
- *
- * The interface name "org.freedesktop.Telepathy.Channel.Interface.OTR1" as a QLatin1String, usable in QString requiring contexts even when
- * building with Q_NO_CAST_FROM_ASCII defined.
- */
-#define TP_QT_IFACE_CHANNEL_INTERFACE_OTR1 (QLatin1String("org.freedesktop.Telepathy.Channel.Interface.OTR1"))
+#define KTP_IFACE_CHANNEL_PROXY_OTR (QLatin1String("org.kde.TelepathyProxy.ChannelProxy.Interface.OTR"))
 
+#define KTP_IFACE_PROXY_SERVICE (QLatin1String("org.kde.TelepathyProxy.ProxyService"))
+
+#define KTP_PROXY_CHANNEL_OBJECT_PATH_PREFIX (QLatin1String("/org/freedesktop/TelepathyProxy/OtrChannelProxy/"))
+
+#define KTP_PROXY_BUS_NAME (QLatin1String("org.freedesktop.Telepathy.Client.KTp.Proxy"))
 
 /**
  * OTR message headers

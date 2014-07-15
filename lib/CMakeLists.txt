@@ -18,7 +18,9 @@ set(ktpchat_SRCS
         notify-filter.cpp
         text-chat-config.cpp
         otr-types.cpp
-        otr-channel-interface.cpp
+        channel-adapter.cpp
+        otr-channel-proxy.cpp
+        proxy-service.cpp
         otr-utils.cpp
         )
 

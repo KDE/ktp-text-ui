@@ -24,6 +24,7 @@
 #include "chat-search-bar.h"
 #include "chat-tab.h"
 #include "chat-widget.h"
+#include "otr-constants.h"
 
 #include <KTp/service-availability-checker.h>
 #include <KTp/actions.h>
@@ -137,8 +138,8 @@ ChatWindow::ChatWindow()
     // we must do it AFTER m_tabWidget is set up
     setupCustomActions();
 
-    // create otr actions for otr popup menu
-    setupOtrActions();
+    // start otr service and create otr actions for otr popup menu
+    setupOTR();
 
     setupGUI(QSize(460, 440), static_cast<StandardWindowOptions>(Default^StatusBar), QLatin1String("chatwindow.rc"));
 
@@ -397,7 +398,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setShowInfoEnabled(false);
     }
 
-    onOtrStatusChanged(currentChatTab->otrStatus(), currentChatTab);
+    onOtrStatusChanged(currentChatTab->otrStatus());
 
     // Allow "Leaving" rooms only in group chat, and when persistent rooms are enabled
     actionCollection()->action(QLatin1String("leave-chat"))->setEnabled(currentChatTab->isGroupChat() && TextChatConfig::instance()->dontLeaveGroupChats());
@@ -754,7 +755,7 @@ void ChatWindow::removeChatTabSignals(ChatTab *chatTab)
     disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
     disconnect(chatTab, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
     if(chatTab->otrStatus())
-        disconnect(chatTab, SIGNAL(otrStatusChanged(OtrStatus, ChatWidget*)), this, SLOT(onOtrStatusChanged(OtrStatus, ChatWidget*)));
+        disconnect(chatTab, SIGNAL(otrStatusChanged(OtrStatus)), this, SLOT(onOtrStatusChanged(OtrStatus)));
 }
 
 void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const QString& errorMsg)
@@ -782,8 +783,8 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
     connect(chatTab, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
     connect(chatTab, SIGNAL(zoomFactorChanged(qreal)), this, SLOT(onZoomFactorChanged(qreal)));
-    if(chatTab->otrStatus()) 
-        connect(chatTab, SIGNAL(otrStatusChanged(OtrStatus, ChatWidget*)), this, SLOT(onOtrStatusChanged(OtrStatus, ChatWidget*)));
+    if(chatTab->otrStatus())
+        connect(chatTab, SIGNAL(otrStatusChanged(OtrStatus)), this, SLOT(onOtrStatusChanged(OtrStatus)));
 }
 
 void ChatWindow::setupCustomActions()
@@ -890,12 +891,21 @@ void ChatWindow::setupCustomActions()
 }
 
 
-void ChatWindow::setupOtrActions() 
+void ChatWindow::setupOTR()
 {
+    // start otr proxy service
+    QDBusConnection dbusConnection = QDBusConnection::sessionBus();
+    if(!dbusConnection.interface()->isServiceRegistered(KTP_PROXY_BUS_NAME)) {
+        const QDBusReply<void> regRep = dbusConnection.interface()->startService(KTP_PROXY_BUS_NAME);
+        if(!regRep.isValid()) {
+            kDebug() << KTP_PROXY_BUS_NAME << " service unavailable";
+            return;
+        }
+    }
 
     otrActionMenu = new KActionMenu(KIcon(QLatin1String("object-unlocked")), i18n("&OTR"), this);
     otrActionMenu->setDelayed(false);
-    
+
     KAction *startRestartOtrAction = new KAction(KIcon(QLatin1String("object-locked")), i18n("&Start session"), this);
     startRestartOtrAction->setEnabled(false);
     connect(startRestartOtrAction, SIGNAL(triggered()), this, SLOT(onStartRestartOtrTriggered()));
@@ -919,10 +929,17 @@ void ChatWindow::setupOtrActions()
     actionCollection()->addAction(QLatin1String("otr-actions"), otrActionMenu);
 }
 
-void ChatWindow::onOtrStatusChanged(OtrStatus status, ChatWidget *chatTab) 
+void ChatWindow::onOtrStatusChanged(OtrStatus status)
 {
 
-    if(chatTab != getCurrentTab()) return;
+    ChatWidget *chatTab = dynamic_cast<ChatWidget*>(QObject::sender());
+    if(!chatTab) {
+        chatTab = getCurrentTab();
+    }
+
+    if(chatTab != getCurrentTab()) {
+        return;
+    }
 
     if(!status) {
         otrActionMenu->setEnabled(false);
@@ -974,7 +991,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status, ChatWidget *chatTab)
     }
 }
 
-void ChatWindow::onStartRestartOtrTriggered() 
+void ChatWindow::onStartRestartOtrTriggered()
 {
 
     ChatTab* chat = getCurrentTab();
@@ -987,7 +1004,7 @@ void ChatWindow::onStopOtrTriggered() {
     chat->stopOtrSession();
 }
 
-void ChatWindow::onAuthenticateBuddyTriggered() 
+void ChatWindow::onAuthenticateBuddyTriggered()
 {
 
     ChatTab* chat = getCurrentTab();

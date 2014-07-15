@@ -120,7 +120,7 @@ private Q_SLOTS:
     void onCollaborateDocumentTriggered();
     void onLeaveChannelTriggered();
     /** otr related handlers */
-    void onOtrStatusChanged(OtrStatus status, ChatWidget *chatTab);
+    void onOtrStatusChanged(OtrStatus status);
     void onStartRestartOtrTriggered();
     void onStopOtrTriggered();
     void onAuthenticateBuddyTriggered();
@@ -150,7 +150,7 @@ private:
     void setupCustomActions();
 
     /** sets up otr actions */
-    void setupOtrActions();
+    void setupOTR();
 
     /** setters for chat actions */
     void setAudioCallEnabled(bool enable);

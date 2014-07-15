@@ -206,7 +206,7 @@ Q_SIGNALS:
     void zoomFactorChanged(qreal zoomFactor);
 
     /** Emitted when OTRTrustLevel changes in the channel */
-    void otrStatusChanged(OtrStatus otrStatus, ChatWidget *chatTab);
+    void otrStatusChanged(OtrStatus otrStatus);
 
 private Q_SLOTS:
     /** received when user changes search criteria or when searching for text */
@@ -229,7 +229,6 @@ private Q_SLOTS:
     void onShareProviderFinishedSuccess(ShareProvider *provider, const QString &imageUrl);
     void onShareProviderFinishedFailure(ShareProvider *provider, const QString &errorMessage);
     void onSendFileClicked();
-    void onOtrChannelPropertiesChanged(QVariantMap props, QStringList ignored);
     void onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous);
 
 private:
@@ -248,8 +247,8 @@ private:
     /** Loads theme into the the AdiumThemeView */
     void initChatArea();
 
-    /** connects necessary signals for the otr channel */
-    void setupOtrChannel();
+    /** connects necessary signals for the otr proxy channel */
+    void setupOTR();
 
     bool m_previousConversationAvailable;
 
