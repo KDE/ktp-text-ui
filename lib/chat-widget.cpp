@@ -681,6 +681,8 @@ void ChatWidget::setupOTR()
 {
     connect(&d->channel, SIGNAL(otrTrustLevelChanged(Tp::OTRTrustLevel, Tp::OTRTrustLevel)),
             SLOT(onOTRTrustLevelChanged(Tp::OTRTrustLevel, Tp::OTRTrustLevel)));
+    connect(&d->channel, SIGNAL(sessionRefreshed()),
+            SLOT(onOTRsessionRefreshed()));
 }
 
 void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous)
@@ -711,6 +713,11 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
 
     Q_EMIT otrStatusChanged(OtrStatus(trustLevel));
 
+}
+
+void ChatWidget::onOTRsessionRefreshed()
+{
+    d->ui.chatArea->addStatusMessage(i18n("Successfully refreshed OTR session"));
 }
 
 void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified)
@@ -1307,9 +1314,9 @@ void ChatWidget::currentPresenceChanged(const Tp::Presence &presence)
         d->ui.chatArea->addStatusMessage(i18n("You are now offline"), d->yourName);
         iconChanged(icon());
     } else {
-	if (d->ui.messageWidget && d->ui.messageWidget->isVisible()) {
-	    d->ui.messageWidget->animatedHide();
-	}
+        if (d->ui.messageWidget && d->ui.messageWidget->isVisible()) {
+            d->ui.messageWidget->animatedHide();
+        }
     }
 }
 
@@ -1360,7 +1367,7 @@ void ChatWidget::onMessageWidgetSwitchOnlineActionTriggered()
 void ChatWidget::onShareImageMenuActionTriggered()
 {
     if (!d->fileToTransferPath.isEmpty()) {
-	d->shareProvider->publish(d->fileToTransferPath);
+        d->shareProvider->publish(d->fileToTransferPath);
     }
 }
 
@@ -1378,7 +1385,7 @@ void ChatWidget::onShareProviderFinishedSuccess(ShareProvider* provider, const Q
 {
     Q_UNUSED(provider);
     if (!imageUrl.isEmpty()) {
-	d->channel.send(imageUrl);
+        d->channel.send(imageUrl);
     }
 }
 

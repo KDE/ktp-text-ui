@@ -113,7 +113,7 @@ public:
     /**
      * Asynchronous getter for the remote object property \c WrappedChannel of type \c QDBusObjectPath.
      *
-     * 
+     *
      * \htmlonly
      * <p>Object path of the channel this proxy is created for.</p>
      * \endhtmlonly
@@ -129,7 +129,7 @@ public:
     /**
      * Asynchronous getter for the remote object property \c Connected of type \c bool.
      *
-     * 
+     *
      * \htmlonly
      * <p>TRUE if the proxy is connected</p>
      * \endhtmlonly
@@ -145,11 +145,11 @@ public:
     /**
      * Asynchronous getter for the remote object property \c PendingMessages of type \c Tp::MessagePartListList.
      *
-     * 
+     *
      * \htmlonly
      * <p>
      *   The same as:
-     *    \endhtmlonly ChannelInterfaceMessagesInterface \htmlonly 
+     *    \endhtmlonly ChannelInterfaceMessagesInterface \htmlonly
      * </p>
      * \endhtmlonly
      *
@@ -164,7 +164,7 @@ public:
     /**
      * Asynchronous getter for the remote object property \c TrustLevel of type \c uint.
      *
-     * 
+     *
      * \htmlonly
      * <p>The current trust level of this channel:
      *     0=TRUST_NOT_PRIVATE, 1=TRUST_UNVERIFIED, 2=TRUST_PRIVATE,
@@ -184,7 +184,7 @@ public:
     /**
      * Asynchronous getter for the remote object property \c LocalFingerprint of type \c QString.
      *
-     * 
+     *
      * \htmlonly
      * <p>User's current fingerprint. The first element is a human readable
      * fingerprint that can be displayed to the user so he can communicate it
@@ -203,12 +203,11 @@ public:
     /**
      * Asynchronous getter for the remote object property \c RemoteFingerprint of type \c QString.
      *
-     * 
+     *
      * \htmlonly
      * <p>The current fingerprint of the remote contact. Should be displayed
-     * to the user to update its trust level. The first element of the tuple
-     * is the fingerprint formatted to be displayed. The 2nd element is the
-     * fingerprint raw data that can be passed to TrustFingerprint</p>
+     *   to the user to update its trust level. It is shown in human readable format i.e.
+     *   :e .</p>
      * \endhtmlonly
      *
      * \return A pending variant which will emit finished when the property has been
@@ -233,8 +232,8 @@ public:
 public Q_SLOTS:
     /**
      * Begins a call to the D-Bus method \c ConnectProxy on the remote object.
-     * 
-     * Connect to the otr proxy. From now on all data which is modified by it 
+     *
+     * Connect to the otr proxy. From now on all data which is modified by it
      * should be acquired from the proxy, not from the underlying channel.
      *
      * Note that \a timeout is ignored as of now. It will be used once
@@ -258,7 +257,7 @@ public Q_SLOTS:
 
     /**
      * Begins a call to the D-Bus method \c DisconnectProxy on the remote object.
-     * 
+     *
      * Turns off proxy if one is connected.
      *
      * Note that \a timeout is ignored as of now. It will be used once
@@ -282,11 +281,11 @@ public Q_SLOTS:
 
     /**
      * Begins a call to the D-Bus method \c SendMessage on the remote object.
-     * 
+     *
      * \htmlonly
      * <p>
      *   The same as:
-     *    \endhtmlonly org.freedesktop.Telepathy.Channel.Interface.Messages.Sent \htmlonly 
+     *    \endhtmlonly org.freedesktop.Telepathy.Channel.Interface.Messages.Sent \htmlonly
      * </p>
      * \endhtmlonly
      *
@@ -312,11 +311,11 @@ public Q_SLOTS:
 
     /**
      * Begins a call to the D-Bus method \c AcknowledgePendingMessages on the remote object.
-     * 
+     *
      * \htmlonly
      * <p>
      *   The same as:
-     *    \endhtmlonly ChannelTypeTextInterface \htmlonly 
+     *    \endhtmlonly ChannelTypeTextInterface \htmlonly
      * </p>
      * \endhtmlonly
      *
@@ -342,8 +341,8 @@ public Q_SLOTS:
 
     /**
      * Begins a call to the D-Bus method \c Initialize on the remote object.
-     * 
-     * Start an OTR session for this channel if the remote end supports it has 
+     *
+     * Start an OTR session for this channel if the remote end supports it has
      * well.
      *
      * Note that \a timeout is ignored as of now. It will be used once
@@ -367,7 +366,7 @@ public Q_SLOTS:
 
     /**
      * Begins a call to the D-Bus method \c Stop on the remote object.
-     * 
+     *
      * Stops the OTR session.
      *
      * Note that \a timeout is ignored as of now. It will be used once
@@ -389,14 +388,49 @@ public Q_SLOTS:
         return this->connection().asyncCall(callMessage, timeout);
     }
 
+    /**
+     * Begins a call to the D-Bus method \c TrustFingerprint on the remote object.
+     *
+     * Set whether or not the user trusts the given fingerprint. It has to be
+     * the fingerprint the remote contact is currently using.
+     *
+     * Note that \a timeout is ignored as of now. It will be used once
+     * http://bugreports.qt.nokia.com/browse/QTBUG-11775 is fixed.
+     *
+     *
+     * \param fingerprint
+     *
+     *     The fingerprint in format: &apos;12345678 12345678 12345678
+     *     12345678 12345678&apos;
+     *
+     * \param trust
+     *
+     *     %TRUE if trusted, %FALSE otherwise.
+     * \param timeout The timeout in milliseconds.
+     */
+    inline QDBusPendingReply<> TrustFingerprint(const QString& fingerprint, bool trust, int timeout = -1)
+    {
+        if (!invalidationReason().isEmpty()) {
+            return QDBusPendingReply<>(QDBusMessage::createError(
+                invalidationReason(),
+                invalidationMessage()
+            ));
+        }
+
+        QDBusMessage callMessage = QDBusMessage::createMethodCall(this->service(), this->path(),
+                this->staticInterfaceName(), QLatin1String("TrustFingerprint"));
+        callMessage << QVariant::fromValue(fingerprint) << QVariant::fromValue(trust);
+        return this->connection().asyncCall(callMessage, timeout);
+    }
+
 Q_SIGNALS:
     /**
      * Represents the signal \c MessageSent on the remote object.
-     * 
+     *
      * \htmlonly
      * <p>
      *   The same as:
-     *    \endhtmlonly ChannelInterfaceMessagesInterface \htmlonly 
+     *    \endhtmlonly ChannelInterfaceMessagesInterface \htmlonly
      * </p>
      * \endhtmlonly
      */
@@ -404,11 +438,63 @@ Q_SIGNALS:
 
     /**
      * Represents the signal \c MessageReceived on the remote object.
-     * 
+     *
      * \htmlonly
      * <p>
      *   The same as:
-     *    \endhtmlonly ChannelInterfaceMessagesInterface \htmlonly 
+     *    \endhtmlonly ChannelInterfaceMessagesInterface \htmlonly
+     *   Plus:
+     *   <p>The OTR interface adds some additional keys to message headers.
+     *     Messages sent during an encrypted OTR session have an additional
+     *     'otr-remote-fingerprint' header, whose string value is the
+     *     human-readable hex form of an OTR fingerprint:</p>
+     *
+     *   <code>
+     *     {
+     *     'message-type': Channel_Text_Message_Type_Normal,
+     *     'message-sender': 42,               # Contact_Handle of mercutio@example.com
+     *     'otr-remote-fingerprint': '12345678 12345678 12345678 12345678 12345678',
+     *     },
+     *     {
+     *     'content-type': 'text/plain',
+     *     'content': 'O, then, I see Queen Mab hath been with you.',
+     *     }
+     *   </code>
+     *
+     *   <p>Logging infrastructure MAY use these headers to associate
+     *     conversations with OTR users in a secure way, or to avoid
+     *     logging OTR conversations at all.</p>
+     *
+     *   <p>Messages generated internally by the OTR implementation have an
+     *     additional &quot;otr-message-event&quot; key in the header (0'th part) whose
+     *     value is the OtrlMessageEvent, and SHOULD be
+     *     of type Channel_Text_Message_Type_Notice. These messages do not have id
+     *     and should not be acknowledged:</p>
+     *
+     *   <code>
+     *     {
+     *     'message-type': Channel_Text_Message_Type_Notice,
+     *     'message-sender': 42,               # Contact_Handle of mercutio@example.com
+     *     'otr-message-event': OTRL_MSGEVENT_RCVDMSG_UNRECOGNIZED,
+     *     'otr-remote-fingerprint': '12345678 12345678 12345678 12345678 12345678',
+     *     },
+     *     {
+     *     'content-type': 'text/plain',
+     *     'content': 'Unrecognized OTR message received from mercutio@example.com',
+     *     }
+     *   </code>
+     *
+     *   <p>User interfaces that implement OTR MUST present these special
+     *     notices in a way that cannot be faked by the remote user
+     *     sending a crafted XMPP (or other protocol) notice.</p>
+     *
+     *   <p>For OTRL_MSGEVENT_SETUP_ERROR or OTRL_MSGEVENT_RCVDMSG_GENERAL_ERR
+     *     events, the header SHOULD additionally contain an &quot;otr-error&quot;
+     *     key whose string value is a debug message.</p>
+     *
+     *   <p>For OTRL_MSGEVENT_RCVDMSG_UNENCRYPTED events, the header
+     *     MUST additionally contain an &quot;otr-unencrypted-message&quot; key
+     *     whose string value is the unencrypted message.</p>
      * </p>
      * \endhtmlonly
      */
@@ -416,11 +502,11 @@ Q_SIGNALS:
 
     /**
      * Represents the signal \c PendingMessagesRemoved on the remote object.
-     * 
+     *
      * \htmlonly
      * <p>
      *   The same as:
-     *    \endhtmlonly ChannelInterfaceMessagesInterface \htmlonly 
+     *    \endhtmlonly ChannelInterfaceMessagesInterface \htmlonly
      * </p>
      * \endhtmlonly
      */
@@ -428,10 +514,19 @@ Q_SIGNALS:
 
     /**
      * Represents the signal \c SessionRefreshed on the remote object.
-     * 
+     *
      * An AKE has been performed in an already established session.
      */
     void SessionRefreshed();
+
+    /**
+     * Represents the signal \c TrustLevelChanged on the remote object.
+     *
+     * \htmlonly
+     * OTR state of the connection has changed.
+     * \endhtmlonly
+     */
+    void TrustLevelChanged(uint trustLevel);
 
 protected:
     virtual void invalidate(Tp::DBusProxy *, const QString &, const QString &);
@@ -439,5 +534,4 @@ protected:
 }
 }
 Q_DECLARE_METATYPE(Tp::Client::ChannelProxyInterfaceOTRInterface*)
-
 #endif

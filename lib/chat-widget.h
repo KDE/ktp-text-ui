@@ -230,6 +230,7 @@ private Q_SLOTS:
     void onShareProviderFinishedFailure(ShareProvider *provider, const QString &errorMessage);
     void onSendFileClicked();
     void onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous);
+    void onOTRsessionRefreshed();
 
 private:
     /** connects necessary signals for the channel */

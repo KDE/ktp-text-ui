@@ -164,10 +164,14 @@ void ChannelAdapter::setupOTRChannel()
             SLOT(onPendingMessagesRemoved(const Tp::UIntList&)));
     connect(d->otrProxy.data(), SIGNAL(MessageSent(const Tp::MessagePartList&, uint, const QString&)),
             SLOT(onMessageSent(const Tp::MessagePartList&, uint, const QString&)));
+    connect(d->otrProxy.data(), SIGNAL(TrustLevelChanged(uint)), SLOT(onTrustLevelChanged(uint)));
 
     // initialize message queue;
     connect(d->otrProxy->requestPropertyPendingMessages(), SIGNAL(finished(Tp::PendingOperation*)),
                 SLOT(onPendingMessagesPropertyGet(Tp::PendingOperation*)));
+    // initialize trust level property
+    connect(d->otrProxy->requestPropertyTrustLevel(), SIGNAL(finished(Tp::PendingOperation*)),
+            SLOT(onTrustLevelPropertyGet(Tp::PendingOperation*)));
 }
 
 Tp::OTRTrustLevel ChannelAdapter::otrTrustLevel() const
@@ -177,7 +181,12 @@ Tp::OTRTrustLevel ChannelAdapter::otrTrustLevel() const
 
 void ChannelAdapter::onTrustLevelPropertyGet(Tp::PendingOperation *op)
 {
-
+    if(op->isError()) {
+        kWarning() << "Could not get property: TrustLevel";
+        return;
+    }
+    Tp::PendingVariant *pv = dynamic_cast<Tp::PendingVariant*>(op);
+    d->trustLevel = static_cast<Tp::OTRTrustLevel>(pv->result().toUInt(NULL));
 }
 
 bool ChannelAdapter::isOTRsuppored() const
@@ -188,11 +197,13 @@ bool ChannelAdapter::isOTRsuppored() const
 void ChannelAdapter::initializeOTR()
 {
     kDebug() << "Initializing OTR session";
+    d->otrProxy->Initialize();
 }
 
 void ChannelAdapter::stopOTR()
 {
     kDebug() << "Stopping OTR session";
+    d->otrProxy->Stop();
 }
 
 void ChannelAdapter::acknowledge(const QList<Tp::ReceivedMessage> &messages)
@@ -315,4 +326,12 @@ void ChannelAdapter::onMessageSent(const Tp::MessagePartList &content, uint flag
     kDebug();
     OTRMessage message(content, d->textChannel);
     Q_EMIT messageSent(message, Tp::MessageSendingFlags(flags), messageToken);
+}
+
+void ChannelAdapter::onTrustLevelChanged(uint trustLevel)
+{
+    Tp::OTRTrustLevel oldLevel = d->trustLevel;
+    d->trustLevel = static_cast<Tp::OTRTrustLevel>(trustLevel);
+
+    Q_EMIT otrTrustLevelChanged(d->trustLevel, oldLevel);
 }

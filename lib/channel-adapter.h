@@ -73,6 +73,7 @@ class ChannelAdapter : public QObject
         void onMessageReceived(const Tp::MessagePartList &message);
         void onPendingMessagesRemoved(const Tp::UIntList &messageIDs);
         void onMessageSent(const Tp::MessagePartList &content, uint flags, const QString &messageToken);
+        void onTrustLevelChanged(uint trustLevel);
 
     Q_SIGNALS:
         void messageSent(const Tp::Message &message,

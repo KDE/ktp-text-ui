@@ -38,6 +38,7 @@ void ChannelProxyInterfaceOTRInterface::invalidate(Tp::DBusProxy *proxy,
     disconnect(this, SIGNAL(MessageReceived(const Tp::MessagePartList&)), NULL, NULL);
     disconnect(this, SIGNAL(PendingMessagesRemoved(const Tp::UIntList&)), NULL, NULL);
     disconnect(this, SIGNAL(SessionRefreshed()), NULL, NULL);
+    disconnect(this, SIGNAL(TrustLevelChanged(uint)), NULL, NULL);
 
     Tp::AbstractInterface::invalidate(proxy, error, message);
 }
