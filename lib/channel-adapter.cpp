@@ -56,6 +56,7 @@ struct ChannelAdapter::Private
 
     bool otrConnected;
     Tp::OTRTrustLevel trustLevel;
+    QString remoteFp;
 
     QMap<uint, OTRMessage> messages;
 };
@@ -172,6 +173,9 @@ void ChannelAdapter::setupOTRChannel()
     // initialize trust level property
     connect(d->otrProxy->requestPropertyTrustLevel(), SIGNAL(finished(Tp::PendingOperation*)),
             SLOT(onTrustLevelPropertyGet(Tp::PendingOperation*)));
+    // initialize remote fingerprint property
+    connect(d->otrProxy->requestPropertyRemoteFingerprint(), SIGNAL(finished(Tp::PendingOperation*)),
+            SLOT(onRemoteFingerprintPropertyGet(Tp::PendingOperation*)));
 }
 
 Tp::OTRTrustLevel ChannelAdapter::otrTrustLevel() const
@@ -187,6 +191,7 @@ void ChannelAdapter::onTrustLevelPropertyGet(Tp::PendingOperation *op)
     }
     Tp::PendingVariant *pv = dynamic_cast<Tp::PendingVariant*>(op);
     d->trustLevel = static_cast<Tp::OTRTrustLevel>(pv->result().toUInt(NULL));
+    Q_EMIT otrTrustLevelChanged(d->trustLevel, Tp::OTRTrustLevelNotPrivate);
 }
 
 bool ChannelAdapter::isOTRsuppored() const
@@ -204,6 +209,16 @@ void ChannelAdapter::stopOTR()
 {
     kDebug() << "Stopping OTR session";
     d->otrProxy->Stop();
+}
+
+QString ChannelAdapter::remoteFingerprint() const
+{
+    return d->remoteFp;
+}
+
+QDBusPendingReply<> ChannelAdapter::trustFingerprint(const QString &fingerprint, bool trust)
+{
+    return d->otrProxy->TrustFingerprint(fingerprint, trust);
 }
 
 void ChannelAdapter::acknowledge(const QList<Tp::ReceivedMessage> &messages)
@@ -306,6 +321,19 @@ void ChannelAdapter::onPendingMessagesPropertyGet(Tp::PendingOperation *op)
     }
 }
 
+void ChannelAdapter::onRemoteFingerprintPropertyGet(Tp::PendingOperation *op)
+{
+    kDebug();
+    Tp::PendingVariant *variant = dynamic_cast<Tp::PendingVariant*>(op);
+
+    if(!variant->isError()) {
+        d->remoteFp = variant->result().toString();
+    } else {
+        kWarning() << "Could not get remote fingerprint: " << variant->errorName() << " - "
+            << variant->errorMessage();
+    }
+}
+
 void ChannelAdapter::onPendingMessagesRemoved(const Tp::UIntList &messageIDs)
 {
     kDebug();
@@ -332,6 +360,11 @@ void ChannelAdapter::onTrustLevelChanged(uint trustLevel)
 {
     Tp::OTRTrustLevel oldLevel = d->trustLevel;
     d->trustLevel = static_cast<Tp::OTRTrustLevel>(trustLevel);
+    // get remote's fingerprint
+    if(oldLevel == Tp::OTRTrustLevelNotPrivate) {
+        connect(d->otrProxy->requestPropertyRemoteFingerprint(), SIGNAL(finished(Tp::PendingOperation*)),
+                SLOT(onRemoteFingerprintPropertyGet(Tp::PendingOperation*)));
+    }
 
     Q_EMIT otrTrustLevelChanged(d->trustLevel, oldLevel);
 }

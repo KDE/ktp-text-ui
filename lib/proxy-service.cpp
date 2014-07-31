@@ -36,6 +36,8 @@ void ProxyServiceInterface::invalidate(Tp::DBusProxy *proxy,
 {
     disconnect(this, SIGNAL(ProxyConnected(const QDBusObjectPath&)), NULL, NULL);
     disconnect(this, SIGNAL(ProxyDisconnected(const QDBusObjectPath&)), NULL, NULL);
+    disconnect(this, SIGNAL(KeyGenerationStarted(const QDBusObjectPath&)), NULL, NULL);
+    disconnect(this, SIGNAL(KeyGenerationFinished(const QDBusObjectPath&, bool)), NULL, NULL);
 
     Tp::AbstractInterface::invalidate(proxy, error, message);
 }

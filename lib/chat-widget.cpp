@@ -674,7 +674,31 @@ void ChatWidget::stopOtrSession()
 void ChatWidget::authenticateBuddy()
 {
     if(!d->channel.isOTRsuppored()) return;
-    // TODO use adapter
+    // TODO add smp
+    const QString fingerprint = d->channel.remoteFingerprint();
+
+    QString question = i18n("Is the following fingerprint for the contact %1 correct?\n%2",
+            d->contactName, fingerprint);
+
+    int askResult = KMessageBox::questionYesNoCancel(this, question);
+    QDBusPendingReply<> result;
+    switch(askResult) {
+        case KMessageBox::Yes:
+            result = d->channel.trustFingerprint(fingerprint, true);
+            break;
+        case KMessageBox::No:
+            result = d->channel.trustFingerprint(fingerprint, false);
+            break;
+        default:
+            return;
+    }
+
+    result.waitForFinished();
+    if(result.isError()) {
+        kWarning() << "Could not set fingerprint trusted because of: " << result.error().name()
+            << " -> " << result.error().message();
+        KMessageBox::error(this, i18n("%1", result.error().message()));
+    }
 }
 
 void ChatWidget::setupOTR()

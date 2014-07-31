@@ -22,6 +22,7 @@
 #include <TelepathyQt/DBusProxy>
 #include <TelepathyQt/Global>
 
+
 namespace Tp
 {
 class PendingVariant;
@@ -111,6 +112,38 @@ public:
     ProxyServiceInterface(const Tp::AbstractInterface& mainInterface, QObject* parent);
 
     /**
+     * Asynchronous getter for the remote object property \c PolicySettings of type \c uint.
+     *
+     * 
+     * \htmlonly
+     * <p>Set the OTR policy how you like it</p>
+     * \endhtmlonly
+     *
+     * \return A pending variant which will emit finished when the property has been
+     *          retrieved.
+     */
+    inline Tp::PendingVariant *requestPropertyPolicySettings() const
+    {
+        return internalRequestProperty(QLatin1String("PolicySettings"));
+    }
+
+    /**
+     * Asynchronous setter for the remote object property \c PolicySettings of type \c uint.
+     *
+     * 
+     * \htmlonly
+     * <p>Set the OTR policy how you like it</p>
+     * \endhtmlonly
+     *
+     * \return A pending operation which will emit finished when the property has been
+     *          set.
+     */
+    inline Tp::PendingOperation *setPropertyPolicySettings(uint newValue)
+    {
+        return internalSetProperty(QLatin1String("PolicySettings"), QVariant::fromValue(newValue));
+    }
+
+    /**
      * Request all of the DBus properties on the interface.
      *
      * \return A pending variant map which will emit finished when the properties have
@@ -119,6 +152,68 @@ public:
     Tp::PendingVariantMap *requestAllProperties() const
     {
         return internalRequestAllProperties();
+    }
+
+public Q_SLOTS:
+    /**
+     * Begins a call to the D-Bus method \c GeneratePrivateKey on the remote object.
+     * 
+     * \htmlonly
+     * <p> Generate new private key for given account. </p>
+     * \endhtmlonly
+     *
+     * Note that \a timeout is ignored as of now. It will be used once
+     * http://bugreports.qt.nokia.com/browse/QTBUG-11775 is fixed.
+     *
+     * \param timeout The timeout in milliseconds.
+     */
+    inline QDBusPendingReply<> GeneratePrivateKey(const QDBusObjectPath& account, int timeout = -1)
+    {
+        if (!invalidationReason().isEmpty()) {
+            return QDBusPendingReply<>(QDBusMessage::createError(
+                invalidationReason(),
+                invalidationMessage()
+            ));
+        }
+
+        QDBusMessage callMessage = QDBusMessage::createMethodCall(this->service(), this->path(),
+                this->staticInterfaceName(), QLatin1String("GeneratePrivateKey"));
+        callMessage << QVariant::fromValue(account);
+        return this->connection().asyncCall(callMessage, timeout);
+    }
+
+    /**
+     * Begins a call to the D-Bus method \c GetFingerprintForAccount on the remote object.
+     * 
+     * Get private key fingerprint associated with given account
+     *
+     * Note that \a timeout is ignored as of now. It will be used once
+     * http://bugreports.qt.nokia.com/browse/QTBUG-11775 is fixed.
+     *
+     *
+     * \param account
+     *     
+     *     The account the new key is generated for
+     * \param timeout The timeout in milliseconds.
+     *
+     * \return
+     *     
+     *     Fingerprint of given account&apos;s private key or an empty string 
+     *     if none exists
+     */
+    inline QDBusPendingReply<QString> GetFingerprintForAccount(const QDBusObjectPath& account, int timeout = -1)
+    {
+        if (!invalidationReason().isEmpty()) {
+            return QDBusPendingReply<QString>(QDBusMessage::createError(
+                invalidationReason(),
+                invalidationMessage()
+            ));
+        }
+
+        QDBusMessage callMessage = QDBusMessage::createMethodCall(this->service(), this->path(),
+                this->staticInterfaceName(), QLatin1String("GetFingerprintForAccount"));
+        callMessage << QVariant::fromValue(account);
+        return this->connection().asyncCall(callMessage, timeout);
     }
 
 Q_SIGNALS:
@@ -144,11 +239,36 @@ Q_SIGNALS:
      */
     void ProxyDisconnected(const QDBusObjectPath& proxy);
 
+    /**
+     * Represents the signal \c KeyGenerationStarted on the remote object.
+     * 
+     * Signals that a new private key is being generated for account
+     *
+     * \param account
+     *     
+     *     The account the new key is generated for
+     */
+    void KeyGenerationStarted(const QDBusObjectPath& account);
+
+    /**
+     * Represents the signal \c KeyGenerationFinished on the remote object.
+     * 
+     * Signals that a new private key has just been generated for account
+     *
+     * \param account
+     *     
+     *     The account the new key has been generated for
+     *
+     * \param error
+     *     
+     *     %TRUE if error occured during generation
+     */
+    void KeyGenerationFinished(const QDBusObjectPath& account, bool error);
+
 protected:
     virtual void invalidate(Tp::DBusProxy *, const QString &, const QString &);
 };
 }
 }
 Q_DECLARE_METATYPE(Tp::Client::ProxyServiceInterface*)
-
 #endif

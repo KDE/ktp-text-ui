@@ -43,6 +43,8 @@ class ChannelAdapter : public QObject
 
         Tp::OTRTrustLevel otrTrustLevel() const;
         bool isOTRsuppored() const;
+        QString remoteFingerprint() const;
+        QDBusPendingReply<> trustFingerprint(const QString &fingerprint, bool trust);
 
         bool isValid() const;
 
@@ -70,6 +72,7 @@ class ChannelAdapter : public QObject
     private Q_SLOTS:
         void onTrustLevelPropertyGet(Tp::PendingOperation *op);
         void onPendingMessagesPropertyGet(Tp::PendingOperation *op);
+        void onRemoteFingerprintPropertyGet(Tp::PendingOperation *op);
         void onMessageReceived(const Tp::MessagePartList &message);
         void onPendingMessagesRemoved(const Tp::UIntList &messageIDs);
         void onMessageSent(const Tp::MessagePartList &content, uint flags, const QString &messageToken);
