@@ -20,7 +20,7 @@ set(ktpchat_SRCS
         otr-types.cpp
         channel-adapter.cpp
         otr-channel-proxy.cpp
-        proxy-service.cpp
+        proxy-service-interface.cpp
         otr-utils.cpp
         )
 

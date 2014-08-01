@@ -893,16 +893,6 @@ void ChatWindow::setupCustomActions()
 
 void ChatWindow::setupOTR()
 {
-    // start otr proxy service
-    QDBusConnection dbusConnection = QDBusConnection::sessionBus();
-    if(!dbusConnection.interface()->isServiceRegistered(KTP_PROXY_BUS_NAME)) {
-        const QDBusReply<void> regRep = dbusConnection.interface()->startService(KTP_PROXY_BUS_NAME);
-        if(!regRep.isValid()) {
-            kDebug() << KTP_PROXY_BUS_NAME << " service unavailable";
-            return;
-        }
-    }
-
     otrActionMenu = new KActionMenu(KIcon(QLatin1String("object-unlocked")), i18n("&OTR"), this);
     otrActionMenu->setDelayed(false);
 

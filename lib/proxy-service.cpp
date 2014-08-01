@@ -1,5 +1,5 @@
 #define IN_TP_QT_HEADER
-#include "proxy-service.h"
+#include "proxy-service-interface.h"
 
 namespace Tp
 {

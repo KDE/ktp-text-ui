@@ -27,15 +27,15 @@
 
 namespace Tp
 {
-    
+
 /**
  * \enum OTRTrustLevel
  * \ingroup enumtypeconsts
  *
  * Enumerated type generated from the specification.
- * 
- * Enumeration describing trust level of this conversation. The trust level 
- * can only increase unless Initialize/Stop are called or TrustFingerprint is 
+ *
+ * Enumeration describing trust level of this conversation. The trust level
+ * can only increase unless Initialize/Stop are called or TrustFingerprint is
  * called with trust=false.
  */
 enum OTRTrustLevel
@@ -46,7 +46,7 @@ enum OTRTrustLevel
     OTRTrustLevelNotPrivate = 0,
 
     /**
-     * The conversation is currently encrypted but the remote end is not 
+     * The conversation is currently encrypted but the remote end is not
      * verified
      */
     OTRTrustLevelUnverified = 1,
@@ -57,8 +57,8 @@ enum OTRTrustLevel
     OTRTrustLevelPrivate = 2,
 
     /**
-     * Remote end closed the OTR session, messages cannot be sent anymore. 
-     * Either call Stop to continue unencrypted or Initialize to send 
+     * Remote end closed the OTR session, messages cannot be sent anymore.
+     * Either call Stop to continue unencrypted or Initialize to send
      * encrypted messages again.
      */
     OTRTrustLevelFinished = 3,
@@ -73,11 +73,18 @@ enum OTRTrustLevel
  */
 const int NUM_OTR_TRUST_LEVELS = (3+1);
 
+enum OTRPolicy {
+    OTRPolicyAlways = 0,
+    OTRPolicyOpportunistic = 1,
+    OTRPolicyManual = 2,
+    OTRPolicyNever = 3
+};
+
 
 /**
  * OTR message event enum type - the same as OtrlMessageEvent in libotr
  */
-enum OTRMessageEvent 
+enum OTRMessageEvent
 {
     OTRL_MSGEVENT_NONE,
     OTRL_MSGEVENT_ENCRYPTION_REQUIRED,

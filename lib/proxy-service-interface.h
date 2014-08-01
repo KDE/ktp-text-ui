@@ -5,8 +5,8 @@
  * which it was generated.
  */
 
-#ifndef OTR_PROXY_SERVICE_HEADER
-#define OTR_PROXY_SERVICE_HEADER
+#ifndef PROXY_SERVICE_INTERFACE_HEADER
+#define PROXY_SERVICE_INTERFACE_HEADER
 
 #include <TelepathyQt/Types>
 
@@ -114,7 +114,7 @@ public:
     /**
      * Asynchronous getter for the remote object property \c PolicySettings of type \c uint.
      *
-     * 
+     *
      * \htmlonly
      * <p>Set the OTR policy how you like it</p>
      * \endhtmlonly
@@ -130,7 +130,7 @@ public:
     /**
      * Asynchronous setter for the remote object property \c PolicySettings of type \c uint.
      *
-     * 
+     *
      * \htmlonly
      * <p>Set the OTR policy how you like it</p>
      * \endhtmlonly
@@ -157,7 +157,7 @@ public:
 public Q_SLOTS:
     /**
      * Begins a call to the D-Bus method \c GeneratePrivateKey on the remote object.
-     * 
+     *
      * \htmlonly
      * <p> Generate new private key for given account. </p>
      * \endhtmlonly
@@ -184,7 +184,7 @@ public Q_SLOTS:
 
     /**
      * Begins a call to the D-Bus method \c GetFingerprintForAccount on the remote object.
-     * 
+     *
      * Get private key fingerprint associated with given account
      *
      * Note that \a timeout is ignored as of now. It will be used once
@@ -192,13 +192,13 @@ public Q_SLOTS:
      *
      *
      * \param account
-     *     
+     *
      *     The account the new key is generated for
      * \param timeout The timeout in milliseconds.
      *
      * \return
-     *     
-     *     Fingerprint of given account&apos;s private key or an empty string 
+     *
+     *     Fingerprint of given account&apos;s private key or an empty string
      *     if none exists
      */
     inline QDBusPendingReply<QString> GetFingerprintForAccount(const QDBusObjectPath& account, int timeout = -1)
@@ -219,48 +219,48 @@ public Q_SLOTS:
 Q_SIGNALS:
     /**
      * Represents the signal \c ProxyConnected on the remote object.
-     * 
+     *
      * Signals that a proxy has been connected
      *
      * \param proxy
-     *     
+     *
      *     The object path of the connected proxy
      */
     void ProxyConnected(const QDBusObjectPath& proxy);
 
     /**
      * Represents the signal \c ProxyDisconnected on the remote object.
-     * 
+     *
      * Signals that a proxy has been disconnected
      *
      * \param proxy
-     *     
+     *
      *     The object path of the disconnectd proxy type
      */
     void ProxyDisconnected(const QDBusObjectPath& proxy);
 
     /**
      * Represents the signal \c KeyGenerationStarted on the remote object.
-     * 
+     *
      * Signals that a new private key is being generated for account
      *
      * \param account
-     *     
+     *
      *     The account the new key is generated for
      */
     void KeyGenerationStarted(const QDBusObjectPath& account);
 
     /**
      * Represents the signal \c KeyGenerationFinished on the remote object.
-     * 
+     *
      * Signals that a new private key has just been generated for account
      *
      * \param account
-     *     
+     *
      *     The account the new key has been generated for
      *
      * \param error
-     *     
+     *
      *     %TRUE if error occured during generation
      */
     void KeyGenerationFinished(const QDBusObjectPath& account, bool error);

@@ -25,27 +25,58 @@
 #include <KPluginFactory>
 #include <KLocalizedString>
 #include <QtGui/QtEvents>
+#include <QtDBus/QDBusConnection>
+
+#include <TelepathyQt/AccountSet>
 
 K_PLUGIN_FACTORY(KCMTelepathyChatOtrConfigFactory, registerPlugin<OTRConfig>();)
 K_EXPORT_PLUGIN(KCMTelepathyChatOtrConfigFactory("ktp_chat_otr", "kcm_ktp_chat_otr"))
 
 OTRConfig::OTRConfig(QWidget *parent, const QVariantList& args)
     : KCModule(KCMTelepathyChatOtrConfigFactory::componentData(), parent, args),
-      ui(new Ui::OTRConfigUi())
+      ui(new Ui::OTRConfigUi()),
+      am(Tp::AccountManager::create(QDBusConnection::sessionBus()))
 {
     kDebug();
 
     ui->setupUi(this);
 
-	addConfig(KtpOtrKcfg::self(), this);
-	KtpOtrKcfg::self()->readConfig();
+    ui->policyGroupButtons->setId(ui->rbAlways, Tp::OTRPolicyAlways);
+    ui->policyGroupButtons->setId(ui->rbOpportunistic, Tp::OTRPolicyOpportunistic);
+    ui->policyGroupButtons->setId(ui->rbManual, Tp::OTRPolicyManual);
+    ui->policyGroupButtons->setId(ui->rbNever, Tp::OTRPolicyNever);
+    connect(ui->policyGroupButtons, SIGNAL(buttonClicked(int)), SLOT(onRadioSelected(int)));
+
+    connect(ui->btGenFingerprint, SIGNAL(clicked()), SLOT(onGenerateClicked()));
+
+    connect(ui->cbAccounts, SIGNAL(activated(int)), SLOT(onAccountChosen(int)));
 }
 
-OTRConfig::~OTRConfig() 
+OTRConfig::~OTRConfig()
 {
     delete ui;
 }
 
+void OTRConfig::load()
+{
+    kDebug();
+    accounts = am->validAccounts()->accounts();
+    QStringList items;
+    Q_FOREACH(const Tp::AccountPtr ac, accounts) {
+        items << ac->normalizedName();
+    }
+    ui->cbAccounts->addItems(items);
+
+    if(!items.isEmpty()) {
+        ui->cbAccounts->setEnabled(true);
+        ui->btGenFingerprint->setEnabled(true);
+    }
+}
+
+void OTRConfig::save()
+{
+    kDebug();
+}
 
 void OTRConfig::changeEvent(QEvent* e)
 {
@@ -57,5 +88,22 @@ void OTRConfig::changeEvent(QEvent* e)
     default:
         break;
     }
+}
+
+void OTRConfig::onRadioSelected(int id)
+{
+    kDebug();
+    policy = static_cast<Tp::OTRPolicy>(id);
+    Q_EMIT changed(true);
+}
+
+void OTRConfig::onGenerateClicked()
+{
+    kDebug();
+}
+
+void OTRConfig::onAccountChosen(int id)
+{
+    kDebug();
 }
 

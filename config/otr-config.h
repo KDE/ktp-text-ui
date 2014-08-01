@@ -21,7 +21,12 @@
 #ifndef OTR_CONFIG_H
 #define OTR_CONFIG_H
 
+#include "otr-constants.h"
+
 #include <KCModule>
+#include <QList>
+
+#include <TelepathyQt/AccountManager>
 
 namespace Ui {
 class OTRConfigUi;
@@ -38,10 +43,21 @@ public:
 protected:
     virtual void changeEvent(QEvent *e);
 
+public Q_SLOTS:
+    virtual void load();
+    virtual void save();
+
 private Q_SLOTS:
+    void onRadioSelected(int id);
+    void onGenerateClicked();
+    void onAccountChosen(int id);
 
 private:
     Ui::OTRConfigUi *ui;
+    Tp::AccountManagerPtr am;
+    QList<Tp::AccountPtr> accounts;
+    QMap<int, QString> fpCache;
+    Tp::OTRPolicy policy;
 };
 
 #endif // OTR_CONFIG_H

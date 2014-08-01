@@ -15,8 +15,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OTR_MANAGER_HEADER
-#define OTR_MANAGER_HEADER
+#ifndef CHANNEL_ADAPTER_HEADER
+#define CHANNEL_ADAPTER_HEADER
 
 #include "otr-types.h"
 #include "otr-utils.h"
