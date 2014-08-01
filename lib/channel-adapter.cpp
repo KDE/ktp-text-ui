@@ -29,16 +29,40 @@
 
 typedef QSharedPointer<Tp::Client::ChannelProxyInterfaceOTRInterface> OTRProxyPtr;
 
-    uint getId(const Tp::MessagePartList &message) {
-        return message.first()[QLatin1String("pending-message-id")].variant().toUInt(NULL);
+namespace
+{
+    int getId(const Tp::ReceivedMessage &recvMes)
+    {
+        return recvMes.header()[QLatin1String("pending-message-id")].variant().toUInt(NULL);
     }
+}
 
 class OTRMessage : public Tp::ReceivedMessage
 {
     public:
+        OTRMessage(const Tp::ReceivedMessage &recMes) 
+            : Tp::ReceivedMessage(recMes)
+        {
+        }
+
         OTRMessage(const Tp::MessagePartList &message, const Tp::TextChannelPtr channel)
             : Tp::ReceivedMessage(message, channel)
         {
+        }
+
+        bool hasId() const
+        {
+            return header().contains(QLatin1String("pending-message-id"));
+        }
+
+        int getId() const
+        {
+            return ::getId(*this);
+        }
+
+        void setId(int id)
+        {
+            header()[QLatin1String("pending-message-id")] = QDBusVariant(id);
         }
 };
 
@@ -59,6 +83,7 @@ struct ChannelAdapter::Private
     QString remoteFp;
 
     QMap<uint, OTRMessage> messages;
+    QMap<uint, OTRMessage> otrEvents;
 };
 
 ChannelAdapter::ChannelAdapter(const Tp::TextChannelPtr &textChannel, ChatWidget *parent)
@@ -229,7 +254,21 @@ void ChannelAdapter::acknowledge(const QList<Tp::ReceivedMessage> &messages)
 
     kDebug();
     if(isOTRsuppored()) {
-        d->otrProxy->AcknowledgePendingMessages(Tp::Utils::getPendingMessagesIDs(messages));
+        QList<Tp::ReceivedMessage> toAck;
+        QList<Tp::ReceivedMessage> eventsToRemove;
+
+        Q_FOREACH(const Tp::ReceivedMessage &mes, messages) {
+            if(Tp::Utils::isOtrEvent(mes)) {
+                d->otrEvents.remove(getId(mes));
+                eventsToRemove << mes;
+            } else {
+                toAck << mes;
+            }
+        }
+        d->otrProxy->AcknowledgePendingMessages(Tp::Utils::getPendingMessagesIDs(toAck));
+        Q_FOREACH(const Tp::ReceivedMessage &mes, eventsToRemove) {
+            Q_EMIT pendingMessageRemoved(mes);
+        }
     } else {
         d->textChannel->acknowledge(messages);
     }
@@ -284,6 +323,9 @@ QList<Tp::ReceivedMessage> ChannelAdapter::messageQueue() const
         Q_FOREACH(const Tp::ReceivedMessage &m, d->messages) {
             messages << m;
         }
+        Q_FOREACH(const Tp::ReceivedMessage &m, d->otrEvents) {
+            messages << m;
+        }
         return messages;
     } else {
         return d->textChannel->messageQueue();
@@ -293,13 +335,22 @@ QList<Tp::ReceivedMessage> ChannelAdapter::messageQueue() const
 void ChannelAdapter::onMessageReceived(const Tp::MessagePartList &message)
 {
     kDebug();
-    const uint id = getId(message);
     OTRMessage recvMes(message, d->textChannel);
-    if(!d->messages.contains(id)) {
-        d->messages.insert(id, recvMes);
+    if(recvMes.hasId()) {
+        const int id = recvMes.getId();
+        if(!d->messages.contains(id)) {
+            d->messages.insert(id, recvMes);
+            Q_EMIT messageReceived(recvMes);
+        } else {
+            kWarning() << "Message already in the queue. Id: " << id;
+        }
+    } else if (Tp::Utils::isOtrEvent(recvMes)) {
+        const int id = d->otrEvents.size();
+        recvMes.setId(d->otrEvents.size());
+        d->otrEvents.insert(id, recvMes);
         Q_EMIT messageReceived(recvMes);
     } else {
-        kWarning() << "Message already in the queue. Id: " << id;
+        kWarning() << "Message has not id and is not an OTR event either";
     }
 }
 

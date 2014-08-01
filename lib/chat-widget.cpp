@@ -85,7 +85,8 @@ public:
         shareImageMenuAction(0),
         messageWidgetSwitchOnlineAction(0),
         logsLoaded(false),
-        exchangedMessagesCount(0)
+        exchangedMessagesCount(0),
+        newOTRstatus(false)
     {
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
@@ -112,6 +113,7 @@ public:
     QTimer *pausedStateTimer;
     bool logsLoaded;
     uint exchangedMessagesCount;
+    bool newOTRstatus;
 
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
@@ -621,7 +623,7 @@ void ChatWidget::onHistoryFetched(const QList<KTp::Message> &messages)
 
 int ChatWidget::unreadMessageCount() const
 {
-    return d->channel.messageQueue().size();
+    return d->channel.messageQueue().size() + (d->newOTRstatus ? 1 : 0);
 }
 
 void ChatWidget::acknowledgeMessages()
@@ -631,6 +633,10 @@ void ChatWidget::acknowledgeMessages()
     if (d->chatViewInitialized) {
         //acknowledge everything in the message queue.
         d->channel.acknowledge(d->channel.messageQueue());
+    }
+    if(d->newOTRstatus) {
+        d->newOTRstatus = false;
+        Q_EMIT unreadMessagesChanged();
     }
 }
 
@@ -697,7 +703,7 @@ void ChatWidget::authenticateBuddy()
     if(result.isError()) {
         kWarning() << "Could not set fingerprint trusted because of: " << result.error().name()
             << " -> " << result.error().message();
-        KMessageBox::error(this, i18n("%1", result.error().message()));
+        KMessageBox::error(this, i18n(result.error().message().toLocal8Bit()));
     }
 }
 
@@ -711,6 +717,7 @@ void ChatWidget::setupOTR()
 
 void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous)
 {
+    d->newOTRstatus = true;
     switch(trustLevel) {
         case Tp::OTRTrustLevelUnverified:
             if(previous == Tp::OTRTrustLevelPrivate) {
@@ -735,8 +742,8 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
         default: break;
     }
 
+    Q_EMIT unreadMessagesChanged();
     Q_EMIT otrStatusChanged(OtrStatus(trustLevel));
-
 }
 
 void ChatWidget::onOTRsessionRefreshed()
