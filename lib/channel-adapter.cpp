@@ -417,5 +417,11 @@ void ChannelAdapter::onTrustLevelChanged(uint trustLevel)
                 SLOT(onRemoteFingerprintPropertyGet(Tp::PendingOperation*)));
     }
 
+    // it may be a new session and the fingerprint has to be updated
+    if(d->trustLevel == Tp::OTRTrustLevelPrivate || d->trustLevel == Tp::OTRTrustLevelUnverified) {
+        connect(d->otrProxy->requestPropertyRemoteFingerprint(), SIGNAL(finished(Tp::PendingOperation*)),
+                SLOT(onRemoteFingerprintPropertyGet(Tp::PendingOperation*)));
+    }
+
     Q_EMIT otrTrustLevelChanged(d->trustLevel, oldLevel);
 }
