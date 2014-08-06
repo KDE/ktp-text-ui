@@ -22,6 +22,7 @@
 #define OTR_CONFIG_H
 
 #include "otr-constants.h"
+#include "proxy-service.h"
 
 #include <KCModule>
 #include <QList>
@@ -35,6 +36,7 @@ class OTRConfigUi;
 class OTRConfig : public KCModule
 {
     Q_OBJECT
+    Q_PROPERTY(ProxyService* proxyService READ proxyService WRITE setProxyService)
 
 public:
     explicit OTRConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
@@ -46,18 +48,24 @@ protected:
 public Q_SLOTS:
     virtual void load();
     virtual void save();
+    ProxyService* proxyService();
+    void setProxyService(ProxyService *ps);
 
 private Q_SLOTS:
     void onRadioSelected(int id);
     void onGenerateClicked();
     void onAccountChosen(int id);
+    void updatePolicy();
+    void onPolicyGet(Tp::PendingOperation *getOp);
+    void onPolicySet(Tp::PendingOperation *setOp);
+    void onKeyGenerationFinished();
 
 private:
     Ui::OTRConfigUi *ui;
     Tp::AccountManagerPtr am;
     QList<Tp::AccountPtr> accounts;
-    QMap<int, QString> fpCache;
     Tp::OTRPolicy policy;
+    ProxyService *ps;
 };
 
 #endif // OTR_CONFIG_H

@@ -111,6 +111,7 @@ enum OTRMessageEvent
 #define KTP_IFACE_PROXY_SERVICE (QLatin1String("org.kde.TelepathyProxy.ProxyService"))
 
 #define KTP_PROXY_CHANNEL_OBJECT_PATH_PREFIX (QLatin1String("/org/freedesktop/TelepathyProxy/OtrChannelProxy/"))
+#define KTP_PROXY_SERVICE_OBJECT_PATH (QLatin1String("/org/freedesktop/TelepathyProxy/ProxyService"))
 
 #define KTP_PROXY_BUS_NAME (QLatin1String("org.freedesktop.Telepathy.Client.KTp.Proxy"))
 

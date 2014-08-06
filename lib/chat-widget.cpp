@@ -259,7 +259,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     d->notifyFilter = new NotifyFilter(this);
 
-    // setup new otr channel along with connecting to signals
+    // setup new otr channel and connect to signals
     if(d->channel.isOTRsuppored()) {
         setupOTR();
     }
@@ -657,6 +657,15 @@ OtrStatus ChatWidget::otrStatus() const
         return OtrStatus(d->channel.otrTrustLevel());
     } else {
         return OtrStatus();
+    }
+}
+
+void ChatWidget::blockTextInput(bool block)
+{
+    if(block) {
+        d->ui.sendMessageBox->setDisabled(true);
+    } else {
+        d->ui.sendMessageBox->setEnabled(true);
     }
 }
 

@@ -123,6 +123,9 @@ public:
     /** Returns OtrStatus linked to the channel represented by this tab */
     OtrStatus otrStatus() const;
 
+    /** If block then send message box is disabled */
+    void blockTextInput(bool block);
+
 public Q_SLOTS:
     /** toggle the search bar visibility */
     void toggleSearchBar() const;

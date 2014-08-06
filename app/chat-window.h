@@ -23,6 +23,7 @@
 #define CHATWINDOW_H
 
 #include "chat-widget.h"
+#include "proxy-service.h"
 
 #include <KXmlGuiWindow>
 #include <KTabWidget>
@@ -124,6 +125,8 @@ private Q_SLOTS:
     void onStartRestartOtrTriggered();
     void onStopOtrTriggered();
     void onAuthenticateBuddyTriggered();
+    void onKeyGenerationStarted(Tp::AccountPtr);
+    void onKeyGenerationFinished(Tp::AccountPtr, bool error);
 
 protected Q_SLOTS:
     void showSettingsDialog();
@@ -218,7 +221,8 @@ private:
     Sonnet::DictionaryComboBox *m_spellDictCombo;
     QLabel *m_accountIconLabel;
     qreal m_zoomFactor;
-    KActionMenu *otrActionMenu;
+    KActionMenu *m_otrActionMenu;
+    ProxyService *m_proxyService;
 };
 
 #endif // CHATWINDOW_H

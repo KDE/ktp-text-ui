@@ -21,11 +21,13 @@ set(ktpchat_SRCS
         channel-adapter.cpp
         otr-channel-proxy.cpp
         proxy-service-interface.cpp
+        proxy-service.cpp
         otr-utils.cpp
         )
 
 set(ktpchat_UI
     chat-widget.ui
+    keygendialog.ui
 )
 
 kde4_add_ui_files(ktpchat_SRCS ${ktpchat_UI})
