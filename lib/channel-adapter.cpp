@@ -237,7 +237,7 @@ void ChannelAdapter::initializeOTR()
 
 void ChannelAdapter::stopOTR()
 {
-    kDebug() << "Stopping OTR session";
+    kDebug();
     d->otrProxy->Stop();
 }
 

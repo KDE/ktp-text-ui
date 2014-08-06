@@ -681,7 +681,10 @@ void ChatWidget::startOtrSession()
 
 void ChatWidget::stopOtrSession()
 {
-    if(!d->channel.isOTRsuppored()) return;
+    kDebug();
+    if(!d->channel.isOTRsuppored() || d->channel.otrTrustLevel() == Tp::OTRTrustLevelNotPrivate) {
+        return;
+    }
     d->channel.stopOTR();
     d->ui.chatArea->addStatusMessage(i18n("Terminating OTR session"));
 }

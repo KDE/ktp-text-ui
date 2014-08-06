@@ -245,6 +245,7 @@ void ChatWindow::removeTab(ChatTab *tab)
 {
     kDebug();
 
+    tab->stopOtrSession();
     removeChatTabSignals(tab);
 
     m_tabWidget->removePage(tab);
@@ -762,7 +763,7 @@ void ChatWindow::removeChatTabSignals(ChatTab *chatTab)
     disconnect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
     disconnect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
     disconnect(chatTab, SIGNAL(unreadMessagesChanged()), this, SLOT(onTabStateChanged()));
-    disconnect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
+    disconnect(chatTab, SIGNAL(contactPresenceChanged(KTp::Presence)), this, SLOT(onTabStateChanged()));
     disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
     disconnect(chatTab, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
     if(chatTab->otrStatus())
@@ -1324,6 +1325,7 @@ void ChatWindow::onReloadTheme()
 void ChatWindow::onLeaveChannelTriggered()
 {
     ChatTab *tab = getCurrentTab();
+    tab->stopOtrSession();
     tab->textChannel()->requestLeave();
     closeCurrentTab();
 }
