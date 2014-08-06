@@ -128,6 +128,11 @@ bool ProxyService::generatePrivateKey(const QDBusObjectPath& account)
     return !rep.isError();
 }
 
+bool ProxyService::isOngoingGeneration(const QDBusObjectPath &account)
+{
+    return d->dialogs.contains(account.path());
+}
+
 QString ProxyService::fingerprintForAccount(const QDBusObjectPath& account)
 {
     QDBusPendingReply<QString> rep = d->psi->GetFingerprintForAccount(account);

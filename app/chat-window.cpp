@@ -280,6 +280,10 @@ void ChatWindow::addTab(ChatTab *tab)
 
     tab->setFocus();
     tab->updateSendMessageShortcuts(m_sendMessage->shortcut());
+    // block text input if key is being generated for this account
+    if(m_proxyService->isOngoingGeneration(QDBusObjectPath(tab->account()->objectPath()))) {
+        tab->blockTextInput(true);
+    }
 }
 
 void ChatWindow::destroyTab(QWidget* chatWidget)

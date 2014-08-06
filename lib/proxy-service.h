@@ -37,9 +37,10 @@ class KDE_TELEPATHY_CHAT_EXPORT ProxyService : public QObject
         ~ProxyService();
 
         /** return true if generation could be started */
-        bool generatePrivateKey(const QDBusObjectPath& account);
+        bool generatePrivateKey(const QDBusObjectPath &account);
+        bool isOngoingGeneration(const QDBusObjectPath &account);
         /** fingerprint or an empty string of none available */
-        QString fingerprintForAccount(const QDBusObjectPath& account);
+        QString fingerprintForAccount(const QDBusObjectPath &account);
 
         Tp::PendingVariant* getOTRPolicy() const;
         Tp::PendingOperation* setOTRPolicy(uint policy);
