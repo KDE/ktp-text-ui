@@ -40,7 +40,7 @@ namespace
 class OTRMessage : public Tp::ReceivedMessage
 {
     public:
-        OTRMessage(const Tp::ReceivedMessage &recMes) 
+        OTRMessage(const Tp::ReceivedMessage &recMes)
             : Tp::ReceivedMessage(recMes)
         {
         }
@@ -70,7 +70,8 @@ struct ChannelAdapter::Private
 {
     Private(ChatWidget *chat)
         : chat(chat),
-        otrConnected(false)
+        otrConnected(false),
+        trustLevel(Tp::OTRTrustLevelNotPrivate)
     {
     }
 
@@ -212,6 +213,10 @@ void ChannelAdapter::onTrustLevelPropertyGet(Tp::PendingOperation *op)
 {
     if(op->isError()) {
         kWarning() << "Could not get property: TrustLevel";
+        return;
+    }
+    // we must have received trust level changed signal before
+    if(d->trustLevel != Tp::OTRTrustLevelNotPrivate) {
         return;
     }
     Tp::PendingVariant *pv = dynamic_cast<Tp::PendingVariant*>(op);
