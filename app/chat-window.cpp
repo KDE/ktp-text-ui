@@ -112,7 +112,8 @@ ChatWindow::ChatWindow()
 
     connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(destroyTab(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
-    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)),m_tabWidget, SLOT(removeTab(int)));
+
+    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)), this, SLOT(onTabMiddleClicked(int)));
     connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int,QPoint)), SLOT(tabBarContextMenu(int,QPoint)));
 
     setCentralWidget(m_tabWidget);
@@ -218,6 +219,13 @@ void ChatWindow::removeTab(ChatTab *tab)
             m_tabWidget->setTabBarHidden(true);
         }
     }
+}
+
+void ChatWindow::onTabMiddleClicked(int index)
+{
+    QWidget *tab = m_tabWidget->widget(index);
+    Q_ASSERT(tab);
+    destroyTab(tab);
 }
 
 void ChatWindow::addTab(ChatTab *tab)
