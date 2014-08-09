@@ -85,6 +85,7 @@ private Q_SLOTS:
     void onAudioCallTriggered();                                /** start an audio call */
     void onBlockContactTriggered();                             /** Blocks contact */
     void onCurrentIndexChanged(int index);
+    void onTabMiddleClicked(int index);
     void onEnableSearchActions(bool enable);                    /** enables/disables menu search actions */
     void onFileTransferTriggered();                             /** start a file transfer (to be used only for 1on1 chats!) */
     void onFindNextText();                                      /** go to next text the user is searching for */
