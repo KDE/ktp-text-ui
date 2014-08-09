@@ -37,6 +37,12 @@ void ChannelProxyInterfaceOTRInterface::invalidate(Tp::DBusProxy *proxy,
     disconnect(this, SIGNAL(MessageSent(const Tp::MessagePartList&, uint, const QString&)), NULL, NULL);
     disconnect(this, SIGNAL(MessageReceived(const Tp::MessagePartList&)), NULL, NULL);
     disconnect(this, SIGNAL(PendingMessagesRemoved(const Tp::UIntList&)), NULL, NULL);
+    disconnect(this, SIGNAL(PeerAuthenticationRequested(const QString&)), NULL, NULL);
+    disconnect(this, SIGNAL(PeerAuthenticationConcluded(bool)), NULL, NULL);
+    disconnect(this, SIGNAL(PeerAuthenticationInProgress()), NULL, NULL);
+    disconnect(this, SIGNAL(PeerAuthenticationAborted()), NULL, NULL);
+    disconnect(this, SIGNAL(PeerAuthenticationError()), NULL, NULL);
+    disconnect(this, SIGNAL(PeerAuthenticationCheated()), NULL, NULL);
     disconnect(this, SIGNAL(SessionRefreshed()), NULL, NULL);
     disconnect(this, SIGNAL(TrustLevelChanged(uint)), NULL, NULL);
 

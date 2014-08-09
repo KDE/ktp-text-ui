@@ -50,6 +50,12 @@ class ChannelAdapter : public QObject
 
         void initializeOTR();
         void stopOTR();
+        /** question answer peer authentication */
+        void startPeerAuthenticationQA(const QString &secret);
+        /** shared secret peer authentication*/
+        void startPeerAuthenticationSS(const QString &question, const QString &answer);
+        void respondPeerAuthentication(const QString &secret);
+        void abortPeerAuthentication();
 
         void acknowledge(const QList<Tp::ReceivedMessage> &messages);
         void send(const QString& text,
@@ -77,6 +83,7 @@ class ChannelAdapter : public QObject
         void onPendingMessagesRemoved(const Tp::UIntList &messageIDs);
         void onMessageSent(const Tp::MessagePartList &content, uint flags, const QString &messageToken);
         void onTrustLevelChanged(uint trustLevel);
+        void onPeerAuthenticationRequested(const QString &question);
 
     Q_SIGNALS:
         void messageSent(const Tp::Message &message,
@@ -87,6 +94,13 @@ class ChannelAdapter : public QObject
 
         void otrTrustLevelChanged(Tp::OTRTrustLevel newStatus, Tp::OTRTrustLevel oldStatus);
         void sessionRefreshed();
+        void peerAuthenticationRequestedQA(const QString &question);
+        void peerAuthenticationRequestedSS();
+        void peerAuthenticationConcluded(bool authenticated);
+        void peerAuthenticationInProgress();
+        void peerAuthenticationAborted();
+        void peerAuthenticationError();
+        void peerAuthenticationCheated();
 
     private:
         struct Private;

@@ -207,7 +207,7 @@ public:
      * \htmlonly
      * <p>The current fingerprint of the remote contact. Should be displayed
      *   to the user to update its trust level. It is shown in human readable format i.e.
-     *   :e .</p>
+     *   :e '12345678 12345678 12345678 12345678 12345678'.</p>
      * \endhtmlonly
      *
      * \return A pending variant which will emit finished when the property has been
@@ -423,6 +423,104 @@ public Q_SLOTS:
         return this->connection().asyncCall(callMessage, timeout);
     }
 
+    /**
+     * Begins a call to the D-Bus method \c StartPeerAuthentication on the remote object.
+     *
+     * \htmlonly
+     * <p>This method starts peer authentication using the Socialist
+     *   Millionaire protocol.</p>
+     * \endhtmlonly
+     *
+     * Note that \a timeout is ignored as of now. It will be used once
+     * http://bugreports.qt.nokia.com/browse/QTBUG-11775 is fixed.
+     *
+     *
+     * \param question
+     *
+     *     The question to be used for peer authentication. It is used by the
+     *     remote peer as a hint for the shared secret. If an empty string is
+     *     passed only the shared secret will be used on the peer
+     *     authentication process.
+     *
+     * \param secret
+     *
+     *     The shared secret to be used for peer authentication. If the
+     *     Question parameter is not empty, this should be the answer to it.
+     * \param timeout The timeout in milliseconds.
+     */
+    inline QDBusPendingReply<> StartPeerAuthentication(const QString& question, const QString& secret, int timeout = -1)
+    {
+        if (!invalidationReason().isEmpty()) {
+            return QDBusPendingReply<>(QDBusMessage::createError(
+                invalidationReason(),
+                invalidationMessage()
+            ));
+        }
+
+        QDBusMessage callMessage = QDBusMessage::createMethodCall(this->service(), this->path(),
+                this->staticInterfaceName(), QLatin1String("StartPeerAuthentication"));
+        callMessage << QVariant::fromValue(question) << QVariant::fromValue(secret);
+        return this->connection().asyncCall(callMessage, timeout);
+    }
+
+    /**
+     * Begins a call to the D-Bus method \c RespondPeerAuthentication on the remote object.
+     *
+     * \htmlonly
+     * <p>This method continues the peer authentication started by the remote
+     *   peer.</p>
+     * \endhtmlonly
+     *
+     * Note that \a timeout is ignored as of now. It will be used once
+     * http://bugreports.qt.nokia.com/browse/QTBUG-11775 is fixed.
+     *
+     *
+     * \param secret
+     *
+     *     The shared secret to be used for peer authentication.
+     * \param timeout The timeout in milliseconds.
+     */
+    inline QDBusPendingReply<> RespondPeerAuthentication(const QString& secret, int timeout = -1)
+    {
+        if (!invalidationReason().isEmpty()) {
+            return QDBusPendingReply<>(QDBusMessage::createError(
+                invalidationReason(),
+                invalidationMessage()
+            ));
+        }
+
+        QDBusMessage callMessage = QDBusMessage::createMethodCall(this->service(), this->path(),
+                this->staticInterfaceName(), QLatin1String("RespondPeerAuthentication"));
+        callMessage << QVariant::fromValue(secret);
+        return this->connection().asyncCall(callMessage, timeout);
+    }
+
+    /**
+     * Begins a call to the D-Bus method \c AbortPeerAuthentication on the remote object.
+     *
+     * \htmlonly
+     * <p>This method aborts the peer authentication process.</p>
+     * \endhtmlonly
+     *
+     * Note that \a timeout is ignored as of now. It will be used once
+     * http://bugreports.qt.nokia.com/browse/QTBUG-11775 is fixed.
+     *
+     * \param timeout The timeout in milliseconds.
+     */
+    inline QDBusPendingReply<> AbortPeerAuthentication(int timeout = -1)
+    {
+        if (!invalidationReason().isEmpty()) {
+            return QDBusPendingReply<>(QDBusMessage::createError(
+                invalidationReason(),
+                invalidationMessage()
+            ));
+        }
+
+        QDBusMessage callMessage = QDBusMessage::createMethodCall(this->service(), this->path(),
+                this->staticInterfaceName(), QLatin1String("AbortPeerAuthentication"));
+        return this->connection().asyncCall(callMessage, timeout);
+    }
+
 Q_SIGNALS:
     /**
      * Represents the signal \c MessageSent on the remote object.
@@ -511,6 +609,61 @@ Q_SIGNALS:
      * \endhtmlonly
      */
     void PendingMessagesRemoved(const Tp::UIntList& messageIDs);
+
+    /**
+     * Represents the signal \c PeerAuthenticationRequested on the remote object.
+     *
+     * Emitted when peer authentication has been requested by the remote peer.
+     *
+     * \param question
+     *
+     *     The question the remote peer is using for peer authentication. If
+     *     an empty string is passed only the shared secret will be used on
+     *     the peer authentication process.
+     */
+    void PeerAuthenticationRequested(const QString& question);
+
+    /**
+     * Represents the signal \c PeerAuthenticationConcluded on the remote object.
+     *
+     * Emitted when the peer authentication process finishes normally.
+     *
+     * \param authenticated
+     *
+     *     True if peer identity could be authenticated, false otherwise.
+     */
+    void PeerAuthenticationConcluded(bool authenticated);
+
+    /**
+     * Represents the signal \c PeerAuthenticationInProgress on the remote object.
+     *
+     * Emitted when the peer authentication process has entered next stage.
+     */
+    void PeerAuthenticationInProgress();
+
+    /**
+     * Represents the signal \c PeerAuthenticationAborted on the remote object.
+     *
+     * Emitted when the peer authentication process has been aborted by the
+     * remote peer.
+     */
+    void PeerAuthenticationAborted();
+
+    /**
+     * Represents the signal \c PeerAuthenticationError on the remote object.
+     *
+     * Emitted when the peer authentication process has been aborted because a
+     * protocol error has occured.
+     */
+    void PeerAuthenticationError();
+
+    /**
+     * Represents the signal \c PeerAuthenticationCheated on the remote object.
+     *
+     * Emitted when the peer authentication process has been aborted because
+     * cheating was discovered.
+     */
+    void PeerAuthenticationCheated();
 
     /**
      * Represents the signal \c SessionRefreshed on the remote object.

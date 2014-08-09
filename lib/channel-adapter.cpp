@@ -193,6 +193,20 @@ void ChannelAdapter::setupOTRChannel()
             SLOT(onMessageSent(const Tp::MessagePartList&, uint, const QString&)));
     connect(d->otrProxy.data(), SIGNAL(TrustLevelChanged(uint)), SLOT(onTrustLevelChanged(uint)));
 
+    // smp protocol
+    connect(d->otrProxy.data(), SIGNAL(PeerAuthenticationRequested(const QString&)),
+           SLOT(onPeerAuthenticationRequested(const QString&)));
+    connect(d->otrProxy.data(), SIGNAL(PeerAuthenticationConcluded(bool)),
+           SIGNAL(peerAuthenticationConcluded(bool)));
+    connect(d->otrProxy.data(), SIGNAL(PeerAuthenticationInProgress()),
+           SIGNAL(peerAuthenticationInProgress()));
+    connect(d->otrProxy.data(), SIGNAL(PeerAuthenticationAborted()),
+           SIGNAL(peerAuthenticationAborted()));
+    connect(d->otrProxy.data(), SIGNAL(PeerAuthenticationError()),
+           SIGNAL(peerAuthenticationError()));
+    connect(d->otrProxy.data(), SIGNAL(PeerAuthenticationCheated()),
+           SIGNAL(peerAuthenticationCheated()));
+
     // initialize message queue;
     connect(d->otrProxy->requestPropertyPendingMessages(), SIGNAL(finished(Tp::PendingOperation*)),
                 SLOT(onPendingMessagesPropertyGet(Tp::PendingOperation*)));
@@ -429,4 +443,13 @@ void ChannelAdapter::onTrustLevelChanged(uint trustLevel)
     }
 
     Q_EMIT otrTrustLevelChanged(d->trustLevel, oldLevel);
+}
+
+void ChannelAdapter::onPeerAuthenticationRequested(const QString &question)
+{
+    if(question.isEmpty()) {
+        Q_EMIT peerAuthenticationRequestedSS();
+    } else {
+        Q_EMIT peerAuthenticationRequestedQA(question);
+    }
 }
