@@ -196,14 +196,16 @@ private:
     void offerDocumentToChatroom(const Tp::AccountPtr& account, const QString& roomName);
 
     /**
-     * @brief Restores the System's keyboard layout to the layout of the current ChatTab
-     * @param chatTab The tab that the language is going to be restored from
+     * @brief Set the System's keyboard layout to the layout of the current ChatTab
+     * @param layout latout to set
      */
-    void restoreKeyboardLayout(ChatTab *chatTab);
+    void restoreKeyboardLayout(const QString &layout);
 
     KAction *m_sendMessage;
 
     KTabWidget *m_tabWidget;
+
+    QString m_previousKeyboardLayout;
 
     QDBusInterface *m_keyboardLayoutInterface;
     Sonnet::DictionaryComboBox *m_spellDictCombo;

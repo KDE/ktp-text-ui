@@ -143,6 +143,10 @@ ChatWindow::ChatWindow()
     Q_FOREACH(KToolBar *toolbar, toolBars()) {
         connect(toolbar, SIGNAL(iconSizeChanged(const QSize&)), SLOT(updateAccountIcon()));
     }
+
+    QDBusPendingCall dbusPendingCall = m_keyboardLayoutInterface->asyncCall(QLatin1String("getCurrentLayout"));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(dbusPendingCall, this);
+    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(onGetCurrentKeyboardLayoutFinished(QDBusPendingCallWatcher*)));
 }
 
 ChatWindow::~ChatWindow()
@@ -259,10 +263,7 @@ void ChatWindow::addTab(ChatTab *tab)
 
     setupChatTabSignals(tab);
     tab->setZoomFactor(m_zoomFactor);
-
-    QDBusPendingCall dbusPendingCall = m_keyboardLayoutInterface->asyncCall(QLatin1String("getCurrentLayout"));
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(dbusPendingCall, this);
-    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(onGetCurrentKeyboardLayoutFinished(QDBusPendingCallWatcher*)));
+    tab->setCurrentKeyboardLayoutLanguage(m_previousKeyboardLayout);
 
     m_tabWidget->addTab(tab, tab->icon(), tab->title());
     m_tabWidget->setCurrentWidget(tab);
@@ -367,7 +368,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
     m_spellDictCombo->setCurrentByDictionary(currentChatTab->spellDictionary());
 
     if (currentChatTab->isActiveWindow()) {
-	restoreKeyboardLayout(currentChatTab);
+	restoreKeyboardLayout(currentChatTab->currentKeyboardLayoutLanguage());
     }
 
     // when the tab changes I need to "refresh" the window's findNext and findPrev actions
@@ -476,13 +477,18 @@ void ChatWindow::onGenericOperationFinished(Tp::PendingOperation* op)
 
 void ChatWindow::onGetCurrentKeyboardLayoutFinished(QDBusPendingCallWatcher* watcher)
 {
-    if (!watcher->isError()) {
-	QDBusMessage replyMessage = watcher->reply();
-	ChatTab *chatTab = getCurrentTab();
-	if (chatTab) {
-	    QString layout = replyMessage.arguments().first().toString();
-	    chatTab->setCurrentKeyboardLayoutLanguage(layout);
-	}
+    if (watcher->isError()) {
+        return;
+    }
+
+    QDBusMessage replyMessage = watcher->reply();
+    if (replyMessage.arguments().size() > 0) {
+        m_previousKeyboardLayout = replyMessage.arguments().first().toString();
+    }
+
+    ChatTab *tab = getCurrentTab();
+    if (tab) {
+        tab->setCurrentKeyboardLayoutLanguage(m_previousKeyboardLayout);
     }
     watcher->deleteLater();
 }
@@ -503,7 +509,9 @@ void ChatWindow::onKeyboardLayoutChange(const QString& keyboardLayout)
 	// To prevent keyboard layout change when the ChatWindow is minimized or not active
 	if (currChat->isActiveWindow()) {
 	    currChat->setCurrentKeyboardLayoutLanguage(keyboardLayout);
-	}
+	} else {
+            m_previousKeyboardLayout = keyboardLayout;
+        }
     }
 }
 
@@ -1026,15 +1034,10 @@ void ChatWindow::offerDocumentToChatroom(const Tp::AccountPtr& account, const QS
     }
 }
 
-void ChatWindow::restoreKeyboardLayout(ChatTab *chatTab)
+void ChatWindow::restoreKeyboardLayout(const QString &layout)
 {
-    if (!chatTab) {
-        return;
-    }
-
-    QString currentKeyboardLayout = chatTab->currentKeyboardLayoutLanguage();
-    if (!currentKeyboardLayout.isEmpty()) {
-        m_keyboardLayoutInterface->asyncCall(QLatin1String("setLayout"), currentKeyboardLayout);
+    if (!layout.isEmpty()) {
+        m_keyboardLayoutInterface->asyncCall(QLatin1String("setLayout"), layout);
     }
 }
 
@@ -1059,8 +1062,10 @@ bool ChatWindow::event(QEvent *e)
         //see https://bugs.kde.org/show_bug.cgi?id=322135
         if (currChat) {
             currChat->acknowledgeMessages();
-	    restoreKeyboardLayout(currChat);
+            restoreKeyboardLayout(currChat->currentKeyboardLayoutLanguage());
         }
+    } else if (e->type() == QEvent::WindowDeactivate) {
+        restoreKeyboardLayout(m_previousKeyboardLayout);
     }
 
     return KXmlGuiWindow::event(e);
