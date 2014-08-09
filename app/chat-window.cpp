@@ -1028,11 +1028,13 @@ void ChatWindow::offerDocumentToChatroom(const Tp::AccountPtr& account, const QS
 
 void ChatWindow::restoreKeyboardLayout(ChatTab *chatTab)
 {
-    if (chatTab) {
-	QString currentKeyboardLayout = chatTab->currentKeyboardLayoutLanguage();
-	if (!currentKeyboardLayout.isEmpty()) {
-	    m_keyboardLayoutInterface->asyncCall(QLatin1String("setLayout"), currentKeyboardLayout);
-	}
+    if (!chatTab) {
+        return;
+    }
+
+    QString currentKeyboardLayout = chatTab->currentKeyboardLayoutLanguage();
+    if (!currentKeyboardLayout.isEmpty()) {
+        m_keyboardLayoutInterface->asyncCall(QLatin1String("setLayout"), currentKeyboardLayout);
     }
 }
 
