@@ -232,8 +232,15 @@ private Q_SLOTS:
     void onShareProviderFinishedSuccess(ShareProvider *provider, const QString &imageUrl);
     void onShareProviderFinishedFailure(ShareProvider *provider, const QString &errorMessage);
     void onSendFileClicked();
+
     void onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous);
     void onOTRsessionRefreshed();
+    void onPeerAuthenticationRequestedQA(const QString &question);
+    void onPeerAuthenticationRequestedSS();
+    void onPeerAuthenticationConcluded(bool authenticated);
+    void onPeerAuthenticationInProgress();
+    void onPeerAuthenticationAborted();
+    void onPeerAuthenticationFailed();
 
 private:
     /** connects necessary signals for the channel */

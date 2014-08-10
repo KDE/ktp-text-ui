@@ -30,6 +30,7 @@
 #include "text-chat-config.h"
 #include "contact-delegate.h"
 #include "channel-adapter.h"
+#include "authenticationwizard.h"
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
@@ -692,30 +693,13 @@ void ChatWidget::stopOtrSession()
 void ChatWidget::authenticateBuddy()
 {
     if(!d->channel.isOTRsuppored()) return;
-    // TODO add smp
-    const QString fingerprint = d->channel.remoteFingerprint();
 
-    QString question = i18n("Is the following fingerprint for the contact %1 correct?\n%2",
-            d->contactName, fingerprint);
-
-    int askResult = KMessageBox::questionYesNoCancel(this, question);
-    QDBusPendingReply<> result;
-    switch(askResult) {
-        case KMessageBox::Yes:
-            result = d->channel.trustFingerprint(fingerprint, true);
-            break;
-        case KMessageBox::No:
-            result = d->channel.trustFingerprint(fingerprint, false);
-            break;
-        default:
-            return;
-    }
-
-    result.waitForFinished();
-    if(result.isError()) {
-        kWarning() << "Could not set fingerprint trusted because of: " << result.error().name()
-            << " -> " << result.error().message();
-        KMessageBox::error(this, i18n(result.error().message().toLocal8Bit()));
+    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(&d->channel);
+    if(wizard) {
+        wizard->raise();
+        wizard->showNormal();
+    } else {
+        new AuthenticationWizard(&d->channel, d->contactName, this, true);
     }
 }
 
@@ -725,6 +709,20 @@ void ChatWidget::setupOTR()
             SLOT(onOTRTrustLevelChanged(Tp::OTRTrustLevel, Tp::OTRTrustLevel)));
     connect(&d->channel, SIGNAL(sessionRefreshed()),
             SLOT(onOTRsessionRefreshed()));
+    connect(&d->channel, SIGNAL(peerAuthenticationRequestedQA(const QString&)),
+            SLOT(onPeerAuthenticationRequestedQA(const QString&)));
+    connect(&d->channel, SIGNAL(peerAuthenticationRequestedSS()),
+            SLOT(onPeerAuthenticationRequestedSS()));
+    connect(&d->channel, SIGNAL(peerAuthenticationConcluded(bool)),
+            SLOT(onPeerAuthenticationConcluded(bool)));
+    connect(&d->channel, SIGNAL(peerAuthenticationInProgress()),
+            SLOT(onPeerAuthenticationInProgress()));
+    connect(&d->channel, SIGNAL(peerAuthenticationAborted()),
+            SLOT(onPeerAuthenticationAborted()));
+    connect(&d->channel, SIGNAL(peerAuthenticationError()),
+            SLOT(onPeerAuthenticationFailed()));
+    connect(&d->channel, SIGNAL(peerAuthenticationCheated()),
+            SLOT(onPeerAuthenticationFailed()));
 }
 
 void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous)
@@ -762,6 +760,56 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
 void ChatWidget::onOTRsessionRefreshed()
 {
     d->ui.chatArea->addStatusMessage(i18n("Successfully refreshed OTR session"));
+}
+
+void ChatWidget::onPeerAuthenticationRequestedQA(const QString &question)
+{
+    new AuthenticationWizard(&d->channel, d->contactName, this, false, question);
+}
+
+void ChatWidget::onPeerAuthenticationRequestedSS()
+{
+    new AuthenticationWizard(&d->channel, d->contactName, this, false);
+}
+
+void ChatWidget::onPeerAuthenticationConcluded(bool authenticated)
+{
+    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(&d->channel);
+    if(wizard) {
+        wizard->raise();
+        wizard->showNormal();
+        wizard->finished(authenticated);
+    }
+}
+
+void ChatWidget::onPeerAuthenticationInProgress()
+{
+    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(&d->channel);
+    if(wizard) {
+        wizard->raise();
+        wizard->showNormal();
+        wizard->nextState();
+    }
+}
+
+void ChatWidget::onPeerAuthenticationAborted()
+{
+    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(&d->channel);
+    if(wizard) {
+        wizard->raise();
+        wizard->showNormal();
+        wizard->aborted();
+    }
+}
+
+void ChatWidget::onPeerAuthenticationFailed()
+{
+    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(&d->channel);
+    if(wizard) {
+        wizard->raise();
+        wizard->showNormal();
+        wizard->finished(false);
+    }
 }
 
 void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified)

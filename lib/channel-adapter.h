@@ -51,9 +51,9 @@ class ChannelAdapter : public QObject
         void initializeOTR();
         void stopOTR();
         /** question answer peer authentication */
-        void startPeerAuthenticationQA(const QString &secret);
+        void startPeerAuthenticationQA(const QString &question, const QString &answer);
         /** shared secret peer authentication*/
-        void startPeerAuthenticationSS(const QString &question, const QString &answer);
+        void startPeerAuthenticationSS(const QString &secret);
         void respondPeerAuthentication(const QString &secret);
         void abortPeerAuthentication();
 

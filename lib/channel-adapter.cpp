@@ -453,3 +453,23 @@ void ChannelAdapter::onPeerAuthenticationRequested(const QString &question)
         Q_EMIT peerAuthenticationRequestedQA(question);
     }
 }
+
+void ChannelAdapter::startPeerAuthenticationQA(const QString &question, const QString &answer)
+{
+    d->otrProxy->StartPeerAuthentication(question, answer);
+}
+
+void ChannelAdapter::startPeerAuthenticationSS(const QString &secret)
+{
+    startPeerAuthenticationQA(QLatin1String(""), secret);
+}
+
+void ChannelAdapter::respondPeerAuthentication(const QString &secret)
+{
+    d->otrProxy->RespondPeerAuthentication(secret);
+}
+
+void ChannelAdapter::abortPeerAuthentication()
+{
+    d->otrProxy->AbortPeerAuthentication();
+}

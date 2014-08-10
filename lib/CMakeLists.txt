@@ -23,6 +23,7 @@ set(ktpchat_SRCS
         proxy-service-interface.cpp
         proxy-service.cpp
         otr-utils.cpp
+        authenticationwizard.cpp
         )
 
 set(ktpchat_UI
