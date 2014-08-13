@@ -40,38 +40,44 @@ namespace Tp
 {
 
 /**
- * \struct Fingerprint
+ * \struct FingerprintInfo
  * \ingroup struct
  * \headerfile TelepathyQt/types.h <TelepathyQt/Types>
  *
  * Structure type generated from the specification.
- * 
- * An OTR fingerprint.
+ *
+ * A struct (Contact_Name, Fingerprint, Is_Verified) representing remote
+ * contact&apos;s fingerprint, as returned by Get_Known_Fingerprints
  */
-struct TP_QT_EXPORT Fingerprint
+struct TP_QT_EXPORT FingerprintInfo
 {
-    /**
-     * Human readable fingerprint
-     */
-    QString humanReadableFingerprint;
-    /**
-     * Raw data of fingerprint
-     */
-    QByteArray fingerprintRawData;
+    QString contactName;
+    QString fingerprint;
+    bool isVerified;
+    bool inUse;
 };
 
-TP_QT_EXPORT bool operator==(const Fingerprint& v1, const Fingerprint& v2);
-inline bool operator!=(const Fingerprint& v1, const Fingerprint& v2)
+TP_QT_EXPORT bool operator==(const FingerprintInfo& v1, const FingerprintInfo& v2);
+inline bool operator!=(const FingerprintInfo& v1, const FingerprintInfo& v2)
 {
     return !operator==(v1, v2);
 }
-TP_QT_EXPORT QDBusArgument& operator<<(QDBusArgument& arg, const Fingerprint& val);
-TP_QT_EXPORT const QDBusArgument& operator>>(const QDBusArgument& arg, Fingerprint& val);
+TP_QT_EXPORT QDBusArgument& operator<<(QDBusArgument& arg, const FingerprintInfo& val);
+TP_QT_EXPORT const QDBusArgument& operator>>(const QDBusArgument& arg, FingerprintInfo& val);
+
+/**
+ * \ingroup list
+ * \headerfile TelepathyQt/types.h <TelepathyQt/Types>
+ *
+ * Array of FingerprintInfo values.
+ */
+typedef QList<FingerprintInfo> FingerprintInfoList;
 
 KDE_TELEPATHY_CHAT_EXPORT void registerOtrTypes();
 
-} // namespace Tp
+} /* namespace Tp */
 
-Q_DECLARE_METATYPE(Tp::Fingerprint)
+Q_DECLARE_METATYPE(Tp::FingerprintInfo)
+Q_DECLARE_METATYPE(Tp::FingerprintInfoList)
 
 #endif

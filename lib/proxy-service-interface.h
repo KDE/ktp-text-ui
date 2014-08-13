@@ -8,6 +8,8 @@
 #ifndef PROXY_SERVICE_INTERFACE_HEADER
 #define PROXY_SERVICE_INTERFACE_HEADER
 
+#include "otr-types.h"
+
 #include <TelepathyQt/Types>
 
 #include <QtGlobal>
@@ -213,6 +215,82 @@ public Q_SLOTS:
         QDBusMessage callMessage = QDBusMessage::createMethodCall(this->service(), this->path(),
                 this->staticInterfaceName(), QLatin1String("GetFingerprintForAccount"));
         callMessage << QVariant::fromValue(account);
+        return this->connection().asyncCall(callMessage, timeout);
+    }
+
+    /**
+     * Begins a call to the D-Bus method \c GetKnownFingerprints on the remote object.
+     *
+     * Get private key fingerprint associated with given account
+     *
+     * Note that \a timeout is ignored as of now. It will be used once
+     * http://bugreports.qt.nokia.com/browse/QTBUG-11775 is fixed.
+     *
+     * \param timeout The timeout in milliseconds.
+     */
+    inline QDBusPendingReply<Tp::FingerprintInfoList> GetKnownFingerprints(const QDBusObjectPath& account, int timeout = -1)
+    {
+        if (!invalidationReason().isEmpty()) {
+            return QDBusPendingReply<Tp::FingerprintInfoList>(QDBusMessage::createError(
+                invalidationReason(),
+                invalidationMessage()
+            ));
+        }
+
+        QDBusMessage callMessage = QDBusMessage::createMethodCall(this->service(), this->path(),
+                this->staticInterfaceName(), QLatin1String("GetKnownFingerprints"));
+        callMessage << QVariant::fromValue(account);
+        return this->connection().asyncCall(callMessage, timeout);
+    }
+
+    /**
+     * Begins a call to the D-Bus method \c TrustFingerprint on the remote object.
+     *
+     * Trust or distrust given fingerprint for account by settings
+     * Is_Verfified to %TRUE or %FALSE
+     *
+     * Note that \a timeout is ignored as of now. It will be used once
+     * http://bugreports.qt.nokia.com/browse/QTBUG-11775 is fixed.
+     *
+     * \param timeout The timeout in milliseconds.
+     */
+    inline QDBusPendingReply<> TrustFingerprint(const QDBusObjectPath& account, const QString& contactName, const QString& fingerprint, bool trust, int timeout = -1)
+    {
+        if (!invalidationReason().isEmpty()) {
+            return QDBusPendingReply<>(QDBusMessage::createError(
+                invalidationReason(),
+                invalidationMessage()
+            ));
+        }
+
+        QDBusMessage callMessage = QDBusMessage::createMethodCall(this->service(), this->path(),
+                this->staticInterfaceName(), QLatin1String("TrustFingerprint"));
+        callMessage << QVariant::fromValue(account) << QVariant::fromValue(contactName) << QVariant::fromValue(fingerprint) << QVariant::fromValue(trust);
+        return this->connection().asyncCall(callMessage, timeout);
+    }
+
+    /**
+     * Begins a call to the D-Bus method \c ForgetFingerprint on the remote object.
+     *
+     * Forget fingerprint romoving it from the list of known fingerprints
+     *
+     * Note that \a timeout is ignored as of now. It will be used once
+     * http://bugreports.qt.nokia.com/browse/QTBUG-11775 is fixed.
+     *
+     * \param timeout The timeout in milliseconds.
+     */
+    inline QDBusPendingReply<> ForgetFingerprint(const QDBusObjectPath& account, const QString& contactName, const QString& fingerprint, int timeout = -1)
+    {
+        if (!invalidationReason().isEmpty()) {
+            return QDBusPendingReply<>(QDBusMessage::createError(
+                invalidationReason(),
+                invalidationMessage()
+            ));
+        }
+
+        QDBusMessage callMessage = QDBusMessage::createMethodCall(this->service(), this->path(),
+                this->staticInterfaceName(), QLatin1String("ForgetFingerprint"));
+        callMessage << QVariant::fromValue(account) << QVariant::fromValue(contactName) << QVariant::fromValue(fingerprint);
         return this->connection().asyncCall(callMessage, timeout);
     }
 

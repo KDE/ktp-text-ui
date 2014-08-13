@@ -133,7 +133,7 @@ bool ProxyService::isOngoingGeneration(const QDBusObjectPath &account)
     return d->dialogs.contains(account.path());
 }
 
-QString ProxyService::fingerprintForAccount(const QDBusObjectPath& account)
+QString ProxyService::fingerprintForAccount(const QDBusObjectPath& account) const
 {
     QDBusPendingReply<QString> rep = d->psi->GetFingerprintForAccount(account);
     rep.waitForFinished();
@@ -143,6 +143,45 @@ QString ProxyService::fingerprintForAccount(const QDBusObjectPath& account)
         kWarning() << "Could not get fingerprint of account: " << account.path() <<
             " due to: " << rep.error().message();
         return QLatin1String("");
+    }
+}
+
+Tp::FingerprintInfoList ProxyService::knownFingerprints(const QDBusObjectPath &account) const
+{
+    QDBusPendingReply<Tp::FingerprintInfoList> fpsRep = d->psi->GetKnownFingerprints(account);
+    fpsRep.waitForFinished();
+    if(fpsRep.isValid()) {
+        return fpsRep.value();
+    } else {
+        kWarning() << "Could not get known fingerprints for account: " << account.path() <<
+            " due to: " << fpsRep.error().message();
+        return Tp::FingerprintInfoList();
+    }
+}
+
+bool ProxyService::trustFingerprint(const QDBusObjectPath &account, const QString &contactName, const QString &fingerprint, bool trust)
+{
+    QDBusPendingReply<> res = d->psi->TrustFingerprint(account, contactName, fingerprint, trust);
+    res.waitForFinished();
+    if(res.isValid()) {
+        return true;
+    } else {
+        kWarning() << "Could not trust fingerprint " << fingerprint << " for account: " << account.path() <<
+            " due to: " << res.error().message();
+        return false;
+    }
+}
+
+bool ProxyService::forgetFingerprint(const QDBusObjectPath &account, const QString &contactName, const QString &fingerprint)
+{
+    QDBusPendingReply<> res = d->psi->ForgetFingerprint(account, contactName, fingerprint);
+    res.waitForFinished();
+    if(res.isValid()) {
+        return true;
+    } else {
+        kWarning() << "Could not forget fingerprint " << fingerprint << " for account: " << account.path() <<
+            " due to: " << res.error().message();
+        return false;
     }
 }
 

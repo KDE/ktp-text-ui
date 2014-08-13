@@ -21,39 +21,47 @@
 
 #include "otr-types.h"
 
+#include <QDBusArgument>
+#include <QDBusMetaType>
+
 namespace Tp
 {
 
-TP_QT_EXPORT bool operator==(const Fingerprint& v1, const Fingerprint& v2)
-{
-    return ((v1.humanReadableFingerprint == v2.humanReadableFingerprint)
-            && (v1.fingerprintRawData == v2.fingerprintRawData)
-            );
+    TP_QT_EXPORT bool operator==(const FingerprintInfo& v1, const FingerprintInfo& v2)
+    {
+        return ((v1.contactName == v2.contactName)
+                && (v1.fingerprint == v2.fingerprint)
+                && (v1.isVerified == v2.isVerified)
+                && (v1.inUse == v2.inUse)
+               );
+    }
+
+    TP_QT_EXPORT QDBusArgument& operator<<(QDBusArgument& arg, const FingerprintInfo& val)
+    {
+        arg.beginStructure();
+        arg << val.contactName << val.fingerprint << val.isVerified << val.inUse;
+        arg.endStructure();
+        return arg;
+    }
+
+    TP_QT_EXPORT const QDBusArgument& operator>>(const QDBusArgument& arg, FingerprintInfo& val)
+    {
+        arg.beginStructure();
+        arg >> val.contactName >> val.fingerprint >> val.isVerified >> val.inUse;
+        arg.endStructure();
+        return arg;
+    }
+
+    void registerOtrTypes()
+    {
+        static bool registered = false;
+        if(registered) {
+            return;
+        }
+        registered = true;
+
+        qDBusRegisterMetaType<Tp::FingerprintInfo>();
+        qDBusRegisterMetaType<Tp::FingerprintInfoList>();
+    }
+
 }
-
-TP_QT_EXPORT QDBusArgument& operator<<(QDBusArgument& arg, const Fingerprint& val)
-{
-    arg.beginStructure();
-    arg << val.humanReadableFingerprint << val.fingerprintRawData;
-    arg.endStructure();
-    return arg;
-}
-
-TP_QT_EXPORT const QDBusArgument& operator>>(const QDBusArgument& arg, Fingerprint& val)
-{
-    arg.beginStructure();
-    arg >> val.humanReadableFingerprint >> val.fingerprintRawData;
-    arg.endStructure();
-    return arg;
-}
-
-KDE_TELEPATHY_CHAT_EXPORT void registerOtrTypes() {
-    static bool registered = false;
-    if (registered)
-        return;
-    registered = true;
-
-    qDBusRegisterMetaType<Tp::Fingerprint>();
-}
-
-} // namespace Tp

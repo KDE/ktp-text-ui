@@ -32,6 +32,7 @@
 namespace Ui {
 class OTRConfigUi;
 }
+class QMenu;
 
 class OTRConfig : public KCModule
 {
@@ -59,6 +60,14 @@ private Q_SLOTS:
     void onPolicyGet(Tp::PendingOperation *getOp);
     void onPolicySet(Tp::PendingOperation *setOp);
     void onKeyGenerationFinished();
+    void onCurrentFpCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn);
+    void onVerifyClicked();
+    void onForgetClicked();
+    void onFpTableMenuRequested(QPoint pos);
+
+private:
+    QDBusObjectPath currentAccount() const;
+    void loadFingerprints();
 
 private:
     Ui::OTRConfigUi *ui;
@@ -66,6 +75,7 @@ private:
     QList<Tp::AccountPtr> accounts;
     Tp::OTRPolicy policy;
     ProxyService *ps;
+    QMenu *fpCtxMenu;
 };
 
 #endif // OTR_CONFIG_H

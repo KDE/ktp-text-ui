@@ -728,6 +728,11 @@ void ChatWidget::setupOTR()
 void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous)
 {
     kDebug();
+
+    if(trustLevel == previous) {
+        return;
+    }
+
     d->newOTRstatus = true;
     switch(trustLevel) {
         case Tp::OTRTrustLevelUnverified:
