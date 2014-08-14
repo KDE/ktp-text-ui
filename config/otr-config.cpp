@@ -19,7 +19,6 @@
 
 #include "otr-config.h"
 #include "ui_otr-config.h"
-#include "ktp_otr.h"
 #include "otr-types.h"
 
 #include <QLatin1String>
