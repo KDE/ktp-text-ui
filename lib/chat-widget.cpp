@@ -916,17 +916,14 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
 
             d->ui.chatArea->addStatusMessage(text, message.sender()->alias(), message.received());
         } else {
-
+            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel.textChannel()));
+            if (!alreadyNotified) {
+                d->notifyFilter->filterMessage(processedMessage,
+                        KTp::MessageContext(d->account, d->channel.textChannel()));
+            }
             if(Tp::Utils::isOtrEvent(message)) {
-                // TODO use notify filter to present to user when unencrypted message was received
                 d->ui.chatArea->addStatusMessage(Tp::Utils::processOtrMessage(message));
             } else {
-                KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel.textChannel()));
-
-                if (!alreadyNotified) {
-                    d->notifyFilter->filterMessage(processedMessage,
-                                                   KTp::MessageContext(d->account, d->channel.textChannel()));
-                }
                 d->ui.chatArea->addMessage(processedMessage);
             }
         }
