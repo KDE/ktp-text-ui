@@ -48,6 +48,7 @@ class OTRMessage : public Tp::ReceivedMessage
         OTRMessage(const Tp::MessagePartList &message, const Tp::TextChannelPtr channel)
             : Tp::ReceivedMessage(message, channel)
         {
+            setSender(channel->targetContact());
         }
 
         bool hasId() const
@@ -63,6 +64,11 @@ class OTRMessage : public Tp::ReceivedMessage
         void setId(int id)
         {
             header()[QLatin1String("pending-message-id")] = QDBusVariant(id);
+        }
+
+        void setSender(const Tp::ContactPtr &contact)
+        {
+            ReceivedMessage::setSender(contact);
         }
 };
 
