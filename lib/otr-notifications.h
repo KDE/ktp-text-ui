@@ -23,12 +23,13 @@
 #include <TelepathyQt/Contact>
 
 class QWidget;
+class ChatWidget;
 
 namespace OTRNotifications
 {
-    void otrSessionStarted(QWidget *widget, const Tp::ContactPtr &targetContact, bool verified);
+    void otrSessionStarted(ChatWidget *widget, const Tp::ContactPtr &targetContact, bool verified);
 
-    void otrSessionFinished(QWidget *widget, const Tp::ContactPtr &targetContact);
+    void otrSessionFinished(ChatWidget *widget, const Tp::ContactPtr &targetContact);
 
     void authenticationRequested(QWidget *widget, const Tp::ContactPtr &targetContact);
 

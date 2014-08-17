@@ -19,10 +19,12 @@
 
 
 #include "otr-notifications.h"
+#include "chat-widget.h"
 
 #include <TelepathyQt/AvatarData>
 
 #include <QWidget>
+#include <QObject>
 
 #include <KAboutData>
 #include <KComponentData>
@@ -49,35 +51,44 @@ namespace OTRNotifications
             notification->setPixmap(notificationPixmap);
         }
 
-        notification->setActions(QStringList(i18n("View")));
-
         return notification;
     }
 
-    void otrSessionStarted(QWidget *widget, const Tp::ContactPtr &targetContact, bool verified)
+    void otrSessionStarted(ChatWidget *widget, const Tp::ContactPtr &targetContact, bool verified)
     {
         KNotification *notification = prepareNotification(widget, targetContact);
         if(verified) {
-            notification->setText(i18n("Private OTR session started with %1", targetContact->id()));
+            notification->setText(i18n("Private OTR session started with %1", targetContact->alias()));
         } else {
-            notification->setText(i18n("Unverified OTR session started with %1", targetContact->id()));
+            notification->setText(i18n("Unverified OTR session started with %1", targetContact->alias()));
+        }
+
+        notification->setActions(QStringList(i18n("View")));
+        if(widget) {
+            QObject::connect(notification, SIGNAL(activated(uint)), widget, SIGNAL(notificationClicked()));
+            QObject::connect(notification, SIGNAL(activated(uint)), notification, SLOT(close()));
         }
 
         notification->sendEvent();
     }
 
-    void otrSessionFinished(QWidget *widget, const Tp::ContactPtr &targetContact)
+    void otrSessionFinished(ChatWidget *widget, const Tp::ContactPtr &targetContact)
     {
         KNotification *notification = prepareNotification(widget, targetContact);
-        notification->setText(i18n("Finished OTR session with %1", targetContact->id()));
+        notification->setText(i18n("Finished OTR session with %1", targetContact->alias()));
 
+        notification->setActions(QStringList(i18n("View")));
+        if(widget) {
+            QObject::connect(notification, SIGNAL(activated(uint)), widget, SIGNAL(notificationClicked()));
+            QObject::connect(notification, SIGNAL(activated(uint)), notification, SLOT(close()));
+        }
         notification->sendEvent();
     }
 
     void authenticationRequested(QWidget *widget, const Tp::ContactPtr &targetContact)
     {
         KNotification *notification = prepareNotification(widget, targetContact);
-        notification->setText(i18n("%1 has requested your authentication", targetContact->id()));
+        notification->setText(i18n("%1 has requested your authentication", targetContact->alias()));
 
         notification->sendEvent();
     }
@@ -86,9 +97,9 @@ namespace OTRNotifications
     {
         KNotification *notification = prepareNotification(widget, targetContact);
         if(success) {
-            notification->setText(i18n("Authentication with %1 completed successfully", targetContact->id()));
+            notification->setText(i18n("Authentication with %1 completed successfully", targetContact->alias()));
         } else {
-            notification->setText(i18n("Authentication with %1 failed", targetContact->id()));
+            notification->setText(i18n("Authentication with %1 failed", targetContact->alias()));
         }
 
         notification->sendEvent();
@@ -97,7 +108,7 @@ namespace OTRNotifications
     void authenticationAborted(QWidget *widget, const Tp::ContactPtr &targetContact)
     {
         KNotification *notification = prepareNotification(widget, targetContact);
-        notification->setText(i18n("Authentication with %1 was aborted", targetContact->id()));
+        notification->setText(i18n("Authentication with %1 was aborted", targetContact->alias()));
 
         notification->sendEvent();
     }
@@ -105,7 +116,7 @@ namespace OTRNotifications
     void authenticationFailed(QWidget *widget, const Tp::ContactPtr &targetContact)
     {
         KNotification *notification = prepareNotification(widget, targetContact);
-        notification->setText(i18n("Authentication with %1 failed", targetContact->id()));
+        notification->setText(i18n("Authentication with %1 failed", targetContact->alias()));
 
         notification->sendEvent();
     }
