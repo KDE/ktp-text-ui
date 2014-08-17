@@ -24,6 +24,7 @@ set(ktpchat_SRCS
         proxy-service.cpp
         otr-utils.cpp
         authenticationwizard.cpp
+        otr-notifications.cpp
         )
 
 set(ktpchat_UI

@@ -31,6 +31,7 @@
 #include "contact-delegate.h"
 #include "channel-adapter.h"
 #include "authenticationwizard.h"
+#include "otr-notifications.h"
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QAction>
@@ -741,6 +742,9 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
             }
             else {
                 d->ui.chatArea->addStatusMessage(i18n("Unverified OTR session started"));
+                if(!this->isActiveWindow()) {
+                    OTRNotifications::otrSessionStarted(this, d->channel.textChannel()->targetContact(), false);
+                }
             }
             break;
         case Tp::OTRTrustLevelPrivate:
@@ -749,10 +753,16 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
             }
             else {
                 d->ui.chatArea->addStatusMessage(i18n("Private OTR session started"));
+                if(!this->isActiveWindow()) {
+                    OTRNotifications::otrSessionStarted(this, d->channel.textChannel()->targetContact(), true);
+                }
             }
             break;
         case Tp::OTRTrustLevelFinished:
             d->ui.chatArea->addStatusMessage(i18n("%1 has ended the OTR session. You should do the same", d->contactName));
+            if(!this->isActiveWindow()) {
+                OTRNotifications::otrSessionFinished(this, d->channel.textChannel()->targetContact());
+            }
             break;
 
         default: break;
@@ -769,12 +779,18 @@ void ChatWidget::onOTRsessionRefreshed()
 
 void ChatWidget::onPeerAuthenticationRequestedQA(const QString &question)
 {
-    new AuthenticationWizard(&d->channel, d->contactName, this, false, question);
+    AuthenticationWizard *wizard = new AuthenticationWizard(&d->channel, d->contactName, this, false, question);
+    if(!wizard->isActiveWindow()) {
+        OTRNotifications::authenticationRequested(wizard, d->channel.textChannel()->targetContact());
+    }
 }
 
 void ChatWidget::onPeerAuthenticationRequestedSS()
 {
-    new AuthenticationWizard(&d->channel, d->contactName, this, false);
+    AuthenticationWizard *wizard = new AuthenticationWizard(&d->channel, d->contactName, this, false);
+    if(!wizard->isActiveWindow()) {
+        OTRNotifications::authenticationRequested(wizard, d->channel.textChannel()->targetContact());
+    }
 }
 
 void ChatWidget::onPeerAuthenticationConcluded(bool authenticated)
@@ -784,6 +800,9 @@ void ChatWidget::onPeerAuthenticationConcluded(bool authenticated)
         wizard->raise();
         wizard->showNormal();
         wizard->finished(authenticated);
+    }
+    if(!wizard->isActiveWindow()) {
+        OTRNotifications::authenticationConcluded(wizard, d->channel.textChannel()->targetContact(), authenticated);
     }
 }
 
@@ -805,6 +824,9 @@ void ChatWidget::onPeerAuthenticationAborted()
         wizard->showNormal();
         wizard->aborted();
     }
+    if(!wizard->isActiveWindow()) {
+        OTRNotifications::authenticationAborted(wizard, d->channel.textChannel()->targetContact());
+    }
 }
 
 void ChatWidget::onPeerAuthenticationFailed()
@@ -814,6 +836,9 @@ void ChatWidget::onPeerAuthenticationFailed()
         wizard->raise();
         wizard->showNormal();
         wizard->finished(false);
+    }
+    if(!wizard->isActiveWindow()) {
+        OTRNotifications::authenticationFailed(wizard, d->channel.textChannel()->targetContact());
     }
 }
 
