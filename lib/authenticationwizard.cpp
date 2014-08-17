@@ -90,7 +90,7 @@ AuthenticationWizard::AuthenticationWizard(
 	setPage(Page_QuestionAnswer, createQAPage());
 	setPage(Page_SharedSecret, createSSPage());
 	setPage(Page_ManualVerification, createMVPage());
-	setPage(Page_Wait1, new WaitPage(i18n("Waiting for %1...", contact)));
+	setPage(Page_Wait1, new WaitPage(i18n("Waiting for <b>%1</b>...", contact)));
 	setPage(Page_Wait2, new WaitPage(i18n("Checking if answers match...")));
 	setPage(Page_Final, createFinalPage());
 
@@ -109,7 +109,7 @@ AuthenticationWizard::AuthenticationWizard(
 
 	updateInfoBox();
 
-	resize(rbMV->width() * 1.5, rbMV->width() * 0.75);
+	resize(rbMV->width() * 1.05, rbMV->width() * 0.5);
 	show();
 }
 
@@ -165,11 +165,12 @@ QWizardPage *AuthenticationWizard::createQAPage()
 {
 	QWizardPage *page = new QWizardPage();
 	QGridLayout *layout = new QGridLayout();
+    layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 0, 0);
 
 	if(initiate) {
 		page->setTitle(i18nc("@title", "Question and Answer"));
 
-		lQuestion = new QLabel(i18nc("@info", "Enter a question that only %1 is able to answer:",
+		lQuestion = new QLabel(i18nc("@info", "Enter a question that only <b>%1</b> is able to answer:",
                     contact));
 		layout->addWidget(lQuestion);
 		leQuestion = new QLineEdit();
@@ -178,18 +179,23 @@ QWizardPage *AuthenticationWizard::createQAPage()
 		layout->addWidget(lAnswer);
 	} else {
 		if(!question.isEmpty()) {
-			page->setTitle(i18nc("@info", "Authentication with %1", contact));
-			lQuestion = new QLabel(i18nc("@info", "%1 would like to verify your authentication."
+			page->setTitle(i18nc("@info", "Authentication with <b>%1</b>", contact));
+			lQuestion = new QLabel(i18nc("@info", "<b>%1</b> would like to verify your authentication."
                         "Please answer the following question in the field below:", contact));
+            layout->setRowMinimumHeight(1, 30);
 			lQuestion->setWordWrap(true);
 			layout->addWidget(lQuestion);
 			lAnswer = new QLabel(question);
+            QFont font = lAnswer->font();
+            font.setItalic(true);
+            lAnswer->setFont(font);
 			lAnswer->setWordWrap(true);
 			layout->addWidget(lAnswer);
 		}
 	}
 	leAnswer = new QLineEdit();
 	layout->addWidget(leAnswer);
+    layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 5, 0);
 
 	page->setLayout(layout);
 	page->setCommitPage(true);
@@ -200,18 +206,20 @@ QWizardPage *AuthenticationWizard::createSSPage()
 {
 	QWizardPage *page = new QWizardPage();
 	QGridLayout *layout = new QGridLayout();
+    layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 0, 0);
 
 	if(initiate) {
 		page->setTitle(i18nc("@title", "Shared Secret"));
 
-		layout->addWidget(new QLabel(i18nc("@info", "Enter a secret passphrase known only to you and %1:", contact)));
+		layout->addWidget(new QLabel(i18nc("@info", "Enter a secret passphrase known only to you and <b>%1</b>:", contact)));
 	} else {
-        page->setTitle(i18nc("@title", "Authentication with %1", contact));
-		layout->addWidget(new QLabel(i18nc("@info", "Enter the secret passphrase known only to you and %1:", contact)));
+        page->setTitle(i18nc("@title", "Authentication with <b>%1</b>", contact));
+		layout->addWidget(new QLabel(i18nc("@info", "Enter the secret passphrase known only to you and <b>%1</b>:", contact)));
 	}
 	leSecret = new QLineEdit();
 	layout->addWidget(leSecret);
 
+    layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 4, 0);
 	page->setLayout(layout);
 	page->setCommitPage(true);
 	return page;
@@ -223,12 +231,16 @@ QWizardPage *AuthenticationWizard::createMVPage()
 	page->setTitle(i18nc("@title", "Manual Verification"));
 
 	QGridLayout *layout = new QGridLayout();
+    layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 0, 0);
 
 	QLabel *lMessage1 = new QLabel(i18nc("@info",
-                "Contact %1 via another secure channel and verify that the following fingerprint is correct:", contact));
+                "Contact <b>%1</b> via another secure channel and verify that the following fingerprint is correct:", contact));
 	lMessage1->setWordWrap(true);
 	layout->addWidget(lMessage1);
-	layout->addWidget(new QLabel(chAdapter->remoteFingerprint()));
+    QLabel *lFingerprint = new QLabel(QLatin1String("<b>") + chAdapter->remoteFingerprint() + QLatin1String("</b>"));
+    lFingerprint->setAlignment(Qt::AlignCenter);
+    lFingerprint->setTextInteractionFlags(Qt::TextSelectableByMouse);
+	layout->addWidget(lFingerprint);
 
 	cbManualAuth = new QComboBox();
 	cbManualAuth->addItem(i18nc("@item:inlistbox ...verified that", "I have not"));
@@ -242,30 +254,36 @@ QWizardPage *AuthenticationWizard::createMVPage()
 	}
 
 	QLabel *lMessage2 = new QLabel(i18nc("@info:label I have...",
-                "verified that this is in fact the correct fingerprint for %1", contact));
+                "verified that this is in fact the correct fingerprint for <b>%1</b>.", contact));
 	lMessage2->setWordWrap(true);
 
 	QHBoxLayout *verifyLayout = new QHBoxLayout();
-	verifyLayout->addWidget(cbManualAuth);
-	verifyLayout->addWidget(lMessage2);
+	verifyLayout->addWidget(cbManualAuth, 0, Qt::AlignLeft);
+    verifyLayout->addSpacing(5);
+	verifyLayout->addWidget(lMessage2, 1);
 
 	QFrame *frame = new QFrame();
 	frame->setLayout(verifyLayout);
 	layout->addWidget(frame);
 
+    layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 6, 0);
+    layout->setVerticalSpacing(15);
 	page->setLayout(layout);
-	return page;
 
+	return page;
 }
 
 QWizardPage *AuthenticationWizard::createFinalPage()
 {
 	QWizardPage *page = new QWizardPage();
 	QGridLayout *layout = new QGridLayout();
+    layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 0, 0);
 
 	lFinal = new QLabel();
 	lFinal->setWordWrap(true);
 	layout->addWidget(lFinal);
+    layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding), 2, 0);
+
 	page->setLayout(layout);
 
 	return page;
@@ -353,10 +371,10 @@ void AuthenticationWizard::finished(bool success)
 		if(success) {
 			kDebug() << "auth succeeded";
 			currentPage()->setTitle(i18n("Authentication successful"));
-			if(!question.isEmpty()|| rbQA->isChecked()){
+			if(!question.isEmpty()|| rbQA->isChecked()) {
 				if(initiate){
 					kDebug() << "initiate";
-					lFinal->setText(i18n("The authentication with %1 was completed successfully."
+					lFinal->setText(i18n("The authentication with <b>%1</b> has been completed successfully."
                                 " The conversation is now secure.", contact));
 				} else {
 					kDebug() << "not initiate";
@@ -364,13 +382,14 @@ void AuthenticationWizard::finished(bool success)
                                 " You may want to authenticate this contact as well by asking your own question.", contact));
 				}
 			} else {
-				lFinal->setText(i18n("The authentication with %1 was completed successfully. "
+				lFinal->setText(i18n("The authentication with <b>%1</b> has been completed successfully. "
                             "The conversation is now secure.", contact));
 			}
 		} else {
 			currentPage()->setTitle(i18n("Authentication failed"));
-			lFinal->setText(i18n("The authentication with %1 failed."
-                        " To make sure you are not talking to an imposter, try again using the manual fingerprint verification method."
+			lFinal->setText(i18n("The authentication with <b>%1</b> has failed."
+                        " To make sure you are not talking to an imposter, "
+                        "try again using the manual fingerprint verification method."
                         " Note that the conversation is now insecure.", contact));
 		}
 	}
@@ -391,21 +410,24 @@ void AuthenticationWizard::aborted()
 		next();
 	}
 	currentPage()->setTitle(i18n("Authentication aborted"));
-	lFinal->setText(i18n("%1 has aborted the authentication process."
-                " To make sure you are not talking to an imposter, try again using the manual fingerprint verification method.", contact));
+	lFinal->setText(i18n("<b>%1</b> has aborted the authentication process."
+                " To make sure you are not talking to an imposter, "
+                "try again using the manual fingerprint verification method.", contact));
 
 	setOption(QWizard::NoCancelButton, true);
 }
 
 void AuthenticationWizard::updateInfoBox(){
 	if(rbQA->isChecked()) {
-		infoLabel->setText(i18n("Ask %1 a question, the answer to which is known only to you and them."
+		infoLabel->setText(i18n("Ask <b>%1</b> a question, the answer to which is known only to you and them."
                     " If the answer does not match, you may be talking to an imposter.", contact));
 	} else if(rbSS->isChecked()) {
-		infoLabel->setText(i18n("Pick a secret known only to you and %1. If the secret does not match, you may be talking to an imposter."
-                    " Do not send the secret through the chat window, or this authentication method could be compromised with ease.", contact));
+		infoLabel->setText(i18n("Pick a secret known only to you and <b>%1</b>. If the secret does not match, "
+                    "you may be talking to an imposter. Do not send the secret through the chat window, "
+                    "or this authentication method could be compromised with ease.", contact));
 	} else {
-		infoLabel->setText(i18n("Verify %1's fingerprint manually. For example via a phone call or signed (and verified) email.", contact));
+		infoLabel->setText(i18n("Verify <b>%1's</b> fingerprint manually. "
+                    "For example via a phone call or signed (and verified) email.", contact));
 	}
 }
 
