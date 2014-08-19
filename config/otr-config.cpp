@@ -30,6 +30,7 @@
 #include <QAction>
 #include <QMenu>
 #include <KMessageBox>
+#include <KTp/core.h>
 
 #include <TelepathyQt/AccountSet>
 #include <TelepathyQt/PendingVariant>
@@ -40,7 +41,7 @@ K_EXPORT_PLUGIN(KCMTelepathyChatOtrConfigFactory("ktp_chat_otr", "kcm_ktp_chat_o
 OTRConfig::OTRConfig(QWidget *parent, const QVariantList& args)
     : KCModule(KCMTelepathyChatOtrConfigFactory::componentData(), parent, args),
       ui(new Ui::OTRConfigUi()),
-      am(Tp::AccountManager::create(QDBusConnection::sessionBus())),
+      am(KTp::accountManager()),
       ps(NULL),
       fpCtxMenu(new QMenu(this))
 {
