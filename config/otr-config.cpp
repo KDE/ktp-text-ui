@@ -127,8 +127,8 @@ void OTRConfig::loadFingerprints()
     Q_FOREACH(const Tp::FingerprintInfo &fp, fingerprints) {
         ui->tbFingerprints->setItem(i, 0, new QTableWidgetItem(fp.contactName));
         ui->tbFingerprints->setItem(i, 1, new QTableWidgetItem(fp.fingerprint));
-        ui->tbFingerprints->setItem(i, 2, new QTableWidgetItem(fp.isVerified ? i18n("Yes") : i18n("No")));
-        ui->tbFingerprints->setItem(i, 3, new QTableWidgetItem(fp.inUse ? i18n("Used") : i18n("Unused")));
+        ui->tbFingerprints->setItem(i, 2, new QTableWidgetItem(fp.isVerified ? i18n("yes") : i18n("no")));
+        ui->tbFingerprints->setItem(i, 3, new QTableWidgetItem(fp.inUse ? i18n("in use") : i18n("not in use")));
 
         i++;
     }
@@ -231,7 +231,7 @@ void OTRConfig::onCurrentFpCellChanged(int currentRow, int currentColumn, int pr
     if(currentRow != -1) {
         ui->btVerify->setEnabled(true);
         fpCtxMenu->actions().at(0)->setEnabled(true);
-        if(ui->tbFingerprints->item(ui->tbFingerprints->currentRow(), 3)->text() == i18n("Unused")) {
+        if(ui->tbFingerprints->item(ui->tbFingerprints->currentRow(), 3)->text() == i18n("not in use")) {
             ui->btForget->setEnabled(true);
             fpCtxMenu->actions().at(1)->setEnabled(true);
         } else {
