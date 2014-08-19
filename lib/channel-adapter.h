@@ -35,10 +35,9 @@ class ChannelAdapter : public QObject
     Q_OBJECT
 
     public:
-        ChannelAdapter(const Tp::TextChannelPtr &textChannel, ChatWidget *parent);
+        ChannelAdapter(const Tp::TextChannelPtr &textChannel, QObject *parent = 0);
         ~ChannelAdapter();
 
-        void setChannel(const Tp::TextChannelPtr &textChannel);
         Tp::TextChannelPtr textChannel();
 
         Tp::OTRTrustLevel otrTrustLevel() const;
@@ -71,7 +70,7 @@ class ChannelAdapter : public QObject
         QList<Tp::ReceivedMessage> messageQueue() const;
 
     private:
-        void reset();
+        void setChannel(const Tp::TextChannelPtr &textChannel);
         void setupOTRChannel();
         void setupTextChannel();
 
@@ -107,5 +106,7 @@ class ChannelAdapter : public QObject
         friend struct Private;
         Private *d;
 };
+
+typedef QSharedPointer<ChannelAdapter> ChannelAdapterPtr;
 
 #endif

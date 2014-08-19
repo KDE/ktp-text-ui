@@ -74,15 +74,13 @@ class OTRMessage : public Tp::ReceivedMessage
 
 struct ChannelAdapter::Private
 {
-    Private(ChatWidget *chat)
-        : chat(chat),
-        otrConnected(false),
+    Private()
+        : otrConnected(false),
         trustLevel(Tp::OTRTrustLevelNotPrivate)
     {
     }
 
     Tp::TextChannelPtr textChannel;
-    ChatWidget *chat;
     OTRProxyPtr otrProxy;
 
     bool otrConnected;
@@ -93,9 +91,9 @@ struct ChannelAdapter::Private
     QMap<uint, OTRMessage> otrEvents;
 };
 
-ChannelAdapter::ChannelAdapter(const Tp::TextChannelPtr &textChannel, ChatWidget *parent)
+ChannelAdapter::ChannelAdapter(const Tp::TextChannelPtr &textChannel, QObject *parent)
     : QObject(parent),
-    d(new Private(parent))
+    d(new Private())
 {
     setChannel(textChannel);
 }
@@ -110,35 +108,8 @@ bool ChannelAdapter::isValid() const
     return d->textChannel->isValid();
 }
 
-void ChannelAdapter::reset()
-{
-    kDebug();
-
-    d->messages.clear();
-
-    if(isOTRsuppored()) {
-        d->otrConnected = false;
-        d->trustLevel = Tp::OTRTrustLevelNotPrivate;
-        d->otrProxy.clear();
-    } else {
-        disconnect(d->textChannel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
-                this, SIGNAL(messageReceived(Tp::ReceivedMessage)));
-        disconnect(d->textChannel.data(), SIGNAL(pendingMessageRemoved(Tp::ReceivedMessage)),
-                this, SIGNAL(pendingMessageRemoved(Tp::ReceivedMessage)));
-        disconnect(d->textChannel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
-                this, SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
-    }
-
-    d->textChannel.reset();
-}
-
 void ChannelAdapter::setChannel(const Tp::TextChannelPtr &textChannel)
 {
-    if(d->textChannel) {
-        // reset old settings
-        reset();
-    }
-
     d->textChannel = textChannel;
     QDBusConnection dbusConnection = textChannel->dbusConnection();
     if(textChannel->targetHandleType() != Tp::HandleTypeContact ||
@@ -163,7 +134,7 @@ void ChannelAdapter::setChannel(const Tp::TextChannelPtr &textChannel)
     if(connectResult.isValid()) {
         setupOTRChannel();
     } else {
-        kWarning() << "Could not connect to the proxy";
+        kWarning() << "Could not connect to the proxy" << connectResult.error().message();
         setupTextChannel();
     }
 }

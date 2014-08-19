@@ -77,10 +77,10 @@ const QString groupChatOfflineIcon(QLatin1String("im-irc"));
 class ChatWidgetPrivate
 {
 public:
-    ChatWidgetPrivate(const Tp::TextChannelPtr &textChannel, ChatWidget *parent) :
+    ChatWidgetPrivate(const Tp::TextChannelPtr &textChannel) :
         remoteContactChatState(Tp::ChannelChatStateInactive),
         isGroupChat(false),
-        channel(textChannel, parent),
+        channel(new ChannelAdapter(textChannel)),
         contactsMenu(0),
         fileResourceTransferMenu(0),
         fileTransferMenuAction(0),
@@ -99,7 +99,7 @@ public:
     QString contactName;
     QString yourName;
     QString currentKeyboardLayoutLanguage;
-    ChannelAdapter channel;
+    ChannelAdapterPtr channel;
     Tp::AccountPtr account;
     ShareProvider *shareProvider;
     Ui::ChatWidget ui;
@@ -133,7 +133,7 @@ KComponentData ChatWidgetPrivate::telepathyComponentData()
 
 ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr &account, QWidget *parent)
     : QWidget(parent),
-      d(new ChatWidgetPrivate(channel, this))
+      d(new ChatWidgetPrivate(channel))
 {
     d->account = account;
     d->logManager = new ScrollbackManager(this);
@@ -175,7 +175,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
                 this, SLOT(onContactsViewContextMenuRequested(QPoint)));
     }
 
-    KTp::ContactPtr targetContact = KTp::ContactPtr::qObjectCast(d->channel.textChannel()->targetContact());
+    KTp::ContactPtr targetContact = KTp::ContactPtr::qObjectCast(d->channel->textChannel()->targetContact());
 
     d->fileResourceTransferMenu = new QMenu(this);
     // This action's text is going to be changed in the dropEvent method to add the destination image service.
@@ -191,7 +191,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     setupChannelSignals();
 
     // create contactModel and start keeping track of contacts.
-    d->contactModel = new ChannelContactModel(d->channel.textChannel(), this);
+    d->contactModel = new ChannelContactModel(d->channel->textChannel(), this);
     setupContactModelSignals();
 
     /* Enable nick completion only in group chats */
@@ -256,13 +256,13 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     KConfig config(QLatin1String("ktelepathyrc"));
     KConfigGroup tabConfig = config.group("Behavior");
     d->logManager->setScrollbackLength(tabConfig.readEntry<int>("scrollbackLength", 4));
-    d->logManager->setTextChannel(d->account, d->channel.textChannel());
+    d->logManager->setTextChannel(d->account, d->channel->textChannel());
     m_previousConversationAvailable = d->logManager->exists();
 
     d->notifyFilter = new NotifyFilter(this);
 
     // setup new otr channel and connect to signals
-    if(d->channel.isOTRsuppored()) {
+    if(d->channel->isOTRsuppored()) {
         setupOTR();
     }
 }
@@ -307,7 +307,7 @@ KIcon ChatWidget::icon() const
         if (d->account->currentPresence() != Tp::Presence::offline()) {
             //normal chat - self and one other person.
             //find the other contact which isn't self.
-            Tp::ContactPtr otherContact = d->channel.textChannel()->targetContact();
+            Tp::ContactPtr otherContact = d->channel->textChannel()->targetContact();
             KIcon presenceIcon = KTp::Presence(otherContact->presence()).icon();
 
             if (otherContact->clientTypes().contains(QLatin1String("phone"))) {
@@ -356,27 +356,31 @@ void ChatWidget::setChatEnabled(bool enable)
 void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 {
 
-    d->channel.setChannel(newTextChannelPtr);     // set the new channel
+    d->channel.clear();
+    d->channel = ChannelAdapterPtr(new ChannelAdapter(newTextChannelPtr));
     d->contactModel->setTextChannel(newTextChannelPtr);
 
     // connect signals for the new textchannel
     setupChannelSignals();
+    if(d->channel->isOTRsuppored()) {
+        setupOTR();
+    }
 
     //if the UI is ready process any messages in queue
     if (d->chatViewInitialized) {
-        Q_FOREACH (const Tp::ReceivedMessage &message, d->channel.messageQueue()) {
+        Q_FOREACH (const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
             handleIncomingMessage(message, true);
         }
     }
     setChatEnabled(true);
     onContactPresenceChange(
-            d->channel.textChannel()->groupSelfContact(),
-            KTp::Presence(d->channel.textChannel()->groupSelfContact()->presence()));
+            d->channel->textChannel()->groupSelfContact(),
+            KTp::Presence(d->channel->textChannel()->groupSelfContact()->presence()));
 }
 
 Tp::TextChannelPtr ChatWidget::textChannel() const
 {
-    return d->channel.textChannel();
+    return d->channel->textChannel();
 }
 
 void ChatWidget::keyPressEvent(QKeyEvent *e)
@@ -534,8 +538,8 @@ QColor ChatWidget::titleColor() const
     //normal chat - self and one other person.
     if (!d->isGroupChat) {
         //find the other contact which isn't self.
-        Q_FOREACH(const Tp::ContactPtr & contact, d->channel.textChannel()->groupContacts()) {
-            if (contact != d->channel.textChannel()->groupSelfContact()) {
+        Q_FOREACH(const Tp::ContactPtr & contact, d->channel->textChannel()->groupContacts()) {
+            if (contact != d->channel->textChannel()->groupSelfContact()) {
                 if (contact->presence().type() == Tp::ConnectionPresenceTypeOffline ||
                     contact->presence().type() == Tp::ConnectionPresenceTypeHidden) {
                     return scheme.foreground(KColorScheme::InactiveText).color();
@@ -558,17 +562,17 @@ void ChatWidget::toggleSearchBar() const
 
 void ChatWidget::setupChannelSignals()
 {
-    connect(&d->channel, SIGNAL(messageReceived(Tp::ReceivedMessage)),
+    connect(d->channel.data(), SIGNAL(messageReceived(Tp::ReceivedMessage)),
             SLOT(handleIncomingMessage(Tp::ReceivedMessage)));
-    connect(&d->channel, SIGNAL(pendingMessageRemoved(Tp::ReceivedMessage)),
+    connect(d->channel.data(), SIGNAL(pendingMessageRemoved(Tp::ReceivedMessage)),
             SIGNAL(unreadMessagesChanged()));
-    connect(&d->channel, SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
+    connect(d->channel.data(), SIGNAL(messageSent(Tp::Message,Tp::MessageSendingFlags,QString)),
             SLOT(handleMessageSent(Tp::Message,Tp::MessageSendingFlags,QString)));
-    connect(d->channel.textChannel().data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
+    connect(d->channel->textChannel().data(), SIGNAL(chatStateChanged(Tp::ContactPtr,Tp::ChannelChatState)),
             SLOT(onChatStatusChanged(Tp::ContactPtr,Tp::ChannelChatState)));
-    connect(d->channel.textChannel().data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
+    connect(d->channel->textChannel().data(), SIGNAL(invalidated(Tp::DBusProxy*,QString,QString)),
             this, SLOT(onChannelInvalidated()));
-    connect(d->channel.textChannel().data(), SIGNAL(groupMembersChanged(Tp::Contacts,
+    connect(d->channel->textChannel().data(), SIGNAL(groupMembersChanged(Tp::Contacts,
                                                           Tp::Contacts,
                                                           Tp::Contacts,
                                                           Tp::Contacts,
@@ -579,7 +583,7 @@ void ChatWidget::setupChannelSignals()
                                              Tp::Contacts,
                                              Tp::Channel::GroupMemberChangeDetails)));
 
-    if (d->channel.textChannel()->hasChatStateInterface()) {
+    if (d->channel->textChannel()->hasChatStateInterface()) {
         connect(d->ui.sendMessageBox, SIGNAL(textChanged()), SLOT(onInputBoxChanged()));
     }
 }
@@ -618,14 +622,14 @@ void ChatWidget::onHistoryFetched(const QList<KTp::Message> &messages)
     }
 
     //process any messages we've 'missed' whilst initialising.
-    Q_FOREACH(const Tp::ReceivedMessage &message, d->channel.messageQueue()) {
+    Q_FOREACH(const Tp::ReceivedMessage &message, d->channel->messageQueue()) {
         handleIncomingMessage(message, true);
     }
 }
 
 int ChatWidget::unreadMessageCount() const
 {
-    return d->channel.messageQueue().size() + (d->newOTRstatus ? 1 : 0);
+    return d->channel->messageQueue().size() + (d->newOTRstatus ? 1 : 0);
 }
 
 void ChatWidget::acknowledgeMessages()
@@ -634,7 +638,7 @@ void ChatWidget::acknowledgeMessages()
     //if we're not initialised we can't have shown anything, even if we are on top, therefore ignore all requests to do so
     if (d->chatViewInitialized) {
         //acknowledge everything in the message queue.
-        d->channel.acknowledge(d->channel.messageQueue());
+        d->channel->acknowledge(d->channel->messageQueue());
     }
     if(d->newOTRstatus) {
         d->newOTRstatus = false;
@@ -655,8 +659,8 @@ bool ChatWidget::isOnTop() const
 
 OtrStatus ChatWidget::otrStatus() const
 {
-    if(d->channel.isOTRsuppored()) {
-        return OtrStatus(d->channel.otrTrustLevel());
+    if(d->channel->isOTRsuppored()) {
+        return OtrStatus(d->channel->otrTrustLevel());
     } else {
         return OtrStatus();
     }
@@ -673,9 +677,9 @@ void ChatWidget::blockTextInput(bool block)
 
 void ChatWidget::startOtrSession()
 {
-    if(!d->channel.isOTRsuppored()) return;
-    d->channel.initializeOTR();
-    if(d->channel.otrTrustLevel() == Tp::OTRTrustLevelNotPrivate)
+    if(!d->channel->isOTRsuppored()) return;
+    d->channel->initializeOTR();
+    if(d->channel->otrTrustLevel() == Tp::OTRTrustLevelNotPrivate)
         d->ui.chatArea->addStatusMessage(i18n("Attempting to start a private OTR session with %1", d->contactName));
     else
         d->ui.chatArea->addStatusMessage(i18n("Attempting to restart a private OTR session with %1", d->contactName));
@@ -684,45 +688,47 @@ void ChatWidget::startOtrSession()
 void ChatWidget::stopOtrSession()
 {
     kDebug();
-    if(!d->channel.isOTRsuppored() || d->channel.otrTrustLevel() == Tp::OTRTrustLevelNotPrivate) {
+    if(!d->channel->isOTRsuppored() || d->channel->otrTrustLevel() == Tp::OTRTrustLevelNotPrivate) {
         return;
     }
-    d->channel.stopOTR();
+    d->channel->stopOTR();
     d->ui.chatArea->addStatusMessage(i18n("Terminating OTR session"));
 }
 
 void ChatWidget::authenticateBuddy()
 {
-    if(!d->channel.isOTRsuppored()) return;
+    if(!d->channel->isOTRsuppored()) return;
 
-    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(&d->channel);
+    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(d->channel.data());
     if(wizard) {
         wizard->raise();
         wizard->showNormal();
     } else {
-        new AuthenticationWizard(&d->channel, d->contactName, this, true);
+        new AuthenticationWizard(d->channel.data(), d->contactName, this, true);
     }
 }
 
 void ChatWidget::setupOTR()
 {
-    connect(&d->channel, SIGNAL(otrTrustLevelChanged(Tp::OTRTrustLevel, Tp::OTRTrustLevel)),
+    kDebug();
+
+    connect(d->channel.data(), SIGNAL(otrTrustLevelChanged(Tp::OTRTrustLevel, Tp::OTRTrustLevel)),
             SLOT(onOTRTrustLevelChanged(Tp::OTRTrustLevel, Tp::OTRTrustLevel)));
-    connect(&d->channel, SIGNAL(sessionRefreshed()),
+    connect(d->channel.data(), SIGNAL(sessionRefreshed()),
             SLOT(onOTRsessionRefreshed()));
-    connect(&d->channel, SIGNAL(peerAuthenticationRequestedQA(const QString&)),
+    connect(d->channel.data(), SIGNAL(peerAuthenticationRequestedQA(const QString&)),
             SLOT(onPeerAuthenticationRequestedQA(const QString&)));
-    connect(&d->channel, SIGNAL(peerAuthenticationRequestedSS()),
+    connect(d->channel.data(), SIGNAL(peerAuthenticationRequestedSS()),
             SLOT(onPeerAuthenticationRequestedSS()));
-    connect(&d->channel, SIGNAL(peerAuthenticationConcluded(bool)),
+    connect(d->channel.data(), SIGNAL(peerAuthenticationConcluded(bool)),
             SLOT(onPeerAuthenticationConcluded(bool)));
-    connect(&d->channel, SIGNAL(peerAuthenticationInProgress()),
+    connect(d->channel.data(), SIGNAL(peerAuthenticationInProgress()),
             SLOT(onPeerAuthenticationInProgress()));
-    connect(&d->channel, SIGNAL(peerAuthenticationAborted()),
+    connect(d->channel.data(), SIGNAL(peerAuthenticationAborted()),
             SLOT(onPeerAuthenticationAborted()));
-    connect(&d->channel, SIGNAL(peerAuthenticationError()),
+    connect(d->channel.data(), SIGNAL(peerAuthenticationError()),
             SLOT(onPeerAuthenticationFailed()));
-    connect(&d->channel, SIGNAL(peerAuthenticationCheated()),
+    connect(d->channel.data(), SIGNAL(peerAuthenticationCheated()),
             SLOT(onPeerAuthenticationFailed()));
 }
 
@@ -743,7 +749,7 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
             else {
                 d->ui.chatArea->addStatusMessage(i18n("Unverified OTR session started"));
                 if(!this->isActiveWindow()) {
-                    OTRNotifications::otrSessionStarted(this, d->channel.textChannel()->targetContact(), false);
+                    OTRNotifications::otrSessionStarted(this, d->channel->textChannel()->targetContact(), false);
                 }
             }
             break;
@@ -754,14 +760,14 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
             else {
                 d->ui.chatArea->addStatusMessage(i18n("Private OTR session started"));
                 if(!this->isActiveWindow()) {
-                    OTRNotifications::otrSessionStarted(this, d->channel.textChannel()->targetContact(), true);
+                    OTRNotifications::otrSessionStarted(this, d->channel->textChannel()->targetContact(), true);
                 }
             }
             break;
         case Tp::OTRTrustLevelFinished:
             d->ui.chatArea->addStatusMessage(i18n("%1 has ended the OTR session. You should do the same", d->contactName));
             if(!this->isActiveWindow()) {
-                OTRNotifications::otrSessionFinished(this, d->channel.textChannel()->targetContact());
+                OTRNotifications::otrSessionFinished(this, d->channel->textChannel()->targetContact());
             }
             break;
 
@@ -779,36 +785,36 @@ void ChatWidget::onOTRsessionRefreshed()
 
 void ChatWidget::onPeerAuthenticationRequestedQA(const QString &question)
 {
-    AuthenticationWizard *wizard = new AuthenticationWizard(&d->channel, d->contactName, this, false, question);
+    AuthenticationWizard *wizard = new AuthenticationWizard(d->channel.data(), d->contactName, this, false, question);
     if(!wizard->isActiveWindow()) {
-        OTRNotifications::authenticationRequested(wizard, d->channel.textChannel()->targetContact());
+        OTRNotifications::authenticationRequested(wizard, d->channel->textChannel()->targetContact());
     }
 }
 
 void ChatWidget::onPeerAuthenticationRequestedSS()
 {
-    AuthenticationWizard *wizard = new AuthenticationWizard(&d->channel, d->contactName, this, false);
+    AuthenticationWizard *wizard = new AuthenticationWizard(d->channel.data(), d->contactName, this, false);
     if(!wizard->isActiveWindow()) {
-        OTRNotifications::authenticationRequested(wizard, d->channel.textChannel()->targetContact());
+        OTRNotifications::authenticationRequested(wizard, d->channel->textChannel()->targetContact());
     }
 }
 
 void ChatWidget::onPeerAuthenticationConcluded(bool authenticated)
 {
-    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(&d->channel);
+    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(d->channel.data());
     if(wizard) {
         wizard->raise();
         wizard->showNormal();
         wizard->finished(authenticated);
     }
     if(!wizard->isActiveWindow()) {
-        OTRNotifications::authenticationConcluded(wizard, d->channel.textChannel()->targetContact(), authenticated);
+        OTRNotifications::authenticationConcluded(wizard, d->channel->textChannel()->targetContact(), authenticated);
     }
 }
 
 void ChatWidget::onPeerAuthenticationInProgress()
 {
-    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(&d->channel);
+    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(d->channel.data());
     if(wizard) {
         wizard->raise();
         wizard->showNormal();
@@ -818,27 +824,27 @@ void ChatWidget::onPeerAuthenticationInProgress()
 
 void ChatWidget::onPeerAuthenticationAborted()
 {
-    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(&d->channel);
+    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(d->channel.data());
     if(wizard) {
         wizard->raise();
         wizard->showNormal();
         wizard->aborted();
     }
     if(!wizard->isActiveWindow()) {
-        OTRNotifications::authenticationAborted(wizard, d->channel.textChannel()->targetContact());
+        OTRNotifications::authenticationAborted(wizard, d->channel->textChannel()->targetContact());
     }
 }
 
 void ChatWidget::onPeerAuthenticationFailed()
 {
-    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(&d->channel);
+    AuthenticationWizard *wizard = AuthenticationWizard::findWizard(d->channel.data());
     if(wizard) {
         wizard->raise();
         wizard->showNormal();
         wizard->finished(false);
     }
     if(!wizard->isActiveWindow()) {
-        OTRNotifications::authenticationFailed(wizard, d->channel.textChannel()->targetContact());
+        OTRNotifications::authenticationFailed(wizard, d->channel->textChannel()->targetContact());
     }
 }
 
@@ -935,16 +941,16 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
             } else {
                 //TODO: handle delivery reports properly
                 kWarning() << "Ignoring delivery report";
-                d->channel.acknowledge(QList<Tp::ReceivedMessage>() << message);
+                d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
                 return;
             }
 
             d->ui.chatArea->addStatusMessage(text, message.sender()->alias(), message.received());
         } else {
-            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel.textChannel()));
+            KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel->textChannel()));
             if (!alreadyNotified) {
                 d->notifyFilter->filterMessage(processedMessage,
-                        KTp::MessageContext(d->account, d->channel.textChannel()));
+                        KTp::MessageContext(d->account, d->channel->textChannel()));
             }
             if(Tp::Utils::isOtrEvent(message)) {
                 d->ui.chatArea->addStatusMessage(Tp::Utils::processOtrMessage(message));
@@ -955,7 +961,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
 
         //if the window is on top, ack straight away. Otherwise they stay in the message queue for acking when activated..
         if (isOnTop()) {
-            d->channel.acknowledge(QList<Tp::ReceivedMessage>() << message);
+            d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
         } else {
             Q_EMIT unreadMessagesChanged();
         }
@@ -965,9 +971,9 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
 
 void ChatWidget::handleMessageSent(const Tp::Message &message, Tp::MessageSendingFlags, const QString&)
 {
-    KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel.textChannel()));
+    KTp::Message processedMessage(KTp::MessageProcessor::instance()->processIncomingMessage(message, d->account, d->channel->textChannel()));
     d->notifyFilter->filterMessage(processedMessage,
-                                   KTp::MessageContext(d->account, d->channel.textChannel()));
+                                   KTp::MessageContext(d->account, d->channel->textChannel()));
     d->ui.chatArea->addMessage(processedMessage);
     d->exchangedMessagesCount++;
 }
@@ -990,7 +996,7 @@ void ChatWidget::chatViewReady()
 
 void ChatWidget::sendMessage()
 {
-    if(d->channel.isOTRsuppored() && d->channel.otrTrustLevel() == Tp::OTRTrustLevelFinished) {
+    if(d->channel->isOTRsuppored() && d->channel->otrTrustLevel() == Tp::OTRTrustLevelFinished) {
         d->ui.chatArea->addStatusMessage(i18n("%1 has already closed his/her private connection to you."
                     "Your message was not sent. Either end your private conversation, or restart it.", d->contactName));
         return;
@@ -1000,16 +1006,16 @@ void ChatWidget::sendMessage()
 
     if (!message.isEmpty()) {
         message = KTp::MessageProcessor::instance()->processOutgoingMessage(
-                    message, d->account, d->channel.textChannel()).text();
+                    message, d->account, d->channel->textChannel()).text();
 
-	if (d->channel.isValid()) {
-	    if (d->channel.supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
+	if (d->channel->isValid()) {
+	    if (d->channel->supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
 		//remove "/me " from the start of the message
 		message.remove(0,4);
 
-		d->channel.send(message, Tp::ChannelTextMessageTypeAction);
+		d->channel->send(message, Tp::ChannelTextMessageTypeAction);
 	    } else {
-		d->channel.send(message);
+		d->channel->send(message);
 	    }
 	    d->ui.sendMessageBox->clear();
 	} else {
@@ -1027,7 +1033,7 @@ void ChatWidget::sendMessage()
 void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::ChannelChatState state)
 {
     //don't show our own status changes.
-    if (contact == d->channel.textChannel()->groupSelfContact()) {
+    if (contact == d->channel->textChannel()->groupSelfContact()) {
         return;
     }
 
@@ -1043,12 +1049,12 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
 
         Tp::ChannelChatState tempState = Tp::ChannelChatStateInactive;
 
-        Q_FOREACH (const Tp::ContactPtr & contact, d->channel.textChannel()->groupContacts()) {
-            if (contact == d->channel.textChannel()->groupSelfContact()) {
+        Q_FOREACH (const Tp::ContactPtr & contact, d->channel->textChannel()->groupContacts()) {
+            if (contact == d->channel->textChannel()->groupSelfContact()) {
                 continue;
             }
 
-            tempState = d->channel.textChannel()->chatState(contact);
+            tempState = d->channel->textChannel()->chatState(contact);
 
             if (tempState == Tp::ChannelChatStateComposing) {
                 state = tempState;
@@ -1068,7 +1074,7 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
 void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const KTp::Presence &presence)
 {
     QString message;
-    bool isYou = (contact == d->channel.textChannel()->groupSelfContact());
+    bool isYou = (contact == d->channel->textChannel()->groupSelfContact());
 
     if (isYou) {
         if (presence.statusMessage().isEmpty()) {
@@ -1108,7 +1114,7 @@ void ChatWidget::onContactPresenceChange(const Tp::ContactPtr & contact, const K
 void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QString& alias)
 {
     QString message;
-    bool isYou = (contact == d->channel.textChannel()->groupSelfContact());
+    bool isYou = (contact == d->channel->textChannel()->groupSelfContact());
 
     if (isYou) {
         if (d->yourName != alias) {
@@ -1152,7 +1158,7 @@ void ChatWidget::onContactBlockStatusChanged(const Tp::ContactPtr &contact, bool
 void ChatWidget::onContactClientTypesChanged(const Tp::ContactPtr &contact, const QStringList &clientTypes)
 {
     Q_UNUSED(clientTypes)
-    bool isYou = (contact == d->channel.textChannel()->groupSelfContact());
+    bool isYou = (contact == d->channel->textChannel()->groupSelfContact());
 
     if (!d->isGroupChat && !isYou) {
         Q_EMIT iconChanged(icon());
@@ -1173,13 +1179,13 @@ void ChatWidget::onParticipantsChanged(Tp::Contacts groupMembersAdded,
         d->ui.chatArea->addStatusMessage(i18n("%1 has joined the chat", groupMembersAdded.toList().value(0).data()->alias()), groupMembersAdded.toList().value(0).data()->alias());
     }
     // Temporarily detect on-demand rooms by checking for gabble-created string "private-chat"
-    if (d->isGroupChat && d->channel.textChannel()->targetId().startsWith(QLatin1String("private-chat"))) {
+    if (d->isGroupChat && d->channel->textChannel()->targetId().startsWith(QLatin1String("private-chat"))) {
         QList<QString> contactAliasList;
-        if (d->channel.textChannel()->groupContacts().count() > 0) {
-            Q_FOREACH (const Tp::ContactPtr &contact, d->channel.textChannel()->groupContacts()) {
+        if (d->channel->textChannel()->groupContacts().count() > 0) {
+            Q_FOREACH (const Tp::ContactPtr &contact, d->channel->textChannel()->groupContacts()) {
                 contactAliasList.append(contact->alias());
             }
-            contactAliasList.removeAll(d->channel.textChannel()->groupSelfContact()->alias());
+            contactAliasList.removeAll(d->channel->textChannel()->groupSelfContact()->alias());
             qSort(contactAliasList);
 
             int aliasesToShow = qMin(contactAliasList.length(), 2);
@@ -1235,16 +1241,16 @@ void ChatWidget::onInputBoxChanged()
             //if the user has just typed some text, set state to Composing and start the timer
             //unless "show me typing" is off; in that case set state to Active and stop the timer
             if (TextChatConfig::instance()->showMeTyping()) {
-                d->channel.textChannel()->requestChatState(Tp::ChannelChatStateComposing);
+                d->channel->textChannel()->requestChatState(Tp::ChannelChatStateComposing);
                 d->pausedStateTimer->start(5000);
             } else {
-                d->channel.textChannel()->requestChatState(Tp::ChannelChatStateActive);
+                d->channel->textChannel()->requestChatState(Tp::ChannelChatStateActive);
                 d->pausedStateTimer->stop();
             }
         }
     } else {
         //if the user typed no text/cleared the input field, set Active and stop the timer
-        d->channel.textChannel()->requestChatState(Tp::ChannelChatStateActive);
+        d->channel->textChannel()->requestChatState(Tp::ChannelChatStateActive);
         d->pausedStateTimer->stop();
     }
 }
@@ -1292,7 +1298,7 @@ void ChatWidget::saveSpellCheckingOption()
 {
     QString spellCheckingLanguage = spellDictionary();
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktp-text-uirc"));
-    KConfigGroup configGroup = config->group(d->channel.textChannel()->targetId());
+    KConfigGroup configGroup = config->group(d->channel->textChannel()->targetId());
     if (spellCheckingLanguage != Sonnet::Speller().defaultLanguage()) {
         configGroup.writeEntry("language", spellCheckingLanguage);
     } else {
@@ -1317,7 +1323,7 @@ void ChatWidget::loadSpellCheckingOption()
     d->ui.sendMessageBox->createHighlighter();
 
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktp-text-uirc"));
-    KConfigGroup configGroup = config->group(d->channel.textChannel()->targetId());
+    KConfigGroup configGroup = config->group(d->channel->textChannel()->targetId());
     QString spellCheckingLanguage;
     if (configGroup.exists()) {
         spellCheckingLanguage = configGroup.readEntry("language");
@@ -1377,15 +1383,15 @@ void ChatWidget::initChatArea()
         // room name property
         // Temporarily detect on-demand rooms by checking for
         // gabble-created string "private-chat"
-        if (d->channel.textChannel()->targetId().contains(QLatin1String("private-chat"))) {
+        if (d->channel->textChannel()->targetId().contains(QLatin1String("private-chat"))) {
             info.setChatName(i18n("Group Chat"));
         } else {
-            QString roomName = d->channel.textChannel()->targetId();
+            QString roomName = d->channel->textChannel()->targetId();
             roomName = roomName.left(roomName.indexOf(QLatin1Char('@')));
             info.setChatName(roomName);
         }
     } else {
-        Tp::ContactPtr otherContact = d->channel.textChannel()->targetContact();
+        Tp::ContactPtr otherContact = d->channel->textChannel()->targetContact();
 
         Q_ASSERT(otherContact);
 
@@ -1397,14 +1403,14 @@ void ChatWidget::initChatArea()
         d->ui.contactsView->hide();
     }
 
-    info.setSourceName(d->channel.textChannel()->connection()->protocolName());
+    info.setSourceName(d->channel->textChannel()->connection()->protocolName());
 
     //set up anything related to 'self'
-    info.setOutgoingIconPath(d->channel.textChannel()->groupSelfContact()->avatarData().fileName);
+    info.setOutgoingIconPath(d->channel->textChannel()->groupSelfContact()->avatarData().fileName);
 
     //set the message time
-    if (!d->channel.messageQueue().isEmpty()) {
-        info.setTimeOpened(d->channel.messageQueue().first().received());
+    if (!d->channel->messageQueue().isEmpty()) {
+        info.setTimeOpened(d->channel->messageQueue().first().received());
     } else {
         info.setTimeOpened(QDateTime::currentDateTime());
     }
@@ -1420,10 +1426,10 @@ void ChatWidget::initChatArea()
 
 void ChatWidget::onChatPausedTimerExpired()
 {
-     if (TextChatConfig::instance()->showMeTyping()) {
-        d->channel.textChannel()->requestChatState(Tp::ChannelChatStatePaused);
+    if (TextChatConfig::instance()->showMeTyping()) {
+        d->channel->textChannel()->requestChatState(Tp::ChannelChatStatePaused);
     } else {
-        d->channel.textChannel()->requestChatState(Tp::ChannelChatStateActive);
+        d->channel->textChannel()->requestChatState(Tp::ChannelChatStateActive);
     }
 }
 
@@ -1474,7 +1480,7 @@ void ChatWidget::onContactsViewContextMenuRequested(const QPoint& point)
 void ChatWidget::onFileTransferMenuActionTriggered()
 {
     if (!d->fileToTransferPath.isEmpty()) {
-	KTp::Actions::startFileTransfer(d->account, d->channel.textChannel()->targetContact(), d->fileToTransferPath);
+	KTp::Actions::startFileTransfer(d->account, d->channel->textChannel()->targetContact(), d->fileToTransferPath);
     }
 }
 
@@ -1504,7 +1510,7 @@ void ChatWidget::onShareProviderFinishedSuccess(ShareProvider* provider, const Q
 {
     Q_UNUSED(provider);
     if (!imageUrl.isEmpty()) {
-        d->channel.send(imageUrl);
+        d->channel->send(imageUrl);
     }
 }
 
