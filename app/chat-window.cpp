@@ -935,9 +935,9 @@ void ChatWindow::setupOTR()
     actionCollection()->addAction(QLatin1String("otr-actions"), m_otrActionMenu);
 
     // private key generation
-    connect(m_proxyService, SIGNAL(keyGenerationStarted(Tp::AccountPtr)),
+    connect(m_proxyService.data(), SIGNAL(keyGenerationStarted(Tp::AccountPtr)),
             SLOT(onKeyGenerationStarted(Tp::AccountPtr)));
-    connect(m_proxyService, SIGNAL(keyGenerationFinished(Tp::AccountPtr, bool)),
+    connect(m_proxyService.data(), SIGNAL(keyGenerationFinished(Tp::AccountPtr, bool)),
             SLOT(onKeyGenerationFinished(Tp::AccountPtr, bool)));
 }
 

@@ -37,7 +37,7 @@ class QMenu;
 class OTRConfig : public KCModule
 {
     Q_OBJECT
-    Q_PROPERTY(ProxyService* proxyService READ proxyService WRITE setProxyService)
+    Q_PROPERTY(ProxyServicePtr proxyService READ proxyService WRITE setProxyService)
 
 public:
     explicit OTRConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
@@ -49,8 +49,8 @@ protected:
 public Q_SLOTS:
     virtual void load();
     virtual void save();
-    ProxyService* proxyService();
-    void setProxyService(ProxyService *ps);
+    ProxyServicePtr proxyService();
+    void setProxyService(const ProxyServicePtr &ps);
 
 private Q_SLOTS:
     void onRadioSelected(int id);
@@ -74,7 +74,7 @@ private:
     Tp::AccountManagerPtr am;
     QList<Tp::AccountPtr> accounts;
     Tp::OTRPolicy policy;
-    ProxyService *ps;
+    ProxyServicePtr ps;
     QMenu *fpCtxMenu;
 };
 

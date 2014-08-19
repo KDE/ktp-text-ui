@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Please Wait</string>
   </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
   <layout class="QGridLayout">
    <property name="leftMargin">
     <number>10</number>
@@ -20,6 +23,19 @@
    <property name="rightMargin">
     <number>10</number>
    </property>
+   <property name="verticalSpacing">
+    <number>1</number>
+   </property>
+   <item row="0" column="1">
+    <widget class="QLabel" name="lbText">
+     <property name="text">
+      <string>Please wait while generating the private key</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="keyIcon">
      <property name="text">
@@ -27,10 +43,13 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="lbText">
+   <item row="1" column="1">
+    <widget class="QLabel" name="lbTime">
      <property name="text">
-      <string>Please wait while generating the private key</string>
+      <string>TextLabel</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

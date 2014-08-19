@@ -23,8 +23,10 @@
 
 #include <QWidget>
 #include <TelepathyQt/AccountManager>
+#include <TelepathyQt/SharedPtr>
+#include <TelepathyQt/RefCounted>
 
-class KDE_TELEPATHY_CHAT_EXPORT ProxyService : public QObject
+class KDE_TELEPATHY_CHAT_EXPORT ProxyService : public QObject, public Tp::RefCounted
 {
     Q_OBJECT
 
@@ -65,6 +67,8 @@ class KDE_TELEPATHY_CHAT_EXPORT ProxyService : public QObject
         Private *d;
 };
 
-Q_DECLARE_METATYPE(ProxyService*)
+typedef Tp::SharedPtr<ProxyService> ProxyServicePtr;
+
+Q_DECLARE_METATYPE(ProxyServicePtr)
 
 #endif

@@ -222,7 +222,7 @@ private:
     QLabel *m_accountIconLabel;
     qreal m_zoomFactor;
     KActionMenu *m_otrActionMenu;
-    ProxyService *m_proxyService;
+    ProxyServicePtr m_proxyService;
 };
 
 #endif // CHATWINDOW_H

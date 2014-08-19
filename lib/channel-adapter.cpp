@@ -23,7 +23,7 @@
 
 #include <KDebug>
 
-#include <QSharedPointer>
+#include <TelepathyQt/SharedPtr>
 #include <QMap>
 #include <QGenericArgument>
 

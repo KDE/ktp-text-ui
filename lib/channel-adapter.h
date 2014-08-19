@@ -27,10 +27,11 @@
 #include <TelepathyQt/Types>
 #include <TelepathyQt/TextChannel>
 #include <TelepathyQt/PendingOperation>
+#include <TelepathyQt/RefCounted>
 
 class ChatWidget;
 
-class ChannelAdapter : public QObject
+class ChannelAdapter : public QObject, public Tp::RefCounted
 {
     Q_OBJECT
 
@@ -107,6 +108,6 @@ class ChannelAdapter : public QObject
         Private *d;
 };
 
-typedef QSharedPointer<ChannelAdapter> ChannelAdapterPtr;
+typedef Tp::SharedPtr<ChannelAdapter> ChannelAdapterPtr;
 
 #endif

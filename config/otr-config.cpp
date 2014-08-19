@@ -42,7 +42,6 @@ OTRConfig::OTRConfig(QWidget *parent, const QVariantList& args)
     : KCModule(KCMTelepathyChatOtrConfigFactory::componentData(), parent, args),
       ui(new Ui::OTRConfigUi()),
       am(KTp::accountManager()),
-      ps(NULL),
       fpCtxMenu(new QMenu(this))
 {
     kDebug();
@@ -80,20 +79,20 @@ OTRConfig::~OTRConfig()
     delete ui;
 }
 
-ProxyService* OTRConfig::proxyService()
+ProxyServicePtr OTRConfig::proxyService()
 {
     return ps;
 }
 
-void OTRConfig::setProxyService(ProxyService *proxyService)
+void OTRConfig::setProxyService(const ProxyServicePtr &proxyService)
 {
     ps = proxyService;
-    connect(ps, SIGNAL(keyGenerationFinished(Tp::AccountPtr, bool)), SLOT(onKeyGenerationFinished()));
+    connect(ps.data(), SIGNAL(keyGenerationFinished(Tp::AccountPtr, bool)), SLOT(onKeyGenerationFinished()));
 }
 
 void OTRConfig::load()
 {
-    Q_ASSERT(ps != NULL);
+    Q_ASSERT(!ps.isNull());
     kDebug();
     accounts = am->validAccounts()->accounts();
     QStringList items;
@@ -199,7 +198,7 @@ void OTRConfig::onPolicyGet(Tp::PendingOperation *getOp)
     if(getOp->isError()) {
         kWarning() << "Could not get OTR policy: " << getOp->errorMessage();
     } else {
-        Tp::PendingVariant *pv = dynamic_cast<Tp::PendingVariant*>(getOp);
+        Tp::PendingVariant *pv = qobject_cast<Tp::PendingVariant*>(getOp);
         const uint id = pv->result().toUInt(NULL);
         Q_FOREACH(QAbstractButton *bt, ui->policyGroupButtons->buttons()) {
             bt->setChecked(false);

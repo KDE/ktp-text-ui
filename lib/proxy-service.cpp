@@ -37,7 +37,8 @@ class KeyGenDialog : public KDialog
         {
             QWidget *widget = new QWidget(this);
             ui.setupUi(widget);
-            ui.lbText->setText(i18n("Generating the private key for %1", accountName));
+            ui.lbText->setText(i18n("Generating the private key for %1...", accountName));
+            ui.lbTime->setText(i18n("This may take some time"));
             setMainWidget(widget);
             this->setCaption(i18n("Please wait"));
             this->setButtons(KDialog::Ok);
@@ -70,6 +71,7 @@ class KeyGenDialog : public KDialog
 
         void setFinished(bool error)
         {
+            ui.lbTime->clear();
             if(error) {
                 ui.lbText->setText(i18n("Could not generate a private key for %1", accountName));
             } else {
