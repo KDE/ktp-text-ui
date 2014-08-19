@@ -88,7 +88,7 @@ public:
         messageWidgetSwitchOnlineAction(0),
         logsLoaded(false),
         exchangedMessagesCount(0),
-        newOTRstatus(false)
+        hasNewOTRstatus(false)
     {
     }
     /** Stores whether the channel is ready with all contacts upgraded*/
@@ -115,7 +115,7 @@ public:
     QTimer *pausedStateTimer;
     bool logsLoaded;
     uint exchangedMessagesCount;
-    bool newOTRstatus;
+    bool hasNewOTRstatus;
 
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
@@ -629,7 +629,7 @@ void ChatWidget::onHistoryFetched(const QList<KTp::Message> &messages)
 
 int ChatWidget::unreadMessageCount() const
 {
-    return d->channel->messageQueue().size() + (d->newOTRstatus ? 1 : 0);
+    return d->channel->messageQueue().size() + (d->hasNewOTRstatus ? 1 : 0);
 }
 
 void ChatWidget::acknowledgeMessages()
@@ -640,8 +640,8 @@ void ChatWidget::acknowledgeMessages()
         //acknowledge everything in the message queue.
         d->channel->acknowledge(d->channel->messageQueue());
     }
-    if(d->newOTRstatus) {
-        d->newOTRstatus = false;
+    if(d->hasNewOTRstatus) {
+        d->hasNewOTRstatus = false;
         Q_EMIT unreadMessagesChanged();
     }
 }
@@ -740,7 +740,7 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
         return;
     }
 
-    d->newOTRstatus = true;
+    d->hasNewOTRstatus = true;
     switch(trustLevel) {
         case Tp::OTRTrustLevelUnverified:
             if(previous == Tp::OTRTrustLevelPrivate) {
