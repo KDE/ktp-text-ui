@@ -945,6 +945,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
 {
 
     ChatWidget *chatTab = dynamic_cast<ChatWidget*>(QObject::sender());
+    // in case if this slot is called directly, not by the signal
     if(!chatTab) {
         chatTab = getCurrentTab();
     }
@@ -953,6 +954,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
         return;
     }
 
+    // OTR is disabled for this channel
     if(!status) {
         m_otrActionMenu->setEnabled(false);
         m_otrActionMenu->menu()->setIcon(KIcon(QLatin1String("object-unlocked")));
