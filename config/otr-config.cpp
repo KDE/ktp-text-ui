@@ -96,7 +96,7 @@ void OTRConfig::load()
     kDebug();
     accounts = am->validAccounts()->accounts();
     QStringList items;
-    Q_FOREACH(const Tp::AccountPtr ac, accounts) {
+    Q_FOREACH(const Tp::AccountPtr &ac, accounts) {
         items << ac->normalizedName();
     }
     ui->cbAccounts->clear();
