@@ -678,11 +678,22 @@ void ChatWidget::blockTextInput(bool block)
 void ChatWidget::startOtrSession()
 {
     if(!d->channel->isOTRsuppored()) return;
+    if(!d->channel->isValid()) {
+        d->ui.messageWidget->removeAction(d->messageWidgetSwitchOnlineAction);
+        if (d->account->requestedPresence().type() == Tp::ConnectionPresenceTypeOffline) {
+            d->ui.messageWidget->addAction(d->messageWidgetSwitchOnlineAction);
+        }
+        d->ui.messageWidget->animatedShow();
+        return;
+    }
+
     d->channel->initializeOTR();
-    if(d->channel->otrTrustLevel() == Tp::OTRTrustLevelNotPrivate)
+    if(d->channel->otrTrustLevel() == Tp::OTRTrustLevelNotPrivate) {
         d->ui.chatArea->addStatusMessage(i18n("Attempting to start a private OTR session with %1", d->contactName));
-    else
+    }
+    else {
         d->ui.chatArea->addStatusMessage(i18n("Attempting to restart a private OTR session with %1", d->contactName));
+    }
 }
 
 void ChatWidget::stopOtrSession()
@@ -691,6 +702,15 @@ void ChatWidget::stopOtrSession()
     if(!d->channel->isOTRsuppored() || d->channel->otrTrustLevel() == Tp::OTRTrustLevelNotPrivate) {
         return;
     }
+    if(!d->channel->isValid()) {
+        d->ui.messageWidget->removeAction(d->messageWidgetSwitchOnlineAction);
+        if (d->account->requestedPresence().type() == Tp::ConnectionPresenceTypeOffline) {
+            d->ui.messageWidget->addAction(d->messageWidgetSwitchOnlineAction);
+        }
+        d->ui.messageWidget->animatedShow();
+        return;
+    }
+
     d->channel->stopOTR();
     d->ui.chatArea->addStatusMessage(i18n("Terminating OTR session"));
 }
@@ -1006,27 +1026,26 @@ void ChatWidget::sendMessage()
 
     if (!message.isEmpty()) {
         message = KTp::MessageProcessor::instance()->processOutgoingMessage(
-                    message, d->account, d->channel->textChannel()).text();
+                message, d->account, d->channel->textChannel()).text();
 
-	if (d->channel->isValid()) {
-	    if (d->channel->supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
-		//remove "/me " from the start of the message
-		message.remove(0,4);
+        if (d->channel->isValid()) {
+            if (d->channel->supportsMessageType(Tp::ChannelTextMessageTypeAction) && message.startsWith(QLatin1String("/me "))) {
+                //remove "/me " from the start of the message
+                message.remove(0,4);
 
-		d->channel->send(message, Tp::ChannelTextMessageTypeAction);
-	    } else {
-		d->channel->send(message);
-	    }
-	    d->ui.sendMessageBox->clear();
-	} else {
-	    d->ui.messageWidget->removeAction(d->messageWidgetSwitchOnlineAction);
-	    if (d->account->requestedPresence().type() == Tp::ConnectionPresenceTypeOffline) {
-		d->ui.messageWidget->addAction(d->messageWidgetSwitchOnlineAction);
-	    }
+                d->channel->send(message, Tp::ChannelTextMessageTypeAction);
+            } else {
+                d->channel->send(message);
+            }
+            d->ui.sendMessageBox->clear();
+        } else {
+            d->ui.messageWidget->removeAction(d->messageWidgetSwitchOnlineAction);
+            if (d->account->requestedPresence().type() == Tp::ConnectionPresenceTypeOffline) {
+                d->ui.messageWidget->addAction(d->messageWidgetSwitchOnlineAction);
+            }
 
-	    d->ui.messageWidget->animatedShow();
-
-	}
+            d->ui.messageWidget->animatedShow();
+        }
     }
 }
 
@@ -1039,8 +1058,8 @@ void ChatWidget::onChatStatusChanged(const Tp::ContactPtr & contact, Tp::Channel
 
     if (state == Tp::ChannelChatStateGone) {
         if (d->ui.chatArea->showJoinLeaveChanges()) {
-	    d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()), contact->alias());
-	}
+            d->ui.chatArea->addStatusMessage(i18n("%1 has left the chat", contact->alias()), contact->alias());
+        }
     }
 
     if (d->isGroupChat) {
