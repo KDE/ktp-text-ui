@@ -20,7 +20,8 @@
  *************************************************************************/
 
 #include "authenticationwizard.h"
-#include "channel-adapter.h"
+
+#include <KTp/OTR/channel-adapter.h>
 
 #include <KDebug>
 #include <KLocale>
@@ -71,7 +72,7 @@ namespace
 }
 
 AuthenticationWizard::AuthenticationWizard(
-        ChannelAdapter *chAdapter,
+        KTp::ChannelAdapter *chAdapter,
         const QString &contact,
         QWidget *parent,
         bool initiate,
@@ -119,7 +120,7 @@ AuthenticationWizard::~AuthenticationWizard()
 	wizardList.removeAll(this);
 }
 
-AuthenticationWizard *AuthenticationWizard::findWizard(ChannelAdapter *chAdapter)
+AuthenticationWizard *AuthenticationWizard::findWizard(KTp::ChannelAdapter *chAdapter)
 {
 	for(int i = 0; i < wizardList.size(); i++) {
 		if(wizardList.at(i)->chAdapter == chAdapter) {
@@ -247,7 +248,7 @@ QWizardPage *AuthenticationWizard::createMVPage()
 	cbManualAuth->addItem(i18nc("@item:inlistbox ...verified that", "I have"));
 	cbManualAuth->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
-	if(chAdapter->otrTrustLevel() == Tp::OTRTrustLevelPrivate) {
+	if(chAdapter->otrTrustLevel() == KTp::OTRTrustLevelPrivate) {
 		cbManualAuth->setCurrentIndex(1);
 	} else {
 		cbManualAuth->setCurrentIndex(0);

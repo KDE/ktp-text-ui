@@ -20,6 +20,7 @@ set (ktp-text-ui_LIBS
         ${KTP_LIBRARIES}
         ${KTP_MODELS_LIBRARIES}
         ${KTP_WIDGETS_LIBRARIES}
+        ${KTP_OTR_LIBRARIES}
         ${QT_QTWEBKIT_LIBRARY}
         ${KDE4_KNOTIFYCONFIG_LIBS}
         ${KDE4_KCMUTILS_LIBS}

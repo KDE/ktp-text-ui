@@ -21,8 +21,10 @@
 #ifndef OTR_CONFIG_H
 #define OTR_CONFIG_H
 
-#include "otr-constants.h"
 #include "proxy-service.h"
+#include "types.h"
+
+#include <KTp/OTR/constants.h>
 
 #include <KCModule>
 #include <QList>
@@ -73,7 +75,7 @@ private:
     Ui::OTRConfigUi *ui;
     Tp::AccountManagerPtr am;
     QList<Tp::AccountPtr> accounts;
-    Tp::OTRPolicy policy;
+    KTp::OTRPolicy policy;
     ProxyServicePtr ps;
     QMenu *fpCtxMenu;
 };

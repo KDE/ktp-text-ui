@@ -18,7 +18,6 @@
 */
 
 #include "chat-window.h"
-#include "otr-types.h"
 #include "telepathy-chat-ui.h"
 
 #include "defines.h"
@@ -34,6 +33,7 @@
 #include <TelepathyQt/AccountManager>
 
 #include <KTp/core.h>
+#include <KTp/OTR/types.h>
 
 #include <KAboutData>
 #include <KCmdLineArgs>
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     Tp::registerTypes();
-    Tp::registerOtrTypes();
+    KTp::registerOtrTypes();
 
     Tp::ChannelFactoryPtr channelFactory = Tp::ChannelFactory::create(QDBusConnection::sessionBus());
     channelFactory->addCommonFeatures(Tp::Channel::FeatureCore);

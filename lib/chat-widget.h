@@ -23,8 +23,8 @@
 #define CHATWIDGET_H
 
 #include "ktpchat_export.h"
-#include "otr-utils.h"
-#include "otr-types.h"
+#include "otr-status.h"
+#include "types.h"
 
 #include <QtCore/QString>
 #include <QtGui/QWidget>
@@ -38,6 +38,7 @@
 
 #include <KTp/presence.h>
 #include <KTp/message.h>
+#include <KTp/OTR/types.h>
 
 class ChatSearchBar;
 class ChatWidgetPrivate;
@@ -233,7 +234,7 @@ private Q_SLOTS:
     void onShareProviderFinishedFailure(ShareProvider *provider, const QString &errorMessage);
     void onSendFileClicked();
 
-    void onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous);
+    void onOTRTrustLevelChanged(KTp::OTRTrustLevel trustLevel, KTp::OTRTrustLevel previous);
     void onOTRsessionRefreshed();
     void onPeerAuthenticationRequestedQA(const QString &question);
     void onPeerAuthenticationRequestedSS();

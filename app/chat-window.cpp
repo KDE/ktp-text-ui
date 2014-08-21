@@ -24,7 +24,6 @@
 #include "chat-search-bar.h"
 #include "chat-tab.h"
 #include "chat-widget.h"
-#include "otr-constants.h"
 
 #include <KTp/service-availability-checker.h>
 #include <KTp/actions.h>
@@ -74,6 +73,7 @@
 #endif
 
 #include <KTp/contact-info-dialog.h>
+#include <KTp/OTR/constants.h>
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
@@ -969,7 +969,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
 
     switch(status.otrTrustLevel()) {
 
-        case Tp::OTRTrustLevelNotPrivate:
+        case KTp::OTRTrustLevelNotPrivate:
             m_otrActionMenu->setIcon(KIcon(QLatin1String("object-unlocked")));
             m_otrActionMenu->setToolTip(i18n("Not private"));
             srAction->setEnabled(true);
@@ -978,7 +978,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
             authenticateBuddyAction->setEnabled(false);
             return;
 
-        case Tp::OTRTrustLevelUnverified:
+        case KTp::OTRTrustLevelUnverified:
             m_otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-unverified")));
             m_otrActionMenu->setToolTip(i18n("Unverified"));
             srAction->setEnabled(true);
@@ -987,7 +987,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
             authenticateBuddyAction->setEnabled(true);
             return;
 
-        case Tp::OTRTrustLevelPrivate:
+        case KTp::OTRTrustLevelPrivate:
             m_otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-verified")));
             m_otrActionMenu->setToolTip(i18n("Private"));
             srAction->setEnabled(true);
@@ -996,7 +996,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
             authenticateBuddyAction->setEnabled(true);
             return;
 
-        case Tp::OTRTrustLevelFinished:
+        case KTp::OTRTrustLevelFinished:
             m_otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-finished")));
             m_otrActionMenu->setToolTip(i18n("Finished"));
             srAction->setEnabled(true);

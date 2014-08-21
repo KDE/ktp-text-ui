@@ -29,14 +29,17 @@
 #include <QWizard>
 #include <QRadioButton>
 
-class ChannelAdapter;
+namespace KTp
+{
+    class ChannelAdapter;
+}
 
 class AuthenticationWizard: public QWizard
 {
 	Q_OBJECT
 public:
 	explicit AuthenticationWizard(
-            ChannelAdapter *chAdapter,
+            KTp::ChannelAdapter *chAdapter,
             const QString &contact,
             QWidget *parent = 0,
             bool initiate = true,
@@ -44,7 +47,7 @@ public:
 
 	~AuthenticationWizard();
 
-	static AuthenticationWizard *findWizard(ChannelAdapter *chAdapter);
+	static AuthenticationWizard *findWizard(KTp::ChannelAdapter *chAdapter);
 	void nextState();
 	void finished(bool success);
 	void aborted();
@@ -65,7 +68,7 @@ private:
         Page_Final
     };
 
-    ChannelAdapter *chAdapter;
+    KTp::ChannelAdapter *chAdapter;
     const QString contact;
 
 	QString question;

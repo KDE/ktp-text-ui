@@ -18,7 +18,7 @@
 #include "proxy-service.h"
 #include "ui_keygendialog.h"
 
-#include "proxy-service-interface.h"
+#include <KTp/OTR/proxy-service-interface.h>
 
 #include <QMap>
 #include <QScopedPointer>
@@ -90,14 +90,14 @@ class KeyGenDialog : public KDialog
 class ProxyService::Private
 {
     public:
-        Private(Tp::Client::ProxyServiceInterface *psi, const QDBusConnection &dbusConnection, QWidget *parent)
+        Private(KTp::Client::ProxyServiceInterface *psi, const QDBusConnection &dbusConnection, QWidget *parent)
             : psi(psi),
             am(Tp::AccountManager::create(dbusConnection)),
             parent(parent)
         {
         }
 
-        QScopedPointer<Tp::Client::ProxyServiceInterface> psi;
+        QScopedPointer<KTp::Client::ProxyServiceInterface> psi;
         Tp::AccountManagerPtr am;
         QWidget *parent;
         QMap<QString, KeyGenDialog*> dialogs;
@@ -109,7 +109,7 @@ ProxyService::ProxyService(
         const QString& objectPath,
         QWidget* parent)
     : QObject(parent),
-    d(new Private(new Tp::Client::ProxyServiceInterface(dbusConnection, busName, objectPath), dbusConnection, parent))
+    d(new Private(new KTp::Client::ProxyServiceInterface(dbusConnection, busName, objectPath), dbusConnection, parent))
 {
     connect(d->psi.data(), SIGNAL(ProxyConnected(const QDBusObjectPath&)), SIGNAL(proxyConnected(const QDBusObjectPath&)));
     connect(d->psi.data(), SIGNAL(KeyGenerationStarted(const QDBusObjectPath&)),
@@ -148,16 +148,16 @@ QString ProxyService::fingerprintForAccount(const QDBusObjectPath& account) cons
     }
 }
 
-Tp::FingerprintInfoList ProxyService::knownFingerprints(const QDBusObjectPath &account) const
+KTp::FingerprintInfoList ProxyService::knownFingerprints(const QDBusObjectPath &account) const
 {
-    QDBusPendingReply<Tp::FingerprintInfoList> fpsRep = d->psi->GetKnownFingerprints(account);
+    QDBusPendingReply<KTp::FingerprintInfoList> fpsRep = d->psi->GetKnownFingerprints(account);
     fpsRep.waitForFinished();
     if(fpsRep.isValid()) {
         return fpsRep.value();
     } else {
         kWarning() << "Could not get known fingerprints for account: " << account.path() <<
             " due to: " << fpsRep.error().message();
-        return Tp::FingerprintInfoList();
+        return KTp::FingerprintInfoList();
     }
 }
 

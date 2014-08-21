@@ -18,8 +18,9 @@
 #ifndef PROXY_SERIVCE_HEADER
 #define PROXY_SERIVCE_HEADER
 
-#include "otr-types.h"
 #include "ktpchat_export.h"
+
+#include <KTp/OTR/types.h>
 
 #include <QWidget>
 #include <TelepathyQt/AccountManager>
@@ -44,7 +45,7 @@ class KDE_TELEPATHY_CHAT_EXPORT ProxyService : public QObject, public Tp::RefCou
         bool isOngoingGeneration(const QDBusObjectPath &account);
         /** fingerprint or an empty string of none available */
         QString fingerprintForAccount(const QDBusObjectPath &account) const;
-        Tp::FingerprintInfoList knownFingerprints(const QDBusObjectPath &account) const;
+        KTp::FingerprintInfoList knownFingerprints(const QDBusObjectPath &account) const;
         bool trustFingerprint(const QDBusObjectPath &account, const QString &contactName, const QString &fingerprint, bool trust);
         bool forgetFingerprint(const QDBusObjectPath &account, const QString &contactName, const QString &fingerprint);
 

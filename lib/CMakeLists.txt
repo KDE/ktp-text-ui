@@ -17,12 +17,8 @@ set(ktpchat_SRCS
         contact-delegate.cpp
         notify-filter.cpp
         text-chat-config.cpp
-        otr-types.cpp
-        channel-adapter.cpp
-        otr-channel-proxy.cpp
-        proxy-service-interface.cpp
         proxy-service.cpp
-        otr-utils.cpp
+        otr-status.cpp
         authenticationwizard.cpp
         otr-notifications.cpp
         )
@@ -45,6 +41,7 @@ target_link_libraries(ktpchat
     ${KDE4_KEMOTICONS_LIBS}
     ${KTP_LIBRARIES}
     ${KTP_LOGGER_LIBRARIES}
+    ${KTP_OTR_LIBRARIES}
     ktpimagesharer
 )
 install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})

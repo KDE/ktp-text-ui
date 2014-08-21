@@ -29,7 +29,6 @@
 #include "notify-filter.h"
 #include "text-chat-config.h"
 #include "contact-delegate.h"
-#include "channel-adapter.h"
 #include "authenticationwizard.h"
 #include "otr-notifications.h"
 
@@ -65,6 +64,8 @@
 #include <KTp/message-processor.h>
 #include <KTp/Logger/scrollback-manager.h>
 #include <KTp/contact-info-dialog.h>
+#include <KTp/OTR/channel-adapter.h>
+#include <KTp/OTR/utils.h>
 
 #include <sonnet/speller.h>
 
@@ -80,7 +81,7 @@ public:
     ChatWidgetPrivate(const Tp::TextChannelPtr &textChannel) :
         remoteContactChatState(Tp::ChannelChatStateInactive),
         isGroupChat(false),
-        channel(new ChannelAdapter(textChannel)),
+        channel(new KTp::ChannelAdapter(textChannel)),
         contactsMenu(0),
         fileResourceTransferMenu(0),
         fileTransferMenuAction(0),
@@ -99,7 +100,7 @@ public:
     QString contactName;
     QString yourName;
     QString currentKeyboardLayoutLanguage;
-    ChannelAdapterPtr channel;
+    KTp::ChannelAdapterPtr channel;
     Tp::AccountPtr account;
     ShareProvider *shareProvider;
     Ui::ChatWidget ui;
@@ -357,7 +358,7 @@ void ChatWidget::setTextChannel(const Tp::TextChannelPtr &newTextChannelPtr)
 {
 
     d->channel.reset();
-    d->channel = ChannelAdapterPtr(new ChannelAdapter(newTextChannelPtr));
+    d->channel = KTp::ChannelAdapterPtr(new KTp::ChannelAdapter(newTextChannelPtr));
     d->contactModel->setTextChannel(newTextChannelPtr);
 
     // connect signals for the new textchannel
@@ -688,7 +689,7 @@ void ChatWidget::startOtrSession()
     }
 
     d->channel->initializeOTR();
-    if(d->channel->otrTrustLevel() == Tp::OTRTrustLevelNotPrivate) {
+    if(d->channel->otrTrustLevel() == KTp::OTRTrustLevelNotPrivate) {
         d->ui.chatArea->addStatusMessage(i18n("Attempting to start a private OTR session with %1", d->contactName));
     }
     else {
@@ -699,7 +700,7 @@ void ChatWidget::startOtrSession()
 void ChatWidget::stopOtrSession()
 {
     kDebug();
-    if(!d->channel->isOTRsuppored() || d->channel->otrTrustLevel() == Tp::OTRTrustLevelNotPrivate) {
+    if(!d->channel->isOTRsuppored() || d->channel->otrTrustLevel() == KTp::OTRTrustLevelNotPrivate) {
         return;
     }
     if(!d->channel->isValid()) {
@@ -732,8 +733,8 @@ void ChatWidget::setupOTR()
 {
     kDebug();
 
-    connect(d->channel.data(), SIGNAL(otrTrustLevelChanged(Tp::OTRTrustLevel, Tp::OTRTrustLevel)),
-            SLOT(onOTRTrustLevelChanged(Tp::OTRTrustLevel, Tp::OTRTrustLevel)));
+    connect(d->channel.data(), SIGNAL(otrTrustLevelChanged(KTp::OTRTrustLevel, KTp::OTRTrustLevel)),
+            SLOT(onOTRTrustLevelChanged(KTp::OTRTrustLevel, KTp::OTRTrustLevel)));
     connect(d->channel.data(), SIGNAL(sessionRefreshed()),
             SLOT(onOTRsessionRefreshed()));
     connect(d->channel.data(), SIGNAL(peerAuthenticationRequestedQA(const QString&)),
@@ -752,7 +753,7 @@ void ChatWidget::setupOTR()
             SLOT(onPeerAuthenticationFailed()));
 }
 
-void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTrustLevel previous)
+void ChatWidget::onOTRTrustLevelChanged(KTp::OTRTrustLevel trustLevel, KTp::OTRTrustLevel previous)
 {
     kDebug();
 
@@ -762,8 +763,8 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
 
     d->hasNewOTRstatus = true;
     switch(trustLevel) {
-        case Tp::OTRTrustLevelUnverified:
-            if(previous == Tp::OTRTrustLevelPrivate) {
+        case KTp::OTRTrustLevelUnverified:
+            if(previous == KTp::OTRTrustLevelPrivate) {
                 d->ui.chatArea->addStatusMessage(i18n("The OTR session is unverified now"));
             }
             else {
@@ -773,8 +774,8 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
                 }
             }
             break;
-        case Tp::OTRTrustLevelPrivate:
-            if(previous == Tp::OTRTrustLevelUnverified) {
+        case KTp::OTRTrustLevelPrivate:
+            if(previous == KTp::OTRTrustLevelUnverified) {
                 d->ui.chatArea->addStatusMessage(i18n("The OTR session is private now"));
             }
             else {
@@ -784,7 +785,7 @@ void ChatWidget::onOTRTrustLevelChanged(Tp::OTRTrustLevel trustLevel, Tp::OTRTru
                 }
             }
             break;
-        case Tp::OTRTrustLevelFinished:
+        case KTp::OTRTrustLevelFinished:
             d->ui.chatArea->addStatusMessage(i18n("%1 has ended the OTR session. You should do the same", d->contactName));
             if(!this->isActiveWindow()) {
                 OTRNotifications::otrSessionFinished(this, d->channel->textChannel()->targetContact());
@@ -972,8 +973,8 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
                 d->notifyFilter->filterMessage(processedMessage,
                         KTp::MessageContext(d->account, d->channel->textChannel()));
             }
-            if(Tp::Utils::isOtrEvent(message)) {
-                d->ui.chatArea->addStatusMessage(Tp::Utils::processOtrMessage(message));
+            if(KTp::Utils::isOtrEvent(message)) {
+                d->ui.chatArea->addStatusMessage(KTp::Utils::processOtrMessage(message));
             } else {
                 d->ui.chatArea->addMessage(processedMessage);
             }
@@ -1016,7 +1017,7 @@ void ChatWidget::chatViewReady()
 
 void ChatWidget::sendMessage()
 {
-    if(d->channel->isOTRsuppored() && d->channel->otrTrustLevel() == Tp::OTRTrustLevelFinished) {
+    if(d->channel->isOTRsuppored() && d->channel->otrTrustLevel() == KTp::OTRTrustLevelFinished) {
         d->ui.chatArea->addStatusMessage(i18n("%1 has already closed his/her private connection to you."
                     "Your message was not sent. Either end your private conversation, or restart it.", d->contactName));
         return;

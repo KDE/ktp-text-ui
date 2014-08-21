@@ -19,7 +19,8 @@
 
 #include "otr-config.h"
 #include "ui_otr-config.h"
-#include "otr-types.h"
+
+#include <KTp/OTR/types.h>
 
 #include <QLatin1String>
 #include <KDebug>
@@ -48,10 +49,10 @@ OTRConfig::OTRConfig(QWidget *parent, const QVariantList& args)
 
     ui->setupUi(this);
 
-    ui->policyGroupButtons->setId(ui->rbAlways, Tp::OTRPolicyAlways);
-    ui->policyGroupButtons->setId(ui->rbOpportunistic, Tp::OTRPolicyOpportunistic);
-    ui->policyGroupButtons->setId(ui->rbManual, Tp::OTRPolicyManual);
-    ui->policyGroupButtons->setId(ui->rbNever, Tp::OTRPolicyNever);
+    ui->policyGroupButtons->setId(ui->rbAlways, KTp::OTRPolicyAlways);
+    ui->policyGroupButtons->setId(ui->rbOpportunistic, KTp::OTRPolicyOpportunistic);
+    ui->policyGroupButtons->setId(ui->rbManual, KTp::OTRPolicyManual);
+    ui->policyGroupButtons->setId(ui->rbNever, KTp::OTRPolicyNever);
 
     ui->tbFingerprints->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tbFingerprints, SIGNAL(customContextMenuRequested(QPoint)), SLOT(onFpTableMenuRequested(QPoint)));
@@ -120,11 +121,11 @@ void OTRConfig::loadFingerprints()
         return;
     }
 
-    const Tp::FingerprintInfoList fingerprints = ps->knownFingerprints(currentAccount());
+    const KTp::FingerprintInfoList fingerprints = ps->knownFingerprints(currentAccount());
     kDebug() << fingerprints.size();
     ui->tbFingerprints->setRowCount(fingerprints.size());
     int i = 0;
-    Q_FOREACH(const Tp::FingerprintInfo &fp, fingerprints) {
+    Q_FOREACH(const KTp::FingerprintInfo &fp, fingerprints) {
         ui->tbFingerprints->setItem(i, 0, new QTableWidgetItem(fp.contactName));
         ui->tbFingerprints->setItem(i, 1, new QTableWidgetItem(fp.fingerprint));
         ui->tbFingerprints->setItem(i, 2, new QTableWidgetItem(fp.isVerified ? i18n("yes") : i18n("no")));
@@ -160,7 +161,7 @@ void OTRConfig::changeEvent(QEvent* e)
 void OTRConfig::onRadioSelected(int id)
 {
     kDebug();
-    policy = static_cast<Tp::OTRPolicy>(id);
+    policy = static_cast<KTp::OTRPolicy>(id);
     Q_EMIT changed(true);
 }
 
@@ -204,7 +205,7 @@ void OTRConfig::onPolicyGet(Tp::PendingOperation *getOp)
             bt->setChecked(false);
         }
         ui->policyGroupButtons->button(id)->setChecked(true);
-        policy = static_cast<Tp::OTRPolicy>(id);
+        policy = static_cast<KTp::OTRPolicy>(id);
     }
 }
 
