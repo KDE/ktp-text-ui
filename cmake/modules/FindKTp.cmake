@@ -5,6 +5,7 @@
 # KTP_MODELS_LIBRARIES
 # KTP_WIDGETS_LIBRARIES
 # KTP_LOGGER_LIBRARIES
+# KTP_OTR_LIBRARIES
 
 # Copyright (c) 2011, Dario Freddi <drf@kde.org>
 #
@@ -30,6 +31,7 @@ find_library(KTP_LIBRARIES NAMES ktpcommoninternalsprivate )
 find_library(KTP_MODELS_LIBRARIES NAMES ktpmodelsprivate )
 find_library(KTP_WIDGETS_LIBRARIES NAMES ktpwidgetsprivate )
 find_library(KTP_LOGGER_LIBRARIES NAMES ktploggerprivate )
+find_library(KTP_OTR_LIBRARIES NAMES ktpotrprivate )
 
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(KTp DEFAULT_MSG

@@ -2,6 +2,7 @@
     Copyright (C) 2010  David Edmundson    <kde@davidedmundson.co.uk>
     Copyright (C) 2011  Dominik Schmidt    <dev@dominik-schmidt.de>
     Copyright (C) 2011  Francesco Nwokeka  <francesco.nwokeka@gmail.com>
+    Copyright (C) 2014  Marcin Ziemiński   <zieminn@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,10 +23,12 @@
 #define CHATWINDOW_H
 
 #include "chat-widget.h"
+#include "proxy-service.h"
 
 #include <KXmlGuiWindow>
 #include <KTabWidget>
 #include <KAction>
+#include <KActionMenu>
 
 namespace Sonnet {
     class DictionaryComboBox;
@@ -118,6 +121,13 @@ private Q_SLOTS:
     void onReloadTheme();
     void onCollaborateDocumentTriggered();
     void onLeaveChannelTriggered();
+    /** otr related handlers */
+    void onOtrStatusChanged(OtrStatus status);
+    void onStartRestartOtrTriggered();
+    void onStopOtrTriggered();
+    void onAuthenticateBuddyTriggered();
+    void onKeyGenerationStarted(Tp::AccountPtr);
+    void onKeyGenerationFinished(Tp::AccountPtr, bool error);
 
 protected Q_SLOTS:
     void showSettingsDialog();
@@ -142,6 +152,9 @@ private:
 
     /** creates and adds custom actions for the chat window */
     void setupCustomActions();
+
+    /** sets up otr actions */
+    void setupOTR();
 
     /** setters for chat actions */
     void setAudioCallEnabled(bool enable);
@@ -209,6 +222,8 @@ private:
     Sonnet::DictionaryComboBox *m_spellDictCombo;
     QLabel *m_accountIconLabel;
     qreal m_zoomFactor;
+    KActionMenu *m_otrActionMenu;
+    ProxyServicePtr m_proxyService;
 };
 
 #endif // CHATWINDOW_H

@@ -2,6 +2,7 @@
     Copyright (C) 2010  David Edmundson   <kde@davidedmundson.co.uk>
     Copyright (C) 2011  Dominik Schmidt   <dev@dominik-schmidt.de>
     Copyright (C) 2011  Francesco Nwokeka <francesco.nwokeka@gmail.com>
+    Copyright (C) 2014  Marcin Ziemiński   <zieminn@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -72,6 +73,7 @@
 #endif
 
 #include <KTp/contact-info-dialog.h>
+#include <KTp/OTR/constants.h>
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
@@ -81,7 +83,13 @@ K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecke
 ChatWindow::ChatWindow()
     : m_sendMessage(0),
       m_tabWidget(0),
-      m_keyboardLayoutInterface(0)
+      m_keyboardLayoutInterface(0),
+      m_otrActionMenu(0),
+      m_proxyService(
+              new ProxyService(QDBusConnection::sessionBus(),
+                  KTP_PROXY_BUS_NAME,
+                  KTP_PROXY_SERVICE_OBJECT_PATH,
+                  this))
 {
     //This effectively constructs the s_krfbAvailableChecker object the first
     //time that this code is executed. This is to start the d-bus query early, so
@@ -135,6 +143,9 @@ ChatWindow::ChatWindow()
     // create custom actions
     // we must do it AFTER m_tabWidget is set up
     setupCustomActions();
+
+    // start otr service and create otr actions for otr popup menu
+    setupOTR();
 
     setupGUI(QSize(460, 440), static_cast<StandardWindowOptions>(Default^StatusBar), QLatin1String("chatwindow.rc"));
 
@@ -235,6 +246,7 @@ void ChatWindow::removeTab(ChatTab *tab)
 {
     kDebug();
 
+    tab->stopOtrSession();
     removeChatTabSignals(tab);
 
     m_tabWidget->removePage(tab);
@@ -276,6 +288,10 @@ void ChatWindow::addTab(ChatTab *tab)
 
     tab->setFocus();
     tab->updateSendMessageShortcuts(m_sendMessage->shortcut());
+    // block text input if key is being generated for this account
+    if(m_proxyService->isOngoingGeneration(QDBusObjectPath(tab->account()->objectPath()))) {
+        tab->blockTextInput(true);
+    }
 }
 
 void ChatWindow::destroyTab(QWidget* chatWidget)
@@ -399,6 +415,8 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setBlockEnabled(false);
         setShowInfoEnabled(false);
     }
+
+    onOtrStatusChanged(currentChatTab->otrStatus());
 
     // Allow "Leaving" rooms only in group chat, and when persistent rooms are enabled
     actionCollection()->action(QLatin1String("leave-chat"))->setEnabled(currentChatTab->isGroupChat() && TextChatConfig::instance()->dontLeaveGroupChats());
@@ -736,6 +754,13 @@ void ChatWindow::showSettingsDialog()
     dialog->addModule(QLatin1String("kcm_ktp_chat_behavior"));
     dialog->addModule(QLatin1String("kcm_ktp_chat_messages"));
 
+    KPageWidgetItem *otrConfigPage = dialog->addModule(QLatin1String("kcm_ktp_chat_otr"));
+    proxy = qobject_cast<KCModuleProxy*>(otrConfigPage->widget());
+    Q_ASSERT(proxy);
+    QVariant value;
+    value.setValue(m_proxyService);
+    proxy->realModule()->setProperty("proxyService", value);
+
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
@@ -750,9 +775,11 @@ void ChatWindow::removeChatTabSignals(ChatTab *chatTab)
     disconnect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
     disconnect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
     disconnect(chatTab, SIGNAL(unreadMessagesChanged()), this, SLOT(onTabStateChanged()));
-    disconnect(chatTab, SIGNAL(contactPresenceChanged(Tp::Presence)), this, SLOT(onTabStateChanged()));
+    disconnect(chatTab, SIGNAL(contactPresenceChanged(KTp::Presence)), this, SLOT(onTabStateChanged()));
     disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
     disconnect(chatTab, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
+    if(chatTab->otrStatus())
+        disconnect(chatTab, SIGNAL(otrStatusChanged(OtrStatus)), this, SLOT(onOtrStatusChanged(OtrStatus)));
 }
 
 void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const QString& errorMsg)
@@ -780,6 +807,8 @@ void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
     connect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
     connect(chatTab, SIGNAL(contactBlockStatusChanged(bool)), this, SLOT(toggleBlockButton(bool)));
     connect(chatTab, SIGNAL(zoomFactorChanged(qreal)), this, SLOT(onZoomFactorChanged(qreal)));
+    if(chatTab->otrStatus())
+        connect(chatTab, SIGNAL(otrStatusChanged(OtrStatus)), this, SLOT(onOtrStatusChanged(OtrStatus)));
 }
 
 void ChatWindow::setupCustomActions()
@@ -883,6 +912,152 @@ void ChatWindow::setupCustomActions()
     actionCollection()->addAction(QLatin1String("collaborate-document"), collaborateDocumentAction);
     actionCollection()->addAction(QLatin1String("contact-info"), showInfoAction);
     actionCollection()->addAction(QLatin1String("leave-chat"), leaveAction);
+}
+
+
+void ChatWindow::setupOTR()
+{
+    m_otrActionMenu = new KActionMenu(KIcon(QLatin1String("object-unlocked")), i18n("&OTR"), this);
+    m_otrActionMenu->setDelayed(false);
+
+    KAction *startRestartOtrAction = new KAction(KIcon(QLatin1String("object-locked")), i18n("&Start session"), this);
+    startRestartOtrAction->setEnabled(false);
+    connect(startRestartOtrAction, SIGNAL(triggered()), this, SLOT(onStartRestartOtrTriggered()));
+
+    KAction *stopOtrAction = new KAction(KIcon(QLatin1String("object-unlocked")), i18n("&Stop session"), this);
+    stopOtrAction->setEnabled(false);
+    connect(stopOtrAction, SIGNAL(triggered()), this, SLOT(onStopOtrTriggered()));
+
+    KAction *authenticateBuddyAction = new KAction(KIcon(QLatin1String("application-pgp-signature")), i18n("&Authenticate contact"), this);
+    authenticateBuddyAction->setEnabled(false);
+    connect(authenticateBuddyAction, SIGNAL(triggered()), this, SLOT(onAuthenticateBuddyTriggered()));
+
+    m_otrActionMenu->addAction(startRestartOtrAction);
+    m_otrActionMenu->addAction(stopOtrAction);
+    m_otrActionMenu->addAction(authenticateBuddyAction);
+    m_otrActionMenu->setEnabled(false);
+
+    actionCollection()->addAction(QLatin1String("start-restart-otr"), startRestartOtrAction);
+    actionCollection()->addAction(QLatin1String("stop-otr"), stopOtrAction);
+    actionCollection()->addAction(QLatin1String("authenticate-otr"), authenticateBuddyAction);
+    actionCollection()->addAction(QLatin1String("otr-actions"), m_otrActionMenu);
+
+    // private key generation
+    connect(m_proxyService.data(), SIGNAL(keyGenerationStarted(Tp::AccountPtr)),
+            SLOT(onKeyGenerationStarted(Tp::AccountPtr)));
+    connect(m_proxyService.data(), SIGNAL(keyGenerationFinished(Tp::AccountPtr, bool)),
+            SLOT(onKeyGenerationFinished(Tp::AccountPtr, bool)));
+}
+
+void ChatWindow::onOtrStatusChanged(OtrStatus status)
+{
+
+    ChatWidget *chatTab = dynamic_cast<ChatWidget*>(QObject::sender());
+    // in case if this slot is called directly, not by the signal
+    if(!chatTab) {
+        chatTab = getCurrentTab();
+    }
+
+    if(chatTab != getCurrentTab()) {
+        return;
+    }
+
+    // OTR is disabled for this channel
+    if(!status) {
+        m_otrActionMenu->setEnabled(false);
+        m_otrActionMenu->menu()->setIcon(KIcon(QLatin1String("object-unlocked")));
+        return;
+    }
+
+    QAction* srAction = actionCollection()->action(QLatin1String("start-restart-otr"));
+    QAction* stopAction = actionCollection()->action(QLatin1String("stop-otr"));
+    QAction* authenticateBuddyAction = actionCollection()->action(QLatin1String("authenticate-otr"));
+
+    m_otrActionMenu->setEnabled(true);
+
+    switch(status.otrTrustLevel()) {
+
+        case KTp::OTRTrustLevelNotPrivate:
+            m_otrActionMenu->setIcon(KIcon(QLatin1String("object-unlocked")));
+            m_otrActionMenu->setToolTip(i18n("Not private"));
+            srAction->setEnabled(true);
+            srAction->setText(i18n("&Start session"));
+            stopAction->setEnabled(false);
+            authenticateBuddyAction->setEnabled(false);
+            return;
+
+        case KTp::OTRTrustLevelUnverified:
+            m_otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-unverified")));
+            m_otrActionMenu->setToolTip(i18n("Unverified"));
+            srAction->setEnabled(true);
+            srAction->setText(i18n("&Restart session"));
+            stopAction->setEnabled(true);
+            authenticateBuddyAction->setEnabled(true);
+            return;
+
+        case KTp::OTRTrustLevelPrivate:
+            m_otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-verified")));
+            m_otrActionMenu->setToolTip(i18n("Private"));
+            srAction->setEnabled(true);
+            srAction->setText(i18n("&Restart session"));
+            stopAction->setEnabled(true);
+            authenticateBuddyAction->setEnabled(true);
+            return;
+
+        case KTp::OTRTrustLevelFinished:
+            m_otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-finished")));
+            m_otrActionMenu->setToolTip(i18n("Finished"));
+            srAction->setEnabled(true);
+            srAction->setText(i18n("&Restart session"));
+            stopAction->setEnabled(true);
+            authenticateBuddyAction->setEnabled(false);
+            return;
+
+        default: return;
+    }
+}
+
+void ChatWindow::onStartRestartOtrTriggered()
+{
+
+    ChatTab* chat = getCurrentTab();
+    chat->startOtrSession();
+}
+
+void ChatWindow::onStopOtrTriggered() {
+
+    ChatTab* chat = getCurrentTab();
+    chat->stopOtrSession();
+}
+
+void ChatWindow::onAuthenticateBuddyTriggered()
+{
+
+    ChatTab* chat = getCurrentTab();
+    chat->authenticateBuddy();
+}
+
+void ChatWindow::onKeyGenerationStarted(Tp::AccountPtr account)
+{
+    // block user text input for these tabs
+    QList<ChatTab*> allTabs = tabs();
+    Q_FOREACH(ChatTab *ct, allTabs) {
+        if(ct->account()->objectPath() == account->objectPath()) {
+            ct->blockTextInput(true);
+        }
+    }
+}
+
+void ChatWindow::onKeyGenerationFinished(Tp::AccountPtr account, bool error)
+{
+    Q_UNUSED(error);
+    // unblock user text input for these tabs
+    QList<ChatTab*> allTabs = tabs();
+    Q_FOREACH(ChatTab *ct, allTabs) {
+        if(ct->account()->objectPath() == account->objectPath()) {
+            ct->blockTextInput(false);
+        }
+    }
 }
 
 void ChatWindow::setCollaborateDocumentEnabled(bool enable)
@@ -1164,6 +1339,7 @@ void ChatWindow::onReloadTheme()
 void ChatWindow::onLeaveChannelTriggered()
 {
     ChatTab *tab = getCurrentTab();
+    tab->stopOtrSession();
     tab->textChannel()->requestLeave();
     closeCurrentTab();
 }

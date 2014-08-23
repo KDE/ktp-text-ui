@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui name="ktp-text-ui"
-     version="8"
+     version="9"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -31,6 +31,7 @@
    <Separator />
    <Action name="block-contact"/>
    <Separator />
+   <Action name="otr-actions"/>
   </Menu>
   <Menu name="settings"/>
   <Menu name="help"/>
@@ -44,6 +45,8 @@
   <Action name="collaborate-document"/>
   <Separator />
   <Action name="edit_find"/>
+  <Separator />
+  <Action name="otr-actions"/>
  </ToolBar>
 
  <ToolBar hidden="true" newline="false" noEdit="true" noMerge="1" name="accountIconToolBar">
