@@ -1018,7 +1018,7 @@ void ChatWidget::chatViewReady()
 void ChatWidget::sendMessage()
 {
     if(d->channel->isOTRsuppored() && d->channel->otrTrustLevel() == KTp::OTRTrustLevelFinished) {
-        d->ui.chatArea->addStatusMessage(i18n("%1 has already closed his/her private connection to you."
+        d->ui.chatArea->addStatusMessage(i18n("%1 has already closed his/her private connection to you. "
                     "Your message was not sent. Either end your private conversation, or restart it.", d->contactName));
         return;
     }
