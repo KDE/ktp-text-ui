@@ -7,6 +7,7 @@ add_subdirectory(searchexpansion)
 add_subdirectory(youtube)
 add_subdirectory(highlight)
 add_subdirectory(urlexpansion)
+add_subdirectory(otr)
 
 IF (EXISTS "${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml")
     set (HAS_KTTS TRUE)
