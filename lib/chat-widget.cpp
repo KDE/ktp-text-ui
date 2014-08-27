@@ -757,15 +757,11 @@ void ChatWidget::onOTRTrustLevelChanged(KTp::OTRTrustLevel trustLevel, KTp::OTRT
 {
     kDebug();
 
-    if(trustLevel == previous) {
-        return;
-    }
-
     d->hasNewOTRstatus = true;
     switch(trustLevel) {
         case KTp::OTRTrustLevelUnverified:
             if(previous == KTp::OTRTrustLevelPrivate) {
-                d->ui.chatArea->addStatusMessage(i18n("The OTR session is unverified now"));
+                d->ui.chatArea->addStatusMessage(i18n("The OTR session is now unverified"));
             }
             else {
                 d->ui.chatArea->addStatusMessage(i18n("Unverified OTR session started"));
@@ -776,7 +772,7 @@ void ChatWidget::onOTRTrustLevelChanged(KTp::OTRTrustLevel trustLevel, KTp::OTRT
             break;
         case KTp::OTRTrustLevelPrivate:
             if(previous == KTp::OTRTrustLevelUnverified) {
-                d->ui.chatArea->addStatusMessage(i18n("The OTR session is private now"));
+                d->ui.chatArea->addStatusMessage(i18n("The OTR session is now private"));
             }
             else {
                 d->ui.chatArea->addStatusMessage(i18n("Private OTR session started"));
@@ -801,7 +797,9 @@ void ChatWidget::onOTRTrustLevelChanged(KTp::OTRTrustLevel trustLevel, KTp::OTRT
 
 void ChatWidget::onOTRsessionRefreshed()
 {
-    d->ui.chatArea->addStatusMessage(i18n("Successfully refreshed OTR session"));
+    const QLatin1String status = (d->channel->otrTrustLevel() == KTp::OTRTrustLevelPrivate) ?
+        QLatin1String("private") : QLatin1String("unverified");
+    d->ui.chatArea->addStatusMessage(i18n("Successfully refreshed %1 OTR session", status));
 }
 
 void ChatWidget::onPeerAuthenticationRequestedQA(const QString &question)
