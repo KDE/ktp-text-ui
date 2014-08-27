@@ -27,6 +27,7 @@
 #include <KLocale>
 #include <KNotification>
 #include <KIconLoader>
+#include <KWindowSystem>
 
 #include <QGroupBox>
 #include <QProgressBar>
@@ -436,10 +437,7 @@ void AuthenticationWizard::notificationActivated( unsigned int id)
 {
 	kDebug() << "notificationActivated. ButtonId" << id;
 	if(id == 1) {
-		// raise the view to bring the chatwindow + authwizard to current desktop and on top
-        dynamic_cast<QWidget*>(QWizard::parent())->raise();
-		// now grab focus and keyboard again to the auth-wizard
-		setFocus(Qt::ActiveWindowFocusReason);
-		leAnswer->grabKeyboard();
+        this->raise();
+        KWindowSystem::forceActiveWindow(this->winId());
 	}
 }

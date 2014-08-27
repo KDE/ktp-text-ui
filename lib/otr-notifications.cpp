@@ -46,6 +46,8 @@ namespace OTRNotifications
         KAboutData telepathySharedAboutData("ktelepathy", 0, KLocalizedString(), 0);
         notification->setComponentData(KComponentData(telepathySharedAboutData));
 
+        notification->setActions(QStringList(i18n("View")));
+
         QPixmap notificationPixmap;
         if(notificationPixmap.load(contact->avatarData().fileName)) {
             notification->setPixmap(notificationPixmap);
@@ -63,7 +65,6 @@ namespace OTRNotifications
             notification->setText(i18n("Unverified OTR session started with %1", targetContact->alias()));
         }
 
-        notification->setActions(QStringList(i18n("View")));
         if(widget) {
             QObject::connect(notification, SIGNAL(activated(uint)), widget, SIGNAL(notificationClicked()));
             QObject::connect(notification, SIGNAL(activated(uint)), notification, SLOT(close()));
@@ -77,7 +78,6 @@ namespace OTRNotifications
         KNotification *notification = prepareNotification(widget, targetContact);
         notification->setText(i18n("Finished OTR session with %1", targetContact->alias()));
 
-        notification->setActions(QStringList(i18n("View")));
         if(widget) {
             QObject::connect(notification, SIGNAL(activated(uint)), widget, SIGNAL(notificationClicked()));
             QObject::connect(notification, SIGNAL(activated(uint)), notification, SLOT(close()));
@@ -89,6 +89,11 @@ namespace OTRNotifications
     {
         KNotification *notification = prepareNotification(widget, targetContact);
         notification->setText(i18n("%1 has requested your authentication", targetContact->alias()));
+
+        if(widget) {
+            QObject::connect(notification, SIGNAL(activated(uint)), widget, SLOT(notificationActivated(uint)));
+            QObject::connect(notification, SIGNAL(activated(uint)), notification, SLOT(close()));
+        }
 
         notification->sendEvent();
     }
@@ -102,6 +107,11 @@ namespace OTRNotifications
             notification->setText(i18n("Authentication with %1 failed", targetContact->alias()));
         }
 
+        if(widget) {
+            QObject::connect(notification, SIGNAL(activated(uint)), widget, SLOT(notificationActivated(uint)));
+            QObject::connect(notification, SIGNAL(activated(uint)), notification, SLOT(close()));
+        }
+
         notification->sendEvent();
     }
 
@@ -110,6 +120,11 @@ namespace OTRNotifications
         KNotification *notification = prepareNotification(widget, targetContact);
         notification->setText(i18n("Authentication with %1 was aborted", targetContact->alias()));
 
+        if(widget) {
+            QObject::connect(notification, SIGNAL(activated(uint)), widget, SLOT(notificationActivated(uint)));
+            QObject::connect(notification, SIGNAL(activated(uint)), notification, SLOT(close()));
+        }
+
         notification->sendEvent();
     }
 
@@ -117,6 +132,11 @@ namespace OTRNotifications
     {
         KNotification *notification = prepareNotification(widget, targetContact);
         notification->setText(i18n("Authentication with %1 failed", targetContact->alias()));
+
+        if(widget) {
+            QObject::connect(notification, SIGNAL(activated(uint)), widget, SLOT(notificationActivated(uint)));
+            QObject::connect(notification, SIGNAL(activated(uint)), notification, SLOT(close()));
+        }
 
         notification->sendEvent();
     }
