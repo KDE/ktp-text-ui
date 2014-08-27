@@ -1,5 +1,14 @@
 [Desktop Entry]
 Name=OTR
+Name[ca]=OTR
+Name[en_GB]=OTR
+Name[it]=OTR
+Name[pt]=OTR
+Name[pt_BR]=OTR
+Name[sk]=OTR
+Name[sv]=OTR
+Name[uk]=OTR
+Name[x-test]=xxOTRxx
 Comment=If a message is an OTR message, it will not be shown
 Encoding=UTF-8
 Type=Service
