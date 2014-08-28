@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=OTR
 Name[ca]=OTR
+Name[cs]=OTR
 Name[en_GB]=OTR
 Name[it]=OTR
+Name[nl]=OTR
 Name[pt]=OTR
 Name[pt_BR]=OTR
 Name[sk]=OTR
@@ -10,6 +12,15 @@ Name[sv]=OTR
 Name[uk]=OTR
 Name[x-test]=xxOTRxx
 Comment=If a message is an OTR message, it will not be shown
+Comment[ca]=Si un missatge és OTR, no serà mostrat
+Comment[cs]=Pokud je zpráva OTR, nebude zobrazena
+Comment[it]=Se un messaggio è un messaggio OTR, non sarà mostrato
+Comment[nl]=Als een bericht een OTR-bericht is, zal het niet getoond worden
+Comment[pt]=Se uma dada mensagem for em OTR, não será apresentada
+Comment[pt_BR]=Se uma determinada mensagem for em OTR, não será apresentada
+Comment[sv]=Om ett meddelande är ett OTR-meddelande, kommer det inte att visas
+Comment[uk]=Якщо повідомлення є повідомленням OTR, його не буде показано
+Comment[x-test]=xxIf a message is an OTR message, it will not be shownxx
 Encoding=UTF-8
 Type=Service
 ServiceTypes=KTpTextUi/MessageFilter
