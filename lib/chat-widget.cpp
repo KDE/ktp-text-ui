@@ -797,9 +797,10 @@ void ChatWidget::onOTRTrustLevelChanged(KTp::OTRTrustLevel trustLevel, KTp::OTRT
 
 void ChatWidget::onOTRsessionRefreshed()
 {
-    const QLatin1String status = (d->channel->otrTrustLevel() == KTp::OTRTrustLevelPrivate) ?
-        QLatin1String("private") : QLatin1String("unverified");
-    d->ui.chatArea->addStatusMessage(i18n("Successfully refreshed %1 OTR session", status));
+    const QString msg = d->channel->otrTrustLevel() == KTp::OTRTrustLevelPrivate ?
+      i18n("Successfully refreshed private OTR session") :
+      i18n("Successfully refreshed unverified OTR session");
+    d->ui.chatArea->addStatusMessage(msg);
 }
 
 void ChatWidget::onPeerAuthenticationRequestedQA(const QString &question)
