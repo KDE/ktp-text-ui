@@ -2,6 +2,7 @@
 Name=OTR
 Name[ca]=OTR
 Name[cs]=OTR
+Name[de]=OTR
 Name[en_GB]=OTR
 Name[fi]=OTR
 Name[it]=OTR
