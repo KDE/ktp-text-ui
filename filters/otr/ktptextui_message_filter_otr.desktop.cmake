@@ -2,6 +2,7 @@
 Name=OTR
 Name[ca]=OTR
 Name[cs]=OTR
+Name[da]=OTR
 Name[de]=OTR
 Name[en_GB]=OTR
 Name[fi]=OTR
@@ -24,6 +25,7 @@ Name[x-test]=xxOTRxx
 Comment=If a message is an OTR message, it will not be shown
 Comment[ca]=Si un missatge és OTR, no serà mostrat
 Comment[cs]=Pokud je zpráva OTR, nebude zobrazena
+Comment[da]=Hvis en besked er en OTR-besked, vil den ikke blive vist
 Comment[en_GB]=If a message is an OTR message, it will not be shown
 Comment[fi]=Jos viesti on OTR-viesti, sitä ei näytetä
 Comment[it]=Se un messaggio è un messaggio OTR, non sarà mostrato
