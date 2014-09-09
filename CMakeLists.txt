@@ -13,7 +13,7 @@ set (CMAKE_MODULE_PATH
 
 set(KDE_MIN_VERSION "4.4.75")
 find_package (KDE4 ${KDE_MIN_VERSION} REQUIRED)
-find_package (TelepathyQt4 0.9.1 REQUIRED)
+find_package (TelepathyQt4 0.9.5 REQUIRED)
 find_package (KTp REQUIRED)
 find_package (KPeople 0.2)
 
