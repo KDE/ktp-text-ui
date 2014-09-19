@@ -27,6 +27,7 @@ Comment=If a message is an OTR message, it will not be shown
 Comment[ca]=Si un missatge és OTR, no serà mostrat
 Comment[cs]=Pokud je zpráva OTR, nebude zobrazena
 Comment[da]=Hvis en besked er en OTR-besked, vil den ikke blive vist
+Comment[de]=Wenn eine Nachricht vom Typ OTR ist, wird sie nicht angezeigt
 Comment[en_GB]=If a message is an OTR message, it will not be shown
 Comment[fi]=Jos viesti on OTR-viesti, sitä ei näytetä
 Comment[fr]=Si un message est un message OTR, il ne sera pas affiché
