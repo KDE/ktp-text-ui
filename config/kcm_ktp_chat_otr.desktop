@@ -11,6 +11,7 @@ X-KDE-RootOnly=false
 Categories=Qt;KDE;X-KDE-settings-network;
 
 Comment=Encrypt chat sessions with Off-The-Record encryption
+Comment[ca]=Encripta les sessions de xat amb l'encriptatge «Off-The-Record»
 Comment[cs]=Šifrovat rozhovory pomocí OTR (Off-The-Record encryption)
 Comment[de]=Chatsitzung mit Off-The-Record-Verschlüsselung sichern
 Comment[fr]=Chiffrez vos discussions avec le chiffrement Off-The-Record
@@ -28,6 +29,7 @@ Comment[sv]=Kryptera chattsessioner med Off-The-Record kryptering
 Comment[uk]=Шифрування сеансів спілкування за допомогою методу OTR (Off-The-Record)
 Comment[x-test]=xxEncrypt chat sessions with Off-The-Record encryptionxx
 Name=OTR
+Name[ca]=OTR
 Name[cs]=OTR
 Name[de]=OTR
 Name[fr]=OTR

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=OTR
+Name[ca]=OTR
 Name[cs]=OTR
 Name[de]=OTR
 Name[fr]=OTR
@@ -17,6 +18,7 @@ Name[sv]=OTR
 Name[uk]=OTR
 Name[x-test]=xxOTRxx
 Comment=If a message is an OTR message, it will not be shown
+Comment[ca]=Si un missatge és OTR, no es mostrarà
 Comment[cs]=Pokud je zpráva OTR, nebude zobrazena
 Comment[de]=Wenn eine Nachricht vom Typ OTR ist, wird sie nicht angezeigt
 Comment[fr]=Si un message est un message OTR, il ne sera pas affiché
