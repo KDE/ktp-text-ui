@@ -34,6 +34,7 @@ Comment[et]=Kui tegu on OTR-sõnumiga, seda ei näidata.
 Comment[fi]=Jos viesti on OTR-viesti, sitä ei näytetä
 Comment[fr]=Si un message est un message OTR, il ne sera pas affiché
 Comment[it]=Se un messaggio è un messaggio OTR, non sarà mostrato
+Comment[nb]=Hvis en melding er en OTR-melding blir den ikke vist
 Comment[nl]=Als een bericht een OTR-bericht is, zal het niet getoond worden
 Comment[pl]=Jeśli wiadomość jest wiadomością OTR, to nie zostanie pokazana
 Comment[pt]=Se uma dada mensagem for em OTR, não será apresentada
