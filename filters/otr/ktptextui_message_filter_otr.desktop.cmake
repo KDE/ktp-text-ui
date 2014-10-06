@@ -9,6 +9,7 @@ Name[fi]=OTR
 Name[fr]=OTR
 Name[nb]=OTR
 Name[nl]=OTR
+Name[nn]=OTR
 Name[pl]=OTR
 Name[pt]=OTR
 Name[pt_BR]=OTR
