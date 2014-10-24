@@ -47,8 +47,8 @@ inline Tp::ChannelClassSpecList channelClassList()
 }
 
 
-TelepathyChatUi::TelepathyChatUi()
-    : KTp::TelepathyHandlerApplication(true, -1, -1),
+TelepathyChatUi::TelepathyChatUi(int &argc, char *argv[])
+    : KTp::TelepathyHandlerApplication(argc, argv, -1, -1),
       AbstractClientHandler(channelClassList())
 {
     kDebug();

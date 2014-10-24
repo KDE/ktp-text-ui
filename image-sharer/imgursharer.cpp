@@ -20,11 +20,9 @@
 #include "imgursharer.h"
 
 #include <QString>
+#include <QtCore/qjsondocument.h>
+#include <QtCore/qjsonobject.h>
 #include <KUrl>
-#include <QDebug>
-
-#include <qjson/parser.h>
-
 
 // Taken from "share" Data Engine
 // key associated with plasma-devel@kde.org
@@ -53,16 +51,19 @@ QByteArray ImgurSharer::postBody(const QByteArray &imageData)
 
 void ImgurSharer::parseResponse(const QByteArray& responseData)
 {
-    QJson::Parser parser;
-    bool ok = false;
-    QVariantMap resultMap = parser.parse(responseData, &ok).toMap();
-    if ( resultMap.contains(QLatin1String("error")) ) {
+    QJsonDocument parser;
+    QJsonParseError error;
+    QJsonObject resultMap = parser.fromJson(responseData, &error).object();
+    if (error.error) {
         m_hasError = true;
-        QVariantMap errorMap = resultMap[QLatin1String("error")].toMap();
+        m_errorMessage = error.errorString();
+    } else if ( resultMap.contains(QLatin1String("error")) ) {
+        m_hasError = true;
+        QJsonObject errorMap = resultMap[QLatin1String("error")].toObject();
         m_errorMessage = errorMap[QLatin1String("message")].toString();
     } else {
-        QVariantMap uploadMap = resultMap[QLatin1String("upload")].toMap();
-        QVariantMap linksMap = uploadMap[QLatin1String("links")].toMap();
+        QJsonObject uploadMap = resultMap[QLatin1String("upload")].toObject();
+        QJsonObject linksMap = uploadMap[QLatin1String("links")].toObject();
         m_imageUrl = KUrl(linksMap[QLatin1String("original")].toString());
     }
 }

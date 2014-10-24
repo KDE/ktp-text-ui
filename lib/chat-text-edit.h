@@ -21,10 +21,11 @@
 #define CHATTEXTEDIT_H
 
 #include <QtCore/QList>
-#include <QtGui/QKeySequence>
+#include <QKeySequence>
 
 #include <KTextEdit>
 #include <KAction>
+#include <KShortcut>
 
 class ChannelContactModel;
 class ChatTextEdit : public KTextEdit

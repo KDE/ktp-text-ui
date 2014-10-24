@@ -137,3 +137,5 @@ QStringList BugzillaFilter::requiredScripts()
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<BugzillaFilter>();)
 K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_bugzilla"))
+
+#include "bugzilla-filter.moc"

@@ -26,7 +26,7 @@ K_PLUGIN_FACTORY(LatexConfigFactory, registerPlugin<LatexFilterConfig>();)
 K_EXPORT_PLUGIN(LatexConfigFactory( "kcm_ktptextui_message_filter_latex" ))
 
 LatexFilterConfig::LatexFilterConfig(QWidget* parent, const QVariantList& args)
-    : KCModule(LatexConfigFactory::componentData(), parent, args)
+    : KCModule(parent, args)
 {
     ui.setupUi(this);
     addConfig(LatexConfig::self(), this);

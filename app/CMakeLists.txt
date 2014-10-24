@@ -12,32 +12,27 @@ set(ktp-text-ui_SRCS
 )
 
 set (ktp-text-ui_LIBS
-        ${KDE4_KDECORE_LIBS}
-        ${KDE4_KDEUI_LIBS}
-        ${KDE4_KIO_LIBS}
-        ${KDE4_KEMOTICONS_LIBS}
-        ${TELEPATHY_QT4_LIBRARIES}
-        ${KTP_LIBRARIES}
-        ${KTP_MODELS_LIBRARIES}
-        ${KTP_WIDGETS_LIBRARIES}
-        ${KTP_OTR_LIBRARIES}
-        ${QT_QTWEBKIT_LIBRARY}
-        ${KDE4_KNOTIFYCONFIG_LIBS}
-        ${KDE4_KCMUTILS_LIBS}
+        Qt5::WebKit
+        KF5::KIOWidgets
+        KF5::Emoticons
+        KTp::CommonInternals
+        KTp::Models
+        KTp::Widgets
+        KTp::OTR
+        KF5::NotifyConfig
+        KF5::KCMUtils
         ${KDEPIMLIBS_KPIMTEXTEDIT_LIBS}
         ktpchat
 )
 
-if(KPEOPLE_FOUND)
-set (ktp-text-ui_LIBS
-    ${ktp-text-ui_LIBS}
-    ${KPEOPLE_LIBRARY}
-    ${KDEPIMLIBS_KABC_LIBS}
-    ${KPEOPLEWIDGETS_LIBRARY}
-)
-endif(KPEOPLE_FOUND)
+if(KF5People_FOUND)
+    set (ktp-text-ui_LIBS
+        ${ktp-text-ui_LIBS}
+        KF5::PeopleWidgets
+    )
+endif()
 
-kde4_add_executable(ktp-text-ui ${ktp-text-ui_SRCS})
+add_executable(ktp-text-ui ${ktp-text-ui_SRCS})
 
 target_link_libraries(ktp-text-ui
             ${ktp-text-ui_LIBS})

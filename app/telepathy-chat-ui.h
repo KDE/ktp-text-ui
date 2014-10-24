@@ -41,7 +41,7 @@ class TelepathyChatUi : public KTp::TelepathyHandlerApplication, public Tp::Abst
 {
     Q_OBJECT
 public:
-    TelepathyChatUi();
+    TelepathyChatUi(int& argc, char* argv[]);
     ~TelepathyChatUi();
 
     virtual void handleChannels(const Tp::MethodInvocationContextPtr<> & context,

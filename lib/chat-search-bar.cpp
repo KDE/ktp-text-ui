@@ -24,13 +24,14 @@
 #include <KLineEdit>
 #include <KLocale>
 #include <KPushButton>
+#include <KIcon>
 
 #include <QCheckBox>
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QToolButton>
 
-#include <QtGui/QKeyEvent>
+#include <QKeyEvent>
 
 ChatSearchBar::ChatSearchBar(QWidget *parent)
     : QWidget(parent)

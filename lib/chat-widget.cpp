@@ -32,9 +32,9 @@
 #include "authenticationwizard.h"
 #include "otr-notifications.h"
 
-#include <QtGui/QKeyEvent>
-#include <QtGui/QAction>
-#include <QtGui/QMenu>
+#include <QKeyEvent>
+#include <QAction>
+#include <QMenu>
 #include <QSortFilterProxyModel>
 
 #include <KColorDialog>
@@ -49,6 +49,7 @@
 #include <KFileDialog>
 #include <KMessageWidget>
 #include <KMessageBox>
+#include <KIconLoader>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/Message>
@@ -120,16 +121,15 @@ public:
 
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
-    KComponentData telepathyComponentData();
+    static QString telepathyComponentName();
     KTp::AbstractMessageFilter *notifyFilter;
 };
 
 
 //FIXME I would like this to be part of the main KDE Telepathy library as a static function somewhere.
-KComponentData ChatWidgetPrivate::telepathyComponentData()
+QString ChatWidgetPrivate::telepathyComponentName()
 {
-    KAboutData telepathySharedAboutData("ktelepathy",0,KLocalizedString(),0);
-    return KComponentData(telepathySharedAboutData);
+    return QStringLiteral("ktelepathy");
 }
 
 ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr &account, QWidget *parent)

@@ -24,7 +24,9 @@
 #include <KTp/message-processor.h>
 
 #include <KDebug>
+#include <KConfig>
 #include <KIconLoader>
+#include <KLocalizedString>
 
 #include <QLabel>
 #include <QResizeEvent>

@@ -19,10 +19,10 @@
 
 #include <KUniqueApplication>
 #include <KCmdLineArgs>
-#include <KAboutData>
+#include <k4aboutdata.h>
 
 #include "log-viewer.h"
-#include "version.h"
+#include "../ktptextui_version.h"
 
 #include <TelepathyQt/AccountManager>
 
@@ -30,16 +30,16 @@
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData("ktp-log-viewer",
+    K4AboutData aboutData("ktp-log-viewer",
                          0,
                          ki18n("KDE IM Log Viewer"),
-                         KTP_TEXT_UI_VERSION);
+                         KTP_TEXT_UI_VERSION_STRING);
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "kde@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
     aboutData.addAuthor(ki18n("Dan Vrátil"), ki18n("Developer"), "dvratil@redhat.com");
     aboutData.setProductName("telepathy/log-viewer"); //set the correct name for bug reporting
     aboutData.setProgramIconName(QLatin1String("documentation"));
-    aboutData.setLicense(KAboutData::License_GPL_V2);
+    aboutData.setLicense(K4AboutData::License_GPL_V2);
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 

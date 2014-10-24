@@ -16,21 +16,21 @@ set(ktp-log-viewer_SRCS
 
 add_subdirectory(config)
 
-kde4_add_ui_files(ktp-log-viewer_SRCS log-viewer.ui)
+qt5_wrap_ui(ktp-log-viewer_SRCS log-viewer.ui)
 
-kde4_add_executable(ktp-log-viewer ${ktp-log-viewer_SRCS})
+add_executable(ktp-log-viewer ${ktp-log-viewer_SRCS})
 
 target_link_libraries(ktp-log-viewer
-            ${KDE4_KDECORE_LIBS}
+            
             ${KDE4_KDEUI_LIBS}
-            ${KDE4_KIO_LIBS}
+            KF5::KIOWidgets
             ${TELEPATHY_QT4_LIBRARIES}
-            ${KDE4_KEMOTICONS_LIBS}
-            ${KDE4_KCMUTILS_LIBS}
-            ${KDE4_KDEWEBKIT_LIBRARY}
-            ${KTP_LIBRARIES}
-            ${KTP_LOGGER_LIBRARIES}
-            ${KTP_MODELS_LIBRARIES}
+            KF5::Emoticons
+            KF5::KCMUtils
+            KF5::WebKit
+            KTp::CommonInternals
+            KTp::Logger
+            KTp::Models
             ktpchat)
 
 install(TARGETS ktp-log-viewer DESTINATION ${BIN_INSTALL_DIR})

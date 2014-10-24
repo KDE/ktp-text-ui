@@ -29,10 +29,9 @@ K_PLUGIN_FACTORY(KCMTelepathyLogViewerBehaviorConfigFactory, registerPlugin<Beha
 K_EXPORT_PLUGIN(KCMTelepathyLogViewerBehaviorConfigFactory("ktp_logviewer_behavior", "kcm_ktp_logviewer_behavior"))
 
 BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
-    : KCModule(KCMTelepathyLogViewerBehaviorConfigFactory::componentData(), parent, args)
+    : KCModule(parent, args)
     , ui(new Ui::BehaviorConfig())
 {
-
     ui->setupUi(this);
 
     ui->sortButtonGroup->setId(ui->sortOldestOnTop, MessageView::SortOldestTop);
@@ -88,4 +87,4 @@ void BehaviorConfig::onRadioChanged()
     Q_EMIT changed(true);
 }
 
-#include "ui_behavior-config.h"
+#include "behavior-config.moc"

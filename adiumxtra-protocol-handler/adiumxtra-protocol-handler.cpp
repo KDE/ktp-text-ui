@@ -32,13 +32,13 @@
 #include <KMimeType>
 #include <KAboutData>
 #include <KComponentData>
+#include <KUrl>
 
 // FIXME: Part of a hack to let adiumxtra-protocol-handler use the main ktelepathy.notifyrc because
 // the string freeze does not permit adding a new notifyrc only for adiumxtra-protocol-handler.
 // Remove this after 0.7 is released.
-static KComponentData ktelepathyComponentData() {
-    KAboutData telepathySharedAboutData("ktelepathy",0,KLocalizedString(),0);
-    return KComponentData(telepathySharedAboutData);
+static QString ktelepathyComponentName() {
+    return QStringLiteral("ktelepathy");
 }
 
 AdiumxtraProtocolHandler::AdiumxtraProtocolHandler()
@@ -94,7 +94,7 @@ void AdiumxtraProtocolHandler::install()
         notification->setActions( QStringList() << i18n("OK") );
         QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
         QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
-        notification->setComponentData(ktelepathyComponentData());
+        notification->setComponentName(ktelepathyComponentName());
         notification->sendEvent();
         kDebug() << "Unsupported file type" << currentBundleMimeType;
         kDebug() << tmpFile->fileName();
@@ -152,7 +152,7 @@ void AdiumxtraProtocolHandler::install()
     QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(close()));
     QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
     notification->setActions( QStringList() << i18n("OK") );
-    notification->setComponentData(ktelepathyComponentData());
+    notification->setComponentName(ktelepathyComponentName());
     notification->sendEvent();
     kDebug() << "Sent error";
 

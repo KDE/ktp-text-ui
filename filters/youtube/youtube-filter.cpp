@@ -77,3 +77,5 @@ void YoutubeFilter::filterMessage(KTp::Message &message, const KTp::MessageConte
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<YoutubeFilter>();)
 K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_youtube"))
+
+#include "youtube-filter.moc"

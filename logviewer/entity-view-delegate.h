@@ -22,7 +22,7 @@
 #ifndef ENTITYVIEWDELEGATE_H
 #define ENTITYVIEWDELEGATE_H
 
-#include <QtGui/QStyledItemDelegate>
+#include <QStyledItemDelegate>
 
 class EntityViewDelegate : public QStyledItemDelegate
 {

@@ -22,8 +22,8 @@
 
 #include "ktpchat_export.h"
 
-#include <QtWebKit/QWebPage>
-#include <QtGui/QWidget>
+#include <QWebPage>
+#include <QWidget>
 
 class KLineEdit;
 class KPushButton;

@@ -27,6 +27,9 @@
 #include "adium-theme-status-info.h"
 
 #include <KMessageBox>
+#include <KLocalizedString>
+#include <KIconLoader>
+#include <KGlobalSettings>
 
 AppearanceConfigTab::AppearanceConfigTab(QWidget *parent, TabMode mode)
     : QWidget(parent),

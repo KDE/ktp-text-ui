@@ -34,9 +34,8 @@
 // FIXME: Part of a hack to let adiumxtra-protocol-handler use the main ktelepathy.notifyrc because
 // the string freeze does not permit adding a new notifyrc only for adiumxtra-protocol-handler.
 // Remove this after 0.7 is released.
-static KComponentData ktelepathyComponentData() {
-    KAboutData telepathySharedAboutData("ktelepathy",0,KLocalizedString(),0);
-    return KComponentData(telepathySharedAboutData);
+static QString ktelepathyComponentName() {
+    return QStringLiteral("ktelepathy");
 }
 
 ChatStyleInstaller::ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFile)
@@ -141,7 +140,7 @@ void ChatStyleInstaller::showRequest()
     QObject::connect(notification, SIGNAL(action2Activated()), this, SLOT(ignoreRequest()));
     QObject::connect(notification, SIGNAL(action2Activated()), notification, SLOT(close()));
 
-    notification->setComponentData(ktelepathyComponentData());
+    notification->setComponentName(ktelepathyComponentName());
     notification->sendEvent();
 }
 
@@ -159,7 +158,7 @@ void ChatStyleInstaller::showResult()
         notification = new KNotification(QLatin1String("chatstyleFailure"));
         notification->setText( i18n("Installation of Chatstyle %1 failed.", this->bundleName()) );
     }
-    notification->setComponentData(ktelepathyComponentData());
+    notification->setComponentName(ktelepathyComponentName());
     notification->sendEvent();
 
     Q_EMIT showedResult();

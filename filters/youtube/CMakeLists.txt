@@ -1,17 +1,9 @@
-set (ktptextui_message_filter_youtube_SRCS
-     youtube-filter.cpp
-)
-
-kde4_add_plugin (ktptextui_message_filter_youtube
-                 ${ktptextui_message_filter_youtube_SRCS}
-)
+add_library(ktptextui_message_filter_youtube MODULE youtube-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_youtube
     ktpchat
-    ${QT_LIBRARIES}
-    ${KDE4_KIO_LIBS}
-    ${TELEPATHY_QT4_LIBRARIES}
-    ${KTP_LIBRARIES}
+    KF5::KIOWidgets
+    KTp::CommonInternals
 )
 
 # Install:

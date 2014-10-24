@@ -26,6 +26,7 @@
 #include <KDebug>
 #include <KDialog>
 #include <KLocale>
+#include <KIcon>
 
 class KeyGenDialog : public KDialog
 {

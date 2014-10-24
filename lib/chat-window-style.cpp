@@ -30,6 +30,7 @@
 
 // KDE includes
 #include <KDebug>
+#include <KGlobal>
 #include <KLocale>
 #include <KStandardDirs>
 #include <KGlobalSettings>

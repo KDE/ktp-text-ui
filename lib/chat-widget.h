@@ -27,8 +27,8 @@
 #include "types.h"
 
 #include <QtCore/QString>
-#include <QtGui/QWidget>
-#include <QtWebKit/QWebPage>
+#include <QWidget>
+#include <QWebPage>
 
 #include <KIcon>
 #include <KColorScheme>

@@ -21,12 +21,13 @@
 #include "entity-view-delegate.h"
 #include "person-entity-merge-model.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QApplication>
+#include <QPainter>
+#include <QApplication>
 
 #include <KDE/KIconLoader>
 #include <KDE/KGlobalSettings>
 #include <KDE/KDebug>
+#include <KDE/KIcon>
 
 #include <TelepathyQt/Account>
 

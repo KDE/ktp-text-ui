@@ -10,45 +10,39 @@ set(kcm_ktp_chat_appearance_UI appearance-config.ui)
 set(kcm_ktp_chat_behavior_UI behavior-config.ui)
 set(kcm_ktp_chat_otr_UI otr-config.ui)
 
-kde4_add_ui_files(kcm_ktp_chat_appearance_SRCS ${kcm_ktp_chat_appearance_UI})
-kde4_add_ui_files(kcm_ktp_chat_behavior_SRCS ${kcm_ktp_chat_behavior_UI})
-kde4_add_ui_files(kcm_ktp_chat_behavior_SRCS ${kcm_ktp_chat_behavior_UI})
-kde4_add_ui_files(kcm_ktp_chat_otr_SRCS ${kcm_ktp_chat_otr_UI})
+qt5_wrap_ui(kcm_ktp_chat_appearance_SRCS ${kcm_ktp_chat_appearance_UI})
+qt5_wrap_ui(kcm_ktp_chat_behavior_SRCS ${kcm_ktp_chat_behavior_UI})
+qt5_wrap_ui(kcm_ktp_chat_behavior_SRCS ${kcm_ktp_chat_behavior_UI})
+qt5_wrap_ui(kcm_ktp_chat_otr_SRCS ${kcm_ktp_chat_otr_UI})
 
-kde4_add_plugin(kcm_ktp_chat_appearance ${kcm_ktp_chat_appearance_SRCS})
-kde4_add_plugin(kcm_ktp_chat_behavior ${kcm_ktp_chat_behavior_SRCS})
-kde4_add_plugin(kcm_ktp_chat_messages ${kcm_ktp_chat_messages_SRCS})
-kde4_add_plugin(kcm_ktp_chat_otr ${kcm_ktp_chat_otr_SRCS})
+add_library(kcm_ktp_chat_appearance MODULE ${kcm_ktp_chat_appearance_SRCS})
+add_library(kcm_ktp_chat_behavior MODULE ${kcm_ktp_chat_behavior_SRCS})
+add_library(kcm_ktp_chat_messages MODULE ${kcm_ktp_chat_messages_SRCS})
+add_library(kcm_ktp_chat_otr MODULE ${kcm_ktp_chat_otr_SRCS})
 
 target_link_libraries(kcm_ktp_chat_appearance
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTWEBKIT_LIBRARY}
-    ${KDE4_KCMUTILS_LIBS}
+    Qt5::WebKitWidgets
+    KF5::KCMUtils
+    KF5::KDELibs4Support
     ktpchat
 )
 target_link_libraries(kcm_ktp_chat_behavior
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
+    KF5::KDELibs4Support
+    KF5::KCMUtils
     ktpchat
     ktpimagesharer
 )
 target_link_libraries(kcm_ktp_chat_messages
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KUTILS_LIBS}
-    ${KTP_LIBRARIES}
+    KF5::KDELibs4Support
+    KF5::KCMUtils
+    KTp::CommonInternals
     ktpchat
 )
 
 target_link_libraries(kcm_ktp_chat_otr
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KUTILS_LIBS}
-    ${KTP_LIBRARIES}
-    ${KTP_OTR_LIBRARIES}
-    ${TELEPATHY_QT4_LIBRARIES}
+    KTp::CommonInternals
+    KTp::OTR
+    KF5::KDELibs4Support
     ktpchat
 )
 

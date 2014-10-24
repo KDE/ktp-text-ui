@@ -23,7 +23,7 @@
 #include "chat-widget.h"
 
 #include <QtCore/QString>
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <KIcon>
 #include <KColorScheme>
 

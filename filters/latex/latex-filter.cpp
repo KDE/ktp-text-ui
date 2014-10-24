@@ -184,3 +184,5 @@ LatexFilter::~LatexFilter()
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<LatexFilter>();)
 K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_latex"))
+
+#include "latex-filter.moc"

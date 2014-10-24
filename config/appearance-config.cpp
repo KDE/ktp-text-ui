@@ -30,14 +30,17 @@
 #include "adium-theme-status-info.h"
 
 #include <KDebug>
+#include <KDialog>
 #include <KLocalizedString>
 #include <KPluginFactory>
+#include <KIcon>
+#include <KSharedConfig>
 
 K_PLUGIN_FACTORY(KCMTelepathyChatAppearanceConfigFactory, registerPlugin<AppearanceConfig>();)
 K_EXPORT_PLUGIN(KCMTelepathyChatAppearanceConfigFactory("ktp_chat_appearance", "kcm_ktp_chat_appearance"))
 
 AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList &args)
-    : KCModule(KCMTelepathyChatAppearanceConfigFactory::componentData(), parent, args)
+    : KCModule(parent, args)
 {
     QVBoxLayout *topLayout = new QVBoxLayout(this);
     topLayout->setMargin(0);
@@ -89,3 +92,5 @@ void AppearanceConfig::save()
 
     Q_EMIT reloadTheme();
 }
+
+#include "appearance-config.moc"

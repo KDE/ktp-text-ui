@@ -38,6 +38,7 @@ class KDE_TELEPATHY_CHAT_EXPORT TextChatConfig : QObject
         NewWindow,
         FirstWindow
     };
+    ~TextChatConfig();
 
     // settings get loaded when instance gets created
     static TextChatConfig *instance();

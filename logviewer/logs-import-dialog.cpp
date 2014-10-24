@@ -22,11 +22,12 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QProgressBar>
+#include <QIcon>
 #include <KListWidget>
 #include <KLocalizedString>
-#include <KDebug>
 #include <KTp/logs-importer.h>
 #include <TelepathyQt/Account>
+#include <KIcon>
 
 Q_DECLARE_METATYPE(Tp::AccountPtr);
 
@@ -36,7 +37,7 @@ LogsImportDialog::LogsImportDialog(QObject *parent)
     Q_UNUSED(parent);
 
     setWindowTitle(i18n("Import Kopete Logs"));
-    setWindowIcon(KIcon::fromTheme(QLatin1String("telepathy-kde")));
+    setWindowIcon(QIcon::fromTheme(QLatin1String("telepathy-kde")));
 
     QWidget *mainWidget = new QWidget(this);
     setMainWidget(mainWidget);

@@ -21,7 +21,7 @@
 #include "telepathy-chat-ui.h"
 
 #include "defines.h"
-#include "version.h"
+#include "../ktptextui_version.h"
 
 #include <TelepathyQt/ClientRegistrar>
 #include <TelepathyQt/AccountFactory>
@@ -35,20 +35,20 @@
 #include <KTp/core.h>
 #include <KTp/OTR/types.h>
 
-#include <KAboutData>
+#include <k4aboutdata.h>
 #include <KCmdLineArgs>
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData("ktp-text-ui", 0,
+    K4AboutData aboutData("ktp-text-ui", 0,
                          ki18n("Chat Application"),
-                         KTP_TEXT_UI_VERSION);
+                         KTP_TEXT_UI_VERSION_STRING);
     aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "david@davidedmundson.co.uk");
     aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
     aboutData.addAuthor(ki18n("Francesco Nwokeka"), ki18n("Developer"), "francesco.nwokeka@gmail.com");
     aboutData.addAuthor(ki18n("Marcin Ziemiński"), ki18n("Developer"), "zieminn@gmail.com");
     aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
-    aboutData.setLicense(KAboutData::License_GPL_V2);
+    aboutData.setLicense(K4AboutData::License_GPL_V2);
     aboutData.setProgramIconName(QLatin1String("telepathy-kde"));
 
     KCmdLineArgs::init(argc, argv, &aboutData);
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
     Tp::ClientRegistrarPtr registrar = Tp::ClientRegistrar::create(KTp::accountFactory(), KTp::connectionFactory(), channelFactory, KTp::contactFactory());
 
-    Tp::SharedPtr<TelepathyChatUi> app = Tp::SharedPtr<TelepathyChatUi>(new TelepathyChatUi);
+    Tp::SharedPtr<TelepathyChatUi> app(new TelepathyChatUi(argc, argv));
     Tp::AbstractClientPtr handler = Tp::AbstractClientPtr(app);
     registrar->registerClient(handler, QLatin1String(KTP_TEXTUI_CLIENT_NAME));
 

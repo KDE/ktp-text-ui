@@ -49,6 +49,7 @@
 #include <KToolBar>
 #include <KToolInvocation>
 #include <KCModuleProxy>
+#include <KIconLoader>
 
 #include <QEvent>
 #include <QWidgetAction>
@@ -77,7 +78,7 @@
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
-K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
+Q_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
                           (QLatin1String(PREFERRED_RFB_HANDLER)));
 
 ChatWindow::ChatWindow()
@@ -585,7 +586,7 @@ void ChatWindow::onTabStateChanged()
 {
     kDebug();
 
-    KIcon windowIcon;
+    QIcon windowIcon;
     ChatTab *sender = qobject_cast<ChatTab*>(QObject::sender());
     if (sender) {
         int tabIndex = m_tabWidget->indexOf(sender);

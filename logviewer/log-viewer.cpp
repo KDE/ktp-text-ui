@@ -35,6 +35,7 @@
 #include <KTp/Models/contacts-model.h>
 
 #include <QWebFrame>
+#include <KShortcut>
 #include <KLineEdit>
 #include <KPixmapSequence>
 #include <KMessageBox>
@@ -47,6 +48,9 @@
 #include <KActionCollection>
 #include <KMenuBar>
 #include <KSettings/Dialog>
+#include <KLocalizedString>
+#include <KIcon>
+#include <KIconLoader>
 
 #include <KDE/KCModuleProxy>
 
@@ -97,7 +101,7 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     ui->entityList->setIndentation(0);
     ui->entityList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->entityFilter->setProxy(m_filterModel);
-    ui->entityFilter->lineEdit()->setClickMessage(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
+    ui->entityFilter->lineEdit()->setPlaceholderText(i18nc("Placeholder text in line edit for filtering contacts", "Filter contacts..."));
 
     m_datesModel = new DatesModel(this);
     ui->datesView->setModel(m_datesModel);

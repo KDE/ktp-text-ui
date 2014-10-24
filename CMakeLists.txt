@@ -1,5 +1,7 @@
 project(ktp-text-ui)
 
+cmake_minimum_required(VERSION 2.8.12)
+
 set(KTP_TEXT_UI_VERSION "0.8.80")
 set(KTP_MESSAGE_FILTER_FRAMEWORK_VERSION "4")
 set(IS_KTP_INTERNAL_MODULE TRUE)
@@ -11,42 +13,32 @@ set (CMAKE_MODULE_PATH
 )
 # cmake_policy(SET CMP0002 OLD)
 
-set(KDE_MIN_VERSION "4.4.75")
-find_package (KDE4 ${KDE_MIN_VERSION} REQUIRED)
+find_package(ECM 1.3.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+
+find_package (KF5 REQUIRED COMPONENTS Archive Sonnet WidgetsAddons Service Emoticons KIO KCMUtils NotifyConfig I18n WebKit KDELibs4Support)
+find_package (Qt5 REQUIRED COMPONENTS WebKitWidgets)
 find_package (TelepathyQt4 0.9.5 REQUIRED)
 find_package (KTp REQUIRED)
-find_package (KPeople 0.2)
 
+find_package (KF5People)
 
-macro_log_feature(KPEOPLE_FOUND "KPeople" "Support for KDE Contact Aggregation" "https://projects.kde.org/libkpeople" FALSE "" "")
-macro_display_feature_log()
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
+include(ECMSetupVersion)
+include(FeatureSummary)
 
-if (KPEOPLE_FOUND)
+set_package_properties(KF5People PROPERTIES DESCRIPTION "KDE Contacts aggregation"
+                       TYPE OPTIONAL
+)
+
+if (KF5People_FOUND)
     add_definitions(-DHAVE_KPEOPLE)
-    find_package (KdepimLibs REQUIRED)
-    include_directories(${KPEOPLE_INCLUDES} ${KDEPIMLIBS_INCLUDE_DIRS})
-endif (KPEOPLE_FOUND)
+endif ()
 
 # FUTURE: When we can depend on KDE 4.10, use emoticoncontexteditaction from here
 # find_package(KdepimLibs 4.10 REQUIRED)
-
-include (CheckIncludeFiles)
-include (KDE4Defaults)
-include (MacroLibrary)
-
-include_directories (${KDE4_INCLUDES}
-                     ${TELEPATHY_QT4_INCLUDE_DIR}
-                     ${QT_QTWEBKIT_INCLUDES}
-                     ${KTP_INCLUDE_DIR}
-                     "${CMAKE_CURRENT_SOURCE_DIR}/lib"
-)
-
-add_definitions (${KDE4_DEFINITIONS}
-                 -DQT_NO_CAST_FROM_ASCII
-                 -DQT_NO_KEYWORDS)
-
-configure_file(version.h.in ${CMAKE_CURRENT_BINARY_DIR}/version.h @ONLY)
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(image-sharer)
 add_subdirectory(lib)
@@ -56,3 +48,8 @@ add_subdirectory(data)
 add_subdirectory(adiumxtra-protocol-handler)
 add_subdirectory(filters)
 add_subdirectory(logviewer)
+
+ecm_setup_version(${KTP_TEXT_UI_VERSION} VARIABLE_PREFIX KTP_TEXT_UI
+                        VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/ktptextui_version.h")
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

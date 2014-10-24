@@ -22,9 +22,9 @@
 
 #include "contact-delegate.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QPainterPath>
-#include <QtGui/QToolTip>
+#include <QPainter>
+#include <QPainterPath>
+#include <QToolTip>
 #include <QApplication>
 #include <QStyle>
 #include <QHelpEvent>

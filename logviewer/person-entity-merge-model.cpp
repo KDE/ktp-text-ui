@@ -31,6 +31,8 @@
 #include <KDE/KLocalizedString>
 #include <KDE/KIconLoader>
 
+#include <QPixmap>
+
 class PersonEntityMergeModel::Item
 {
   public:

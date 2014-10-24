@@ -1,21 +1,9 @@
-set (ktptextui_message_filter_tts_SRCS
-     tts-filter.cpp
-)
+qt5_add_dbus_interfaces(ktptextui_message_filter_tts_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
-kde4_add_ui_files (ktptextui_message_filter_tts_SRCS
-)
-
-qt4_add_dbus_interfaces(ktptextui_message_filter_tts_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
-
-kde4_add_plugin (ktptextui_message_filter_tts
-                 ${ktptextui_message_filter_tts_SRCS}
-)
+add_library (ktptextui_message_filter_tts MODULE tts-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_tts
-    ${QT_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
-    ${TELEPATHY_QT4_LIBRARIES}
-    ${KTP_LIBRARIES}
+    KTp::CommonInternals
 )
 
 # Install:

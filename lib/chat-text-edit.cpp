@@ -21,9 +21,9 @@
 #include "channel-contact-model.h"
 #include "text-chat-config.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QAction>
+#include <QMenu>
+#include <QContextMenuEvent>
+#include <QAction>
 #include <QtCore/QTimer>
 #include <QtCore/QDebug>
 #include <QtCore/QString>
@@ -32,6 +32,7 @@
 
 #include <KStandardShortcut>
 #include <KActionCollection>
+#include <KShortcut>
 
 #define MAXHISTORY 100
 

@@ -19,8 +19,8 @@
 
 #include "dates-view-delegate.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QApplication>
+#include <QPainter>
+#include <QApplication>
 
 #include <KDE/KGlobalSettings>
 #include <KDE/KIconLoader>

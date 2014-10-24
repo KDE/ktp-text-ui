@@ -57,3 +57,5 @@ void SearchexpansionFilter::filterOutgoingMessage(KTp::OutgoingMessage &message,
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<SearchexpansionFilter>();)
 K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_searchexpansion"))
+
+#include "searchexpansion-filter.moc"
