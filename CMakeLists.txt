@@ -18,7 +18,6 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 find_package (KF5 REQUIRED COMPONENTS Archive Sonnet WidgetsAddons Service Emoticons KIO KCMUtils NotifyConfig I18n WebKit KDELibs4Support)
 find_package (Qt5 REQUIRED COMPONENTS WebKitWidgets)
-find_package (TelepathyQt4 0.9.5 REQUIRED)
 find_package (KTp REQUIRED)
 
 find_package (KF5People)
