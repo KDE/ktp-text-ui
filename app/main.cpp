@@ -37,9 +37,16 @@
 
 #include <k4aboutdata.h>
 #include <KCmdLineArgs>
+#include <Kdelibs4ConfigMigrator>
 
 int main(int argc, char *argv[])
 {
+
+    Kdelibs4ConfigMigrator migrator(QLatin1String("ktp-text-ui"));
+    migrator.setConfigFiles(QStringList() << QLatin1String("ktp-text-uirc"));
+    migrator.setUiFiles(QStringList() << QLatin1String("chatwindow.rc"));
+    migrator.migrate();
+
     K4AboutData aboutData("ktp-text-ui", 0,
                          ki18n("Chat Application"),
                          KTP_TEXT_UI_VERSION_STRING);
