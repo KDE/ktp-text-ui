@@ -45,4 +45,4 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.Telepathy.Client.KTp.T
         DESTINATION ${DBUS_SERVICES_INSTALL_DIR})
 install(FILES KTp.TextUi.client DESTINATION ${SHARE_INSTALL_PREFIX}/telepathy/clients/)
 install(FILES chatwindow.rc
-        DESTINATION  ${DATA_INSTALL_DIR}/ktp-text-ui/)
+  DESTINATION  ${KXMLGUI_INSTALL_DIR}/ktp-text-ui/)
