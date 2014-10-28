@@ -70,7 +70,7 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     KXmlGuiWindow(parent),
     ui(new Ui::LogViewer)
 {
-    setWindowIcon(KIcon(QLatin1String("documentation")));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("documentation")));
 
     QWidget *widget = new QWidget(this);
     setCentralWidget(widget);
@@ -133,31 +133,31 @@ void LogViewer::setupActions()
     KStandardAction::showMenubar(this->menuBar(), SLOT(setVisible(bool)), actionCollection());
 
     KAction *configure = new KAction(i18n("&Configure LogViewer"), this);
-    configure->setIcon(KIcon(QLatin1String("configure")));
+    configure->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
     connect(configure, SIGNAL(triggered(bool)), SLOT(slotConfigure()));
 
     KAction *clearAccHistory = new KAction(i18n("Clear &account history"), this);
-    clearAccHistory->setIcon(KIcon(QLatin1String("edit-clear-history")));
+    clearAccHistory->setIcon(QIcon::fromTheme(QStringLiteral("edit-clear-history")));
     connect(clearAccHistory, SIGNAL(triggered(bool)), SLOT(slotClearAccountHistory()));
 
     KAction *clearContactHistory = new KAction(i18n("Clear &contact history"), this);
-    clearContactHistory->setIcon(KIcon(QLatin1String("edit-clear-history")));
+    clearContactHistory->setIcon(QIcon::fromTheme(QStringLiteral("edit-clear-history")));
     clearContactHistory->setEnabled(false);
     connect(clearContactHistory, SIGNAL(triggered(bool)), SLOT(slotClearContactHistory()));
 
     KAction *importKopeteLogs = new KAction(i18n("&Import Kopete Logs"), this);
-    importKopeteLogs->setIcon(KIcon(QLatin1String("document-import")));
+    importKopeteLogs->setIcon(QIcon::fromTheme(QStringLiteral("document-import")));
     connect(importKopeteLogs, SIGNAL(triggered(bool)), SLOT(slotImportKopeteLogs()));
 
     KAction *prevConversation = new KAction(i18n("&Previous Conversation"), this);
     prevConversation->setShortcut(KShortcut(Qt::CTRL + Qt::Key_P));
-    prevConversation->setIcon(KIcon(QLatin1String("go-previous")));
+    prevConversation->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
     prevConversation->setEnabled(false);
     connect(prevConversation, SIGNAL(triggered(bool)), SLOT(slotJumpToPrevConversation()));
 
     KAction *nextConversation = new KAction(i18n("&Next Conversation"), this);
     nextConversation->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
-    nextConversation->setIcon(KIcon(QLatin1String("go-next")));
+    nextConversation->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     nextConversation->setEnabled(false);
     connect(nextConversation, SIGNAL(triggered(bool)), SLOT(slotJumpToNextConversation()));
 

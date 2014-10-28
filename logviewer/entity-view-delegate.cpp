@@ -131,7 +131,7 @@ void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewI
 
     const Tp::AccountPtr &account = index.data(KTp::AccountRole).value<Tp::AccountPtr>();
     if (isEntity && account) {
-        const QPixmap accountIcon = KIcon(account->iconName()).pixmap(m_avatarSize);
+        const QPixmap accountIcon = QIcon::fromTheme(account->iconName()).pixmap(m_avatarSize);
         QRect accountIconRect = optV4.rect;
         accountIconRect.adjust(optV4.rect.width() - m_avatarSize - m_spacing, 0, 0, 0);
         style->drawItemPixmap(painter, accountIconRect, 0, accountIcon);

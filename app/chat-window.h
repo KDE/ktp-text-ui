@@ -34,7 +34,6 @@ namespace Sonnet {
     class DictionaryComboBox;
 }
 
-class KIcon;
 class ChatTab;
 class QLabel;
 class QDBusPendingCallWatcher;
@@ -54,7 +53,7 @@ public:
 
     void destroyTab(ChatTab *tab);
     void setTabText(int index, const QString &newTitle);
-    void setTabIcon(int index, const KIcon &newIcon);
+    void setTabIcon(int index, const QIcon &newIcon);
     void setTabTextColor(int index,const QColor &color);
 
     /** retrieves tab with given textChannel if it exists
@@ -102,7 +101,7 @@ private Q_SLOTS:
     void onSearchActionToggled();                               /** toggle search bar visibility */
     void onTabStateChanged();
     void onTabTextChanged(const QString &newTitle);
-    void onTabIconChanged(const KIcon &newIcon);
+    void onTabIconChanged(const QIcon &newIcon);
     void onVideoCallTriggered();                                /** start a video call */
     void onUnblockContactTriggered();                           /** Unblocks contact when already blocked */
     void onShareDesktopTriggered();                             /** start a desktop share */

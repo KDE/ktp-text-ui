@@ -81,7 +81,7 @@ void LogsImportDialog::importLogs(const QList< Tp::AccountPtr >& accounts)
     Q_FOREACH(const Tp::AccountPtr &account, accounts) {
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(account->displayName());
-        item->setIcon(KIcon(account->iconName()));
+        item->setIcon(QIcon::fromTheme(account->iconName()));
         item->setCheckState(Qt::Checked);
         item->setData(Qt::UserRole + 1, QVariant::fromValue(account));
 

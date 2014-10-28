@@ -44,7 +44,7 @@ class KeyGenDialog : public KDialog
             this->setCaption(i18n("Please wait"));
             this->setButtons(KDialog::Ok);
             this->enableButton(KDialog::Ok, false);
-            ui.keyIcon->setPixmap(KIcon(QLatin1String("dialog-password")).pixmap( 48, 48 ));
+            ui.keyIcon->setPixmap(QIcon::fromTheme(QStringLiteral("dialog-password")).pixmap( 48, 48 ));
         }
         ~KeyGenDialog()
         {

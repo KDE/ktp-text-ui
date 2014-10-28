@@ -49,11 +49,11 @@ AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList &args)
     KTabWidget *tabWidget = new KTabWidget(this);
 
     m_singleTab = new AppearanceConfigTab(this, AppearanceConfigTab::NormalChat);
-    tabWidget->addTab(m_singleTab, KIcon(), i18nc("@title:tab", "Normal Chat"));
+    tabWidget->addTab(m_singleTab, QIcon(), i18nc("@title:tab", "Normal Chat"));
     connect(m_singleTab, SIGNAL(tabChanged()), this, SLOT(changed()));
 
     m_groupTab = new AppearanceConfigTab(this, AppearanceConfigTab::GroupChat);
-    tabWidget->addTab(m_groupTab, KIcon(), i18nc("@title:tab", "Group Chat"));
+    tabWidget->addTab(m_groupTab, QIcon(), i18nc("@title:tab", "Group Chat"));
     connect(m_groupTab, SIGNAL(tabChanged()), this, SLOT(changed()));
 
     topLayout->addWidget(tabWidget, 0, 0);

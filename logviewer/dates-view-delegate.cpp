@@ -183,7 +183,7 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
 
     const Tp::AccountPtr &account = index.data(DatesModel::AccountRole).value<Tp::AccountPtr>();
     if (account) {
-        const QPixmap accountIcon = KIcon(account->iconName()).pixmap(iconSize);
+        const QPixmap accountIcon = QIcon::fromTheme(account->iconName()).pixmap(iconSize);
         QRect accountIconRect = optV4.rect;
         accountIconRect.adjust(optV4.rect.width() - iconSize - m_spacing, 0, 0, 0);
         style->drawItemPixmap(painter, accountIconRect, 0, accountIcon);

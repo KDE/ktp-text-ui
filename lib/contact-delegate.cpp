@@ -74,7 +74,7 @@ void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QPixmap avatar;
 
     if (index.data(ChannelContactModel::IsTypingRole).toBool()) {
-        avatar = KIcon(QLatin1String("document-edit")).pixmap(KIconLoader::SizeSmallMedium);
+        avatar = QIcon::fromTheme(QStringLiteral("document-edit")).pixmap(KIconLoader::SizeSmallMedium);
     } else {
         avatar = qvariant_cast<QPixmap>(index.data(KTp::ContactAvatarPixmapRole));
     }
@@ -86,7 +86,7 @@ void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // This value is used to set the correct width for the username and the presence message.
     int rightIconsWidth = m_presenceIconSize + m_spacing;
 
-    QPixmap icon = KIcon(index.data(KTp::ContactPresenceIconRole).toString()).pixmap(KIconLoader::SizeSmallMedium);
+    QPixmap icon = QIcon::fromTheme(index.data(KTp::ContactPresenceIconRole).toString()).pixmap(KIconLoader::SizeSmallMedium);
 
     QRect statusIconRect = optV4.rect;
 
