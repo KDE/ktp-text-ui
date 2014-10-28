@@ -27,7 +27,7 @@
 
 #include <KXmlGuiWindow>
 #include <KTabWidget>
-#include <KAction>
+#include <QAction>
 #include <KActionMenu>
 
 namespace Sonnet {
@@ -213,7 +213,7 @@ private:
      */
     void restoreKeyboardLayout(ChatTab *chatTab);
 
-    KAction *m_sendMessage;
+    QAction *m_sendMessage;
 
     KTabWidget *m_tabWidget;
 

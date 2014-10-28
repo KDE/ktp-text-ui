@@ -32,7 +32,6 @@
 
 #include <KStandardShortcut>
 #include <KActionCollection>
-#include <KShortcut>
 
 #define MAXHISTORY 100
 
@@ -143,13 +142,13 @@ bool ChatTextEdit::event(QEvent *e)
     if (e->type() == QEvent::ShortcutOverride) {
         // Extract key code for shortcut sequence comparison
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(e);
-        int key = keyEvent->key();
+        QKeySequence key = keyEvent->key();
         if (keyEvent->modifiers() != Qt::KeypadModifier) {
             // Keypad modifier is not used in KDE shortcuts setup, so, we need to skip it.
-            key |= keyEvent->modifiers();
+            key = QKeySequence(keyEvent->modifiers() | keyEvent->key());
         }
 
-        if (m_sendMessageShortcuts.contains(key)) {
+        if (m_sendMessageShortcuts.matches(key) == QKeySequence::ExactMatch) {
             // keyPressEvent() handles Control modifier wrong, so we need that thing
             // to be in event().
             this->sendMessage();
@@ -204,9 +203,9 @@ void ChatTextEdit::sendMessage()
     Q_EMIT returnKeyPressed();
 }
 
-void ChatTextEdit::setSendMessageShortcuts(const KShortcut &shortcuts)
+void ChatTextEdit::setSendMessageShortcuts(const QKeySequence &shortcuts)
 {
-    m_sendMessageShortcuts = KShortcut(shortcuts);
+    m_sendMessageShortcuts = shortcuts;
 }
 
 // History of sent messages based on code from Konversation

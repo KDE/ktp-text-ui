@@ -24,8 +24,7 @@
 #include <QKeySequence>
 
 #include <KTextEdit>
-#include <KAction>
-#include <KShortcut>
+#include <QAction>
 
 class ChannelContactModel;
 class ChatTextEdit : public KTextEdit
@@ -72,7 +71,7 @@ public Q_SLOTS:
      * Updates internal message sending shortcuts. Must be called on every window
      * creation and every message sending shortcuts change.
      */
-    void setSendMessageShortcuts(const KShortcut &shortcuts);
+    void setSendMessageShortcuts(const QKeySequence &shortcuts);
 
 private:
     QStringList m_history;
@@ -85,7 +84,7 @@ private:
     int m_completionPosition;
     bool m_continuousCompletion;
 
-    KShortcut m_sendMessageShortcuts;
+    QKeySequence m_sendMessageShortcuts;
 };
 
 #endif // CHATTEXTEDIT_H

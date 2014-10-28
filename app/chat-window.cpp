@@ -886,11 +886,10 @@ void ChatWindow::setupCustomActions()
     connect(addEmoticonAction, SIGNAL(emoticonActivated(QString)), this, SLOT(onAddEmoticon(QString)) );
 
     m_sendMessage = new KAction(i18n("Send message"), this);
-    m_sendMessage->setShortcuts(
+
+    actionCollection()->setDefaultShortcuts(m_sendMessage,
                 // Setting default shortcuts. Return will be a primary one, and Enter (on keypad) - alternate.
-                QList<QKeySequence>() << QKeySequence(Qt::Key_Return) << QKeySequence(Qt::Key_Enter),
-                KAction::DefaultShortcut);
-    m_sendMessage->setShortcutConfigurable(true);
+                QList<QKeySequence>() << QKeySequence(Qt::Key_Return) << QKeySequence(Qt::Key_Enter));
     connect(m_sendMessage, SIGNAL(changed()), SLOT(updateSendMessageShortcuts()));
 
     // add custom actions to the collection
@@ -1323,7 +1322,7 @@ void ChatWindow::onZoomFactorChanged(qreal zoom)
 
 void ChatWindow::updateSendMessageShortcuts()
 {
-    KShortcut newSendMessageShortcuts = m_sendMessage->shortcut();
+    QKeySequence newSendMessageShortcuts = m_sendMessage->shortcut();
     for (int i = 0; i < m_tabWidget->count(); i++) {
         ChatTab* tab = qobject_cast<ChatTab*>(m_tabWidget->widget(i));
         tab->updateSendMessageShortcuts(newSendMessageShortcuts);

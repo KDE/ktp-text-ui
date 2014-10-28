@@ -32,7 +32,6 @@
 
 #include <QIcon>
 #include <KColorScheme>
-#include <KShortcut>
 
 #include <TelepathyQt/ReceivedMessage>
 
@@ -135,7 +134,7 @@ public Q_SLOTS:
       */
     void acknowledgeMessages();
 
-    void updateSendMessageShortcuts(const KShortcut &shortcuts);
+    void updateSendMessageShortcuts(const QKeySequence &shortcuts);
 
     void reloadTheme();
 

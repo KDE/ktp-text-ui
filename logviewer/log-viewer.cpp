@@ -35,7 +35,6 @@
 #include <KTp/Models/contacts-model.h>
 
 #include <QWebFrame>
-#include <KShortcut>
 #include <KLineEdit>
 #include <KPixmapSequence>
 #include <KMessageBox>
@@ -150,13 +149,13 @@ void LogViewer::setupActions()
     connect(importKopeteLogs, SIGNAL(triggered(bool)), SLOT(slotImportKopeteLogs()));
 
     KAction *prevConversation = new KAction(i18n("&Previous Conversation"), this);
-    prevConversation->setShortcut(KShortcut(Qt::CTRL + Qt::Key_P));
+    prevConversation->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
     prevConversation->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
     prevConversation->setEnabled(false);
     connect(prevConversation, SIGNAL(triggered(bool)), SLOT(slotJumpToPrevConversation()));
 
     KAction *nextConversation = new KAction(i18n("&Next Conversation"), this);
-    nextConversation->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
+    nextConversation->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
     nextConversation->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     nextConversation->setEnabled(false);
     connect(nextConversation, SIGNAL(triggered(bool)), SLOT(slotJumpToNextConversation()));

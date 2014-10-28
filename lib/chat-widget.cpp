@@ -647,7 +647,7 @@ void ChatWidget::acknowledgeMessages()
     }
 }
 
-void ChatWidget::updateSendMessageShortcuts(const KShortcut &shortcuts)
+void ChatWidget::updateSendMessageShortcuts(const QKeySequence &shortcuts)
 {
     d->ui.sendMessageBox->setSendMessageShortcuts(shortcuts);
 }
