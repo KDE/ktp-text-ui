@@ -21,9 +21,9 @@
 #include "ui_behavior-config.h"
 #include "message-view.h"
 
-#include <KDE/KConfig>
-#include <KDE/KConfigGroup>
-#include <KDE/KDebug>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KDebug>
 
 K_PLUGIN_FACTORY(KCMTelepathyLogViewerBehaviorConfigFactory, registerPlugin<BehaviorConfig>();)
 K_EXPORT_PLUGIN(KCMTelepathyLogViewerBehaviorConfigFactory("ktp_logviewer_behavior", "kcm_ktp_logviewer_behavior"))

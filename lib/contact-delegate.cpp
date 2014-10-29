@@ -32,7 +32,7 @@
 
 #include <KIconLoader>
 #include <KDebug>
-#include <KDE/KLocale>
+#include <KLocale>
 
 #include <KTp/types.h>
 

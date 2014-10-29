@@ -24,10 +24,10 @@
 
 #include <QtCore/QPointer>
 
-#include <KDE/KLineEdit>
-#include <KDE/KPushButton>
-#include <KDE/KLocalizedString>
-#include <KDE/KDebug>
+#include <KLineEdit>
+#include <KPushButton>
+#include <KLocalizedString>
+#include <KDebug>
 
 #include <TelepathyQt/Contact>
 #include <TelepathyQt/TextChannel>

@@ -25,9 +25,9 @@
 #include <KTp/Logger/pending-logger-dates.h>
 #include <TelepathyQt/Account>
 
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <klocalizeddate.h>
-#include <KDE/KDebug>
+#include <KDebug>
 
 Q_DECLARE_METATYPE(Tp::AccountPtr)
 

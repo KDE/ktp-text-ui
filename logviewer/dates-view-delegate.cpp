@@ -23,7 +23,7 @@
 #include <QApplication>
 #include <QFontDatabase>
 
-#include <KDE/KIconLoader>
+#include <KIconLoader>
 
 #include <TelepathyQt/Account>
 

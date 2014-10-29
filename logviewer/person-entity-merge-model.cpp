@@ -27,9 +27,9 @@
 #include <TelepathyQt/Contact>
 #include <TelepathyQt/ContactManager>
 
-#include <KDE/KDebug>
-#include <KDE/KLocalizedString>
-#include <KDE/KIconLoader>
+#include <KDebug>
+#include <KLocalizedString>
+#include <KIconLoader>
 
 #include <QPixmap>
 

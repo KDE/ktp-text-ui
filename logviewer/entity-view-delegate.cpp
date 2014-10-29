@@ -25,9 +25,8 @@
 #include <QApplication>
 #include <QFontDatabase>
 
-#include <KDE/KIconLoader>
-#include <KDE/KDebug>
-#include <KDE/KIcon>
+#include <KIconLoader>
+#include <KDebug>
 
 #include <TelepathyQt/Account>
 

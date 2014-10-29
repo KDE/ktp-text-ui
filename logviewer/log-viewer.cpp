@@ -50,7 +50,7 @@
 #include <KLocalizedString>
 #include <KIconLoader>
 
-#include <KDE/KCModuleProxy>
+#include <KCModuleProxy>
 
 #include "entity-model.h"
 #include "logs-import-dialog.h"
