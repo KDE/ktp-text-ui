@@ -24,7 +24,6 @@
 #include <KLineEdit>
 #include <KLocale>
 #include <KPushButton>
-#include <KIcon>
 
 #include <QCheckBox>
 #include <QDebug>

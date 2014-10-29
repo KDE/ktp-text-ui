@@ -28,13 +28,11 @@
 #include <QApplication>
 #include <QStyle>
 #include <QHelpEvent>
+#include <QFontDatabase>
 
 #include <KIconLoader>
-#include <KIcon>
 #include <KDebug>
-#include <KGlobalSettings>
 #include <KDE/KLocale>
-#include <KStandardDirs>
 
 #include <KTp/types.h>
 
@@ -109,8 +107,7 @@ void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->drawPixmap(phoneIconRect, phone);
     }
 
-    QFont nameFont;
-    nameFont = KGlobalSettings::generalFont();
+    QFont nameFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
     const QFontMetrics nameFontMetrics(nameFont);
 
@@ -140,7 +137,7 @@ QSize ContactDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
     Q_UNUSED(option);
     Q_UNUSED(index);
 
-    return QSize(0, qMax(m_avatarSize + 2 * m_spacing, KGlobalSettings::smallestReadableFont().pixelSize() + m_spacing));
+    return QSize(0, qMax(m_avatarSize + 2 * m_spacing, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pixelSize() + m_spacing));
 }
 
 #include "contact-delegate.moc"

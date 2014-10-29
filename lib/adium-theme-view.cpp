@@ -44,7 +44,6 @@
 #include <KDebug>
 #include <KEmoticonsTheme>
 #include <KGlobal>
-#include <KStandardDirs>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KMessageBox>

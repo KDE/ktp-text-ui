@@ -23,9 +23,9 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <QFontDatabase>
 
 #include <KDE/KIconLoader>
-#include <KDE/KGlobalSettings>
 #include <KDE/KDebug>
 #include <KDE/KIcon>
 
@@ -102,7 +102,7 @@ void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewI
 
     style->drawItemPixmap(painter, iconRect, Qt::AlignCenter, avatar.scaled(iconRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    const QFont nameFont = KGlobalSettings::generalFont();
+    const QFont nameFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     const QFontMetrics nameFontMetrics(nameFont);
 
     if (option.state & QStyle::State_Selected) {
@@ -142,7 +142,7 @@ QSize EntityViewDelegate::sizeHintContact(const QStyleOptionViewItem& option, co
 {
     Q_UNUSED(option);
     Q_UNUSED(index);
-    return QSize(0, qMax(m_avatarSize + 2 * m_spacing, KGlobalSettings::smallestReadableFont().pixelSize() + m_spacing));
+    return QSize(0, qMax(m_avatarSize + 2 * m_spacing, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pixelSize() + m_spacing));
 }
 
 
@@ -194,7 +194,7 @@ void EntityViewDelegate::paintHeader(QPainter* painter, const QStyleOptionViewIt
         style->drawPrimitive(QStyle::PE_IndicatorArrowRight, &expandSignOption, painter);
     }
 
-    const QFont groupFont = KGlobalSettings::smallestReadableFont();
+    const QFont groupFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 
     //paint the header string
     const QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + m_spacing * 2, 0, -m_spacing, 0);
@@ -216,7 +216,7 @@ QSize EntityViewDelegate::sizeHintHeader(const QStyleOptionViewItem& option, con
     Q_UNUSED(option)
     Q_UNUSED(index)
     // Add one point to the bottom for the 1px line
-    return QSize(0, qMax(m_avatarSize, KGlobalSettings::smallestReadableFont().pixelSize()) + m_spacing + 1);
+    return QSize(0, qMax(m_avatarSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pixelSize()) + m_spacing + 1);
 }
 
 

@@ -21,10 +21,9 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <QFontDatabase>
 
-#include <KDE/KGlobalSettings>
 #include <KDE/KIconLoader>
-#include <KDE/KIcon>
 
 #include <TelepathyQt/Account>
 
@@ -47,10 +46,10 @@ QSize DatesViewDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
     Q_UNUSED(option);
 
     if (index.data(DatesModel::TypeRole).toUInt() == DatesModel::GroupRow) {
-        return QSize(0, qMax(22, KGlobalSettings::smallestReadableFont().pixelSize()) + 2 + 1);
+        return QSize(0, qMax(22, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pixelSize()) + 2 + 1);
     } else {
         return QSize(0, qMax(KIconLoader::global()->currentSize(KIconLoader::Small) + m_spacing,
-                             KGlobalSettings::smallestReadableFont().pixelSize() + 2 + 1));
+                             QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pixelSize() + 2 + 1));
     }
 }
 
@@ -111,7 +110,7 @@ void DatesViewDelegate::paintGroup(QPainter* painter, const QStyleOptionViewItem
         style->drawPrimitive(QStyle::PE_IndicatorArrowRight, &expandSignOption, painter);
     }
 
-    const QFont groupFont = KGlobalSettings::smallestReadableFont();
+    const QFont groupFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
     //paint the header string
     const QRect groupLabelRect = groupRect.adjusted(expandSignOption.rect.width() + 2 * 2, 0, -2, 0);
     const QString groupHeaderString =  index.data(Qt::DisplayRole).toString();

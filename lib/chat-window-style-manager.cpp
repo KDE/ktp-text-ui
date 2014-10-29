@@ -22,9 +22,10 @@
 // Qt includes
 #include <QtCore/QStack>
 #include <QtCore/QFileInfo>
+#include <QtCore/QStandardPaths>
+#include <QtCore/QDir>
 
 // KDE includes
-#include <KStandardDirs>
 #include <KDirLister>
 #include <KDebug>
 #include <KUrl>
@@ -83,9 +84,8 @@ ChatWindowStyleManager::~ChatWindowStyleManager()
 void ChatWindowStyleManager::loadStyles()
 {
     // Make sure there exists a directory where chat styles can be installed to and it will be watched for changes
-    KStandardDirs::locateLocal("data", QLatin1String("ktelepathy/styles/"));
-
-    QStringList chatStyles = KGlobal::dirs()->findDirs("data", QLatin1String("ktelepathy/styles"));
+    QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/ktelepathy/styles/"));
+    QStringList chatStyles = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("ktelepathy/styles"), QStandardPaths::LocateDirectory);
 
     Q_FOREACH(const QString &styleDir, chatStyles) {
         kDebug() << styleDir;
@@ -112,8 +112,8 @@ QMap<QString, QString> ChatWindowStyleManager::getAvailableStyles() const
 int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
 {
     QString localStyleDir;
-    KStandardDirs::locateLocal("data", QLatin1String("ktelepathy/styles/"));
-    QStringList chatStyles = KGlobal::dirs()->findDirs("data", QLatin1String("ktelepathy/styles"));
+    QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/ktelepathy/styles/"));
+    QStringList chatStyles = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("ktelepathy/styles"), QStandardPaths::LocateDirectory);
     // findDirs returns preferred paths first, let's check if one of them is writable
     Q_FOREACH(const QString& styleDir, chatStyles) {
         kDebug() << styleDir;
@@ -310,7 +310,7 @@ ChatWindowStyle *ChatWindowStyleManager::getStyleFromPool(const QString &styleId
         // NOTE: This is a hidden config switch for style developers
         // Check in the config if the cache is disabled.
         // if the cache is disabled, reload the style every time it's getted.
-        KConfigGroup config(KGlobal::config(), "KopeteStyleDebug");
+        KConfigGroup config(KSharedConfig::openConfig(), "KopeteStyleDebug");
         bool disableCache = config.readEntry("disableStyleCache", false);
         if (disableCache) {
             d->stylePool[styleId]->reload();

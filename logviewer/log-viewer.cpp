@@ -48,7 +48,6 @@
 #include <KMenuBar>
 #include <KSettings/Dialog>
 #include <KLocalizedString>
-#include <KIcon>
 #include <KIconLoader>
 
 #include <KDE/KCModuleProxy>

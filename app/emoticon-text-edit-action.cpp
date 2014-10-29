@@ -22,7 +22,6 @@
 #include <KLocale>
 
 #include <KMenu>
-#include <KIcon>
 
 #include <QWidgetAction>
 

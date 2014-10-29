@@ -33,7 +33,6 @@
 #include <KDialog>
 #include <KLocalizedString>
 #include <KPluginFactory>
-#include <KIcon>
 #include <KSharedConfig>
 
 K_PLUGIN_FACTORY(KCMTelepathyChatAppearanceConfigFactory, registerPlugin<AppearanceConfig>();)

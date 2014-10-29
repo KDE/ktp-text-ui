@@ -30,7 +30,6 @@
 
 #include <KPluginFactory>
 #include <KDebug>
-#include <KStandardDirs>
 #include <KProcess>
 
 LatexFilter::LatexFilter(QObject* parent, const QVariantList &)
@@ -110,11 +109,11 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
     Q_FOREACH(const QString &cmd, latexCmd.mid(1, latexCmd.size())) {
         latexArgs << cmd;
     }
-    const KStandardDirs outputDir;
-    latexArgs << QString(QLatin1String("-output-directory=%1")).arg(outputDir.resourceDirs("tmp").first());
+
+    latexArgs << QStringLiteral("-output-directory=%1").arg(QStandardPaths::standardLocations(QStandardPaths::TempLocation).first());
     latexArgs << texFile.fileName();
 
-    if (KStandardDirs::findExe(latexCmd.first()).isEmpty()) {
+    if (QStandardPaths::findExecutable(latexCmd.first()).isEmpty()) {
         kError() << "Cannot find the TeX" << latexCmd.first() << " program.\n;"
                  << "Please get the software from http://tug.org/texlive/"
                  << "or from your distribution's package manager.";
@@ -130,7 +129,7 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
         return QString();
     }
 
-    if (KStandardDirs::findExe(QLatin1String("dvipng")).isEmpty()) {
+    if (QStandardPaths::findExecutable(QLatin1String("dvipng")).isEmpty()) {
         kError() << "Cannot find the TeX 'dvipng' program.\n;"
                  << "Please get the software from http://tug.org/texlive/"
                  << "or from your distribution's package manager.";

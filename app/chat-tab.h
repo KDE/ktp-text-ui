@@ -24,7 +24,6 @@
 
 #include <QtCore/QString>
 #include <QWidget>
-#include <KIcon>
 #include <KColorScheme>
 
 class ChatWidgetPrivate;

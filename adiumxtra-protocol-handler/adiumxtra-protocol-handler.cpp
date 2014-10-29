@@ -28,7 +28,6 @@
 #include <KIO/Job>
 #include <KIO/NetAccess>
 #include <KNotification>
-#include <KIcon>
 #include <KMimeType>
 #include <KAboutData>
 #include <KComponentData>

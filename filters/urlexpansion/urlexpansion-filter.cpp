@@ -19,11 +19,10 @@
 #include "urlexpansion-filter.h"
 #include <QtCore/qjsondocument.h>
 
-#include<QFile>
+#include <QFile>
+#include <QStandardPaths>
 
 #include <KPluginFactory>
-#include <KDE/KStandardDirs>
-#include <KGlobal>
 
 class UrlExpansionFilter::Private
 {
@@ -48,7 +47,7 @@ UrlExpansionFilter::~UrlExpansionFilter()
 
 void UrlExpansionFilter::getSupportedServices()
 {
-    QFile servicesFile(KGlobal::dirs()->findResource("data", QLatin1String("ktelepathy/longurlServices.json")));
+    QFile servicesFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("ktelepathy/longurlServices.json")));
     bool b = servicesFile.open(QIODevice::ReadOnly);
     Q_ASSERT(b);
     QVariantMap response = QJsonDocument::fromJson(servicesFile.readAll()).toVariant().toMap();
