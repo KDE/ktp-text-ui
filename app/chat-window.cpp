@@ -49,6 +49,7 @@
 #include <KToolInvocation>
 #include <KCModuleProxy>
 #include <KIconLoader>
+#include <KUrl>
 
 #include <QEvent>
 #include <QWidgetAction>
@@ -1188,7 +1189,7 @@ void ChatWindow::offerDocumentToContact(const Tp::AccountPtr& account, const Tp:
 {
     const KUrl url = KFileDialog::getOpenUrl();
     if ( ! url.isEmpty() ) {
-        KTp::Actions::startCollaborativeEditing(account, targetContact, QList<KUrl>() << url, true);
+        KTp::Actions::startCollaborativeEditing(account, targetContact, QList<QUrl>() << url, true);
     }
 }
 
@@ -1196,7 +1197,7 @@ void ChatWindow::offerDocumentToChatroom(const Tp::AccountPtr& account, const QS
 {
    const KUrl url = KFileDialog::getOpenUrl();
     if ( ! url.isEmpty() ) {
-        KTp::Actions::startCollaborativeEditing(account, roomName, QList<KUrl>() << url, true);
+        KTp::Actions::startCollaborativeEditing(account, roomName, QList<QUrl>() << url, true);
     }
 }
 

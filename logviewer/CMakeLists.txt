@@ -21,10 +21,7 @@ qt5_wrap_ui(ktp-log-viewer_SRCS log-viewer.ui)
 add_executable(ktp-log-viewer ${ktp-log-viewer_SRCS})
 
 target_link_libraries(ktp-log-viewer
-            
-            ${KDE4_KDEUI_LIBS}
             KF5::KIOWidgets
-            ${TELEPATHY_QT4_LIBRARIES}
             KF5::Emoticons
             KF5::KCMUtils
             KF5::WebKit

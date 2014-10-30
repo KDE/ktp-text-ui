@@ -11,9 +11,7 @@ set(ktp-adiumxtra-protocol-handler_SRCS
 add_executable(ktp-adiumxtra-protocol-handler ${ktp-adiumxtra-protocol-handler_SRCS})
 
 target_link_libraries(ktp-adiumxtra-protocol-handler
-            
-            ${KDE4_KDEUI_LIBS}
-            ${QT_QTWEBKIT_LIBRARY}
+            Qt5::WebKit
             KF5::Emoticons
             Qt5::Xml
             KF5::KIOWidgets

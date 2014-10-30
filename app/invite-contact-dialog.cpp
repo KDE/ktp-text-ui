@@ -49,7 +49,7 @@ InviteContactDialog::InviteContactDialog(const Tp::AccountManagerPtr &accountMan
     m_contactsModel->setAccountManager(accountManager);
 
     m_contactGridWidget = new KTp::ContactGridWidget(m_contactsModel, this);
-    m_contactGridWidget->contactFilterLineEdit()->setClickMessage(i18n("Search in Contacts..."));
+    m_contactGridWidget->contactFilterLineEdit()->setPlaceholderText(i18n("Search in Contacts..."));
     m_contactGridWidget->filter()->setPresenceTypeFilterFlags(KTp::ContactsFilterModel::ShowOnlyConnected);
     m_contactGridWidget->filter()->setAccountFilter(account);
     m_contactGridWidget->setSelectionMode(QAbstractItemView::MultiSelection);
