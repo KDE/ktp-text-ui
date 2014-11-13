@@ -60,3 +60,5 @@ void HighlightFilter::filterMessage(KTp::Message &message,
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<HighlightFilter>();)
 K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_highlight"))
+
+#include "highlight-filter.moc"

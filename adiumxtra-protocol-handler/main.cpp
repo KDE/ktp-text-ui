@@ -17,23 +17,23 @@
 */
 
 #include "adiumxtra-protocol-handler.h"
-#include "version.h"
+#include "../ktptextui_version.h"
 
 #include <KApplication>
-#include <KAboutData>
+#include <k4aboutdata.h>
 #include <KCmdLineArgs>
 #include <QTimer>
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData("ktp-adiumxtra-protocol-handler",
+    K4AboutData aboutData("ktp-adiumxtra-protocol-handler",
                          0,
                          ki18n("AdiumXtra Protocol Handler"),
-                         KTP_TEXT_UI_VERSION);
+                         KTP_TEXT_UI_VERSION_STRING);
     aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
     aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
     aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
-    aboutData.setLicense(KAboutData::License_GPL_V2);
+    aboutData.setLicense(K4AboutData::License_GPL_V2);
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineOptions options;
     options.add("!+adium-bundle", ki18n("Adium package to install"));

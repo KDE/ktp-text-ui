@@ -32,8 +32,6 @@ public:
     QList<QByteArray> formats;
 };
 
-static const KCatalogLoader loader(QLatin1String("ktp-filters"));
-
 ImagesFilter::ImagesFilter (QObject* parent, const QVariantList&) :
     KTp::AbstractMessageFilter (parent), d(new Private)
 {
@@ -71,3 +69,5 @@ void ImagesFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<ImagesFilter>();)
 K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_images"))
+
+#include "images-filter.moc"

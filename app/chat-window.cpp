@@ -30,7 +30,6 @@
 #include <KTp/contact.h>
 
 #include <KStandardAction>
-#include <KIcon>
 #include <KLocale>
 #include <KApplication>
 #include <KAction>
@@ -49,6 +48,8 @@
 #include <KToolBar>
 #include <KToolInvocation>
 #include <KCModuleProxy>
+#include <KIconLoader>
+#include <KUrl>
 
 #include <QEvent>
 #include <QWidgetAction>
@@ -77,7 +78,7 @@
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
 
-K_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
+Q_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
                           (QLatin1String(PREFERRED_RFB_HANDLER)));
 
 ChatWindow::ChatWindow()
@@ -163,10 +164,10 @@ ChatWindow::~ChatWindow()
 
 void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
 {
-    KAction close(KIcon(QLatin1String("tab-close"), KIconLoader::global()), i18n("Close"), this);
-    KAction dettach(KIcon(QLatin1String("tab-detach"), KIconLoader::global()), i18n("Detach Tab"), this);
-    KAction moveLeft(KIcon(QLatin1String("arrow-left"), KIconLoader::global()), i18n("Move Tab Left"), this);
-    KAction moveRight(KIcon(QLatin1String("arrow-right"), KIconLoader::global()), i18n("Move Tab Right"), this);
+    KAction close(QIcon::fromTheme(QStringLiteral("tab-close")), i18n("Close"), this);
+    KAction dettach(QIcon::fromTheme(QStringLiteral("tab-detach")), i18n("Detach Tab"), this);
+    KAction moveLeft(QIcon::fromTheme(QStringLiteral("arrow-left")), i18n("Move Tab Left"), this);
+    KAction moveRight(QIcon::fromTheme(QStringLiteral("arrow-right")), i18n("Move Tab Right"), this);
 
     KMenu* menu = new KMenu(this);
 
@@ -315,7 +316,7 @@ void ChatWindow::setTabText(int index, const QString &newTitle)
     }
 }
 
-void ChatWindow::setTabIcon(int index, const KIcon & newIcon)
+void ChatWindow::setTabIcon(int index, const QIcon & newIcon)
 {
     m_tabWidget->setTabIcon(index, newIcon);
 
@@ -374,7 +375,7 @@ void ChatWindow::onCurrentIndexChanged(int index)
     currentChatTab->acknowledgeMessages();
     setWindowTitle(currentChatTab->title());
     if (hasUnreadMessages()) {
-        setWindowIcon(KIcon(QLatin1String("mail-mark-unread-new")));
+        setWindowIcon(QIcon::fromTheme(QStringLiteral("mail-mark-unread-new")));
     } else {
         setWindowIcon(currentChatTab->icon());
     }
@@ -585,16 +586,16 @@ void ChatWindow::onTabStateChanged()
 {
     kDebug();
 
-    KIcon windowIcon;
+    QIcon windowIcon;
     ChatTab *sender = qobject_cast<ChatTab*>(QObject::sender());
     if (sender) {
         int tabIndex = m_tabWidget->indexOf(sender);
         setTabTextColor(tabIndex, sender->titleColor());
 
         if (TextChatConfig::instance()->showOthersTyping() && (sender->remoteChatState() == Tp::ChannelChatStateComposing)) {
-            setTabIcon(tabIndex, KIcon(QLatin1String("document-edit")));
+            setTabIcon(tabIndex, QIcon::fromTheme(QStringLiteral("document-edit")));
             if (sender == m_tabWidget->currentWidget()) {
-                windowIcon = KIcon(QLatin1String("document-edit"));
+                windowIcon = QIcon::fromTheme(QStringLiteral("document-edit"));
             } else {
                 windowIcon = qobject_cast<ChatTab*>(m_tabWidget->currentWidget())->icon();
             }
@@ -604,18 +605,18 @@ void ChatWindow::onTabStateChanged()
         }
 
         if (sender->unreadMessageCount() > 0) {
-            setTabIcon(tabIndex, KIcon(QLatin1String("mail-mark-unread-new")));
+            setTabIcon(tabIndex, QIcon::fromTheme(QStringLiteral("mail-mark-unread-new")));
         }
     }
 
     if (hasUnreadMessages()) {
-        windowIcon = KIcon(QLatin1String("mail-mark-unread-new"));
+        windowIcon = QIcon::fromTheme(QStringLiteral("mail-mark-unread-new"));
     }
 
     setWindowIcon(windowIcon);
 }
 
-void ChatWindow::onTabIconChanged(const KIcon & newIcon)
+void ChatWindow::onTabIconChanged(const QIcon & newIcon)
 {
     //find out which widget made the call, and update the correct tab.
     QWidget* sender = qobject_cast<QWidget*>(QObject::sender());
@@ -773,7 +774,7 @@ void ChatWindow::showNotificationsDialog()
 void ChatWindow::removeChatTabSignals(ChatTab *chatTab)
 {
     disconnect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
-    disconnect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
+    disconnect(chatTab, SIGNAL(iconChanged(QIcon)), this, SLOT(onTabIconChanged(QIcon)));
     disconnect(chatTab, SIGNAL(unreadMessagesChanged()), this, SLOT(onTabStateChanged()));
     disconnect(chatTab, SIGNAL(contactPresenceChanged(KTp::Presence)), this, SLOT(onTabStateChanged()));
     disconnect(chatTab->chatSearchBar(), SIGNAL(enableSearchButtonsSignal(bool)), this, SLOT(onEnableSearchActions(bool)));
@@ -800,7 +801,7 @@ void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const
 void ChatWindow::setupChatTabSignals(ChatTab *chatTab)
 {
     connect(chatTab, SIGNAL(titleChanged(QString)), this, SLOT(onTabTextChanged(QString)));
-    connect(chatTab, SIGNAL(iconChanged(KIcon)), this, SLOT(onTabIconChanged(KIcon)));
+    connect(chatTab, SIGNAL(iconChanged(QIcon)), this, SLOT(onTabIconChanged(QIcon)));
     connect(chatTab, SIGNAL(userTypingChanged(Tp::ChannelChatState)), this, SLOT(onTabStateChanged()));
     connect(chatTab, SIGNAL(unreadMessagesChanged()), this, SLOT(onTabStateChanged()));
     connect(chatTab, SIGNAL(contactPresenceChanged(KTp::Presence)), this, SLOT(onTabStateChanged()));
@@ -816,46 +817,46 @@ void ChatWindow::setupCustomActions()
     KStandardAction::close(this, SLOT(closeCurrentTab()), this);
     KStandardAction::quit(this, SLOT(close()), this);
 
-    KAction *nextTabAction = new KAction(KIcon(QLatin1String("go-next-view")), i18n("&Next Tab"), this);
+    KAction *nextTabAction = new KAction(QIcon::fromTheme(QStringLiteral("go-next-view")), i18n("&Next Tab"), this);
     nextTabAction->setShortcuts(KStandardShortcut::tabNext());
     connect(nextTabAction, SIGNAL(triggered()), this, SLOT(onNextTabActionTriggered()));
 
-    KAction *previousTabAction = new KAction(KIcon(QLatin1String("go-previous-view")), i18n("&Previous Tab"), this);
+    KAction *previousTabAction = new KAction(QIcon::fromTheme(QStringLiteral("go-previous-view")), i18n("&Previous Tab"), this);
     previousTabAction->setShortcuts(KStandardShortcut::tabPrev());
     connect(previousTabAction, SIGNAL(triggered()), this, SLOT(onPreviousTabActionTriggered()));
 
-    KAction *audioCallAction = new KAction(KIcon(QLatin1String("audio-headset")), i18n("&Audio Call"), this);
+    KAction *audioCallAction = new KAction(QIcon::fromTheme(QStringLiteral("audio-headset")), i18n("&Audio Call"), this);
     audioCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an audio call with this contact"));
     connect(audioCallAction, SIGNAL(triggered()), this, SLOT(onAudioCallTriggered()));
 
-    KAction *blockContactAction = new KAction(KIcon(QLatin1String("im-ban-kick-user")), i18n("&Block Contact"), this);
+    KAction *blockContactAction = new KAction(QIcon::fromTheme(QStringLiteral("im-ban-kick-user")), i18n("&Block Contact"), this);
     blockContactAction->setToolTip(i18nc("Toolbar icon tooltip",
                                          "Blocking means that this contact will not see you online and you will not receive any messages from this contact"));
     connect(blockContactAction, SIGNAL(triggered()), this, SLOT(onBlockContactTriggered()));
 
-    KAction *fileTransferAction = new KAction(KIcon(QLatin1String("mail-attachment")), i18n("&Send File"), this);
+    KAction *fileTransferAction = new KAction(QIcon::fromTheme(QStringLiteral("mail-attachment")), i18n("&Send File"), this);
     fileTransferAction->setToolTip(i18nc("Toolbar icon tooltip", "Send a file to this contact"));
     connect(fileTransferAction, SIGNAL(triggered()), this, SLOT(onFileTransferTriggered()));
 
-    KAction *inviteToChat = new KAction(KIcon(QLatin1String("user-group-new")), i18n("&Invite to Chat"), this);
+    KAction *inviteToChat = new KAction(QIcon::fromTheme(QStringLiteral("user-group-new")), i18n("&Invite to Chat"), this);
     inviteToChat->setToolTip(i18nc("Toolbar icon tooltip", "Invite another contact to join this chat"));
     connect(inviteToChat, SIGNAL(triggered()), this, SLOT(onInviteToChatTriggered()));
 
-    KAction *videoCallAction = new KAction(KIcon(QLatin1String("camera-web")), i18n("&Video Call"), this);
+    KAction *videoCallAction = new KAction(QIcon::fromTheme(QStringLiteral("camera-web")), i18n("&Video Call"), this);
     videoCallAction->setToolTip(i18nc("Toolbar icon tooltip", "Start a video call with this contact"));
     connect(videoCallAction, SIGNAL(triggered()), this, SLOT(onVideoCallTriggered()));
 
-    KAction *shareDesktopAction = new KAction(KIcon(QLatin1String("krfb")), i18n("Share My &Desktop"), this);
+    KAction *shareDesktopAction = new KAction(QIcon::fromTheme(QStringLiteral("krfb")), i18n("Share My &Desktop"), this);
     shareDesktopAction->setToolTip(i18nc("Toolbar icon tooltip", "Start an application that allows this contact to see your desktop"));
     connect(shareDesktopAction, SIGNAL(triggered()), this, SLOT(onShareDesktopTriggered()));
 
-    KAction* collaborateDocumentAction = new KAction(KIcon(QLatin1String("document-share")), i18n("&Collaboratively edit a document"), this);
+    KAction* collaborateDocumentAction = new KAction(QIcon::fromTheme(QStringLiteral("document-share")), i18n("&Collaboratively edit a document"), this);
     connect(collaborateDocumentAction, SIGNAL(triggered()), this, SLOT(onCollaborateDocumentTriggered()));
 
-    KAction* showInfoAction = new KAction(KIcon(QLatin1String("view-pim-contacts")), i18n("&Contact info"), this);
+    KAction* showInfoAction = new KAction(QIcon::fromTheme(QStringLiteral("view-pim-contacts")), i18n("&Contact info"), this);
     connect(showInfoAction, SIGNAL(triggered()), this, SLOT(onShowInfoTriggered()));
 
-    KAction* leaveAction = new KAction(KIcon(QLatin1String("irc-close-channel")), i18n("&Leave room"), this);
+    KAction* leaveAction = new KAction(QIcon::fromTheme(QStringLiteral("irc-close-channel")), i18n("&Leave room"), this);
     connect(leaveAction, SIGNAL(triggered()), this, SLOT(onLeaveChannelTriggered()));
 
     m_spellDictCombo = new Sonnet::DictionaryComboBox();
@@ -865,20 +866,20 @@ void ChatWindow::setupCustomActions()
     QWidgetAction *spellDictComboAction = new QWidgetAction(this);
     spellDictComboAction->setDefaultWidget(m_spellDictCombo);
     spellDictComboAction->defaultWidget()->setFocusPolicy(Qt::ClickFocus);
-    spellDictComboAction->setIcon(KIcon(QLatin1String("tools-check-spelling")));
+    spellDictComboAction->setIcon(QIcon::fromTheme(QStringLiteral("tools-check-spelling")));
     spellDictComboAction->setIconText(i18n("Choose Spelling Language"));
 
-    KAction *openLogAction = new KAction(KIcon(QLatin1String("view-pim-journal")), i18nc("Action to open the log viewer with a specified contact","&Previous Conversations"), this);
+    KAction *openLogAction = new KAction(QIcon::fromTheme(QStringLiteral("view-pim-journal")), i18nc("Action to open the log viewer with a specified contact","&Previous Conversations"), this);
     connect(openLogAction, SIGNAL(triggered()), SLOT(onOpenLogTriggered()));
 
-    KAction *openContactListAction = new KAction(KIcon(QLatin1String("telepathy-kde")), i18nc("Action to open the contact list","Contact &List"), this);
+    KAction *openContactListAction = new KAction(QIcon::fromTheme(QStringLiteral("telepathy-kde")), i18nc("Action to open the contact list","Contact &List"), this);
     connect(openContactListAction, SIGNAL(triggered()), SLOT(onOpenContactListTriggered()));
 
-    KAction *accountIconAction = new KAction(KIcon(QLatin1String("telepathy-kde")), i18n("Account Icon"), this);
+    KAction *accountIconAction = new KAction(QIcon::fromTheme(QStringLiteral("telepathy-kde")), i18n("Account Icon"), this);
     m_accountIconLabel = new QLabel(this);
     accountIconAction->setDefaultWidget(m_accountIconLabel);
 
-    KAction *clearViewAction = new KAction(KIcon(QLatin1String("edit-clear-history")), i18n("&Clear View"), this);
+    KAction *clearViewAction = new KAction(QIcon::fromTheme(QStringLiteral("edit-clear-history")), i18n("&Clear View"), this);
     clearViewAction->setToolTip(i18nc("Toolbar icon tooltip", "Clear all messages from current chat tab"));
     connect(clearViewAction, SIGNAL(triggered()), this, SLOT(onClearViewTriggered()));
 
@@ -886,11 +887,10 @@ void ChatWindow::setupCustomActions()
     connect(addEmoticonAction, SIGNAL(emoticonActivated(QString)), this, SLOT(onAddEmoticon(QString)) );
 
     m_sendMessage = new KAction(i18n("Send message"), this);
-    m_sendMessage->setShortcuts(
+
+    actionCollection()->setDefaultShortcuts(m_sendMessage,
                 // Setting default shortcuts. Return will be a primary one, and Enter (on keypad) - alternate.
-                QList<QKeySequence>() << QKeySequence(Qt::Key_Return) << QKeySequence(Qt::Key_Enter),
-                KAction::DefaultShortcut);
-    m_sendMessage->setShortcutConfigurable(true);
+                QList<QKeySequence>() << QKeySequence(Qt::Key_Return) << QKeySequence(Qt::Key_Enter));
     connect(m_sendMessage, SIGNAL(changed()), SLOT(updateSendMessageShortcuts()));
 
     // add custom actions to the collection
@@ -917,18 +917,18 @@ void ChatWindow::setupCustomActions()
 
 void ChatWindow::setupOTR()
 {
-    m_otrActionMenu = new KActionMenu(KIcon(QLatin1String("object-unlocked")), i18n("&OTR"), this);
+    m_otrActionMenu = new KActionMenu(QIcon::fromTheme(QStringLiteral("object-unlocked")), i18n("&OTR"), this);
     m_otrActionMenu->setDelayed(false);
 
-    KAction *startRestartOtrAction = new KAction(KIcon(QLatin1String("object-locked")), i18n("&Start session"), this);
+    KAction *startRestartOtrAction = new KAction(QIcon::fromTheme(QStringLiteral("object-locked")), i18n("&Start session"), this);
     startRestartOtrAction->setEnabled(false);
     connect(startRestartOtrAction, SIGNAL(triggered()), this, SLOT(onStartRestartOtrTriggered()));
 
-    KAction *stopOtrAction = new KAction(KIcon(QLatin1String("object-unlocked")), i18n("&Stop session"), this);
+    KAction *stopOtrAction = new KAction(QIcon::fromTheme(QStringLiteral("object-unlocked")), i18n("&Stop session"), this);
     stopOtrAction->setEnabled(false);
     connect(stopOtrAction, SIGNAL(triggered()), this, SLOT(onStopOtrTriggered()));
 
-    KAction *authenticateBuddyAction = new KAction(KIcon(QLatin1String("application-pgp-signature")), i18n("&Authenticate contact"), this);
+    KAction *authenticateBuddyAction = new KAction(QIcon::fromTheme(QStringLiteral("application-pgp-signature")), i18n("&Authenticate contact"), this);
     authenticateBuddyAction->setEnabled(false);
     connect(authenticateBuddyAction, SIGNAL(triggered()), this, SLOT(onAuthenticateBuddyTriggered()));
 
@@ -965,7 +965,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
     // OTR is disabled for this channel
     if(!status) {
         m_otrActionMenu->setEnabled(false);
-        m_otrActionMenu->menu()->setIcon(KIcon(QLatin1String("object-unlocked")));
+        m_otrActionMenu->menu()->setIcon(QIcon::fromTheme(QStringLiteral("object-unlocked")));
         return;
     }
 
@@ -978,7 +978,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
     switch(status.otrTrustLevel()) {
 
         case KTp::OTRTrustLevelNotPrivate:
-            m_otrActionMenu->setIcon(KIcon(QLatin1String("object-unlocked")));
+            m_otrActionMenu->setIcon(QIcon::fromTheme(QStringLiteral("object-unlocked")));
             m_otrActionMenu->setToolTip(i18n("Not private"));
             srAction->setEnabled(true);
             srAction->setText(i18n("&Start session"));
@@ -987,7 +987,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
             return;
 
         case KTp::OTRTrustLevelUnverified:
-            m_otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-unverified")));
+            m_otrActionMenu->setIcon(QIcon::fromTheme(QStringLiteral("object-locked-unverified")));
             m_otrActionMenu->setToolTip(i18n("Unverified"));
             srAction->setEnabled(true);
             srAction->setText(i18n("&Restart session"));
@@ -996,7 +996,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
             return;
 
         case KTp::OTRTrustLevelPrivate:
-            m_otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-verified")));
+            m_otrActionMenu->setIcon(QIcon::fromTheme(QStringLiteral("object-locked-verified")));
             m_otrActionMenu->setToolTip(i18n("Private"));
             srAction->setEnabled(true);
             srAction->setText(i18n("&Restart session"));
@@ -1005,7 +1005,7 @@ void ChatWindow::onOtrStatusChanged(OtrStatus status)
             return;
 
         case KTp::OTRTrustLevelFinished:
-            m_otrActionMenu->setIcon(KIcon(QLatin1String("object-locked-finished")));
+            m_otrActionMenu->setIcon(QIcon::fromTheme(QStringLiteral("object-locked-finished")));
             m_otrActionMenu->setToolTip(i18n("Finished"));
             srAction->setEnabled(true);
             srAction->setText(i18n("&Restart session"));
@@ -1189,7 +1189,7 @@ void ChatWindow::offerDocumentToContact(const Tp::AccountPtr& account, const Tp:
 {
     const KUrl url = KFileDialog::getOpenUrl();
     if ( ! url.isEmpty() ) {
-        KTp::Actions::startCollaborativeEditing(account, targetContact, QList<KUrl>() << url, true);
+        KTp::Actions::startCollaborativeEditing(account, targetContact, QList<QUrl>() << url, true);
     }
 }
 
@@ -1197,7 +1197,7 @@ void ChatWindow::offerDocumentToChatroom(const Tp::AccountPtr& account, const QS
 {
    const KUrl url = KFileDialog::getOpenUrl();
     if ( ! url.isEmpty() ) {
-        KTp::Actions::startCollaborativeEditing(account, roomName, QList<KUrl>() << url, true);
+        KTp::Actions::startCollaborativeEditing(account, roomName, QList<QUrl>() << url, true);
     }
 }
 
@@ -1323,7 +1323,7 @@ void ChatWindow::onZoomFactorChanged(qreal zoom)
 
 void ChatWindow::updateSendMessageShortcuts()
 {
-    KShortcut newSendMessageShortcuts = m_sendMessage->shortcut();
+    QKeySequence newSendMessageShortcuts = m_sendMessage->shortcut();
     for (int i = 0; i < m_tabWidget->count(); i++) {
         ChatTab* tab = qobject_cast<ChatTab*>(m_tabWidget->widget(i));
         tab->updateSendMessageShortcuts(newSendMessageShortcuts);

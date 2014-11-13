@@ -22,7 +22,6 @@
 #include <QRegExp>
 
 #include <KPluginFactory>
-#include <KDebug>
 
 typedef QPair<QRegExp, QString> FormatTag;
 
@@ -115,3 +114,5 @@ void FormatFilter::Private::addTag (const QString &markingCharacter, const QStri
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<FormatFilter>();)
 K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_formatting"))
+
+#include "format-filter.moc"

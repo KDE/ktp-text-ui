@@ -20,7 +20,7 @@
 #ifndef BEHAVIORCONFIG_H
 #define BEHAVIORCONFIG_H
 
-#include <KDE/KCModule>
+#include <KCModule>
 
 namespace Ui
 {

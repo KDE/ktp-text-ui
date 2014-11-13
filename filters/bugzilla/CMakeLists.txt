@@ -1,16 +1,9 @@
-set (ktptextui_message_filter_bugzilla_SRCS
-     bugzilla-filter.cpp
-)
-
-kde4_add_plugin (ktptextui_message_filter_bugzilla
-                 ${ktptextui_message_filter_bugzilla_SRCS}
-)
+add_library (ktptextui_message_filter_bugzilla MODULE bugzilla-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_bugzilla
-    ${QT_LIBRARIES}
-    ${KDE4_KIO_LIBS}
-    ${KTP_LIBRARIES}
-    ${TELEPATHY_QT4_LIBRARIES}
+    KF5::KIOWidgets
+    KF5::KDELibs4Support
+    KTp::CommonInternals
 )
 
 # Install:

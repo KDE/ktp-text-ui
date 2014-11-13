@@ -30,9 +30,8 @@
 K_PLUGIN_FACTORY(KCMTelepathyChatBehaviorConfigFactory, registerPlugin<BehaviorConfig>();)
 K_EXPORT_PLUGIN(KCMTelepathyChatBehaviorConfigFactory("ktp_chat_behavior", "kcm_ktp_chat_behavior"))
 
-
 BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
-    : KCModule(KCMTelepathyChatBehaviorConfigFactory::componentData(), parent, args),
+    : KCModule(parent, args),
       ui(new Ui::BehaviorConfigUi())
 {
     kDebug();
@@ -169,3 +168,5 @@ void BehaviorConfig::onDontLeaveGroupChatsChanged(bool state)
     m_dontLeaveGroupChats = state;
     Q_EMIT changed(true);
 }
+
+#include "behavior-config.moc"

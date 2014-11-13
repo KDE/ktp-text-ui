@@ -30,14 +30,16 @@
 #include "adium-theme-status-info.h"
 
 #include <KDebug>
+#include <KDialog>
 #include <KLocalizedString>
 #include <KPluginFactory>
+#include <KSharedConfig>
 
 K_PLUGIN_FACTORY(KCMTelepathyChatAppearanceConfigFactory, registerPlugin<AppearanceConfig>();)
 K_EXPORT_PLUGIN(KCMTelepathyChatAppearanceConfigFactory("ktp_chat_appearance", "kcm_ktp_chat_appearance"))
 
 AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList &args)
-    : KCModule(KCMTelepathyChatAppearanceConfigFactory::componentData(), parent, args)
+    : KCModule(parent, args)
 {
     QVBoxLayout *topLayout = new QVBoxLayout(this);
     topLayout->setMargin(0);
@@ -46,11 +48,11 @@ AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList &args)
     KTabWidget *tabWidget = new KTabWidget(this);
 
     m_singleTab = new AppearanceConfigTab(this, AppearanceConfigTab::NormalChat);
-    tabWidget->addTab(m_singleTab, KIcon(), i18nc("@title:tab", "Normal Chat"));
+    tabWidget->addTab(m_singleTab, QIcon(), i18nc("@title:tab", "Normal Chat"));
     connect(m_singleTab, SIGNAL(tabChanged()), this, SLOT(changed()));
 
     m_groupTab = new AppearanceConfigTab(this, AppearanceConfigTab::GroupChat);
-    tabWidget->addTab(m_groupTab, KIcon(), i18nc("@title:tab", "Group Chat"));
+    tabWidget->addTab(m_groupTab, QIcon(), i18nc("@title:tab", "Group Chat"));
     connect(m_groupTab, SIGNAL(tabChanged()), this, SLOT(changed()));
 
     topLayout->addWidget(tabWidget, 0, 0);
@@ -89,3 +91,5 @@ void AppearanceConfig::save()
 
     Q_EMIT reloadTheme();
 }
+
+#include "appearance-config.moc"

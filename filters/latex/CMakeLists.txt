@@ -1,41 +1,28 @@
-set (ktptextui_message_filter_latex_SRCS
-     latex-filter.cpp
-)
+kconfig_add_kcfg_files(ktptextui_message_filter_latex_SRCS latexconfig.kcfgc)
 
-kde4_add_kcfg_files(ktptextui_message_filter_latex_SRCS latexconfig.kcfgc)
-
-kde4_add_plugin (ktptextui_message_filter_latex
+add_library(ktptextui_message_filter_latex MODULE latex-filter.cpp
                  ${ktptextui_message_filter_latex_SRCS}
 )
 
 target_link_libraries (ktptextui_message_filter_latex
     ktpchat
-    ${QT_LIBRARIES}
-    ${QT_QTGUI_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${TELEPATHY_QT4_LIBRARIES}
-    ${KTP_LIBRARIES}
+    Qt5::Gui
+    
+    KTp::CommonInternals
 )
 
-set (kcm_ktptextui_message_filter_latex_SRCS
-     latex-config.cpp
-)
+kconfig_add_kcfg_files(kcm_ktptextui_message_filter_latex_SRCS latexconfig.kcfgc)
 
-kde4_add_kcfg_files(kcm_ktptextui_message_filter_latex_SRCS latexconfig.kcfgc)
-
-kde4_add_ui_files (kcm_ktptextui_message_filter_latex_SRCS
+qt5_wrap_ui (kcm_ktptextui_message_filter_latex_SRCS
     latex-config.ui
 )
 
-kde4_add_plugin (kcm_ktptextui_message_filter_latex
+add_library(kcm_ktptextui_message_filter_latex MODULE latex-config.cpp
                  ${kcm_ktptextui_message_filter_latex_SRCS}
 )
 
 target_link_libraries (kcm_ktptextui_message_filter_latex
     ktpchat
-    ${QT_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
 )
 
 # Install:

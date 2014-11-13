@@ -27,12 +27,11 @@
 #include "types.h"
 
 #include <QtCore/QString>
-#include <QtGui/QWidget>
-#include <QtWebKit/QWebPage>
+#include <QWidget>
+#include <QWebPage>
 
-#include <KIcon>
+#include <QIcon>
 #include <KColorScheme>
-#include <KShortcut>
 
 #include <TelepathyQt/ReceivedMessage>
 
@@ -61,10 +60,10 @@ public:
     ChatSearchBar* chatSearchBar() const;
 
     /** Returns the icon of this chat window */
-    KIcon icon() const;
+    QIcon icon() const;
 
     /** Returns the icon for the account used in this chat window */
-    KIcon accountIcon() const;
+    QIcon accountIcon() const;
 
     /** returns whether the chat is considered a group chat */
     bool isGroupChat() const;
@@ -135,7 +134,7 @@ public Q_SLOTS:
       */
     void acknowledgeMessages();
 
-    void updateSendMessageShortcuts(const KShortcut &shortcuts);
+    void updateSendMessageShortcuts(const QKeySequence &shortcuts);
 
     void reloadTheme();
 
@@ -185,7 +184,7 @@ Q_SIGNALS:
     void titleChanged(const QString &title);
 
     /** Emmitted if the icon for this channel changes*/
-    void iconChanged(const KIcon &icon);
+    void iconChanged(const QIcon &icon);
 
     /** Emmited whenever a message is received in this channel. It is up to the parent application to acknowledge these messages*/
     void messageReceived(const Tp::ReceivedMessage &message);

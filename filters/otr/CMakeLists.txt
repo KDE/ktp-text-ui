@@ -1,16 +1,10 @@
-set (ktptextui_message_filter_otr_SRCS
-     otr-filter.cpp
-)
-
-kde4_add_plugin (ktptextui_message_filter_otr
-                 ${ktptextui_message_filter_otr_SRCS}
-)
+add_library (ktptextui_message_filter_otr MODULE otr-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_otr
-    ${QT_LIBRARIES}
-    ${KDE4_KIO_LIBS}
-    ${KTP_LIBRARIES}
-    ${KTP_OTR_LIBRARIES}
+    KF5::KIOWidgets
+    KF5::I18n
+    KTp::CommonInternals
+    KTp::OTR
 )
 
 # Install:

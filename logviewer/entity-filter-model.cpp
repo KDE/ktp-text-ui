@@ -24,7 +24,7 @@
 
 #include <TelepathyQt/Types>
 
-#include <KDE/KDebug>
+#include <KDebug>
 
 EntityFilterModel::EntityFilterModel(QObject *parent):
     QSortFilterProxyModel(parent)

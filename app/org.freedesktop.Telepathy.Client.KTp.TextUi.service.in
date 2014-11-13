@@ -1,3 +1,3 @@
 [D-BUS Service]
 Name=org.freedesktop.Telepathy.Client.KTp.TextUi
-Exec=@LIBEXEC_INSTALL_DIR@/ktp-text-ui
+Exec=@CMAKE_INSTALL_FULL_LIBEXECDIR@/ktp-text-ui

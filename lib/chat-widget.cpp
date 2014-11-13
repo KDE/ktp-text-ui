@@ -32,9 +32,9 @@
 #include "authenticationwizard.h"
 #include "otr-notifications.h"
 
-#include <QtGui/QKeyEvent>
-#include <QtGui/QAction>
-#include <QtGui/QMenu>
+#include <QKeyEvent>
+#include <QAction>
+#include <QMenu>
 #include <QSortFilterProxyModel>
 
 #include <KColorDialog>
@@ -49,6 +49,7 @@
 #include <KFileDialog>
 #include <KMessageWidget>
 #include <KMessageBox>
+#include <KIconLoader>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/Message>
@@ -120,16 +121,15 @@ public:
 
     QList< Tp::OutgoingFileTransferChannelPtr > tmpFileTransfers;
 
-    KComponentData telepathyComponentData();
+    static QString telepathyComponentName();
     KTp::AbstractMessageFilter *notifyFilter;
 };
 
 
 //FIXME I would like this to be part of the main KDE Telepathy library as a static function somewhere.
-KComponentData ChatWidgetPrivate::telepathyComponentData()
+QString ChatWidgetPrivate::telepathyComponentName()
 {
-    KAboutData telepathySharedAboutData("ktelepathy",0,KLocalizedString(),0);
-    return KComponentData(telepathySharedAboutData);
+    return QStringLiteral("ktelepathy");
 }
 
 ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr &account, QWidget *parent)
@@ -157,11 +157,11 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->ui.setupUi(this);
     if (d->isGroupChat) {
         d->contactsMenu = new QMenu(this);
-        QAction *action = d->contactsMenu->addAction(KIcon::fromTheme(QLatin1String("text-x-generic")),
+        QAction *action = d->contactsMenu->addAction(QIcon::fromTheme(QLatin1String("text-x-generic")),
                                    i18n("Open chat window"),
                                    this, SLOT(onOpenContactChatWindowClicked()));
         action->setObjectName(QLatin1String("OpenChatWindowAction"));
-        action = d->contactsMenu->addAction(KIcon::fromTheme(QLatin1String("mail-attachment")),
+        action = d->contactsMenu->addAction(QIcon::fromTheme(QLatin1String("mail-attachment")),
                                             i18n("Send file"),
                                             this, SLOT(onSendFileClicked()));
         action->setObjectName(QLatin1String("SendFileAction"));
@@ -180,9 +180,9 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     d->fileResourceTransferMenu = new QMenu(this);
     // This action's text is going to be changed in the dropEvent method to add the destination image service.
-    d->shareImageMenuAction = new QAction(KIcon::fromTheme(QLatin1String("insert-image")), i18n("Share Image"), this);
+    d->shareImageMenuAction = new QAction(QIcon::fromTheme(QLatin1String("insert-image")), i18n("Share Image"), this);
     connect(d->shareImageMenuAction, SIGNAL(triggered(bool)), this, SLOT(onShareImageMenuActionTriggered()));
-    d->fileTransferMenuAction = new QAction(KIcon::fromTheme(QLatin1String("mail-attachment")), i18n("Send File"), this);
+    d->fileTransferMenuAction = new QAction(QIcon::fromTheme(QLatin1String("mail-attachment")), i18n("Send File"), this);
 
     d->fileTransferMenuAction->setEnabled(targetContact && targetContact->fileTransferCapability());
     d->fileResourceTransferMenu->addAction(d->fileTransferMenuAction);
@@ -302,14 +302,14 @@ Tp::AccountPtr ChatWidget::account() const
     return d->account;
 }
 
-KIcon ChatWidget::icon() const
+QIcon ChatWidget::icon() const
 {
     if (!d->isGroupChat) {
         if (d->account->currentPresence() != Tp::Presence::offline()) {
             //normal chat - self and one other person.
             //find the other contact which isn't self.
             Tp::ContactPtr otherContact = d->channel->textChannel()->targetContact();
-            KIcon presenceIcon = KTp::Presence(otherContact->presence()).icon();
+            QIcon presenceIcon = KTp::Presence(otherContact->presence()).icon();
 
             if (otherContact->clientTypes().contains(QLatin1String("phone"))) {
                 //we paint a warning symbol in the right-bottom corner
@@ -317,7 +317,7 @@ KIcon ChatWidget::icon() const
                 QPixmap pixmap = presenceIcon.pixmap(32, 32);
                 QPainter painter(&pixmap);
                 painter.drawPixmap(8, 8, 24, 24, phonePixmap);
-                return KIcon(pixmap);
+                return QIcon(pixmap);
             }
             return presenceIcon;
         } else {
@@ -326,16 +326,16 @@ KIcon ChatWidget::icon() const
     } else {
         //group chat
         if (d->account->currentPresence() != Tp::Presence::offline()) {
-            return KIcon(groupChatOnlineIcon);
+            return QIcon::fromTheme(groupChatOnlineIcon);
         } else {
-            return KIcon(groupChatOfflineIcon);
+            return QIcon::fromTheme(groupChatOfflineIcon);
         }
     }
 }
 
-KIcon ChatWidget::accountIcon() const
+QIcon ChatWidget::accountIcon() const
 {
-    return KIcon(d->account->iconName());
+    return QIcon::fromTheme(d->account->iconName());
 }
 
 bool ChatWidget::isGroupChat() const
@@ -647,7 +647,7 @@ void ChatWidget::acknowledgeMessages()
     }
 }
 
-void ChatWidget::updateSendMessageShortcuts(const KShortcut &shortcuts)
+void ChatWidget::updateSendMessageShortcuts(const QKeySequence &shortcuts)
 {
     d->ui.sendMessageBox->setSendMessageShortcuts(shortcuts);
 }

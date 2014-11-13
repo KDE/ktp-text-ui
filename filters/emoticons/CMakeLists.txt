@@ -1,20 +1,8 @@
-set (ktptextui_message_filter_emoticons_SRCS
-     emoticon-filter.cpp
-)
-
-kde4_add_ui_files (ktptextui_message_filter_emoticons_SRCS
-)
-
-kde4_add_plugin (ktptextui_message_filter_emoticons
-                 ${ktptextui_message_filter_emoticons_SRCS}
-)
+add_library (ktptextui_message_filter_emoticons MODULE emoticon-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_emoticons
-    ${QT_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
-    ${TELEPATHY_QT4_LIBRARIES}
-    ${KDE4_KEMOTICONS_LIBS}
-    ${KTP_LIBRARIES}
+    KF5::Emoticons
+    KTp::CommonInternals
 )
 
 # Install:

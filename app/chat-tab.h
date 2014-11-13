@@ -23,8 +23,7 @@
 #include "chat-widget.h"
 
 #include <QtCore/QString>
-#include <QtGui/QWidget>
-#include <KIcon>
+#include <QWidget>
 #include <KColorScheme>
 
 class ChatWidgetPrivate;

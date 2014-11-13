@@ -23,6 +23,7 @@
 #include <KAboutData>
 #include <KComponentData>
 #include <KNotification>
+#include <KLocalizedString>
 
 NotifyFilter::NotifyFilter(ChatWidget *widget) :
     KTp::AbstractMessageFilter(widget),
@@ -32,9 +33,8 @@ NotifyFilter::NotifyFilter(ChatWidget *widget) :
 
 // TODO: when d_ed makes this available in a libarary, like he
 // said in chat-widget.cpp, replace this
-static KComponentData telepathyComponentData() {
-    KAboutData telepathySharedAboutData("ktelepathy",0,KLocalizedString(),0);
-    return KComponentData(telepathySharedAboutData);
+static QString telepathyComponentName() {
+    return QStringLiteral("ktelepathy");
 }
 
 void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context) {
@@ -78,7 +78,7 @@ void NotifyFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
                 | KNotification::CloseWhenWidgetActivated
                 | KNotification::CloseOnTimeout);
 
-    notification->setComponentData(telepathyComponentData());
+    notification->setComponentName(telepathyComponentName());
     notification->setTitle(i18n("%1 has sent you a message",
                                 message.senderAlias()));
 

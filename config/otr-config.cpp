@@ -40,7 +40,7 @@ K_PLUGIN_FACTORY(KCMTelepathyChatOtrConfigFactory, registerPlugin<OTRConfig>();)
 K_EXPORT_PLUGIN(KCMTelepathyChatOtrConfigFactory("ktp_chat_otr", "kcm_ktp_chat_otr"))
 
 OTRConfig::OTRConfig(QWidget *parent, const QVariantList& args)
-    : KCModule(KCMTelepathyChatOtrConfigFactory::componentData(), parent, args),
+    : KCModule(parent, args),
       ui(new Ui::OTRConfigUi()),
       am(KTp::accountManager()),
       fpCtxMenu(new QMenu(this))
@@ -283,3 +283,5 @@ void OTRConfig::onForgetClicked()
     loadFingerprints();
     onCurrentFpCellChanged(ui->tbFingerprints->currentRow(), ui->tbFingerprints->currentColumn(), 0, 0);
 }
+
+#include "otr-config.moc"

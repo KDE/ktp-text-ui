@@ -20,6 +20,7 @@
 #define CHATWINDOWSTYLE_H
 
 #include <QtCore/QHash>
+#include <QtCore/QObject>
 #include <ktpchat_export.h>
 
 /**

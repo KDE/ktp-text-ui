@@ -22,19 +22,17 @@
 
 #include "contact-delegate.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QPainterPath>
-#include <QtGui/QToolTip>
+#include <QPainter>
+#include <QPainterPath>
+#include <QToolTip>
 #include <QApplication>
 #include <QStyle>
 #include <QHelpEvent>
+#include <QFontDatabase>
 
 #include <KIconLoader>
-#include <KIcon>
 #include <KDebug>
-#include <KGlobalSettings>
-#include <KDE/KLocale>
-#include <KStandardDirs>
+#include <KLocale>
 
 #include <KTp/types.h>
 
@@ -74,7 +72,7 @@ void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QPixmap avatar;
 
     if (index.data(ChannelContactModel::IsTypingRole).toBool()) {
-        avatar = KIcon(QLatin1String("document-edit")).pixmap(KIconLoader::SizeSmallMedium);
+        avatar = QIcon::fromTheme(QStringLiteral("document-edit")).pixmap(KIconLoader::SizeSmallMedium);
     } else {
         avatar = qvariant_cast<QPixmap>(index.data(KTp::ContactAvatarPixmapRole));
     }
@@ -86,7 +84,7 @@ void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // This value is used to set the correct width for the username and the presence message.
     int rightIconsWidth = m_presenceIconSize + m_spacing;
 
-    QPixmap icon = KIcon(index.data(KTp::ContactPresenceIconRole).toString()).pixmap(KIconLoader::SizeSmallMedium);
+    QPixmap icon = QIcon::fromTheme(index.data(KTp::ContactPresenceIconRole).toString()).pixmap(KIconLoader::SizeSmallMedium);
 
     QRect statusIconRect = optV4.rect;
 
@@ -109,8 +107,7 @@ void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->drawPixmap(phoneIconRect, phone);
     }
 
-    QFont nameFont;
-    nameFont = KGlobalSettings::generalFont();
+    QFont nameFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
     const QFontMetrics nameFontMetrics(nameFont);
 
@@ -140,7 +137,7 @@ QSize ContactDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
     Q_UNUSED(option);
     Q_UNUSED(index);
 
-    return QSize(0, qMax(m_avatarSize + 2 * m_spacing, KGlobalSettings::smallestReadableFont().pixelSize() + m_spacing));
+    return QSize(0, qMax(m_avatarSize + 2 * m_spacing, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pixelSize() + m_spacing));
 }
 
 #include "contact-delegate.moc"

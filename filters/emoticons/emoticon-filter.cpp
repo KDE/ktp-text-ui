@@ -47,4 +47,4 @@ EmoticonFilter::~EmoticonFilter()
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<EmoticonFilter>();)
 K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_emoticons"))
 
-#include "moc_emoticon-filter.cpp"
+#include "emoticon-filter.moc"

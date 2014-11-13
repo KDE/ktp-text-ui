@@ -30,21 +30,20 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QTextCodec>
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QFontDatabase>
-#include <QtGui/QMenu>
-#include <QtGui/QDesktopWidget>
-#include <QtWebKit/QWebFrame>
-#include <QtWebKit/QWebElement>
-#include <QtWebKit/QWebInspector>
-#include <QtWebKit/QWebSettings>
+#include <QContextMenuEvent>
+#include <QFontDatabase>
+#include <QMenu>
+#include <QDesktopWidget>
+#include <QWebFrame>
+#include <QWebElement>
+#include <QWebInspector>
+#include <QWebSettings>
 #include <QApplication>
 
 #include <KAction>
 #include <KDebug>
 #include <KEmoticonsTheme>
 #include <KGlobal>
-#include <KStandardDirs>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KMessageBox>

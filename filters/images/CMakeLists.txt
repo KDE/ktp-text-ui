@@ -1,20 +1,11 @@
-set (ktptextui_message_filter_images_SRCS
-     images-filter.cpp
-)
+add_definitions(-DTRANSLATION_DOMAIN=\"ktp-filters\")
 
-kde4_add_ui_files (ktptextui_message_filter_images_SRCS
-)
-
-kde4_add_plugin (ktptextui_message_filter_images
-                 ${ktptextui_message_filter_images_SRCS}
-)
+add_library(ktptextui_message_filter_images MODULE images-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_images
-    ${QT_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
-    ${TELEPATHY_QT4_LIBRARIES}
-    ${KDE4_KEMOTICONS_LIBS}
-    ${KTP_LIBRARIES}
+    KF5::Emoticons
+    KF5::KDELibs4Support
+    KTp::CommonInternals
 )
 
 # Install:

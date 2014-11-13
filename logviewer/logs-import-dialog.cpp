@@ -22,9 +22,9 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QProgressBar>
+#include <QIcon>
 #include <KListWidget>
 #include <KLocalizedString>
-#include <KDebug>
 #include <KTp/logs-importer.h>
 #include <TelepathyQt/Account>
 
@@ -36,7 +36,7 @@ LogsImportDialog::LogsImportDialog(QObject *parent)
     Q_UNUSED(parent);
 
     setWindowTitle(i18n("Import Kopete Logs"));
-    setWindowIcon(KIcon::fromTheme(QLatin1String("telepathy-kde")));
+    setWindowIcon(QIcon::fromTheme(QLatin1String("telepathy-kde")));
 
     QWidget *mainWidget = new QWidget(this);
     setMainWidget(mainWidget);
@@ -80,7 +80,7 @@ void LogsImportDialog::importLogs(const QList< Tp::AccountPtr >& accounts)
     Q_FOREACH(const Tp::AccountPtr &account, accounts) {
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(account->displayName());
-        item->setIcon(KIcon(account->iconName()));
+        item->setIcon(QIcon::fromTheme(account->iconName()));
         item->setCheckState(Qt::Checked);
         item->setData(Qt::UserRole + 1, QVariant::fromValue(account));
 

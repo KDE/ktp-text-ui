@@ -1,4 +1,3 @@
-include_directories (${KTP_INCLUDE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/image-sharer)
 
 set(ktpchat_SRCS
@@ -28,22 +27,24 @@ set(ktpchat_UI
     keygendialog.ui
 )
 
-kde4_add_ui_files(ktpchat_SRCS ${ktpchat_UI})
+qt5_wrap_ui(ktpchat_SRCS ${ktpchat_UI})
 
-kde4_add_library(ktpchat SHARED ${ktpchat_SRCS})
+add_library(ktpchat SHARED ${ktpchat_SRCS})
 
 set_target_properties(ktpchat PROPERTIES SOVERSION ${KTP_TEXT_UI_VERSION} VERSION ${KTP_TEXT_UI_VERSION})
 
 target_link_libraries(ktpchat
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${TELEPATHY_QT4_LIBRARIES}
-    ${KDE4_KDEWEBKIT_LIBRARY}
-    ${KDE4_KEMOTICONS_LIBS}
-    ${KTP_LIBRARIES}
-    ${KTP_LOGGER_LIBRARIES}
-    ${KTP_OTR_LIBRARIES}
+    KF5::KIOWidgets
+    KF5::WebKit
+    KF5::Emoticons
+    KF5::IconThemes
+    KF5::Archive
+    KF5::SonnetCore
+    KF5::KDELibs4Support
+    KTp::CommonInternals
+    KTp::Logger
+    KTp::OTR
+    Qt5::WebKitWidgets
     ktpimagesharer
 )
 install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})

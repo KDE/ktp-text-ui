@@ -1,17 +1,9 @@
-set (ktptextui_message_filter_highlight_SRCS
-     highlight-filter.cpp
-)
-
-kde4_add_plugin (ktptextui_message_filter_highlight
-                 ${ktptextui_message_filter_highlight_SRCS}
-)
+add_library (ktptextui_message_filter_highlight MODULE highlight-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_highlight
     ktpchat
-    ${QT_LIBRARIES}
-    ${KDE4_KDECORE_LIBS}
-    ${TELEPATHY_QT4_LIBRARIES}
-    ${KTP_LIBRARIES}
+    
+    KTp::CommonInternals
 )
 
 # Install:

@@ -38,7 +38,7 @@ class ChatWindowStyle;
 
 class QContextMenuEvent;
 
-class KAction;
+class QAction;
 
 class AdiumThemeViewProxy : public QObject
 {
@@ -152,7 +152,7 @@ private:
     QString m_defaultAvatar;
     AdiumThemeContentInfo m_lastContent;
     bool m_displayHeader;
-    KAction *m_openLinkAction;
+    QAction *m_openLinkAction;
 
     QString m_service;
     QString m_serviceIconPath;

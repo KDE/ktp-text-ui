@@ -30,19 +30,19 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 
-#include <QtGui/QKeyEvent>
+#include <QKeyEvent>
 
 ChatSearchBar::ChatSearchBar(QWidget *parent)
     : QWidget(parent)
     , m_searchInput(new KLineEdit(this))
     , m_closeButton(new QToolButton(this))
-    , m_nextButton(new KPushButton(KIcon(QLatin1String("go-down-search")), i18nc("Next search result" ,"&Next"), this))
-    , m_previousButton(new KPushButton(KIcon(QLatin1String("go-up-search")), i18nc("Previous search result" ,"&Previous"), this))
+    , m_nextButton(new KPushButton(QIcon::fromTheme(QStringLiteral("go-down-search")), i18nc("Next search result" ,"&Next"), this))
+    , m_previousButton(new KPushButton(QIcon::fromTheme(QStringLiteral("go-up-search")), i18nc("Previous search result" ,"&Previous"), this))
     , m_caseSensitive(false)
 {
     // close button setup
     m_closeButton->setAutoRaise(true);
-    m_closeButton->setIcon(KIcon(QLatin1String("dialog-close")));
+    m_closeButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-close")));
     connect(m_closeButton, SIGNAL(clicked(bool)), this, SLOT(toggleView(bool)));
 
     // search line setup

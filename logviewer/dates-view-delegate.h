@@ -20,7 +20,7 @@
 #ifndef DATESVIEWDELEGATE_H
 #define DATESVIEWDELEGATE_H
 
-#include <QtGui/QStyledItemDelegate>
+#include <QStyledItemDelegate>
 
 class DatesViewDelegate : public QStyledItemDelegate
 {

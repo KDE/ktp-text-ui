@@ -1,19 +1,10 @@
-set (ktptextui_message_filter_searchexpansion_SRCS
-     searchexpansion-filter.cpp
-)
-
-kde4_add_plugin (ktptextui_message_filter_searchexpansion
-                 ${ktptextui_message_filter_searchexpansion_SRCS}
-)
+add_library (ktptextui_message_filter_searchexpansion MODULE searchexpansion-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_searchexpansion
     ktpchat
-    ${QT_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${TELEPATHY_QT4_LIBRARIES}
-    ${KDE4_KEMOTICONS_LIBS}
-    ${KTP_LIBRARIES}
+    KF5::KIOWidgets
+    KF5::Emoticons
+    KTp::CommonInternals
 )
 
 # Install:

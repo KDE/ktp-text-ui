@@ -21,9 +21,9 @@
 #include "channel-contact-model.h"
 #include "text-chat-config.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QAction>
+#include <QMenu>
+#include <QContextMenuEvent>
+#include <QAction>
 #include <QtCore/QTimer>
 #include <QtCore/QDebug>
 #include <QtCore/QString>
@@ -142,13 +142,13 @@ bool ChatTextEdit::event(QEvent *e)
     if (e->type() == QEvent::ShortcutOverride) {
         // Extract key code for shortcut sequence comparison
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(e);
-        int key = keyEvent->key();
+        QKeySequence key = keyEvent->key();
         if (keyEvent->modifiers() != Qt::KeypadModifier) {
             // Keypad modifier is not used in KDE shortcuts setup, so, we need to skip it.
-            key |= keyEvent->modifiers();
+            key = QKeySequence(keyEvent->modifiers() | keyEvent->key());
         }
 
-        if (m_sendMessageShortcuts.contains(key)) {
+        if (m_sendMessageShortcuts.matches(key) == QKeySequence::ExactMatch) {
             // keyPressEvent() handles Control modifier wrong, so we need that thing
             // to be in event().
             this->sendMessage();
@@ -203,9 +203,9 @@ void ChatTextEdit::sendMessage()
     Q_EMIT returnKeyPressed();
 }
 
-void ChatTextEdit::setSendMessageShortcuts(const KShortcut &shortcuts)
+void ChatTextEdit::setSendMessageShortcuts(const QKeySequence &shortcuts)
 {
-    m_sendMessageShortcuts = KShortcut(shortcuts);
+    m_sendMessageShortcuts = shortcuts;
 }
 
 // History of sent messages based on code from Konversation

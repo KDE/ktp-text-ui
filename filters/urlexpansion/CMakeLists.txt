@@ -1,21 +1,9 @@
-find_package(QJSON REQUIRED)
-
-include_directories(${QJSON_INCLUDE_DIR})
-
-set (ktptextui_message_filter_urlexpansion_SRCS
-     urlexpansion-filter.cpp
-)
-
-kde4_add_plugin (ktptextui_message_filter_urlexpansion
-                 ${ktptextui_message_filter_urlexpansion_SRCS}
-)
+add_library (ktptextui_message_filter_urlexpansion MODULE urlexpansion-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_urlexpansion
-    ${QT_LIBRARIES}
-    ${KDE4_KIO_LIBS}
-    ${KTP_LIBRARIES}
-    ${TELEPATHY_QT4_LIBRARIES}
-    ${QJSON_LIBRARIES}
+    KF5::KIOWidgets
+    KF5::KDELibs4Support
+    KTp::CommonInternals
 )
 
 # Install:

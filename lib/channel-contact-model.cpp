@@ -20,8 +20,9 @@
 #include "channel-contact-model.h"
 #include "text-chat-config.h"
 
+#include <QPixmap>
+
 #include <KDebug>
-#include <KIcon>
 
 #include <KTp/types.h>
 

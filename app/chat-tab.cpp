@@ -26,8 +26,8 @@
 #include <KTabWidget>
 #include <KDebug>
 #include <QStackedWidget>
-#include <KDE/KColorScheme>
-#include <KDE/KWindowSystem>
+#include <KColorScheme>
+#include <KWindowSystem>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/TextChannel>

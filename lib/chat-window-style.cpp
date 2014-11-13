@@ -26,13 +26,13 @@
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
 #include <QtCore/qmath.h>
+#include <QStandardPaths>
 #include <QFont>
+#include <QFontDatabase>
 
 // KDE includes
 #include <KDebug>
 #include <KLocale>
-#include <KStandardDirs>
-#include <KGlobalSettings>
 
 class ChatWindowStyle::Private
 {
@@ -76,9 +76,10 @@ ChatWindowStyle::ChatWindowStyle(const QString &styleId, const QString &variantP
 
 void ChatWindowStyle::init(const QString &styleId, StyleBuildMode styleBuildMode)
 {
-    QStringList styleDirs = KGlobal::dirs()->findDirs("data",
-        QString(QLatin1String("ktelepathy/styles/%1/Contents/Resources/")).arg(styleId)
-    );
+    QStringList styleDirs = QStandardPaths::locateAll(
+        QStandardPaths::GenericDataLocation,
+        QStringLiteral("ktelepathy/styles/%1/Contents/Resources/").arg(styleId),
+        QStandardPaths::LocateDirectory);
 
     if (styleDirs.isEmpty()) {
         kDebug() << "Failed to find style" << styleId;
@@ -352,13 +353,13 @@ void ChatWindowStyle::readStyleFiles()
         d->defaultVariantName = i18nc("Normal style variant menu item", "Normal");
     }
     kDebug() << "defaultVariantName = " << d->defaultVariantName;
-    d->defaultFontFamily  = plistReader.defaultFontFamily().isEmpty() ? KGlobalSettings::generalFont().family()
+    d->defaultFontFamily  = plistReader.defaultFontFamily().isEmpty() ? QFontDatabase::systemFont(QFontDatabase::GeneralFont).family()
                                                                       : plistReader.defaultFontFamily();
 
     // If the theme has no default font size, use the system font size, but since that is in points (pt), we need to convert
     // it to pixel size (and using pixelSize() does not work if the QFont was not set up using setPixelSize), so we use the
     // rough conversion ratio 4/3 and floor the number
-    d->defaultFontSize    = plistReader.defaultFontSize() == 0 ? qFloor(KGlobalSettings::generalFont().pointSizeF() * (4.0/3.0))
+    d->defaultFontSize    = plistReader.defaultFontSize() == 0 ? qFloor(QFontDatabase::systemFont(QFontDatabase::GeneralFont).pointSizeF() * (4.0/3.0))
                                                                : plistReader.defaultFontSize();
     d->disableCombineConsecutive = plistReader.disableCombineConsecutive();
     d->messageViewVersion = plistReader.messageViewVersion();
@@ -450,7 +451,7 @@ void ChatWindowStyle::readStyleFiles()
     if (content(Template).isEmpty())
     {
         d->hasCustomTemplateHtml = false;
-        QString templateFileName(KGlobal::dirs()->findResource("data", QLatin1String("ktelepathy/Template.html")));
+        QString templateFileName(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("ktelepathy/Template.html")));
 
         if (!templateFileName.isEmpty() && QFile::exists(templateFileName)) {
             fileAccess.setFileName(templateFileName);

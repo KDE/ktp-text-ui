@@ -4,14 +4,12 @@ set(kcm_ktp_logviewer_behavior_SRCS behavior-config.cpp)
 
 set(kcm_ktp_logviewer_behavior_UI behavior-config.ui)
 
-kde4_add_ui_files(kcm_ktp_logviewer_behavior_SRCS ${kcm_ktp_logviewer_behavior_UI})
+qt5_wrap_ui(kcm_ktp_logviewer_behavior_SRCS ${kcm_ktp_logviewer_behavior_UI})
 
-kde4_add_plugin(kcm_ktp_logviewer_behavior ${kcm_ktp_logviewer_behavior_SRCS})
+add_library(kcm_ktp_logviewer_behavior MODULE ${kcm_ktp_logviewer_behavior_SRCS})
 
 target_link_libraries(kcm_ktp_logviewer_behavior
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
+    KF5::KCMUtils
     ktpchat
 )
 

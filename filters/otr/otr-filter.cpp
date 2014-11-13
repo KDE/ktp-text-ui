@@ -21,8 +21,7 @@
 #include <KTp/OTR/utils.h>
 
 #include <KPluginFactory>
-#include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 OTRFilter::OTRFilter(QObject *parent, const QVariantList &) :
     AbstractMessageFilter(parent)
@@ -38,3 +37,5 @@ void OTRFilter::filterMessage(KTp::Message &message, const KTp::MessageContext&)
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<OTRFilter>();)
 K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_otr"))
+
+#include "otr-filter.moc"

@@ -27,6 +27,10 @@
 #include "adium-theme-status-info.h"
 
 #include <KMessageBox>
+#include <KLocalizedString>
+#include <KIconLoader>
+
+#include <QFontDatabase>
 
 AppearanceConfigTab::AppearanceConfigTab(QWidget *parent, TabMode mode)
     : QWidget(parent),
@@ -333,7 +337,7 @@ void AppearanceConfigTab::defaultTab()
     ui->showHeader->setChecked(false);
     ui->customFontBox->setChecked(false);
     ui->chatView->setUseCustomFont(false);
-    ui->fontFamily->setCurrentFont(KGlobalSettings::generalFont());
+    ui->fontFamily->setCurrentFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
     ui->fontSize->setValue(QWebSettings::DefaultFontSize);
     ui->showPresenceCheckBox->setChecked(!m_groupChat);
     ui->showJoinLeaveCheckBox->setChecked(!m_groupChat);
