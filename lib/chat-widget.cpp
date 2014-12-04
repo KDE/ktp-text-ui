@@ -64,7 +64,7 @@
 #include <KTp/actions.h>
 #include <KTp/message-processor.h>
 #include <KTp/Logger/scrollback-manager.h>
-#include <KTp/contact-info-dialog.h>
+#include <KTp/Widgets/contact-info-dialog.h>
 #include <KTp/OTR/channel-adapter.h>
 #include <KTp/OTR/utils.h>
 

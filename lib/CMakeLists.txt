@@ -44,6 +44,7 @@ target_link_libraries(ktpchat
     KTp::CommonInternals
     KTp::Logger
     KTp::OTR
+    KTp::Widgets
     Qt5::WebKitWidgets
     ktpimagesharer
 )

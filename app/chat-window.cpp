@@ -73,7 +73,7 @@
 #include <kpeople/persondata.h>
 #endif
 
-#include <KTp/contact-info-dialog.h>
+#include <KTp/Widgets/contact-info-dialog.h>
 #include <KTp/OTR/constants.h>
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
