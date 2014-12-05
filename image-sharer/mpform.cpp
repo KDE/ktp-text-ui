@@ -147,10 +147,10 @@ bool MPForm::addFile(const QString& name, const QString& path)
     return true;
 }
 
-bool MPForm::addFile(const QString& name, const QString& filePath, const QByteArray& fileData)
+bool MPForm::addFile(const QString& name, const QUrl& fileUrl, const QByteArray& fileData)
 {
     QMimeDatabase db;
-    QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(filePath));
+    QMimeType ptr = db.mimeTypeForUrl(fileUrl);
     QString mime  = ptr.name();
 
     if (mime.isEmpty())
