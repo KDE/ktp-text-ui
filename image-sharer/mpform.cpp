@@ -30,6 +30,7 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QMimeDatabase>
+#include <QDebug>
 
 // KDE includes
 
@@ -112,6 +113,7 @@ bool MPForm::addFile(const QString& name, const QString& path)
 
     if (!imageFile.open(QIODevice::ReadOnly))
     {
+        qWarning() << "Couldn't open" << path;
         return false;
     }
 
