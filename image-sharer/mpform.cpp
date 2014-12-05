@@ -32,12 +32,12 @@
 // Qt includes
 
 #include <QFile>
+#include <QUrl>
+#include <QFileInfo>
+#include <QMimeDatabase>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kmimetype.h>
-#include <kurl.h>
 #include <krandom.h>
 
 
@@ -102,8 +102,9 @@ bool MPForm::addPair(const QString& name, const QString& value, const QString& c
 
 bool MPForm::addFile(const QString& name, const QString& path)
 {
-    KMimeType::Ptr ptr = KMimeType::findByUrl(path);
-    QString mime       = ptr->name();
+    QMimeDatabase db;
+    QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(path));
+    QString mime  = ptr.name();
 
     if (mime.isEmpty())
     {
@@ -132,7 +133,7 @@ bool MPForm::addFile(const QString& name, const QString& path)
     str += name.toAscii();
     str += "\"; ";
     str += "filename=\"";
-    str += QFile::encodeName(KUrl(path).fileName());
+    str += QFile::encodeName(imageFile.fileName());
     str += "\"\r\n";
     str += "Content-Length: ";
     str += file_size.toAscii();
@@ -151,8 +152,9 @@ bool MPForm::addFile(const QString& name, const QString& path)
 
 bool MPForm::addFile(const QString& name, const QString& filePath, const QByteArray& fileData)
 {
-    KMimeType::Ptr ptr = KMimeType::findByUrl(filePath);
-    QString mime       = ptr->name();
+    QMimeDatabase db;
+    QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(filePath));
+    QString mime  = ptr.name();
 
     if (mime.isEmpty())
     {
@@ -171,7 +173,7 @@ bool MPForm::addFile(const QString& name, const QString& filePath, const QByteAr
     str += name.toAscii();
     str += "\"; ";
     str += "filename=\"";
-    str += QFile::encodeName(KUrl(filePath).fileName());
+    str += QFile::encodeName(QFileInfo(filePath).fileName());
     str += "\"\r\n";
     str += "Content-Length: ";
     str += file_size.toAscii();
