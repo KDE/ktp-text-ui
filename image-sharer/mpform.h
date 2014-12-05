@@ -45,9 +45,9 @@ public:
     bool addFile(const QString& name, const QString& path);
     bool addFile(const QString& name, const QString& filePath, const QByteArray& fileData);
 
-    QString    contentType() const;
+    QByteArray contentType() const;
     QByteArray formData()    const;
-    QString    boundary()    const;
+    QByteArray boundary()    const;
 
 private:
 

@@ -68,7 +68,7 @@ void MPForm::finish()
 bool MPForm::addPair(const QString& name, const QString& value, const QString& contentType)
 {
     QByteArray str;
-    QString content_length = QString(QLatin1String("%1")).arg(value.length());
+    QByteArray content_length = QByteArray::number(value.length());
 
     str += "--";
     str += m_boundary;
@@ -83,14 +83,14 @@ bool MPForm::addPair(const QString& name, const QString& value, const QString& c
 
     if (!contentType.isEmpty())
     {
-        str += "Content-Type: " + QByteArray(contentType.toLatin1());
+        str += "Content-Type: " + contentType.toLatin1();
         str += "\r\n";
         str += "Mime-version: 1.0 ";
         str += "\r\n";
     }
 
     str += "Content-Length: ";
-    str += content_length.toLatin1();
+    str += content_length;
     str += "\r\n\r\n";
     str += value.toUtf8();
 
@@ -123,7 +123,7 @@ bool MPForm::addFile(const QString& name, const QString& path)
     QByteArray imageData = imageFile.readAll();
 
     QByteArray str;
-    QString file_size = QString(QLatin1String("%1")).arg(imageFile.size());
+    QByteArray file_size = QByteArray::number(imageFile.size());
     imageFile.close();
 
     str += "--";
@@ -136,7 +136,7 @@ bool MPForm::addFile(const QString& name, const QString& path)
     str += QFile::encodeName(imageFile.fileName());
     str += "\"\r\n";
     str += "Content-Length: ";
-    str += file_size.toLatin1();
+    str += file_size;
     str += "\r\n";
     str += "Content-Type: ";
     str +=  mime.toLatin1();
@@ -164,7 +164,7 @@ bool MPForm::addFile(const QString& name, const QString& filePath, const QByteAr
     }
 
     QByteArray str;
-    QString file_size = QString(QLatin1String("%1")).arg(fileData.size());
+    QByteArray file_size = QByteArray::number(fileData.size());
 
     str += "--";
     str += m_boundary;
@@ -173,10 +173,10 @@ bool MPForm::addFile(const QString& name, const QString& filePath, const QByteAr
     str += name.toLatin1();
     str += "\"; ";
     str += "filename=\"";
-    str += QFile::encodeName(QFileInfo(filePath).fileName());
+    str += QFile::encodeName(fileUrl.fileName());
     str += "\"\r\n";
     str += "Content-Length: ";
-    str += file_size.toLatin1();
+    str += file_size;
     str += "\r\n";
     str += "Content-Type: ";
     str +=  mime.toLatin1();
@@ -190,14 +190,14 @@ bool MPForm::addFile(const QString& name, const QString& filePath, const QByteAr
     return true;
 }
 
-QString MPForm::contentType() const
+QByteArray MPForm::contentType() const
 {
-    return QString(QLatin1String("Content-Type: multipart/form-data; boundary=" + m_boundary));
+    return "Content-Type: multipart/form-data; boundary=" + m_boundary;
 }
 
-QString MPForm::boundary() const
+QByteArray MPForm::boundary() const
 {
-    return QLatin1String(m_boundary);
+    return m_boundary;
 }
 
 QByteArray MPForm::formData() const
