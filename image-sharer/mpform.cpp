@@ -24,11 +24,6 @@
 
 #include "mpform.h"
 
-// C++ includes
-
-#include <cstring>
-#include <cstdio>
-
 // Qt includes
 
 #include <QFile>
@@ -38,7 +33,7 @@
 
 // KDE includes
 
-#include <krandom.h>
+#include <KRandom>
 
 
 MPForm::MPForm()
