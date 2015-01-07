@@ -40,6 +40,7 @@ target_link_libraries(ktpchat
     KF5::IconThemes
     KF5::Archive
     KF5::SonnetCore
+    KF5::KDELibs4Support
     KTp::CommonInternals
     KTp::Logger
     KTp::OTR
