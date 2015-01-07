@@ -3,6 +3,7 @@ add_library (ktptextui_message_filter_otr MODULE otr-filter.cpp)
 target_link_libraries (ktptextui_message_filter_otr
     KF5::KIOWidgets
     KF5::I18n
+    KF5::CoreAddons
     KTp::CommonInternals
     KTp::OTR
 )

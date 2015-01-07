@@ -19,8 +19,9 @@
 #include "youtube-filter.h"
 
 #include <KPluginFactory>
-#include <KDebug>
-#include <KUrl>
+
+#include <QUrl>
+#include <QUrlQuery>
 
 YoutubeFilter::YoutubeFilter(QObject *parent, const QVariantList &) :
     AbstractMessageFilter(parent)
@@ -46,13 +47,11 @@ void YoutubeFilter::filterMessage(KTp::Message &message, const KTp::MessageConte
     static const QRegExp validId(QLatin1String("[a-zA-Z0-9_-]+"));
 
     Q_FOREACH (QVariant var, message.property("Urls").toList()) {
-        KUrl url = qvariant_cast<KUrl>(var);
+        QUrl url = qvariant_cast<QUrl>(var);
         if (url.host() == QLatin1String("www.youtube.com") ||
                 url.host() == QLatin1String("youtube.com")) {
-            kDebug() << "found youtube url :" << url.url();
 
-            QString v = url.queryItemValue(QLatin1String("v"));
-            kDebug() << "v =" << v;
+            QString v = QUrlQuery(url.query()).queryItemValue(QLatin1String("v"));
 
             if (validId.exactMatch(v)){
                 message.appendMessagePart(html.arg(v));
@@ -60,13 +59,11 @@ void YoutubeFilter::filterMessage(KTp::Message &message, const KTp::MessageConte
         }
         else if (url.host() == QLatin1String("www.youtu.be") ||
                 url.host() == QLatin1String("youtu.be")) {
-            kDebug() << "found youtube url :" << url.url();
 
             QString v = url.path().mid(1);
             if (v.endsWith(QLatin1Char('/'))) {
                 v.chop(1);
             }
-            kDebug() << "v =" << v;
 
             if (validId.exactMatch(v)){
                 message.appendMessagePart(html.arg(v));
@@ -76,6 +73,5 @@ void YoutubeFilter::filterMessage(KTp::Message &message, const KTp::MessageConte
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<YoutubeFilter>();)
-K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_youtube"))
 
 #include "youtube-filter.moc"

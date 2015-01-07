@@ -20,8 +20,9 @@
 #include "bugzilla-filter.h"
 
 #include <KPluginFactory>
-#include <KDebug>
-#include <KUrl>
+
+#include <QDebug>
+#include <QUrl>
 
 class BugzillaFilter::Private
 {
@@ -59,27 +60,26 @@ BugzillaFilter::~BugzillaFilter()
     delete d;
 }
 
-void BugzillaFilter::addBugDescription(KTp::Message &message, const KUrl &baseUrl)
+void BugzillaFilter::addBugDescription(KTp::Message &message, const QUrl &baseUrl)
 {
     QString bugRequestId((QLatin1String("bug_") + QString::number(d->requestCounter)));
     d->requestCounter++;
 
-    KUrl request;
-    request.setHost(baseUrl.host());
-    request.setProtocol(baseUrl.protocol());
-    request.setDirectory(baseUrl.directory());
-    request.setFileName(QLatin1String("jsonrpc.cgi"));
+    QUrl request(baseUrl);
+    request.setPath(request.path() + QStringLiteral("jsonrpc.cgi"));
 
-    request.addQueryItem(QLatin1String("method"), QLatin1String("Bug.get"));
-    request.addQueryItem(QLatin1String("params"),
-                         QString(QLatin1String("[{\"ids\":[%1]}]")).
-                         arg(baseUrl.queryItemValue(QLatin1String("id"))));
+    QUrlQuery query(request);
 
-    request.addQueryItem(QLatin1String("callback"), QLatin1String("showBugCallback"));
-    request.addQueryItem(QLatin1String("id"), bugRequestId);
+    query.addQueryItem(QStringLiteral("method"), QStringLiteral("Bug.get"));
+    query.addQueryItem(QStringLiteral("params"),
+                       QString(QStringLiteral("[{\"ids\":[%1]}]")).
+                           arg(query.queryItemValue(QStringLiteral("id"))));
 
-    message.appendMessagePart(QString::fromLatin1("<p><a href=\"%1\" id=\"%2\"></a></p>").arg(baseUrl.prettyUrl(), bugRequestId));
-    message.appendScript(QString::fromLatin1("showBug(\"%1\");").arg(request.prettyUrl()));
+    query.addQueryItem(QStringLiteral("callback"), QStringLiteral("showBugCallback"));
+    query.addQueryItem(QStringLiteral("id"), bugRequestId);
+
+    message.appendMessagePart(QString::fromLatin1("<p><a href=\"%1\" id=\"%2\"></a></p>").arg(baseUrl.toDisplayString(), bugRequestId));
+    message.appendScript(QString::fromLatin1("showBug(\"%1\");").arg(request.toDisplayString()));
 }
 
 void BugzillaFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
@@ -92,13 +92,15 @@ void BugzillaFilter::filterMessage(KTp::Message &message, const KTp::MessageCont
     QString msg = message.mainMessagePart();
     int index = msg.indexOf(d->bugText);
     while (index >= 0) {
-        KUrl baseUrl;
+        QUrl baseUrl;
 
         //TODO make this configurable
-        baseUrl.setProtocol(QLatin1String("https"));
+        baseUrl.setScheme(QLatin1String("https"));
         baseUrl.setHost(QLatin1String("bugs.kde.org"));
-        baseUrl.setFileName(QLatin1String("show_bug.cgi"));
-        baseUrl.addQueryItem(QLatin1String("id"), d->bugText.cap(1));
+        baseUrl.setPath(QLatin1String("/show_bug.cgi"));
+
+        QUrlQuery query(baseUrl);
+        query.addQueryItem(QLatin1String("id"), d->bugText.cap(1));
 
         addBugDescription(message, baseUrl);
 
@@ -106,9 +108,9 @@ void BugzillaFilter::filterMessage(KTp::Message &message, const KTp::MessageCont
     }
 
     Q_FOREACH (QVariant var, message.property("Urls").toList()) {
-        KUrl url = qvariant_cast<KUrl>(var);
+        QUrl url = qvariant_cast<QUrl>(var);
 
-        if (url.fileName() == QLatin1String("show_bug.cgi")) { //a bugzilla of some sort
+        if (url.path().contains(QLatin1String("show_bug.cgi"))) { //a bugzilla of some sort
 
             //as we have to use jsonp to get round making a cross-domain http request, a malicious website
             //could pretend to be bugzilla and return arbitrary data that we cannot sanitise, filling the text-ui
@@ -136,6 +138,6 @@ QStringList BugzillaFilter::requiredScripts()
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<BugzillaFilter>();)
-K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_bugzilla"))
+// K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_bugzilla"))
 
 #include "bugzilla-filter.moc"

@@ -2,7 +2,6 @@ add_library (ktptextui_message_filter_bugzilla MODULE bugzilla-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_bugzilla
     KF5::KIOWidgets
-    KF5::KDELibs4Support
     KTp::CommonInternals
 )
 

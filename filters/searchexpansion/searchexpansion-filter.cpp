@@ -18,9 +18,9 @@
 
 #include "searchexpansion-filter.h"
 
+#include <QUrl>
+
 #include <KPluginFactory>
-#include <KDebug>
-#include <KUrl>
 #include <KUriFilter>
 
 class SearchexpansionFilter::Private
@@ -49,13 +49,10 @@ void SearchexpansionFilter::filterOutgoingMessage(KTp::OutgoingMessage &message,
     Q_UNUSED(context);
     KUriFilterData data(message.text().trimmed());
     if(KUriFilter::self()->filterSearchUri(data, KUriFilter::WebShortcutFilter)) {
-
-//         kDebug() << "Succesfully filtered" << data.typedString() << "to" << data.uri();
         message.setText(data.uri().url());
     }
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<SearchexpansionFilter>();)
-K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_searchexpansion"))
 
 #include "searchexpansion-filter.moc"

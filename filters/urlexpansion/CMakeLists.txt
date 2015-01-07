@@ -2,7 +2,7 @@ add_library (ktptextui_message_filter_urlexpansion MODULE urlexpansion-filter.cp
 
 target_link_libraries (ktptextui_message_filter_urlexpansion
     KF5::KIOWidgets
-    KF5::KDELibs4Support
+    KF5::CoreAddons
     KTp::CommonInternals
 )
 

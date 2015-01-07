@@ -20,7 +20,6 @@
 
 
 #include <KPluginFactory>
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <kspeech.h>
@@ -68,4 +67,3 @@ void TTSFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<TTSFilter>();)
-K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_tts"))

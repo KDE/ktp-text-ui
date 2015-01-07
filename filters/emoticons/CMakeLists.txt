@@ -2,6 +2,7 @@ add_library (ktptextui_message_filter_emoticons MODULE emoticon-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_emoticons
     KF5::Emoticons
+    KF5::CoreAddons
     KTp::CommonInternals
 )
 

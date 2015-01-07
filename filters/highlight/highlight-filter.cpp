@@ -21,7 +21,6 @@
 #include <QStringBuilder>
 
 #include <KPluginFactory>
-#include <KDebug>
 #include <KUser>
 
 #include <TelepathyQt/AccountManager>
@@ -53,12 +52,10 @@ void HighlightFilter::filterMessage(KTp::Message &message,
     }
 
     if (msg.contains(d->user.loginName(), Qt::CaseInsensitive)) {
-        kDebug() << "messge contains user login name" << d->user.loginName();
         message.setProperty("highlight", true);
     }
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<HighlightFilter>();)
-K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_highlight"))
 
 #include "highlight-filter.moc"

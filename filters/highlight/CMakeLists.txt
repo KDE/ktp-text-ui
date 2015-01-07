@@ -2,7 +2,7 @@ add_library (ktptextui_message_filter_highlight MODULE highlight-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_highlight
     ktpchat
-    
+    KF5::CoreAddons
     KTp::CommonInternals
 )
 

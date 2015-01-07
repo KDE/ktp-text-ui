@@ -27,9 +27,10 @@
 
 #include <QImage>
 #include <QTextDocument>
+#include <QDebug>
+#include <QTemporaryFile>
 
 #include <KPluginFactory>
-#include <KDebug>
 #include <KProcess>
 
 LatexFilter::LatexFilter(QObject* parent, const QVariantList &)
@@ -89,18 +90,16 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
                     .arg(latexFormula));
     latexText.append(QLatin1String("\\end{document}"));
 
-    KTemporaryFile texFile;
-    texFile.setPrefix(QLatin1String("ktplatex-"));
-    texFile.setSuffix(QLatin1String(".tex"));
+    QTemporaryFile texFile(QStringLiteral("ktplatex-XXXXXX.tex"));
     if (!texFile.open()) {
-      kError() << "Cannot create the TeX file";
-      return QString();
+        qCritical() << "Cannot create the TeX file";
+        return QString();
     }
     texFile.write(latexText.toAscii());
     texFile.close();
 
     if (LatexConfig::latexCmd().isEmpty()) {
-        kError() << "No TeX compiler set!";
+        qCritical() << "No TeX compiler set!";
         return QString();
     }
     const QStringList latexCmd = LatexConfig::latexCmd().split(QRegExp(QLatin1String("\\s+")));
@@ -114,23 +113,23 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
     latexArgs << texFile.fileName();
 
     if (QStandardPaths::findExecutable(latexCmd.first()).isEmpty()) {
-        kError() << "Cannot find the TeX" << latexCmd.first() << " program.\n;"
+        qCritical() << "Cannot find the TeX" << latexCmd.first() << " program.\n;"
                  << "Please get the software from http://tug.org/texlive/"
                  << "or from your distribution's package manager.";
         return QString();
     }
 
-    kDebug() << "Running " << latexCmd.first() << latexArgs;
+    qDebug() << "Running " << latexCmd.first() << latexArgs;
 
     KProcess p;
     p.execute(latexCmd.first(), latexArgs);
     if (p.exitCode()) {
-        kError() << "Error compiling the TeX text";
+        qCritical() << "Error compiling the TeX text";
         return QString();
     }
 
     if (QStandardPaths::findExecutable(QLatin1String("dvipng")).isEmpty()) {
-        kError() << "Cannot find the TeX 'dvipng' program.\n;"
+        qCritical() << "Cannot find the TeX 'dvipng' program.\n;"
                  << "Please get the software from http://tug.org/texlive/"
                  << "or from your distribution's package manager.";
         return QString();
@@ -145,11 +144,11 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
     dvipngArgs << QString(QLatin1String("-o%1")).arg(imageFile);
     dvipngArgs << dviFile;
 
-    kDebug() << "Rendering dvipng" << dvipngArgs;
+    qDebug() << "Rendering dvipng" << dvipngArgs;
 
     p.execute(QLatin1String("dvipng"), dvipngArgs);
     if (p.exitCode()){
-        kError() << "Error rendering the image to PNG";
+        qCritical() << "Error rendering the image to PNG";
         return QString();
     }
 
@@ -182,6 +181,5 @@ LatexFilter::~LatexFilter()
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<LatexFilter>();)
-K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_latex"))
 
 #include "latex-filter.moc"

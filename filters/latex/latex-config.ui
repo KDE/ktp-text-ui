@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KLineEdit" name="kcfg_LatexCmd">
+    <widget class="QLineEdit" name="kcfg_LatexCmd">
      <property name="text">
       <string>latex -interaction=batchmode -halt-on-error</string>
      </property>
@@ -49,11 +49,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

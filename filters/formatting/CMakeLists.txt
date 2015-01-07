@@ -2,6 +2,7 @@ add_library (ktptextui_message_filter_formatting MODULE format-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_formatting
     KTp::CommonInternals
+    KF5::CoreAddons
 )
 
 # Install:

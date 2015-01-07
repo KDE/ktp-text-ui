@@ -21,10 +21,9 @@
 #include <QStringBuilder>
 #include <QRegExp>
 #include <QImageReader>
+#include <QUrl>
 
 #include <KPluginFactory>
-#include <KDebug>
-#include <KUrl>
 #include <KLocalizedString>
 
 class ImagesFilter::Private {
@@ -46,10 +45,9 @@ ImagesFilter::~ImagesFilter()
 void ImagesFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
 {
     Q_UNUSED(context)
-    kDebug() << message.property("Urls").toList().size();
     Q_FOREACH (const QVariant &var, message.property("Urls").toList()) {
-        const KUrl url = qvariant_cast<KUrl>(var);
-        QString fileName = url.fileName().toLower();
+        const QUrl url = qvariant_cast<QUrl>(var);
+        QString fileName = url.adjusted(QUrl::StripTrailingSlash).fileName().toLower();
 
         //get everything after the . The +1 means we don't include the . character
         QString extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.'))+1);
@@ -68,6 +66,5 @@ void ImagesFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<ImagesFilter>();)
-K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_images"))
 
 #include "images-filter.moc"

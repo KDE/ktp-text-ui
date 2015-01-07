@@ -113,6 +113,5 @@ void FormatFilter::Private::addTag (const QString &markingCharacter, const QStri
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<FormatFilter>();)
-K_EXPORT_PLUGIN(MessageFilterFactory("ktptextui_message_filter_formatting"))
 
 #include "format-filter.moc"

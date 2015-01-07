@@ -4,7 +4,8 @@ add_library(ktptextui_message_filter_images MODULE images-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_images
     KF5::Emoticons
-    KF5::KDELibs4Support
+    KF5::I18n
+    KF5::CoreAddons
     KTp::CommonInternals
 )
 

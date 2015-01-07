@@ -3,7 +3,7 @@ add_library (ktptextui_message_filter_searchexpansion MODULE searchexpansion-fil
 target_link_libraries (ktptextui_message_filter_searchexpansion
     ktpchat
     KF5::KIOWidgets
-    KF5::Emoticons
+    KF5::CoreAddons
     KTp::CommonInternals
 )
 

@@ -7,8 +7,9 @@ add_library(ktptextui_message_filter_latex MODULE latex-filter.cpp
 target_link_libraries (ktptextui_message_filter_latex
     ktpchat
     Qt5::Gui
-    
     KTp::CommonInternals
+    KF5::CoreAddons
+    KF5::KCMUtils
 )
 
 kconfig_add_kcfg_files(kcm_ktptextui_message_filter_latex_SRCS latexconfig.kcfgc)

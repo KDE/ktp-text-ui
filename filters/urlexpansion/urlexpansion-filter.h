@@ -21,7 +21,7 @@
 
 #include <KTp/abstract-message-filter.h>
 
-#include <KUrl>
+#include <QUrl>
 
 class UrlExpansionFilter : public KTp::AbstractMessageFilter
 {
@@ -34,7 +34,7 @@ public:
     virtual void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
     virtual QStringList requiredScripts();
 private:
-    void addExpandedUrl(KTp::Message &message, const KUrl &baseUrl);
+    void addExpandedUrl(KTp::Message &message, const QUrl &baseUrl);
     void getSupportedServices();
 
     class Private;
