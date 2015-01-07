@@ -22,22 +22,24 @@
 #include <QString>
 #include <QtCore/qjsondocument.h>
 #include <QtCore/qjsonobject.h>
-#include <KUrl>
+#include <QUrl>
+#include <QUrlQuery>
 
 // Taken from "share" Data Engine
 // key associated with plasma-devel@kde.org
 // thanks to Alan Schaaf of Imgur (alan@imgur.com)
-static const QString apiKey = QLatin1String("d0757bc2e94a0d4652f28079a0be9379");
+static const QString apiKey = QStringLiteral("d0757bc2e94a0d4652f28079a0be9379");
 
 ImgurSharer::ImgurSharer(const QString& contentPath): AbstractSharer(contentPath)
 {
 }
 
 
-KUrl ImgurSharer::url() const
+QUrl ImgurSharer::url() const
 {
-    KUrl url(QLatin1String("https://api.imgur.com/2/upload.json"));
-    url.addQueryItem(QLatin1String("key"), apiKey);
+    QUrl url(QStringLiteral("https://api.imgur.com/2/upload.json"));
+    QUrlQuery query(url);
+    query.addQueryItem(QStringLiteral("key"), apiKey);
     return url;
 }
 
@@ -64,6 +66,6 @@ void ImgurSharer::parseResponse(const QByteArray& responseData)
     } else {
         QJsonObject uploadMap = resultMap[QLatin1String("upload")].toObject();
         QJsonObject linksMap = uploadMap[QLatin1String("links")].toObject();
-        m_imageUrl = KUrl(linksMap[QLatin1String("original")].toString());
+        m_imageUrl = QUrl::fromUserInput(linksMap[QLatin1String("original")].toString());
     }
 }

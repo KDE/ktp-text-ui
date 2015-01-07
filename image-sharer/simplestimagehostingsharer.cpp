@@ -26,10 +26,9 @@ SimplestImageHostingSharer::SimplestImageHostingSharer(const QString& contentPat
 {
 }
 
-KUrl SimplestImageHostingSharer::url() const
+QUrl SimplestImageHostingSharer::url() const
 {
-    KUrl url("http://api.simplest-image-hosting.net/upload:image,default");
-    return url;
+    return QUrl("http://api.simplest-image-hosting.net/upload:image,default");
 }
 
 void SimplestImageHostingSharer::parseResponse(const QByteArray& responseData)

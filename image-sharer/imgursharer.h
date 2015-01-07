@@ -27,7 +27,7 @@ class ImgurSharer : public AbstractSharer
 public:
     ImgurSharer(const QString& contentPath);
 
-    KUrl url() const;
+    QUrl url() const;
     QByteArray postBody(const QByteArray &imageData);
     virtual void parseResponse(const QByteArray& responseData);
 };

@@ -19,15 +19,13 @@
 
 #include "imagebinsharer.h"
 
-#include <QDebug>
-
 ImageBinSharer::ImageBinSharer(const QString& contentPath) : AbstractSharer(contentPath)
 {
 }
 
-KUrl ImageBinSharer::url() const
+QUrl ImageBinSharer::url() const
 {
-    return KUrl("http://imagebin.ca/upload.php");
+    return QUrl("http://imagebin.ca/upload.php");
 }
 
 void ImageBinSharer::parseResponse(const QByteArray& responseData)
@@ -41,7 +39,7 @@ void ImageBinSharer::parseResponse(const QByteArray& responseData)
     int urlPrefixIndex = responseString.indexOf(urlPrefix);
     if (urlPrefixIndex != -1) {
         QString imageUrl = responseString.mid(urlPrefixIndex + urlPrefix.length()).trimmed();
-        m_imageUrl = KUrl(imageUrl);
+        m_imageUrl = QUrl(imageUrl);
     } else {
         m_hasError = true;
         m_errorMessage = responseString.replace(QLatin1String("status:error:"), QLatin1String(""));

@@ -22,8 +22,8 @@
 
 #include <QByteArray>
 #include <QString>
-
-#include <KUrl>
+#include <QMap>
+#include <QUrl>
 
 #include "mpform.h"
 
@@ -42,7 +42,7 @@ public:
     /**
      * @return A KUrl that points to the uploading endpoint of the Share Service
      */
-    virtual KUrl url() const = 0;
+    virtual QUrl url() const = 0;
 
     /**
      * @param imageData The image bytes that needs to be put inside the post body.
@@ -72,7 +72,7 @@ public:
     /**
      * @return A URL that contains the image url from the service if the response is success.
      */
-    virtual KUrl imageUrl() const;
+    virtual QUrl imageUrl() const;
 
     /**
      * You should override this if you want to customize the headers sent to the server.
@@ -84,7 +84,7 @@ protected:
     QString m_contentPath;
     QString m_errorMessage;
     MPForm m_form;
-    KUrl m_imageUrl;
+    QUrl m_imageUrl;
     bool m_hasError;
 };
 

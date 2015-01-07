@@ -27,7 +27,7 @@ class ImageBinSharer : public AbstractSharer
 public:
     ImageBinSharer(const QString& contentPath);
 
-    KUrl url() const;
+    QUrl url() const;
     void parseResponse(const QByteArray& responseData);
     QByteArray postBody(const QByteArray& imageData);
 };

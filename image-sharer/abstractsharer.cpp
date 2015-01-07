@@ -45,7 +45,7 @@ bool AbstractSharer::hasError() const
 }
 
 
-KUrl AbstractSharer::imageUrl() const
+QUrl AbstractSharer::imageUrl() const
 {
     return m_imageUrl;
 }

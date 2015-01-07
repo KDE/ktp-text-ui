@@ -110,7 +110,7 @@ ShareProvider::ShareService ShareProvider::shareServiceType() const
 void ShareProvider::publish(const QString& filePath)
 {
     d->m_filePath = filePath;
-    KUrl fileUrl(filePath);
+    QUrl fileUrl = QUrl::fromLocalFile(filePath);
 
     KIO::MimetypeJob *mimetypeJob = KIO::mimetype(fileUrl, KIO::HideProgressInfo);
     connect(mimetypeJob, SIGNAL(finished(KJob*)), this, SLOT(onMimetypeJobFinished(KJob*)));
@@ -168,7 +168,7 @@ void ShareProvider::onFinishedReadingFile(KIO::Job* job, const QByteArray& data)
 
     AbstractSharer *sharer = d->getSharer();
     if (sharer) {
-        KUrl sharerUrl = sharer->url();
+        QUrl sharerUrl = sharer->url();
         if (!sharerUrl.isValid()) {
             Q_EMIT finishedError(this, i18n("Service Url is not valid"));
             return;
