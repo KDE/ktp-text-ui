@@ -1,7 +1,6 @@
 add_library (ktptextui_message_filter_formatting MODULE format-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_formatting
-    KF5::Emoticons
     KTp::CommonInternals
 )
 
