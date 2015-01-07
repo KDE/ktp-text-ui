@@ -31,7 +31,6 @@
 #include <QFontDatabase>
 
 #include <KIconLoader>
-#include <KDebug>
 #include <KLocale>
 
 #include <KTp/types.h>

@@ -19,10 +19,9 @@
 
 #include "channel-contact-model.h"
 #include "text-chat-config.h"
+#include "ktp-debug.h"
 
 #include <QPixmap>
-
-#include <KDebug>
 
 #include <KTp/types.h>
 
@@ -130,7 +129,7 @@ void ChannelContactModel::onGroupMembersChanged(const Tp::Contacts &groupMembers
                                              const Tp::Contacts &groupMembersRemoved,
                                              const Tp::Channel::GroupMemberChangeDetails &details)
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
 
     Q_UNUSED(groupLocalPendingMembersAdded);
     Q_UNUSED(groupRemotePendingMembersAdded);
@@ -224,4 +223,3 @@ void ChannelContactModel::onChatStateChanged(const Tp::ContactPtr &contact, Tp::
     const QModelIndex index = createIndex(m_contacts.lastIndexOf(contact), 0);
     dataChanged(index, index);
 }
-

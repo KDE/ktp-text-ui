@@ -20,6 +20,7 @@ set(ktpchat_SRCS
         otr-status.cpp
         authenticationwizard.cpp
         otr-notifications.cpp
+        ktp-debug.cpp
         )
 
 set(ktpchat_UI

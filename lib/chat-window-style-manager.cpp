@@ -18,6 +18,7 @@
 #include "chat-window-style-manager.h"
 #include "chat-style-plist-file-reader.h"
 #include "chat-window-style.h"
+#include "ktp-debug.h"
 
 // Qt includes
 #include <QtCore/QStack>
@@ -27,7 +28,6 @@
 
 // KDE includes
 #include <KDirLister>
-#include <KDebug>
 #include <KUrl>
 #include <KGlobal>
 #include <KArchive>
@@ -72,12 +72,12 @@ ChatWindowStyleManager *ChatWindowStyleManager::self()
 ChatWindowStyleManager::ChatWindowStyleManager(QObject *parent)
         : QObject(parent), d(new Private(this))
 {
-    kDebug() ;
+    qCDebug(KTP_TEXTUI_LIB);
 }
 
 ChatWindowStyleManager::~ChatWindowStyleManager()
 {
-    kDebug() ;
+    qCDebug(KTP_TEXTUI_LIB);
     delete d;
 }
 
@@ -88,7 +88,7 @@ void ChatWindowStyleManager::loadStyles()
     QStringList chatStyles = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("ktelepathy/styles"), QStandardPaths::LocateDirectory);
 
     Q_FOREACH(const QString &styleDir, chatStyles) {
-        kDebug() << styleDir;
+        qCDebug(KTP_TEXTUI_LIB) << styleDir;
         d->styleDirs.push(KUrl(styleDir));
     }
 
@@ -116,14 +116,14 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
     QStringList chatStyles = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("ktelepathy/styles"), QStandardPaths::LocateDirectory);
     // findDirs returns preferred paths first, let's check if one of them is writable
     Q_FOREACH(const QString& styleDir, chatStyles) {
-        kDebug() << styleDir;
+        qCDebug(KTP_TEXTUI_LIB) << styleDir;
         if (QFileInfo(styleDir).isWritable()) {
             localStyleDir = styleDir;
             break;
         }
     }
     if (localStyleDir.isEmpty()) { // none of dirs is writable
-        kDebug()<< "not writable";
+        qCDebug(KTP_TEXTUI_LIB)<< "not writable";
         return StyleNoDirectoryValid;
     }
 
@@ -143,23 +143,23 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
         archive = new KZip(styleBundlePath);
         if (!archive->open(QIODevice::ReadOnly)) {
             delete archive;
-            kDebug() << "!zip";
+            qCDebug(KTP_TEXTUI_LIB) << "!zip";
             archive = new KTar(styleBundlePath);
             if (!archive->open(QIODevice::ReadOnly)) {
                 delete archive;
-                kDebug() << "!tar" << styleBundlePath;
+                qCDebug(KTP_TEXTUI_LIB) << "!tar" << styleBundlePath;
                 return StyleCannotOpen;
             }
         }
     } else {
-        kDebug() << "unsupported file type" << currentBundleMimeType;
-        kDebug() << styleBundlePath;
+        qCDebug(KTP_TEXTUI_LIB) << "unsupported file type" << currentBundleMimeType;
+        qCDebug(KTP_TEXTUI_LIB) << styleBundlePath;
         return StyleUnknow;
     }
 
     if (archive == 0 ||  !archive->open(QIODevice::ReadOnly)) {
         delete archive;
-        kDebug() << "cannot open theme file";
+        qCDebug(KTP_TEXTUI_LIB) << "cannot open theme file";
         return StyleCannotOpen;
     }
 
@@ -177,22 +177,22 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
     QStringList::ConstIterator entriesIt;
     for (entriesIt = entries.begin(); entriesIt != entries.end(); ++entriesIt) {
         currentEntry = const_cast<KArchiveEntry*>(rootDir->entry(*entriesIt));
-    kDebug() << "Current entry name: " << currentEntry->name();
+    qCDebug(KTP_TEXTUI_LIB) << "Current entry name: " << currentEntry->name();
         if (currentEntry->isDirectory()) {
             currentDir = dynamic_cast<KArchiveDirectory*>(currentEntry);
             if (currentDir) {
                 if (currentDir->entry(QLatin1String("Contents"))) {
-                   kDebug() << "Contents found";
+                   qCDebug(KTP_TEXTUI_LIB) << "Contents found";
                    validResult += 1;
                 }
                 if (currentDir->entry(QLatin1String("Contents/Resources"))) {
-                    kDebug() << "Contents/Resources found";
+                    qCDebug(KTP_TEXTUI_LIB) << "Contents/Resources found";
                     validResult += 1;
                 }
             }
         }
     }
-    kDebug() << "Valid result: " << QString::number(validResult);
+    qCDebug(KTP_TEXTUI_LIB) << "Valid result: " << QString::number(validResult);
     // The archive is a valid style bundle.
     if (validResult >= 2) {
         bool installOk = false;
@@ -224,7 +224,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
         archive->close();
         delete archive;
 
-        kDebug() << "style not valid";
+        qCDebug(KTP_TEXTUI_LIB) << "style not valid";
         return StyleNotValid;
     }
 
@@ -239,7 +239,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
 bool ChatWindowStyleManager::removeStyle(const QString &styleId)
 {
     Q_UNUSED(styleId)
-//    kDebug() << styleId;
+//    qCDebug(KTP_TEXTUI_LIB) << styleId;
 //    // Find for the current style in avaiableStyles map.
 //    int foundStyleIdx = d->availableStyles.indexOf(styleId);
 
@@ -255,7 +255,7 @@ bool ChatWindowStyleManager::removeStyle(const QString &styleId)
 
 //        QStringList styleDirs = KGlobal::dirs()->findDirs("appdata", QString("styles/%1").arg(styleId));
 //        if (styleDirs.isEmpty()) {
-//            kDebug() << "Failed to find style" << styleId;
+//            qCDebug(KTP_TEXTUI_LIB) << "Failed to find style" << styleId;
 //            return false;
 //        }
 
@@ -282,14 +282,14 @@ ChatWindowStyle *ChatWindowStyleManager::getValidStyleFromPool(const QString &st
         return style;
     }
 
-    kDebug() << "Trying default style";
+    qCDebug(KTP_TEXTUI_LIB) << "Trying default style";
     // Try default style
     style = getStyleFromPool(QLatin1String("renkoo.AdiumMessageStyle"));
     if (style) {
         return style;
     }
 
-    kDebug() << "Trying first valid style";
+    qCDebug(KTP_TEXTUI_LIB) << "Trying first valid style";
     // Try first valid style
     Q_FOREACH(const QString& name, d->availableStyles) {
         style = getStyleFromPool(name);
@@ -298,14 +298,14 @@ ChatWindowStyle *ChatWindowStyleManager::getValidStyleFromPool(const QString &st
         }
     }
 
-    kDebug() << "Valid style not found!";
+    qCDebug(KTP_TEXTUI_LIB) << "Valid style not found!";
     return 0;
 }
 
 ChatWindowStyle *ChatWindowStyleManager::getStyleFromPool(const QString &styleId)
 {
     if (d->stylePool.contains(styleId)) {
-        kDebug() << styleId << " was on the pool";
+        qCDebug(KTP_TEXTUI_LIB) << styleId << " was on the pool";
 
         // NOTE: This is a hidden config switch for style developers
         // Check in the config if the cache is disabled.
@@ -322,13 +322,13 @@ ChatWindowStyle *ChatWindowStyleManager::getStyleFromPool(const QString &styleId
     // Build a chat window style and list its variants, then add it to the pool.
     ChatWindowStyle *style = new ChatWindowStyle(styleId, ChatWindowStyle::StyleBuildNormal);
     if (!style->isValid()) {
-        kDebug() << styleId << " is invalid style!";
+        qCDebug(KTP_TEXTUI_LIB) << styleId << " is invalid style!";
         delete style;
         return 0;
     }
 
     d->stylePool.insert(styleId, style);
-    kDebug() << styleId << " is just created";
+    qCDebug(KTP_TEXTUI_LIB) << styleId << " is just created";
 
     return style;
 }
@@ -338,12 +338,12 @@ void ChatWindowStyleManager::slotNewStyles(const KFileItemList &dirList)
     Q_FOREACH(const KFileItem &item, dirList) {
         // Ignore data dir(from deprecated XSLT themes)
         if (!item.url().fileName().contains(QLatin1String("data"))) {
-            kDebug() << "Listing: " << item.url().fileName();
+            qCDebug(KTP_TEXTUI_LIB) << "Listing: " << item.url().fileName();
             // If the style path is already in the pool, that's mean the style was updated on disk
             // Reload the style
             QString styleId = item.url().fileName();
             if (d->stylePool.contains(styleId)) {
-                kDebug() << "Updating style: " << styleId;
+                qCDebug(KTP_TEXTUI_LIB) << "Updating style: " << styleId;
 
                 d->stylePool[styleId]->reload();
 
@@ -374,7 +374,7 @@ void ChatWindowStyleManager::slotDirectoryFinished()
 {
     // Start another scanning if the directories stack is not empty
     if (!d->styleDirs.isEmpty()) {
-        kDebug() << "Starting another directory.";
+        qCDebug(KTP_TEXTUI_LIB) << "Starting another directory.";
         d->styleDirLister->openUrl(d->styleDirs.pop(), KDirLister::Keep);
     } else {
         Q_EMIT loadStylesFinished();

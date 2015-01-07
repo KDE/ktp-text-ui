@@ -31,6 +31,7 @@
 #include "contact-delegate.h"
 #include "authenticationwizard.h"
 #include "otr-notifications.h"
+#include "ktp-debug.h"
 
 #include <QKeyEvent>
 #include <QAction>
@@ -41,7 +42,6 @@
 #include <KNotification>
 #include <KAboutData>
 #include <KComponentData>
-#include <KDebug>
 #include <KColorScheme>
 #include <KLineEdit>
 #include <KMimeType>
@@ -411,7 +411,7 @@ void ChatWidget::temporaryFileTransferStateChanged(Tp::FileTransferState state, 
         QString localFile = QUrl(channel->uri()).toLocalFile();
         if (QFile::exists(localFile)) {
             QFile::remove(localFile);
-            kDebug() << "File" << localFile << "removed";
+            qCDebug(KTP_TEXTUI_LIB) << "File" << localFile << "removed";
         }
 
         d->tmpFileTransfers.removeAll(Tp::OutgoingFileTransferChannelPtr(channel));
@@ -493,7 +493,7 @@ void ChatWidget::dropEvent(QDropEvent *e)
 	d->fileToTransferPath = tmpFile.fileName();
 	d->fileResourceTransferMenu->popup(mapToGlobal(e->pos()));
 
-        kDebug() << "Starting Uploading of" << tmpFile.fileName();
+        qCDebug(KTP_TEXTUI_LIB) << "Starting Uploading of" << tmpFile.fileName();
         e->acceptProposedAction();
     }
 
@@ -527,12 +527,12 @@ QColor ChatWidget::titleColor() const
     KColorScheme scheme(QPalette::Active, KColorScheme::Window);
 
     if (TextChatConfig::instance()->showOthersTyping() && (d->remoteContactChatState == Tp::ChannelChatStateComposing)) {
-        kDebug() << "remote is typing";
+        qCDebug(KTP_TEXTUI_LIB) << "remote is typing";
         return scheme.foreground(KColorScheme::PositiveText).color();
     }
 
     if (unreadMessageCount() > 0 && !isOnTop()) {
-        kDebug() << "unread messages";
+        qCDebug(KTP_TEXTUI_LIB) << "unread messages";
         return scheme.foreground(KColorScheme::ActiveText).color();
     }
 
@@ -605,7 +605,7 @@ void ChatWidget::onHistoryFetched(const QList<KTp::Message> &messages)
 {
     d->chatViewInitialized = true;
 
-    kDebug() << "found" << messages.count() << "messages in history";
+    qCDebug(KTP_TEXTUI_LIB) << "found" << messages.count() << "messages in history";
     if (!messages.isEmpty()) {
         QDate date = messages.first().time().date();
         Q_FOREACH(const KTp::Message &message, messages) {
@@ -635,7 +635,7 @@ int ChatWidget::unreadMessageCount() const
 
 void ChatWidget::acknowledgeMessages()
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
     //if we're not initialised we can't have shown anything, even if we are on top, therefore ignore all requests to do so
     if (d->chatViewInitialized) {
         //acknowledge everything in the message queue.
@@ -654,7 +654,7 @@ void ChatWidget::updateSendMessageShortcuts(const QKeySequence &shortcuts)
 
 bool ChatWidget::isOnTop() const
 {
-    kDebug() << ( isActiveWindow() && isVisible() );
+    qCDebug(KTP_TEXTUI_LIB) << ( isActiveWindow() && isVisible() );
     return ( isActiveWindow() && isVisible() );
 }
 
@@ -699,7 +699,7 @@ void ChatWidget::startOtrSession()
 
 void ChatWidget::stopOtrSession()
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
     if(!d->channel->isOTRsuppored() || d->channel->otrTrustLevel() == KTp::OTRTrustLevelNotPrivate) {
         return;
     }
@@ -731,7 +731,7 @@ void ChatWidget::authenticateBuddy()
 
 void ChatWidget::setupOTR()
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
 
     connect(d->channel.data(), SIGNAL(otrTrustLevelChanged(KTp::OTRTrustLevel, KTp::OTRTrustLevel)),
             SLOT(onOTRTrustLevelChanged(KTp::OTRTrustLevel, KTp::OTRTrustLevel)));
@@ -755,7 +755,7 @@ void ChatWidget::setupOTR()
 
 void ChatWidget::onOTRTrustLevelChanged(KTp::OTRTrustLevel trustLevel, KTp::OTRTrustLevel previous)
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
 
     d->hasNewOTRstatus = true;
     switch(trustLevel) {
@@ -870,7 +870,7 @@ void ChatWidget::onPeerAuthenticationFailed()
 
 void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified)
 {
-    kDebug() << title() << message.text();
+    qCDebug(KTP_TEXTUI_LIB) << title() << message.text();
 
     if (d->chatViewInitialized) {
 
@@ -892,7 +892,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
             Tp::ReceivedMessage::DeliveryDetails reportDetails = message.deliveryDetails();
 
             if (reportDetails.hasDebugMessage()) {
-                kDebug() << "delivery report debug message: " << reportDetails.debugMessage();
+                qCDebug(KTP_TEXTUI_LIB) << "delivery report debug message: " << reportDetails.debugMessage();
             }
 
             if (reportDetails.isError()) {
@@ -960,7 +960,7 @@ void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool 
                 }
             } else {
                 //TODO: handle delivery reports properly
-                kWarning() << "Ignoring delivery report";
+                qCWarning(KTP_TEXTUI_LIB) << "Ignoring delivery report";
                 d->channel->acknowledge(QList<Tp::ReceivedMessage>() << message);
                 return;
             }

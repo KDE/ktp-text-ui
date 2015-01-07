@@ -17,6 +17,7 @@
 
 #include "chat-window-style.h"
 #include "chat-style-plist-file-reader.h"
+#include "ktp-debug.h"
 
 // Qt includes
 #include <QtCore/QFile>
@@ -31,7 +32,6 @@
 #include <QFontDatabase>
 
 // KDE includes
-#include <KDebug>
 #include <KLocale>
 
 class ChatWindowStyle::Private
@@ -56,12 +56,12 @@ ChatWindowStyle::ChatWindowStyle(const QString &styleId, StyleBuildMode styleBui
 {
     init(styleId, styleBuildMode);
 
-    kDebug() << "Style" << styleId << ":";
-    kDebug() << "messageViewVersion is" << d->messageViewVersion;
-    kDebug() << "disableCombineConsecutive is" << d->disableCombineConsecutive;
-    kDebug() << "hasCustomTemplateHtml is" << d->hasCustomTemplateHtml;
+    qCDebug(KTP_TEXTUI_LIB) << "Style" << styleId << ":";
+    qCDebug(KTP_TEXTUI_LIB) << "messageViewVersion is" << d->messageViewVersion;
+    qCDebug(KTP_TEXTUI_LIB) << "disableCombineConsecutive is" << d->disableCombineConsecutive;
+    qCDebug(KTP_TEXTUI_LIB) << "hasCustomTemplateHtml is" << d->hasCustomTemplateHtml;
     if (d->messageViewVersion < 3) {
-        kWarning() << "Style" << styleId << "is legacy";
+        qCWarning(KTP_TEXTUI_LIB) << "Style" << styleId << "is legacy";
     }
 
 }
@@ -82,15 +82,15 @@ void ChatWindowStyle::init(const QString &styleId, StyleBuildMode styleBuildMode
         QStandardPaths::LocateDirectory);
 
     if (styleDirs.isEmpty()) {
-        kDebug() << "Failed to find style" << styleId;
+        qCDebug(KTP_TEXTUI_LIB) << "Failed to find style" << styleId;
         return;
     }
     d->styleId = styleId;
     if (styleDirs.count() > 1) {
-        kDebug() << "found several styles with the same name. using first";
+        qCDebug(KTP_TEXTUI_LIB) << "found several styles with the same name. using first";
     }
     d->baseHref = styleDirs.at(0);
-    kDebug() << "Using style:" << d->baseHref;
+    qCDebug(KTP_TEXTUI_LIB) << "Using style:" << d->baseHref;
     readStyleFiles();
     if (styleBuildMode & StyleBuildNormal) {
         listVariants();
@@ -352,7 +352,7 @@ void ChatWindowStyle::readStyleFiles()
         // If name is still empty we use "Normal"
         d->defaultVariantName = i18nc("Normal style variant menu item", "Normal");
     }
-    kDebug() << "defaultVariantName = " << d->defaultVariantName;
+    qCDebug(KTP_TEXTUI_LIB) << "defaultVariantName = " << d->defaultVariantName;
     d->defaultFontFamily  = plistReader.defaultFontFamily().isEmpty() ? QFontDatabase::systemFont(QFontDatabase::GeneralFont).family()
                                                                       : plistReader.defaultFontFamily();
 
@@ -409,12 +409,12 @@ void ChatWindowStyle::readStyleFiles()
             headerStream.setCodec(QTextCodec::codecForName("UTF-8"));
             QString data = headerStream.readAll();
             if(!data.isEmpty()) {
-                //kDebug() << fileName << "was found!";
+                //qCDebug(KTP_TEXTUI_LIB) << fileName << "was found!";
                 setContent( templateFiles.key(fileName), data);
             } else {
-                kDebug() << fileName << "was not found!";
+                qCDebug(KTP_TEXTUI_LIB) << fileName << "was not found!";
             }
-            //kDebug() << fileName << content(templateFiles.key(fileName));
+            //qCDebug(KTP_TEXTUI_LIB) << fileName << content(templateFiles.key(fileName));
             fileAccess.close();
         }
     }

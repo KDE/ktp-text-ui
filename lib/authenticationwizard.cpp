@@ -20,10 +20,9 @@
  *************************************************************************/
 
 #include "authenticationwizard.h"
+#include "ktp-debug.h"
 
 #include <KTp/OTR/channel-adapter.h>
-
-#include <KDebug>
 #include <KLocale>
 #include <KNotification>
 #include <KIconLoader>
@@ -319,7 +318,7 @@ int AuthenticationWizard::nextId() const
 
 bool AuthenticationWizard::validateCurrentPage()
 {
-	kDebug() << "currentId:" << currentId();
+	qCDebug(KTP_TEXTUI_LIB) << "currentId:" << currentId();
 	switch(currentId()) {
 		case 1:
 			if(initiate) {
@@ -348,7 +347,7 @@ bool AuthenticationWizard::validateCurrentPage()
 
 void AuthenticationWizard::cancelVerification()
 {
-	kDebug() << "cancelVerification...";
+	qCDebug(KTP_TEXTUI_LIB) << "cancelVerification...";
 	if(!initiate){
         chAdapter->abortPeerAuthentication();
 	}
@@ -356,7 +355,7 @@ void AuthenticationWizard::cancelVerification()
 
 void AuthenticationWizard::nextState()
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
 	if(currentId() == Page_Wait1) {
 		static_cast<WaitPage*>(currentPage())->ready();
 		next();
@@ -365,21 +364,21 @@ void AuthenticationWizard::nextState()
 
 void AuthenticationWizard::finished(bool success)
 {
-	kDebug() << "authWizard finished";
+	qCDebug(KTP_TEXTUI_LIB) << "authWizard finished";
 	if(currentId() == Page_Wait2){
-		kDebug() << "Yes, in wait_page2";
+		qCDebug(KTP_TEXTUI_LIB) << "Yes, in wait_page2";
 		static_cast<WaitPage*>(currentPage())->ready();
 		next();
 		if(success) {
-			kDebug() << "auth succeeded";
+			qCDebug(KTP_TEXTUI_LIB) << "auth succeeded";
 			currentPage()->setTitle(i18n("Authentication successful"));
 			if(!question.isEmpty()|| rbQA->isChecked()) {
 				if(initiate){
-					kDebug() << "initiate";
+					qCDebug(KTP_TEXTUI_LIB) << "initiate";
 					lFinal->setText(i18n("The authentication with <b>%1</b> has been completed successfully."
                                 " The conversation is now secure.", contact));
 				} else {
-					kDebug() << "not initiate";
+					qCDebug(KTP_TEXTUI_LIB) << "not initiate";
                     lFinal->setText(i18n("<b>%1</b> has successfully authenticated you."
                                 " You may want to authenticate this contact as well by asking your own question.", contact));
 				}
@@ -435,7 +434,7 @@ void AuthenticationWizard::updateInfoBox(){
 
 void AuthenticationWizard::notificationActivated( unsigned int id)
 {
-	kDebug() << "notificationActivated. ButtonId" << id;
+	qCDebug(KTP_TEXTUI_LIB) << "notificationActivated. ButtonId" << id;
 	if(id == 1) {
         this->raise();
         KWindowSystem::forceActiveWindow(this->winId());

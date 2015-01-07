@@ -25,6 +25,7 @@
 #include "adium-theme-status-info.h"
 #include "chat-window-style-manager.h"
 #include "chat-window-style.h"
+#include "ktp-debug.h"
 
 #include <KTp/message-processor.h>
 
@@ -41,7 +42,6 @@
 #include <QApplication>
 
 #include <KAction>
-#include <KDebug>
 #include <KEmoticonsTheme>
 #include <KGlobal>
 #include <KConfig>
@@ -226,7 +226,7 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     } else {
         // FIXME: we should inform the user if the chatStyle want's to use a fontFamily which is not present on the system
         QFontDatabase fontDB = QFontDatabase();
-        kDebug() << "Theme font installed: " << m_chatStyle->defaultFontFamily()
+        qCDebug(KTP_TEXTUI_LIB) << "Theme font installed: " << m_chatStyle->defaultFontFamily()
         << fontDB.families().contains(m_chatStyle->defaultFontFamily());
 
         // use theme fontFamily/Size, if not existent, it falls back to systems default font
@@ -298,11 +298,11 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
             templateHtml.insert(index + 5, onload);
         } else {
             themeOnLoadJS = body.cap(2);
-            //kDebug() << "Captured js onLoad" << themeOnLoadJS;
+            //qCDebug(KTP_TEXTUI_LIB) << "Captured js onLoad" << themeOnLoadJS;
             templateHtml.replace(body.pos(1), body.cap(1).length(), onload);
         }
     }
-    //kDebug() << templateHtml;
+    //qCDebug(KTP_TEXTUI_LIB) << templateHtml;
 
     setHtml(templateHtml);
 
@@ -348,7 +348,7 @@ QString AdiumThemeView::fontFamily()
 
 void AdiumThemeView::setFontFamily(QString fontFamily)
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
     m_fontFamily = fontFamily;
 }
 
@@ -359,13 +359,13 @@ int AdiumThemeView::fontSize()
 
 void AdiumThemeView::setFontSize(int fontSize)
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
     m_fontSize = fontSize;
 }
 
 void AdiumThemeView::setUseCustomFont(bool useCustomFont)
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
     m_useCustomFont = useCustomFont;
 }
 
@@ -376,7 +376,7 @@ bool AdiumThemeView::isCustomFont() const
 
 void AdiumThemeView::setShowPresenceChanges(bool showPresenceChanges)
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
     m_showPresenceChanges = showPresenceChanges;
 }
 
@@ -515,7 +515,7 @@ void AdiumThemeView::addAdiumContentMessage(const AdiumThemeContentInfo &content
         }
         break;
     default:
-        kWarning() << "Unexpected message type to addContentMessage";
+        qCWarning(KTP_TEXTUI_LIB) << "Unexpected message type to addContentMessage";
     }
 
     replaceContentKeywords(styleHtml, message);
@@ -553,7 +553,7 @@ void AdiumThemeView::addAdiumStatusMessage(const AdiumThemeStatusInfo& statusMes
         styleHtml = m_chatStyle->getStatusHistoryHtml();
         break;
     default:
-        kWarning() << "Unexpected message type to addStatusMessage";
+        qCWarning(KTP_TEXTUI_LIB) << "Unexpected message type to addStatusMessage";
     }
 
     replaceStatusKeywords(styleHtml, message);
@@ -572,28 +572,28 @@ QString AdiumThemeView::appendScript(AdiumThemeView::AppendMode mode)
     //escape quotes, and merge HTML onto one line.
     switch (mode) {
     case AppendMessageWithScroll:
-        kDebug() << "AppendMessageWithScroll";
+        qCDebug(KTP_TEXTUI_LIB) << "AppendMessageWithScroll";
         return QLatin1String("checkIfScrollToBottomIsNeeded(); appendMessage(\"%1\"); scrollToBottomIfNeeded(); false;");
     case AppendNextMessageWithScroll:
-        kDebug() << "AppendNextMessageWithScroll";
+        qCDebug(KTP_TEXTUI_LIB) << "AppendNextMessageWithScroll";
         return QLatin1String("checkIfScrollToBottomIsNeeded(); appendNextMessage(\"%1\"); scrollToBottomIfNeeded(); false;");
     case AppendMessage:
-        kDebug() << "AppendMessage";
+        qCDebug(KTP_TEXTUI_LIB) << "AppendMessage";
         return QLatin1String("appendMessage(\"%1\"); false;");
     case AppendNextMessage:
-        kDebug() << "AppendNextMessage";
+        qCDebug(KTP_TEXTUI_LIB) << "AppendNextMessage";
         return QLatin1String("appendNextMessage(\"%1\"); false;");
     case AppendMessageNoScroll:
-        kDebug() << "AppendMessageNoScroll";
+        qCDebug(KTP_TEXTUI_LIB) << "AppendMessageNoScroll";
         return QLatin1String("appendMessageNoScroll(\"%1\"); false;");
     case AppendNextMessageNoScroll:
-        kDebug() << "AppendNextMessageNoScroll";
+        qCDebug(KTP_TEXTUI_LIB) << "AppendNextMessageNoScroll";
         return QLatin1String("appendNextMessageNoScroll(\"%1\"); false;");
     case ReplaceLastMessage:
-        kDebug() << "ReplaceLastMessage";
+        qCDebug(KTP_TEXTUI_LIB) << "ReplaceLastMessage";
         return QLatin1String("replaceLastMessage(\"%1\"); false");
     default:
-        kWarning() << "Unhandled append mode!";
+        qCWarning(KTP_TEXTUI_LIB) << "Unhandled append mode!";
         return QLatin1String("%1");
     }
 }

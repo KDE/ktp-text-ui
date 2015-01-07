@@ -17,13 +17,13 @@
 
 #include "proxy-service.h"
 #include "ui_keygendialog.h"
+#include "ktp-debug.h"
 
 #include <KTp/OTR/proxy-service-interface.h>
 
 #include <QMap>
 #include <QScopedPointer>
 #include <QCloseEvent>
-#include <KDebug>
 #include <KDialog>
 #include <KLocale>
 
@@ -47,7 +47,7 @@ class KeyGenDialog : public KDialog
         }
         ~KeyGenDialog()
         {
-            kDebug() << "Destructing";
+            qCDebug(KTP_TEXTUI_LIB) << "Destructing";
         }
 
         void block()
@@ -142,7 +142,7 @@ QString ProxyService::fingerprintForAccount(const QDBusObjectPath& account) cons
     if(rep.isValid()) {
         return rep.value();
     } else {
-        kWarning() << "Could not get fingerprint of account: " << account.path() <<
+        qCWarning(KTP_TEXTUI_LIB) << "Could not get fingerprint of account: " << account.path() <<
             " due to: " << rep.error().message();
         return QLatin1String("");
     }
@@ -155,7 +155,7 @@ KTp::FingerprintInfoList ProxyService::knownFingerprints(const QDBusObjectPath &
     if(fpsRep.isValid()) {
         return fpsRep.value();
     } else {
-        kWarning() << "Could not get known fingerprints for account: " << account.path() <<
+        qCWarning(KTP_TEXTUI_LIB) << "Could not get known fingerprints for account: " << account.path() <<
             " due to: " << fpsRep.error().message();
         return KTp::FingerprintInfoList();
     }
@@ -168,7 +168,7 @@ bool ProxyService::trustFingerprint(const QDBusObjectPath &account, const QStrin
     if(res.isValid()) {
         return true;
     } else {
-        kWarning() << "Could not trust fingerprint " << fingerprint << " for account: " << account.path() <<
+        qCWarning(KTP_TEXTUI_LIB) << "Could not trust fingerprint " << fingerprint << " for account: " << account.path() <<
             " due to: " << res.error().message();
         return false;
     }
@@ -181,7 +181,7 @@ bool ProxyService::forgetFingerprint(const QDBusObjectPath &account, const QStri
     if(res.isValid()) {
         return true;
     } else {
-        kWarning() << "Could not forget fingerprint " << fingerprint << " for account: " << account.path() <<
+        qCWarning(KTP_TEXTUI_LIB) << "Could not forget fingerprint " << fingerprint << " for account: " << account.path() <<
             " due to: " << res.error().message();
         return false;
     }
@@ -199,7 +199,7 @@ Tp::PendingOperation* ProxyService::setOTRPolicy(uint policy)
 
 void ProxyService::onKeyGenerationStarted(const QDBusObjectPath &accountPath)
 {
-    kDebug();
+    qCDebug(KTP_TEXTUI_LIB);
     KeyGenDialog *dialog = new KeyGenDialog(
                 d->am->accountForObjectPath(accountPath.path())->normalizedName(),
                 d->parent);
