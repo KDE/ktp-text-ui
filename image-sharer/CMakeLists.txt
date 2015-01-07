@@ -9,7 +9,7 @@ add_library (ktpimagesharer simplestimagehostingsharer.cpp
 )
 
 target_link_libraries(ktpimagesharer
-                      KF5::KDELibs4Support
+                      KF5::I18n
                       KF5::KIOWidgets
                       KTp::OTR
 )
