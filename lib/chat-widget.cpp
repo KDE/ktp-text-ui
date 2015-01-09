@@ -42,11 +42,11 @@
 #include <QLineEdit>
 #include <QColorDialog>
 #include <QTemporaryFile>
+#include <QFileDialog>
 
 #include <KNotification>
 #include <KAboutData>
 #include <KColorScheme>
-#include <KFileDialog>
 #include <KMessageWidget>
 #include <KMessageBox>
 #include <KIconLoader>
@@ -1549,7 +1549,7 @@ void ChatWidget::onSendFileClicked()
 {
     const KTp::ContactPtr contact = d->contactsMenu->property("Contact").value<KTp::ContactPtr>();
     Q_ASSERT(!contact.isNull());
-    const QString filename = KFileDialog::getOpenFileName();
+    const QString filename = QFileDialog::getOpenFileName();
     if (filename.isEmpty() || !QFile::exists(filename)) {
         return;
     }
