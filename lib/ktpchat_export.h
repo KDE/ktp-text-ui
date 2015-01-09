@@ -1,40 +1,37 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2007 David Faure <faure@kde.org>
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-    Boston, MA 02110-1301, USA.
-*/
+ *    Copyright (C) 2007 David Faure <faure@kde.org>
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Library General Public
+ *    License as published by the Free Software Foundation; either
+ *    version 2 of the License, or (at your option) any later version.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Library General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Library General Public License
+ *    along with this library; see the file COPYING.LIB.  If not, write to
+ *    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ *    Boston, MA 02110-1301, USA.
+ */
 
 #ifndef KDETELEPATHYCHAT_EXPORT_H
 #define KDETELEPATHYCHAT_EXPORT_H
 
-/* needed for KDE_EXPORT and KDE_IMPORT macros */
-#include <kdemacros.h>
+#include <QtCore/QtGlobal>
 
 #ifndef KDE_TELEPATHY_CHAT_EXPORT
-# if defined(MAKE_KTPCHAT_LIB)
-   /* We are building this library */
-#  define KDE_TELEPATHY_CHAT_EXPORT KDE_EXPORT
+/* We are building this library */
+#  define KDE_TELEPATHY_CHAT_EXPORT __attribute__((visibility("default")))
 # else
-   /* We are using this library */
-#  define KDE_TELEPATHY_CHAT_EXPORT KDE_IMPORT
-# endif
+/* We are using this library */
+#  define KDE_TELEPATHY_CHAT_EXPORT __attribute__((visibility("default")))
 #endif
 
 # ifndef KDE_TELEPATHY_CHAT_EXPORT_DEPRECATED
-#  define KDE_TELEPATHY_CHAT_EXPORT_DEPRECATED KDE_DEPRECATED KDE_TELEPATHY_CHAT_EXPORT
+#  define KDE_TELEPATHY_CHAT_EXPORT_DEPRECATED Q_DECL_DEPRECATED KDE_TELEPATHY_CHAT_EXPORT
 # endif
 
 #endif
