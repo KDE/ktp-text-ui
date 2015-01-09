@@ -24,12 +24,10 @@
 #include <KPluginInfo>
 #include <KPluginFactory>
 #include <KPluginSelector>
-#include <KDebug>
 #include <KLocalizedString>
 #include <KAboutData>
 
 K_PLUGIN_FACTORY(KTpMessagesConfigFactory, registerPlugin<MessagesConfig>();)
-K_EXPORT_PLUGIN(KTpMessagesConfigFactory("ktp_chat_messages", "kcm_ktp_chat_messages"))
 
 MessagesConfig::MessagesConfig(QWidget* parent, const QVariantList& args)
     : PluginPage(new KAboutData("ktp_chat_messages", i18n("Chat Messages"), "1.0"), parent, args)

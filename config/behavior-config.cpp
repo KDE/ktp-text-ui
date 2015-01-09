@@ -19,32 +19,33 @@
  ***************************************************************************/
 
 #include "behavior-config.h"
+#include <QButtonGroup>
 #include "ui_behavior-config.h"
 
-#include <KDebug>
 #include <KPluginFactory>
 #include <KLocalizedString>
 
 #include "shareprovider.h"
 
 K_PLUGIN_FACTORY(KCMTelepathyChatBehaviorConfigFactory, registerPlugin<BehaviorConfig>();)
-K_EXPORT_PLUGIN(KCMTelepathyChatBehaviorConfigFactory("ktp_chat_behavior", "kcm_ktp_chat_behavior"))
 
 BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
     : KCModule(parent, args),
       ui(new Ui::BehaviorConfigUi())
 {
-    kDebug();
-
     load();
 
     ui->setupUi(this);
 
-    ui->newTabButtonGroup->setId(ui->radioNew, TextChatConfig::NewWindow);
-    ui->newTabButtonGroup->setId(ui->radioZero, TextChatConfig::FirstWindow);
+    QButtonGroup *newTabGroup = new QButtonGroup(this);
+    newTabGroup->addButton(ui->radioNew);
+    newTabGroup->addButton(ui->radioZero);
 
-    ui->newTabButtonGroup->button(m_openMode)->setChecked(true);
-    connect(ui->newTabButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(onRadioSelected(int)));
+    newTabGroup->setId(ui->radioNew, TextChatConfig::NewWindow);
+    newTabGroup->setId(ui->radioZero, TextChatConfig::FirstWindow);
+
+    newTabGroup->button(m_openMode)->setChecked(true);
+    connect(newTabGroup, SIGNAL(buttonClicked(int)), this, SLOT(onRadioSelected(int)));
 
     ui->scrollbackLength->setSuffix(ki18ncp("Part of config 'show last [spin box] messages' This is the suffix to the spin box. Be sure to include leading space"," message", " messages"));
     ui->scrollbackLength->setValue(m_scrollbackLength);
@@ -123,9 +124,7 @@ void BehaviorConfig::changeEvent(QEvent* e)
 
 void BehaviorConfig::onRadioSelected(int id)
 {
-    kDebug() << "BehaviorConfig::m_openMode changed from " << id << " to " << m_openMode;
     m_openMode = (TextChatConfig::TabOpenMode) id;
-    kDebug() << "emitting changed(true)";
     Q_EMIT changed(true);
 }
 
@@ -158,7 +157,6 @@ void BehaviorConfig::onImageSharingServiceChanged(int index)
 {
     Q_UNUSED(index);
     QString imageShareServiceName = ui->imageSharingService->currentText();
-    kDebug() << imageShareServiceName;
     m_imageShareServiceType = ShareProvider::availableShareServices()[imageShareServiceName];
     Q_EMIT changed(true);
 }

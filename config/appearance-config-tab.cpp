@@ -154,7 +154,7 @@ void AppearanceConfigTab::onStylesLoaded()
         ui->styleComboBox->addItem(i.value(), i.key());
 
         if (i.key() == currentStyle->id()) {
-            ui->styleComboBox->setCurrentItem(i.value());
+            ui->styleComboBox->setCurrentIndex(ui->styleComboBox->count() - 1);
         }
 
         ++i;
@@ -281,7 +281,7 @@ void AppearanceConfigTab::updateVariantsList()
     QHash<QString, QString> variants = ui->chatView->chatStyle()->getVariants();
     ui->variantComboBox->clear();
     ui->variantComboBox->addItems(variants.keys());
-    ui->variantComboBox->setCurrentItem(ui->chatView->variantName());
+    ui->variantComboBox->setCurrentIndex(ui->variantComboBox->findText(ui->chatView->variantName()));
 }
 
 void AppearanceConfigTab::saveTab(KConfigGroup appearanceConfigGroup)

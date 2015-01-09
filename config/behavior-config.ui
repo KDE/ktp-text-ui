@@ -12,7 +12,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="KButtonGroup" name="newTabGroup">
+     <widget class="QGroupBox" name="newTabGroupBox">
      <property name="title">
       <string>Tabs</string>
      </property>
@@ -45,10 +45,10 @@
        </widget>
       </item>
      </layout>
-    </widget>
+     </widget>
    </item>
    <item>
-    <widget class="KButtonGroup" name="scrollbackGroup">
+    <widget class="QGroupBox" name="scrollbackGroupBox">
      <property name="title">
       <string>Last Conversation Scrollback</string>
      </property>
@@ -61,7 +61,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KIntSpinBox" name="scrollbackLength"/>
+       <widget class="KPluralHandlingSpinBox" name="scrollbackLength"/>
       </item>
       <item row="0" column="2">
        <spacer name="horizontalSpacer">
@@ -80,7 +80,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KButtonGroup" name="typingGroup">
+     <widget class="QGroupBox" name="typingGroupBox">
      <property name="title">
       <string>User Is Typing</string>
      </property>
@@ -103,7 +103,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KButtonGroup" name="nicknameCompletionGroup">
+    <widget class="QGroupBox" name="nicknameCompletionGroup">
      <property name="title">
       <string>Nickname Completion</string>
      </property>
@@ -142,7 +142,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KButtonGroup" name="kbuttongroup">
+    <widget class="QGroupBox" name="kbuttongroup">
      <property name="title">
       <string>Image Sharing</string>
      </property>
@@ -228,15 +228,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KButtonGroup</class>
-   <extends>QGroupBox</extends>
-   <header>kbuttongroup.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KIntSpinBox</class>
+   <class>KPluralHandlingSpinBox</class>
    <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
+   <header>kpluralhandlingspinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

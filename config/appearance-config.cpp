@@ -21,7 +21,7 @@
 #include "ui_appearance-config.h"
 #include "appearance-config-tab.h"
 
-#include <KTabWidget>
+#include <QTabWidget>
 
 #include "chat-window-style-manager.h"
 #include "chat-window-style.h"
@@ -29,23 +29,19 @@
 #include "adium-theme-content-info.h"
 #include "adium-theme-status-info.h"
 
-#include <KDebug>
-#include <KDialog>
 #include <KLocalizedString>
 #include <KPluginFactory>
 #include <KSharedConfig>
 
 K_PLUGIN_FACTORY(KCMTelepathyChatAppearanceConfigFactory, registerPlugin<AppearanceConfig>();)
-K_EXPORT_PLUGIN(KCMTelepathyChatAppearanceConfigFactory("ktp_chat_appearance", "kcm_ktp_chat_appearance"))
 
 AppearanceConfig::AppearanceConfig(QWidget *parent, const QVariantList &args)
     : KCModule(parent, args)
 {
     QVBoxLayout *topLayout = new QVBoxLayout(this);
     topLayout->setMargin(0);
-    topLayout->setSpacing(KDialog::spacingHint());
 
-    KTabWidget *tabWidget = new KTabWidget(this);
+    QTabWidget *tabWidget = new QTabWidget(this);
 
     m_singleTab = new AppearanceConfigTab(this, AppearanceConfigTab::NormalChat);
     tabWidget->addTab(m_singleTab, QIcon(), i18nc("@title:tab", "Normal Chat"));
@@ -78,8 +74,6 @@ void AppearanceConfig::load()
 
 void AppearanceConfig::save()
 {
-    kDebug();
-
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("ktelepathyrc"));
 
     m_singleTab->saveTab(config->group("Appearance"));

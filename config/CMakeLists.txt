@@ -23,26 +23,27 @@ add_library(kcm_ktp_chat_otr MODULE ${kcm_ktp_chat_otr_SRCS})
 target_link_libraries(kcm_ktp_chat_appearance
     Qt5::WebKitWidgets
     KF5::KCMUtils
-    KF5::KDELibs4Support
+    KF5::WidgetsAddons
+    KF5::IconThemes
     ktpchat
 )
 target_link_libraries(kcm_ktp_chat_behavior
-    KF5::KDELibs4Support
+    KF5::TextWidgets
     KF5::KCMUtils
     ktpchat
     ktpimagesharer
 )
 target_link_libraries(kcm_ktp_chat_messages
-    KF5::KDELibs4Support
     KF5::KCMUtils
     KTp::CommonInternals
     ktpchat
 )
 
 target_link_libraries(kcm_ktp_chat_otr
+    KF5::KCMUtils
+    KF5::WidgetsAddons
     KTp::CommonInternals
     KTp::OTR
-    KF5::KDELibs4Support
     ktpchat
 )
 

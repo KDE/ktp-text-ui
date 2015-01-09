@@ -20,24 +20,23 @@
 #include "otr-config.h"
 #include "ui_otr-config.h"
 
-#include <KTp/OTR/types.h>
-
-#include <QLatin1String>
-#include <KDebug>
 #include <KPluginFactory>
 #include <KLocalizedString>
+#include <KMessageBox>
+
+#include <QLatin1String>
 #include <QtEvents>
 #include <QDBusConnection>
 #include <QAction>
 #include <QMenu>
-#include <KMessageBox>
-#include <KTp/core.h>
+#include <QDebug>
 
+#include <KTp/OTR/types.h>
+#include <KTp/core.h>
 #include <TelepathyQt/AccountSet>
 #include <TelepathyQt/PendingVariant>
 
 K_PLUGIN_FACTORY(KCMTelepathyChatOtrConfigFactory, registerPlugin<OTRConfig>();)
-K_EXPORT_PLUGIN(KCMTelepathyChatOtrConfigFactory("ktp_chat_otr", "kcm_ktp_chat_otr"))
 
 OTRConfig::OTRConfig(QWidget *parent, const QVariantList& args)
     : KCModule(parent, args),
@@ -45,8 +44,6 @@ OTRConfig::OTRConfig(QWidget *parent, const QVariantList& args)
       am(KTp::accountManager()),
       fpCtxMenu(new QMenu(this))
 {
-    kDebug();
-
     ui->setupUi(this);
 
     ui->policyGroupButtons->setId(ui->rbAlways, KTp::OTRPolicyAlways);
@@ -94,7 +91,6 @@ void OTRConfig::setProxyService(const ProxyServicePtr &proxyService)
 void OTRConfig::load()
 {
     Q_ASSERT(!ps.isNull());
-    kDebug();
     accounts = am->validAccounts()->accounts();
     QStringList items;
     Q_FOREACH(const Tp::AccountPtr &ac, accounts) {
@@ -122,7 +118,6 @@ void OTRConfig::loadFingerprints()
     }
 
     const KTp::FingerprintInfoList fingerprints = ps->knownFingerprints(currentAccount());
-    kDebug() << fingerprints.size();
     ui->tbFingerprints->setRowCount(fingerprints.size());
     int i = 0;
     Q_FOREACH(const KTp::FingerprintInfo &fp, fingerprints) {
@@ -141,7 +136,6 @@ void OTRConfig::loadFingerprints()
 
 void OTRConfig::save()
 {
-    kDebug();
     connect(ps->setOTRPolicy(static_cast<uint>(policy)), SIGNAL(finished(Tp::PendingOperation*)),
             SLOT(onPolicySet(Tp::PendingOperation*)));
 }
@@ -160,20 +154,17 @@ void OTRConfig::changeEvent(QEvent* e)
 
 void OTRConfig::onRadioSelected(int id)
 {
-    kDebug();
     policy = static_cast<KTp::OTRPolicy>(id);
     Q_EMIT changed(true);
 }
 
 void OTRConfig::onGenerateClicked()
 {
-    kDebug();
     ps->generatePrivateKey(currentAccount());
 }
 
 void OTRConfig::onAccountChosen(int id)
 {
-    kDebug();
     const QString fp = ps->fingerprintForAccount(QDBusObjectPath(accounts.at(id)->objectPath()));
     if(fp.isEmpty()) {
         ui->tlFingerprint->setText(i18n("No fingerprint"));
@@ -197,7 +188,7 @@ void OTRConfig::updatePolicy()
 void OTRConfig::onPolicyGet(Tp::PendingOperation *getOp)
 {
     if(getOp->isError()) {
-        kWarning() << "Could not get OTR policy: " << getOp->errorMessage();
+        qWarning() << "Could not get OTR policy: " << getOp->errorMessage();
     } else {
         Tp::PendingVariant *pv = qobject_cast<Tp::PendingVariant*>(getOp);
         const uint id = pv->result().toUInt(NULL);
@@ -212,7 +203,7 @@ void OTRConfig::onPolicyGet(Tp::PendingOperation *getOp)
 void OTRConfig::onPolicySet(Tp::PendingOperation *setOp)
 {
     if(setOp->isError()) {
-        kWarning() << "OTR policy set error: " << setOp->errorMessage();
+        qWarning() << "OTR policy set error: " << setOp->errorMessage();
     } else {
         updatePolicy();
     }
@@ -249,8 +240,6 @@ void OTRConfig::onCurrentFpCellChanged(int currentRow, int currentColumn, int pr
 
 void OTRConfig::onFpTableMenuRequested(QPoint pos)
 {
-    kDebug();
-
     fpCtxMenu->popup(ui->tbFingerprints->viewport()->mapToGlobal(pos));
 }
 
@@ -274,7 +263,6 @@ void OTRConfig::onVerifyClicked()
 
 void OTRConfig::onForgetClicked()
 {
-    kDebug();
     ps->forgetFingerprint(
             currentAccount(),
             ui->tbFingerprints->item(ui->tbFingerprints->currentRow(), 0)->text(),
