@@ -31,7 +31,6 @@
 
 // KDE includes
 #include <KDirLister>
-#include <KGlobal>
 #include <KArchive>
 #include <KZip>
 #include <KTar>

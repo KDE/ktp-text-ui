@@ -148,9 +148,6 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     connect(d->shareProvider, SIGNAL(finishedSuccess(ShareProvider*,QString)), this, SLOT(onShareProviderFinishedSuccess(ShareProvider*,QString)));
     connect(d->shareProvider, SIGNAL(finishedError(ShareProvider*,QString)), this, SLOT(onShareProviderFinishedFailure(ShareProvider*,QString)));
 
-    //load translations for this library. keep this before any i18n() calls in library code
-    KGlobal::locale()->insertCatalog(QLatin1String("ktpchat"));
-
     d->chatViewInitialized = false;
     d->isGroupChat = (channel->targetHandleType() == Tp::HandleTypeContact ? false : true);
 
