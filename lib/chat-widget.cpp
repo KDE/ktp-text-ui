@@ -37,6 +37,8 @@
 #include <QAction>
 #include <QMenu>
 #include <QSortFilterProxyModel>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 #include <KColorDialog>
 #include <KNotification>
@@ -44,7 +46,6 @@
 #include <KComponentData>
 #include <KColorScheme>
 #include <KLineEdit>
-#include <KMimeType>
 #include <KTemporaryFile>
 #include <KFileDialog>
 #include <KMessageWidget>
@@ -450,8 +451,8 @@ void ChatWidget::dropEvent(QDropEvent *e)
         Q_FOREACH(const QUrl &url, data->urls()) {
             if (url.isLocalFile()) {
 		 // Not sure if this the best way to determine the MIME type of the file
-		 KMimeType::Ptr ptr = KMimeType::findByUrl(url);
-		 QString mime       = ptr->name();
+        QMimeDatabase db;
+        QString mime = db.mimeTypeForUrl(url).name();
 		 if (mime.startsWith(QLatin1String("image/"))) {
 		    d->fileTransferMenuAction->setText(i18n("Send Image via File Transfer"));
 		    d->fileResourceTransferMenu->addAction(d->shareImageMenuAction);

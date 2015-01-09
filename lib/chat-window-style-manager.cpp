@@ -25,6 +25,8 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QDir>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 // KDE includes
 #include <KDirLister>
@@ -33,7 +35,6 @@
 #include <KArchive>
 #include <KZip>
 #include <KTar>
-#include <KMimeType>
 #include <KIO/NetAccess>
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -131,7 +132,8 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
     KArchiveDirectory *currentDir = 0L;
     KArchive *archive = 0L;
 
-    QString currentBundleMimeType = KMimeType::findByPath(styleBundlePath, 0, false)->name();
+    QMimeDatabase mimeDb;
+    QString currentBundleMimeType = db.mimeTypeForFile(styleBundlePath).name();
     if (currentBundleMimeType == QLatin1String("application/zip")) {
         archive = new KZip(styleBundlePath);
     } else if (currentBundleMimeType == QLatin1String("application/x-compressed-tar") ||
