@@ -22,7 +22,7 @@
 #include <KAction>
 #include <KColorScheme>
 #include <KLineEdit>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KPushButton>
 
 #include <QCheckBox>

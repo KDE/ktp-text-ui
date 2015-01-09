@@ -25,7 +25,7 @@
 #include <QScopedPointer>
 #include <QCloseEvent>
 #include <KDialog>
-#include <KLocale>
+#include <KLocalizedString>
 
 class KeyGenDialog : public KDialog
 {

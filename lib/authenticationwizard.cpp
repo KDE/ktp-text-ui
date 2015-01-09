@@ -23,7 +23,7 @@
 #include "ktp-debug.h"
 
 #include <KTp/OTR/channel-adapter.h>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KNotification>
 #include <KIconLoader>
 #include <KWindowSystem>

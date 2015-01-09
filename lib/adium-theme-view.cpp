@@ -40,10 +40,10 @@
 #include <QWebInspector>
 #include <QWebSettings>
 #include <QApplication>
+#include <QLocale>
 
 #include <KAction>
 #include <KEmoticonsTheme>
-#include <KGlobal>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KMessageBox>
@@ -669,16 +669,16 @@ QString AdiumThemeView::replaceHeaderKeywords(QString htmlTemplate, const AdiumT
     htmlTemplate.replace(QLatin1String("%destinationDisplayName%"), info.destinationDisplayName());
     htmlTemplate.replace(QLatin1String("%incomingIconPath%"), (!info.incomingIconPath().isEmpty() ? info.incomingIconPath().toString() : m_defaultAvatar));
     htmlTemplate.replace(QLatin1String("%outgoingIconPath%"), (!info.outgoingIconPath().isEmpty() ? info.outgoingIconPath().toString() : m_defaultAvatar));
-    htmlTemplate.replace(QLatin1String("%timeOpened%"), KGlobal::locale()->formatTime(info.timeOpened().time()));
-    htmlTemplate.replace(QLatin1String("%dateOpened%"), KGlobal::locale()->formatDate(info.timeOpened().date(), KLocale::LongDate));
+    htmlTemplate.replace(QLatin1String("%timeOpened%"), QLocale::system().toString(info.timeOpened().time()));
+    htmlTemplate.replace(QLatin1String("%dateOpened%"), QLocale::system().toString(info.timeOpened().date(), QLocale::LongFormat));
 
     //KTp-Renkoo specific hack to make "Conversation Began" translatable
     htmlTemplate.replace(QLatin1String("%conversationBegan%"), i18nc("Header at top of conversation view. %1 is the time format",
-                                                                     "Conversation began %1", KGlobal::locale()->formatTime(info.timeOpened().time())));
+                                                                     "Conversation began %1", QLocale::system().toString(info.timeOpened().time())));
 
     //KTp-WoshiChat specific hack to make "Joined at" translatable
     htmlTemplate.replace(QLatin1String("%conversationJoined%"), i18nc("Header at top of conversation view. %1 is the time format",
-                                                                      "Joined at %1", KGlobal::locale()->formatTime(info.timeOpened().time())));
+                                                                      "Joined at %1", QLocale::system().toString(info.timeOpened().time())));
 
     htmlTemplate.replace(QLatin1String("%groupChatIcon%"), KIconLoader::global()->iconPath(QLatin1String("telepathy-kde"), -48));
 
@@ -745,9 +745,9 @@ QString AdiumThemeView::replaceMessageKeywords(QString &htmlTemplate, const Adiu
     //service
     htmlTemplate.replace(QLatin1String("%service%"), m_service);
     //time
-    htmlTemplate.replace(QLatin1String("%time%"), KGlobal::locale()->formatLocaleTime(info.time().time()));
+    htmlTemplate.replace(QLatin1String("%time%"), QLocale::system().toString(info.time().time()));
     //shortTime
-    htmlTemplate.replace(QLatin1String("%shortTime%"), KGlobal::locale()->formatLocaleTime(info.time().time(), KLocale::TimeWithoutSeconds | KLocale::TimeWithoutAmPm));
+    htmlTemplate.replace(QLatin1String("%shortTime%"), QLocale::system().toString(info.time().time(), QLocale::ShortFormat));
     //time{X}
     QRegExp timeRegExp(QLatin1String("%time\\{([^}]*)\\}%"));
     int pos = 0;
@@ -839,5 +839,3 @@ const QString AdiumThemeView::variantPath() const
 {
     return m_variantPath;
 }
-
-

@@ -31,8 +31,7 @@
 #include <QFont>
 #include <QFontDatabase>
 
-// KDE includes
-#include <KLocale>
+#include <KLocalizedString>
 
 class ChatWindowStyle::Private
 {
