@@ -1,5 +1,7 @@
 include_directories(${CMAKE_SOURCE_DIR}/image-sharer)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"ktpchat\")
+
 set(ktpchat_SRCS
         chat-widget.cpp
         chat-window-style.cpp
