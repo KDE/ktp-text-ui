@@ -39,6 +39,7 @@
 #include <QSortFilterProxyModel>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QTemporaryFile>
 
 #include <KColorDialog>
 #include <KNotification>
@@ -46,7 +47,6 @@
 #include <KComponentData>
 #include <KColorScheme>
 #include <KLineEdit>
-#include <KTemporaryFile>
 #include <KFileDialog>
 #include <KMessageWidget>
 #include <KMessageBox>
@@ -478,9 +478,7 @@ void ChatWidget::dropEvent(QDropEvent *e)
     } else if (data->hasImage()) {
         QImage image = qvariant_cast<QImage>(data->imageData());
 
-        KTemporaryFile tmpFile;
-        tmpFile.setPrefix(d->account->displayName() + QLatin1String("-"));
-        tmpFile.setSuffix(QLatin1String(".png"));
+        QTemporaryFile tmpFile(d->account->displayName() + QStringLiteral("-XXXXXX.png"));
         tmpFile.setAutoRemove(false);
         if (!tmpFile.open()) {
             return;
