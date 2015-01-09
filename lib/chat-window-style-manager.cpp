@@ -25,12 +25,12 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QDir>
+#include <QUrl>
 #include <QMimeDatabase>
 #include <QMimeType>
 
 // KDE includes
 #include <KDirLister>
-#include <KUrl>
 #include <KGlobal>
 #include <KArchive>
 #include <KZip>
@@ -61,7 +61,7 @@ public:
     // key = style id, value = ChatWindowStyle instance
     QHash<QString, ChatWindowStyle*> stylePool;
 
-    QStack<KUrl> styleDirs;
+    QStack<QUrl> styleDirs;
 };
 
 ChatWindowStyleManager *ChatWindowStyleManager::self()
@@ -90,7 +90,7 @@ void ChatWindowStyleManager::loadStyles()
 
     Q_FOREACH(const QString &styleDir, chatStyles) {
         qCDebug(KTP_TEXTUI_LIB) << styleDir;
-        d->styleDirs.push(KUrl(styleDir));
+        d->styleDirs.push(QUrl::fromUserInput(styleDir));
     }
 
     d->styleDirLister = new KDirLister(this);
@@ -264,7 +264,7 @@ bool ChatWindowStyleManager::removeStyle(const QString &styleId)
 //        // attempt to delete all dirs with this style
 //        int numDeleted = 0;
 //        Q_FOREACH(const QString& stylePath, styleDirs) {
-//            KUrl urlStyle(stylePath);
+//            QUrl urlStyle(stylePath);
 //            // Do the actual deletion of the directory style.
 //            if (KIO::NetAccess::del(urlStyle, 0))
 //                numDeleted++;
