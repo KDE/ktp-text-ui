@@ -244,5 +244,3 @@ TextChatConfig::TextChatConfig() :
 
 TextChatConfig::~TextChatConfig()
 {}
-
-#include "text-chat-config.moc"

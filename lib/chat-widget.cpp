@@ -50,6 +50,7 @@
 #include <KMessageWidget>
 #include <KMessageBox>
 #include <KIconLoader>
+#include <KLocalizedString>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/Message>
@@ -1553,5 +1554,3 @@ void ChatWidget::onSendFileClicked()
 
     KTp::Actions::startFileTransfer(d->account, contact, filename);
 }
-
-#include "chat-widget.moc"

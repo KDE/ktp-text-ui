@@ -34,7 +34,6 @@
 #include <KArchive>
 #include <KZip>
 #include <KTar>
-#include <KIO/NetAccess>
 #include <KSharedConfig>
 #include <KConfigGroup>
 
@@ -132,7 +131,7 @@ int ChatWindowStyleManager::installStyle(const QString &styleBundlePath)
     KArchive *archive = 0L;
 
     QMimeDatabase mimeDb;
-    QString currentBundleMimeType = db.mimeTypeForFile(styleBundlePath).name();
+    QString currentBundleMimeType = mimeDb.mimeTypeForFile(styleBundlePath).name();
     if (currentBundleMimeType == QLatin1String("application/zip")) {
         archive = new KZip(styleBundlePath);
     } else if (currentBundleMimeType == QLatin1String("application/x-compressed-tar") ||
@@ -381,5 +380,3 @@ void ChatWindowStyleManager::slotDirectoryFinished()
         Q_EMIT loadStylesFinished();
     }
 }
-
-#include "chat-window-style-manager.moc"

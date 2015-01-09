@@ -47,6 +47,7 @@ target_link_libraries(ktpchat
     KF5::SonnetCore
     KF5::Notifications
     KF5::TextWidgets
+    KF5::ConfigCore
     KF5::ConfigWidgets
     KF5::WindowSystem
     KF5::XmlGui #for KActionCollection

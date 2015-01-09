@@ -44,12 +44,14 @@
 #include <QLocale>
 
 #include <KEmoticonsTheme>
+#include <KSharedConfig>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KMessageBox>
 #include <KToolInvocation>
 #include <KIconLoader>
 #include <KProtocolInfo>
+#include <KLocalizedString>
 
 AdiumThemeView::AdiumThemeView(QWidget *parent)
         : KWebView(parent),

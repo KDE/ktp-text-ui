@@ -34,6 +34,7 @@
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QProgressBar>
+#include <QVBoxLayout>
 
 namespace
 {

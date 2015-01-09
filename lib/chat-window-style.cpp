@@ -20,13 +20,13 @@
 #include "ktp-debug.h"
 
 // Qt includes
-#include <QtCore/QFile>
-#include <QtCore/QDir>
-#include <QtCore/QHash>
-#include <QtCore/QStringList>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
-#include <QtCore/qmath.h>
+#include <QFile>
+#include <QDir>
+#include <QHash>
+#include <QStringList>
+#include <QTextCodec>
+#include <QTextStream>
+#include <qmath.h>
 #include <QStandardPaths>
 #include <QFont>
 #include <QFontDatabase>

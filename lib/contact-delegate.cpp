@@ -137,5 +137,3 @@ QSize ContactDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
 
     return QSize(0, qMax(m_avatarSize + 2 * m_spacing, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pixelSize() + m_spacing));
 }
-
-#include "contact-delegate.moc"

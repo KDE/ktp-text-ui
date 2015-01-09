@@ -244,7 +244,8 @@ void ProxyService::onDialogClosed()
     for(QMap<QString, KeyGenDialog*>::iterator it = d->dialogs.begin(); it != d->dialogs.end(); ++it) {
         if(it.value() == dialog) {
             d->dialogs.erase(it);
-            dialog->delayedDestruct();
+            dialog->hide();
+            dialog->deleteLater();
             return;
         }
     }
