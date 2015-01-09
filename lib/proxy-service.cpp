@@ -24,14 +24,18 @@
 #include <QMap>
 #include <QScopedPointer>
 #include <QCloseEvent>
-#include <KDialog>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
+
 #include <KLocalizedString>
 
-class KeyGenDialog : public KDialog
+class KeyGenDialog : public QDialog
 {
     public:
         KeyGenDialog(const QString &accountName, QWidget *parent = 0)
-            : KDialog(parent),
+            : QDialog(parent),
             blocked(true),
             accountName(accountName)
         {
@@ -39,10 +43,17 @@ class KeyGenDialog : public KDialog
             ui.setupUi(widget);
             ui.lbText->setText(i18n("Generating the private key for %1...", accountName));
             ui.lbTime->setText(i18n("This may take some time"));
-            setMainWidget(widget);
-            this->setCaption(i18n("Please wait"));
-            this->setButtons(KDialog::Ok);
-            this->enableButton(KDialog::Ok, false);
+
+            QVBoxLayout *mainLayout = new QVBoxLayout(this);
+            setLayout(mainLayout);
+            mainLayout->addWidget(widget);
+
+            buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, this);
+            buttonBox->button(QDialogButtonBox::Ok)->setDisabled(true);
+            mainLayout->addWidget(buttonBox);
+
+            this->setWindowTitle(i18n("Please wait"));
+
             ui.keyIcon->setPixmap(QIcon::fromTheme(QStringLiteral("dialog-password")).pixmap( 48, 48 ));
         }
         ~KeyGenDialog()
@@ -77,13 +88,15 @@ class KeyGenDialog : public KDialog
             } else {
                 ui.lbText->setText(i18n("Finished generating the private key for %1", accountName));
             }
-            this->enableButton(KDialog::Ok, true);
+            buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+
         }
 
     private:
         bool blocked;
         const QString accountName;
         Ui::KeyGenDialog ui;
+        QDialogButtonBox *buttonBox;
 
 };
 
