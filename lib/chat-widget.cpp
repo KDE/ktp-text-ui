@@ -39,14 +39,13 @@
 #include <QSortFilterProxyModel>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QLineEdit>
+#include <QColorDialog>
 #include <QTemporaryFile>
 
-#include <KColorDialog>
 #include <KNotification>
 #include <KAboutData>
-#include <KComponentData>
 #include <KColorScheme>
-#include <KLineEdit>
 #include <KFileDialog>
 #include <KMessageWidget>
 #include <KMessageBox>

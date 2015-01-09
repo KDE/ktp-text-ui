@@ -22,17 +22,17 @@
 #ifndef AUTHENTICATIONWIZARD_HEADER
 #define AUTHENTICATIONWIZARD_HEADER
 
-#include <KLineEdit>
-#include <KComboBox>
-#include <QLabel>
-#include <QVBoxLayout>
 #include <QWizard>
-#include <QRadioButton>
 
 namespace KTp
 {
     class ChannelAdapter;
 }
+
+class QComboBox;
+class QLabel;
+class QLineEdit;
+class QRadioButton;
 
 class AuthenticationWizard: public QWizard
 {

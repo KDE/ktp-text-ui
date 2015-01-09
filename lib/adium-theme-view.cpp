@@ -40,9 +40,9 @@
 #include <QWebInspector>
 #include <QWebSettings>
 #include <QApplication>
+#include <QAction>
 #include <QLocale>
 
-#include <KAction>
 #include <KEmoticonsTheme>
 #include <KConfig>
 #include <KConfigGroup>
@@ -65,7 +65,7 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
     page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
     QAction *defaultOpenLinkAction = pageAction(QWebPage::OpenLink);
-    m_openLinkAction = new KAction(defaultOpenLinkAction->text(), this);
+    m_openLinkAction = new QAction(defaultOpenLinkAction->text(), this);
     connect(m_openLinkAction, SIGNAL(triggered()),
             this, SLOT(onOpenLinkActionTriggered()));
 

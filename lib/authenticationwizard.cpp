@@ -28,8 +28,13 @@
 #include <KIconLoader>
 #include <KWindowSystem>
 
+#include <QComboBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QRadioButton>
 #include <QGroupBox>
 #include <QProgressBar>
+
 namespace
 {
 

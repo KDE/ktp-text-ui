@@ -19,12 +19,12 @@
 
 #include "chat-search-bar.h"
 
-#include <KAction>
 #include <KColorScheme>
-#include <KLineEdit>
 #include <KLocalizedString>
-#include <KPushButton>
 
+#include <QPushButton>
+#include <QLineEdit>
+#include <QAction>
 #include <QCheckBox>
 #include <QDebug>
 #include <QHBoxLayout>
@@ -34,10 +34,10 @@
 
 ChatSearchBar::ChatSearchBar(QWidget *parent)
     : QWidget(parent)
-    , m_searchInput(new KLineEdit(this))
+    , m_searchInput(new QLineEdit(this))
     , m_closeButton(new QToolButton(this))
-    , m_nextButton(new KPushButton(QIcon::fromTheme(QStringLiteral("go-down-search")), i18nc("Next search result" ,"&Next"), this))
-    , m_previousButton(new KPushButton(QIcon::fromTheme(QStringLiteral("go-up-search")), i18nc("Previous search result" ,"&Previous"), this))
+    , m_nextButton(new QPushButton(QIcon::fromTheme(QStringLiteral("go-down-search")), i18nc("Next search result" ,"&Next"), this))
+    , m_previousButton(new QPushButton(QIcon::fromTheme(QStringLiteral("go-up-search")), i18nc("Previous search result" ,"&Previous"), this))
     , m_caseSensitive(false)
 {
     // close button setup
@@ -101,7 +101,7 @@ QWebPage::FindFlags ChatSearchBar::findFlags()
     return flags;
 }
 
-KLineEdit *ChatSearchBar::searchBar() const
+QLineEdit *ChatSearchBar::searchBar() const
 {
     return m_searchInput;
 }
@@ -185,7 +185,3 @@ void ChatSearchBar::toggleCaseSensitive(bool toggle)
     m_caseSensitive = toggle;
     Q_EMIT flagsChangedSignal(m_searchInput->text(), findFlags());
 }
-
-
-
-

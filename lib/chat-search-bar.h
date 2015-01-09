@@ -25,8 +25,8 @@
 #include <QWebPage>
 #include <QWidget>
 
-class KLineEdit;
-class KPushButton;
+class QLineEdit;
+class QPushButton;
 class QToolButton;
 
 /**
@@ -41,7 +41,7 @@ public:
     ChatSearchBar(QWidget *parent = 0);
     virtual ~ChatSearchBar();
 
-    KLineEdit* searchBar() const;
+    QLineEdit* searchBar() const;
 
 public Q_SLOTS:
     void onNextButtonClicked();
@@ -83,10 +83,10 @@ private:
     /** returns selected search criteria chosen by user */
     QWebPage::FindFlags findFlags();
 
-    KLineEdit *m_searchInput;
+    QLineEdit *m_searchInput;
     QToolButton *m_closeButton;
-    KPushButton *m_nextButton;
-    KPushButton *m_previousButton;
+    QPushButton *m_nextButton;
+    QPushButton *m_previousButton;
 
     // search criteria variables
     bool m_highlightAll
