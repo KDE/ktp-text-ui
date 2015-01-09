@@ -26,8 +26,6 @@
 #include <QWidget>
 #include <QObject>
 
-#include <KAboutData>
-#include <KComponentData>
 #include <KNotification>
 #include <KLocalizedString>
 
