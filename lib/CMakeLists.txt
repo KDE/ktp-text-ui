@@ -36,12 +36,18 @@ set_target_properties(ktpchat PROPERTIES SOVERSION ${KTP_TEXT_UI_VERSION} VERSIO
 
 target_link_libraries(ktpchat
     KF5::KIOWidgets
+    KF5::KIOCore
+    KF5::I18n
     KF5::WebKit
     KF5::Emoticons
     KF5::IconThemes
     KF5::Archive
     KF5::SonnetCore
-    KF5::KDELibs4Support
+    KF5::Notifications
+    KF5::TextWidgets
+    KF5::ConfigWidgets
+    KF5::WindowSystem
+    KF5::XmlGui #for KActionCollection
     KTp::CommonInternals
     KTp::Logger
     KTp::OTR
