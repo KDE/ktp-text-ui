@@ -19,7 +19,7 @@
 #ifndef KCM_MESSAGES_H
 #define KCM_MESSAGES_H
 
-#include <KSettings/PluginPage>
+#include <KSettings/pluginpage.h>
 
 class MessagesConfig : public KSettings::PluginPage
 {
