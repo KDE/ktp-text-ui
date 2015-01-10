@@ -19,8 +19,6 @@
 #ifndef LATEX_FILTER_H
 #define LATEX_FILTER_H
 
-#include <KTemporaryFile>
-
 #include <KTp/abstract-message-filter.h>
 
 class LatexFilter : public KTp::AbstractMessageFilter
