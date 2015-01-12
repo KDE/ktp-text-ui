@@ -21,15 +21,16 @@
 #include "emoticon-text-edit-selector.h"
 #include <KLocale>
 
-#include <KMenu>
 
+
+#include <QMenu>
 #include <QWidgetAction>
 
 class EmoticonTextEditAction::EmoticonTextEditActionPrivate
 {
 public:
   EmoticonTextEditActionPrivate() {
-    emoticonMenu = new KMenu();
+    emoticonMenu = new QMenu();
     selector = new EmoticonTextEditSelector( emoticonMenu );
     QWidgetAction *action = new QWidgetAction( emoticonMenu );
     action->setDefaultWidget( selector );
@@ -41,7 +42,7 @@ public:
     delete emoticonMenu;
   }
 
-  KMenu *emoticonMenu;
+  QMenu *emoticonMenu;
   EmoticonTextEditSelector *selector;
 };
 
