@@ -29,7 +29,8 @@
 #include <KDebug>
 #include <KConfigGroup>
 #include <KWindowSystem>
-#include <KGlobal>
+
+#include <QEventLoopLocker>
 
 #include <TelepathyQt/ChannelClassSpec>
 #include <TelepathyQt/TextChannel>
@@ -52,6 +53,7 @@ TelepathyChatUi::TelepathyChatUi(int &argc, char *argv[])
       AbstractClientHandler(channelClassList())
 {
     kDebug();
+    m_eventLoopLocker = 0;
     m_notifyFilter = new NotifyFilter;
     ChatWindow *window = createWindow();
     window->show();
@@ -262,8 +264,8 @@ void TelepathyChatUi::takeChannel(const Tp::TextChannelPtr& channel, const Tp::A
     connectChannelNotifications(channel, true);
     connectAccountNotifications(account, true);
 
-    if (ref) {
-        KGlobal::ref();
+    if (ref && !m_eventLoopLocker) {
+        m_eventLoopLocker = new QEventLoopLocker();
     }
 }
 
@@ -276,8 +278,9 @@ void TelepathyChatUi::releaseChannel(const Tp::TextChannelPtr& channel, const Tp
         connectAccountNotifications(account, false);
     }
 
-    if (unref) {
-        KGlobal::deref();
+    if (unref && m_eventLoopLocker) {
+        delete m_eventLoopLocker;
+        m_eventLoopLocker = 0;
     }
 }
 
