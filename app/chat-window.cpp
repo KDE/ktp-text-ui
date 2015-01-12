@@ -30,29 +30,29 @@
 #include <KTp/contact.h>
 
 #include <KStandardAction>
-#include <KLocale>
-#include <KApplication>
+#include <KLocalizedString>
 #include <KActionCollection>
 #include <KColorScheme>
-#include <KTabBar>
 #include <KSettings/Dialog>
 #include <kcmodulecontainer.h>
 #include <KNotification>
 #include <KNotifyConfigWidget>
-#include <KLineEdit>
 #include <KToolBar>
 #include <KToolInvocation>
 #include <KCModuleProxy>
 #include <KIconLoader>
 
+#include <QApplication>
 #include <QFileDialog>
 #include <QUrl>
 #include <QMenu>
 #include <QMenuBar>
+#include <QTabBar>
 #include <QAction>
 #include <QEvent>
 #include <QWidgetAction>
 #include <QLabel>
+#include <QLineEdit>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/ContactCapabilities>
@@ -118,7 +118,7 @@ ChatWindow::ChatWindow()
     KStandardAction::zoomOut(this, SLOT(onZoomOut()), actionCollection());
 
     m_keyboardLayoutInterface = new QDBusInterface(QLatin1String("org.kde.keyboard"), QLatin1String("/Layouts"),
-						   QLatin1String("org.kde.KeyboardLayouts"), QDBusConnection::sessionBus(), this);
+                                                   QLatin1String("org.kde.KeyboardLayouts"), QDBusConnection::sessionBus(), this);
 
     connect(m_keyboardLayoutInterface, SIGNAL(currentLayoutChanged(QString)), this, SLOT(onKeyboardLayoutChange(QString)));
 
@@ -1329,5 +1329,3 @@ void ChatWindow::onLeaveChannelTriggered()
     tab->textChannel()->requestLeave();
     closeCurrentTab();
 }
-
-#include "chat-window.moc"

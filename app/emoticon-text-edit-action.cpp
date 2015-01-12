@@ -19,8 +19,8 @@
 */
 #include "emoticon-text-edit-action.h"
 #include "emoticon-text-edit-selector.h"
-#include <KLocale>
 
+#include <KLocalizedString>
 
 
 #include <QMenu>
@@ -61,5 +61,3 @@ EmoticonTextEditAction::~EmoticonTextEditAction()
 {
   delete d;
 }
-
-#include "emoticon-text-edit-action.moc"

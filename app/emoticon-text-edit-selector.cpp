@@ -130,5 +130,3 @@ void EmoticonTextEditSelector::slotEmoticonClicked(QListWidgetItem*item)
     parentWidget()->close();
   }
 }
-
-#include "emoticon-text-edit-selector.moc"

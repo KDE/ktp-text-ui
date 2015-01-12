@@ -23,8 +23,9 @@
 
 #include "defines.h"
 
-#include <KTabWidget>
+#include <QTabWidget>
 #include <QStackedWidget>
+
 #include <KColorScheme>
 #include <KWindowSystem>
 
