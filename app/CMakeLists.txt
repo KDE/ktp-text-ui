@@ -13,8 +13,12 @@ set(ktp-text-ui_SRCS
 
 set (ktp-text-ui_LIBS
         Qt5::WebKit
+        KF5::CoreAddons
+        KF5::I18n
         KF5::KIOWidgets
+        KF5::ConfigWidgets
         KF5::Emoticons
+        KF5::WidgetsAddons
         KTp::CommonInternals
         KTp::Models
         KTp::Widgets
