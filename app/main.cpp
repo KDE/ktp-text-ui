@@ -35,8 +35,9 @@
 #include <KTp/core.h>
 #include <KTp/OTR/types.h>
 
-#include <k4aboutdata.h>
-#include <KCmdLineArgs>
+#include <KAboutData>
+#include <KLocalizedString>
+
 #include <Kdelibs4ConfigMigrator>
 
 int main(int argc, char *argv[])
@@ -47,18 +48,14 @@ int main(int argc, char *argv[])
     migrator.setUiFiles(QStringList() << QLatin1String("chatwindow.rc"));
     migrator.migrate();
 
-    K4AboutData aboutData("ktp-text-ui", 0,
-                         ki18n("Chat Application"),
-                         KTP_TEXT_UI_VERSION_STRING);
-    aboutData.addAuthor(ki18n("David Edmundson"), ki18n("Developer"), "david@davidedmundson.co.uk");
-    aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
-    aboutData.addAuthor(ki18n("Francesco Nwokeka"), ki18n("Developer"), "francesco.nwokeka@gmail.com");
-    aboutData.addAuthor(ki18n("Marcin Ziemiński"), ki18n("Developer"), "zieminn@gmail.com");
+    KAboutData aboutData("ktp-text-ui", i18n("Chat Application"),
+                         QStringLiteral(KTP_TEXT_UI_VERSION_STRING));
+    aboutData.addAuthor(i18n("David Edmundson"), i18n("Developer"), "david@davidedmundson.co.uk");
+    aboutData.addAuthor(i18n("Dominik Schmidt"), i18n("Developer"), "kde@dominik-schmidt.de");
+    aboutData.addAuthor(i18n("Francesco Nwokeka"), i18n("Developer"), "francesco.nwokeka@gmail.com");
+    aboutData.addAuthor(i18n("Marcin Ziemiński"), i18n("Developer"), "zieminn@gmail.com");
     aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
-    aboutData.setLicense(K4AboutData::License_GPL_V2);
-    aboutData.setProgramIconName(QLatin1String("telepathy-kde"));
-
-    KCmdLineArgs::init(argc, argv, &aboutData);
+    aboutData.setLicense(KAboutLicense::GPL_V2);
 
     Tp::registerTypes();
     KTp::registerOtrTypes();
@@ -79,6 +76,9 @@ int main(int argc, char *argv[])
     Tp::SharedPtr<TelepathyChatUi> app(new TelepathyChatUi(argc, argv));
     Tp::AbstractClientPtr handler = Tp::AbstractClientPtr(app);
     registrar->registerClient(handler, QLatin1String(KTP_TEXTUI_CLIENT_NAME));
+
+    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("telepathy-kde")));
+    KAboutData::setApplicationData(aboutData);
 
     return app->exec();
 }
