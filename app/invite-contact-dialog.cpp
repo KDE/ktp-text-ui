@@ -27,7 +27,6 @@
 #include <KLineEdit>
 #include <KPushButton>
 #include <KLocalizedString>
-#include <KDebug>
 
 #include <TelepathyQt/Contact>
 #include <TelepathyQt/TextChannel>

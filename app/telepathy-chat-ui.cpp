@@ -26,10 +26,10 @@
 #include "text-chat-config.h"
 #include "defines.h"
 
-#include <KDebug>
 #include <KConfigGroup>
 #include <KWindowSystem>
 
+#include <QDebug>
 #include <QEventLoopLocker>
 
 #include <TelepathyQt/ChannelClassSpec>
@@ -52,7 +52,6 @@ TelepathyChatUi::TelepathyChatUi(int &argc, char *argv[])
     : KTp::TelepathyHandlerApplication(argc, argv, -1, -1),
       AbstractClientHandler(channelClassList())
 {
-    kDebug();
     m_eventLoopLocker = 0;
     m_notifyFilter = new NotifyFilter;
     ChatWindow *window = createWindow();
@@ -116,7 +115,6 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
         const QDateTime &userActionTime,
         const Tp::AbstractClientHandler::HandlerInfo &handlerInfo)
 {
-    kDebug();
     Q_UNUSED(connection);
     Q_UNUSED(userActionTime);
     Q_UNUSED(handlerInfo);
@@ -140,12 +138,11 @@ void TelepathyChatUi::handleChannels(const Tp::MethodInvocationContextPtr<> & co
 
     //find the relevant channelRequest
     Q_FOREACH(const Tp::ChannelRequestPtr channelRequest, channelRequests) {
-        kDebug() << channelRequest->hints().allHints();
         windowRaise = !channelRequest->hints().hint(QLatin1String("org.kde.telepathy"), QLatin1String("suppressWindowRaise")).toBool();
     }
 
-    kDebug() << "Incomming channel" << textChannel->targetId();
-    kDebug() << "raise window hint set to: " << windowRaise;
+    qDebug() << "Incomming channel" << textChannel->targetId();
+    qDebug() << "raise window hint set to: " << windowRaise;
 
     Tp::TextChannelPtr oldTextChannel;
     const bool isKnown = isHiddenChannel(account, textChannel, &oldTextChannel);
@@ -233,7 +230,6 @@ bool TelepathyChatUi::bypassApproval() const
 
 void TelepathyChatUi::onTabAboutToClose(ChatTab *tab)
 {
-    kDebug() << tab;
     const Tp::TextChannelPtr channel = tab->textChannel();
 
     // Close 1-on-1 chats, but keep group chats opened if user has configured so
@@ -259,7 +255,6 @@ void TelepathyChatUi::onWindowAboutToClose(ChatWindow* window)
 
 void TelepathyChatUi::takeChannel(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, bool ref)
 {
-    kDebug() << channel->targetId();
     m_channelAccountMap.insert(channel, account);
     connectChannelNotifications(channel, true);
     connectAccountNotifications(account, true);
@@ -271,7 +266,6 @@ void TelepathyChatUi::takeChannel(const Tp::TextChannelPtr& channel, const Tp::A
 
 void TelepathyChatUi::releaseChannel(const Tp::TextChannelPtr& channel, const Tp::AccountPtr& account, bool unref)
 {
-    kDebug() << channel->targetId();
     m_channelAccountMap.remove(channel);
     connectChannelNotifications(channel, false);
     if (m_channelAccountMap.keys(account).count() == 0) {

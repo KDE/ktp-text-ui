@@ -33,7 +33,6 @@
 #include <KLocale>
 #include <KApplication>
 #include <KActionCollection>
-#include <KDebug>
 #include <KFileDialog>
 #include <KColorScheme>
 #include <KTabBar>
@@ -197,7 +196,6 @@ void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
 
 void ChatWindow::focusChat(ChatTab *tab)
 {
-    kDebug();
     m_tabWidget->setCurrentWidget(tab);
 }
 
@@ -245,8 +243,6 @@ QList<ChatTab*> ChatWindow::tabs() const
 
 void ChatWindow::removeTab(ChatTab *tab)
 {
-    kDebug();
-
     tab->stopOtrSession();
     removeChatTabSignals(tab);
 
@@ -266,8 +262,6 @@ void ChatWindow::onTabMiddleClicked(int index)
 
 void ChatWindow::addTab(ChatTab *tab)
 {
-    kDebug();
-
     setupChatTabSignals(tab);
     tab->setZoomFactor(m_zoomFactor);
 
@@ -293,8 +287,6 @@ void ChatWindow::addTab(ChatTab *tab)
 
 void ChatWindow::destroyTab(QWidget* chatWidget)
 {
-    kDebug();
-
     ChatTab *tab = qobject_cast<ChatTab*>(chatWidget);
     Q_ASSERT(tab);
 
@@ -360,8 +352,6 @@ void ChatWindow::onBlockContactTriggered()
 
 void ChatWindow::onCurrentIndexChanged(int index)
 {
-    kDebug() << index;
-
     if (index == -1) {
         close();
         return;
@@ -376,7 +366,6 @@ void ChatWindow::onCurrentIndexChanged(int index)
         setWindowIcon(currentChatTab->icon());
     }
 
-    kDebug() << "Current spell dictionary is" << currentChatTab->spellDictionary();
     m_spellDictCombo->setCurrentByDictionary(currentChatTab->spellDictionary());
 
     if (currentChatTab->isActiveWindow()) {
@@ -580,8 +569,6 @@ void ChatWindow::onCollaborateDocumentTriggered()
 
 void ChatWindow::onTabStateChanged()
 {
-    kDebug();
-
     QIcon windowIcon;
     ChatTab *sender = qobject_cast<ChatTab*>(QObject::sender());
     if (sender) {
@@ -737,8 +724,6 @@ void ChatWindow::onClearViewTriggered()
 
 void ChatWindow::showSettingsDialog()
 {
-    kDebug();
-
     KSettings::Dialog *dialog = new KSettings::Dialog(this);
 
     KPageWidgetItem *configPage = dialog->addModule(QLatin1String("kcm_ktp_chat_appearance"));

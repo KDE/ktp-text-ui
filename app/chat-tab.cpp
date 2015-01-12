@@ -24,7 +24,6 @@
 #include "defines.h"
 
 #include <KTabWidget>
-#include <KDebug>
 #include <QStackedWidget>
 #include <KColorScheme>
 #include <KWindowSystem>
@@ -70,11 +69,11 @@ ChatWindow* ChatTab::chatWindow() const
 
 void ChatTab::showOnTop()
 {
-    kDebug() << "Show this widget on top" << title();
     if (m_chatWindow) {
         m_chatWindow->focusChat(this);
     } else {
-        kError() << "Attempting to focus chatTab without chatWindow being set!";
+        //FIXME: remove?
+        qCritical() << "Attempting to focus chatTab without chatWindow being set!";
     }
 
     m_chatWindow->raise();
