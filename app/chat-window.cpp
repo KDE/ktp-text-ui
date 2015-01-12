@@ -124,20 +124,20 @@ ChatWindow::ChatWindow()
     connect(m_keyboardLayoutInterface, SIGNAL(currentLayoutChanged(QString)), this, SLOT(onKeyboardLayoutChange(QString)));
 
     // set up m_tabWidget
-    m_tabWidget = new KTabWidget(this);
+    m_tabWidget = new QTabWidget(this);
     //clicking on the close button can result in the tab bar getting focus, this works round that
     m_tabWidget->setFocusPolicy(Qt::TabFocus);
     m_tabWidget->setMovable(true);
     m_tabWidget->setDocumentMode(true);
     m_tabWidget->setTabsClosable(true);
-    m_tabWidget->setTabBarHidden(true);
+    m_tabWidget->tabBar()->hide();
     m_tabWidget->setElideMode(Qt::ElideRight);
 
     connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(destroyTab(QWidget*)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
 
-    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)), this, SLOT(onTabMiddleClicked(int)));
-    connect(qobject_cast<KTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int,QPoint)), SLOT(tabBarContextMenu(int,QPoint)));
+    connect(qobject_cast<QTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)), this, SLOT(onTabMiddleClicked(int)));
+    connect(qobject_cast<QTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int,QPoint)), SLOT(tabBarContextMenu(int,QPoint)));
 
     setCentralWidget(m_tabWidget);
 
@@ -189,9 +189,9 @@ void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
     } else if (result == &dettach) {
         Q_EMIT detachRequested(qobject_cast<ChatTab*>(m_tabWidget->widget(index)));
     } else if (result == &moveLeft) {
-        m_tabWidget->moveTab(index, index - 1);
+        m_tabWidget->tabBar()->moveTab(index, index - 1);
     } else if (result == &moveRight) {
-        m_tabWidget->moveTab(index, index + 1);
+        m_tabWidget->tabBar()->moveTab(index, index + 1);
     }
 }
 
@@ -250,12 +250,10 @@ void ChatWindow::removeTab(ChatTab *tab)
     tab->stopOtrSession();
     removeChatTabSignals(tab);
 
-    m_tabWidget->removePage(tab);
+    m_tabWidget->removeTab(m_tabWidget->indexOf(tab));
 
-    if (!m_tabWidget->isTabBarHidden()){
-        if (m_tabWidget->count() <= 1) {
-            m_tabWidget->setTabBarHidden(true);
-        }
+    if (m_tabWidget->tabBar()->isVisible() && m_tabWidget->count() <= 1) {
+        m_tabWidget->tabBar()->hide();
     }
 }
 
@@ -281,10 +279,8 @@ void ChatWindow::addTab(ChatTab *tab)
     m_tabWidget->setCurrentWidget(tab);
     m_tabWidget->setTabToolTip(m_tabWidget->indexOf(tab), tab->title());
 
-    if (m_tabWidget->isTabBarHidden()) {
-        if (m_tabWidget->count() > 1) {
-            m_tabWidget->setTabBarHidden(false);
-        }
+    if (!m_tabWidget->tabBar()->isVisible() && m_tabWidget->count() > 1) {
+        m_tabWidget->tabBar()->show();
     }
 
     tab->setFocus();
@@ -328,7 +324,7 @@ void ChatWindow::setTabIcon(int index, const QIcon & newIcon)
 
 void ChatWindow::setTabTextColor(int index, const QColor& color)
 {
-    m_tabWidget->setTabTextColor(index, color);
+    m_tabWidget->tabBar()->setTabTextColor(index, color);
 }
 
 void ChatWindow::closeCurrentTab()

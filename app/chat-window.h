@@ -26,9 +26,10 @@
 #include "proxy-service.h"
 
 #include <KXmlGuiWindow>
-#include <KTabWidget>
-#include <QAction>
 #include <KActionMenu>
+
+#include <QTabWidget>
+#include <QAction>
 
 namespace Sonnet {
     class DictionaryComboBox;
@@ -215,7 +216,7 @@ private:
 
     QAction *m_sendMessage;
 
-    KTabWidget *m_tabWidget;
+    QTabWidget *m_tabWidget;
 
     QDBusInterface *m_keyboardLayoutInterface;
     Sonnet::DictionaryComboBox *m_spellDictCombo;
