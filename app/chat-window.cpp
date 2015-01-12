@@ -33,7 +33,6 @@
 #include <KLocale>
 #include <KApplication>
 #include <KActionCollection>
-#include <KFileDialog>
 #include <KColorScheme>
 #include <KTabBar>
 #include <KSettings/Dialog>
@@ -45,8 +44,9 @@
 #include <KToolInvocation>
 #include <KCModuleProxy>
 #include <KIconLoader>
-#include <KUrl>
 
+#include <QFileDialog>
+#include <QUrl>
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
@@ -1151,10 +1151,11 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
     Q_ASSERT(contact);
 
     // use the keyword "FileTransferLastDirectory" for setting last used dir for file transfer
-    QStringList fileNames = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///FileTransferLastDirectory"),
-                                                          QString(),
-                                                          this,
-                                                          i18n("Choose files to send to %1", contact->alias()));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this,
+                                                          i18n("Choose files to send to %1", contact->alias()),
+                                                          QStringLiteral("kfiledialog:///FileTransferLastDirectory"),
+                                                          QString()
+                                                          );
 
     // User hit cancel button
     if (fileNames.isEmpty()) {
@@ -1170,7 +1171,7 @@ void ChatWindow::startFileTransfer(const Tp::AccountPtr& account, const Tp::Cont
 
 void ChatWindow::offerDocumentToContact(const Tp::AccountPtr& account, const Tp::ContactPtr& targetContact)
 {
-    const KUrl url = KFileDialog::getOpenUrl();
+    const QUrl url = QFileDialog::getOpenFileName();
     if ( ! url.isEmpty() ) {
         KTp::Actions::startCollaborativeEditing(account, targetContact, QList<QUrl>() << url, true);
     }
@@ -1178,7 +1179,7 @@ void ChatWindow::offerDocumentToContact(const Tp::AccountPtr& account, const Tp:
 
 void ChatWindow::offerDocumentToChatroom(const Tp::AccountPtr& account, const QString& roomName)
 {
-   const KUrl url = KFileDialog::getOpenUrl();
+   const QUrl url = QFileDialog::getOpenFileName();
     if ( ! url.isEmpty() ) {
         KTp::Actions::startCollaborativeEditing(account, roomName, QList<QUrl>() << url, true);
     }
