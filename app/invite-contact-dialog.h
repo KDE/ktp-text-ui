@@ -23,11 +23,13 @@
 #ifndef INVITECONTACTDIALOG_H
 #define INVITECONTACTDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
+
 #include <TelepathyQt/Types>
 #include <TelepathyQt/TextChannel>
 #include <TelepathyQt/Account>
 
+class QDialogButtonBox;
 namespace Tp {
 class PendingOperation;
 }
@@ -38,7 +40,7 @@ class ContactsListModel;
 }
 
 
-class InviteContactDialog : public KDialog
+class InviteContactDialog : public QDialog
 {
     Q_OBJECT
     Q_DISABLE_COPY(InviteContactDialog)
@@ -57,6 +59,7 @@ private:
     Tp::TextChannelPtr m_channel;
     KTp::ContactsListModel *m_contactsModel;
     KTp::ContactGridWidget *m_contactGridWidget;
+    QDialogButtonBox *m_buttonBox;
 };
 
 #endif // CONTACTDIALOG_H
