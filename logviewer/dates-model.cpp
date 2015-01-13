@@ -23,10 +23,10 @@
 #include <KTp/Logger/log-entity.h>
 #include <KTp/Logger/log-search-hit.h>
 #include <KTp/Logger/pending-logger-dates.h>
+#include <QLocale>
 #include <TelepathyQt/Account>
 
 #include <KLocalizedString>
-#include <klocalizeddate.h>
 
 Q_DECLARE_METATYPE(Tp::AccountPtr)
 
@@ -329,7 +329,7 @@ QVariant DatesModel::data(const QModelIndex &index, int role) const
         }
     } else if (node->type == Node::Date) {
         if (role == Qt::DisplayRole) {
-            return KLocalizedDate(node->date).formatDate();
+            return QLocale::system().toString(node->date, QLocale::ShortFormat);
         } else if (role == TypeRole) {
             return DatesModel::DateRow;
         } else if (role == HintRole) {
