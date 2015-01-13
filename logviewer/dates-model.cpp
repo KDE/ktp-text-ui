@@ -465,5 +465,3 @@ void DatesModel::onDatesReceived(KTp::PendingLoggerOperation *operation)
         Q_EMIT datesReceived();
     }
 }
-
-#include "dates-model.moc"

@@ -476,7 +476,3 @@ void PersonEntityMergeModel::entityModelDataChanged(const QModelIndex &topLeft,
     const QModelIndex changedIndex = index(parent->children.indexOf(item), 0);
     Q_EMIT dataChanged(changedIndex, changedIndex);
 }
-
-
-
-#include "person-entity-merge-model.moc"

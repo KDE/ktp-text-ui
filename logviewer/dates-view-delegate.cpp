@@ -188,7 +188,3 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
         style->drawItemPixmap(painter, accountIconRect, 0, accountIcon);
     }
 }
-
-
-
-#include "dates-view-delegate.moc"

@@ -216,10 +216,3 @@ QSize EntityViewDelegate::sizeHintHeader(const QStyleOptionViewItem& option, con
     // Add one point to the bottom for the 1px line
     return QSize(0, qMax(m_avatarSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pixelSize()) + m_spacing + 1);
 }
-
-
-
-
-
-
-#include "entity-view-delegate.moc"
