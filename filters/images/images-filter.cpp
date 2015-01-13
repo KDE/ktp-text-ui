@@ -53,7 +53,7 @@ void ImagesFilter::filterMessage(KTp::Message &message, const KTp::MessageContex
         QString extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.'))+1);
 
         if (!fileName.isNull() && d->formats.contains(extension.toUtf8())) {
-            QString href = QString::fromAscii(url.toEncoded());
+            QString href = QString::fromLatin1(url.toEncoded());
             message.appendMessagePart(
                 QLatin1Literal("<br/><a href=\"") % href % QLatin1Literal("\">") %
                     QLatin1Literal("<img src=\"") %

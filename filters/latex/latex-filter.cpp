@@ -69,7 +69,7 @@ void LatexFilter::filterMessage(KTp::Message &message, const KTp::MessageContext
         handleLatex(formula) %
         QLatin1Literal("\" style=\"max-width:100%;margin-top:3px\"") %
         QLatin1Literal("alt=\"") %
-        Qt::escape(formula) %
+        QString(formula).toHtmlEscaped() %
         QLatin1Literal("\" isEmotion=\"true\"/>"));
 
         int length = rg.matchedLength();
@@ -95,7 +95,7 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
         qCritical() << "Cannot create the TeX file";
         return QString();
     }
-    texFile.write(latexText.toAscii());
+    texFile.write(latexText.toLatin1());
     texFile.close();
 
     if (LatexConfig::latexCmd().isEmpty()) {
@@ -163,7 +163,7 @@ QString LatexFilter::handleLatex(const QString &latexFormula)
     QFile::remove(texFile.fileName().replace(QLatin1String(".tex"), QLatin1String(".aux")));
     QFile::remove(texFile.fileName().replace(QLatin1String(".tex"), QLatin1String(".log")));
 
-    return QString::fromAscii(image.toBase64());
+    return QString::fromLatin1(image.toBase64());
 }
 
 bool LatexFilter::isSafe(const QString &latexFormula)
