@@ -21,14 +21,14 @@
 
 #include "bundle-installer.h"
 
-class KTemporaryFile;
+class QTemporaryFile;
 
 class EmoticonSetInstaller : public BundleInstaller
 {
     Q_OBJECT
 
 public:
-    EmoticonSetInstaller(KArchive *archive, KTemporaryFile *tmpFile);
+    EmoticonSetInstaller(KArchive *archive, QTemporaryFile *tmpFile);
     virtual ~EmoticonSetInstaller();
 
     virtual BundleStatus validate();
@@ -42,7 +42,7 @@ public Q_SLOTS:
 
 private:
     KArchive *m_archive;
-    KTemporaryFile *m_tmpFile;
+    QTemporaryFile *m_tmpFile;
     QString m_bundleName;
 };
 

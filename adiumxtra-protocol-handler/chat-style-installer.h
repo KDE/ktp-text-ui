@@ -21,16 +21,14 @@
 
 #include "bundle-installer.h"
 
-#include <KDebug>
-
-class KTemporaryFile;
+class QTemporaryFile;
 
 class ChatStyleInstaller : public BundleInstaller
 {
     Q_OBJECT
 
 public:
-    ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFile);
+    ChatStyleInstaller(KArchive *archive, QTemporaryFile *tmpFile);
     virtual ~ChatStyleInstaller();
 
     virtual BundleInstaller::BundleStatus validate();
@@ -44,7 +42,7 @@ public Q_SLOTS:
 
 private:
     KArchive *m_archive;
-    KTemporaryFile *m_tmpFile;
+    QTemporaryFile *m_tmpFile;
     QString m_bundleName;
     BundleInstaller::BundleStatus m_status;
 };

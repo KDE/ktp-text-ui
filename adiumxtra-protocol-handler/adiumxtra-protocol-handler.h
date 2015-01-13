@@ -21,7 +21,7 @@
 
 #include "bundle-installer.h"
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class AdiumxtraProtocolHandler : public QObject
 {

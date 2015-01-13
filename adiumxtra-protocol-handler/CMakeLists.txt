@@ -15,7 +15,6 @@ target_link_libraries(ktp-adiumxtra-protocol-handler
             KF5::Emoticons
             Qt5::Xml
             KF5::KIOWidgets
-            KF5::KDELibs4Support
             ktpchat)
 
 

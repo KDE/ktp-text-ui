@@ -20,18 +20,18 @@
 #include "chat-style-installer.h"
 #include "emoticon-set-installer.h"
 
-#include <KDebug>
 #include <KZip>
 #include <KTar>
 #include <KEmoticons>
-#include <KTemporaryFile>
 #include <KIO/Job>
-#include <KIO/NetAccess>
 #include <KNotification>
-#include <KMimeType>
-#include <KAboutData>
-#include <KComponentData>
-#include <KUrl>
+#include <KLocalizedString>
+
+#include <QTemporaryFile>
+#include <QUrl>
+#include <QDebug>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 // FIXME: Part of a hack to let adiumxtra-protocol-handler use the main ktelepathy.notifyrc because
 // the string freeze does not permit adding a new notifyrc only for adiumxtra-protocol-handler.
@@ -43,34 +43,30 @@ static QString ktelepathyComponentName() {
 AdiumxtraProtocolHandler::AdiumxtraProtocolHandler()
     : QObject()
 {
-    kDebug();
 }
 
 AdiumxtraProtocolHandler::~AdiumxtraProtocolHandler()
 {
-    kDebug();
 }
 
 void AdiumxtraProtocolHandler::install()
 {
-    kDebug();
-
     if (m_url.isEmpty()) {
         Q_EMIT finished();
         return; // BundleInstaller:: xxxxx
     }
 
-    KUrl url(m_url);
-    if(url.protocol() == QLatin1String("adiumxtra")) {
-        url.setProtocol(QLatin1String("http"));
+    QUrl url = QUrl::fromUserInput(m_url);
+    if(url.scheme() == QLatin1String("adiumxtra")) {
+        url.setScheme(QStringLiteral("http"));
     }
 
-    KTemporaryFile *tmpFile = new KTemporaryFile();
+    QTemporaryFile *tmpFile = new QTemporaryFile();
     if (tmpFile->open()) {
-        KIO::Job* getJob = KIO::file_copy(url.prettyUrl(), KUrl(tmpFile->fileName()), -1,
+        KIO::Job* getJob = KIO::file_copy(url.toDisplayString(), QUrl(tmpFile->fileName()), -1,
                                           KIO::Overwrite | KIO::HideProgressInfo);
-        if (!KIO::NetAccess::synchronousRun(getJob, 0)) {
-            kDebug() << "Download failed";
+        if (getJob->exec()) {
+            qWarning() << "Download failed";
             Q_EMIT finished();
             return; // BundleInstaller::BundleCannotOpen;
         }
@@ -79,7 +75,9 @@ void AdiumxtraProtocolHandler::install()
 
     KArchive *archive = 0L;
 
-    QString currentBundleMimeType = KMimeType::findByPath(tmpFile->fileName(), 0, false)->name();
+    QMimeDatabase db;
+
+    QString currentBundleMimeType =  db.mimeTypeForFile(tmpFile->fileName()).name();
     if (currentBundleMimeType == QLatin1String("application/zip")) {
         archive = new KZip(tmpFile->fileName());
     } else if (currentBundleMimeType == QLatin1String("application/x-compressed-tar") ||
@@ -95,15 +93,14 @@ void AdiumxtraProtocolHandler::install()
         QObject::connect(notification, SIGNAL(ignored()), notification, SLOT(close()));
         notification->setComponentName(ktelepathyComponentName());
         notification->sendEvent();
-        kDebug() << "Unsupported file type" << currentBundleMimeType;
-        kDebug() << tmpFile->fileName();
+        qWarning() << "Unsupported file type" << currentBundleMimeType;
         Q_EMIT finished();
         return;// BundleInstaller::BundleNotValid;
     }
 
     if (!archive->open(QIODevice::ReadOnly)) {
         delete archive;
-        kDebug() << "Cannot open theme file";
+        qWarning() << "Cannot open theme file";
         Q_EMIT finished();
         return;// BundleInstaller::BundleCannotOpen;
     }
@@ -111,7 +108,6 @@ void AdiumxtraProtocolHandler::install()
     ChatStyleInstaller *chatStyleInstaller = new ChatStyleInstaller(archive, tmpFile);
     if (chatStyleInstaller->validate() == BundleInstaller::BundleValid) {
         chatStyleInstaller->showRequest();
-        kDebug() << "Sent messagestyle request";
 
         QObject::connect(chatStyleInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
                          chatStyleInstaller, SLOT(showResult()));
@@ -129,7 +125,6 @@ void AdiumxtraProtocolHandler::install()
     EmoticonSetInstaller *emoticonSetInstaller = new EmoticonSetInstaller(archive, tmpFile);
     if(emoticonSetInstaller->validate() == BundleInstaller::BundleValid) {
         emoticonSetInstaller->showRequest();
-        kDebug() << "Sent emoticonset request";
 
         QObject::connect(emoticonSetInstaller, SIGNAL(finished(BundleInstaller::BundleStatus)),
                          emoticonSetInstaller, SLOT(showResult()));
@@ -153,7 +148,6 @@ void AdiumxtraProtocolHandler::install()
     notification->setActions( QStringList() << i18n("OK") );
     notification->setComponentName(ktelepathyComponentName());
     notification->sendEvent();
-    kDebug() << "Sent error";
 
     Q_EMIT finished();
     return;// BundleInstaller::BundleUnknownError;

@@ -19,35 +19,39 @@
 #include "adiumxtra-protocol-handler.h"
 #include "../ktptextui_version.h"
 
-#include <KApplication>
-#include <k4aboutdata.h>
-#include <KCmdLineArgs>
+#include <KAboutData>
+#include <KLocalizedString>
+
+#include <QApplication>
+#include <QCommandLineParser>
 #include <QTimer>
 
 int main(int argc, char *argv[])
 {
-    K4AboutData aboutData("ktp-adiumxtra-protocol-handler",
-                         0,
-                         ki18n("AdiumXtra Protocol Handler"),
-                         KTP_TEXT_UI_VERSION_STRING);
-    aboutData.addAuthor(ki18n("Dominik Schmidt"), ki18n("Developer"), "kde@dominik-schmidt.de");
-    aboutData.addAuthor(ki18n("Daniele E. Domenichelli"), ki18n("Developer"), "daniele.domenichelli@gmail.com");
+    QApplication app(argc, argv);
+
+    KAboutData aboutData("ktp-adiumxtra-protocol-handler",
+                         i18n("AdiumXtra Protocol Handler"),
+                         QStringLiteral(KTP_TEXT_UI_VERSION_STRING));
+    aboutData.addAuthor(i18n("Dominik Schmidt"), i18n("Developer"), "kde@dominik-schmidt.de");
+    aboutData.addAuthor(i18n("Daniele E. Domenichelli"), i18n("Developer"), "daniele.domenichelli@gmail.com");
     aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
-    aboutData.setLicense(K4AboutData::License_GPL_V2);
-    KCmdLineArgs::init(argc, argv, &aboutData);
-    KCmdLineOptions options;
-    options.add("!+adium-bundle", ki18n("Adium package to install"));
-    KCmdLineArgs::addCmdLineOptions(options);
+    aboutData.setLicense(KAboutLicense::GPL_V2);
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    KApplication app;
+    KAboutData::setApplicationData(aboutData);
 
-    if (args->count() == 0) {
+    QCommandLineParser parser;
+    QCommandLineOption adiumBundleOption(QStringLiteral("adium-bundle"), i18n("Adium package to install"));
+    parser.addOption(adiumBundleOption);
+    parser.process(app);
+
+
+    if (parser.positionalArguments().count() == 0) {
         return -1;
     }
 
     AdiumxtraProtocolHandler handler;
-    handler.setUrl(KCmdLineArgs::parsedArgs()->arg(0));
+    handler.setUrl(parser.value(adiumBundleOption));
 
     app.connect(&handler, SIGNAL(finished()), SLOT(quit()));
     QTimer::singleShot(0, &handler, SLOT(install()));

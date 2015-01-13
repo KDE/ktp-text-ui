@@ -21,15 +21,13 @@
 #include "chat-window-style-manager.h"
 #include "chat-style-plist-file-reader.h"
 
-#include <KDebug>
-#include <KTemporaryFile>
-#include <KArchiveFile>
-#include <KLocale>
-#include <KNotification>
-#include <KApplication>
+#include <QTemporaryFile>
 #include <QTimer>
-#include <KAboutData>
-#include <KComponentData>
+#include <QDebug>
+
+#include <KLocalizedString>
+#include <KArchiveFile>
+#include <KNotification>
 
 // FIXME: Part of a hack to let adiumxtra-protocol-handler use the main ktelepathy.notifyrc because
 // the string freeze does not permit adding a new notifyrc only for adiumxtra-protocol-handler.
@@ -38,23 +36,18 @@ static QString ktelepathyComponentName() {
     return QStringLiteral("ktelepathy");
 }
 
-ChatStyleInstaller::ChatStyleInstaller(KArchive *archive, KTemporaryFile *tmpFile)
+ChatStyleInstaller::ChatStyleInstaller(KArchive *archive, QTemporaryFile *tmpFile)
 {
-    kDebug();
-
     m_archive = archive;
     m_tmpFile = tmpFile;
 }
 
 ChatStyleInstaller::~ChatStyleInstaller()
 {
-    kDebug();
 }
 
 BundleInstaller::BundleStatus ChatStyleInstaller::validate()
 {
-    kDebug();
-
     KArchiveEntry *currentEntry = 0L;
     KArchiveDirectory* currentDir = 0L;
     const KArchiveDirectory* rootDir = m_archive->directory();
@@ -64,18 +57,15 @@ BundleInstaller::BundleStatus ChatStyleInstaller::validate()
 
     for (entriesIt = entries.begin(); entriesIt != entries.end(); ++entriesIt) {
         currentEntry = const_cast<KArchiveEntry*>(rootDir->entry(*entriesIt));
-        kDebug() << "Current entry name: " << currentEntry->name();
         if (currentEntry->isDirectory()) {
             currentDir = dynamic_cast<KArchiveDirectory*>(currentEntry);
             if (currentDir) {
                 if (currentDir->entry(QLatin1String("Contents")) &&
                     currentDir->entry(QLatin1String("Contents"))->isDirectory()) {
-                    kDebug() << "Contents found";
                     validResult += 1;
                 }
                 if (currentDir->entry(QLatin1String("Contents/Info.plist")) &&
                     currentDir->entry(QLatin1String("Contents/Info.plist"))->isFile()) {
-                    kDebug() << "Contents/Info.plist found";
                     KArchiveFile const *info = dynamic_cast<KArchiveFile const *>(
                         currentDir->entry(QLatin1String("Contents/Info.plist"))
                     );
@@ -91,29 +81,23 @@ BundleInstaller::BundleStatus ChatStyleInstaller::validate()
     }
 
     if(validResult >= 2) {
-        kDebug() << "Bundle is valid";
         return BundleValid;
     } else {
-        kDebug() << "Bundle is not valid";
+        qWarning() << "Bundle is not valid";
         return BundleNotValid;
     }
 }
 
 QString ChatStyleInstaller::bundleName() const
 {
-    kDebug();
-
     return m_bundleName;
 }
 
 BundleInstaller::BundleStatus ChatStyleInstaller::install()
 {
-    kDebug();
-
     BundleInstaller::BundleStatus status = static_cast<BundleInstaller::BundleStatus>(
         ChatWindowStyleManager::self()->installStyle(m_archive->fileName())
     );
-    kDebug()<< "status " << status;
     delete m_tmpFile;
 
     m_status = status;
@@ -125,8 +109,6 @@ BundleInstaller::BundleStatus ChatStyleInstaller::install()
 
 void ChatStyleInstaller::showRequest()
 {
-    kDebug();
-
     KNotification *notification = new KNotification(QLatin1String("chatstyleRequest"), NULL, KNotification::Persistent);
     notification->setText( i18n("Install Chatstyle %1", this->bundleName()) );
     notification->setActions( QStringList() << i18n("Install") << i18n("Cancel") );
@@ -146,15 +128,13 @@ void ChatStyleInstaller::showRequest()
 
 void ChatStyleInstaller::showResult()
 {
-    kDebug();
-
     KNotification *notification;
     if(m_status == BundleInstaller::BundleInstallOk) {
-        kDebug() << "Installed Chatstyle" << this->bundleName() << "successfully";
+        qDebug() << "Installed Chatstyle" << this->bundleName() << "successfully";
         notification = new KNotification(QLatin1String("chatstyleSuccess"));
         notification->setText( i18n("Installed Chatstyle %1 successfully.", this->bundleName()) );
     } else {
-        kDebug() << "Installation of Chatstyle" << this->bundleName() << "failed";
+        qWarning() << "Installation of Chatstyle" << this->bundleName() << "failed";
         notification = new KNotification(QLatin1String("chatstyleFailure"));
         notification->setText( i18n("Installation of Chatstyle %1 failed.", this->bundleName()) );
     }
@@ -166,7 +146,5 @@ void ChatStyleInstaller::showResult()
 
 void ChatStyleInstaller::ignoreRequest()
 {
-    kDebug();
-
     Q_EMIT ignoredRequest();
 }
