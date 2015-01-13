@@ -25,7 +25,6 @@
 #include <KConfigGroup>
 
 K_PLUGIN_FACTORY(KCMTelepathyLogViewerBehaviorConfigFactory, registerPlugin<BehaviorConfig>();)
-K_EXPORT_PLUGIN(KCMTelepathyLogViewerBehaviorConfigFactory("ktp_logviewer_behavior", "kcm_ktp_logviewer_behavior"))
 
 BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
     : KCModule(parent, args)
