@@ -24,8 +24,6 @@
 
 #include <TelepathyQt/Types>
 
-#include <KDebug>
-
 EntityFilterModel::EntityFilterModel(QObject *parent):
     QSortFilterProxyModel(parent)
 {
@@ -83,14 +81,12 @@ bool EntityFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sour
 
         /* Check if contact's account name matches */
         if (entity.alias().contains(term, Qt::CaseInsensitive) && matches_filter) {
-            kDebug() << entity.alias() << "matches" << term;
             return matches_filter;
         }
 
         /* If there's information about contact's real name try to match it too */
         if (!contact.isNull()) {
             if (contact->alias().contains(term, Qt::CaseInsensitive) && matches_filter) {
-                kDebug() << contact->alias() << "matches" << term;
                 return matches_filter;
             }
         }

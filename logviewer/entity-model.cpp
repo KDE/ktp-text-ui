@@ -30,8 +30,6 @@
 #include <TelepathyQt/PendingOperation>
 #include <TelepathyQt/PendingContacts>
 
-#include <KDebug>
-
 class EntityModelItem
 {
   public:

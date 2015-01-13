@@ -23,7 +23,6 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KDebug>
 
 K_PLUGIN_FACTORY(KCMTelepathyLogViewerBehaviorConfigFactory, registerPlugin<BehaviorConfig>();)
 K_EXPORT_PLUGIN(KCMTelepathyLogViewerBehaviorConfigFactory("ktp_logviewer_behavior", "kcm_ktp_logviewer_behavior"))
@@ -60,8 +59,6 @@ void BehaviorConfig::load()
 
 void BehaviorConfig::save()
 {
-    kDebug();
-
     KConfig config(QLatin1String("ktelepathyrc"));
     KConfigGroup group = config.group("LogViewer");
     group.writeEntry(QLatin1String("SortMode"), ui->sortButtonGroup->checkedId());

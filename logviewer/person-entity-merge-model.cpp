@@ -19,6 +19,7 @@
 
 #include "person-entity-merge-model.h"
 #include "entity-model.h"
+#include "debug.h"
 
 #include <KTp/Logger/log-entity.h>
 #include <KTp/Models/contacts-model.h>
@@ -27,7 +28,6 @@
 #include <TelepathyQt/Contact>
 #include <TelepathyQt/ContactManager>
 
-#include <KDebug>
 #include <KLocalizedString>
 #include <KIconLoader>
 
@@ -123,13 +123,13 @@ PersonEntityMergeModel::ContactItem* PersonEntityMergeModel::itemForPersona(cons
             ContactItem *cItem = dynamic_cast<ContactItem*>(item);
             Q_ASSERT(cItem);
             if (cItem->personaIndex == personsModel_personaIndex) {
-                kDebug() << "\t\tFound existing persona for" << personsModel_personaIndex.data();
+                qCDebug(KTP_LOGVIEWER) << "\t\tFound existing persona for" << personsModel_personaIndex.data();
                 return cItem;
             }
         }
     }
 
-    kDebug() << "\t\tCreating a new persona for" << personsModel_personaIndex.data();
+    qCDebug(KTP_LOGVIEWER) << "\t\tCreating a new persona for" << personsModel_personaIndex.data();
     ContactItem *item = new ContactItem;
     item->personaIndex = personsModel_personaIndex;
 
@@ -163,12 +163,12 @@ PersonEntityMergeModel::GroupItem* PersonEntityMergeModel::groupForName(const QV
         Q_ASSERT(group);
 
         if (group->label == groupName) {
-            kDebug() << "\tFound matching group" << groupName;
+            qCDebug(KTP_LOGVIEWER) << "\tFound matching group" << groupName;
             return group;
         }
     }
 
-    kDebug() << "\tCreating a new group" << groupName;
+    qCDebug(KTP_LOGVIEWER) << "\tCreating a new group" << groupName;
     GroupItem *group = new GroupItem;
     group->label = groupName;
     addItem(group, m_rootItem);
@@ -216,7 +216,7 @@ PersonEntityMergeModel::Item* PersonEntityMergeModel::itemForIndex(const QModelI
         return 0;
     }
 
-    kDebug() << index;
+    qCDebug(KTP_LOGVIEWER) << index;
     Q_ASSERT(false && "Invalid index model");
     return 0;
 }
@@ -409,7 +409,7 @@ void PersonEntityMergeModel::sourceModelInitialized()
 
 void PersonEntityMergeModel::initializeModel()
 {
-    kDebug();
+    qCDebug(KTP_LOGVIEWER);
 
     for (int i = 0; i < m_entityModel->rowCount(QModelIndex()); ++i) {
         const QModelIndex entityIndex = m_entityModel->index(i, 0);
@@ -419,7 +419,7 @@ void PersonEntityMergeModel::initializeModel()
 
         const KTp::LogEntity entity = entityIndex.data(EntityModel::EntityRole).value<KTp::LogEntity>();
         const Tp::AccountPtr account = entityIndex.data(EntityModel::AccountRole).value<Tp::AccountPtr>();
-        kDebug() << "Searching for match for entity" << entity.id() << "@" << account->uniqueIdentifier();
+        qCDebug(KTP_LOGVIEWER) << "Searching for match for entity" << entity.id() << "@" << account->uniqueIdentifier();
         if (KTp::kpeopleEnabled()) {
             for (int j = 0; j < m_contactsModel->rowCount(); ++j) {
                 const QModelIndex index = m_contactsModel->index(j, 0);
@@ -427,8 +427,8 @@ void PersonEntityMergeModel::initializeModel()
                 for (int k = 0; k < m_contactsModel->rowCount(index); ++k) {
                     const QModelIndex childIndex = m_contactsModel->index(k, 0, index);
                     if (m_contactsModel->data(childIndex, KTp::IdRole).toString() == entity.id()) {
-                        //kDebug() << "\tFound matching persona" << m_personsModel->data(index, PersonsModel::UriRole).toString();
-                        //kDebug() << "\t\tFound matching contact" << m_personsModel->data(childIndex, PersonsModel::IMRole).toString();
+                        //qCDebug(KTP_LOGVIEWER) << "\tFound matching persona" << m_personsModel->data(index, PersonsModel::UriRole).toString();
+                        //qCDebug(KTP_LOGVIEWER) << "\t\tFound matching contact" << m_personsModel->data(childIndex, PersonsModel::IMRole).toString();
                         parentItem = itemForPersona(index);
                         personaIndex = index;
                         contactIndex = childIndex;
@@ -444,7 +444,7 @@ void PersonEntityMergeModel::initializeModel()
         }
 
         if (!contactIndex.isValid() && !personaIndex.isValid()) {
-            kDebug() << "\tNo match";
+            qCDebug(KTP_LOGVIEWER) << "\tNo match";
             // If we don't have kpeople, we don't have information about group
             // membership, so fallback to grouping by account
             if (KTp::kpeopleEnabled()) {

@@ -27,7 +27,6 @@
 
 #include <KLocalizedString>
 #include <klocalizeddate.h>
-#include <KDebug>
 
 Q_DECLARE_METATYPE(Tp::AccountPtr)
 

@@ -26,7 +26,6 @@
 #include <QFontDatabase>
 
 #include <KIconLoader>
-#include <KDebug>
 
 #include <TelepathyQt/Account>
 

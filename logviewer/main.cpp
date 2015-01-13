@@ -23,10 +23,13 @@
 
 #include "log-viewer.h"
 #include "../ktptextui_version.h"
+#include "debug.h"
 
 #include <TelepathyQt/AccountManager>
 
 #include <KTp/contact-factory.h>
+
+Q_LOGGING_CATEGORY(KTP_LOGVIEWER, "ktp-logviewer")
 
 int main(int argc, char *argv[])
 {

@@ -20,6 +20,7 @@
 
 #include "log-viewer.h"
 #include "ui_log-viewer.h"
+#include "debug.h"
 
 #include <TelepathyQt/AccountManager>
 #include <TelepathyQt/PendingReady>
@@ -38,8 +39,6 @@
 #include <KLineEdit>
 #include <KPixmapSequence>
 #include <KMessageBox>
-
-#include <KDebug>
 #include <KStandardAction>
 #include <KMenu>
 #include <KApplication>
@@ -455,7 +454,7 @@ void LogViewer::slotImportKopeteLogs(bool force)
 
     bool importDone = logsConfig.readEntry(QLatin1String("InitialKopeteImportDone"), QVariant(false)).toBool();
     if (!force && importDone) {
-        kDebug() << "Skipping initial Kopete logs import, already done.";
+        qCDebug(KTP_LOGVIEWER) << "Skipping initial Kopete logs import, already done.";
         return;
     }
 
@@ -469,7 +468,7 @@ void LogViewer::slotImportKopeteLogs(bool force)
         }
     }
 
-    kDebug() << "Initial Kopete logs import: found" << matchingAccounts.count() << "accounts to import";
+    qCDebug(KTP_LOGVIEWER) << "Initial Kopete logs import: found" << matchingAccounts.count() << "accounts to import";
 
     if (!matchingAccounts.isEmpty()) {
         LogsImportDialog *dialog = new LogsImportDialog(this);
