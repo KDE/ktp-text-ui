@@ -24,6 +24,9 @@
 #include <QProgressBar>
 #include <QIcon>
 #include <KListWidget>
+#include <QDialogButtonBox>
+#include <QAbstractButton>
+#include <QPushButton>
 #include <KLocalizedString>
 #include <KTp/logs-importer.h>
 #include <TelepathyQt/Account>
@@ -31,18 +34,25 @@
 Q_DECLARE_METATYPE(Tp::AccountPtr);
 
 LogsImportDialog::LogsImportDialog(QObject *parent)
-    : KDialog()
+    : QDialog()
 {
     Q_UNUSED(parent);
+
+    m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Close, this);
+    m_buttonBox->button(QDialogButtonBox::Ok)->setText(i18n("Import Logs"));
+
+    connect(m_buttonBox, &QDialogButtonBox::clicked, this, &LogsImportDialog::slotButtonClicked);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     setWindowTitle(i18n("Import Kopete Logs"));
     setWindowIcon(QIcon::fromTheme(QLatin1String("telepathy-kde")));
 
     QWidget *mainWidget = new QWidget(this);
-    setMainWidget(mainWidget);
 
-    QVBoxLayout *layout = new QVBoxLayout();
-    mainWidget->setLayout(layout);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    setLayout(layout);
+    layout->addWidget(mainWidget);
 
     QLabel *label = new QLabel(mainWidget);
     label->setText(i18n("We have found Kopete logs that seem to match some of your KDE Telepathy accounts.\n\n"
@@ -61,8 +71,7 @@ LogsImportDialog::LogsImportDialog(QObject *parent)
     m_progressBar->setTextVisible(false);
     layout->addWidget(m_progressBar);
 
-    setButtons(Ok | Close);
-    setButtonText(Ok, i18n("Import Logs"));
+    layout->addWidget(m_buttonBox);
 
     setMinimumWidth(300);
 
@@ -90,20 +99,18 @@ void LogsImportDialog::importLogs(const QList< Tp::AccountPtr >& accounts)
     exec();
 }
 
-void LogsImportDialog::slotButtonClicked(int button)
+void LogsImportDialog::slotButtonClicked(QAbstractButton *button)
 {
-    if (button == Ok) {
+    if (m_buttonBox->standardButton(button) == QDialogButtonBox::Ok) {
         m_accountsList->setEnabled(false);
         m_progressBar->setVisible(true);
-        enableButton(Ok, false);
-        enableButton(Close, false);
+        m_buttonBox->button(QDialogButtonBox::Ok)->setDisabled(true);
+        m_buttonBox->button(QDialogButtonBox::Close)->setDisabled(true);
 
         m_row = 0;
         importFinished();
         return;
     }
-
-    KDialog::slotButtonClicked(button);
 }
 
 void LogsImportDialog::importFinished()
@@ -127,7 +134,7 @@ void LogsImportDialog::importFinished()
     } else {
         m_accountsList->item(m_row - 1)->setCheckState(Qt::Unchecked);
         m_progressBar->setVisible(false);
-        enableButton(Close, true);
-        setButtonText(Close, i18n("Done"));
+        m_buttonBox->button(QDialogButtonBox::Close)->setEnabled(true);
+        m_buttonBox->button(QDialogButtonBox::Close)->setText(i18n("Done"));
     }
 }

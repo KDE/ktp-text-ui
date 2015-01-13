@@ -20,18 +20,20 @@
 #ifndef LOGSIMPORTDIALOG_H
 #define LOGSIMPORTDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 #include <TelepathyQt/Types>
 
 namespace KTp {
 class LogsImporter;
 }
 
+class QAbstractButton;
+class QDialogButtonBox;
 class QProgressBar;
-class KListWidget;
+class QListWidget;
 class LogsImportDialogPrivate;
 
-class LogsImportDialog : public KDialog
+class LogsImportDialog : public QDialog
 {
     Q_OBJECT
 
@@ -43,13 +45,14 @@ class LogsImportDialog : public KDialog
     void importLogs(const QList<Tp::AccountPtr> &accounts);
 
   protected Q_SLOTS:
-    virtual void slotButtonClicked(int button);
+    virtual void slotButtonClicked(QAbstractButton *button);
 
   private Q_SLOTS:
     void importFinished();
 
   private:
-    KListWidget *m_accountsList;
+    QDialogButtonBox *m_buttonBox;
+    QListWidget *m_accountsList;
     QProgressBar *m_progressBar;
     KTp::LogsImporter *m_importer;
     int m_row;
