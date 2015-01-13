@@ -45,7 +45,7 @@
 #include <KMessageBox>
 #include <KStandardAction>
 #include <KActionCollection>
-#include <KSettings/Dialog>
+#include <ksettings/dialog.h>
 #include <KLocalizedString>
 #include <KIconLoader>
 #include <KSharedConfig>
