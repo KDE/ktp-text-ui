@@ -15,11 +15,11 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
-    <widget class="KLineEdit" name="globalSearch">
-     <property name="clickMessage">
+    <widget class="QLineEdit" name="globalSearch">
+     <property name="placeholderText">
       <string>Search all logs...</string>
      </property>
-     <property name="showClearButton" stdset="0">
+     <property name="clearButtonEnabled" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
@@ -67,11 +67,6 @@
    <class>KFilterProxySearchLine</class>
    <extends>QWidget</extends>
    <header>kfilterproxysearchline.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
   <customwidget>
    <class>KPixmapSequenceWidget</class>

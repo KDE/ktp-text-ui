@@ -23,11 +23,13 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QIcon>
-#include <KListWidget>
 #include <QDialogButtonBox>
 #include <QAbstractButton>
 #include <QPushButton>
+#include <QListWidget>
+
 #include <KLocalizedString>
+
 #include <KTp/logs-importer.h>
 #include <TelepathyQt/Account>
 
@@ -60,7 +62,7 @@ LogsImportDialog::LogsImportDialog(QObject *parent)
     label->setWordWrap(true);
     layout->addWidget(label);
 
-    m_accountsList = new KListWidget(mainWidget);
+    m_accountsList = new QListWidget(mainWidget);
     m_accountsList->setIconSize(QSize(24,24));
     layout->addWidget(m_accountsList, 1);
 

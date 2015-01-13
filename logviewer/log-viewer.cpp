@@ -37,6 +37,8 @@
 
 #include <QWebFrame>
 #include <KLineEdit>
+#include <QMenuBar>
+
 #include <KPixmapSequence>
 #include <KMessageBox>
 #include <KStandardAction>
@@ -44,7 +46,6 @@
 #include <KApplication>
 #include <KAction>
 #include <KActionCollection>
-#include <KMenuBar>
 #include <KSettings/Dialog>
 #include <KLocalizedString>
 #include <KIconLoader>
