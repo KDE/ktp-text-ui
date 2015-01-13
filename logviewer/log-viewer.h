@@ -39,7 +39,7 @@ class DatesModel;
 class EntityModel;
 class EntityFilterModel;
 class PersonEntityMergeModel;
-class KMenu;
+class QMenu;
 
 class LogViewer : public KXmlGuiWindow
 {
@@ -93,7 +93,7 @@ private:
 
     QPersistentModelIndex m_expandedPersona;
 
-    KMenu *m_entityListContextMenu;
+    QMenu *m_entityListContextMenu;
 
     QDate m_prevConversationDate;
     QDate m_nextConversationDate;
