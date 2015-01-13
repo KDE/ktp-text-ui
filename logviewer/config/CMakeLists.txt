@@ -10,7 +10,6 @@ add_library(kcm_ktp_logviewer_behavior MODULE ${kcm_ktp_logviewer_behavior_SRCS}
 
 target_link_libraries(kcm_ktp_logviewer_behavior
     KF5::KCMUtils
-    KF5::KDELibs4Support
     ktpchat
 )
 
