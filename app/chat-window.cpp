@@ -33,7 +33,7 @@
 #include <KLocalizedString>
 #include <KActionCollection>
 #include <KColorScheme>
-#include <KSettings/Dialog>
+#include <ksettings/dialog.h>
 #include <kcmodulecontainer.h>
 #include <KNotification>
 #include <KNotifyConfigWidget>

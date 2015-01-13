@@ -25,6 +25,7 @@ target_link_libraries(ktp-log-viewer
             KF5::Emoticons
             KF5::KCMUtils
             KF5::WebKit
+            KF5::KDELibs4Support
             KTp::CommonInternals
             KTp::Logger
             KTp::Models
