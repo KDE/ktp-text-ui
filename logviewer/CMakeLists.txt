@@ -21,11 +21,14 @@ qt5_wrap_ui(ktp-log-viewer_SRCS log-viewer.ui)
 add_executable(ktp-log-viewer ${ktp-log-viewer_SRCS})
 
 target_link_libraries(ktp-log-viewer
+            KF5::I18n
+            KF5::ConfigCore
+            KF5::ItemViews
+            KF5::CoreAddons
             KF5::KIOWidgets
             KF5::Emoticons
             KF5::KCMUtils
             KF5::WebKit
-            KF5::KDELibs4Support
             KTp::CommonInternals
             KTp::Logger
             KTp::Models
