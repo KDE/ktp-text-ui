@@ -19,12 +19,11 @@
 
 #include "entity-view.h"
 
-#include <KCmdLineArgs>
-
 #include <KTp/Logger/log-entity.h>
 #include <KTp/types.h>
 
 #include <QAbstractItemModel>
+#include <QCoreApplication>
 
 #include <TelepathyQt/Account>
 
@@ -56,8 +55,10 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
     }
 
     QModelIndex selectedIndex;
-    if (KCmdLineArgs::parsedArgs()->count() == 1 && KTp::kpeopleEnabled()) {
-        const QString selectedPersonaId = KCmdLineArgs::parsedArgs()->arg(0);
+    QCommandLineParser parser;
+
+    if (QCoreApplication::arguments().count() == 1 && KTp::kpeopleEnabled()) {
+        const QString selectedPersonaId = QCoreApplication::arguments().at(0);
         for (int i = start; i <= end; i++) {
             const QModelIndex index = model()->index(i, 0, parent);
             if (index.data(KTp::PersonIdRole).toUrl() == selectedPersonaId) {
@@ -65,9 +66,9 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
                 break;
             }
         }
-    } else if (KCmdLineArgs::parsedArgs()->count() == 2) {
-        QString selectAccountId = KCmdLineArgs::parsedArgs()->arg(0);
-        QString selectContactId = KCmdLineArgs::parsedArgs()->arg(1);
+    } else if (QCoreApplication::arguments().count() == 2) {
+        QString selectAccountId = QCoreApplication::arguments().at(0);
+        QString selectContactId = QCoreApplication::arguments().at(1);
 
         for (int i = start; i <= end; i++) {
             QModelIndex index = model()->index(i, 0, parent);
