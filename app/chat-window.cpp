@@ -129,6 +129,7 @@ ChatWindow::ChatWindow()
     m_tabWidget->setMovable(true);
     m_tabWidget->setDocumentMode(true);
     m_tabWidget->setTabsClosable(true);
+    m_tabWidget->tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tabWidget->tabBar()->hide();
     m_tabWidget->setElideMode(Qt::ElideRight);
 
@@ -136,7 +137,7 @@ ChatWindow::ChatWindow()
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
 
     connect(qobject_cast<QTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)), this, SLOT(onTabMiddleClicked(int)));
-    connect(qobject_cast<QTabBar*>(m_tabWidget->tabBar()), SIGNAL(contextMenu(int,QPoint)), SLOT(tabBarContextMenu(int,QPoint)));
+    connect(qobject_cast<QTabBar*>(m_tabWidget->tabBar()), SIGNAL(customContextMenuRequested(QPoint)), SLOT(tabBarContextMenu(QPoint)));
 
     setCentralWidget(m_tabWidget);
 
@@ -161,8 +162,9 @@ ChatWindow::~ChatWindow()
     Q_EMIT aboutToClose(this);
 }
 
-void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
+void ChatWindow::tabBarContextMenu(const QPoint &globalPos)
 {
+    int index = m_tabWidget->tabBar()->tabAt(globalPos);
     QAction close(QIcon::fromTheme(QStringLiteral("tab-close")), i18n("Close"), this);
     QAction dettach(QIcon::fromTheme(QStringLiteral("tab-detach")), i18n("Detach Tab"), this);
     QAction moveLeft(QIcon::fromTheme(QStringLiteral("arrow-left")), i18n("Move Tab Left"), this);
@@ -181,7 +183,7 @@ void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
         moveRight.setEnabled(false);
     }
 
-    QAction *result = qobject_cast<QAction*>(menu->exec(globalPos));
+    QAction *result = qobject_cast<QAction*>(menu->exec(m_tabWidget->tabBar()->mapToGlobal(globalPos)));
 
     if(result == &close) {
         destroyTab(index);

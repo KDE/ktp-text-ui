@@ -83,7 +83,7 @@ protected:
 
 
 private Q_SLOTS:
-    void tabBarContextMenu(int  index, const QPoint &  globalPos);
+    void tabBarContextMenu(const QPoint &globalPos);
     void closeCurrentTab();
     void onAudioCallTriggered();                                /** start an audio call */
     void onBlockContactTriggered();                             /** Blocks contact */
