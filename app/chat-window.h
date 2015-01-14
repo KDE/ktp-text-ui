@@ -76,7 +76,7 @@ Q_SIGNALS:
     void detachRequested(ChatTab *tab);
 
 public Q_SLOTS:
-    void destroyTab(QWidget *chatWidget);
+    void destroyTab(int index);
 
 protected:
     virtual bool event(QEvent *e);

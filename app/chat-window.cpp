@@ -132,7 +132,7 @@ ChatWindow::ChatWindow()
     m_tabWidget->tabBar()->hide();
     m_tabWidget->setElideMode(Qt::ElideRight);
 
-    connect(m_tabWidget, SIGNAL(closeRequest(QWidget*)), this, SLOT(destroyTab(QWidget*)));
+    connect(m_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(destroyTab(int)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
 
     connect(qobject_cast<QTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)), this, SLOT(onTabMiddleClicked(int)));
@@ -184,7 +184,7 @@ void ChatWindow::tabBarContextMenu(int index, const QPoint& globalPos)
     QAction *result = qobject_cast<QAction*>(menu->exec(globalPos));
 
     if(result == &close) {
-        destroyTab(m_tabWidget->widget(index));
+        destroyTab(index);
     } else if (result == &dettach) {
         Q_EMIT detachRequested(qobject_cast<ChatTab*>(m_tabWidget->widget(index)));
     } else if (result == &moveLeft) {
@@ -255,9 +255,7 @@ void ChatWindow::removeTab(ChatTab *tab)
 
 void ChatWindow::onTabMiddleClicked(int index)
 {
-    QWidget *tab = m_tabWidget->widget(index);
-    Q_ASSERT(tab);
-    destroyTab(tab);
+    destroyTab(index);
 }
 
 void ChatWindow::addTab(ChatTab *tab)
@@ -285,13 +283,13 @@ void ChatWindow::addTab(ChatTab *tab)
     }
 }
 
-void ChatWindow::destroyTab(QWidget* chatWidget)
+void ChatWindow::destroyTab(int index)
 {
-    ChatTab *tab = qobject_cast<ChatTab*>(chatWidget);
+    ChatTab *tab = qobject_cast<ChatTab*>(m_tabWidget->widget(index));
     Q_ASSERT(tab);
 
     tab->setChatWindow(0);
-    chatWidget->deleteLater();
+    tab->deleteLater();
 }
 
 void ChatWindow::setTabText(int index, const QString &newTitle)
@@ -321,7 +319,7 @@ void ChatWindow::setTabTextColor(int index, const QColor& color)
 
 void ChatWindow::closeCurrentTab()
 {
-    destroyTab(m_tabWidget->currentWidget());
+    destroyTab(m_tabWidget->currentIndex());
 }
 
 void ChatWindow::onAudioCallTriggered()
