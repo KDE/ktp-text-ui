@@ -2,6 +2,7 @@
 Name=OTR
 Name[ca]=OTR
 Name[cs]=OTR
+Name[da]=OTR
 Name[de]=OTR
 Name[en_GB]=OTR
 Name[es]=OTR
@@ -30,6 +31,7 @@ Name[zh_CN]=非公开加密
 Comment=If a message is an OTR message, it will not be shown
 Comment[ca]=Si un missatge és OTR, no es mostrarà
 Comment[cs]=Pokud je zpráva OTR, nebude zobrazena
+Comment[da]=Hvis en besked er en OTR-besked, vil den ikke blive vist
 Comment[de]=Wenn eine Nachricht vom Typ OTR ist, wird sie nicht angezeigt
 Comment[en_GB]=If a message is an OTR message, it will not be shown
 Comment[es]=Si un mensaje es un mensaje OTR, no se mostrará
