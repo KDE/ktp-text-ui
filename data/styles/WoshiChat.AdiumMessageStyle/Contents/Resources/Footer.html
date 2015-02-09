@@ -1,25 +1,10 @@
 <script language="Javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" defer="defer">
-
-function scrubHTML(html) {
-  // unescape HTML entities
-  html = html.replace(/&amp;/ig, '&');
-  html = html.replace(/&lt;/ig, '<');
-  html = html.replace(/&gt;/ig, '>');
-  // undo Adium's terrible auto-linking
-  html = html.replace(/"<a href="https?:\/\/.+?" title="https?:\/\/.+?">(https?:\/\/.+?)<\/a>"/g, '"$1"');
-  // strip targets
-  html = html.replace(/target="_blank"/g, '');
-  return html
-}
-
 function hipChatizeHTML(html) {
 
   var messageNode = html.querySelector('#contents');
   var rawMessage = messageNode.innerHTML;
 
-  // scrub the raw message
-  rawMessage = scrubHTML(rawMessage);
   // add style to @ mentions
   messageNode.innerHTML = rawMessage.replace(/(@"*[\d\w]*)/, '<span class="atTag">$1</span>');
 
