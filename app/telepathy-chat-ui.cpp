@@ -39,6 +39,10 @@
 
 #include <KTp/message-processor.h>
 
+#include <KAboutData>
+#include <KLocalizedString>
+#include "../ktptextui_version.h"
+
 
 inline Tp::ChannelClassSpecList channelClassList()
 {
@@ -52,6 +56,20 @@ TelepathyChatUi::TelepathyChatUi(int &argc, char *argv[])
     : KTp::TelepathyHandlerApplication(argc, argv, -1, -1),
       AbstractClientHandler(channelClassList())
 {
+    // We need to set up KAboutData in here, before the ChatWindow gets created,
+    // otherwise the Settings and Help menu will not have the Application Name
+    // set and will contain just "ktp-text-ui".
+    KAboutData aboutData("ktp-text-ui", i18n("Chat Application"), QStringLiteral(KTP_TEXT_UI_VERSION_STRING));
+    aboutData.addAuthor(i18n("David Edmundson"), i18n("Developer"), "david@davidedmundson.co.uk");
+    aboutData.addAuthor(i18n("Marcin Ziemiński"), i18n("Developer"), "zieminn@gmail.com");
+    aboutData.addAuthor(i18n("Dominik Schmidt"), i18n("Past Developer"), "kde@dominik-schmidt.de");
+    aboutData.addAuthor(i18n("Francesco Nwokeka"), i18n("Past Developer"), "francesco.nwokeka@gmail.com");
+    aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
+    aboutData.setLicense(KAboutLicense::GPL_V2);
+
+    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("telepathy-kde")));
+    KAboutData::setApplicationData(aboutData);
+
     m_eventLoopLocker = 0;
     m_notifyFilter = new NotifyFilter;
     ChatWindow *window = createWindow();
