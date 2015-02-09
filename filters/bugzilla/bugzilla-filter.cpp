@@ -66,17 +66,20 @@ void BugzillaFilter::addBugDescription(KTp::Message &message, const QUrl &baseUr
     d->requestCounter++;
 
     QUrl request(baseUrl);
-    request.setPath(request.path() + QStringLiteral("jsonrpc.cgi"));
+    request.setPath(QStringLiteral("/jsonrpc.cgi"));
 
     QUrlQuery query(request);
+    QString id = query.queryItemValue(QStringLiteral("id"));
+    // Clear the query because we're setting the id as local one for identification
+    // and QUrlQuery just adds another id query item, so let's just clear it
+    query.clear();
 
     query.addQueryItem(QStringLiteral("method"), QStringLiteral("Bug.get"));
-    query.addQueryItem(QStringLiteral("params"),
-                       QString(QStringLiteral("[{\"ids\":[%1]}]")).
-                           arg(query.queryItemValue(QStringLiteral("id"))));
-
+    query.addQueryItem(QStringLiteral("params"), QStringLiteral("[{\"ids\":[%1]}]").arg(id));
     query.addQueryItem(QStringLiteral("callback"), QStringLiteral("showBugCallback"));
     query.addQueryItem(QStringLiteral("id"), bugRequestId);
+
+    request.setQuery(query);
 
     message.appendMessagePart(QString::fromLatin1("<p><a href=\"%1\" id=\"%2\"></a></p>").arg(baseUrl.toDisplayString(), bugRequestId));
     message.appendScript(QString::fromLatin1("showBug(\"%1\");").arg(request.toDisplayString()));
