@@ -311,7 +311,7 @@ position:absolute;
 display:none;
 }
 
-/*.atTag {
+.atTag {
 display:inline-block;
 border:1px solid #B4B4B4;
 background-color:#EFEFEF;
@@ -325,7 +325,7 @@ padding:0 3px;
 color:#fff;
 border:1px solid #4783BF;
 background:#4282C1 url(/img/at_bg.png) repeat-x;
-}*/
+}
 
 .hexPreview {
 -webkit-border-radius:3px;
