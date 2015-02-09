@@ -51,9 +51,9 @@ int main(int argc, char *argv[])
     KAboutData aboutData("ktp-text-ui", i18n("Chat Application"),
                          QStringLiteral(KTP_TEXT_UI_VERSION_STRING));
     aboutData.addAuthor(i18n("David Edmundson"), i18n("Developer"), "david@davidedmundson.co.uk");
-    aboutData.addAuthor(i18n("Dominik Schmidt"), i18n("Developer"), "kde@dominik-schmidt.de");
-    aboutData.addAuthor(i18n("Francesco Nwokeka"), i18n("Developer"), "francesco.nwokeka@gmail.com");
     aboutData.addAuthor(i18n("Marcin Ziemiński"), i18n("Developer"), "zieminn@gmail.com");
+    aboutData.addAuthor(i18n("Dominik Schmidt"), i18n("Past Developer"), "kde@dominik-schmidt.de");
+    aboutData.addAuthor(i18n("Francesco Nwokeka"), i18n("Past Developer"), "francesco.nwokeka@gmail.com");
     aboutData.setProductName("telepathy/text-ui"); //set the correct name for bug reporting
     aboutData.setLicense(KAboutLicense::GPL_V2);
 
