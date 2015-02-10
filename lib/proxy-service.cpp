@@ -51,6 +51,8 @@ class KeyGenDialog : public QDialog
             buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, this);
             buttonBox->button(QDialogButtonBox::Ok)->setDisabled(true);
             mainLayout->addWidget(buttonBox);
+            connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+            connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
             this->setWindowTitle(i18n("Please wait"));
 
@@ -232,8 +234,7 @@ void ProxyService::onKeyGenerationFinished(const QDBusObjectPath &accountPath, b
     }
     it.value()->setFinished(error);
     it.value()->unblock();
-    connect(it.value(), SIGNAL(closeClicked()), SLOT(onDialogClosed()));
-    connect(it.value(), SIGNAL(okClicked()), SLOT(onDialogClosed()));
+    connect(it.value(), SIGNAL(finished(int)), SLOT(onDialogClosed()));
 
     Q_EMIT keyGenerationFinished(d->am->accountForObjectPath(accountPath.path()), error);
 }
