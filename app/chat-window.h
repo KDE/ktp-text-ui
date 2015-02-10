@@ -38,6 +38,7 @@ namespace Sonnet {
 class ChatTab;
 class QLabel;
 class QDBusPendingCallWatcher;
+class MiddleMouseButtonHandler;
 
 class ChatWindow : public KXmlGuiWindow
 {
@@ -216,7 +217,7 @@ private:
 
     QAction *m_sendMessage;
 
-    QTabWidget *m_tabWidget;
+    MiddleMouseButtonHandler *m_tabWidget;
 
     QDBusInterface *m_keyboardLayoutInterface;
     Sonnet::DictionaryComboBox *m_spellDictCombo;

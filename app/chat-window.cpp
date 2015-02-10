@@ -53,6 +53,7 @@
 #include <QWidgetAction>
 #include <QLabel>
 #include <QLineEdit>
+#include <QMouseEvent>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/ContactCapabilities>
@@ -76,6 +77,39 @@
 #include <KTp/OTR/constants.h>
 
 #define PREFERRED_RFB_HANDLER "org.freedesktop.Telepathy.Client.krfb_rfb_handler"
+
+// FIXME
+// As of Qt 5.4 there's no way to get middle mouse click
+// event other than reimplementing mouseReleaseEvent
+// Remove this class once Qt has something for this
+class MiddleMouseButtonHandler : public QTabWidget
+{
+    Q_OBJECT
+public:
+    MiddleMouseButtonHandler(QWidget *parent);
+
+Q_SIGNALS:
+    void mouseMiddleClick(int index);
+
+protected:
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+};
+
+MiddleMouseButtonHandler::MiddleMouseButtonHandler(QWidget *parent)
+    : QTabWidget(parent)
+{
+}
+
+void MiddleMouseButtonHandler::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::MiddleButton) {
+        Q_EMIT mouseMiddleClick(tabBar()->tabAt(event->pos()));
+    }
+
+    QTabWidget::mouseReleaseEvent(event);
+}
+
+//------------------------------------------------------------------------------
 
 Q_GLOBAL_STATIC_WITH_ARGS(KTp::ServiceAvailabilityChecker, s_krfbAvailableChecker,
                           (QLatin1String(PREFERRED_RFB_HANDLER)));
@@ -123,7 +157,7 @@ ChatWindow::ChatWindow()
     connect(m_keyboardLayoutInterface, SIGNAL(currentLayoutChanged(QString)), this, SLOT(onKeyboardLayoutChange(QString)));
 
     // set up m_tabWidget
-    m_tabWidget = new QTabWidget(this);
+    m_tabWidget = new MiddleMouseButtonHandler(this);
     //clicking on the close button can result in the tab bar getting focus, this works round that
     m_tabWidget->setFocusPolicy(Qt::TabFocus);
     m_tabWidget->setMovable(true);
@@ -136,7 +170,7 @@ ChatWindow::ChatWindow()
     connect(m_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(destroyTab(int)));
     connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
 
-    connect(qobject_cast<QTabBar*>(m_tabWidget->tabBar()), SIGNAL(mouseMiddleClick(int)), this, SLOT(onTabMiddleClicked(int)));
+    connect(m_tabWidget, SIGNAL(mouseMiddleClick(int)), this, SLOT(onTabMiddleClicked(int)));
     connect(qobject_cast<QTabBar*>(m_tabWidget->tabBar()), SIGNAL(customContextMenuRequested(QPoint)), SLOT(tabBarContextMenu(QPoint)));
 
     setCentralWidget(m_tabWidget);
@@ -1329,3 +1363,5 @@ void ChatWindow::onLeaveChannelTriggered()
     tab->textChannel()->requestLeave();
     closeCurrentTab();
 }
+
+#include "chat-window.moc"
