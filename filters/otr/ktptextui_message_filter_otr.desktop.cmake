@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=OTR
+Name[bs]=OTR
 Name[ca]=OTR
 Name[cs]=OTR
 Name[da]=OTR
@@ -29,6 +30,7 @@ Name[uk]=OTR
 Name[x-test]=xxOTRxx
 Name[zh_CN]=非公开加密
 Comment=If a message is an OTR message, it will not be shown
+Comment[bs]=Ako je poruka OTR poruka, ona neće biti prikazana
 Comment[ca]=Si un missatge és OTR, no es mostrarà
 Comment[cs]=Pokud je zpráva OTR, nebude zobrazena
 Comment[da]=Hvis en besked er en OTR-besked, vil den ikke blive vist
