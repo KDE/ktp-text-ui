@@ -2,47 +2,6 @@
 Type=ServiceType
 X-KDE-ServiceType=KTpTextUi/MessageFilter
 Comment=Telepathy Text-Ui Message Filter
-Comment[bs]=Filter za poruke Telepathy Text
-Comment[ca]=Filtre de missatge Text-IU del Telepathy
-Comment[ca@valencia]=Filtre de missatge Text-IU del Telepathy
-Comment[cs]=Filtr textových zpráv Telepathy
-Comment[da]=Beskedfilter til tekst-brugerflade til Telepathy
-Comment[de]=Nachrichtenfilter für Telepathy-Text-Oberfläche
-Comment[el]=Telepathy Text-Ui φίλτρο μηνυμάτων
-Comment[en_GB]=Telepathy Text-Ui Message Filter
-Comment[es]=Filtro de mensajes de la interfaz de texto de Telepathy
-Comment[et]=Telepathy teksti kasutajaliidese sõnumifilter
-Comment[fi]=Telepathyn tekstikäyttöliittymän viestisuodatin
-Comment[fr]=Filtre de messages d'interface utilisateur de texte pour Telepathy
-Comment[gl]=Filtro de mensaxes Text-Ui en Telepathy
-Comment[hu]=Telepathy üzenetszűrő
-Comment[ia]=Filtro de message de UI de Texto de Telepathy
-Comment[it]=Filtro dei messaggi dell'interfaccia di Telepathy
-Comment[kk]=Telepathy мәтін-интерфейсінің хабарлама сүзгісі
-Comment[km]=តម្រង​សារ Text-Ui របស់ Telepathy
-Comment[ko]=Telepathy 텍스트 UI 메시지 필터
-Comment[lt]=Telepathy tekstinės žinutės filtras
-Comment[nb]=Telepathy tekst-brukerflate meldingsfilter
-Comment[nds]=Telepathy-Textböversiet-Narichtenfilter
-Comment[nl]=Tekstinterface voor het berichtenfilter van Telepathy
-Comment[pl]=Interfejs użytkownika filtrowania wiadomości - Telepathy Tekst
-Comment[pt]=Filtro de Mensagens da Interface de Texto do Telepathy
-Comment[pt_BR]=Filtro de mensagens da interface de texto do Telepathy
-Comment[ro]=Filtru de mesaje pentru interfața textuală Telepathy
-Comment[ru]=Фильтр сообщений окна текстового общения
-Comment[sk]=Filter správ Telepathy Text-Ui
-Comment[sl]=Filter besedila za besedilni vmesnik za Telepathy
-Comment[sr]=Филтер порука за телепатијско текстуално сучеље
-Comment[sr@ijekavian]=Филтер порука за телепатијско текстуално сучеље
-Comment[sr@ijekavianlatin]=Filter poruka za Telepathy tekstualno sučelje
-Comment[sr@latin]=Filter poruka za Telepathy tekstualno sučelje
-Comment[sv]=Telepathy meddelandefilter för textbaserat användargränssnitt
-Comment[tr]=Telepathy Metin Mesaj Süzgeci
-Comment[uk]=Фільтр повідомлень текстового інтерфейсу Telepathy
-Comment[wa]=Eterface uzeu di passete di messaedje Telepathy
-Comment[x-test]=xxTelepathy Text-Ui Message Filterxx
-Comment[zh_CN]=Telepathy 文本界面消息过滤器
-Comment[zh_TW]=Telepathy 文字介面訊息過濾器
 
 # The ktp-text-ui plugin framework version for which the plugin is written
 [PropertyDef::X-KTp-PluginInfo-Version]
