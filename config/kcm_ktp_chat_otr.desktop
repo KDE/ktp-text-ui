@@ -40,6 +40,7 @@ Comment[sv]=Kryptera chattsessioner med Off-The-Record kryptering
 Comment[uk]=Шифрування сеансів спілкування за допомогою методу OTR (Off-The-Record)
 Comment[x-test]=xxEncrypt chat sessions with Off-The-Record encryptionxx
 Comment[zh_CN]=用非正式加密算法加密聊天会话
+Comment[zh_TW]=使用私下加密（Off-The-Record）來加密聊天階段
 Name=OTR
 Name[bs]=OTR
 Name[ca]=OTR
@@ -70,4 +71,5 @@ Name[sv]=OTR
 Name[uk]=OTR
 Name[x-test]=xxOTRxx
 Name[zh_CN]=非公开加密
+Name[zh_TW]=OTR
 

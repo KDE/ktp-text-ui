@@ -28,6 +28,7 @@ Name[et]=Esiletõstmine
 Name[fi]=Korostus
 Name[fr]=Surligner
 Name[gl]=Realzar
+Name[hr]=Isticanje
 Name[hu]=Kiemelés
 Name[ia]=Evidentia
 Name[it]=Evidenziazione
