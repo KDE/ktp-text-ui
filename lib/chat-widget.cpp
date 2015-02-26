@@ -753,6 +753,10 @@ void ChatWidget::onOTRTrustLevelChanged(KTp::OTRTrustLevel trustLevel, KTp::OTRT
 {
     qCDebug(KTP_TEXTUI_LIB);
 
+    if (trustLevel == previous) {
+        return;
+    }
+
     d->hasNewOTRstatus = true;
     switch(trustLevel) {
         case KTp::OTRTrustLevelUnverified:
