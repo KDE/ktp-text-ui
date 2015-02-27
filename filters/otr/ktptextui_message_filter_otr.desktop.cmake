@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=OTR
+Name[ast]=OTR
 Name[bs]=OTR
 Name[ca]=OTR
 Name[cs]=OTR
