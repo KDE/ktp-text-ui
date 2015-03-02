@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Emoticons
+Name[ast]=Fustaxes
 Name[bs]=Emotikoni
 Name[ca]=Emoticones
 Name[ca@valencia]=Emoticones

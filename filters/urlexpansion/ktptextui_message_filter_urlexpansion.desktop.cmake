@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Short URLs
+Name[ast]=Acurtiar URLs
 Name[bs]=Kratke URL adrese
 Name[ca]=URL breus
 Name[ca@valencia]=URL breus

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Text Formatting
+Name[ast]=Formatéu del testu
 Name[bs]=Formatiranje teksta
 Name[ca]=Formatació de text
 Name[ca@valencia]=Formatació de text

@@ -32,6 +32,7 @@ Name[x-test]=xxOTRxx
 Name[zh_CN]=非公开加密
 Name[zh_TW]=OTR
 Comment=If a message is an OTR message, it will not be shown
+Comment[ast]=Si un mensaxe ye OTR, nun s'amosará
 Comment[bs]=Ako je poruka OTR poruka, ona neće biti prikazana
 Comment[ca]=Si un missatge és OTR, no es mostrarà
 Comment[cs]=Pokud je zpráva OTR, nebude zobrazena
