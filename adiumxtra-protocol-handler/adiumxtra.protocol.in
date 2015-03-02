@@ -1,6 +1,6 @@
 [Protocol]
 Type=Service
-exec=@LIBEXEC_INSTALL_DIR@/ktp-adiumxtra-protocol-handler "%U"
+exec=@CMAKE_INSTALL_FULL_LIBEXECDIR@/ktp-adiumxtra-protocol-handler "%U"
 protocol=adiumxtra
 input=none
 output=none
