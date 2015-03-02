@@ -870,8 +870,6 @@ void ChatWidget::onPeerAuthenticationFailed()
 
 void ChatWidget::handleIncomingMessage(const Tp::ReceivedMessage &message, bool alreadyNotified)
 {
-    qCDebug(KTP_TEXTUI_LIB) << title() << message.text();
-
     if (d->chatViewInitialized) {
 
         d->exchangedMessagesCount++;
