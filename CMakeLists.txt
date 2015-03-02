@@ -2,7 +2,7 @@ project(ktp-text-ui)
 
 cmake_minimum_required(VERSION 2.8.12)
 
-set(KTP_TEXT_UI_VERSION "0.8.80")
+set(KTP_TEXT_UI_VERSION "0.9.80")
 set(KTP_MESSAGE_FILTER_FRAMEWORK_VERSION "5")
 set(IS_KTP_INTERNAL_MODULE TRUE)
 
