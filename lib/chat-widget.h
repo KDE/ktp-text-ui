@@ -255,7 +255,7 @@ private:
     /** Loads language option for specified target Id */
     void loadSpellCheckingOption();
 
-    /** Loads theme into the the AdiumThemeView */
+    /** Loads theme into the AdiumThemeView */
     void initChatArea();
 
     /** connects necessary signals for the otr proxy channel */
