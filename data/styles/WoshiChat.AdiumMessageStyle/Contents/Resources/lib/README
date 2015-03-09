@@ -1,0 +1,2 @@
+jquery.min.js made with:
+ uglifyjs jquery.js > jquery.min.js
