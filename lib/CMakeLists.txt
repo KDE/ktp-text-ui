@@ -34,8 +34,6 @@ qt5_wrap_ui(ktpchat_SRCS ${ktpchat_UI})
 
 add_library(ktpchat SHARED ${ktpchat_SRCS})
 
-set_target_properties(ktpchat PROPERTIES SOVERSION ${KTP_TEXT_UI_VERSION} VERSION ${KTP_TEXT_UI_VERSION})
-
 target_link_libraries(ktpchat
     KF5::KIOWidgets
     KF5::KIOCore
