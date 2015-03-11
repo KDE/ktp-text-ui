@@ -1,0 +1,9 @@
+Do also note the theme licenses in:
+./data/styles/WoshiChat.AdiumMessageStyle/LICENSE
+./data/styles/renkoo.AdiumMessageStyle/Contents/Resources/Renkoo LICENSE.txt
+./data/styles/SimKete.AdiumMessageStyle/Contents/README
+
+Additionally the following javascript libraries are MIT licensed:
+jquery.js
+livepipe.js
+scrollbar.js
