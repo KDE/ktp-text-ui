@@ -201,6 +201,7 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
     d->ui.messageWidget->setText(i18n("Your message cannot be sent because the account %1 is offline. Please try again when the account is connected again.", d->account->displayName()));
     d->ui.messageWidget->setMessageType(KMessageWidget::Warning);
     d->ui.messageWidget->setCloseButtonVisible(true);
+    d->ui.messageWidget->setWordWrap(true);
     // Hide for the first time
     d->ui.messageWidget->hide();
     d->messageWidgetSwitchOnlineAction = new QAction(i18n("Connect %1", d->account->displayName()), d->ui.messageWidget);
