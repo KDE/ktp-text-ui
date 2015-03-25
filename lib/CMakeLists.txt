@@ -49,6 +49,7 @@ target_link_libraries(ktpchat
     KF5::ConfigWidgets
     KF5::WindowSystem
     KF5::XmlGui #for KActionCollection
+    KF5::Activities #for KActionCollection
     KTp::CommonInternals
     KTp::Logger
     KTp::OTR

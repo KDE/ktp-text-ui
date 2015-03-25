@@ -43,6 +43,7 @@
 #include <QColorDialog>
 #include <QTemporaryFile>
 #include <QFileDialog>
+#include <QScopedPointer>
 
 #include <KNotification>
 #include <KAboutData>
@@ -51,6 +52,7 @@
 #include <KMessageBox>
 #include <KIconLoader>
 #include <KLocalizedString>
+#include <KActivities/ResourceInstance>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/Message>
@@ -124,6 +126,54 @@ public:
 
     static QString telepathyComponentName();
     KTp::AbstractMessageFilter *notifyFilter;
+
+    class Activities {
+    public:
+        Activities()
+        {
+        }
+
+        void setCurrentContact(const QString &contactId)
+        {
+            if (!resourceInstance) {
+                resourceInstance.reset(new KActivities::ResourceInstance(0, "KTp"));
+            }
+
+            resourceInstance->setUri("ktp://contacts/" + contactId);
+            resourceInstance->setMimetype("application/x-ktp-contact");
+        }
+
+        void resetCurrentContact()
+        {
+            currentContactId.clear();
+            resourceInstance.reset();
+        }
+
+        void setOTR(bool otr)
+        {
+            if (otr) {
+                resourceInstance.reset();
+
+            } else if (!currentContactId.isEmpty()) {
+                setCurrentContact(currentContactId);
+
+            }
+        }
+
+        void setCurrentContactName(const QString &name)
+        {
+            if (resourceInstance) {
+                resourceInstance->setTitle(name);
+            }
+        }
+
+
+
+    private:
+        QString currentContactId;
+        QScopedPointer<KActivities::ResourceInstance> resourceInstance;
+    };
+    Activities activities;
 };
 
 
@@ -791,6 +841,8 @@ void ChatWidget::onOTRTrustLevelChanged(KTp::OTRTrustLevel trustLevel, KTp::OTRT
         default: break;
     }
 
+    d->activities.setOTR(trustLevel != KTp::OTRTrustLevelNotPrivate);
+
     Q_EMIT unreadMessagesChanged();
     Q_EMIT otrStatusChanged(OtrStatus(trustLevel));
 }
@@ -1145,6 +1197,8 @@ void ChatWidget::onContactAliasChanged(const Tp::ContactPtr & contact, const QSt
         if (d->contactName != alias) {
             message = i18n("%1 is now known as %2", d->contactName, alias);
             d->contactName = alias;
+
+            d->activities.setCurrentContactName(alias);
         }
     }
 
@@ -1407,6 +1461,8 @@ void ChatWidget::initChatArea()
             roomName = roomName.left(roomName.indexOf(QLatin1Char('@')));
             info.setChatName(roomName);
         }
+
+        d->activities.resetCurrentContact();
     } else {
         Tp::ContactPtr otherContact = d->channel->textChannel()->targetContact();
 
@@ -1418,6 +1474,9 @@ void ChatWidget::initChatArea()
         info.setChatName(otherContact->alias());
         info.setIncomingIconPath(otherContact->avatarData().fileName);
         d->ui.contactsView->hide();
+
+        d->activities.setCurrentContact(otherContact->id());
+        d->activities.setCurrentContactName(otherContact->alias());
     }
 
     info.setSourceName(d->channel->textChannel()->connection()->protocolName());

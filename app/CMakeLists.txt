@@ -1,6 +1,7 @@
 include_directories(${CMAKE_SOURCE_DIR}/lib)
 include_directories(${CMAKE_SOURCE_DIR}/image-sharer)
 
+
 set(ktp-text-ui_SRCS
         main.cpp
         telepathy-chat-ui.cpp
@@ -25,6 +26,7 @@ set (ktp-text-ui_LIBS
         KTp::OTR
         KF5::NotifyConfig
         KF5::KCMUtils
+        KF5::Activities
         ${KDEPIMLIBS_KPIMTEXTEDIT_LIBS}
         ktpchat
 )
