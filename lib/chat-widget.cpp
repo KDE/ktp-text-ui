@@ -64,6 +64,7 @@
 #include <TelepathyQt/OutgoingFileTransferChannel>
 
 #include <KTp/presence.h>
+#include <KTp/contact.h>
 #include <KTp/actions.h>
 #include <KTp/message-processor.h>
 #include <KTp/Logger/scrollback-manager.h>
@@ -139,8 +140,9 @@ public:
                 resourceInstance.reset(new KActivities::ResourceInstance(0, "KTp"));
             }
 
-            resourceInstance->setUri("ktp://contacts/" + contactId);
+            resourceInstance->setUri(contactId);
             resourceInstance->setMimetype("application/x-ktp-contact");
+            currentContactId = contactId;
         }
 
         void resetCurrentContact()
@@ -1464,7 +1466,7 @@ void ChatWidget::initChatArea()
 
         d->activities.resetCurrentContact();
     } else {
-        Tp::ContactPtr otherContact = d->channel->textChannel()->targetContact();
+        KTp::ContactPtr otherContact = KTp::ContactPtr::qObjectCast(d->channel->textChannel()->targetContact());
 
         Q_ASSERT(otherContact);
 
@@ -1475,7 +1477,7 @@ void ChatWidget::initChatArea()
         info.setIncomingIconPath(otherContact->avatarData().fileName);
         d->ui.contactsView->hide();
 
-        d->activities.setCurrentContact(otherContact->id());
+        d->activities.setCurrentContact(otherContact->uri());
         d->activities.setCurrentContactName(otherContact->alias());
     }
 
