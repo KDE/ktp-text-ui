@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=YouTube Preview
-Name[ast]=Vista previa de YouTube
 Name[bs]=YouTube pregled
 Name[ca]=Vista prèvia de YouTube
 Name[ca@valencia]=Vista prèvia de YouTube

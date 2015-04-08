@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Bugzilla Information
-Name[ast]=Información Bugzilla
 Name[bs]=Bugzilla informacije
 Name[ca]=Informació del Bugzilla
 Name[ca@valencia]=Informació del Bugzilla
