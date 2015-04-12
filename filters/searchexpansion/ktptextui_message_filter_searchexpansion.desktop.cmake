@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Web Shortcuts
+Name[ar]=اختصارات الوِبّ
 Name[bs]=Web prečice
 Name[ca]=Dreceres web
 Name[ca@valencia]=Dreceres web
@@ -49,6 +50,7 @@ Name[zh_TW]=網頁捷徑
 Encoding=UTF-8
 Type=Service
 Comment=Expand a KDE-shortened URI into a URL (i.e. typing wp:KDE will translate to http://en.wikipedia.org/wiki/KDE)
+Comment[ar]=وسّع معرّف URI مقصّر لكدي إلى عنوان URL (مثلًا كتابة wp:KDE سيُترجم إلى http://en.wikipedia.org/wiki/KDE)
 Comment[bs]=Raširi KDE-skraćen URI u URL (tj. kucanje wp:KDE će prevesti http://en.wikipedia.org/wiki/KDE)
 Comment[ca]=Expandeix un URI retallat pel KDE en un URL (p. ex. teclejant wp:KDE es traduirà a http://en.wikipedia.org/wiki/KDE)
 Comment[ca@valencia]=Expandeix un URI retallat pel KDE en un URL (p. ex. teclejant wp:KDE es traduirà a http://en.wikipedia.org/wiki/KDE)

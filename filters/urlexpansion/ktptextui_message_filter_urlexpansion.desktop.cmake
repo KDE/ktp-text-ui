@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Short URLs
+Name[ar]=وصلات مقصّرة
 Name[bs]=Kratke URL adrese
 Name[ca]=URL breus
 Name[ca@valencia]=URL breus
@@ -41,6 +42,7 @@ Name[x-test]=xxShort URLsxx
 Name[zh_CN]=短 URL
 Name[zh_TW]=短網址
 Comment=Shows the actual URL to which a shortened URL is redirecting to
+Comment[ar]=يظهر العنوان الفعليّ الّذي يعيد العنوان المقصّر التّوجيه إليه
 Comment[bs]=Prikazuje stvarni URL na koji je skraćeni preusmjeren
 Comment[ca]=Mostra l'URL real al que es redirigeix un URL breu
 Comment[ca@valencia]=Mostra l'URL real al que es redirigeix un URL breu
