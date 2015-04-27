@@ -35,9 +35,12 @@
 #include <KTp/OTR/types.h>
 
 #include <Kdelibs4ConfigMigrator>
+#include <KLocalizedString>
 
 int main(int argc, char *argv[])
 {
+    KLocalizedString::setApplicationDomain("ktp-text-ui");
+
     Kdelibs4ConfigMigrator migrator(QLatin1String("ktp-text-ui"));
     migrator.setConfigFiles(QStringList() << QLatin1String("ktp-text-uirc"));
     migrator.setUiFiles(QStringList() << QLatin1String("chatwindow.rc"));

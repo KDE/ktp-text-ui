@@ -36,6 +36,7 @@ Q_LOGGING_CATEGORY(KTP_LOGVIEWER, "ktp-logviewer")
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    KLocalizedString::setApplicationDomain("ktp-log-viewer");
 
     KAboutData aboutData("ktp-log-viewer",
                          i18n("KDE IM Log Viewer"),
