@@ -473,6 +473,10 @@ void LogViewer::slotImportKopeteLogs(bool force)
     if (!matchingAccounts.isEmpty()) {
         LogsImportDialog *dialog = new LogsImportDialog(this);
         dialog->importLogs(matchingAccounts);
+    } else if (force) {
+        // "force" means that import of Kopete logs was requested by user.
+        // In this case we inform him/her why the import dialog hasn't been opened.
+        KMessageBox::information(this, i18n("No Kopete logs found."));
     }
 
     logsConfig.writeEntry(QLatin1String("InitialKopeteImportDone"), true);
