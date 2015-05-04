@@ -4,7 +4,7 @@ set(kcm_ktp_logviewer_behavior_SRCS behavior-config.cpp)
 
 set(kcm_ktp_logviewer_behavior_UI behavior-config.ui)
 
-qt5_wrap_ui(kcm_ktp_logviewer_behavior_SRCS ${kcm_ktp_logviewer_behavior_UI})
+ki18n_wrap_ui(kcm_ktp_logviewer_behavior_SRCS ${kcm_ktp_logviewer_behavior_UI})
 
 add_library(kcm_ktp_logviewer_behavior MODULE ${kcm_ktp_logviewer_behavior_SRCS})
 

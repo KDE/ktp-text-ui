@@ -10,9 +10,9 @@ set(kcm_ktp_chat_appearance_UI appearance-config.ui)
 set(kcm_ktp_chat_behavior_UI behavior-config.ui)
 set(kcm_ktp_chat_otr_UI otr-config.ui)
 
-qt5_wrap_ui(kcm_ktp_chat_appearance_SRCS ${kcm_ktp_chat_appearance_UI})
-qt5_wrap_ui(kcm_ktp_chat_behavior_SRCS ${kcm_ktp_chat_behavior_UI})
-qt5_wrap_ui(kcm_ktp_chat_otr_SRCS ${kcm_ktp_chat_otr_UI})
+ki18n_wrap_ui(kcm_ktp_chat_appearance_SRCS ${kcm_ktp_chat_appearance_UI})
+ki18n_wrap_ui(kcm_ktp_chat_behavior_SRCS ${kcm_ktp_chat_behavior_UI})
+ki18n_wrap_ui(kcm_ktp_chat_otr_SRCS ${kcm_ktp_chat_otr_UI})
 
 add_library(kcm_ktp_chat_appearance MODULE ${kcm_ktp_chat_appearance_SRCS})
 add_library(kcm_ktp_chat_behavior MODULE ${kcm_ktp_chat_behavior_SRCS})

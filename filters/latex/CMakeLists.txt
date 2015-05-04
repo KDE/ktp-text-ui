@@ -14,7 +14,7 @@ target_link_libraries (ktptextui_message_filter_latex
 
 kconfig_add_kcfg_files(kcm_ktptextui_message_filter_latex_SRCS latexconfig.kcfgc)
 
-qt5_wrap_ui (kcm_ktptextui_message_filter_latex_SRCS
+ki18n_wrap_ui(kcm_ktptextui_message_filter_latex_SRCS
     latex-config.ui
 )
 

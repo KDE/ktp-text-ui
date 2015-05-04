@@ -30,7 +30,7 @@ set(ktpchat_UI
     keygendialog.ui
 )
 
-qt5_wrap_ui(ktpchat_SRCS ${ktpchat_UI})
+ki18n_wrap_ui(ktpchat_SRCS ${ktpchat_UI})
 
 add_library(ktpchat SHARED ${ktpchat_SRCS})
 
