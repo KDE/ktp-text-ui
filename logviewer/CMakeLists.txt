@@ -16,7 +16,7 @@ set(ktp-log-viewer_SRCS
 
 add_subdirectory(config)
 
-qt5_wrap_ui(ktp-log-viewer_SRCS log-viewer.ui)
+ki18n_wrap_ui(ktp-log-viewer_SRCS log-viewer.ui)
 
 add_executable(ktp-log-viewer ${ktp-log-viewer_SRCS})
 
