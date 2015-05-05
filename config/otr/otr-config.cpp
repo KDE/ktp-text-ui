@@ -167,7 +167,7 @@ void OTRConfig::onAccountChosen(int id)
 {
     const QString fp = ps->fingerprintForAccount(QDBusObjectPath(accounts.at(id)->objectPath()));
     if(fp.isEmpty()) {
-        ui->tlFingerprint->setText(i18n("No fingerprint"));
+        ui->tlFingerprint->setText(i18n("No Fingerprint"));
     } else {
         ui->tlFingerprint->setText(fp);
     }
