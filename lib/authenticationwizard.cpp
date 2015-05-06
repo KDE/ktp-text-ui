@@ -187,7 +187,7 @@ QWizardPage *AuthenticationWizard::createQAPage()
 	} else {
 		if(!question.isEmpty()) {
 			page->setTitle(i18nc("@info", "Authentication with <b>%1</b>", contact));
-			lQuestion = new QLabel(i18nc("@info", "<b>%1</b> would like to verify your authentication."
+			lQuestion = new QLabel(i18nc("@info", "<b>%1</b> would like to verify your authentication. "
                         "Please answer the following question in the field below:", contact));
             layout->setRowMinimumHeight(1, 30);
 			lQuestion->setWordWrap(true);
