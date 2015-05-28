@@ -22,6 +22,7 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#include <KDBusService>
 
 #include "log-viewer.h"
 #include "../ktptextui_version.h"
@@ -45,10 +46,14 @@ int main(int argc, char *argv[])
     aboutData.addAuthor(i18n("Daniele E. Domenichelli"), i18n("Developer"), "daniele.domenichelli@gmail.com");
     aboutData.addAuthor(i18n("Dan Vrátil"), i18n("Developer"), "dvratil@redhat.com");
     aboutData.setProductName("telepathy/log-viewer"); //set the correct name for bug reporting
+    aboutData.setOrganizationDomain(QByteArray("kde.org"));
     aboutData.setLicense(KAboutLicense::GPL_V2);
 
     KAboutData::setApplicationData(aboutData);
     QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("documentation")));
+
+    // register to DBus
+    const KDBusService dbusService(KDBusService::Multiple);
 
     QCommandLineParser parser;
     parser.addHelpOption();

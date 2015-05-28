@@ -13,7 +13,10 @@ set(IS_KTP_INTERNAL_MODULE TRUE)
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
-find_package (KF5 REQUIRED COMPONENTS Archive Sonnet WidgetsAddons Service Emoticons KIO KCMUtils NotifyConfig Notifications I18n WebKit WindowSystem XmlGui ItemViews TextWidgets IconThemes)
+find_package (KF5 REQUIRED COMPONENTS Archive Sonnet WidgetsAddons Service Emoticons
+                                      KIO KCMUtils NotifyConfig Notifications I18n
+                                      WebKit WindowSystem XmlGui ItemViews TextWidgets
+                                      IconThemes DBusAddons)
 find_package (Qt5 REQUIRED COMPONENTS WebKitWidgets)
 find_package (KTp REQUIRED)
 
