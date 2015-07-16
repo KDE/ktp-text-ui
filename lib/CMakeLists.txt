@@ -23,6 +23,7 @@ set(ktpchat_SRCS
         authenticationwizard.cpp
         otr-notifications.cpp
         ktp-debug.cpp
+        emoticons-manager.cpp
         )
 
 set(ktpchat_UI

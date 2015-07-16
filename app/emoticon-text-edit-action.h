@@ -23,11 +23,13 @@
 
 #include <KActionMenu>
 
+class ChatWindow;
+
 class EmoticonTextEditAction : public KActionMenu
 {
   Q_OBJECT
 public:
-  explicit EmoticonTextEditAction( QObject * parent );
+  explicit EmoticonTextEditAction( ChatWindow * chatWindow );
   ~EmoticonTextEditAction();
 Q_SIGNALS:
   void emoticonActivated(const QString&);

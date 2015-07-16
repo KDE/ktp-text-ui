@@ -17,31 +17,24 @@
 */
 
 #include "emoticon-filter.h"
+#include "emoticons-manager.h"
 
 #include <KPluginFactory>
 #include <KEmoticons>
 
-class EmoticonFilter::Private
-{
-public:
-    KEmoticons emoticons;
-};
-
 EmoticonFilter::EmoticonFilter(QObject *parent, const QVariantList &)
-    : KTp::AbstractMessageFilter(parent),
-      d(new Private)
+    : KTp::AbstractMessageFilter(parent)
 {
 }
 
 void EmoticonFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &context)
 {
     Q_UNUSED(context)
-    message.setMainMessagePart(d->emoticons.theme().parseEmoticons(message.mainMessagePart()));
+    message.setMainMessagePart(EmoticonsManager::themeForAccount(context.account()).parseEmoticons(message.mainMessagePart()));
 }
 
 EmoticonFilter::~EmoticonFilter()
 {
-    delete d;
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<EmoticonFilter>();)

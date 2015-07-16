@@ -19,6 +19,7 @@
 */
 #include "emoticon-text-edit-action.h"
 #include "emoticon-text-edit-selector.h"
+#include "chat-window.h"
 
 #include <KLocalizedString>
 
@@ -29,9 +30,9 @@
 class EmoticonTextEditAction::EmoticonTextEditActionPrivate
 {
 public:
-  EmoticonTextEditActionPrivate() {
+  EmoticonTextEditActionPrivate( ChatWindow *chatWindow ) {
     emoticonMenu = new QMenu();
-    selector = new EmoticonTextEditSelector( emoticonMenu );
+    selector = new EmoticonTextEditSelector( chatWindow , emoticonMenu );
     QWidgetAction *action = new QWidgetAction( emoticonMenu );
     action->setDefaultWidget( selector );
     emoticonMenu->addAction( action );
@@ -46,8 +47,8 @@ public:
   EmoticonTextEditSelector *selector;
 };
 
-EmoticonTextEditAction::EmoticonTextEditAction( QObject * parent )
-  : KActionMenu( i18n( "Add Smiley" ), parent ), d( new EmoticonTextEditActionPrivate() )
+EmoticonTextEditAction::EmoticonTextEditAction( ChatWindow * chatWindow )
+  : KActionMenu( i18n( "Add Smiley" ), chatWindow ), d( new EmoticonTextEditActionPrivate( chatWindow ) )
 {
   setMenu( d->emoticonMenu );
   setIcon( QIcon::fromTheme( QStringLiteral( "face-smile" ) ) );

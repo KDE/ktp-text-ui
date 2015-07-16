@@ -24,6 +24,8 @@
 #include <QWidget>
 #include <QListWidgetItem>
 
+class ChatWindow;
+
 class EmoticonTextEditItem : public QListWidgetItem
 {
 public:
@@ -41,7 +43,7 @@ class EmoticonTextEditSelector : public QWidget
 {
   Q_OBJECT
 public:
-  explicit EmoticonTextEditSelector( QWidget * parent = 0 );
+  explicit EmoticonTextEditSelector( ChatWindow *chatWindow, QWidget * parent = Q_NULLPTR );
   ~EmoticonTextEditSelector();
 
 public Q_SLOTS:

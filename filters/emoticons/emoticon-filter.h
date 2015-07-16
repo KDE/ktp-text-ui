@@ -30,9 +30,6 @@ public:
     virtual ~EmoticonFilter();
 
     void filterMessage(KTp::Message &message, const KTp::MessageContext &context);
-private:
-    class Private;
-    Private *d;
 };
 
 #endif

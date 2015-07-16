@@ -19,6 +19,9 @@
 */
 
 #include "emoticon-text-edit-selector.h"
+#include "emoticons-manager.h"
+#include "chat-window.h"
+#include "chat-tab.h"
 
 #include <KEmoticons>
 #include <kemoticonstheme.h>
@@ -26,9 +29,6 @@
 #include <QListWidget>
 #include <QPixmap>
 #include <QHBoxLayout>
-
-// Use a static for this as calls to the KEmoticons constructor are expensive.
-Q_GLOBAL_STATIC( KEmoticons, sEmoticons )
 
 EmoticonTextEditItem::EmoticonTextEditItem(const QString &emoticonText, const QString &pixmapPath, QListWidget *parent)
   : QListWidgetItem( parent )
@@ -63,11 +63,13 @@ public:
   EmoticonTextEditSelectorPrivate() {
   }
   QListWidget *listEmoticon;
+  ChatWindow *chatWindow;
 };
 
-EmoticonTextEditSelector::EmoticonTextEditSelector( QWidget * parent )
+EmoticonTextEditSelector::EmoticonTextEditSelector( ChatWindow *chatWindow, QWidget * parent )
   :QWidget( parent ), d( new EmoticonTextEditSelectorPrivate() )
 {
+  d->chatWindow = chatWindow;
   QHBoxLayout *lay = new QHBoxLayout( this );
   lay->setSpacing( 0 );
   lay->setContentsMargins( 0, 0, 0, 0 );
@@ -91,11 +93,9 @@ EmoticonTextEditSelector::~EmoticonTextEditSelector()
 void EmoticonTextEditSelector::slotCreateEmoticonList()
 {
   d->listEmoticon->clear();
-  static QString cachedEmoticonsThemeName;
-  if ( cachedEmoticonsThemeName.isEmpty() ) {
-    cachedEmoticonsThemeName = KEmoticons::currentThemeName();
-  }
-  const QHash<QString, QStringList> list = sEmoticons->theme( cachedEmoticonsThemeName ).emoticonsMap();
+
+  Tp::AccountPtr currentAccount = d->chatWindow->getCurrentTab()->account();
+  const QHash<QString, QStringList> list = EmoticonsManager::themeForAccount( currentAccount ).emoticonsMap();
 
   QStringList emoticonKeys = list.keys();
   qSort(emoticonKeys);
