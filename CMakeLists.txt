@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 2.8.9)
 project(ktp-text-ui)
 
 set(KTP_TEXT_UI_VERSION "0.9.0")
