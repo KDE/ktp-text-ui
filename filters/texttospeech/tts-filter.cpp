@@ -18,32 +18,26 @@
 
 #include "tts-filter.h"
 
-
 #include <KPluginFactory>
 #include <KLocalizedString>
 
-#include <kspeech.h>
-#include <kspeechinterface.h>
-
+#include <QTextToSpeech>
 
 class TTSFilter::Private {
 public:
-    org::kde::KSpeech *kspeech;
+    QTextToSpeech *speech;
 };
-
-static const KCatalogLoader loader(QLatin1String("ktp-filters"));
 
 TTSFilter::TTSFilter(QObject *parent, const QVariantList &)
     : KTp::AbstractMessageFilter(parent),
       d(new Private)
 {
-    d->kspeech = new org::kde::KSpeech(QLatin1String("org.kde.kttsd"), QLatin1String("/KSpeech"), QDBusConnection::sessionBus());
-    d->kspeech->setApplicationName(i18n("KDE Instant Messaging"));
+    d->speech = new QTextToSpeech();
 }
 
 TTSFilter::~TTSFilter()
 {
-    delete d->kspeech;
+    delete d->speech;
     delete d;
 }
 
@@ -59,11 +53,13 @@ void TTSFilter::filterMessage(KTp::Message &message, const KTp::MessageContext &
     }
 
     if (message.type() == Tp::ChannelTextMessageTypeNormal) {
-        d->kspeech->say(i18nc("Text to Speech - text message %1 is name, %2 is message", "%1 says %2", message.mainMessagePart(), message.senderAlias()), KSpeech::soHtml);
+        d->speech->say(i18nc("Text to Speech - text message %1 is name, %2 is message", "%1 says %2", message.mainMessagePart(), message.senderAlias()));
     }
     else if (message.type() == Tp::ChannelTextMessageTypeAction) {
-        d->kspeech->say(i18nc("Text to Speech - text message %1 is name, %2 is message", "%1 %2", message.mainMessagePart(), message.senderAlias()), KSpeech::soHtml);
+        d->speech->say(i18nc("Text to Speech - text message %1 is name, %2 is message", "%1 %2", message.mainMessagePart(), message.senderAlias()));
     }
 }
 
 K_PLUGIN_FACTORY(MessageFilterFactory, registerPlugin<TTSFilter>();)
+
+#include "tts-filter.moc"

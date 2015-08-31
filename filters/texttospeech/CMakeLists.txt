@@ -1,11 +1,10 @@
-qt5_add_dbus_interfaces(ktptextui_message_filter_tts_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
-
 add_library (ktptextui_message_filter_tts MODULE tts-filter.cpp)
 
 target_link_libraries (ktptextui_message_filter_tts
     KF5::CoreAddons
     KF5::I18n
     KTp::CommonInternals
+    Qt5::TextToSpeech
 )
 
 # Install:

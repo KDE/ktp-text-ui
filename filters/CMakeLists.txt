@@ -9,11 +9,6 @@ add_subdirectory(highlight)
 add_subdirectory(urlexpansion)
 add_subdirectory(otr)
 
-# TODO: is that a framework now?
-# IF (EXISTS "${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml")
-#     set (HAS_KTTS TRUE)
-#     add_subdirectory(texttospeech)
-# ENDIF ()
-# macro_log_feature(HAS_KTTS "KTTSD" "KDE Text to Speech Deamon" "" FALSE "" "Needed for optional tts message plugin")
-
-
+if (Qt5TextToSpeech_FOUND)
+   add_subdirectory(texttospeech)
+endif()
