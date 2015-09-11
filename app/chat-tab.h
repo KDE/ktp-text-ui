@@ -56,6 +56,7 @@ private Q_SLOTS:
     /** connect account's connection status.
      * This re-enables open chats if user goes offline and then back online */
     void onConnectionStatusChanged(Tp::ConnectionStatus);
+    void setupChannelsTimeout();
 
 private:
     /** pointer to chat window the tab is nested in */

@@ -166,7 +166,7 @@ bool ChatSearchBar::event(QEvent *e)
             return true;
         }
     }
-    return false;
+    return QWidget::event(e);
 }
 
 void ChatSearchBar::textChanged(const QString& text)

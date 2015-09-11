@@ -85,21 +85,29 @@ void ChatTab::onConnectionStatusChanged(Tp::ConnectionStatus status)
 {
     // request a new text channel for the chat
 
+    if (status == Tp::ConnectionStatusConnected) {
+        // Delay the channels reopening for a little bit as it can result
+        // in displaying not accurate data received from gabble
+        // see https://bugs.kde.org/show_bug.cgi?id=318180 for details
+        QTimer::singleShot(2500, this, &ChatTab::setupChannelsTimeout);
+    }
+}
+
+void ChatTab::setupChannelsTimeout()
+{
     Tp::ChannelRequestHints hints;
     hints.setHint(QLatin1String("org.kde.telepathy"),QLatin1String("suppressWindowRaise"), QVariant(true));
 
-    if (status == Tp::ConnectionStatusConnected) {
-        if (textChannel()->targetHandleType() == Tp::HandleTypeContact) {
-            account()->ensureTextChat(textChannel()->targetId(),
+    if (textChannel()->targetHandleType() == Tp::HandleTypeContact) {
+        account()->ensureTextChat(textChannel()->targetId(),
+                                  QDateTime::currentDateTime(),
+                                  QLatin1String(KTP_TEXTUI_CLIENT_PATH),
+                                  hints);
+    } else if (textChannel()->targetHandleType() == Tp::HandleTypeRoom) {
+
+        account()->ensureTextChatroom(textChannel()->targetId(),
                                       QDateTime::currentDateTime(),
                                       QLatin1String(KTP_TEXTUI_CLIENT_PATH),
                                       hints);
-        } else if (textChannel()->targetHandleType() == Tp::HandleTypeRoom) {
-
-            account()->ensureTextChatroom(textChannel()->targetId(),
-                                          QDateTime::currentDateTime(),
-                                          QLatin1String(KTP_TEXTUI_CLIENT_PATH),
-                                          hints);
-        }
     }
 }
