@@ -38,6 +38,7 @@ public:
     bool m_showMeTyping;
     bool m_showOthersTyping;
     bool m_dontLeaveGroupChats;
+    bool m_rememberTabKeyboardLayout;
     QString m_nicknameCompletionSuffix;
     ShareProvider::ShareService m_imageShareServiceType;
 };
@@ -89,6 +90,8 @@ void TextChatConfig::sync()
     behaviorConfig.writeEntry("imageShareServiceType", static_cast<int>(d->m_imageShareServiceType));
 
     behaviorConfig.writeEntry("dontLeaveGroupChats", d->m_dontLeaveGroupChats);
+
+    behaviorConfig.writeEntry("rememberTabKeyboardLayout", d->m_rememberTabKeyboardLayout);
 
     behaviorConfig.sync();
 
@@ -211,6 +214,18 @@ void TextChatConfig::setDontLeaveGroupChats(bool dontLeaveGroupChats)
     mutex.unlock();
 }
 
+bool TextChatConfig::rememberTabKeyboardLayout() const
+{
+    return d->m_rememberTabKeyboardLayout;
+}
+
+void TextChatConfig::setRememberTabKeyboardLayout(bool change)
+{
+    mutex.lock();
+    d->m_rememberTabKeyboardLayout = change;
+    mutex.unlock();
+}
+
 TextChatConfig::TextChatConfig() :
     d(new TextChatConfigPrivate())
 {
@@ -236,6 +251,8 @@ TextChatConfig::TextChatConfig() :
     d->m_nicknameCompletionSuffix = behaviorConfig.readEntry("nicknameCompletionSuffix", ", ");
 
     d->m_dontLeaveGroupChats = behaviorConfig.readEntry("dontLeaveGroupChats", false);
+
+    d->m_rememberTabKeyboardLayout = behaviorConfig.readEntry("rememberTabKeyboardLayout", false);
 
     // Imgur is the default image sharing service
     int shareServiceType = behaviorConfig.readEntry("imageShareServiceType", static_cast<int>(ShareProvider::Imgur));

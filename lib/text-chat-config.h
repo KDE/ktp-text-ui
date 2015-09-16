@@ -67,6 +67,9 @@ class KDE_TELEPATHY_CHAT_EXPORT TextChatConfig : QObject
     bool dontLeaveGroupChats() const;
     void setDontLeaveGroupChats(bool dontLeaveGroupChats);
 
+    bool rememberTabKeyboardLayout() const;
+    void setRememberTabKeyboardLayout(bool change);
+
 private:
     TextChatConfig();
 

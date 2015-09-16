@@ -7,12 +7,12 @@
     <x>0</x>
     <y>0</y>
     <width>583</width>
-    <height>403</height>
+    <height>585</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-     <widget class="QGroupBox" name="newTabGroupBox">
+    <widget class="QGroupBox" name="newTabGroupBox">
      <property name="title">
       <string>Tabs</string>
      </property>
@@ -45,7 +45,7 @@
        </widget>
       </item>
      </layout>
-     </widget>
+    </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="scrollbackGroupBox">
@@ -80,7 +80,7 @@
     </widget>
    </item>
    <item>
-     <widget class="QGroupBox" name="typingGroupBox">
+    <widget class="QGroupBox" name="typingGroupBox">
      <property name="title">
       <string>User Is Typing</string>
      </property>
@@ -205,6 +205,22 @@
         </property>
         <property name="text">
          <string>Stay connected to group chat even when tab is closed</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Keyboard Layouts</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="rememberTabKeyboardLayout">
+        <property name="text">
+         <string>Remember keyboard layout for each tab</string>
         </property>
        </widget>
       </item>

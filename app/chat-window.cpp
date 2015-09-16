@@ -1221,7 +1221,7 @@ void ChatWindow::offerDocumentToChatroom(const Tp::AccountPtr& account, const QS
 
 void ChatWindow::restoreKeyboardLayout(ChatTab *chatTab)
 {
-    if (!chatTab) {
+    if (!chatTab || !TextChatConfig::instance()->rememberTabKeyboardLayout()) {
         return;
     }
 

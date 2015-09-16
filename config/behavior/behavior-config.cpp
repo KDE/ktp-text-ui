@@ -60,6 +60,9 @@ BehaviorConfig::BehaviorConfig(QWidget *parent, const QVariantList& args)
     ui->dontLeaveGroupChats->setChecked(m_dontLeaveGroupChats);
     connect(ui->dontLeaveGroupChats, SIGNAL(toggled(bool)), this, SLOT(onDontLeaveGroupChatsChanged(bool)));
 
+    ui->rememberTabKeyboardLayout->setChecked(m_rememberTabKeyboardLayout);
+    connect(ui->rememberTabKeyboardLayout, SIGNAL(toggled(bool)), this, SLOT(onRememberTabKeyboardLayoutChanged(bool)));
+
     QStringList nicknameCompletionStyles;
     const QString namePlaceholder = ki18nc("Placeholder for contact name in completion suffix selector", "Nickname").toString();
     Q_FOREACH(const QString &suffix, BehaviorConfig::nicknameCompletionSuffixes) {
@@ -96,6 +99,7 @@ void BehaviorConfig::load()
     m_nicknameCompletionSuffix = TextChatConfig::instance()->nicknameCompletionSuffix();
     m_imageShareServiceType = TextChatConfig::instance()->imageShareServiceType();
     m_dontLeaveGroupChats = TextChatConfig::instance()->dontLeaveGroupChats();
+    m_rememberTabKeyboardLayout = TextChatConfig::instance()->rememberTabKeyboardLayout();
 }
 
 void BehaviorConfig::save()
@@ -107,6 +111,7 @@ void BehaviorConfig::save()
     TextChatConfig::instance()->setNicknameCompletionSuffix(m_nicknameCompletionSuffix);
     TextChatConfig::instance()->setImageShareServiceName(m_imageShareServiceType);
     TextChatConfig::instance()->setDontLeaveGroupChats(m_dontLeaveGroupChats);
+    TextChatConfig::instance()->setRememberTabKeyboardLayout(m_rememberTabKeyboardLayout);
     TextChatConfig::instance()->sync();
 }
 
@@ -164,6 +169,12 @@ void BehaviorConfig::onImageSharingServiceChanged(int index)
 void BehaviorConfig::onDontLeaveGroupChatsChanged(bool state)
 {
     m_dontLeaveGroupChats = state;
+    Q_EMIT changed(true);
+}
+
+void BehaviorConfig::onRememberTabKeyboardLayoutChanged(bool state)
+{
+    m_rememberTabKeyboardLayout = state;
     Q_EMIT changed(true);
 }
 
