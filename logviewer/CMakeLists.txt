@@ -25,6 +25,7 @@ target_link_libraries(ktp-log-viewer
             KF5::ConfigCore
             KF5::ItemViews
             KF5::CoreAddons
+            KF5::DBusAddons
             KF5::KIOWidgets
             KF5::Emoticons
             KF5::KCMUtils
@@ -35,5 +36,5 @@ target_link_libraries(ktp-log-viewer
             ktpchat)
 
 install(TARGETS ktp-log-viewer DESTINATION ${BIN_INSTALL_DIR})
-install(FILES ktp-log-viewer.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES org.kde.ktplogviewer.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES log-viewer.rc DESTINATION  ${DATA_INSTALL_DIR}/ktp-log-viewer/)
