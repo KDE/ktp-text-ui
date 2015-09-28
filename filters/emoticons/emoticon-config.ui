@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Custom emoticons for account:</string>
+      <string>Custom emoticons per account:</string>
      </property>
     </widget>
    </item>
