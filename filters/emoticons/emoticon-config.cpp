@@ -190,7 +190,9 @@ void EmoticonFilterConfig::defaults()
 
 void EmoticonFilterConfig::addClicked()
 {
-    const QString account = QInputDialog::getItem(this, i18n("Add account"), i18n("Select account:"), accountsNotInList(), 0, false);
+    const QString account = QInputDialog::getItem(
+        this, i18nc("@title:window", "Add account"),
+        i18nc("@label:listbox", "Select account:"), accountsNotInList(), 0, false);
     if (account.isEmpty()) {
         return;
     }
