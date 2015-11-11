@@ -46,6 +46,7 @@ Name[zh_CN]=Bugzilla 信息
 Name[zh_TW]=Bugzilla 資訊
 Comment=When receiving a link to a bug on bugzilla show additional information such as the title and status
 Comment[ar]=عند استقبال وصلة لعلّة في بغ‌زيلّا، أظهر معلومات إضافيّة كالعنوان والحالة
+Comment[ast]=Al recibise un enllaz a un fallu en bugzilla amuésase información adicional como'l títulu y l'estáu
 Comment[bs]=Kada primite link na grešku na bugzilla, prikažite dodatnu informaciju kao što su naslov i status
 Comment[ca]=En rebre un enllaç a un error del Bugzilla mostra informació addicional com el títol i l'estat
 Comment[ca@valencia]=En rebre un enllaç a un error del Bugzilla mostra informació addicional com el títol i l'estat
