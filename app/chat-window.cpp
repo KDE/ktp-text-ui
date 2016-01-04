@@ -312,7 +312,7 @@ void ChatWindow::addTab(ChatTab *tab)
     }
 
     tab->setFocus();
-    tab->updateSendMessageShortcuts(m_sendMessage->shortcut());
+    tab->updateSendMessageShortcuts(m_sendMessage->shortcuts());
     // block text input if key is being generated for this account
     if(m_proxyService->isOngoingGeneration(QDBusObjectPath(tab->account()->objectPath()))) {
         tab->blockTextInput(true);
@@ -1341,7 +1341,7 @@ void ChatWindow::onZoomFactorChanged(qreal zoom)
 
 void ChatWindow::updateSendMessageShortcuts()
 {
-    QKeySequence newSendMessageShortcuts = m_sendMessage->shortcut();
+    QList<QKeySequence> newSendMessageShortcuts = m_sendMessage->shortcuts();
     for (int i = 0; i < m_tabWidget->count(); i++) {
         ChatTab* tab = qobject_cast<ChatTab*>(m_tabWidget->widget(i));
         tab->updateSendMessageShortcuts(newSendMessageShortcuts);

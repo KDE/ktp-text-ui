@@ -134,7 +134,7 @@ public Q_SLOTS:
       */
     void acknowledgeMessages();
 
-    void updateSendMessageShortcuts(const QKeySequence &shortcuts);
+    void updateSendMessageShortcuts(const QList<QKeySequence> &shortcuts);
 
     void reloadTheme();
 

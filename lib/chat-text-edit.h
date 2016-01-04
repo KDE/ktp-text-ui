@@ -71,7 +71,7 @@ public Q_SLOTS:
      * Updates internal message sending shortcuts. Must be called on every window
      * creation and every message sending shortcuts change.
      */
-    void setSendMessageShortcuts(const QKeySequence &shortcuts);
+    void setSendMessageShortcuts(const QList<QKeySequence> &shortcuts);
 
 private:
     QStringList m_history;
@@ -84,7 +84,7 @@ private:
     int m_completionPosition;
     bool m_continuousCompletion;
 
-    QKeySequence m_sendMessageShortcuts;
+    QList<QKeySequence> m_sendMessageShortcuts;
 };
 
 #endif // CHATTEXTEDIT_H

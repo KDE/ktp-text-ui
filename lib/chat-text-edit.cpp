@@ -148,7 +148,7 @@ bool ChatTextEdit::event(QEvent *e)
             key = QKeySequence(keyEvent->modifiers() | keyEvent->key());
         }
 
-        if (m_sendMessageShortcuts.matches(key) == QKeySequence::ExactMatch) {
+        if (m_sendMessageShortcuts.contains(key)) {
             // keyPressEvent() handles Control modifier wrong, so we need that thing
             // to be in event().
             this->sendMessage();
@@ -203,7 +203,7 @@ void ChatTextEdit::sendMessage()
     Q_EMIT returnKeyPressed();
 }
 
-void ChatTextEdit::setSendMessageShortcuts(const QKeySequence &shortcuts)
+void ChatTextEdit::setSendMessageShortcuts(const QList<QKeySequence> &shortcuts)
 {
     m_sendMessageShortcuts = shortcuts;
 }
