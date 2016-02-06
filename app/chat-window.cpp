@@ -23,16 +23,15 @@
 
 #include "chat-search-bar.h"
 #include "chat-tab.h"
-#include "chat-widget.h"
 
 #include <KTp/service-availability-checker.h>
 #include <KTp/actions.h>
 #include <KTp/contact.h>
 
+#include <KActionMenu>
 #include <KStandardAction>
 #include <KLocalizedString>
 #include <KActionCollection>
-#include <KColorScheme>
 #include <ksettings/dialog.h>
 #include <kcmodulecontainer.h>
 #include <KNotification>
@@ -42,7 +41,7 @@
 #include <KCModuleProxy>
 #include <KIconLoader>
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QFileDialog>
 #include <QUrl>
 #include <QMenu>

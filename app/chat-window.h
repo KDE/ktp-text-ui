@@ -22,20 +22,18 @@
 #ifndef CHATWINDOW_H
 #define CHATWINDOW_H
 
-#include "chat-widget.h"
+#include "otr-status.h"
 #include "proxy-service.h"
 
 #include <KXmlGuiWindow>
-#include <KActionMenu>
-
-#include <QTabWidget>
-#include <QAction>
 
 namespace Sonnet {
     class DictionaryComboBox;
 }
 
 class ChatTab;
+class KActionMenu;
+class QAction;
 class QLabel;
 class QDBusPendingCallWatcher;
 class MiddleMouseButtonHandler;

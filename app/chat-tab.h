@@ -24,7 +24,6 @@
 
 #include <QtCore/QString>
 #include <QWidget>
-#include <KColorScheme>
 
 class ChatWidgetPrivate;
 class ChatWindow;

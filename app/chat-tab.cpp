@@ -26,7 +26,6 @@
 #include <QTabWidget>
 #include <QStackedWidget>
 
-#include <KColorScheme>
 #include <KWindowSystem>
 
 #include <TelepathyQt/Account>
