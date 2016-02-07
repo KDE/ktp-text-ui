@@ -7,7 +7,7 @@ ki18n_wrap_ui(kcm_ktp_chat_appearance_SRCS ${kcm_ktp_chat_appearance_UI})
 add_library(kcm_ktp_chat_appearance MODULE ${kcm_ktp_chat_appearance_SRCS})
 
 target_link_libraries(kcm_ktp_chat_appearance
-    Qt5::WebKitWidgets
+    Qt5::WebEngineWidgets
     KF5::KCMUtils
     KF5::WidgetsAddons
     KF5::IconThemes

@@ -51,13 +51,14 @@ public:
     void showInfoMessage(const QString &message);
 
 public Q_SLOTS:
-    void onLinkClicked(const QUrl &link);
     void reloadTheme();
 
 private Q_SLOTS:
     void onEventsLoaded(KTp::PendingLoggerOperation* po);
     void doHighlightText();
     void processStoredEvents();
+    void switchPrev();
+    void switchNext();
 
 Q_SIGNALS:
     void conversationSwitchRequested(const QDate &date);

@@ -28,7 +28,7 @@
 
 #include <QtCore/QString>
 #include <QWidget>
-#include <QWebPage>
+#include <QWebEnginePage>
 
 #include <QIcon>
 #include <KColorScheme>
@@ -213,9 +213,9 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     /** received when user changes search criteria or when searching for text */
-    void findTextInChat(const QString &text, QWebPage::FindFlags flags);
-    void findNextTextInChat(const QString &text, QWebPage::FindFlags flags);
-    void findPreviousTextInChat(const QString &text, QWebPage::FindFlags flags);
+    void findTextInChat(const QString &text, QWebEnginePage::FindFlags flags);
+    void findNextTextInChat(const QString &text, QWebEnginePage::FindFlags flags);
+    void findPreviousTextInChat(const QString &text, QWebEnginePage::FindFlags flags);
     void onHistoryFetched(const QList<KTp::Message> &messages);
     void onChatPausedTimerExpired();
     void currentPresenceChanged(const Tp::Presence &presence);

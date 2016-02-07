@@ -35,7 +35,6 @@
 
 #include <KTp/Models/contacts-model.h>
 
-#include <QWebFrame>
 #include <QMenu>
 #include <QAction>
 #include <QLineEdit>

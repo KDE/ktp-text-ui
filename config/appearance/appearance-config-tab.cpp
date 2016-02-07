@@ -31,6 +31,7 @@
 #include <KIconLoader>
 
 #include <QFontDatabase>
+#include <QWebEngineSettings>
 
 AppearanceConfigTab::AppearanceConfigTab(QWidget *parent, TabMode mode)
     : QWidget(parent),
@@ -338,7 +339,7 @@ void AppearanceConfigTab::defaultTab()
     ui->customFontBox->setChecked(false);
     ui->chatView->setUseCustomFont(false);
     ui->fontFamily->setCurrentFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
-    ui->fontSize->setValue(QWebSettings::DefaultFontSize);
+    ui->fontSize->setValue(QWebEngineSettings::DefaultFontSize);
     ui->showPresenceCheckBox->setChecked(!m_groupChat);
     ui->showJoinLeaveCheckBox->setChecked(!m_groupChat);
 

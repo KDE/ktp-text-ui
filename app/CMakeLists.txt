@@ -12,7 +12,7 @@ set(ktp-text-ui_SRCS
 )
 
 set (ktp-text-ui_LIBS
-        Qt5::WebKit
+        Qt5::WebEngine
         KF5::CoreAddons
         KF5::I18n
         KF5::KIOWidgets

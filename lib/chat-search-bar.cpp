@@ -90,13 +90,12 @@ void ChatSearchBar::enableSearchButtons(bool enable)
     Q_EMIT enableSearchButtonsSignal(enable);
 }
 
-QWebPage::FindFlags ChatSearchBar::findFlags()
+QWebEnginePage::FindFlags ChatSearchBar::findFlags()
 {
-    QWebPage::FindFlags flags;
-    flags |= QWebPage::FindWrapsAroundDocument;
+    QWebEnginePage::FindFlags flags;
 
     if(m_caseSensitive) {
-        flags |= QWebPage::FindCaseSensitively;
+        flags |= QWebEnginePage::FindCaseSensitively;
     }
     return flags;
 }

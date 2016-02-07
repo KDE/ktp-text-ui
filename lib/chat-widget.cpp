@@ -243,10 +243,10 @@ ChatWidget::ChatWidget(const Tp::TextChannelPtr & channel, const Tp::AccountPtr 
 
     connect(d->ui.sendMessageBox, SIGNAL(returnKeyPressed()), SLOT(sendMessage()));
 
-    connect(d->ui.searchBar, SIGNAL(findTextSignal(QString,QWebPage::FindFlags)), this, SLOT(findTextInChat(QString,QWebPage::FindFlags)));
-    connect(d->ui.searchBar, SIGNAL(findNextSignal(QString,QWebPage::FindFlags)), this, SLOT(findNextTextInChat(QString,QWebPage::FindFlags)));
-    connect(d->ui.searchBar, SIGNAL(findPreviousSignal(QString,QWebPage::FindFlags)), this, SLOT(findPreviousTextInChat(QString,QWebPage::FindFlags)));
-    connect(d->ui.searchBar, SIGNAL(flagsChangedSignal(QString,QWebPage::FindFlags)), this, SLOT(findTextInChat(QString,QWebPage::FindFlags)));
+    connect(d->ui.searchBar, &ChatSearchBar::findTextSignal, this, &ChatWidget::findTextInChat);
+    connect(d->ui.searchBar, &ChatSearchBar::findNextSignal, this, &ChatWidget::findNextTextInChat);
+    connect(d->ui.searchBar, &ChatSearchBar::findPreviousSignal, this, &ChatWidget::findPreviousTextInChat);
+    connect(d->ui.searchBar, &ChatSearchBar::flagsChangedSignal, this, &ChatWidget::findTextInChat);
 
     connect(this, SIGNAL(searchTextComplete(bool)), d->ui.searchBar, SLOT(onSearchTextComplete(bool)));
 
@@ -386,7 +386,7 @@ Tp::TextChannelPtr ChatWidget::textChannel() const
 void ChatWidget::keyPressEvent(QKeyEvent *e)
 {
     if (e->matches(QKeySequence::Copy)) {
-        d->ui.chatArea->triggerPageAction(QWebPage::Copy);
+        d->ui.chatArea->triggerPageAction(QWebEnginePage::Copy);
         return;
     }
 
@@ -1273,27 +1273,23 @@ void ChatWidget::onInputBoxChanged()
     }
 }
 
-void ChatWidget::findTextInChat(const QString& text, QWebPage::FindFlags flags)
+void ChatWidget::findTextInChat(const QString& text, QWebEnginePage::FindFlags flags)
 {
     // reset highlights
     d->ui.chatArea->findText(QString(), flags);
 
-    if(d->ui.chatArea->findText(text, flags)) {
-        Q_EMIT searchTextComplete(true);
-    } else {
-        Q_EMIT searchTextComplete(false);
-    }
+    d->ui.chatArea->findText(text, flags, [&] (bool found) { Q_EMIT searchTextComplete(found); });
 }
 
-void ChatWidget::findNextTextInChat(const QString& text, QWebPage::FindFlags flags)
+void ChatWidget::findNextTextInChat(const QString& text, QWebEnginePage::FindFlags flags)
 {
     d->ui.chatArea->findText(text, flags);
 }
 
-void ChatWidget::findPreviousTextInChat(const QString& text, QWebPage::FindFlags flags)
+void ChatWidget::findPreviousTextInChat(const QString& text, QWebEnginePage::FindFlags flags)
 {
     // for "backwards" search
-    flags |= QWebPage::FindBackward;
+    flags |= QWebEnginePage::FindBackward;
     d->ui.chatArea->findText(text, flags);
 }
 

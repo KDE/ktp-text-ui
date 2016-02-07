@@ -39,7 +39,6 @@ target_link_libraries(ktpchat
     KF5::KIOWidgets
     KF5::KIOCore
     KF5::I18n
-    KF5::WebKit
     KF5::Emoticons
     KF5::IconThemes
     KF5::Archive
@@ -54,7 +53,7 @@ target_link_libraries(ktpchat
     KTp::Logger
     KTp::OTR
     KTp::Widgets
-    Qt5::WebKitWidgets
+    Qt5::WebEngineWidgets
     ktpimagesharer
 )
 install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -15,9 +15,9 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 find_package (KF5 REQUIRED COMPONENTS Archive Sonnet WidgetsAddons Service Emoticons
                                       KIO KCMUtils NotifyConfig Notifications I18n
-                                      WebKit WindowSystem XmlGui ItemViews TextWidgets
+                                      WindowSystem XmlGui ItemViews TextWidgets
                                       IconThemes DBusAddons)
-find_package (Qt5 REQUIRED COMPONENTS WebKitWidgets)
+find_package (Qt5 REQUIRED COMPONENTS WebEngine WebEngineWidgets)
 find_package(Qt5 ${QT_REQUIRED_VERSION} OPTIONAL_COMPONENTS TextToSpeech)
 if (NOT Qt5TextToSpeech_FOUND)
     message(STATUS "Qt5TextToSpeech not found, speech features will be disabled")

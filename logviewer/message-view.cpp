@@ -39,7 +39,6 @@ MessageView::MessageView(QWidget *parent) :
     AdiumThemeView(parent),
     m_infoLabel(new QLabel(this))
 {
-
     loadSettings();
 
     QFont font = m_infoLabel->font();
@@ -47,7 +46,13 @@ MessageView::MessageView(QWidget *parent) :
     m_infoLabel->setFont(font);
     m_infoLabel->setAlignment(Qt::AlignCenter);
 
-    connect(this, SIGNAL(loadFinished(bool)), SLOT(processStoredEvents()));
+    connect(this, &MessageView::loadFinished, this, &MessageView::processStoredEvents);
+
+    AdiumThemePage *adiumThemePage = dynamic_cast<AdiumThemePage *>(page());
+    if (adiumThemePage) {
+        connect(adiumThemePage, &AdiumThemePage::nextConversation, this, &MessageView::switchNext);
+        connect(adiumThemePage, &AdiumThemePage::prevConversation, this, &MessageView::switchPrev);
+    }
 }
 
 void MessageView::loadLog(const Tp::AccountPtr &account, const KTp::LogEntity &entity,
@@ -102,7 +107,7 @@ void MessageView::resizeEvent(QResizeEvent* e)
 {
     m_infoLabel->setGeometry(0, 0, e->size().width(), e->size().height());
 
-    QWebView::resizeEvent(e);
+    QWebEngineView::resizeEvent(e);
 }
 
 void MessageView::setHighlightText(const QString &text)
@@ -149,17 +154,22 @@ bool logMessageNewerThan(const KTp::LogMessage &e1, const KTp::LogMessage &e2)
 
 void MessageView::processStoredEvents()
 {
+    AdiumThemePage *adiumThemePage = dynamic_cast<AdiumThemePage *>(page());
+    if (!adiumThemePage) {
+        return;
+    }
+
     AdiumThemeStatusInfo prevConversation;
     if (m_prev.isValid()) {
         prevConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
-        prevConversation.setMessage(QString(QLatin1String("<a href=\"#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Older conversation")));
+        prevConversation.setMessage(QString(QLatin1String("<a href=\"file:///invalid#x-prevConversation\">&lt;&lt;&lt; %1</a>")).arg(i18n("Older conversation")));
         prevConversation.setTime(QDateTime(m_prev));
     }
 
     AdiumThemeStatusInfo nextConversation;
     if (m_next.isValid()) {
         nextConversation = AdiumThemeStatusInfo(AdiumThemeMessageInfo::HistoryStatus);
-        nextConversation.setMessage(QString(QLatin1String("<a href=\"#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Newer conversation")));
+        nextConversation.setMessage(QString(QLatin1String("<a href=\"file:///invalid#x-nextConversation\">%1 &gt;&gt;&gt;</a>")).arg(i18n("Newer conversation")));
         nextConversation.setTime(QDateTime(m_next));
     }
 
@@ -197,30 +207,6 @@ void MessageView::processStoredEvents()
     QTimer::singleShot(100, this, SLOT(doHighlightText()));
 }
 
-void MessageView::onLinkClicked(const QUrl &link)
-{
-    // Don't emit the signal directly, KWebView does not like when we reload the
-    // page from an event handler (and then chain up) and we can't guarantee
-    // that everyone will use QueuedConnection when connecting to
-    // conversationSwitchRequested() slot
-
-    if (link.fragment() == QLatin1String("x-nextConversation")) {
-        // Q_EMIT conversationSwitchRequested(m_next)
-        QMetaObject::invokeMethod(this, "conversationSwitchRequested", Qt::QueuedConnection,
-            Q_ARG(QDate, m_next));
-        return;
-    }
-
-    if (link.fragment() == QLatin1String("x-prevConversation")) {
-        // Q_EMIT conversationSwitchRequested(m_prev)
-        QMetaObject::invokeMethod(this, "conversationSwitchRequested", Qt::QueuedConnection,
-            Q_ARG(QDate, m_prev));
-        return;
-    }
-
-    AdiumThemeView::onLinkClicked(link);
-}
-
 void MessageView::loadSettings()
 {
     const KConfig config(QLatin1String("ktelepathyrc"));
@@ -238,7 +224,30 @@ void MessageView::doHighlightText()
 {
     findText(QString());
     if (!m_highlightedText.isEmpty()) {
-        findText(m_highlightedText, QWebPage::HighlightAllOccurrences |
-                                    QWebPage::FindWrapsAroundDocument);
+        findText(m_highlightedText);
     }
+}
+
+void MessageView::switchPrev()
+{
+    // Don't emit the signal directly, QWebEngineView does not like when we reload the
+    // page from an event handler (and then chain up) and we can't guarantee
+    // that everyone will use QueuedConnection when connecting to
+    // conversationSwitchRequested() slot
+
+    // Q_EMIT conversationSwitchRequested(m_prev)
+    QMetaObject::invokeMethod(this, "conversationSwitchRequested", Qt::QueuedConnection,
+        Q_ARG(QDate, m_prev));
+}
+
+void MessageView::switchNext()
+{
+    // Don't emit the signal directly, QWebEngineView does not like when we reload the
+    // page from an event handler (and then chain up) and we can't guarantee
+    // that everyone will use QueuedConnection when connecting to
+    // conversationSwitchRequested() slot
+
+    // Q_EMIT conversationSwitchRequested(m_next)
+    QMetaObject::invokeMethod(this, "conversationSwitchRequested", Qt::QueuedConnection,
+        Q_ARG(QDate, m_next));
 }

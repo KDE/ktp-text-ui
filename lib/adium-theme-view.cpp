@@ -35,54 +35,68 @@
 #include <QFontDatabase>
 #include <QMenu>
 #include <QDesktopWidget>
-#include <QWebFrame>
-#include <QWebElement>
-#include <QWebInspector>
-#include <QWebSettings>
+#include <QWebEngineContextMenuData>
+#include <QWebEngineProfile>
+#include <QWebEngineSettings>
 #include <QApplication>
 #include <QAction>
 #include <QLocale>
+#include <QDesktopServices>
 
 #include <KEmoticonsTheme>
 #include <KSharedConfig>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KMessageBox>
-#include <KToolInvocation>
 #include <KIconLoader>
 #include <KProtocolInfo>
 #include <KLocalizedString>
 
+AdiumThemePage::AdiumThemePage(QObject *parent)
+        : QWebEnginePage(parent)
+{
+}
+
+bool AdiumThemePage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType navigationType, bool isMainFrame)
+{
+    if (!isMainFrame && navigationType == QWebEnginePage::NavigationTypeLinkClicked) {
+        /* This might be an iframe (e. g. for the YouTube plugin) */
+        return true;
+    }
+
+    if (url.fragment() == QLatin1String("x-nextConversation")) {
+        Q_EMIT nextConversation();
+    } else if (url.fragment() == QLatin1String("x-prevConversation")) {
+        Q_EMIT prevConversation();
+    } else {
+        QDesktopServices::openUrl(url);
+    }
+
+    // don't let QWebEngineView handle the links, we do
+    return false;
+}
+
 AdiumThemeView::AdiumThemeView(QWidget *parent)
-        : KWebView(parent),
+        : QWebEngineView(parent),
         // check iconPath docs for minus sign in -KIconLoader::SizeLarge
         m_defaultAvatar(KIconLoader::global()->iconPath(QLatin1String("im-user"),-KIconLoader::SizeLarge)),
-        m_displayHeader(true),
-        jsproxy(new AdiumThemeViewProxy())
+        m_displayHeader(true)
 {
-    //blocks QWebView functionality which allows you to change page by dragging a URL onto it.
+    AdiumThemePage *adiumPage = new AdiumThemePage(this);
+    setPage(adiumPage);
+
+    //blocks QWebEngineView functionality which allows you to change page by dragging a URL onto it.
     setAcceptDrops(false);
 
-    // don't let QWebView handle the links, we do
-    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-
-    QAction *defaultOpenLinkAction = pageAction(QWebPage::OpenLink);
-    m_openLinkAction = new QAction(defaultOpenLinkAction->text(), this);
-    connect(m_openLinkAction, SIGNAL(triggered()),
-            this, SLOT(onOpenLinkActionTriggered()));
-
-    connect(this, SIGNAL(linkClicked(QUrl)), this, SLOT(onLinkClicked(QUrl)));
-    connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),
-            this, SLOT(injectProxyIntoJavascript()));
-    connect(jsproxy, SIGNAL(viewReady()), this, SLOT(viewLoadFinished()));
-    QWebSettings *ws = settings();
-    ws->setAttribute(QWebSettings::ZoomTextOnly, true);
+    setFocusPolicy(Qt::NoFocus);
 
     KConfigGroup config(KSharedConfig::openConfig(), "KTpStyleDebug");
     bool disableCache = config.readEntry("disableStyleCache", false);
     if (disableCache) {
-        ws->setObjectCacheCapacities(0, 0, 0);
+        page()->profile()->setHttpCacheType(QWebEngineProfile::NoCache);
     }
+
+    connect(page(), &AdiumThemePage::loadFinished, this, &AdiumThemeView::viewLoadFinished);
 }
 
 void AdiumThemeView::load(ChatType chatType) {
@@ -122,45 +136,33 @@ void AdiumThemeView::load(ChatType chatType) {
 
     m_displayHeader = appearanceConfig.readEntry("displayHeader", true);
 
-    //special HTML debug mode. Debugging/Profiling only (or theme creating) should have no visible way to turn this flag on.
-    m_webInspector = appearanceConfig.readEntry("debug", false);
-
     m_useCustomFont = appearanceConfig.readEntry("useCustomFont", false);
-    m_fontFamily = appearanceConfig.readEntry("fontFamily", QWebSettings::globalSettings()->fontFamily(QWebSettings::StandardFont));
-    m_fontSize = appearanceConfig.readEntry("fontSize", QWebSettings::globalSettings()->fontSize(QWebSettings::DefaultFontSize));
+    m_fontFamily = appearanceConfig.readEntry("fontFamily", QWebEngineSettings::globalSettings()->fontFamily(QWebEngineSettings::StandardFont));
+    m_fontSize = appearanceConfig.readEntry("fontSize", QWebEngineSettings::globalSettings()->fontSize(QWebEngineSettings::DefaultFontSize));
 
     m_showPresenceChanges = appearanceConfig.readEntry("showPresenceChanges", true);
     m_showJoinLeaveChanges = appearanceConfig.readEntry("showJoinLeaveChanges", true);
 }
 
-void AdiumThemeView::viewLoadFinished()
+void AdiumThemeView::viewLoadFinished(bool ok)
 {
-    if (themeOnLoadJS.length()) {
-        page()->mainFrame()->evaluateJavaScript(themeOnLoadJS);
+    if (ok) {
+        viewReady();
     }
-    viewReady();
-}
-
-void AdiumThemeView::injectProxyIntoJavascript()
-{
-    page()->mainFrame()->addToJavaScriptWindowObject(QLatin1String("AdiumThemeViewProxy"), jsproxy);
 }
 
 void AdiumThemeView::contextMenuEvent(QContextMenuEvent *event)
 {
-    QWebHitTestResult r = page()->mainFrame()->hitTestContent(event->pos());
-    QUrl url = r.linkUrl();
-    if (!url.isEmpty()) {
-        // save current link url in openLinkAction
-        m_openLinkAction->setData(url);
-
-        QMenu menu(this);
-        menu.addAction(m_openLinkAction);
-        menu.addAction(pageAction(QWebPage::CopyLinkToClipboard));
-        menu.exec(mapToGlobal(event->pos()));
-    } else {
-        QWebView::contextMenuEvent(event);
+    QMenu *menu = new QMenu(this);
+    if (page()->contextMenuData().linkUrl().isValid()) {
+        menu->addAction(page()->action(QWebEnginePage::OpenLinkInThisWindow));
+        menu->addAction(page()->action(QWebEnginePage::CopyLinkToClipboard));
     }
+    if (!page()->contextMenuData().selectedText().isEmpty()) {
+        menu->addAction(page()->action(QWebEnginePage::Copy));
+    }
+    connect(menu, &QMenu::aboutToHide, menu, &QObject::deleteLater);
+    menu->popup(event->globalPos());
 }
 
 void AdiumThemeView::wheelEvent(QWheelEvent* event)
@@ -180,7 +182,7 @@ void AdiumThemeView::wheelEvent(QWheelEvent* event)
         return;
     }
 
-    QWebView::wheelEvent(event);
+    QWebEngineView::wheelEvent(event);
 }
 
 void AdiumThemeView::mouseReleaseEvent(QMouseEvent *event)
@@ -190,7 +192,7 @@ void AdiumThemeView::mouseReleaseEvent(QMouseEvent *event)
         event->accept();
         return;
     }
-    QWebView::mouseReleaseEvent(event);
+    QWebEngineView::mouseReleaseEvent(event);
 }
 
 void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
@@ -218,11 +220,11 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     // set fontFamily and fontSize
     if (m_useCustomFont) {
         // use user specified fontFamily and Size
-        settings()->setFontFamily(QWebSettings::StandardFont, m_fontFamily);
+        settings()->setFontFamily(QWebEngineSettings::StandardFont, m_fontFamily);
         // We get desktop's DPI and divide it 96, which is the DPI that WebKit has hardcoded in
         // Then we can just scale the fonts using the obtained coefficient and they should look
         // good/better on high-dpi screens
-        settings()->setFontSize(QWebSettings::DefaultFontSize, m_fontSize * (QApplication::desktop()->logicalDpiY() / 96.0 ));
+        settings()->setFontSize(QWebEngineSettings::DefaultFontSize, m_fontSize * (QApplication::desktop()->logicalDpiY() / 96.0 ));
 
         // since some themes are pretty odd and hardcode fonts to the css we need to override that
         // with some extra css. this may not work for all themes!
@@ -238,14 +240,9 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
         << fontDB.families().contains(m_chatStyle->defaultFontFamily());
 
         // use theme fontFamily/Size, if not existent, it falls back to systems default font
-        settings()->setFontFamily(QWebSettings::StandardFont, m_chatStyle->defaultFontFamily());
+        settings()->setFontFamily(QWebEngineSettings::StandardFont, m_chatStyle->defaultFontFamily());
         // Computing the font size can result in floats and have some rounding errors, so add 0.5 and floor
-        settings()->setFontSize(QWebSettings::DefaultFontSize, qFloor(0.5 + m_chatStyle->defaultFontSize() * (QApplication::desktop()->logicalDpiY() / 96.0 )));
-    }
-
-    //hidden HTML debugging mode. Should have no visible way to turn it on.
-    if (m_webInspector) {
-        QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+        settings()->setFontSize(QWebEngineSettings::DefaultFontSize, qFloor(0.5 + m_chatStyle->defaultFontSize() * (QApplication::desktop()->logicalDpiY() / 96.0 )));
     }
 
     //The templateHtml is in a horrific NSString format.
@@ -285,34 +282,9 @@ void AdiumThemeView::initialise(const AdiumThemeHeaderInfo &chatInfo)
     index = templateHtml.indexOf(QLatin1String("</head>"));
     templateHtml.insert(index, KTp::MessageProcessor::instance()->header());
 
-    // The purpose of this regular expression is to find the body tag in the template
-    // and make it possible to replace the onload event.
-    // The [^>]* expression is to match things that are not the end tag
-    // the (onload=\"...\")? expression is to make easy for me to do
-    // a string replace and replace the entire onload event (as cap(1).
-    // the trailing ? makes it optional in case a theme doesn't actually
-    // use the onload event.
-    // the inner ([^\"]*) expression attempts to match the javascript
-    // that is actually being called by the onLoad event so after we replace
-    // it with our C++ function that can call whatever javascript code the theme
-    // actually intended.
-    // Note: styles that use \" or > in unexpected places in their body tag will break
-    // this regexp.
-    QRegExp body(QLatin1String("<body[^>]*(onload=\"([^\"]*)\")?[^>]*>"), Qt::CaseInsensitive);
-    const QString onload(QLatin1String(" onload=\"AdiumThemeViewProxy.viewReady();\" "));
-    index = templateHtml.indexOf(body);
-    if (0 <= index ) {
-        if (body.cap(1).length() == 0) {
-            templateHtml.insert(index + 5, onload);
-        } else {
-            themeOnLoadJS = body.cap(2);
-            //qCDebug(KTP_TEXTUI_LIB) << "Captured js onLoad" << themeOnLoadJS;
-            templateHtml.replace(body.pos(1), body.cap(1).length(), onload);
-        }
-    }
     //qCDebug(KTP_TEXTUI_LIB) << templateHtml;
 
-    setHtml(templateHtml);
+    setHtml(templateHtml, QUrl::fromLocalFile(m_chatStyle->getStyleBaseHref()));
 
     m_service = chatInfo.service();
     m_serviceIconPath = chatInfo.serviceIconPath();
@@ -415,8 +387,8 @@ void AdiumThemeView::setHeaderDisplayed(bool displayHeader)
 
 void AdiumThemeView::clear()
 {
-    if (!page()->mainFrame()->url().isEmpty()) {
-        page()->mainFrame()->setHtml(QString());
+    if (!page()->url().isEmpty()) {
+        page()->setHtml(QString());
     }
 }
 
@@ -576,7 +548,7 @@ void AdiumThemeView::addAdiumStatusMessage(const AdiumThemeStatusInfo& statusMes
 
 QString AdiumThemeView::appendScript(AdiumThemeView::AppendMode mode)
 {
-    //by making the JS return false evaluateJavaScript is a _lot_ faster, as it has nothing to convert to QVariant.
+    //by making the JS return false runJavaScript is a _lot_ faster, as it has nothing to convert to QVariant.
     //escape quotes, and merge HTML onto one line.
     switch (mode) {
     case AppendMessageWithScroll:
@@ -648,22 +620,11 @@ void AdiumThemeView::appendMessage(QString &html, const QString &script, AppendM
                                             .replace(QLatin1Char('\"'), QLatin1String("\\\"")) /* replace " with \"   */
                                             .replace(QLatin1Char('\n'), QLatin1String(""))); /* remove new lines    */
 
-    page()->mainFrame()->evaluateJavaScript(js);
+    page()->runJavaScript(js);
 
     if (!script.isEmpty()) {
-        page()->mainFrame()->evaluateJavaScript(script);
+        page()->runJavaScript(script);
     }
-}
-
-void AdiumThemeView::onLinkClicked(const QUrl &url)
-{
-    KToolInvocation::invokeBrowser(url.toString());
-}
-
-void AdiumThemeView::onOpenLinkActionTriggered()
-{
-    QUrl url = m_openLinkAction->data().toUrl();
-    onLinkClicked(url);
 }
 
 /** Private */

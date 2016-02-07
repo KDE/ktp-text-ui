@@ -22,7 +22,7 @@
 
 #include "ktpchat_export.h"
 
-#include <QWebPage>
+#include <QWebEnginePage>
 #include <QWidget>
 
 class QLineEdit;
@@ -66,12 +66,12 @@ private Q_SLOTS:
     void toggleCaseSensitive(bool toggle);
 
 Q_SIGNALS:
-    void findTextSignal(const QString &text, QWebPage::FindFlags flags);
-    void findNextSignal(const QString &text, QWebPage::FindFlags flags);
-    void findPreviousSignal(const QString &text, QWebPage::FindFlags flags);
+    void findTextSignal(const QString &text, QWebEnginePage::FindFlags flags);
+    void findNextSignal(const QString &text, QWebEnginePage::FindFlags flags);
+    void findPreviousSignal(const QString &text, QWebEnginePage::FindFlags flags);
 
     /** emitted when search criteria is changed by user and updates current view */
-    void flagsChangedSignal(const QString &, QWebPage::FindFlags flags);
+    void flagsChangedSignal(const QString &, QWebEnginePage::FindFlags flags);
 
     /** send signal to mainwindow to enable/disable search buttons */
     void enableSearchButtonsSignal(bool enable);
@@ -81,7 +81,7 @@ private:
     void enableSearchButtons(bool enable);
 
     /** returns selected search criteria chosen by user */
-    QWebPage::FindFlags findFlags();
+    QWebEnginePage::FindFlags findFlags();
 
     QLineEdit *m_searchInput;
     QToolButton *m_closeButton;

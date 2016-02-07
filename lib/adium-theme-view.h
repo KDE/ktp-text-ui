@@ -20,7 +20,7 @@
 #ifndef ADIUMTHEMEVIEW_H
 #define ADIUMTHEMEVIEW_H
 
-#include <KWebView>
+#include <QWebEngineView>
 
 #include "adium-theme-header-info.h"
 #include "adium-theme-content-info.h"
@@ -35,21 +35,30 @@ class AdiumThemeContentInfo;
 class AdiumThemeHeaderInfo;
 class AdiumThemeStatusInfo;
 class ChatWindowStyle;
+class ChatWidget;
 
 class QContextMenuEvent;
 
 class QAction;
 
-class AdiumThemeViewProxy : public QObject
+class KDE_TELEPATHY_CHAT_EXPORT AdiumThemePage : public QWebEnginePage
 {
     Q_OBJECT
+public:
+    AdiumThemePage(QObject *parent = 0);
+
+protected:
+    virtual bool acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType navigationType, bool isMainFrame);
+
 Q_SIGNALS:
-    void viewReady();
+    void nextConversation();
+    void prevConversation();
 };
 
-class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public KWebView
+class KDE_TELEPATHY_CHAT_EXPORT AdiumThemeView : public QWebEngineView
 {
     Q_OBJECT
+    friend class ChatWidget;
 public:
 
     enum ChatType {
@@ -107,13 +116,10 @@ public Q_SLOTS:
     void addStatusMessage(const QString &text,
                           const QString &sender=QString(),
                           const QDateTime &time=QDateTime::currentDateTime());
-    void onOpenLinkActionTriggered();
-    virtual void onLinkClicked(const QUrl &);
-    void injectProxyIntoJavascript();
 
     void addAdiumContentMessage(const AdiumThemeContentInfo&);
     void addAdiumStatusMessage(const AdiumThemeStatusInfo&);
-    void viewLoadFinished();
+    void viewLoadFinished(bool ok);
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -152,15 +158,9 @@ private:
     QString m_defaultAvatar;
     AdiumThemeContentInfo m_lastContent;
     bool m_displayHeader;
-    QAction *m_openLinkAction;
 
     QString m_service;
     QString m_serviceIconPath;
-
-    bool m_webInspector;
-
-    AdiumThemeViewProxy *jsproxy;
-    QString themeOnLoadJS;
 };
 
 #endif // ADIUMTHEMEVIEW_H
