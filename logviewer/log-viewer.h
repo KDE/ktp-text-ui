@@ -66,7 +66,7 @@ private Q_SLOTS:
 
     void slotShowEntityListContextMenu(const QPoint &coords);
     void slotClearGlobalSearch();
-    void slotStartGlobalSearch(const QString &term);
+    void slotStartGlobalSearch();
     void onGlobalSearchFinished(KTp::PendingLoggerOperation *);
 
     void slotClearContactHistory();

@@ -114,8 +114,8 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     connect(ui->datesView, SIGNAL(clicked(QModelIndex)), SLOT(slotDateClicked(QModelIndex)));
     connect(ui->datesView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(slotUpdateMainWindow()));
     connect(ui->messageView, SIGNAL(conversationSwitchRequested(QDate)), SLOT(slotSetConversationDate(QDate)));
-    connect(ui->globalSearch, SIGNAL(returnPressed(QString)), SLOT(slotStartGlobalSearch(QString)));
-    connect(ui->globalSearch, SIGNAL(clearButtonClicked()), SLOT(slotClearGlobalSearch()));
+    connect(ui->globalSearch, SIGNAL(returnPressed()), SLOT(slotStartGlobalSearch()));
+    connect(ui->globalSearch, &QLineEdit::textChanged, [this](const QString &text) { if (text.isEmpty()) { slotClearGlobalSearch(); } });
     connect(ui->entityList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotShowEntityListContextMenu(QPoint)));
     connect(ui->entityList, SIGNAL(noSuchContact()), SLOT(slotNoLogsForContact()));
 }
@@ -302,8 +302,9 @@ void LogViewer::slotSetConversationDate(const QDate &date)
     }
 }
 
-void LogViewer::slotStartGlobalSearch(const QString &term)
+void LogViewer::slotStartGlobalSearch()
 {
+    const QString &term = ui->globalSearch->text();
     if (term.isEmpty()) {
         ui->messageView->clearHighlightText();
         m_filterModel->clearSearchHits();
