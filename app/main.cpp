@@ -51,6 +51,8 @@ int main(int argc, char *argv[])
     Tp::registerTypes();
     KTp::registerOtrTypes();
 
+    Tp::SharedPtr<TelepathyChatUi> app(new TelepathyChatUi(argc, argv));
+
     Tp::ChannelFactoryPtr channelFactory = Tp::ChannelFactory::create(QDBusConnection::sessionBus());
     channelFactory->addCommonFeatures(Tp::Channel::FeatureCore);
 
@@ -64,7 +66,6 @@ int main(int argc, char *argv[])
 
     Tp::ClientRegistrarPtr registrar = Tp::ClientRegistrar::create(KTp::accountFactory(), KTp::connectionFactory(), channelFactory, KTp::contactFactory());
 
-    Tp::SharedPtr<TelepathyChatUi> app(new TelepathyChatUi(argc, argv));
     Tp::AbstractClientPtr handler = Tp::AbstractClientPtr(app);
     registrar->registerClient(handler, QLatin1String(KTP_TEXTUI_CLIENT_NAME));
 
