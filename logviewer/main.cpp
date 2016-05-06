@@ -50,7 +50,6 @@ int main(int argc, char *argv[])
     aboutData.setLicense(KAboutLicense::GPL_V2);
 
     KAboutData::setApplicationData(aboutData);
-    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("documentation")));
 
     // register to DBus
     const KDBusService dbusService(KDBusService::Multiple);

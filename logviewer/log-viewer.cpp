@@ -67,7 +67,7 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     KXmlGuiWindow(parent),
     ui(new Ui::LogViewer)
 {
-    setWindowIcon(QIcon::fromTheme(QStringLiteral("documentation")));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("kde-im-log-viewer")));
 
     QWidget *widget = new QWidget(this);
     setCentralWidget(widget);
