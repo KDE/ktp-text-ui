@@ -48,7 +48,7 @@ void ImageBinSharer::parseResponse(const QByteArray& responseData)
 
 QByteArray ImageBinSharer::postBody(const QByteArray& imageData)
 {
-    m_form.addFile(QLatin1String("file"), m_contentPath, imageData);
+    m_form.addFile(QLatin1String("file"), QUrl::fromLocalFile(m_contentPath), imageData);
     m_form.finish();
     return m_form.formData();
 }

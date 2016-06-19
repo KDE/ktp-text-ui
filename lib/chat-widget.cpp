@@ -1417,14 +1417,14 @@ void ChatWidget::initChatArea()
         info.setDestinationDisplayName(otherContact->alias());
         info.setDestinationName(otherContact->id());
         info.setChatName(otherContact->alias());
-        info.setIncomingIconPath(otherContact->avatarData().fileName);
+        info.setIncomingIconPath(QUrl::fromLocalFile(otherContact->avatarData().fileName));
         d->ui.contactsView->hide();
     }
 
     info.setSourceName(d->channel->textChannel()->connection()->protocolName());
 
     //set up anything related to 'self'
-    info.setOutgoingIconPath(d->channel->textChannel()->groupSelfContact()->avatarData().fileName);
+    info.setOutgoingIconPath(QUrl::fromLocalFile(d->channel->textChannel()->groupSelfContact()->avatarData().fileName));
 
     //set the message time
     if (!d->channel->messageQueue().isEmpty()) {

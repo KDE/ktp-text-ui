@@ -36,7 +36,7 @@ void SimplestImageHostingSharer::parseResponse(const QByteArray& responseData)
     QString responseString = QLatin1String(responseData);
     QRegExp exp(QLatin1String("800\n(http://.+)\n"));
     if ( exp.indexIn(responseString) != -1) {
-        m_imageUrl = responseString.replace(QLatin1String("800"), QLatin1String("")).replace(QLatin1String("\n"), QLatin1String(""));
+        m_imageUrl = QUrl(responseString.remove(QLatin1String("800")).remove(QLatin1String("\n")));
     } else {
         m_hasError = true;
         m_errorMessage = responseString;
@@ -45,7 +45,7 @@ void SimplestImageHostingSharer::parseResponse(const QByteArray& responseData)
 
 QByteArray SimplestImageHostingSharer::postBody(const QByteArray& imageData)
 {
-    m_form.addFile(QLatin1String("fileName"), m_contentPath, imageData);
+    m_form.addFile(QLatin1String("fileName"), QUrl::fromLocalFile(m_contentPath), imageData);
     m_form.finish();
 
     return m_form.formData();

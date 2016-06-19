@@ -61,7 +61,7 @@ void EntityView::rowsInserted(const QModelIndex &parent, int start, int end)
         const QString selectedPersonaId = QCoreApplication::arguments().at(0);
         for (int i = start; i <= end; i++) {
             const QModelIndex index = model()->index(i, 0, parent);
-            if (index.data(KTp::PersonIdRole).toUrl() == selectedPersonaId) {
+            if (index.data(KTp::PersonIdRole).toUrl().toString() == selectedPersonaId) {
                 selectedIndex = index;
                 break;
             }

@@ -39,6 +39,7 @@ set_package_properties(KF5People PROPERTIES DESCRIPTION "KDE Contacts aggregatio
 if (KF5People_FOUND)
     add_definitions(-DHAVE_KPEOPLE)
 endif ()
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 add_subdirectory(image-sharer)
 add_subdirectory(lib)

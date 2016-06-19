@@ -63,7 +63,7 @@ void AdiumxtraProtocolHandler::install()
 
     QTemporaryFile *tmpFile = new QTemporaryFile();
     if (tmpFile->open()) {
-        KIO::Job* getJob = KIO::file_copy(url.toDisplayString(), QUrl(tmpFile->fileName()), -1,
+        KIO::Job* getJob = KIO::file_copy(url, QUrl::fromLocalFile(tmpFile->fileName()), -1,
                                           KIO::Overwrite | KIO::HideProgressInfo);
         if (getJob->exec()) {
             qWarning() << "Download failed";

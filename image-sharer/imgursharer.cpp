@@ -46,7 +46,7 @@ QUrl ImgurSharer::url() const
 QByteArray ImgurSharer::postBody(const QByteArray &imageData)
 {
     // Create the request body
-    m_form.addFile(QLatin1String("image"), m_contentPath, imageData);
+    m_form.addFile(QLatin1String("image"), QUrl::fromLocalFile(m_contentPath), imageData);
     m_form.finish();
     return m_form.formData();
 }

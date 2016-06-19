@@ -126,7 +126,7 @@ void MessageView::onEventsLoaded(KTp::PendingLoggerOperation *po)
     headerInfo.setChatName(m_contact.isNull() ? m_entity.alias() : m_contact->alias());
     headerInfo.setGroupChat(m_entity.entityType() == Tp::HandleTypeRoom);
     headerInfo.setSourceName(m_account->displayName());
-    headerInfo.setIncomingIconPath(m_contact.isNull() ? QString() : m_contact->avatarData().fileName);
+    headerInfo.setIncomingIconPath(m_contact.isNull() ? QUrl() : QUrl::fromLocalFile(m_contact->avatarData().fileName));
     headerInfo.setService(m_account->serviceName());
     // check iconPath docs for minus sign in -KIconLoader::SizeMedium
     headerInfo.setServiceIconPath(KIconLoader::global()->iconPath(m_account->iconName(), -KIconLoader::SizeMedium));
