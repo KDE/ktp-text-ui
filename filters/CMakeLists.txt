@@ -1,6 +1,7 @@
 add_subdirectory(bugzilla)
 add_subdirectory(emoticons)
 add_subdirectory(formatting)
+add_subdirectory(geopoint)
 add_subdirectory(images)
 add_subdirectory(latex)
 add_subdirectory(searchexpansion)
