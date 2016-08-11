@@ -14,6 +14,8 @@ X-KDE-PluginInfo-EnabledByDefault=false
 X-KTp-PluginInfo-Version=@KTP_MESSAGE_FILTER_FRAMEWORK_VERSION@
 
 Name=Geopoint Preview
+Name[ca]=Vista prèvia del punt geogràfic
+Name[ca@valencia]=Vista prèvia del punt geogràfic
 Name[es]=Vista previa de punto geográfico
 Name[nl]=Voorbeeld van geo-punt
 Name[pt]=Antevisão de Ponto Geográfico
@@ -21,6 +23,8 @@ Name[sv]=Förhandsgranskning av geografisk punkt
 Name[uk]=Перегляд геоточки
 Name[x-test]=xxGeopoint Previewxx
 Comment=Show geo URI on a map view.
+Comment[ca]=Mostra la URI geogràfica a la vista d'un mapa.
+Comment[ca@valencia]=Mostra la URI geogràfica a la vista d'un mapa.
 Comment[es]=Mostrar un URI geográfico en un visor de mapa.
 Comment[nl]=Geo-URI op een kaart tonen.
 Comment[pt]=Mostrar um URI geográfico num mapa.
