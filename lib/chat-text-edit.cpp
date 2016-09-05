@@ -228,13 +228,13 @@ void ChatTextEdit::getHistory(bool up)
                 addHistory(toPlainText());
             }
 
-            setText(QLatin1String(""));
+            setPlainText(QLatin1String(""));
         } else {
             m_historyPos--;
         }
     }
 
-    setText(m_history[m_historyPos]);
+    setPlainText(m_history[m_historyPos]);
     moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
@@ -375,7 +375,7 @@ void ChatTextEdit::completeNick()
     }
 
     // Set new text and cursor position
-    setText(newLine);
+    setPlainText(newLine);
     cursor.setPosition(pos);
     setTextCursor(cursor);
 }
