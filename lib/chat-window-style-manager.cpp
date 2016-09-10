@@ -310,7 +310,7 @@ ChatWindowStyle *ChatWindowStyleManager::getStyleFromPool(const QString &styleId
         // NOTE: This is a hidden config switch for style developers
         // Check in the config if the cache is disabled.
         // if the cache is disabled, reload the style every time it's getted.
-        KConfigGroup config(KSharedConfig::openConfig(), "KopeteStyleDebug");
+        KConfigGroup config(KSharedConfig::openConfig(), "KTpStyleDebug");
         bool disableCache = config.readEntry("disableStyleCache", false);
         if (disableCache) {
             d->stylePool[styleId]->reload();
