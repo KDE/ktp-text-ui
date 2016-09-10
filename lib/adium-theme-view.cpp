@@ -77,6 +77,12 @@ AdiumThemeView::AdiumThemeView(QWidget *parent)
     connect(jsproxy, SIGNAL(viewReady()), this, SLOT(viewLoadFinished()));
     QWebSettings *ws = settings();
     ws->setAttribute(QWebSettings::ZoomTextOnly, true);
+
+    KConfigGroup config(KSharedConfig::openConfig(), "KTpStyleDebug");
+    bool disableCache = config.readEntry("disableStyleCache", false);
+    if (disableCache) {
+        ws->setObjectCacheCapacities(0, 0, 0);
+    }
 }
 
 void AdiumThemeView::load(ChatType chatType) {
