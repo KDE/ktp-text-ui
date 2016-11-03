@@ -26,6 +26,7 @@ Name[mr]=मजकूर फॉर्मेटिंग
 Name[nb]=Tekstformatering
 Name[nds]=Textformateren
 Name[nl]=Tekstopmaak
+Name[nn]=Tekstformatering
 Name[pa]=ਟੈਕਸਟ ਫਾਰਮੈਟ
 Name[pl]=Formatowanie tekstu
 Name[pt]=Formatação do Texto

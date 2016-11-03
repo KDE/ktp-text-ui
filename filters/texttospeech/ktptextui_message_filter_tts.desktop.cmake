@@ -25,6 +25,7 @@ Name[mr]=पाठ्य-ते-भाष्य
 Name[nb]=Tekst til tale
 Name[nds]=Vörleser
 Name[nl]=Tekst-naar-spraak
+Name[nn]=Tekst til tale
 Name[pa]=ਸ਼ਬਦ ਤੋਂ ਬੋਲੀ
 Name[pl]=Tekst-na-mowę
 Name[pt]=Texto para Fala

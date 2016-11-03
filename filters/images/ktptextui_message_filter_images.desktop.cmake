@@ -25,6 +25,7 @@ Name[mr]=प्रतिमा पूर्वावलोकन
 Name[nb]=Bildeforhåndsvisning
 Name[nds]=Bild-Vöransicht
 Name[nl]=Afbeeldingsvoorbeeld
+Name[nn]=Førehandsvising av bilete
 Name[pa]=ਚਿੱਤਰ ਝਲਕ
 Name[pl]=Podgląd obrazu
 Name[pt]=Antevisão da Imagem
