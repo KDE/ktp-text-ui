@@ -39,6 +39,7 @@ Name[lt]=LaTeX pateikimas
 Name[nb]=LaTeX-viser
 Name[nds]=LaTeX-Wieser
 Name[nl]=LaTeX-renderer
+Name[nn]=LaTeX-visar
 Name[pa]=LaTeX ਰੈਂਡਰ
 Name[pl]=Wyświetlanie LaTeX
 Name[pt]=Representação em LaTeX

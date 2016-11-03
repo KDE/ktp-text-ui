@@ -25,6 +25,7 @@ Name[mr]=यूट्यूब पूर्वावलोकन
 Name[nb]=YouTube forhåndsvisning
 Name[nds]=YouTube-Vöransicht
 Name[nl]=Voorbeeld van YouTube
+Name[nn]=Førehandsvising av YouTube
 Name[pa]=ਯੂਟਿਊਬ ਝਲਕ
 Name[pl]=Podgląd YouTube
 Name[pt]=Antevisão do YouTube

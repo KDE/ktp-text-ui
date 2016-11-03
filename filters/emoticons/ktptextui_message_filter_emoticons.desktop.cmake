@@ -72,6 +72,7 @@ Comment[lt]=Rodyti šypsenėles pokalbio viduje
 Comment[nb]=Vis humørfjes (emotikoner) inne i praten
 Comment[nds]=Snutenbiller (keen Textsnuten) binnen den Klöönsnack wiesen
 Comment[nl]=Emoticons tonen (lachende gezichtjes) in de chat
+Comment[nn]=Vis fjesingar (emotikon) i pratevindauget
 Comment[pa]=ਗੱਲਬਾਤ ਵਿੱਚ ਈਮੋਸ਼ਨ (ਮੁਖੜੇ) ਵੇਖਾਓ
 Comment[pl]=Pokaż emotikony (buźki) wewnątrz okna rozmowy
 Comment[pt]=Mostrar os ícones emotivos nas conversas
