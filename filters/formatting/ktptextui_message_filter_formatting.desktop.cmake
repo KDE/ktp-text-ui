@@ -69,6 +69,7 @@ Comment[lt]=Naudokite /, _, * ir - kad parašyti tekstą pasvirai, pabrauktą, p
 Comment[nb]=Bruk /, _,* og – for å gjøre teksten henholdsvis kursiv, understreket, halvfet eller overstreket
 Comment[nds]=»/«, »_«, »*« un »-« bruken un Text dor mit kursiev, ünnerstreken, fett oder dörstreken wiesen
 Comment[nl]=Gebruik /, _, * en - om tekst respectievelijk cursief, onderstreept, vet of doorgestreept te maken
+Comment[nn]=Bruk «/», «_», «*» og «-» for markera kursiv, understreking, halvfeit og gjennomstreking
 Comment[pl]=Użyj odpowiednio /,_, * i - aby tekst był napisany kursywą, podkreślony, pogrubiony lub przekreślony
 Comment[pt]=Usar o '/', '_', '*' e '-' para tornar o texto itálico, sublinhado, negrito ou traçado, respectivamente
 Comment[pt_BR]=Use /, _, * e - para tornar o texto itálico, sublinhado, negrito ou tachado, respectivamente
