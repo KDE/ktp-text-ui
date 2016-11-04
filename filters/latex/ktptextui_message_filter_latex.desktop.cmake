@@ -82,6 +82,7 @@ Comment[lt]=Jei gautos žinutės turi LaTeX tarp $$, jis bus išvestas tiesiai �
 Comment[nb]=Hvis innkommende meldinger inneholder LaTeX-kode mellom $$ så blir den tegnet opp direkte i praten.
 Comment[nds]=Bargt rinkamen Narichten LaTeX twischen $-Tekens, warrt dat direktemang binnen den Klöönsnack wiest
 Comment[nl]=Als een inkomend bericht LaTeX tussen $$ bevat, zal het direct in de chat worden weergegeven
+Comment[nn]=Viss innkommande meldingar inneheld LaTeX-kode mellom $$, vis resultatet av LaTeX-kompilering.
 Comment[pl]=Jeśli przychodząca wiadomość będzie zawierać składnię LaTeX pomiędzy $$, to zostanie ona wyświetlona bezpośrednio w rozmowie.
 Comment[pt]=Se as mensagens recebidas tiverem código em LaTeX entre $$, o mesmo será desenhado directamente na conversa.
 Comment[pt_BR]=Se existir código em LaTeX entre $$ nas mensagens recebidas, ele será representado na conversa

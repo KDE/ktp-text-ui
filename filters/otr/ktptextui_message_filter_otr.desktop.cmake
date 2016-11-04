@@ -57,6 +57,7 @@ Comment[it]=Se un messaggio è un messaggio OTR, non sarà mostrato
 Comment[ko]=OTR 메시지이면 표시되지 않습니다
 Comment[nb]=Hvis en melding er en OTR-melding blir den ikke vist
 Comment[nl]=Als een bericht een OTR-bericht is, zal het niet getoond worden
+Comment[nn]=Viss ei melding er ei OTR-melding, vert ho ikkje vist
 Comment[pl]=Jeśli wiadomość jest wiadomością OTR, to nie zostanie pokazana
 Comment[pt]=Se uma dada mensagem for em OTR, não será apresentada
 Comment[pt_BR]=Se receber uma mensagem em OTR, ela não será apresentada

@@ -70,6 +70,7 @@ Comment[lt]=Įjungti miniatiūras kiekvieno paveikslėlio URL atsiuntame pokalby
 Comment[nb]=Bygg inn et minibilde av enhver bilde-URL sent i en prat
 Comment[nds]=En Vöransicht för elkeen binnen en Klöönsnack loosstüert Bild-URL inbetten
 Comment[nl]=Een miniatuur of elke verzonden URL van een afbeelding inbedden in een chat
+Comment[nn]=Innebygg miniatyrbilete når praten inneheld nettadresser til biletfiler
 Comment[pl]=Osadź miniaturę jakiegokolwiek adresu URL obrazu w oknie rozmowy
 Comment[pt]=Incorporar uma miniatura de qualquer URL de imagens numa conversa
 Comment[pt_BR]=Insere uma miniatura de qualquer URL de imagem enviada em uma conversa

@@ -74,6 +74,7 @@ Comment[lt]=Išplėsti KDE-sutrumpintus URI į URL (pvz. rašant wp:KDE bu pakei
 Comment[nb]=Fold ut en KDE-forkortet URL til en fullstendig URL (f.eks. wp:KDE blir oversatt til http://en.wikipedia/wiki/KDE)
 Comment[nds]=En binnen KDE gellen Söökafkörten to en URL utfoolden (a.B. warrt ut „wp:KDE“ de URL „http://de.wikipedia.org/wiki/KDE“)
 Comment[nl]=Expandeer een door KDE afgekorte URI in een URL (bijv. typen van wp:KDE wordt vertaald in http://en.wikipedia.org/wiki/KDE)
+Comment[nn]=Utvida KDE-forkorta nettadresser (for eksempel vert wp:KDE gjort om til http://en.wikipedia.org/wiki/KDE)
 Comment[pl]=Rozwiń skrócone przez KDE adresy URI do adresów URL (np. po wpisaniu wp:KDE zostanie to przetłumaczone na http://en.wikipedia.org/wiki/KDE)
 Comment[pt]=Expandir um URI curto no KDE para um URL (i.e., se escrever wp:KDE, será traduzido para http://en.wikipedia.org/wiki/KDE)
 Comment[pt_BR]=Expande uma URI curta (p.ex., se digitar wp:KDE será transformada em http://en.wikipedia.org/wiki/KDE)

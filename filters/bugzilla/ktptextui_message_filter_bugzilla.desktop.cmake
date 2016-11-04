@@ -70,6 +70,7 @@ Comment[lt]=Kai gaunama nuoroda į klaidą sistemoje bugzilla, rodyti papildomą
 Comment[nb]=Når du mottar en lenke til en feilmelding på bugzilla, så vis tilleggsinformasjon slik som tittel og status.
 Comment[nds]=Informatschonen as Titel un Status wiesen, wenn en Link op en Fehler binnen Bugzilla ankummt
 Comment[nl]=Bij het ontvangen van een koppeling naar een bug in bugzilla toon dan extra informatie zoals de titel en de status
+Comment[nn]=Når du får ei lenkje til ein feilrapport på Bugzilla, vis tilleggsinformasjon som for eksempel tittel og status
 Comment[pl]=Przy otrzymywaniu odnośnika do błędu na bugzilli, pokaż dodatkowe informacje takie jak tytuł i stan
 Comment[pt]=Ao receber uma hiperligação para um erro no Bugzilla, mostra informações adicionais como o título e o estado
 Comment[pt_BR]=Mostra informações adicionais ao receber um link para um erro no Bugzilla, como o título e o status
