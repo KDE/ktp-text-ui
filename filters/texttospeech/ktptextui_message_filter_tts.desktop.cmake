@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Text To Speech
 Name[ar]=نطق النّصّ
-Name[ast]=Testu a voz
 Name[bs]=Tekst u govor
 Name[ca]=Text a veu
 Name[ca@valencia]=Text a veu

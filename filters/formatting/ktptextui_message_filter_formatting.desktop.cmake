@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Name=Text Formatting
 Name[ar]=تنسيق النّصّ
-Name[ast]=Formatéu del testu
 Name[bs]=Formatiranje teksta
 Name[ca]=Formatació del text
 Name[ca@valencia]=Formatació del text

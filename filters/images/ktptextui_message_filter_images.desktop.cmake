@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Image Preview
 Name[ar]=معاينة الصّورة
-Name[ast]=Vista previa d'imaxe
 Name[bs]=Pregled slike
 Name[ca]=Vista prèvia de la imatge
 Name[ca@valencia]=Vista prèvia de la imatge
