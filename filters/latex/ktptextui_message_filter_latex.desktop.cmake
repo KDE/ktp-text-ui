@@ -16,6 +16,7 @@ X-KTp-PluginInfo-Version=@KTP_MESSAGE_FILTER_FRAMEWORK_VERSION@
 
 Name=LaTeX Renderer
 Name[ar]=مصيّر لاتخ
+Name[ast]=Renderizador LaTeX
 Name[bs]=LaTeX Obrađivač
 Name[ca]=Renderitzador LaTeX
 Name[ca@valencia]=Renderitzador LaTeX
