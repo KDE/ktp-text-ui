@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Image Preview
 Name[ar]=معاينة الصّورة
+Name[ast]=Previsualización d'imáxenes
 Name[bs]=Pregled slike
 Name[ca]=Vista prèvia de la imatge
 Name[ca@valencia]=Vista prèvia de la imatge
@@ -47,6 +48,7 @@ Name[zh_CN]=图片预览
 Name[zh_TW]=影像預覽
 Encoding=UTF-8
 Comment=Embed a thumbnail of any image URL sent in a chat
+Comment[ast]=Empotra una miniatura de cualesquier URL d'imaxe unviada nuna charra
 Comment[bs]=Unesite sličicu neke URL slike poslane u ćaskanju
 Comment[ca]=Incrusta una miniatura de qualsevol URL d'imatge enviat al xat
 Comment[ca@valencia]=Incrusta una miniatura de qualsevol URL d'imatge enviat al xat

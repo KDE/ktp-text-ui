@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Bugzilla Information
 Name[ar]=معلومات بغ‌زيلّا
+Name[ast]=Información de Bugzilla
 Name[bs]=Bugzilla informacije
 Name[ca]=Informació del Bugzilla
 Name[ca@valencia]=Informació del Bugzilla

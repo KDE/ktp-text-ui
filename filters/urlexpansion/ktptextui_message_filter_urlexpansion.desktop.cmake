@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Short URLs
 Name[ar]=وصلات مقصّرة
+Name[ast]=Acurtiar URLs
 Name[bs]=Kratke URL adrese
 Name[ca]=URL breus
 Name[ca@valencia]=URL breus
