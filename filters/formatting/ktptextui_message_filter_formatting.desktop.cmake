@@ -47,6 +47,7 @@ Name[x-test]=xxText Formattingxx
 Name[zh_CN]=文本格式化
 Name[zh_TW]=文字格式
 Comment=Use /, _, * and - to make text italic, underlined, bold or strikeout respectively
+Comment[ast]=Usa /, _, * y - pa poner el testu en cursiva, sorrayáu, negrina o tacháu respeutivamente
 Comment[bs]=Koristite _, * i - da napravite tekst kurzivnim, podebljanim ili precrtanim
 Comment[ca]=Usa /, _, * i - per a convertir el text a cursiva, subratllat, negreta o ratllat respectivament
 Comment[ca@valencia]=Usa /, _, * i - per a convertir el text a cursiva, subratllat, negreta o ratllat respectivament
