@@ -17,7 +17,8 @@ find_package (KF5 REQUIRED COMPONENTS Archive Sonnet WidgetsAddons Service Emoti
                                       KIO KCMUtils NotifyConfig Notifications I18n
                                       WindowSystem XmlGui ItemViews TextWidgets
                                       IconThemes DBusAddons)
-find_package (Qt5 REQUIRED COMPONENTS WebEngine WebEngineWidgets)
+set(QT_REQUIRED_VERSION 5.7.0)
+find_package(Qt5 ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS WebEngine WebEngineWidgets)
 find_package(Qt5 ${QT_REQUIRED_VERSION} OPTIONAL_COMPONENTS TextToSpeech)
 if (NOT Qt5TextToSpeech_FOUND)
     message(STATUS "Qt5TextToSpeech not found, speech features will be disabled")
