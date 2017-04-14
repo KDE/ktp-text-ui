@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Icon=mail-encrypt
+Icon=mail-encrypted
 StartupNotify=true
 Terminal=false
 X-DBUS-StartupType=
