@@ -22,10 +22,20 @@
 #include "ktp-debug.h"
 
 #include <QPixmap>
+#include <KIconLoader>
 
 #include <KTp/types.h>
 
 Q_DECLARE_METATYPE(Tp::ContactPtr)
+
+static QPixmap genericAvatar()
+{
+    static QPixmap avatar;
+    if (avatar.isNull()) {
+        avatar = KIconLoader::global()->loadIcon(QLatin1String("im-user"), KIconLoader::NoGroup);
+    }
+    return avatar;
+}
 
 ChannelContactModel::ChannelContactModel(const Tp::TextChannelPtr &channel, QObject *parent)
     : QAbstractListModel(parent)
@@ -98,8 +108,13 @@ QVariant ChannelContactModel::data(const QModelIndex &index, int role) const
         return contact->clientTypes();
     case KTp::ContactAvatarPathRole:
         return contact->avatarData().fileName;
-    case KTp::ContactAvatarPixmapRole:
-        return contact->avatarPixmap();
+    case KTp::ContactAvatarPixmapRole: {
+        const QPixmap avatar = contact->avatarPixmap();
+        if (avatar.isNull()) {
+            return genericAvatar();
+        }
+        return avatar;
+    }
     case KTp::ContactGroupsRole:
         return contact->groups();
 
