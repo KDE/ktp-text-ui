@@ -19,6 +19,7 @@ Name[ca]=Vista prèvia del punt geogràfic
 Name[ca@valencia]=Vista prèvia del punt geogràfic
 Name[cs]=Náhled na geopoint
 Name[da]=Forhåndsvisning af geopunkt
+Name[de]=Vorschau der geografischen Position
 Name[el]=Προεπισκόπηση γεωσημείου
 Name[en_GB]=Geopoint Preview
 Name[es]=Vista previa de punto geográfico
