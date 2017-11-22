@@ -53,6 +53,7 @@ Comment[ca]=Mostra l'URI geogràfic a la vista de mapa.
 Comment[ca@valencia]=Mostra l'URI geogràfic a la vista de mapa.
 Comment[cs]=Zobrazovat geo URI při pohledu na mapu.
 Comment[da]=Vis geo-URI på kortvisning.
+Comment[de]=Zeigt die geografische URI in einer Kartenansicht.
 Comment[el]=Εμφάνιση γεωγραφικού URI σε προβολή χάρτη.
 Comment[en_GB]=Show geo URI on a map view.
 Comment[es]=Mostrar un URI geográfico en un visor de mapa.
