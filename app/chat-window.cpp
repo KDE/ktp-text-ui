@@ -53,6 +53,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMouseEvent>
+#include <QScrollArea>
 
 #include <TelepathyQt/Account>
 #include <TelepathyQt/ContactCapabilities>
@@ -760,7 +761,9 @@ void ChatWindow::showSettingsDialog()
     KSettings::Dialog *dialog = new KSettings::Dialog(this);
 
     KPageWidgetItem *configPage = dialog->addModule(QLatin1String("kcm_ktp_chat_appearance"));
-    KCModuleProxy *proxy = qobject_cast<KCModuleProxy*>(configPage->widget());
+    QScrollArea *moduleScroll = qobject_cast<QScrollArea*>(configPage->widget());
+    Q_ASSERT(moduleScroll);
+    KCModuleProxy *proxy = qobject_cast<KCModuleProxy*>(moduleScroll->widget());
     Q_ASSERT(proxy);
 
     connect(proxy->realModule(), SIGNAL(reloadTheme()),
@@ -770,7 +773,9 @@ void ChatWindow::showSettingsDialog()
     dialog->addModule(QLatin1String("kcm_ktp_chat_messages"));
 
     KPageWidgetItem *otrConfigPage = dialog->addModule(QLatin1String("kcm_ktp_chat_otr"));
-    proxy = qobject_cast<KCModuleProxy*>(otrConfigPage->widget());
+    moduleScroll = qobject_cast<QScrollArea*>(otrConfigPage->widget());
+    Q_ASSERT(moduleScroll);
+    proxy = qobject_cast<KCModuleProxy*>(moduleScroll->widget());
     Q_ASSERT(proxy);
     QVariant value;
     value.setValue(m_proxyService);
