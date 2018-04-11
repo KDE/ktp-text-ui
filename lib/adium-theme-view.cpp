@@ -68,6 +68,8 @@ bool AdiumThemePage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::Na
         Q_EMIT nextConversation();
     } else if (url.fragment() == QLatin1String("x-prevConversation")) {
         Q_EMIT prevConversation();
+    } else if (url.scheme() == QLatin1String("data")) {
+        return true;
     } else {
         QDesktopServices::openUrl(url);
     }
