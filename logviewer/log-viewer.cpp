@@ -39,6 +39,7 @@
 #include <QAction>
 #include <QLineEdit>
 #include <QMenuBar>
+#include <QScrollArea>
 
 #include <KPixmapSequence>
 #include <KMessageBox>
@@ -511,13 +512,16 @@ void LogViewer::slotConfigure()
     KSettings::Dialog *dialog = new KSettings::Dialog(this);
 
     KPageWidgetItem *configPage = dialog->addModule(QLatin1String("kcm_ktp_chat_appearance"));
-    KCModuleProxy *proxy = qobject_cast<KCModuleProxy*>(configPage->widget());
-    Q_ASSERT(proxy);
+    QScrollArea *moduleScroll = qobject_cast<QScrollArea*>(configPage->widget());
+    Q_ASSERT(moduleScroll);
+    KCModuleProxy *proxy = qobject_cast<KCModuleProxy*>(moduleScroll->widget());    Q_ASSERT(proxy);
     connect(proxy->realModule(), SIGNAL(reloadTheme()),
             ui->messageView, SLOT(reloadTheme()));
 
     configPage = dialog->addModule(QLatin1String("kcm_ktp_logviewer_behavior"));
-    proxy = qobject_cast<KCModuleProxy*>(configPage->widget());
+    moduleScroll = qobject_cast<QScrollArea*>(configPage->widget());
+    Q_ASSERT(moduleScroll);
+    proxy = qobject_cast<KCModuleProxy*>(moduleScroll->widget());
     Q_ASSERT(proxy);
     connect(proxy->realModule(), SIGNAL(reloadMessages()),
             ui->messageView, SLOT(reloadTheme()));
