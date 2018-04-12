@@ -39,9 +39,9 @@ void ChannelContactModel::setTextChannel(const Tp::TextChannelPtr &channel)
     m_channel = channel;
 
     //remove existing contacts in list
-    beginRemoveRows(QModelIndex(), 0, m_contacts.size());
+    beginResetModel();
     m_contacts.clear();
-    endRemoveRows();
+    endResetModel();
 
     //add existing contacts from channel
     addContacts(channel->groupContacts());
