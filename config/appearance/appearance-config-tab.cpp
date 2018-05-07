@@ -281,7 +281,9 @@ void AppearanceConfigTab::updateVariantsList()
 {
     QHash<QString, QString> variants = ui->chatView->chatStyle()->getVariants();
     ui->variantComboBox->clear();
-    ui->variantComboBox->addItems(variants.keys());
+    QStringList names = variants.keys();
+    names.sort();
+    ui->variantComboBox->addItems(names);
     ui->variantComboBox->setCurrentIndex(ui->variantComboBox->findText(ui->chatView->variantName()));
 }
 
