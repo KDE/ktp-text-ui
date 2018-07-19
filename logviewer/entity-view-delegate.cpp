@@ -24,6 +24,7 @@
 #include <QPainter>
 #include <QApplication>
 #include <QFontDatabase>
+#include <QStyleOptionViewItem>
 
 #include <KIconLoader>
 
@@ -62,8 +63,8 @@ QSize EntityViewDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
 
 void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    QStyleOptionViewItemV4 optV4 = option;
-    initStyleOption(&optV4, index);
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
 
     const bool isSubcontact = index.parent().data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Persona;
     const bool isEntity = index.data(PersonEntityMergeModel::ItemTypeRole).toUInt() == PersonEntityMergeModel::Entity;
@@ -71,16 +72,16 @@ void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewI
     painter->save();
 
     painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
-    painter->setClipRect(optV4.rect);
+    painter->setClipRect(opt.rect);
 
     QStyle *style = QApplication::style();
-    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &optV4, painter);
+    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter);
 
     if (isSubcontact) {
-        optV4.rect.setLeft(optV4.rect.left() + 10);
+        opt.rect.setLeft(opt.rect.left() + 10);
     }
 
-    QRect iconRect = optV4.rect;
+    QRect iconRect = opt.rect;
     iconRect.setSize(QSize(m_avatarSize, m_avatarSize));
     iconRect.moveTo(QPoint(iconRect.x() + m_spacing, iconRect.y() + m_spacing));
 
@@ -113,12 +114,12 @@ void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewI
 
     painter->setFont(nameFont);
 
-    QRect userNameRect = optV4.rect;
+    QRect userNameRect = opt.rect;
     userNameRect.setX(iconRect.x() + iconRect.width() + m_spacing * 2);
     userNameRect.setY(userNameRect.y() + (userNameRect.height() / 2 - nameFontMetrics.height() / 2));
     userNameRect.setHeight(nameFontMetrics.height());
     if (isEntity) {
-        userNameRect.setWidth(qMin(nameFontMetrics.width(nameText), optV4.rect.width() - m_avatarSize - (2 * m_spacing)));
+        userNameRect.setWidth(qMin(nameFontMetrics.width(nameText), opt.rect.width() - m_avatarSize - (2 * m_spacing)));
     }
 
     QTextOption textOption;
@@ -130,8 +131,8 @@ void EntityViewDelegate::paintContact(QPainter* painter, const QStyleOptionViewI
     const Tp::AccountPtr &account = index.data(KTp::AccountRole).value<Tp::AccountPtr>();
     if (isEntity && account) {
         const QPixmap accountIcon = QIcon::fromTheme(account->iconName()).pixmap(m_avatarSize);
-        QRect accountIconRect = optV4.rect;
-        accountIconRect.adjust(optV4.rect.width() - m_avatarSize - m_spacing, 0, 0, 0);
+        QRect accountIconRect = opt.rect;
+        accountIconRect.adjust(opt.rect.width() - m_avatarSize - m_spacing, 0, 0, 0);
         style->drawItemPixmap(painter, accountIconRect, 0, accountIcon);
     }
 }
@@ -146,18 +147,18 @@ QSize EntityViewDelegate::sizeHintContact(const QStyleOptionViewItem& option, co
 
 void EntityViewDelegate::paintHeader(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    QStyleOptionViewItemV4 optV4 = option;
-    initStyleOption(&optV4, index);
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
 
     painter->save();
 
     painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
-    painter->setClipRect(optV4.rect);
+    painter->setClipRect(opt.rect);
 
     QStyle *style = QApplication::style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
 
-    QRect groupRect = optV4.rect;
+    QRect groupRect = opt.rect;
 
     //paint the background
     const QBrush bgBrush(option.palette.color(QPalette::Active, QPalette::Button).lighter(105));

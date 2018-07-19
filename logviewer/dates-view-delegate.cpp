@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QApplication>
 #include <QFontDatabase>
+#include <QStyleOptionViewItem>
 
 #include <KIconLoader>
 
@@ -64,18 +65,18 @@ void DatesViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 
 void DatesViewDelegate::paintGroup(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    QStyleOptionViewItemV4 optV4 = option;
-    initStyleOption(&optV4, index);
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
 
     painter->save();
 
     painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
-    painter->setClipRect(optV4.rect);
+    painter->setClipRect(opt.rect);
 
     QStyle *style = QApplication::style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
 
-    QRect groupRect = optV4.rect;
+    QRect groupRect = opt.rect;
 
     //paint the background
     const QBrush bgBrush(option.palette.color(QPalette::Active, QPalette::Button).lighter(105));
@@ -128,20 +129,20 @@ void DatesViewDelegate::paintGroup(QPainter* painter, const QStyleOptionViewItem
 
 void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    QStyleOptionViewItemV4 optV4 = option;
-    initStyleOption(&optV4, index);
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
 
     painter->save();
 
     painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
-    painter->setClipRect(optV4.rect);
+    painter->setClipRect(opt.rect);
 
     QStyle *style = QApplication::style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
 
     int iconSize = IconSize(KIconLoader::KIconLoader::Toolbar);
 
-    QRect itemRect = optV4.rect;
+    QRect itemRect = opt.rect;
     if (index.data(DatesModel::TypeRole).toUInt() == DatesModel::ConversationRow) {
         itemRect.setX(itemRect.x() + 20);
         itemRect.setWidth(itemRect.width() - 20);
@@ -169,7 +170,7 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
     QRect dateRect = itemRect;
     dateRect.setX(dateRect.x() + 20);
     dateRect.setY(dateRect.y() + (dateRect.height() / 2 - option.fontMetrics.height() / 2));
-    dateRect.setWidth(qMin(option.fontMetrics.width(date) + 8, optV4.rect.width() - iconSize - (2 * m_spacing)));
+    dateRect.setWidth(qMin(option.fontMetrics.width(date) + 8, opt.rect.width() - iconSize - (2 * m_spacing)));
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(option.palette.color(QPalette::Active, QPalette::HighlightedText));
@@ -183,8 +184,8 @@ void DatesViewDelegate::paintItem(QPainter* painter, const QStyleOptionViewItem&
     const Tp::AccountPtr &account = index.data(DatesModel::AccountRole).value<Tp::AccountPtr>();
     if (account) {
         const QPixmap accountIcon = QIcon::fromTheme(account->iconName()).pixmap(iconSize);
-        QRect accountIconRect = optV4.rect;
-        accountIconRect.adjust(optV4.rect.width() - iconSize - m_spacing, 0, 0, 0);
+        QRect accountIconRect = opt.rect;
+        accountIconRect.adjust(opt.rect.width() - iconSize - m_spacing, 0, 0, 0);
         style->drawItemPixmap(painter, accountIconRect, 0, accountIcon);
     }
 }

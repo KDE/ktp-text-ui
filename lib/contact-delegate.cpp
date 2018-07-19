@@ -29,6 +29,7 @@
 #include <QStyle>
 #include <QHelpEvent>
 #include <QFontDatabase>
+#include <QStyleOptionViewItem>
 
 #include <KIconLoader>
 
@@ -52,18 +53,18 @@ ContactDelegate::~ContactDelegate()
 
 void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QStyleOptionViewItemV4 optV4 = option;
-    initStyleOption(&optV4, index);
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
 
     painter->save();
 
     painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
-    painter->setClipRect(optV4.rect);
+    painter->setClipRect(opt.rect);
 
     QStyle *style = QApplication::style();
-    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &optV4, painter);
+    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter);
 
-    QRect iconRect = optV4.rect;
+    QRect iconRect = opt.rect;
     iconRect.setSize(QSize(m_avatarSize, m_avatarSize));
     iconRect.moveTo(QPoint(iconRect.x() + m_spacing, iconRect.y() + m_spacing));
 
@@ -84,11 +85,11 @@ void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     QPixmap icon = QIcon::fromTheme(index.data(KTp::ContactPresenceIconRole).toString()).pixmap(KIconLoader::SizeSmallMedium);
 
-    QRect statusIconRect = optV4.rect;
+    QRect statusIconRect = opt.rect;
 
     statusIconRect.setSize(QSize(m_presenceIconSize, m_presenceIconSize));
-    statusIconRect.moveTo(QPoint(optV4.rect.right() - (rightIconsWidth),
-                                 optV4.rect.top() + (optV4.rect.height() - m_presenceIconSize) / 2));
+    statusIconRect.moveTo(QPoint(opt.rect.right() - (rightIconsWidth),
+                                 opt.rect.top() + (opt.rect.height() - m_presenceIconSize) / 2));
 
     painter->drawPixmap(statusIconRect, icon);
 
@@ -98,10 +99,10 @@ void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         rightIconsWidth += m_clientTypeIconSize + m_spacing;
 
         QPixmap phone = QIcon::fromTheme(QLatin1String("phone")).pixmap(m_clientTypeIconSize);
-        QRect phoneIconRect = optV4.rect;
+        QRect phoneIconRect = opt.rect;
         phoneIconRect.setSize(QSize(m_clientTypeIconSize, m_clientTypeIconSize));
-        phoneIconRect.moveTo(QPoint(optV4.rect.right() - rightIconsWidth,
-                                    optV4.rect.top() + (optV4.rect.height() - m_clientTypeIconSize) / 2));
+        phoneIconRect.moveTo(QPoint(opt.rect.right() - rightIconsWidth,
+                                    opt.rect.top() + (opt.rect.height() - m_clientTypeIconSize) / 2));
         painter->drawPixmap(phoneIconRect, phone);
     }
 
@@ -117,7 +118,7 @@ void ContactDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     painter->setFont(nameFont);
 
-    QRect userNameRect = optV4.rect;
+    QRect userNameRect = opt.rect;
     userNameRect.setX(iconRect.x() + iconRect.width() + m_spacing * 2);
     userNameRect.setY(userNameRect.y() + (userNameRect.height()/2 - nameFontMetrics.height()/2));
     userNameRect.setWidth(userNameRect.width() - rightIconsWidth);
