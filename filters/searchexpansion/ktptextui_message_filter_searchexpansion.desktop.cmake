@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Web Shortcuts
 Name[ar]=اختصارات الوِبّ
-Name[ast]=Atayos web
 Name[bs]=Web prečice
 Name[ca]=Dreceres web
 Name[ca@valencia]=Dreceres web

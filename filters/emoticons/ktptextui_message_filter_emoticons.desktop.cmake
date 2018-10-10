@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Emoticons
-Name[ast]=Fustaxes
 Name[bs]=Emotikoni
 Name[ca]=Emoticones
 Name[ca@valencia]=Emoticones
@@ -49,7 +48,6 @@ Name[zh_CN]=表情
 Name[zh_TW]=表情圖示
 Encoding=UTF-8
 Comment=Show emoticons (smiley faces) inside the chat
-Comment[ast]=Amuesa fustaxes (cares que sorrín) dientro la charra
 Comment[bs]=Prikaži emotikone (izraze osjećanja znakovima) u ćaskanju
 Comment[ca]=Mostra les emoticones (cares somrients) dins del xat
 Comment[ca@valencia]=Mostra les emoticones (cares somrients) dins del xat
