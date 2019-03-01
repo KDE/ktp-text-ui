@@ -125,6 +125,7 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     } else {
         ui->splitter->setStretchFactor(indexOfMessageView, 1);
     }
+    ui->splitter->setHandleWidth(ui->gridLayout->contentsMargins().right());
 }
 
 LogViewer::~LogViewer()
