@@ -118,6 +118,14 @@ LogViewer::LogViewer(const Tp::AccountFactoryPtr &accountFactory, const Tp::Conn
     connect(ui->globalSearch, &QLineEdit::textChanged, [this](const QString &text) { if (text.isEmpty()) { slotClearGlobalSearch(); } });
     connect(ui->entityList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotShowEntityListContextMenu(QPoint)));
     connect(ui->entityList, SIGNAL(noSuchContact()), SLOT(slotNoLogsForContact()));
+
+    const int indexOfMessageView = ui->splitter->indexOf(ui->messageView);
+    if (indexOfMessageView < 0) {
+        qCCritical(KTP_LOGVIEWER) << "Unable to adjust MessageView size";
+    } else {
+        ui->splitter->setStretchFactor(indexOfMessageView, 1);
+    }
+    ui->splitter->setHandleWidth(ui->gridLayout->contentsMargins().right());
 }
 
 LogViewer::~LogViewer()
