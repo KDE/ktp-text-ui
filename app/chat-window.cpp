@@ -808,9 +808,9 @@ void ChatWindow::sendNotificationToUser(ChatWindow::NotificationType type, const
     KNotification *notification;
 
     if (type == SystemInfoMessage) {
-        notification = new KNotification(QLatin1String("telepathyInfo"), this);
+        notification = new KNotification(QLatin1String("telepathyInfo"));
     } else {
-        notification = new KNotification(QLatin1String("telepathyError"), this);
+        notification = new KNotification(QLatin1String("telepathyError"));
     }
 
     notification->setText(errorMsg);
