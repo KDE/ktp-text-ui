@@ -55,8 +55,6 @@ int main(int argc, char *argv[])
     const KDBusService dbusService(KDBusService::Multiple);
 
     QCommandLineParser parser;
-    parser.addHelpOption();
-    parser.addVersionOption();
 
     QCommandLineOption accountId(QStringLiteral("accountID"), i18n("The UID of the account to preselect"));
     QCommandLineOption contactId(QStringLiteral("contactID"), i18n("The UID of the contact to preselect"));
