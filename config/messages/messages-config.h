@@ -19,19 +19,22 @@
 #ifndef KCM_MESSAGES_H
 #define KCM_MESSAGES_H
 
-#include <ksettings/pluginpage.h>
+#include <KCModule>
 
-class MessagesConfig : public KSettings::PluginPage
+class KPluginSelector;
+
+class MessagesConfig : public KCModule
 {
 Q_OBJECT
 
 public:
-    explicit MessagesConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
+    explicit MessagesConfig(QWidget *parent = nullptr, const QVariantList &args = QVariantList());
 
-    virtual void save();
+    void save() override;
+    void defaults() override;
+    void load() override;
 private:
-    class Private;
-    Private* d;
+    KPluginSelector *m_pluginSelector;
 };
 
 #endif // KCM_MESSAGES_H

@@ -30,9 +30,10 @@
 K_PLUGIN_FACTORY(KTpMessagesConfigFactory, registerPlugin<MessagesConfig>();)
 
 MessagesConfig::MessagesConfig(QWidget* parent, const QVariantList& args)
-    : PluginPage(new KAboutData("ktp_chat_messages", i18n("Chat Messages"), "1.0"), parent, args)
+    : KCModule(parent, args)
+    , m_pluginSelector(new KPluginSelector(this))
 {
-    pluginSelector()->addPlugins(
+    m_pluginSelector->addPlugins(
         KTp::MessageFilterConfigManager::self()->allPlugins(),
         KPluginSelector::ReadConfigFile,
         i18n("Plugins"),
@@ -40,17 +41,27 @@ MessagesConfig::MessagesConfig(QWidget* parent, const QVariantList& args)
         KTp::MessageFilterConfigManager::self()->sharedConfig() //why won't this take a KConfigGroup?
     );
 
-    //Am surprised that PluginPage() doesn't do this for me
+    connect(m_pluginSelector, &KPluginSelector::changed, this, &MessagesConfig::markAsChanged);
+
     QLayout *layout = new QVBoxLayout();
-    layout->addWidget(pluginSelector());
+    layout->addWidget(m_pluginSelector);
     setLayout(layout);
 }
 
 void MessagesConfig::save()
 {
-    KSettings::PluginPage::save();
-
+    m_pluginSelector->save();
     KTp::MessageFilterConfigManager::self()->reloadConfig();
+}
+
+void MessagesConfig::defaults()
+{
+    m_pluginSelector->defaults();
+}
+
+void MessagesConfig::load()
+{
+    m_pluginSelector->load();
 }
 
 #include "messages-config.moc"
