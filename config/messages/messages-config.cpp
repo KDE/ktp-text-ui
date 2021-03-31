@@ -21,7 +21,6 @@
 
 #include <QVBoxLayout>
 
-#include <KPluginInfo>
 #include <KPluginFactory>
 #include <KPluginSelector>
 #include <KLocalizedString>
