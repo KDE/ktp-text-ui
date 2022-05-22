@@ -50,6 +50,8 @@ add_subdirectory(adiumxtra-protocol-handler)
 add_subdirectory(filters)
 add_subdirectory(logviewer)
 
+ki18n_install(po)
+
 ecm_setup_version(${KTP_TEXT_UI_VERSION} VARIABLE_PREFIX KTP_TEXT_UI
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/ktptextui_version.h")
 
