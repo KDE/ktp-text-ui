@@ -49,7 +49,6 @@ Name[x-test]=xxPluginsxx
 Name[zh_CN]=插件
 Name[zh_TW]=外掛程式
 Type=Service
-Exec=kcmshell4 kcm_ktp_message_filters
 Comment=How to deal with extra information obtained from messages
 Comment[ar]=كيفيّة التّعامل مع المعلومات الإضافيّة المحصول عليها من الرّسائل
 Comment[bs]=Kako raditi s dodatnim informacijama koje se dobijaju od poruka
