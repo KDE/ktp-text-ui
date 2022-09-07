@@ -10,7 +10,7 @@ set(KTP_MESSAGE_FILTER_FRAMEWORK_VERSION "5")
 project(ktp-text-ui VERSION ${KTP_TEXT_UI_VERSION})
 
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 find_package (KF5 REQUIRED COMPONENTS Archive Sonnet WidgetsAddons Service Emoticons
                                       KIO KCMUtils NotifyConfig Notifications I18n
