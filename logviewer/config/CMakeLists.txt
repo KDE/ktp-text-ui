@@ -15,9 +15,9 @@ target_link_libraries(kcm_ktp_logviewer_behavior
 
 install(TARGETS
         kcm_ktp_logviewer_behavior
-    DESTINATION ${PLUGIN_INSTALL_DIR}
+    DESTINATION ${KDE_INSTALL_PLUGINDIR}
 )
 install(FILES
         kcm_ktp_logviewer_behavior.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}
+    DESTINATION ${KDE_INSTALL_KSERVICES5DIR}
 )

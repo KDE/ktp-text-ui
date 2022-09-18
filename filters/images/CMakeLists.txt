@@ -11,7 +11,7 @@ target_link_libraries (ktptextui_message_filter_images
 
 # Install:
 install (TARGETS ktptextui_message_filter_images
-         DESTINATION ${PLUGIN_INSTALL_DIR}
+         DESTINATION ${KDE_INSTALL_PLUGINDIR}
 )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ktptextui_message_filter_images.desktop.cmake
@@ -19,5 +19,5 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ktptextui_message_filter_images.deskt
                @ONLY)
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/ktptextui_message_filter_images.desktop
-         DESTINATION ${SERVICES_INSTALL_DIR}
+         DESTINATION ${KDE_INSTALL_KSERVICES5DIR}
 )

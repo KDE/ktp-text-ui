@@ -14,4 +14,4 @@ target_link_libraries(ktpimagesharer
                       KTp::OTR
 )
 
-install(TARGETS ktpimagesharer ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ktpimagesharer ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

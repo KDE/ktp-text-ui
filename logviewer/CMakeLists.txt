@@ -34,6 +34,6 @@ target_link_libraries(ktp-log-viewer
             KTp::Models
             ktpchat)
 
-install(TARGETS ktp-log-viewer DESTINATION ${BIN_INSTALL_DIR})
-install(FILES org.kde.ktplogviewer.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-install(FILES log-viewer.rc DESTINATION  ${DATA_INSTALL_DIR}/ktp-log-viewer/)
+install(TARGETS ktp-log-viewer DESTINATION ${KDE_INSTALL_BINDIR})
+install(FILES org.kde.ktplogviewer.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES log-viewer.rc DESTINATION  ${KDE_INSTALL_DATADIR}/ktp-log-viewer/)

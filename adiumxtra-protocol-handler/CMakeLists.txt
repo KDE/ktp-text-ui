@@ -18,7 +18,7 @@ target_link_libraries(ktp-adiumxtra-protocol-handler
             ktpchat)
 
 
-install(TARGETS ktp-adiumxtra-protocol-handler DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS ktp-adiumxtra-protocol-handler DESTINATION ${KDE_INSTALL_LIBEXECDIR})
 
 configure_file(adiumxtra.protocol.in  ${CMAKE_CURRENT_BINARY_DIR}/adiumxtra.protocol)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/adiumxtra.protocol DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/adiumxtra.protocol DESTINATION ${KDE_INSTALL_KSERVICES5DIR})

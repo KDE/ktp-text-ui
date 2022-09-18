@@ -7,7 +7,7 @@ target_link_libraries (ktptextui_message_filter_bugzilla
 
 # Install:
 install (TARGETS ktptextui_message_filter_bugzilla
-         DESTINATION ${PLUGIN_INSTALL_DIR}
+         DESTINATION ${KDE_INSTALL_PLUGINDIR}
 )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ktptextui_message_filter_bugzilla.desktop.cmake
@@ -15,8 +15,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ktptextui_message_filter_bugzilla.des
                @ONLY)
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/ktptextui_message_filter_bugzilla.desktop
-         DESTINATION ${SERVICES_INSTALL_DIR}
+         DESTINATION ${KDE_INSTALL_KSERVICES5DIR}
 )
 
 install (FILES showBugzillaInfo.js
-         DESTINATION ${DATA_INSTALL_DIR}/ktelepathy)
+         DESTINATION ${KDE_INSTALL_DATADIR}/ktelepathy)

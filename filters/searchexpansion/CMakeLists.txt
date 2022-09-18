@@ -9,7 +9,7 @@ target_link_libraries (ktptextui_message_filter_searchexpansion
 
 # Install:
 install (TARGETS ktptextui_message_filter_searchexpansion
-         DESTINATION ${PLUGIN_INSTALL_DIR}
+         DESTINATION ${KDE_INSTALL_PLUGINDIR}
 )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ktptextui_message_filter_searchexpansion.desktop.cmake
@@ -17,6 +17,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ktptextui_message_filter_searchexpans
                @ONLY)
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/ktptextui_message_filter_searchexpansion.desktop
-         DESTINATION ${SERVICES_INSTALL_DIR}
+         DESTINATION ${KDE_INSTALL_KSERVICES5DIR}
 )
 

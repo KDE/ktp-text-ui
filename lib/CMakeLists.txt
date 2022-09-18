@@ -56,11 +56,11 @@ target_link_libraries(ktpchat
     Qt5::WebEngineWidgets
     ktpimagesharer
 )
-install(TARGETS ktpchat ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ktpchat ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 install(FILES
         ktptxtui_message_filter.desktop
         DESTINATION
-        ${SERVICETYPES_INSTALL_DIR}
+        ${KDE_INSTALL_KSERVICETYPES5DIR}
 )

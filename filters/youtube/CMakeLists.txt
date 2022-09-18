@@ -8,7 +8,7 @@ target_link_libraries (ktptextui_message_filter_youtube
 
 # Install:
 install (TARGETS ktptextui_message_filter_youtube
-         DESTINATION ${PLUGIN_INSTALL_DIR}
+         DESTINATION ${KDE_INSTALL_PLUGINDIR}
 )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ktptextui_message_filter_youtube.desktop.cmake
@@ -16,5 +16,5 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ktptextui_message_filter_youtube.desk
                @ONLY)
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/ktptextui_message_filter_youtube.desktop
-         DESTINATION ${SERVICES_INSTALL_DIR}
+         DESTINATION ${KDE_INSTALL_KSERVICES5DIR}
 )
