@@ -1,0 +1,249 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Volkan Gezer <volkangezer@gmail.com>, 2017.
+# Emir SARI <emir_sari@icloud.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2020-01-16 03:16+0100\n"
+"PO-Revision-Date: 2022-06-23 11:25+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 22.04.2\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Volkan Gezer"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "volkangezer@gmail.com"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/behavior-config.ui:17
+#, kde-format
+msgid "History"
+msgstr "Geçmiş"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/behavior-config.ui:23
+#, kde-format
+msgid "Sort messages:"
+msgstr "İletileri sırala:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, sortOldestOnTop)
+#: config/behavior-config.ui:30
+#, kde-format
+msgid "&Oldest on top"
+msgstr "&En eski yukarıda"
+
+#. i18n: ectx: property (text), widget (QRadioButton, sortNewestOnTop)
+#: config/behavior-config.ui:43
+#, kde-format
+msgid "&Newest on top"
+msgstr "En &yeni yukarıda"
+
+#: dates-model.cpp:336
+#, kde-format
+msgctxt "Number of existing conversations."
+msgid "%1 conversation"
+msgid_plural "%1 conversations"
+msgstr[0] "%1 konuşma"
+msgstr[1] "%1 konuşma"
+
+#: log-viewer.cpp:101
+#, kde-format
+msgctxt "Placeholder text in line edit for filtering contacts"
+msgid "Filter contacts..."
+msgstr "Kişileri süz..."
+
+#: log-viewer.cpp:140
+#, kde-format
+msgid "&Configure LogViewer"
+msgstr "&Günlük Görüntüleyiciyi Yapılandır"
+
+#: log-viewer.cpp:144
+#, kde-format
+msgid "Clear &account history"
+msgstr "Hesap geçmişini &temizle"
+
+#: log-viewer.cpp:148
+#, kde-format
+msgid "Clear &contact history"
+msgstr "&Kişi listesini temizle"
+
+#: log-viewer.cpp:153
+#, kde-format
+msgid "&Import Kopete Logs"
+msgstr "&Kopete günlüklerini içe al"
+
+#: log-viewer.cpp:157
+#, kde-format
+msgid "&Previous Conversation"
+msgstr "&Önceki Konuşma"
+
+#: log-viewer.cpp:163
+#, kde-format
+msgid "&Next Conversation"
+msgstr "&Sonraki Konuşma"
+
+#: log-viewer.cpp:399
+#, kde-format
+msgid "Are you sure you want to remove all logs from account %1?"
+msgstr "Tüm günlükleri %1 hesabından kaldırmak istediğinizden emin misiniz?"
+
+#: log-viewer.cpp:400
+#, kde-format
+msgid "Clear account history"
+msgstr "Hesap geçmişini temizle"
+
+#: log-viewer.cpp:423
+#, kde-format
+msgctxt "%1 is contactdisplay name"
+msgid "Are you sure you want to remove history of all conversations with %1?"
+msgstr ""
+"%1 ile tüm görüşmelerin geçmişini kaldırmak istediğinizden emin misiniz?"
+
+#: log-viewer.cpp:424 log-viewer.cpp:446
+#, kde-format
+msgid "Clear contact history"
+msgstr "Kişi geçmişini temizle"
+
+#: log-viewer.cpp:445
+#, kde-format
+msgctxt "%1 is contact display name, %2 is contact UID"
+msgid ""
+"Are you sure you want to remove history of all conversations with %1 (%2)?"
+msgstr ""
+"%1 (%2) ile tüm görüşmelerin geçmişini kaldırmak istediğinizden emin misiniz?"
+
+#: log-viewer.cpp:488
+#, kde-format
+msgid "No Kopete logs found."
+msgstr "Kopete günlükleri bulunamadı."
+
+#: log-viewer.cpp:543
+#, kde-format
+msgid "There are no logs for this contact"
+msgstr "Bu kişi için günlük kaydı yok"
+
+#. i18n: ectx: Menu (logs)
+#: log-viewer.rc:11
+#, kde-format
+msgid "L&ogs"
+msgstr "Gün&lükler"
+
+#. i18n: ectx: Menu (conversation)
+#: log-viewer.rc:17
+#, kde-format
+msgid "&Conversation"
+msgstr "&Konuşma"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, LogViewer)
+#: log-viewer.ui:14
+#, kde-format
+msgid "LogViewer"
+msgstr "Günlük Görüntüleyici"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, globalSearch)
+#: log-viewer.ui:20
+#, kde-format
+msgid "Search all logs..."
+msgstr "Tüm günlüklerde ara..."
+
+#: logs-import-dialog.cpp:44
+#, kde-format
+msgid "Import Logs"
+msgstr "Günlükleri İçe Aktar"
+
+#: logs-import-dialog.cpp:50
+#, kde-format
+msgid "Import Kopete Logs"
+msgstr "Kopete Günlüklerini İçe Aktar"
+
+#: logs-import-dialog.cpp:60
+#, kde-format
+msgid ""
+"We have found Kopete logs that seem to match some of your KDE Telepathy "
+"accounts.\n"
+"\n"
+"Do you want to import these logs from Kopete to KDE Telepathy?"
+msgstr ""
+"Kopete günlükleri, KDE Telepathy hesaplarınızdan bazılarıyla eşleşecek gibi "
+"görünüyor.\n"
+"\n"
+"Bu günlükleri Kopete'den KDE Telepathy'ye almak istiyor musunuz?"
+
+#: logs-import-dialog.cpp:140
+#, kde-format
+msgid "Done"
+msgstr "Bitti"
+
+#: main.cpp:43
+#, kde-format
+msgid "KDE IM Log Viewer"
+msgstr "KDE IM Günlük Görüntüleyicisi"
+
+#: main.cpp:45
+#, kde-format
+msgid "David Edmundson"
+msgstr "David Edmundson"
+
+#: main.cpp:45 main.cpp:46 main.cpp:47
+#, kde-format
+msgid "Developer"
+msgstr "Geliştirici"
+
+#: main.cpp:46
+#, kde-format
+msgid "Daniele E. Domenichelli"
+msgstr "Daniele E. Domenichelli"
+
+#: main.cpp:47
+#, kde-format
+msgid "Dan Vrátil"
+msgstr "Dan Vrátil"
+
+#: main.cpp:59
+#, kde-format
+msgid "The UID of the account to preselect"
+msgstr "Önceden seçilecek hesap UID'si"
+
+#: main.cpp:60
+#, kde-format
+msgid "The UID of the contact to preselect"
+msgstr "Önceden seçilecek kişinin UID'si"
+
+#: message-view.cpp:64
+#, kde-format
+msgid "Unknown or invalid contact"
+msgstr "Bilinmeyen veya geçersiz kişi"
+
+#: message-view.cpp:165
+#, kde-format
+msgid "Older conversation"
+msgstr "Daha eski konuşma"
+
+#: message-view.cpp:172
+#, kde-format
+msgid "Newer conversation"
+msgstr "Daha yeni konuşma"
+
+#: message-view.cpp:189
+#, kde-format
+msgid "There are no logs for this day"
+msgstr "Bu gün için kayıt yok"
+
+#: person-entity-merge-model.cpp:158
+#, kde-format
+msgid "Unsorted"
+msgstr "Sıralanmamış"

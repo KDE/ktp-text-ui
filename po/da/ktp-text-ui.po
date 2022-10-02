@@ -1,0 +1,352 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Martin Schlander <mschlander@opensuse.org>, 2011, 2012, 2013, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-02-17 17:01+0100\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Martin Schlander"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "mschlander@opensuse.org"
+
+#: chat-window.cpp:202
+#, kde-format
+msgid "Close"
+msgstr "Luk"
+
+#: chat-window.cpp:203
+#, kde-format
+msgid "Detach Tab"
+msgstr "Frigør faneblad"
+
+#: chat-window.cpp:204
+#, kde-format
+msgid "Move Tab Left"
+msgstr "Flyt faneblad til venstre"
+
+#: chat-window.cpp:205
+#, kde-format
+msgid "Move Tab Right"
+msgstr "Flyt faneblad til højre"
+
+#: chat-window.cpp:839
+#, kde-format
+msgid "&Next Tab"
+msgstr "&Næste faneblad"
+
+#: chat-window.cpp:843
+#, kde-format
+msgid "&Previous Tab"
+msgstr "&Forrige faneblad"
+
+#: chat-window.cpp:847
+#, kde-format
+msgid "&Audio Call"
+msgstr "&Lydopkald"
+
+#: chat-window.cpp:848
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start an audio call with this contact"
+msgstr "Start et lydopkald til denne kontakt"
+
+#: chat-window.cpp:851 chat-window.cpp:1287
+#, kde-format
+msgid "&Block Contact"
+msgstr "&Blokér kontakt"
+
+#: chat-window.cpp:853
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid ""
+"Blocking means that this contact will not see you online and you will not "
+"receive any messages from this contact"
+msgstr ""
+"Blokering betyder at denne kontakt ikke vil se dig som online og du vil ikke "
+"modtage nogen beskeder fra denne kontakt"
+
+#: chat-window.cpp:856
+#, kde-format
+msgid "&Send File"
+msgstr "&Send fil"
+
+#: chat-window.cpp:857
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Send a file to this contact"
+msgstr "Send en fil til denne kontakt"
+
+#: chat-window.cpp:860
+#, kde-format
+msgid "&Invite to Chat"
+msgstr "&Invitér til chat"
+
+#: chat-window.cpp:861
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Invite another contact to join this chat"
+msgstr "Invitér en anden kontakt til at gå med i denne chat"
+
+#: chat-window.cpp:864
+#, kde-format
+msgid "&Video Call"
+msgstr "&Videoopkald"
+
+#: chat-window.cpp:865
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start a video call with this contact"
+msgstr "Start et videoopkald til denne kontakt"
+
+#: chat-window.cpp:868
+#, kde-format
+msgid "Share My &Desktop"
+msgstr "Del mit skrivebor&d"
+
+#: chat-window.cpp:869
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start an application that allows this contact to see your desktop"
+msgstr "Start et program der lader denne kontakt se dit skrivebord"
+
+#: chat-window.cpp:872
+#, kde-format
+msgid "&Collaboratively edit a document"
+msgstr "&Redigér et dokument flere sammen"
+
+#: chat-window.cpp:875
+#, kde-format
+msgid "&Contact info"
+msgstr "&Kontaktinfo"
+
+#: chat-window.cpp:878
+#, kde-format
+msgid "&Leave room"
+msgstr "&Forlad rummet"
+
+#: chat-window.cpp:889
+#, kde-format
+msgid "Choose Spelling Language"
+msgstr "Vælg sprog til stavekontrol"
+
+#: chat-window.cpp:891
+#, kde-format
+msgctxt "Action to open the log viewer with a specified contact"
+msgid "&Previous Conversations"
+msgstr "&Tidligere samtaler"
+
+#: chat-window.cpp:894
+#, kde-format
+msgctxt "Action to open the contact list"
+msgid "Contact &List"
+msgstr "Kontakt&liste"
+
+#: chat-window.cpp:899
+#, kde-format
+msgid "Account Icon"
+msgstr "Kontoikon"
+
+#: chat-window.cpp:903
+#, kde-format
+msgid "&Clear View"
+msgstr "&Ryd visning"
+
+#: chat-window.cpp:904
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Clear all messages from current chat tab"
+msgstr "Ryd alle beskeder fra det aktuelle chatfaneblad"
+
+#: chat-window.cpp:910
+#, kde-format
+msgid "Send message"
+msgstr "Send besked"
+
+#: chat-window.cpp:941
+#, kde-format
+msgid "&OTR"
+msgstr "&OTR"
+
+#: chat-window.cpp:944 chat-window.cpp:1005
+#, kde-format
+msgid "&Start session"
+msgstr "&Start session"
+
+#: chat-window.cpp:948
+#, kde-format
+msgid "&Stop session"
+msgstr "&Stop session"
+
+#: chat-window.cpp:952
+#, kde-format
+msgid "&Authenticate contact"
+msgstr "&Godkend kontakt"
+
+#: chat-window.cpp:1003
+#, kde-format
+msgid "Not private"
+msgstr "Ikke privat"
+
+#: chat-window.cpp:1012
+#, kde-format
+msgid "Unverified"
+msgstr "Ikke-verificeret"
+
+#: chat-window.cpp:1014 chat-window.cpp:1023 chat-window.cpp:1032
+#, kde-format
+msgid "&Restart session"
+msgstr "&Genstart session"
+
+#: chat-window.cpp:1021
+#, kde-format
+msgid "Private"
+msgstr "Privat"
+
+#: chat-window.cpp:1030
+#, kde-format
+msgid "Finished"
+msgstr "Færdig"
+
+#: chat-window.cpp:1091
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Edit a plain-text document with this contact in real-time"
+msgstr "Redigér et klartekst-dokument sammen med denne kontakt i realtid"
+
+#: chat-window.cpp:1094
+#, kde-format
+msgctxt "Toolbar icon tooltip for a disabled action"
+msgid ""
+"<p>Both you and the target contact need to have the <i>kte-collaborative</i> "
+"package installed to share documents</p>"
+msgstr ""
+"<p>Både du og målkontakten skal have pakken <i>kte-collaborative</i> "
+"installeret for at kunne dele dokumenter</p>"
+
+#: chat-window.cpp:1193
+#, kde-format
+msgid "Choose files to send to %1"
+msgstr "Vælg filer der skal sendes til %1"
+
+#: chat-window.cpp:1280
+#, kde-format
+msgid "&Unblock Contact"
+msgstr "&Afblokér kontakt"
+
+#. i18n: ectx: Menu (conversation)
+#: chatwindow.rc:11
+#, kde-format
+msgid "&Conversation"
+msgstr "&Samtale"
+
+#. i18n: ectx: Menu (actions)
+#: chatwindow.rc:24
+#, kde-format
+msgid "&Actions"
+msgstr "&Handlinger"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: chatwindow.rc:41
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Hovedværktøjslinje"
+
+#. i18n: ectx: ToolBar (accountIconToolBar)
+#: chatwindow.rc:53
+#, kde-format
+msgid "Account Icon Toolbar"
+msgstr "Kontoikon-værktøjslinje"
+
+#. i18n: ectx: ToolBar (languageToolBar)
+#: chatwindow.rc:58
+#, kde-format
+msgid "Language Toolbar"
+msgstr "Sprog-værktøjslinje"
+
+#. i18n: ectx: ToolBar (emoticonsToolBar)
+#: chatwindow.rc:63
+#, kde-format
+msgid "Smiley Toolbar"
+msgstr "Smiley-værktøjslinje"
+
+#: emoticon-text-edit-action.cpp:51
+#, kde-format
+msgid "Add Smiley"
+msgstr "Tilføj smiley"
+
+#: invite-contact-dialog.cpp:55
+#, kde-format
+msgid "Search in Contacts..."
+msgstr "Søg i kontakter..."
+
+#: invite-contact-dialog.cpp:64
+#, kde-format
+msgid "Select Contacts to Invite to Group Chat"
+msgstr "Vælg kontakter der skal inviteres til gruppechat"
+
+#: telepathy-chat-ui.cpp:62
+#, kde-format
+msgid "Chat Application"
+msgstr "Chat-program"
+
+#: telepathy-chat-ui.cpp:63
+#, kde-format
+msgid "David Edmundson"
+msgstr "David Edmundson"
+
+#: telepathy-chat-ui.cpp:63 telepathy-chat-ui.cpp:64
+#, kde-format
+msgid "Developer"
+msgstr "Udvikler"
+
+#: telepathy-chat-ui.cpp:64
+#, kde-format
+msgid "Marcin Ziemiński"
+msgstr "Marcin Ziemiński"
+
+#: telepathy-chat-ui.cpp:65
+#, kde-format
+msgid "Dominik Schmidt"
+msgstr "Dominik Schmidt"
+
+#: telepathy-chat-ui.cpp:65 telepathy-chat-ui.cpp:66
+#, kde-format
+msgid "Past Developer"
+msgstr "Tidligere udvikler"
+
+#: telepathy-chat-ui.cpp:66
+#, kde-format
+msgid "Francesco Nwokeka"
+msgstr "Francesco Nwokeka"
+
+#~ msgid "Telepathy Text Ui"
+#~ msgstr "Tekst-brugerflade til Telepathy"
+
+#~ msgctxt "String prepended in window title, arg is contact's name"
+#~ msgid "Typing... %1"
+#~ msgstr "skriver... %1"
+
+#~ msgctxt "String appended in window title, arg is contact's name"
+#~ msgid "%1 has entered text"
+#~ msgstr "%1 har indtastet noget"
+
+#~ msgid "Choose a file"
+#~ msgstr "Vælg en fil"

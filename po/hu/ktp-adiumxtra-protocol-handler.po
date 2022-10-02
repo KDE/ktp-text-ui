@@ -1,0 +1,98 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2012-06-12 00:57+0200\n"
+"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Kiszel Kristóf"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "ulysses@kubuntu.org"
+
+#: adiumxtra-protocol-handler.cpp:90 adiumxtra-protocol-handler.cpp:145
+#, kde-format
+msgid "Package type not recognized or not supported"
+msgstr "A csomagtípus ismeretlen vagy nem támogatott"
+
+#: adiumxtra-protocol-handler.cpp:91 adiumxtra-protocol-handler.cpp:148
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
+#: chat-style-installer.cpp:113
+#, kde-format
+msgid "Install Chatstyle %1"
+msgstr "A(z) %1 csevegőstílus telepítése"
+
+#: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
+#, kde-format
+msgid "Install"
+msgstr "Telepítés"
+
+#: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
+#, kde-format
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: chat-style-installer.cpp:135
+#, kde-format
+msgid "Installed Chatstyle %1 successfully."
+msgstr "A(z) %1 csevegőstílus sikeresen telepítve."
+
+#: chat-style-installer.cpp:139
+#, kde-format
+msgid "Installation of Chatstyle %1 failed."
+msgstr "A(z) %1 csevegőstílus telepítése nem sikerült."
+
+#: emoticon-set-installer.cpp:98
+#, kde-format
+msgid "Install Emoticonset %1"
+msgstr "A(z) %1 hangulatjel-csomag telepítése"
+
+#: emoticon-set-installer.cpp:117
+#, kde-format
+msgid "Installed Emoticonset %1 successfully."
+msgstr "A(z) %1 hangulatjelcsomag sikeresen telepítve."
+
+#: main.cpp:34
+#, kde-format
+msgid "AdiumXtra Protocol Handler"
+msgstr "AdiumXtra protokollkezelő"
+
+#: main.cpp:36
+#, kde-format
+msgid "Dominik Schmidt"
+msgstr "Dominik Schmidt"
+
+#: main.cpp:36 main.cpp:37
+#, kde-format
+msgid "Developer"
+msgstr "Fejlesztő"
+
+#: main.cpp:37
+#, kde-format
+msgid "Daniele E. Domenichelli"
+msgstr "Daniele E. Domenichelli"
+
+#: main.cpp:44
+#, kde-format
+msgid "Adium package to install"
+msgstr "A telepítendő Adium csomag"

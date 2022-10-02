@@ -1,0 +1,344 @@
+# Translation of ktp-text-ui.po to Euskara/Basque (eu).
+# Copyright (C) YEAR 2018-2019, This file is copyright:
+# This file is distributed under the same license as the ktp-text-ui package.
+# KDE euskaratzeko proiektuaren arduraduna <xalba@euskalnet.net>.
+#
+# Translators:
+# Gontzal M. Pujana <juchuf@gmail.com>, 2018.
+# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2019, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: ktp-text-ui\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2022-09-10 13:20+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 22.08.0\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Gontzal M. Pujana"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "juchuf@gmail.com"
+
+#: chat-window.cpp:202
+#, kde-format
+msgid "Close"
+msgstr "Itxi"
+
+#: chat-window.cpp:203
+#, kde-format
+msgid "Detach Tab"
+msgstr "Bereizi fitxa"
+
+#: chat-window.cpp:204
+#, kde-format
+msgid "Move Tab Left"
+msgstr "Mugitu fitxa ezkerrera"
+
+#: chat-window.cpp:205
+#, kde-format
+msgid "Move Tab Right"
+msgstr "Mugitu fitxa eskuinera"
+
+#: chat-window.cpp:839
+#, kde-format
+msgid "&Next Tab"
+msgstr "&Hurrengo fitxa"
+
+#: chat-window.cpp:843
+#, kde-format
+msgid "&Previous Tab"
+msgstr "A&urreko fitxa"
+
+#: chat-window.cpp:847
+#, kde-format
+msgid "&Audio Call"
+msgstr "&Audio-deia"
+
+#: chat-window.cpp:848
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start an audio call with this contact"
+msgstr "Hasi audio-dei bat kontaktu honekin"
+
+#: chat-window.cpp:851 chat-window.cpp:1287
+#, kde-format
+msgid "&Block Contact"
+msgstr "Bl&okeatu kontaktua"
+
+#: chat-window.cpp:853
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid ""
+"Blocking means that this contact will not see you online and you will not "
+"receive any messages from this contact"
+msgstr ""
+"Blokeatzerakoan, kontaktu honek ezingo zaitu linean ikusi eta ez duzu "
+"mezurik jasoko kontaktu honengandik"
+
+#: chat-window.cpp:856
+#, kde-format
+msgid "&Send File"
+msgstr "&Bidali fitxategia"
+
+#: chat-window.cpp:857
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Send a file to this contact"
+msgstr "Bidali fitxategi bat kontaktu honi"
+
+#: chat-window.cpp:860
+#, kde-format
+msgid "&Invite to Chat"
+msgstr "&Gonbidatu berriketara"
+
+#: chat-window.cpp:861
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Invite another contact to join this chat"
+msgstr "Gonbidatu beste kontaktu bat berriketa honetara batzera"
+
+#: chat-window.cpp:864
+#, kde-format
+msgid "&Video Call"
+msgstr "&Bideo-deia"
+
+#: chat-window.cpp:865
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start a video call with this contact"
+msgstr "Hasi bideo-dei bat kontaktu honekin"
+
+#: chat-window.cpp:868
+#, kde-format
+msgid "Share My &Desktop"
+msgstr "Partekatu nire &mahaigaina"
+
+#: chat-window.cpp:869
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start an application that allows this contact to see your desktop"
+msgstr ""
+"Hasi kontaktu honi zure mahaigaina ikusteko aukera ematen dion aplikazio bat"
+
+#: chat-window.cpp:872
+#, kde-format
+msgid "&Collaboratively edit a document"
+msgstr "&Elkarlanean dokumentu bat editatu"
+
+#: chat-window.cpp:875
+#, kde-format
+msgid "&Contact info"
+msgstr "&Kontaktuaren info"
+
+#: chat-window.cpp:878
+#, kde-format
+msgid "&Leave room"
+msgstr "&Utzi gela"
+
+#: chat-window.cpp:889
+#, kde-format
+msgid "Choose Spelling Language"
+msgstr "Aukeratu ortografia zuzentzeko hizkuntza"
+
+#: chat-window.cpp:891
+#, kde-format
+msgctxt "Action to open the log viewer with a specified contact"
+msgid "&Previous Conversations"
+msgstr "&Aurreko elkarrizketak"
+
+#: chat-window.cpp:894
+#, kde-format
+msgctxt "Action to open the contact list"
+msgid "Contact &List"
+msgstr "Kontaktu &zerrenda"
+
+#: chat-window.cpp:899
+#, kde-format
+msgid "Account Icon"
+msgstr "Kontuaren ikonoa"
+
+#: chat-window.cpp:903
+#, kde-format
+msgid "&Clear View"
+msgstr "&Garbitu ikuspegia"
+
+#: chat-window.cpp:904
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Clear all messages from current chat tab"
+msgstr "Garbitu mezu guztiak uneko berriketa fitxatik"
+
+#: chat-window.cpp:910
+#, kde-format
+msgid "Send message"
+msgstr "Bidali mezua"
+
+#: chat-window.cpp:941
+#, kde-format
+msgid "&OTR"
+msgstr "&OTR"
+
+#: chat-window.cpp:944 chat-window.cpp:1005
+#, kde-format
+msgid "&Start session"
+msgstr "&Hasi saioa"
+
+#: chat-window.cpp:948
+#, kde-format
+msgid "&Stop session"
+msgstr "&Gelditu saioa"
+
+#: chat-window.cpp:952
+#, kde-format
+msgid "&Authenticate contact"
+msgstr "&Autentifikatu kontaktua"
+
+#: chat-window.cpp:1003
+#, kde-format
+msgid "Not private"
+msgstr "Ez da pribatua"
+
+#: chat-window.cpp:1012
+#, kde-format
+msgid "Unverified"
+msgstr "Egiaztatu gabea"
+
+#: chat-window.cpp:1014 chat-window.cpp:1023 chat-window.cpp:1032
+#, kde-format
+msgid "&Restart session"
+msgstr "&Berrabiarazi saioa"
+
+#: chat-window.cpp:1021
+#, kde-format
+msgid "Private"
+msgstr "Pribatua"
+
+#: chat-window.cpp:1030
+#, kde-format
+msgid "Finished"
+msgstr "Bukatuta"
+
+#: chat-window.cpp:1091
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Edit a plain-text document with this contact in real-time"
+msgstr ""
+"Editatu testu arrunteko dokumentu bat kontaktu honekin denbora errealean"
+
+#: chat-window.cpp:1094
+#, kde-format
+msgctxt "Toolbar icon tooltip for a disabled action"
+msgid ""
+"<p>Both you and the target contact need to have the <i>kte-collaborative</i> "
+"package installed to share documents</p>"
+msgstr ""
+"<p>Kontaktuak eta zuk <i>kte-collaborative</i> paketea instalatuta eduki "
+"behar duzue dokumentuak partekatzeko</p>"
+
+#: chat-window.cpp:1193
+#, kde-format
+msgid "Choose files to send to %1"
+msgstr "Aukeratu %1-(r)i bidali beharreko fitxategiak"
+
+#: chat-window.cpp:1280
+#, kde-format
+msgid "&Unblock Contact"
+msgstr "&Desblokeatu kontaktua"
+
+#. i18n: ectx: Menu (conversation)
+#: chatwindow.rc:11
+#, kde-format
+msgid "&Conversation"
+msgstr "&Elkarrizketa"
+
+#. i18n: ectx: Menu (actions)
+#: chatwindow.rc:24
+#, kde-format
+msgid "&Actions"
+msgstr "E&kintzak"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: chatwindow.rc:41
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Tresna-barra nagusia"
+
+#. i18n: ectx: ToolBar (accountIconToolBar)
+#: chatwindow.rc:53
+#, kde-format
+msgid "Account Icon Toolbar"
+msgstr "Kontuaren ikono tresna-barra"
+
+#. i18n: ectx: ToolBar (languageToolBar)
+#: chatwindow.rc:58
+#, kde-format
+msgid "Language Toolbar"
+msgstr "Hizkuntza tresna-barra"
+
+#. i18n: ectx: ToolBar (emoticonsToolBar)
+#: chatwindow.rc:63
+#, kde-format
+msgid "Smiley Toolbar"
+msgstr "Aurpegieren tresna-barra"
+
+#: emoticon-text-edit-action.cpp:51
+#, kde-format
+msgid "Add Smiley"
+msgstr "Gehitu aurpegiera bat"
+
+#: invite-contact-dialog.cpp:55
+#, kde-format
+msgid "Search in Contacts..."
+msgstr "Bilatu kontaktuetan..."
+
+#: invite-contact-dialog.cpp:64
+#, kde-format
+msgid "Select Contacts to Invite to Group Chat"
+msgstr "Aukeratu talde berriketara gonbidatzeko kontaktuak"
+
+#: telepathy-chat-ui.cpp:62
+#, kde-format
+msgid "Chat Application"
+msgstr "Berriketa aplikazioa"
+
+#: telepathy-chat-ui.cpp:63
+#, kde-format
+msgid "David Edmundson"
+msgstr "David Edmundson"
+
+#: telepathy-chat-ui.cpp:63 telepathy-chat-ui.cpp:64
+#, kde-format
+msgid "Developer"
+msgstr "Garatzailea"
+
+#: telepathy-chat-ui.cpp:64
+#, kde-format
+msgid "Marcin Ziemiński"
+msgstr "Marcin Ziemiński"
+
+#: telepathy-chat-ui.cpp:65
+#, kde-format
+msgid "Dominik Schmidt"
+msgstr "Dominik Schmidt"
+
+#: telepathy-chat-ui.cpp:65 telepathy-chat-ui.cpp:66
+#, kde-format
+msgid "Past Developer"
+msgstr "Iraganeko garatzailea"
+
+#: telepathy-chat-ui.cpp:66
+#, kde-format
+msgid "Francesco Nwokeka"
+msgstr "Francesco Nwokeka"

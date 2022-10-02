@@ -1,0 +1,240 @@
+# Translation of kcm_ktp_chat_appearance.po to Brazilian Portuguese
+# Copyright (C) 2011-2015 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2011, 2012, 2013, 2014, 2015.
+# Marcus Gama <marcus.gama@gmail.com>, 2011.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2012, 2015, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_ktp_chat_appearance\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2019-02-12 11:05-0200\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 18.12.1\n"
+
+#: appearance-config-tab.cpp:44
+#, kde-format
+msgid "A demo chat"
+msgstr "Uma conversa de exemplo"
+
+#: appearance-config-tab.cpp:45
+#, kde-format
+msgid "Jabber"
+msgstr "Jabber"
+
+#: appearance-config-tab.cpp:47 appearance-config-tab.cpp:196
+#: appearance-config-tab.cpp:203 appearance-config-tab.cpp:249
+#: appearance-config-tab.cpp:265
+#, kde-format
+msgctxt "Example email"
+msgid "ted@example.com"
+msgstr "konqui@exemplo.com"
+
+#: appearance-config-tab.cpp:48
+#, kde-format
+msgctxt "Example name"
+msgid "Ted"
+msgstr "Konqui"
+
+#: appearance-config-tab.cpp:181
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ok!"
+msgstr "OK!"
+
+#: appearance-config-tab.cpp:182 appearance-config-tab.cpp:189
+#: appearance-config-tab.cpp:232 appearance-config-tab.cpp:240
+#, kde-format
+msgctxt "Example email"
+msgid "larry@example.com"
+msgstr "joao@exemplo.com"
+
+#: appearance-config-tab.cpp:183 appearance-config-tab.cpp:190
+#: appearance-config-tab.cpp:233 appearance-config-tab.cpp:241
+#, kde-format
+msgctxt "Example name"
+msgid "Larry Demo"
+msgstr "Demonstração de João"
+
+#: appearance-config-tab.cpp:188
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Bye Bye"
+msgstr "Tchau"
+
+#: appearance-config-tab.cpp:195
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Have fun!"
+msgstr "Divirta-se!"
+
+#: appearance-config-tab.cpp:197 appearance-config-tab.cpp:204
+#: appearance-config-tab.cpp:210 appearance-config-tab.cpp:217
+#: appearance-config-tab.cpp:224 appearance-config-tab.cpp:250
+#: appearance-config-tab.cpp:266 appearance-config-tab.cpp:273
+#, kde-format
+msgctxt "Example name"
+msgid "Ted Example"
+msgstr "Exemplo do Konqui"
+
+#: appearance-config-tab.cpp:202
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "cya"
+msgstr "até mais"
+
+#: appearance-config-tab.cpp:209
+#, kde-format
+msgctxt "Example message"
+msgid "Ted Example waves."
+msgstr "Exemplo do Konqui acenou."
+
+#: appearance-config-tab.cpp:216
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example has left the chat."
+msgstr "Exemplo do Konqui saiu da conversa."
+
+#: appearance-config-tab.cpp:223
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example has joined the chat."
+msgstr "Exemplo do Konqui entrou na conversa."
+
+#: appearance-config-tab.cpp:231
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Hello Ted"
+msgstr "Olá Konqui"
+
+#: appearance-config-tab.cpp:239
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "What's up?"
+msgstr "O que está acontecendo?"
+
+#: appearance-config-tab.cpp:246
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid ""
+"Check out which cool adium themes work <a href=\"http://community.kde.org/"
+"KTp/Components/Chat_Window/Themes\">here</a>!"
+msgstr ""
+"Verifique <a href=\"http://community.kde.org/KTp/Components/Chat_Window/"
+"Themes\">aqui</a> quais os temas do Adium funcionam!"
+
+#: appearance-config-tab.cpp:256
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Hello"
+msgstr "Olá"
+
+#: appearance-config-tab.cpp:257
+#, kde-format
+msgctxt "Example email"
+msgid "bob@example.com"
+msgstr "bob@exemplo.com"
+
+#: appearance-config-tab.cpp:258
+#, kde-format
+msgctxt "Example name"
+msgid "Bob Example"
+msgstr "Exemplo do Bob"
+
+#: appearance-config-tab.cpp:264
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "A different example message"
+msgstr "Uma mensagem de exemplo diferente"
+
+#: appearance-config-tab.cpp:272
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example is now Away."
+msgstr "Exemplo de Konqui está agora Ausente."
+
+#: appearance-config.cpp:47
+#, kde-format
+msgctxt "@title:tab"
+msgid "Normal Chat"
+msgstr "Conversa normal"
+
+#: appearance-config.cpp:51
+#, kde-format
+msgctxt "@title:tab"
+msgid "Group Chat"
+msgstr "Conversa em grupo"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: appearance-config.ui:41
+#, kde-format
+msgid "Style"
+msgstr "Estilo"
+
+# A mensagem foi reduzida com a retirada de palavras para que a janela fique totalmente visível.
+# A retirada das palavras não compromete a compreensão.
+# (Alvarenga).
+#. i18n: ectx: property (text), widget (QLabel, styleLabel)
+#: appearance-config.ui:52
+#, kde-format
+msgid "Message Style:"
+msgstr "Estilo:"
+
+#. i18n: ectx: property (text), widget (QLabel, variantLabel)
+#: appearance-config.ui:78
+#, kde-format
+msgid "Variant:"
+msgstr "Variante:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showHeader)
+#: appearance-config.ui:113
+#, kde-format
+msgid "Show Header"
+msgstr "Mostrar o cabeçalho"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showPresenceCheckBox)
+#: appearance-config.ui:129
+#, kde-format
+msgid "Show status changes"
+msgstr "Mostrar as alterações de status"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showJoinLeaveCheckBox)
+#: appearance-config.ui:142
+#, kde-format
+msgid "Show when contacts join/leave chat"
+msgstr "Mostrar quando os contatos entram/deixam a conversa"
+
+# A mensagem foi reduzida com a retirada de palavras para que a janela fique totalmente visível.
+# A retirada das palavras não compromete a compreensão.
+# (Alvarenga).
+#. i18n: ectx: property (title), widget (QGroupBox, customFontBox)
+#: appearance-config.ui:170
+#, kde-format
+msgid "Use Custom Font Settings"
+msgstr "Usar fonte personalizada"
+
+# A mensagem foi reduzida com a retirada de palavras para que a janela fique totalmente visível.
+# A retirada das palavras não compromete a compreensão.
+# (Alvarenga).
+#. i18n: ectx: property (text), widget (QLabel, fontFamilyLabel)
+#: appearance-config.ui:184
+#, kde-format
+msgid "Select Font:"
+msgstr "Fonte:"
+
+# A mensagem foi reduzida com a retirada de palavras para que a janela fique totalmente visível.
+# A retirada das palavras não compromete a compreensão.
+# (Alvarenga).
+#. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
+#: appearance-config.ui:194
+#, kde-format
+msgid "Select Size:"
+msgstr "Tamanho:"

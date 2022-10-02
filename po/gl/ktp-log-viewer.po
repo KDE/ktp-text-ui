@@ -1,0 +1,246 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2020-01-16 03:16+0100\n"
+"PO-Revision-Date: 2015-05-28 06:44+0200\n"
+"Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
+"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Adrián Chaves Fernández"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "adrian@chaves.io"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/behavior-config.ui:17
+#, kde-format
+msgid "History"
+msgstr "Historial"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/behavior-config.ui:23
+#, kde-format
+msgid "Sort messages:"
+msgstr "Ordenar as mensaxes:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, sortOldestOnTop)
+#: config/behavior-config.ui:30
+#, kde-format
+msgid "&Oldest on top"
+msgstr "&Antigas primeiro"
+
+#. i18n: ectx: property (text), widget (QRadioButton, sortNewestOnTop)
+#: config/behavior-config.ui:43
+#, kde-format
+msgid "&Newest on top"
+msgstr "&Novas primeiro"
+
+#: dates-model.cpp:336
+#, kde-format
+msgctxt "Number of existing conversations."
+msgid "%1 conversation"
+msgid_plural "%1 conversations"
+msgstr[0] "%1 conversa"
+msgstr[1] "%1 conversas"
+
+#: log-viewer.cpp:101
+#, kde-format
+msgctxt "Placeholder text in line edit for filtering contacts"
+msgid "Filter contacts..."
+msgstr "Filtrar os contactos…"
+
+#: log-viewer.cpp:140
+#, kde-format
+msgid "&Configure LogViewer"
+msgstr "&Configurar LogViewer"
+
+#: log-viewer.cpp:144
+#, kde-format
+msgid "Clear &account history"
+msgstr "Limpar o historial da &conta"
+
+#: log-viewer.cpp:148
+#, kde-format
+msgid "Clear &contact history"
+msgstr "Limpar o historial do c&ontacto"
+
+#: log-viewer.cpp:153
+#, kde-format
+msgid "&Import Kopete Logs"
+msgstr "&Importar os historiais de Kopete"
+
+#: log-viewer.cpp:157
+#, kde-format
+msgid "&Previous Conversation"
+msgstr "Conversa &anterior"
+
+#: log-viewer.cpp:163
+#, kde-format
+msgid "&Next Conversation"
+msgstr "&Seguinte conversa"
+
+#: log-viewer.cpp:399
+#, kde-format
+msgid "Are you sure you want to remove all logs from account %1?"
+msgstr "Seguro que quere retirar todos os historiais da conta %1?"
+
+#: log-viewer.cpp:400
+#, kde-format
+msgid "Clear account history"
+msgstr "Limpar o historial da conta"
+
+#: log-viewer.cpp:423
+#, kde-format
+msgctxt "%1 is contactdisplay name"
+msgid "Are you sure you want to remove history of all conversations with %1?"
+msgstr "Seguro que quere retirar o historial de todas as conversas con %1?"
+
+#: log-viewer.cpp:424 log-viewer.cpp:446
+#, kde-format
+msgid "Clear contact history"
+msgstr "Limpar o historial do contacto"
+
+#: log-viewer.cpp:445
+#, kde-format
+msgctxt "%1 is contact display name, %2 is contact UID"
+msgid ""
+"Are you sure you want to remove history of all conversations with %1 (%2)?"
+msgstr ""
+"Seguro que quere retirar o historial de todas as conversas con %1 (%2)?"
+
+#: log-viewer.cpp:488
+#, kde-format
+msgid "No Kopete logs found."
+msgstr "Non se atopou ningún historial de Kopete."
+
+#: log-viewer.cpp:543
+#, kde-format
+msgid "There are no logs for this contact"
+msgstr "Non hai historiais con este contacto."
+
+#. i18n: ectx: Menu (logs)
+#: log-viewer.rc:11
+#, kde-format
+msgid "L&ogs"
+msgstr "&Historiais"
+
+#. i18n: ectx: Menu (conversation)
+#: log-viewer.rc:17
+#, kde-format
+msgid "&Conversation"
+msgstr "&Conversa"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, LogViewer)
+#: log-viewer.ui:14
+#, kde-format
+msgid "LogViewer"
+msgstr "LogViewer"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, globalSearch)
+#: log-viewer.ui:20
+#, kde-format
+msgid "Search all logs..."
+msgstr "Buscar en todos os historiais…"
+
+#: logs-import-dialog.cpp:44
+#, kde-format
+msgid "Import Logs"
+msgstr "Importar historiais"
+
+#: logs-import-dialog.cpp:50
+#, kde-format
+msgid "Import Kopete Logs"
+msgstr "Importar os historiais de Kopete"
+
+#: logs-import-dialog.cpp:60
+#, kde-format
+msgid ""
+"We have found Kopete logs that seem to match some of your KDE Telepathy "
+"accounts.\n"
+"\n"
+"Do you want to import these logs from Kopete to KDE Telepathy?"
+msgstr ""
+"Atopáronse historiais de Kopete que parecen corresponderse con algunhas das "
+"súas contas de KDE Telepathy.\n"
+"\n"
+"Quere importar eses historiais de Kopete a KDE Telepathy?"
+
+#: logs-import-dialog.cpp:140
+#, kde-format
+msgid "Done"
+msgstr "Feito"
+
+#: main.cpp:43
+#, kde-format
+msgid "KDE IM Log Viewer"
+msgstr "Visor do rexistro de MI de KDE"
+
+#: main.cpp:45
+#, kde-format
+msgid "David Edmundson"
+msgstr "David Edmundson"
+
+#: main.cpp:45 main.cpp:46 main.cpp:47
+#, kde-format
+msgid "Developer"
+msgstr "Desenvolvedor."
+
+#: main.cpp:46
+#, kde-format
+msgid "Daniele E. Domenichelli"
+msgstr "Daniele E. Domenichelli"
+
+#: main.cpp:47
+#, kde-format
+msgid "Dan Vrátil"
+msgstr "Dan Vrátil"
+
+#: main.cpp:59
+#, kde-format
+msgid "The UID of the account to preselect"
+msgstr "O identificador da conta para preseleccionar."
+
+#: main.cpp:60
+#, kde-format
+msgid "The UID of the contact to preselect"
+msgstr "O identificador do contacto para preseleccionar."
+
+#: message-view.cpp:64
+#, kde-format
+msgid "Unknown or invalid contact"
+msgstr "Contacto descoñecido ou incorrecto."
+
+#: message-view.cpp:165
+#, kde-format
+msgid "Older conversation"
+msgstr "Conversa anterior"
+
+#: message-view.cpp:172
+#, kde-format
+msgid "Newer conversation"
+msgstr "Conversa máis nova"
+
+#: message-view.cpp:189
+#, kde-format
+msgid "There are no logs for this day"
+msgstr "Non hai historiais deste día."
+
+#: person-entity-merge-model.cpp:158
+#, kde-format
+msgid "Unsorted"
+msgstr "Sen ordenar"

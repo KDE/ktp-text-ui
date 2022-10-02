@@ -1,0 +1,153 @@
+# Translation of kcm_ktp_chat_behavior.po to Euskara/Basque (eu).
+# Copyright (C) 2018-2019, This file is copyright:
+# This file is distributed under the same license as the ktp-text-ui package.
+# KDE euskaratzeko proiektuaren arduraduna <xalba@euskalnet.net>.
+#
+# Translators:
+# Gontzal M. Pujana <juchuf@gmail.com>, 2018.
+# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: ktp-text-ui\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2019-07-09 17:54+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 19.04.2\n"
+
+#: behavior-config.cpp:50
+#, kde-format
+msgctxt ""
+"Part of config 'show last [spin box] messages' This is the suffix to the "
+"spin box. Be sure to include leading space"
+msgid " message"
+msgid_plural " messages"
+msgstr[0] "mezua"
+msgstr[1] "mezuak"
+
+#: behavior-config.cpp:67
+#, kde-format
+msgctxt "Placeholder for contact name in completion suffix selector"
+msgid "Nickname"
+msgstr "Goitizena"
+
+#. i18n: ectx: property (title), widget (QGroupBox, newTabGroupBox)
+#: behavior-config.ui:17
+#, kde-format
+msgid "Tabs"
+msgstr "Fitxak"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: behavior-config.ui:23
+#, kde-format
+msgid "Open new conversations:"
+msgstr "Ireki elkarrizketa berriak:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioNew)
+#: behavior-config.ui:30
+#, kde-format
+msgid "As new windows"
+msgstr "Leiho berri gisa"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioZero)
+#: behavior-config.ui:40
+#, kde-format
+msgid "As tabs in the same window"
+msgstr "Leiho berean fitxa gisa"
+
+#. i18n: ectx: property (title), widget (QGroupBox, scrollbackGroupBox)
+#: behavior-config.ui:53
+#, kde-format
+msgid "Last Conversation Scrollback"
+msgstr "Azken elkarrizketan historikoan atzera"
+
+#. i18n: First part of &quot;Show last %1 messages&quot; string
+#. i18n: ectx: property (text), widget (QLabel, label_p1)
+#: behavior-config.ui:59
+#, kde-format
+msgid "Show last"
+msgstr "Erakutsi azkena"
+
+#. i18n: ectx: property (title), widget (QGroupBox, typingGroupBox)
+#: behavior-config.ui:85
+#, kde-format
+msgid "User Is Typing"
+msgstr "Erabiltzailea tekleatzen ari da"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxShowOthersTyping)
+#: behavior-config.ui:91
+#, kde-format
+msgid "Show me when others are typing"
+msgstr "Erakutsi besteak tekleatzen ari direla"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxShowMeTyping)
+#: behavior-config.ui:98
+#, kde-format
+msgid "Show others when I am typing"
+msgstr "Erakutsi besteei tekleatzen ari naizela"
+
+#. i18n: ectx: property (title), widget (QGroupBox, nicknameCompletionGroup)
+#: behavior-config.ui:108
+#, kde-format
+msgid "Nickname Completion"
+msgstr "Goitizena osatzea"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: behavior-config.ui:117
+#, kde-format
+msgid "Complete nicknames to"
+msgstr "Osatu goitizenak honetara..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: behavior-config.ui:137
+#, kde-format
+msgid "when I press Tab"
+msgstr "Tab sakatzen dudanean"
+
+#. i18n: ectx: property (title), widget (QGroupBox, kbuttongroup)
+#: behavior-config.ui:147
+#, kde-format
+msgid "Image Sharing"
+msgstr "Irudiak partekatzea"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: behavior-config.ui:156
+#, kde-format
+msgid "Image Sharing Service"
+msgstr "Irudiak partekatzeko zerbitzua"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: behavior-config.ui:179
+#, kde-format
+msgid "Works when dragging an image to the Chat Window"
+msgstr "Irudi bat berriketa leihora arrastatzean ibiltzen da"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupChatsGroup)
+#: behavior-config.ui:195
+#, kde-format
+msgid "Group Chats"
+msgstr "Talde berriketak"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dontLeaveGroupChats)
+#: behavior-config.ui:207
+#, kde-format
+msgid "Stay connected to group chat even when tab is closed"
+msgstr "Geratu talde berriketara konektatuta fitxa ixten denean ere"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: behavior-config.ui:217
+#, kde-format
+msgid "Keyboard Layouts"
+msgstr "Teklatu antolaerak"
+
+#. i18n: ectx: property (text), widget (QCheckBox, rememberTabKeyboardLayout)
+#: behavior-config.ui:223
+#, kde-format
+msgid "Remember keyboard layout for each tab"
+msgstr "Gogoratu fitxa bakoitzaren teklatu antolaera"

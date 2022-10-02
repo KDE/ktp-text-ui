@@ -1,0 +1,666 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Xosé <xosecalvo@gmail.com>, 2012.
+# Adrian Chaves Fernandez <adriyetichaves@gmail.com>, 2012, 2015, 2017.
+# Miguel Branco <mgl.branco@gmail.com>, 2013.
+# Marce Villarino <mvillarino@kde-espana.org>, 2013.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2019-03-03 13:45+0100\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Xosé Calvo"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "xosecalvo@gmail.com"
+
+#: adium-theme-view.cpp:119
+#, kde-format
+msgid ""
+"Failed to load a valid theme. Your installation is broken. Check your kde "
+"path. Will now crash."
+msgstr ""
+"Non se puido cargar un tema correcto. Esta instalación está danada. Comprobe "
+"a ruta de kde. Isto vai quebrar agora mesmo."
+
+#: adium-theme-view.cpp:210
+#, kde-format
+msgid "Missing required file Template.html - check your installation."
+msgstr ""
+"Falta o modelo de ficheiro requirido Template.html - comprobe a instalación."
+
+#: adium-theme-view.cpp:648
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Conversation began %1"
+msgstr "A conversa comezou o %1"
+
+#: adium-theme-view.cpp:652
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Joined at %1"
+msgstr "Uniuse ás %1"
+
+#: authenticationwizard.cpp:49
+#, kde-format
+msgctxt "@title"
+msgid "Authenticating contact..."
+msgstr "Autenticando o contacto…"
+
+#: authenticationwizard.cpp:100
+#, kde-format
+msgid "Waiting for <b>%1</b>..."
+msgstr "Agardando por <b>%1</b>…"
+
+#: authenticationwizard.cpp:101
+#, kde-format
+msgid "Checking if answers match..."
+msgstr "Comprobando se as respostas coinciden…"
+
+#: authenticationwizard.cpp:143
+#, kde-format
+msgctxt "@title"
+msgid "Select authentication method"
+msgstr "Escolla o método de autenticación"
+
+#: authenticationwizard.cpp:145
+#, kde-format
+msgid "Question and Answer"
+msgstr "Pregunta e resposta"
+
+#: authenticationwizard.cpp:146
+#, kde-format
+msgid "Shared Secret"
+msgstr "Segredo compartido"
+
+#: authenticationwizard.cpp:147
+#, kde-format
+msgid "Manual fingerprint verification"
+msgstr "Verificación manual da pegada dixital"
+
+#: authenticationwizard.cpp:178
+#, kde-format
+msgctxt "@title"
+msgid "Question and Answer"
+msgstr "Pregunta e resposta"
+
+#: authenticationwizard.cpp:180
+#, kde-format
+msgctxt "@info"
+msgid "Enter a question that only <b>%1</b> is able to answer:"
+msgstr "Insira unha pregunta que só saiba contestar <b>%1</b>:"
+
+#: authenticationwizard.cpp:185
+#, kde-format
+msgctxt "@info"
+msgid "Enter the answer to your question:"
+msgstr "Insira a resposta á pregunta:"
+
+#: authenticationwizard.cpp:189 authenticationwizard.cpp:223
+#, kde-format
+msgctxt "@title"
+msgid "Authentication with <b>%1</b>"
+msgstr "Autenticación con <b>%1</b>"
+
+#: authenticationwizard.cpp:190
+#, kde-format
+msgctxt "@info"
+msgid ""
+"<b>%1</b> would like to verify your authentication. Please answer the "
+"following question in the field below:"
+msgstr ""
+"<b>%1</b> quere verificar a súa autenticación. Responda a esta pregunta "
+"embaixo:"
+
+#: authenticationwizard.cpp:219
+#, kde-format
+msgctxt "@title"
+msgid "Shared Secret"
+msgstr "Segredo compartido"
+
+#: authenticationwizard.cpp:221
+#, kde-format
+msgctxt "@info"
+msgid "Enter a secret passphrase known only to you and <b>%1</b>:"
+msgstr "Insira unha frase de paso secreta que só coñezan vostede e <b>%1</b>:"
+
+#: authenticationwizard.cpp:224
+#, kde-format
+msgctxt "@info"
+msgid "Enter the secret passphrase known only to you and <b>%1</b>:"
+msgstr "Insira a frase de paso secreta que só coñecen vostede e <b>%1</b>:"
+
+#: authenticationwizard.cpp:238
+#, kde-format
+msgctxt "@title"
+msgid "Manual Verification"
+msgstr "Autenticación manual"
+
+#: authenticationwizard.cpp:244
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Contact <b>%1</b> via another secure channel and verify that the following "
+"fingerprint is correct:"
+msgstr ""
+"Contacte con <b>%1</b> mediante outra canle segura e verifique que a "
+"seguinte pegada dixital é correcta:"
+
+#: authenticationwizard.cpp:253
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have not"
+msgstr "Non verifiquei"
+
+#: authenticationwizard.cpp:254
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have"
+msgstr "Verifiquei"
+
+#: authenticationwizard.cpp:264
+#, kde-format
+msgctxt "@info:label I have..."
+msgid "verified that this is in fact the correct fingerprint for <b>%1</b>."
+msgstr "que esta é a pegada dixital de <b>%1</b>."
+
+#: authenticationwizard.cpp:380
+#, kde-format
+msgid "Authentication successful"
+msgstr "Completouse a autenticación"
+
+#: authenticationwizard.cpp:384 authenticationwizard.cpp:392
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has been completed successfully. The "
+"conversation is now secure."
+msgstr ""
+"Completouse correctamente a autenticación de <b>%1</b>. A conversa é agora "
+"mesmo segura."
+
+#: authenticationwizard.cpp:388
+#, kde-format
+msgid ""
+"<b>%1</b> has successfully authenticated you. You may want to authenticate "
+"this contact as well by asking your own question."
+msgstr ""
+"<b>%1</b> autenticouno. Poida que queira autenticar este contacto tamén "
+"facéndolle facerlle a súa propia pregunta."
+
+#: authenticationwizard.cpp:396
+#, kde-format
+msgid "Authentication failed"
+msgstr "Fallou a autenticación"
+
+#: authenticationwizard.cpp:397
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has failed. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method. Note that the conversation is now insecure."
+msgstr ""
+"Fallou a autenticación de <b>%1</b>. Para garantir que non está a falar cun "
+"impostor, probe de novo a empregar o método de verificación manual da pegada "
+"dixital. Por agora a conversa non é segura."
+
+#: authenticationwizard.cpp:419
+#, kde-format
+msgid "Authentication aborted"
+msgstr "Interrompeuse a autenticación"
+
+#: authenticationwizard.cpp:420
+#, kde-format
+msgid ""
+"<b>%1</b> has aborted the authentication process. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method."
+msgstr ""
+"<b>%1</b> interrompeu o proceso de autenticación. Para garantir que non está "
+"a falar cun impostor probe de novo a empregar o método de verificación "
+"manual da pegada dixital."
+
+#: authenticationwizard.cpp:429
+#, kde-format
+msgid ""
+"Ask <b>%1</b> a question, the answer to which is known only to you and them. "
+"If the answer does not match, you may be talking to an imposter."
+msgstr ""
+"Fágalle unha pregunta a <b>%1</b> cuxa resposta só saiban vostede e o outro. "
+"Se a resposta non coincide pode que estea a falar cun impostor."
+
+#: authenticationwizard.cpp:432
+#, kde-format
+msgid ""
+"Pick a secret known only to you and <b>%1</b>. If the secret does not match, "
+"you may be talking to an imposter. Do not send the secret through the chat "
+"window, or this authentication method could be compromised with ease."
+msgstr ""
+"Escolla un segredo que só saiban vostede e <b>%1</b>. Se os segredos non "
+"coinciden, poida que estea a falar cun impostor. Non envíe o segredo pola "
+"xanela da conversa, ou este método de autenticación poderá poñerse en perigo "
+"con facilidade."
+
+#: authenticationwizard.cpp:436
+#, kde-format
+msgid ""
+"Verify <b>%1's</b> fingerprint manually. For example via a phone call or "
+"signed (and verified) email."
+msgstr ""
+"Verifique a pegada dixital de <b>%1</b> manualmente. Por exemplo mediante "
+"unha chamada de teléfono ou mediante un correo electrónico asinado (e "
+"verificado)."
+
+#: chat-search-bar.cpp:39
+#, kde-format
+msgctxt "Next search result"
+msgid "&Next"
+msgstr "Segu&inte"
+
+#: chat-search-bar.cpp:40
+#, kde-format
+msgctxt "Previous search result"
+msgid "&Previous"
+msgstr "&Anterior"
+
+#: chat-search-bar.cpp:49
+#, kde-format
+msgid "Insert search text..."
+msgstr "Insira o texto que buscar…"
+
+#: chat-search-bar.cpp:58
+#, kde-format
+msgid "Case sensitive"
+msgstr "Diferenciar as maiúsculas das minúsculas"
+
+#: chat-widget.cpp:159
+#, kde-format
+msgid "Open chat window"
+msgstr "Abrir unha xanela de conversa"
+
+#: chat-widget.cpp:163
+#, kde-format
+msgid "Send file"
+msgstr "Enviar un ficheiro"
+
+#: chat-widget.cpp:167
+#, kde-format
+msgid "Show info..."
+msgstr "Mostrar información…"
+
+#: chat-widget.cpp:181
+#, kde-format
+msgid "Share Image"
+msgstr "Compartir unha imaxe"
+
+#: chat-widget.cpp:183 chat-widget.cpp:460
+#, kde-format
+msgid "Send File"
+msgstr "Enviar un ficheiro"
+
+#: chat-widget.cpp:201
+#, kde-format
+msgid ""
+"Your message cannot be sent because the account %1 is offline. Please try "
+"again when the account is connected again."
+msgstr ""
+"Non se pode enviar a súa mensaxe porque a conta %1 está desconectada. Vólvao "
+"intentar cando a conta estea conectada."
+
+#: chat-widget.cpp:207
+#, kde-format
+msgid "Connect %1"
+msgstr "Conectar %1"
+
+#: chat-widget.cpp:445
+#, kde-format
+msgid "Share Image via %1"
+msgstr "Compartir unha imaxe mediante %1"
+
+#: chat-widget.cpp:455
+#, kde-format
+msgid "Send Image via File Transfer"
+msgstr "Enviar unha imaxe como ficheiro"
+
+#: chat-widget.cpp:690
+#, kde-format
+msgid "Attempting to start a private OTR session with %1"
+msgstr "Intentando comezar unha sesión OTR privada con %1…"
+
+#: chat-widget.cpp:693
+#, kde-format
+msgid "Attempting to restart a private OTR session with %1"
+msgstr "Intentando reiniciar unha sesión OTR privada con %1…"
+
+#: chat-widget.cpp:713
+#, kde-format
+msgid "Terminating OTR session"
+msgstr "Terminou a sesión OTR privada."
+
+#: chat-widget.cpp:765
+#, kde-format
+msgid "The OTR session is now unverified"
+msgstr "A sesión OTR deixou de estar verificada."
+
+#: chat-widget.cpp:768
+#, kde-format
+msgid "Unverified OTR session started"
+msgstr "Comezou unha sesión OTR non verificada."
+
+#: chat-widget.cpp:776
+#, kde-format
+msgid "The OTR session is now private"
+msgstr "A sesión OTR pasou a privarse."
+
+#: chat-widget.cpp:779
+#, kde-format
+msgid "Private OTR session started"
+msgstr "Comezou unha sesión OTR privada."
+
+#: chat-widget.cpp:786
+#, kde-format
+msgid "%1 has ended the OTR session. You should do the same"
+msgstr "%1 rematou a sesión OTR. Vostede debería facer o mesmo."
+
+#: chat-widget.cpp:802
+#, kde-format
+msgid "Successfully refreshed private OTR session"
+msgstr "A sesión OTR privada actualizouse correctamente."
+
+#: chat-widget.cpp:803
+#, kde-format
+msgid "Successfully refreshed unverified OTR session"
+msgstr "A sesión OTR non verificada actualizouse correctamente."
+
+#: chat-widget.cpp:902
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is blocked"
+msgstr ""
+"Fallou a entrega da mensaxe «%1» porque o contacto remoto está bloqueado"
+
+#: chat-widget.cpp:906
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is offline"
+msgstr ""
+"Fallou a entrega da mensaxe «%1» porque o contacto remoto está desconectado"
+
+#: chat-widget.cpp:912
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is blocked"
+msgstr "Fallou a entrega dunha mensaxe porque o contacto remoto está bloqueado"
+
+#: chat-widget.cpp:915
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is offline"
+msgstr ""
+"Fallou a entrega dunha mensaxe porque o contacto remoto está desconectado"
+
+#: chat-widget.cpp:922
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is not valid"
+msgstr ""
+"Fallou a entrega da mensaxe «%1» porque o contacto remoto non é correcto"
+
+#: chat-widget.cpp:926
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is not valid"
+msgstr "Fallou a entrega dunha mensaxe porque o contacto remoto non é correcto"
+
+#: chat-widget.cpp:932
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because you do not have permission to "
+"speak in this room"
+msgstr ""
+"Fallou a entrega da mensaxe «%1» porque carece de permiso para falar nesta "
+"sala"
+
+#: chat-widget.cpp:936
+#, kde-format
+msgid ""
+"Delivery of a message failed because you do not have permission to speak in "
+"this room"
+msgstr ""
+"Fallou a entrega dunha mensaxe por carecer de permiso para falar nesta sala"
+
+#: chat-widget.cpp:942
+#, kde-format
+msgid "Delivery of the message \"%1\" failed because it was too long"
+msgstr "Fallou a entrega da mensaxe «%1» por ser longa de máis"
+
+#: chat-widget.cpp:946
+#, kde-format
+msgid "Delivery of a message failed because it was too long"
+msgstr "Fallou a entrega dunha mensaxe por ser longa de máis"
+
+#: chat-widget.cpp:952
+#, kde-format
+msgid "Delivery of the message \"%1\" failed: %2"
+msgstr "Fallou a entrega da mensaxe «%1»: %2"
+
+#: chat-widget.cpp:956
+#, kde-format
+msgid "Delivery of a message failed: %1"
+msgstr "Fallou a entrega dunha mensaxe: %1"
+
+#: chat-widget.cpp:1019
+#, kde-format
+msgid ""
+"%1 has already closed his/her private connection to you. Your message was "
+"not sent. Either end your private conversation, or restart it."
+msgstr ""
+"%1 xa pecho a conexión privada consigo. A mensaxe non se enviou. Pode ou "
+"rematar a conversa privada ou reiniciala."
+
+#: chat-widget.cpp:1060 chat-widget.cpp:1153
+#, kde-format
+msgid "%1 has left the chat"
+msgstr "%1 deixou a conversa"
+
+#: chat-widget.cpp:1099
+#, kde-format
+msgctxt "Your presence status"
+msgid "You are now marked as %1"
+msgstr "Vostede agora está marcado como %1"
+
+#: chat-widget.cpp:1103
+#, kde-format
+msgctxt "Your presence status with status message"
+msgid "You are now marked as %1 - %2"
+msgstr "Vostede agora está marcado como %1 — %2"
+
+#: chat-widget.cpp:1109
+#, kde-format
+msgctxt "User's name, with their new presence status (i.e online/away)"
+msgid "%1 is %2"
+msgstr "%1 é %2"
+
+#: chat-widget.cpp:1111
+#, kde-format
+msgctxt ""
+"User's name, with their new presence status (i.e online/away) and a "
+"sepecified presence message"
+msgid "%1 is %2 - %3"
+msgstr "%1 é %2 - %3"
+
+#: chat-widget.cpp:1139
+#, kde-format
+msgid "You are now known as %1"
+msgstr "Agora coñéceselle como %1"
+
+#: chat-widget.cpp:1147
+#, kde-format
+msgid "%1 is now known as %2"
+msgstr "A %1 coñéceselle agora como %2"
+
+#: chat-widget.cpp:1166
+#, kde-format
+msgid "%1 is now blocked."
+msgstr "%1 está agora bloqueado."
+
+#: chat-widget.cpp:1168
+#, kde-format
+msgid "%1 is now unblocked."
+msgstr "%1 está agora desbloqueado."
+
+#: chat-widget.cpp:1197
+#, kde-format
+msgid "%1 has joined the chat"
+msgstr "%1 uniuse á conversa."
+
+#: chat-widget.cpp:1238 chat-widget.cpp:1401
+#, kde-format
+msgid "Group Chat"
+msgstr "Conversa en grupo"
+
+#: chat-widget.cpp:1453
+#, kde-format
+msgid "You are now offline"
+msgstr "Agora está vostede desconectado."
+
+#: chat-widget.cpp:1534
+#, kde-format
+msgid "Uploading Image has Failed with Error: %1"
+msgstr "O envío da imaxe fallou por mor do seguinte erro: %1"
+
+#: chat-window-style.cpp:352
+#, kde-format
+msgctxt "Normal style variant menu item"
+msgid "Normal"
+msgstr "Normal"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Download"
+msgstr "Descargar"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Play"
+msgstr "Reproducir"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Save as"
+msgstr "Gardar como"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KeyGenDialog)
+#: keygendialog.ui:14
+#, kde-format
+msgid "Please Wait"
+msgstr "Agarde"
+
+#. i18n: ectx: property (text), widget (QLabel, lbText)
+#: keygendialog.ui:32
+#, kde-format
+msgid "Please wait while generating the private key"
+msgstr "Agarde mentres se xeran as chaves privadas."
+
+#. i18n: ectx: property (text), widget (QLabel, lbTime)
+#: keygendialog.ui:49
+#, kde-format
+msgid "TextLabel"
+msgstr "Etiqueta de texto"
+
+#: notify-filter.cpp:74
+#, kde-format
+msgid "%1 has sent you a message"
+msgstr "%1 envioulle unha mensaxe"
+
+#: notify-filter.cpp:87 otr-notifications.cpp:47
+#, kde-format
+msgid "View"
+msgstr "Vista"
+
+#: otr-notifications.cpp:61
+#, kde-format
+msgid "Private OTR session started with %1"
+msgstr "Comezou unha sesión OTR privada con %1"
+
+#: otr-notifications.cpp:63
+#, kde-format
+msgid "Unverified OTR session started with %1"
+msgstr "Comezou unha sesión OTR non verificada con %1"
+
+#: otr-notifications.cpp:77
+#, kde-format
+msgid "Finished OTR session with %1"
+msgstr "Rematou unha sesión OTR con %1"
+
+#: otr-notifications.cpp:89
+#, kde-format
+msgid "%1 has requested your authentication"
+msgstr "%1 solicitou a súa autenticación."
+
+#: otr-notifications.cpp:103
+#, kde-format
+msgid "Authentication with %1 completed successfully"
+msgstr "A autenticación con %1 completouse correctamente."
+
+#: otr-notifications.cpp:105 otr-notifications.cpp:132
+#, kde-format
+msgid "Authentication with %1 failed"
+msgstr "A autenticación con %1 fallou."
+
+#: otr-notifications.cpp:119
+#, kde-format
+msgid "Authentication with %1 was aborted"
+msgstr "Interrompeuse a autenticación con %1."
+
+#: proxy-service.cpp:44
+#, kde-format
+msgid "Generating the private key for %1..."
+msgstr "Xerando unha chave privada para %1…"
+
+#: proxy-service.cpp:45
+#, kde-format
+msgid "This may take some time"
+msgstr "Isto pode levar un anaco."
+
+#: proxy-service.cpp:57
+#, kde-format
+msgid "Please wait"
+msgstr "Agarde"
+
+#: proxy-service.cpp:89
+#, kde-format
+msgid "Could not generate a private key for %1"
+msgstr "Non se puido xerar unha chave privada para %1."
+
+#: proxy-service.cpp:91
+#, kde-format
+msgid "Finished generating the private key for %1"
+msgstr "Rematou a xeración da chave privada para %1."
+
+#~ msgctxt "@info"
+#~ msgid "Authentication with <b>%1</b>"
+#~ msgstr "Autenticación con <b>%1</b>"
+
+#~ msgid "You have sent a message"
+#~ msgstr "Enviou unha mensaxe"
+
+#~ msgid "Show format options"
+#~ msgstr "Mostrar as opcións de formato"

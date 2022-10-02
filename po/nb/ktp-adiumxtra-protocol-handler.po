@@ -1,0 +1,100 @@
+# Translation of ktp-adiumxtra-protocol-handler to Norwegian Bokmål
+#
+# Bjørn Steensrud <bjornst@skogkatt.homelinux.org>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2012-10-19 21:02+0200\n"
+"Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
+"Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Bjørn Steensrud"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "bjornst@skogkatt.homelinux.org"
+
+#: adiumxtra-protocol-handler.cpp:90 adiumxtra-protocol-handler.cpp:145
+#, kde-format
+msgid "Package type not recognized or not supported"
+msgstr "Pakketypen er ukjent eller ikke støttet"
+
+#: adiumxtra-protocol-handler.cpp:91 adiumxtra-protocol-handler.cpp:148
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
+#: chat-style-installer.cpp:113
+#, kde-format
+msgid "Install Chatstyle %1"
+msgstr "Installer Chatstyle %1"
+
+#: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
+#, kde-format
+msgid "Install"
+msgstr "Installer"
+
+#: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
+#, kde-format
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: chat-style-installer.cpp:135
+#, kde-format
+msgid "Installed Chatstyle %1 successfully."
+msgstr "Vellykket installert Chatstyle %1."
+
+#: chat-style-installer.cpp:139
+#, kde-format
+msgid "Installation of Chatstyle %1 failed."
+msgstr "Installering av Chatstyle %1 mislyktes,"
+
+#: emoticon-set-installer.cpp:98
+#, kde-format
+msgid "Install Emoticonset %1"
+msgstr "Installer Emoticonset %1"
+
+#: emoticon-set-installer.cpp:117
+#, kde-format
+msgid "Installed Emoticonset %1 successfully."
+msgstr "Vellykket installert Emoticonset %1."
+
+#: main.cpp:34
+#, kde-format
+msgid "AdiumXtra Protocol Handler"
+msgstr "AdiumXtra Protokollhåndterer"
+
+#: main.cpp:36
+#, kde-format
+msgid "Dominik Schmidt"
+msgstr "Dominik Schmidt"
+
+#: main.cpp:36 main.cpp:37
+#, kde-format
+msgid "Developer"
+msgstr "Utvikler"
+
+#: main.cpp:37
+#, kde-format
+msgid "Daniele E. Domenichelli"
+msgstr "Daniele E. Domenichelli"
+
+#: main.cpp:44
+#, kde-format
+msgid "Adium package to install"
+msgstr "Adium-pakke som skal installeres"

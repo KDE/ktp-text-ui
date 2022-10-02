@@ -1,0 +1,364 @@
+# Translation of ktp-text-ui.po to Ukrainian
+# Copyright (C) 2011-2015 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2011, 2012, 2013, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: ktp-text-ui\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-02-10 07:35+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Юрій Чорноіван"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "yurchor@ukr.net"
+
+#: chat-window.cpp:202
+#, kde-format
+msgid "Close"
+msgstr "Закрити"
+
+#: chat-window.cpp:203
+#, kde-format
+msgid "Detach Tab"
+msgstr "Від’єднати вкладку"
+
+#: chat-window.cpp:204
+#, kde-format
+msgid "Move Tab Left"
+msgstr "Пересунути вкладку ліворуч"
+
+#: chat-window.cpp:205
+#, kde-format
+msgid "Move Tab Right"
+msgstr "Пересунути вкладку праворуч"
+
+#: chat-window.cpp:839
+#, kde-format
+msgid "&Next Tab"
+msgstr "&Наступна вкладка"
+
+#: chat-window.cpp:843
+#, kde-format
+msgid "&Previous Tab"
+msgstr "&Попередня вкладка"
+
+#: chat-window.cpp:847
+#, kde-format
+msgid "&Audio Call"
+msgstr "&Голосовий виклик"
+
+#: chat-window.cpp:848
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start an audio call with this contact"
+msgstr "Розпочати спілкування з контактом за допомогою звукового зв’язку."
+
+#: chat-window.cpp:851 chat-window.cpp:1287
+#, kde-format
+msgid "&Block Contact"
+msgstr "&Заблокувати контакт"
+
+#: chat-window.cpp:853
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid ""
+"Blocking means that this contact will not see you online and you will not "
+"receive any messages from this contact"
+msgstr ""
+"Блокування означає, що відповідна особа не зможе дізнаватися про те, коли ви "
+"у мережі, а також те, що ви не отримуватимете повідомлень від цієї особи."
+
+#: chat-window.cpp:856
+#, kde-format
+msgid "&Send File"
+msgstr "&Надіслати файли"
+
+#: chat-window.cpp:857
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Send a file to this contact"
+msgstr "Надіслати цьому контакту файл."
+
+#: chat-window.cpp:860
+#, kde-format
+msgid "&Invite to Chat"
+msgstr "&Запросити до спілкування"
+
+#: chat-window.cpp:861
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Invite another contact to join this chat"
+msgstr "Запросити власника іншого запису контакту до цього обговорення."
+
+#: chat-window.cpp:864
+#, kde-format
+msgid "&Video Call"
+msgstr "&Відеовиклик"
+
+#: chat-window.cpp:865
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start a video call with this contact"
+msgstr "Розпочати спілкування з цим контактом за допомогою відеозв’язку."
+
+#: chat-window.cpp:868
+#, kde-format
+msgid "Share My &Desktop"
+msgstr "Оприлюднити мою с&тільницю"
+
+#: chat-window.cpp:869
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start an application that allows this contact to see your desktop"
+msgstr ""
+"Запустити програму, за допомогою якої цей контакт зможе бачити те, що "
+"відбувається на вашій стільниці."
+
+#: chat-window.cpp:872
+#, kde-format
+msgid "&Collaboratively edit a document"
+msgstr "Спі&льне редагування документа"
+
+#: chat-window.cpp:875
+#, kde-format
+msgid "&Contact info"
+msgstr "Дані &контакту"
+
+#: chat-window.cpp:878
+#, kde-format
+msgid "&Leave room"
+msgstr "Ви&йти з кімнати"
+
+#: chat-window.cpp:889
+#, kde-format
+msgid "Choose Spelling Language"
+msgstr "Виберіть мову перевірки правопису"
+
+#: chat-window.cpp:891
+#, kde-format
+msgctxt "Action to open the log viewer with a specified contact"
+msgid "&Previous Conversations"
+msgstr "&Попередні сеанси спілкування"
+
+#: chat-window.cpp:894
+#, kde-format
+msgctxt "Action to open the contact list"
+msgid "Contact &List"
+msgstr "С&писок контактів"
+
+#: chat-window.cpp:899
+#, kde-format
+msgid "Account Icon"
+msgstr "Піктограма облікового запису"
+
+#: chat-window.cpp:903
+#, kde-format
+msgid "&Clear View"
+msgstr "С&порожнити панель перегляду"
+
+#: chat-window.cpp:904
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Clear all messages from current chat tab"
+msgstr "Вилучити всі повідомлення з поточної вкладки спілкування"
+
+#: chat-window.cpp:910
+#, kde-format
+msgid "Send message"
+msgstr "Надіслати повідомлення"
+
+#: chat-window.cpp:941
+#, kde-format
+msgid "&OTR"
+msgstr "&OTR"
+
+#: chat-window.cpp:944 chat-window.cpp:1005
+#, kde-format
+msgid "&Start session"
+msgstr "&Почати сеанс"
+
+#: chat-window.cpp:948
+#, kde-format
+msgid "&Stop session"
+msgstr "З&авершити сеанс"
+
+#: chat-window.cpp:952
+#, kde-format
+msgid "&Authenticate contact"
+msgstr "&Розпізнати контакт"
+
+#: chat-window.cpp:1003
+#, kde-format
+msgid "Not private"
+msgstr "Не конфіденційний"
+
+#: chat-window.cpp:1012
+#, kde-format
+msgid "Unverified"
+msgstr "Неперевірений"
+
+#: chat-window.cpp:1014 chat-window.cpp:1023 chat-window.cpp:1032
+#, kde-format
+msgid "&Restart session"
+msgstr "П&ерезапустити сеанс"
+
+#: chat-window.cpp:1021
+#, kde-format
+msgid "Private"
+msgstr "Конфіденційний"
+
+#: chat-window.cpp:1030
+#, kde-format
+msgid "Finished"
+msgstr "Завершено"
+
+#: chat-window.cpp:1091
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Edit a plain-text document with this contact in real-time"
+msgstr ""
+"Редагувати звичайний текстовий документ з цим контактом у режимі реального "
+"часу"
+
+#: chat-window.cpp:1094
+#, kde-format
+msgctxt "Toolbar icon tooltip for a disabled action"
+msgid ""
+"<p>Both you and the target contact need to have the <i>kte-collaborative</i> "
+"package installed to share documents</p>"
+msgstr ""
+"<p>Щоб ви могли спільно редагувати документи, у вашій операційній системі та "
+"операційній системі вашого контакту має бути встановлено пакунок <i>kte-"
+"collaborative</i>.</p>"
+
+#: chat-window.cpp:1193
+#, kde-format
+msgid "Choose files to send to %1"
+msgstr "Виберіть файли, які слід надіслати %1"
+
+#: chat-window.cpp:1280
+#, kde-format
+msgid "&Unblock Contact"
+msgstr "&&Розблокувати контакт"
+
+#. i18n: ectx: Menu (conversation)
+#: chatwindow.rc:11
+#, kde-format
+msgid "&Conversation"
+msgstr "С&пілкування"
+
+#. i18n: ectx: Menu (actions)
+#: chatwindow.rc:24
+#, kde-format
+msgid "&Actions"
+msgstr "&Дії"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: chatwindow.rc:41
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Головна панель"
+
+#. i18n: ectx: ToolBar (accountIconToolBar)
+#: chatwindow.rc:53
+#, kde-format
+msgid "Account Icon Toolbar"
+msgstr "Панель піктограм облікових записів"
+
+#. i18n: ectx: ToolBar (languageToolBar)
+#: chatwindow.rc:58
+#, kde-format
+msgid "Language Toolbar"
+msgstr "Панель мов"
+
+#. i18n: ectx: ToolBar (emoticonsToolBar)
+#: chatwindow.rc:63
+#, kde-format
+msgid "Smiley Toolbar"
+msgstr "Панель емоційок"
+
+#: emoticon-text-edit-action.cpp:51
+#, kde-format
+msgid "Add Smiley"
+msgstr "Додати емоційку"
+
+#: invite-contact-dialog.cpp:55
+#, kde-format
+msgid "Search in Contacts..."
+msgstr "Шукати у контактах…"
+
+#: invite-contact-dialog.cpp:64
+#, kde-format
+msgid "Select Contacts to Invite to Group Chat"
+msgstr ""
+"Виберіть контакти, власників яких слід запросити до групового спілкування"
+
+#: telepathy-chat-ui.cpp:62
+#, kde-format
+msgid "Chat Application"
+msgstr "Програма для спілкування"
+
+#: telepathy-chat-ui.cpp:63
+#, kde-format
+msgid "David Edmundson"
+msgstr "David Edmundson"
+
+#: telepathy-chat-ui.cpp:63 telepathy-chat-ui.cpp:64
+#, kde-format
+msgid "Developer"
+msgstr "Розробник"
+
+#: telepathy-chat-ui.cpp:64
+#, kde-format
+msgid "Marcin Ziemiński"
+msgstr "Marcin Ziemiński"
+
+#: telepathy-chat-ui.cpp:65
+#, kde-format
+msgid "Dominik Schmidt"
+msgstr "Dominik Schmidt"
+
+#: telepathy-chat-ui.cpp:65 telepathy-chat-ui.cpp:66
+#, kde-format
+msgid "Past Developer"
+msgstr "Колишній розробник"
+
+#: telepathy-chat-ui.cpp:66
+#, kde-format
+msgid "Francesco Nwokeka"
+msgstr "Francesco Nwokeka"
+
+#~ msgid "Telepathy Text Ui"
+#~ msgstr "Текстовий інтерфейс Telepathy"
+
+#~ msgctxt "String prepended in window title, arg is contact's name"
+#~ msgid "Typing... %1"
+#~ msgstr "Створення повідомлення… %1"
+
+#~ msgctxt "String appended in window title, arg is contact's name"
+#~ msgid "%1 has entered text"
+#~ msgstr "%1 введено повідомлення"
+
+#~ msgid "Choose a file"
+#~ msgstr "Виберіть файл"
+
+#~ msgid "Find text"
+#~ msgstr "Знайти текст"

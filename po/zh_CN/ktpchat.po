@@ -1,0 +1,628 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2022-09-20 01:56\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/ktp-text-ui/ktpchat.pot\n"
+"X-Crowdin-File-ID: 5448\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "KDE 中国"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kde-china@kde.org"
+
+#: adium-theme-view.cpp:119
+#, kde-format
+msgid ""
+"Failed to load a valid theme. Your installation is broken. Check your kde "
+"path. Will now crash."
+msgstr "加载可用主题失败。您的安装已损坏。请检查您的 KDE 路径。现在将会崩溃。"
+
+#: adium-theme-view.cpp:210
+#, kde-format
+msgid "Missing required file Template.html - check your installation."
+msgstr "缺少需要的 Template.html - 请检查您的安装。"
+
+#: adium-theme-view.cpp:648
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Conversation began %1"
+msgstr "对话开始 %1"
+
+#: adium-theme-view.cpp:652
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Joined at %1"
+msgstr "加入了 %1"
+
+#: authenticationwizard.cpp:49
+#, kde-format
+msgctxt "@title"
+msgid "Authenticating contact..."
+msgstr "正在验证联系人..."
+
+#: authenticationwizard.cpp:100
+#, kde-format
+msgid "Waiting for <b>%1</b>..."
+msgstr "正在等待 <b>%1</b>..."
+
+#: authenticationwizard.cpp:101
+#, kde-format
+msgid "Checking if answers match..."
+msgstr "正在检查回答是否匹配..."
+
+#: authenticationwizard.cpp:143
+#, kde-format
+msgctxt "@title"
+msgid "Select authentication method"
+msgstr "选择验证方法"
+
+#: authenticationwizard.cpp:145
+#, kde-format
+msgid "Question and Answer"
+msgstr "问题与答案"
+
+#: authenticationwizard.cpp:146
+#, kde-format
+msgid "Shared Secret"
+msgstr "共享秘密"
+
+#: authenticationwizard.cpp:147
+#, kde-format
+msgid "Manual fingerprint verification"
+msgstr "手动指纹验证"
+
+#: authenticationwizard.cpp:178
+#, kde-format
+msgctxt "@title"
+msgid "Question and Answer"
+msgstr "问题与答案"
+
+#: authenticationwizard.cpp:180
+#, kde-format
+msgctxt "@info"
+msgid "Enter a question that only <b>%1</b> is able to answer:"
+msgstr "输入一个只有 <b>%1</b> 能答出的问题："
+
+#: authenticationwizard.cpp:185
+#, kde-format
+msgctxt "@info"
+msgid "Enter the answer to your question:"
+msgstr "输入问题的答案："
+
+#: authenticationwizard.cpp:189 authenticationwizard.cpp:223
+#, kde-format
+msgctxt "@title"
+msgid "Authentication with <b>%1</b>"
+msgstr "验证 <b>%1</b>"
+
+#: authenticationwizard.cpp:190
+#, kde-format
+msgctxt "@info"
+msgid ""
+"<b>%1</b> would like to verify your authentication. Please answer the "
+"following question in the field below:"
+msgstr "<b>%1</b> 需要校验您的验证请求。请在下面回答以下问题："
+
+#: authenticationwizard.cpp:219
+#, kde-format
+msgctxt "@title"
+msgid "Shared Secret"
+msgstr "共享秘密"
+
+#: authenticationwizard.cpp:221
+#, kde-format
+msgctxt "@info"
+msgid "Enter a secret passphrase known only to you and <b>%1</b>:"
+msgstr "请输入只有您和 <b>%1</b> 知道的密文："
+
+#: authenticationwizard.cpp:224
+#, kde-format
+msgctxt "@info"
+msgid "Enter the secret passphrase known only to you and <b>%1</b>:"
+msgstr "请输入只有您和 <b>%1</b> 知道的密文："
+
+#: authenticationwizard.cpp:238
+#, kde-format
+msgctxt "@title"
+msgid "Manual Verification"
+msgstr "手动验证"
+
+#: authenticationwizard.cpp:244
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Contact <b>%1</b> via another secure channel and verify that the following "
+"fingerprint is correct:"
+msgstr "请通过其他安全渠道联系 <b>%1</b> 并确认以下指纹的正确性："
+
+#: authenticationwizard.cpp:253
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have not"
+msgstr "未校验"
+
+#: authenticationwizard.cpp:254
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have"
+msgstr "已校验"
+
+#: authenticationwizard.cpp:264
+#, kde-format
+msgctxt "@info:label I have..."
+msgid "verified that this is in fact the correct fingerprint for <b>%1</b>."
+msgstr "校验此指纹是否确实属于 <b>%1</b>。"
+
+#: authenticationwizard.cpp:380
+#, kde-format
+msgid "Authentication successful"
+msgstr "验证成功"
+
+#: authenticationwizard.cpp:384 authenticationwizard.cpp:392
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has been completed successfully. The "
+"conversation is now secure."
+msgstr "和 <b>%1</b> 的验证完全成功。现在的对话连接是安全的。"
+
+#: authenticationwizard.cpp:388
+#, kde-format
+msgid ""
+"<b>%1</b> has successfully authenticated you. You may want to authenticate "
+"this contact as well by asking your own question."
+msgstr ""
+"<b>%1</b> 已经通过了您的验证。您可能想要通过询问问题让这名联系人也完成自己的"
+"验证。"
+
+#: authenticationwizard.cpp:396
+#, kde-format
+msgid "Authentication failed"
+msgstr "验证失败"
+
+#: authenticationwizard.cpp:397
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has failed. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method. Note that the conversation is now insecure."
+msgstr ""
+"和 <b>%1</b> 的验证失败。要确认对方是不是伪装的，请以手动验证指纹的方法重试。"
+"注意现在的对话连接是不安全的。"
+
+#: authenticationwizard.cpp:419
+#, kde-format
+msgid "Authentication aborted"
+msgstr "验证已中止"
+
+#: authenticationwizard.cpp:420
+#, kde-format
+msgid ""
+"<b>%1</b> has aborted the authentication process. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method."
+msgstr ""
+"<b>%1</b> 已经中止了验证过程。要确认对方是不是伪装的，请以手动验证指纹的方法"
+"重试。"
+
+#: authenticationwizard.cpp:429
+#, kde-format
+msgid ""
+"Ask <b>%1</b> a question, the answer to which is known only to you and them. "
+"If the answer does not match, you may be talking to an imposter."
+msgstr ""
+"向 <b>%1</b> 询问一个只有您们彼此知道答案的问题。如果答案不对，可能对方是伪装"
+"的。"
+
+#: authenticationwizard.cpp:432
+#, kde-format
+msgid ""
+"Pick a secret known only to you and <b>%1</b>. If the secret does not match, "
+"you may be talking to an imposter. Do not send the secret through the chat "
+"window, or this authentication method could be compromised with ease."
+msgstr ""
+"找一个只有您和 <b>%1</b> 知道的秘密。如果回答不对，可能对方是伪装的。此时请不"
+"要在聊天窗口中向对方发送任何私密消息，否则这种验证方式就名存实亡了。"
+
+#: authenticationwizard.cpp:436
+#, kde-format
+msgid ""
+"Verify <b>%1's</b> fingerprint manually. For example via a phone call or "
+"signed (and verified) email."
+msgstr "手动验证 <b>%1</b> 的指纹。比如通过电话或签名邮件这样的方式。"
+
+#: chat-search-bar.cpp:39
+#, kde-format
+msgctxt "Next search result"
+msgid "&Next"
+msgstr "下一个(&N)"
+
+#: chat-search-bar.cpp:40
+#, kde-format
+msgctxt "Previous search result"
+msgid "&Previous"
+msgstr "上一个(&P)"
+
+#: chat-search-bar.cpp:49
+#, kde-format
+msgid "Insert search text..."
+msgstr "插入搜索文本..."
+
+#: chat-search-bar.cpp:58
+#, kde-format
+msgid "Case sensitive"
+msgstr "区分大小写"
+
+#: chat-widget.cpp:159
+#, kde-format
+msgid "Open chat window"
+msgstr "打开聊天窗口"
+
+#: chat-widget.cpp:163
+#, kde-format
+msgid "Send file"
+msgstr "发送文件"
+
+#: chat-widget.cpp:167
+#, kde-format
+msgid "Show info..."
+msgstr "显示信息..."
+
+#: chat-widget.cpp:181
+#, kde-format
+msgid "Share Image"
+msgstr "共享图像"
+
+#: chat-widget.cpp:183 chat-widget.cpp:460
+#, kde-format
+msgid "Send File"
+msgstr "发送文件"
+
+#: chat-widget.cpp:201
+#, kde-format
+msgid ""
+"Your message cannot be sent because the account %1 is offline. Please try "
+"again when the account is connected again."
+msgstr "您的消息无法发送因为账户“%1”已离线。请在对方账号连接后重试。"
+
+#: chat-widget.cpp:207
+#, kde-format
+msgid "Connect %1"
+msgstr "连接 %1"
+
+#: chat-widget.cpp:445
+#, kde-format
+msgid "Share Image via %1"
+msgstr "通过 %1 共享图像"
+
+#: chat-widget.cpp:455
+#, kde-format
+msgid "Send Image via File Transfer"
+msgstr "通过文件传输发送图像"
+
+#: chat-widget.cpp:690
+#, kde-format
+msgid "Attempting to start a private OTR session with %1"
+msgstr "正在尝试打开和 %1 的私密非公开会话"
+
+#: chat-widget.cpp:693
+#, kde-format
+msgid "Attempting to restart a private OTR session with %1"
+msgstr "正在尝试重启和 %1 的私密非公开会话"
+
+#: chat-widget.cpp:713
+#, kde-format
+msgid "Terminating OTR session"
+msgstr "正在终止非公开会话"
+
+#: chat-widget.cpp:765
+#, kde-format
+msgid "The OTR session is now unverified"
+msgstr "非公开会话现在为未验证"
+
+#: chat-widget.cpp:768
+#, kde-format
+msgid "Unverified OTR session started"
+msgstr "未确认的非公开会话已启动。"
+
+#: chat-widget.cpp:776
+#, kde-format
+msgid "The OTR session is now private"
+msgstr "非公开会话现在已私密化"
+
+#: chat-widget.cpp:779
+#, kde-format
+msgid "Private OTR session started"
+msgstr "私密的非公开会话已启动。"
+
+#: chat-widget.cpp:786
+#, kde-format
+msgid "%1 has ended the OTR session. You should do the same"
+msgstr "%1 已结束了非公开会话。您也应该照此办理"
+
+#: chat-widget.cpp:802
+#, kde-format
+msgid "Successfully refreshed private OTR session"
+msgstr "成功刷新了私人非公开会话"
+
+#: chat-widget.cpp:803
+#, kde-format
+msgid "Successfully refreshed unverified OTR session"
+msgstr "成功刷新了未确认的非公开会话"
+
+#: chat-widget.cpp:902
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is blocked"
+msgstr "因联系人被屏蔽发送消息“%1”失败"
+
+#: chat-widget.cpp:906
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is offline"
+msgstr "因联系人离线发送消息“%1”失败"
+
+#: chat-widget.cpp:912
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is blocked"
+msgstr "因联系人被屏蔽发送消息失败"
+
+#: chat-widget.cpp:915
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is offline"
+msgstr "因联系人离线发送消息失败"
+
+#: chat-widget.cpp:922
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is not valid"
+msgstr "因联系人无效发送消息“%1”失败"
+
+#: chat-widget.cpp:926
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is not valid"
+msgstr "因联系人无效发送消息失败"
+
+#: chat-widget.cpp:932
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because you do not have permission to "
+"speak in this room"
+msgstr "因您无权在此聊天室发言消息“%1”发送失败"
+
+#: chat-widget.cpp:936
+#, kde-format
+msgid ""
+"Delivery of a message failed because you do not have permission to speak in "
+"this room"
+msgstr "因您无权在此聊天室发言消息发送失败"
+
+#: chat-widget.cpp:942
+#, kde-format
+msgid "Delivery of the message \"%1\" failed because it was too long"
+msgstr "因消息过长发送“%1”消息失败"
+
+#: chat-widget.cpp:946
+#, kde-format
+msgid "Delivery of a message failed because it was too long"
+msgstr "因消息过长发送失败"
+
+#: chat-widget.cpp:952
+#, kde-format
+msgid "Delivery of the message \"%1\" failed: %2"
+msgstr "发送消息“%1”失败：%2"
+
+#: chat-widget.cpp:956
+#, kde-format
+msgid "Delivery of a message failed: %1"
+msgstr "发送消息失败：%1"
+
+#: chat-widget.cpp:1019
+#, kde-format
+msgid ""
+"%1 has already closed his/her private connection to you. Your message was "
+"not sent. Either end your private conversation, or restart it."
+msgstr ""
+"%1 已关闭了与您之间的私密连接，因此您的消息未能发送。请终止您的私密连接或重新"
+"启动它。"
+
+#: chat-widget.cpp:1060 chat-widget.cpp:1153
+#, kde-format
+msgid "%1 has left the chat"
+msgstr "%1 离开了聊天"
+
+#: chat-widget.cpp:1099
+#, kde-format
+msgctxt "Your presence status"
+msgid "You are now marked as %1"
+msgstr "您已经标为 %1"
+
+#: chat-widget.cpp:1103
+#, kde-format
+msgctxt "Your presence status with status message"
+msgid "You are now marked as %1 - %2"
+msgstr "您已经标为 %1 - %2"
+
+#: chat-widget.cpp:1109
+#, kde-format
+msgctxt "User's name, with their new presence status (i.e online/away)"
+msgid "%1 is %2"
+msgstr "%1 现在是 %2"
+
+#: chat-widget.cpp:1111
+#, kde-format
+msgctxt ""
+"User's name, with their new presence status (i.e online/away) and a "
+"sepecified presence message"
+msgid "%1 is %2 - %3"
+msgstr "%1 现在是 %2 - %3"
+
+#: chat-widget.cpp:1139
+#, kde-format
+msgid "You are now known as %1"
+msgstr "您现在的名字是 %1"
+
+#: chat-widget.cpp:1147
+#, kde-format
+msgid "%1 is now known as %2"
+msgstr "%1 现在的名字是 %2"
+
+#: chat-widget.cpp:1166
+#, kde-format
+msgid "%1 is now blocked."
+msgstr "%1 已被屏蔽。"
+
+#: chat-widget.cpp:1168
+#, kde-format
+msgid "%1 is now unblocked."
+msgstr "%1 已取消屏蔽。"
+
+#: chat-widget.cpp:1197
+#, kde-format
+msgid "%1 has joined the chat"
+msgstr "%1 加入了聊天"
+
+#: chat-widget.cpp:1238 chat-widget.cpp:1401
+#, kde-format
+msgid "Group Chat"
+msgstr "群聊"
+
+#: chat-widget.cpp:1453
+#, kde-format
+msgid "You are now offline"
+msgstr "您已经离线"
+
+#: chat-widget.cpp:1534
+#, kde-format
+msgid "Uploading Image has Failed with Error: %1"
+msgstr "上传图片失败因错误失败：%1"
+
+#: chat-window-style.cpp:352
+#, kde-format
+msgctxt "Normal style variant menu item"
+msgid "Normal"
+msgstr "普通"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Download"
+msgstr "下载"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Cancel"
+msgstr "取消"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Play"
+msgstr "播放"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Save as"
+msgstr "另存为"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KeyGenDialog)
+#: keygendialog.ui:14
+#, kde-format
+msgid "Please Wait"
+msgstr "请稍候"
+
+#. i18n: ectx: property (text), widget (QLabel, lbText)
+#: keygendialog.ui:32
+#, kde-format
+msgid "Please wait while generating the private key"
+msgstr "正在生成私有密钥，请稍候"
+
+#. i18n: ectx: property (text), widget (QLabel, lbTime)
+#: keygendialog.ui:49
+#, kde-format
+msgid "TextLabel"
+msgstr "文本标签"
+
+#: notify-filter.cpp:74
+#, kde-format
+msgid "%1 has sent you a message"
+msgstr "%1 向您发送了消息"
+
+#: notify-filter.cpp:87 otr-notifications.cpp:47
+#, kde-format
+msgid "View"
+msgstr "查看"
+
+#: otr-notifications.cpp:61
+#, kde-format
+msgid "Private OTR session started with %1"
+msgstr "与 %1 私密非公开会话已启动。"
+
+#: otr-notifications.cpp:63
+#, kde-format
+msgid "Unverified OTR session started with %1"
+msgstr "与 %1 的未确认的非公开会话已启动。"
+
+#: otr-notifications.cpp:77
+#, kde-format
+msgid "Finished OTR session with %1"
+msgstr "结束与 %1 的非公开会话"
+
+#: otr-notifications.cpp:89
+#, kde-format
+msgid "%1 has requested your authentication"
+msgstr "%1 请求您的认证"
+
+#: otr-notifications.cpp:103
+#, kde-format
+msgid "Authentication with %1 completed successfully"
+msgstr "与 %1 的验证完全成功"
+
+#: otr-notifications.cpp:105 otr-notifications.cpp:132
+#, kde-format
+msgid "Authentication with %1 failed"
+msgstr "与 %1 的验证失败"
+
+#: otr-notifications.cpp:119
+#, kde-format
+msgid "Authentication with %1 was aborted"
+msgstr "与 %1 的验证已中止"
+
+#: proxy-service.cpp:44
+#, kde-format
+msgid "Generating the private key for %1..."
+msgstr "正在为 %1 生成私有密钥..."
+
+#: proxy-service.cpp:45
+#, kde-format
+msgid "This may take some time"
+msgstr "可能需要一点时间"
+
+#: proxy-service.cpp:57
+#, kde-format
+msgid "Please wait"
+msgstr "请稍候"
+
+#: proxy-service.cpp:89
+#, kde-format
+msgid "Could not generate a private key for %1"
+msgstr "无法生成 %1 的私钥"
+
+#: proxy-service.cpp:91
+#, kde-format
+msgid "Finished generating the private key for %1"
+msgstr "生成 %1 的私钥已完成"

@@ -1,0 +1,663 @@
+# Translation of ktpchat.po to Euskara/Basque (eu).
+# Copyright (C) 2018-2019, This file is copyright:
+# This file is distributed under the same license as the ktp-text-ui package.
+# KDE euskaratzeko proiektuaren arduraduna <xalba@euskalnet.net>.
+#
+# Translators:
+# Gontzal M. Pujana <juchuf@gmail.com>, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: ktp-text-ui\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2019-07-16 00:20+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 19.04.3\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Gontzal M. Pujana"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "juchuf@gmail.com"
+
+#: adium-theme-view.cpp:119
+#, kde-format
+msgid ""
+"Failed to load a valid theme. Your installation is broken. Check your kde "
+"path. Will now crash."
+msgstr ""
+"Baliozko gai bat kargatzeak huts egin du. Zure instalazioa apurtuta dago. "
+"Egiaztatu zure kde bide-izena. Orain kraskatu egingo da."
+
+#: adium-theme-view.cpp:210
+#, kde-format
+msgid "Missing required file Template.html - check your installation."
+msgstr ""
+"Template.html beharrezko fitxategia falta da - egiaztatu zure instalazioa."
+
+#: adium-theme-view.cpp:648
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Conversation began %1"
+msgstr "Elkarrizketa %1-(e)tan hasi da"
+
+#: adium-theme-view.cpp:652
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Joined at %1"
+msgstr "%1-(e)tan sartu da"
+
+#: authenticationwizard.cpp:49
+#, kde-format
+msgctxt "@title"
+msgid "Authenticating contact..."
+msgstr "Kontaktua autentifikatzen..."
+
+#: authenticationwizard.cpp:100
+#, kde-format
+msgid "Waiting for <b>%1</b>..."
+msgstr " <b>%1</b> itxaroten..."
+
+#: authenticationwizard.cpp:101
+#, kde-format
+msgid "Checking if answers match..."
+msgstr "Erantzunak bat etortzen diren ikusten..."
+
+#: authenticationwizard.cpp:143
+#, kde-format
+msgctxt "@title"
+msgid "Select authentication method"
+msgstr "Aukeratu autentifikazio metodoa"
+
+#: authenticationwizard.cpp:145
+#, kde-format
+msgid "Question and Answer"
+msgstr "Galdera eta erantzuna"
+
+#: authenticationwizard.cpp:146
+#, kde-format
+msgid "Shared Secret"
+msgstr "Partekatutako sekretua"
+
+#: authenticationwizard.cpp:147
+#, kde-format
+msgid "Manual fingerprint verification"
+msgstr "Eskuzko hatz-marka egiaztapena"
+
+#: authenticationwizard.cpp:178
+#, kde-format
+msgctxt "@title"
+msgid "Question and Answer"
+msgstr "Galdera eta erantzuna"
+
+#: authenticationwizard.cpp:180
+#, kde-format
+msgctxt "@info"
+msgid "Enter a question that only <b>%1</b> is able to answer:"
+msgstr "Sartu bakarrik <b>%1</b> erantzun dezakeen galdera bat:"
+
+#: authenticationwizard.cpp:185
+#, kde-format
+msgctxt "@info"
+msgid "Enter the answer to your question:"
+msgstr "Sartu zure galderaren erantzuna:"
+
+#: authenticationwizard.cpp:189 authenticationwizard.cpp:223
+#, kde-format
+msgctxt "@title"
+msgid "Authentication with <b>%1</b>"
+msgstr "<b>%1</b>-(r)ekin autentifikazioa"
+
+#: authenticationwizard.cpp:190
+#, kde-format
+msgctxt "@info"
+msgid ""
+"<b>%1</b> would like to verify your authentication. Please answer the "
+"following question in the field below:"
+msgstr ""
+"<b>%1</b> zure autentifikazioa egiaztatu nahi du. Mesedez erantzun hurrengo "
+"galdera azpiko eremuan:"
+
+#: authenticationwizard.cpp:219
+#, kde-format
+msgctxt "@title"
+msgid "Shared Secret"
+msgstr "Partekatutako sekretua"
+
+#: authenticationwizard.cpp:221
+#, kde-format
+msgctxt "@info"
+msgid "Enter a secret passphrase known only to you and <b>%1</b>:"
+msgstr ""
+"Sartu zuk eta <b>%1</b>-(e)k bakarrik ezagutzen duzuen pasahitz sekretu bat:"
+
+#: authenticationwizard.cpp:224
+#, kde-format
+msgctxt "@info"
+msgid "Enter the secret passphrase known only to you and <b>%1</b>:"
+msgstr ""
+"Sartu zuk eta <b>%1</b>-(e)k bakarrik ezagutzen duzuen pasahitz sekretua:"
+
+#: authenticationwizard.cpp:238
+#, kde-format
+msgctxt "@title"
+msgid "Manual Verification"
+msgstr "Eskuzko egiaztapena"
+
+#: authenticationwizard.cpp:244
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Contact <b>%1</b> via another secure channel and verify that the following "
+"fingerprint is correct:"
+msgstr ""
+"Kontaktatu <b>%1</b> beste kanal seguru baten bidez eta egiaztatuhurrengo "
+"hatz-marka zuzena dela:"
+
+#: authenticationwizard.cpp:253
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have not"
+msgstr "Ez dut egiaztatu"
+
+#: authenticationwizard.cpp:254
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have"
+msgstr "Egiaztatu dut"
+
+#: authenticationwizard.cpp:264
+#, kde-format
+msgctxt "@info:label I have..."
+msgid "verified that this is in fact the correct fingerprint for <b>%1</b>."
+msgstr "hurrengo hatz-marka zuzena dela <b>%1</b>-(r)entzat."
+
+#: authenticationwizard.cpp:380
+#, kde-format
+msgid "Authentication successful"
+msgstr "Autentifikazio arrakastatsua"
+
+#: authenticationwizard.cpp:384 authenticationwizard.cpp:392
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has been completed successfully. The "
+"conversation is now secure."
+msgstr ""
+"Autentifikazioa <b>%1</b>-(r)ekin ondo bukatu da. Elkarrizketa orain segurua "
+"da."
+
+#: authenticationwizard.cpp:388
+#, kde-format
+msgid ""
+"<b>%1</b> has successfully authenticated you. You may want to authenticate "
+"this contact as well by asking your own question."
+msgstr ""
+"<b>%1</b> ondo autentifikatu zaitu. Kontaktu hau autentifikatu dezakezu zuk "
+"zeuk galdera bat eginez."
+
+#: authenticationwizard.cpp:396
+#, kde-format
+msgid "Authentication failed"
+msgstr "Autentifikazioak huts egin du"
+
+#: authenticationwizard.cpp:397
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has failed. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method. Note that the conversation is now insecure."
+msgstr ""
+"Autentifikazioak <b>%1</b>-(r)ekin huts egin du. Iruzurti batekin hitz "
+"egiten ez zaudela ziur egoteko, saiatu berriro eskuzko hatz-marka egiaztapen "
+"metodoa erabiliz. Kontuan hartu elkarrizketa hau ez dela segurua."
+
+#: authenticationwizard.cpp:419
+#, kde-format
+msgid "Authentication aborted"
+msgstr "Autentifikazioa bertan behera utzi da"
+
+#: authenticationwizard.cpp:420
+#, kde-format
+msgid ""
+"<b>%1</b> has aborted the authentication process. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method."
+msgstr ""
+"<b>%1</b> autentifikazio prozesua bertan behera utzi du. Iruzurti batekin "
+"hitz egiten ari ez zarela ziur egoteko, saiatu berriro eskuzko hatz-marka "
+"egiaztapen metodoa erabiliz."
+
+#: authenticationwizard.cpp:429
+#, kde-format
+msgid ""
+"Ask <b>%1</b> a question, the answer to which is known only to you and them. "
+"If the answer does not match, you may be talking to an imposter."
+msgstr ""
+"Galdetu <b>%1</b>-(r)i galdera bat, zuk eta berak bakarrik dakizuen "
+"erantzuna duena. Erantzunak ez badu bat egiten, iruzurti batekin hitz egiten "
+"egon zaitezke."
+
+#: authenticationwizard.cpp:432
+#, kde-format
+msgid ""
+"Pick a secret known only to you and <b>%1</b>. If the secret does not match, "
+"you may be talking to an imposter. Do not send the secret through the chat "
+"window, or this authentication method could be compromised with ease."
+msgstr ""
+"Aukeratu zuk eta <b>%1</b>-(e)k bakarrik ezagutzen duzuen sekretu bat. "
+"Sekretua bat ez badator, iruzurti batekin hitz egiten egon zaitezke. Ez "
+"bidali sekretua txat leihotik, edo autentifikazio metodo hau arriskuan jarri "
+"daiteke."
+
+#: authenticationwizard.cpp:436
+#, kde-format
+msgid ""
+"Verify <b>%1's</b> fingerprint manually. For example via a phone call or "
+"signed (and verified) email."
+msgstr ""
+"Egiaztatu<b>%1-(r)en</b> hatz-marka eskuz. Adibidez telefono dei baten bidez "
+"edo sinatutako (eta egiaztatutako) email baten bidez."
+
+#: chat-search-bar.cpp:39
+#, kde-format
+msgctxt "Next search result"
+msgid "&Next"
+msgstr "&Hurrengoa"
+
+#: chat-search-bar.cpp:40
+#, kde-format
+msgctxt "Previous search result"
+msgid "&Previous"
+msgstr "&Aurrekoa"
+
+#: chat-search-bar.cpp:49
+#, kde-format
+msgid "Insert search text..."
+msgstr "Sartu bilaketa testua..."
+
+#: chat-search-bar.cpp:58
+#, kde-format
+msgid "Case sensitive"
+msgstr "Maiuskulak eta minuskulak bereizita"
+
+#: chat-widget.cpp:159
+#, kde-format
+msgid "Open chat window"
+msgstr "Ireki txat leihoa"
+
+#: chat-widget.cpp:163
+#, kde-format
+msgid "Send file"
+msgstr "Bidali fitxategia"
+
+#: chat-widget.cpp:167
+#, kde-format
+msgid "Show info..."
+msgstr "Erakutsi info..."
+
+#: chat-widget.cpp:181
+#, kde-format
+msgid "Share Image"
+msgstr "Partekatu irudia"
+
+#: chat-widget.cpp:183 chat-widget.cpp:460
+#, kde-format
+msgid "Send File"
+msgstr "Bidali fitxategia"
+
+#: chat-widget.cpp:201
+#, kde-format
+msgid ""
+"Your message cannot be sent because the account %1 is offline. Please try "
+"again when the account is connected again."
+msgstr ""
+"Zure mezua ezin da bidali %1 kontua lineaz kanpo dagoelako. Mesedez saiatu "
+"berriro kontua linean dagoenean."
+
+#: chat-widget.cpp:207
+#, kde-format
+msgid "Connect %1"
+msgstr "Konektatu %1"
+
+#: chat-widget.cpp:445
+#, kde-format
+msgid "Share Image via %1"
+msgstr "Partekatu irudia %1-(r)en bidez"
+
+#: chat-widget.cpp:455
+#, kde-format
+msgid "Send Image via File Transfer"
+msgstr "Bidali irudia fitxategi-transferentzia bidez"
+
+#: chat-widget.cpp:690
+#, kde-format
+msgid "Attempting to start a private OTR session with %1"
+msgstr "OTR saio pribatua hasten saiatzen %1-(r)ekin"
+
+#: chat-widget.cpp:693
+#, kde-format
+msgid "Attempting to restart a private OTR session with %1"
+msgstr "OTR saio pribatua berrabiarazten saiatzen %1-(r)ekin"
+
+#: chat-widget.cpp:713
+#, kde-format
+msgid "Terminating OTR session"
+msgstr "OTR saioa amaitzen"
+
+#: chat-widget.cpp:765
+#, kde-format
+msgid "The OTR session is now unverified"
+msgstr "OTR saioa egiaztatu gabe dago une honetan"
+
+#: chat-widget.cpp:768
+#, kde-format
+msgid "Unverified OTR session started"
+msgstr "Egiaztatu gabeko OTR saioa hasita"
+
+#: chat-widget.cpp:776
+#, kde-format
+msgid "The OTR session is now private"
+msgstr "OTR saioa orain pribatua da"
+
+#: chat-widget.cpp:779
+#, kde-format
+msgid "Private OTR session started"
+msgstr "OTR saio pribatua hasita"
+
+#: chat-widget.cpp:786
+#, kde-format
+msgid "%1 has ended the OTR session. You should do the same"
+msgstr "%1 OTR saioa bukatu du. Berdina egin beharko zenuke"
+
+#: chat-widget.cpp:802
+#, kde-format
+msgid "Successfully refreshed private OTR session"
+msgstr "OTR sesio pribatua ondo freskatu da"
+
+#: chat-widget.cpp:803
+#, kde-format
+msgid "Successfully refreshed unverified OTR session"
+msgstr "Egiaztatu gabeko OTR sesio ondo freskatu da"
+
+#: chat-widget.cpp:902
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is blocked"
+msgstr ""
+"\"%1\" mezuaren bidalketak huts egin du urruneko kontaktua blokeatuta "
+"dagoelako"
+
+#: chat-widget.cpp:906
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is offline"
+msgstr ""
+"\"%1\" mezuaren bidalketak huts egin du urruneko kontaktua lineaz kanpo "
+"dagoelako"
+
+#: chat-widget.cpp:912
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is blocked"
+msgstr ""
+"Mezu baten bidalketak huts egin du urruneko kontaktua blokeatuta dagoelako"
+
+#: chat-widget.cpp:915
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is offline"
+msgstr ""
+"Mezu baten bidalketak huts egin du urruneko kontaktua lineaz kanpo dagoelako"
+
+#: chat-widget.cpp:922
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is not valid"
+msgstr ""
+"\"%1\" mezuaren bidalketak huts egin du urruneko kontaktua baliogabea delako"
+
+#: chat-widget.cpp:926
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is not valid"
+msgstr ""
+"Mezu baten bidalketak huts egin du urruneko kontaktua baliogabea delako"
+
+#: chat-widget.cpp:932
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because you do not have permission to "
+"speak in this room"
+msgstr ""
+"\"%1\" mezuaren bidalketak huts egin du ez duzulako baimenik gela honetan "
+"hitz egiteko"
+
+#: chat-widget.cpp:936
+#, kde-format
+msgid ""
+"Delivery of a message failed because you do not have permission to speak in "
+"this room"
+msgstr ""
+"Mezu baten bidalketak huts egin du ez duzulako baimenik gela honetan hitz "
+"egiteko"
+
+#: chat-widget.cpp:942
+#, kde-format
+msgid "Delivery of the message \"%1\" failed because it was too long"
+msgstr "\"%1\" mezuaren bidalketak huts egin du luzeegia delako"
+
+#: chat-widget.cpp:946
+#, kde-format
+msgid "Delivery of a message failed because it was too long"
+msgstr "Mezu baten bidalketak huts egin du luzeegia delako"
+
+#: chat-widget.cpp:952
+#, kde-format
+msgid "Delivery of the message \"%1\" failed: %2"
+msgstr "\"%1\" mezuaren bidalketak huts egin du: %2"
+
+#: chat-widget.cpp:956
+#, kde-format
+msgid "Delivery of a message failed: %1"
+msgstr "Mezu baten bidalketak huts egin du: %1"
+
+#: chat-widget.cpp:1019
+#, kde-format
+msgid ""
+"%1 has already closed his/her private connection to you. Your message was "
+"not sent. Either end your private conversation, or restart it."
+msgstr ""
+"%1-(e)k bere konexio pribatua itxi du jada zurekin. Zure mezua ez da bidali. "
+"Bukatu zure elkarrizketa pribatua, edo berrabiarazi."
+
+#: chat-widget.cpp:1060 chat-widget.cpp:1153
+#, kde-format
+msgid "%1 has left the chat"
+msgstr "%1-ek berriketa utzi du"
+
+#: chat-widget.cpp:1099
+#, kde-format
+msgctxt "Your presence status"
+msgid "You are now marked as %1"
+msgstr "%1 bezala markatuta zaude orain"
+
+#: chat-widget.cpp:1103
+#, kde-format
+msgctxt "Your presence status with status message"
+msgid "You are now marked as %1 - %2"
+msgstr "%1 bezala markatuta zaude orain - %2"
+
+#: chat-widget.cpp:1109
+#, kde-format
+msgctxt "User's name, with their new presence status (i.e online/away)"
+msgid "%1 is %2"
+msgstr "%1 %2 dago"
+
+#: chat-widget.cpp:1111
+#, kde-format
+msgctxt ""
+"User's name, with their new presence status (i.e online/away) and a "
+"sepecified presence message"
+msgid "%1 is %2 - %3"
+msgstr "%1 %2 dago - %3"
+
+#: chat-widget.cpp:1139
+#, kde-format
+msgid "You are now known as %1"
+msgstr "%1 bezala ezagutzen zaituzte orain"
+
+#: chat-widget.cpp:1147
+#, kde-format
+msgid "%1 is now known as %2"
+msgstr "%1 %2 bezala ezagutzen da orain"
+
+#: chat-widget.cpp:1166
+#, kde-format
+msgid "%1 is now blocked."
+msgstr "%1 blokeatuta dago."
+
+#: chat-widget.cpp:1168
+#, kde-format
+msgid "%1 is now unblocked."
+msgstr "%1 desblokeatuta dago."
+
+#: chat-widget.cpp:1197
+#, kde-format
+msgid "%1 has joined the chat"
+msgstr "%1 berriketara batu da"
+
+#: chat-widget.cpp:1238 chat-widget.cpp:1401
+#, kde-format
+msgid "Group Chat"
+msgstr "Taldeko berriketa"
+
+#: chat-widget.cpp:1453
+#, kde-format
+msgid "You are now offline"
+msgstr "Lineaz kanpo zaude"
+
+#: chat-widget.cpp:1534
+#, kde-format
+msgid "Uploading Image has Failed with Error: %1"
+msgstr "Irudiaren kargak huts egin du errore honekin: %1"
+
+#: chat-window-style.cpp:352
+#, kde-format
+msgctxt "Normal style variant menu item"
+msgid "Normal"
+msgstr "Normala"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Download"
+msgstr "Deskargatu"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Cancel"
+msgstr "Utzi"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Play"
+msgstr "Erreproduzitu"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Save as"
+msgstr "Gorde honela"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KeyGenDialog)
+#: keygendialog.ui:14
+#, kde-format
+msgid "Please Wait"
+msgstr "Mesedez itxaron"
+
+#. i18n: ectx: property (text), widget (QLabel, lbText)
+#: keygendialog.ui:32
+#, kde-format
+msgid "Please wait while generating the private key"
+msgstr "Mesedez itxaron gako pribatua sortzen den bitartean"
+
+#. i18n: ectx: property (text), widget (QLabel, lbTime)
+#: keygendialog.ui:49
+#, kde-format
+msgid "TextLabel"
+msgstr "TextLabel"
+
+#: notify-filter.cpp:74
+#, kde-format
+msgid "%1 has sent you a message"
+msgstr "%1-(e)k mezu bat bidali dizu"
+
+#: notify-filter.cpp:87 otr-notifications.cpp:47
+#, kde-format
+msgid "View"
+msgstr "Ikusi"
+
+#: otr-notifications.cpp:61
+#, kde-format
+msgid "Private OTR session started with %1"
+msgstr "OTR saio pribatua %1-(r)ekin hasita"
+
+#: otr-notifications.cpp:63
+#, kde-format
+msgid "Unverified OTR session started with %1"
+msgstr "Egiaztatu gabeko OTR saioa %1-(r)ekin hasita"
+
+#: otr-notifications.cpp:77
+#, kde-format
+msgid "Finished OTR session with %1"
+msgstr "OTR saio pribatua %1-(r)ekin bukatuta"
+
+#: otr-notifications.cpp:89
+#, kde-format
+msgid "%1 has requested your authentication"
+msgstr "%1-(e)k zure autentifikazioa eskatu du"
+
+#: otr-notifications.cpp:103
+#, kde-format
+msgid "Authentication with %1 completed successfully"
+msgstr "Autentifikazioa %1-(r)ekin ondo bukatu da"
+
+#: otr-notifications.cpp:105 otr-notifications.cpp:132
+#, kde-format
+msgid "Authentication with %1 failed"
+msgstr "Autentifikazioak %1-(r)ekin huts egin du"
+
+#: otr-notifications.cpp:119
+#, kde-format
+msgid "Authentication with %1 was aborted"
+msgstr "Autentifikazioa %1-(r)ekin bertan behera utzi da"
+
+#: proxy-service.cpp:44
+#, kde-format
+msgid "Generating the private key for %1..."
+msgstr "%1-(r)entzat gako pribatua sortzen..."
+
+#: proxy-service.cpp:45
+#, kde-format
+msgid "This may take some time"
+msgstr "Baliteke hau zertxobait luzatzea"
+
+#: proxy-service.cpp:57
+#, kde-format
+msgid "Please wait"
+msgstr "Mesedez itxaron"
+
+#: proxy-service.cpp:89
+#, kde-format
+msgid "Could not generate a private key for %1"
+msgstr "Ezin izan da %1-(r)entzat gako pribatua sortu"
+
+#: proxy-service.cpp:91
+#, kde-format
+msgid "Finished generating the private key for %1"
+msgstr "%1-(r)entzat gako pribatua sortzen bukatu da"

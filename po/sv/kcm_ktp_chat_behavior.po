@@ -1,0 +1,226 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2011, 2012, 2013, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-09-17 18:30+0100\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: behavior-config.cpp:50
+#, kde-format
+msgctxt ""
+"Part of config 'show last [spin box] messages' This is the suffix to the "
+"spin box. Be sure to include leading space"
+msgid " message"
+msgid_plural " messages"
+msgstr[0] " meddelande"
+msgstr[1] " meddelanden"
+
+#: behavior-config.cpp:67
+#, kde-format
+msgctxt "Placeholder for contact name in completion suffix selector"
+msgid "Nickname"
+msgstr "Smeknamn"
+
+#. i18n: ectx: property (title), widget (QGroupBox, newTabGroupBox)
+#: behavior-config.ui:17
+#, kde-format
+msgid "Tabs"
+msgstr "Flikar"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: behavior-config.ui:23
+#, kde-format
+msgid "Open new conversations:"
+msgstr "Öppna nya konversationer:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioNew)
+#: behavior-config.ui:30
+#, kde-format
+msgid "As new windows"
+msgstr "Som nya fönster"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioZero)
+#: behavior-config.ui:40
+#, kde-format
+msgid "As tabs in the same window"
+msgstr "Som flikar i samma fönster"
+
+#. i18n: ectx: property (title), widget (QGroupBox, scrollbackGroupBox)
+#: behavior-config.ui:53
+#, kde-format
+msgid "Last Conversation Scrollback"
+msgstr "Historik för senaste konversation"
+
+#. i18n: First part of &quot;Show last %1 messages&quot; string
+#. i18n: ectx: property (text), widget (QLabel, label_p1)
+#: behavior-config.ui:59
+#, kde-format
+msgid "Show last"
+msgstr "Visa senaste"
+
+#. i18n: ectx: property (title), widget (QGroupBox, typingGroupBox)
+#: behavior-config.ui:85
+#, kde-format
+msgid "User Is Typing"
+msgstr "Användaren skriver"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxShowOthersTyping)
+#: behavior-config.ui:91
+#, kde-format
+msgid "Show me when others are typing"
+msgstr "Visa mig när andra skriver"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxShowMeTyping)
+#: behavior-config.ui:98
+#, kde-format
+msgid "Show others when I am typing"
+msgstr "Visa andra när jag skriver"
+
+#. i18n: ectx: property (title), widget (QGroupBox, nicknameCompletionGroup)
+#: behavior-config.ui:108
+#, kde-format
+msgid "Nickname Completion"
+msgstr "Komplettering av smeknamn"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: behavior-config.ui:117
+#, kde-format
+msgid "Complete nicknames to"
+msgstr "Komplettera smeknamn till"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: behavior-config.ui:137
+#, kde-format
+msgid "when I press Tab"
+msgstr "när tabulator trycks ner"
+
+#. i18n: ectx: property (title), widget (QGroupBox, kbuttongroup)
+#: behavior-config.ui:147
+#, kde-format
+msgid "Image Sharing"
+msgstr "Bilddelning"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: behavior-config.ui:156
+#, kde-format
+msgid "Image Sharing Service"
+msgstr "Bilddelningstjänst"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: behavior-config.ui:179
+#, kde-format
+msgid "Works when dragging an image to the Chat Window"
+msgstr "Fungerar när en bild dras till chattfönstret"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupChatsGroup)
+#: behavior-config.ui:195
+#, kde-format
+msgid "Group Chats"
+msgstr "Gruppchatter"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dontLeaveGroupChats)
+#: behavior-config.ui:207
+#, kde-format
+msgid "Stay connected to group chat even when tab is closed"
+msgstr "Förbli ansluten till gruppchatt även om fliken stängs"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: behavior-config.ui:217
+#, kde-format
+msgid "Keyboard Layouts"
+msgstr "Tangentbordslayouter"
+
+#. i18n: ectx: property (text), widget (QCheckBox, rememberTabKeyboardLayout)
+#: behavior-config.ui:223
+#, kde-format
+msgid "Remember keyboard layout for each tab"
+msgstr "Kom ihåg tangentbordslayout för varje flik"
+
+#~ msgid "A new tab in the last focused window"
+#~ msgstr "En ny flik i det senast fokuserade fönstret"
+
+#~ msgid "A demo chat"
+#~ msgstr "En chattdemonstration"
+
+#~ msgid "Jabber"
+#~ msgstr "Jabber"
+
+#~ msgid "BobMarley@yahoo.com"
+#~ msgstr "BobMarley@yahoo.com"
+
+#~ msgid "Bob Marley"
+#~ msgstr "Bob Marley"
+
+#~ msgid "Bye Bye"
+#~ msgstr "Hej då"
+
+#~ msgid "larry@example.com"
+#~ msgstr "larry@exempel.com"
+
+#~ msgid "Larry Demo"
+#~ msgstr "Larry Demo"
+
+#~ msgid "cya"
+#~ msgstr "Vi ses"
+
+#~ msgid "ted@example.com"
+#~ msgstr "ted@exempel.com"
+
+#~ msgid "Ted Example"
+#~ msgstr "Ted Exempel"
+
+#~ msgid "Hello"
+#~ msgstr "Hej"
+
+#~ msgid "A different example message"
+#~ msgstr "Ett annat exempelmeddelande"
+
+#~ msgid "Ted Example has left the chat."
+#~ msgstr "Ted Exempel har lämnat chatten."
+
+#~ msgid "Use Custom Font Settings"
+#~ msgstr "Använd egen inställning av teckensnitt"
+
+#~ msgid "Select Font: "
+#~ msgstr "Välj teckensnitt: "
+
+#~ msgid "Select Size: "
+#~ msgstr "Välj storlek: "
+
+#~ msgid "Style"
+#~ msgstr "Stil"
+
+#~ msgid "Message Style:"
+#~ msgstr "Meddelandestil:"
+
+#~ msgid "Variant:"
+#~ msgstr "Variant:"
+
+#~ msgid "Show User Icons"
+#~ msgstr "Visa användarikoner"
+
+#~ msgid "Form"
+#~ msgstr "Formulär"
+
+#~ msgid "Telepathy Chat Window Config"
+#~ msgstr "Telepathy-chattfönsterinställning"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"

@@ -1,0 +1,225 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2020-04-21 00:34+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 19.04.3\n"
+
+#: appearance-config-tab.cpp:44
+#, kde-format
+msgid "A demo chat"
+msgstr "데모 대화"
+
+#: appearance-config-tab.cpp:45
+#, kde-format
+msgid "Jabber"
+msgstr "Jabber"
+
+#: appearance-config-tab.cpp:47 appearance-config-tab.cpp:196
+#: appearance-config-tab.cpp:203 appearance-config-tab.cpp:249
+#: appearance-config-tab.cpp:265
+#, kde-format
+msgctxt "Example email"
+msgid "ted@example.com"
+msgstr "ted@example.com"
+
+#: appearance-config-tab.cpp:48
+#, kde-format
+msgctxt "Example name"
+msgid "Ted"
+msgstr "Ted"
+
+#: appearance-config-tab.cpp:181
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ok!"
+msgstr "좋아요!"
+
+#: appearance-config-tab.cpp:182 appearance-config-tab.cpp:189
+#: appearance-config-tab.cpp:232 appearance-config-tab.cpp:240
+#, kde-format
+msgctxt "Example email"
+msgid "larry@example.com"
+msgstr "larry@example.com"
+
+#: appearance-config-tab.cpp:183 appearance-config-tab.cpp:190
+#: appearance-config-tab.cpp:233 appearance-config-tab.cpp:241
+#, kde-format
+msgctxt "Example name"
+msgid "Larry Demo"
+msgstr "Larry Demo"
+
+#: appearance-config-tab.cpp:188
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Bye Bye"
+msgstr "안녕히 가세요"
+
+#: appearance-config-tab.cpp:195
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Have fun!"
+msgstr "좋은 시간 되세요!"
+
+#: appearance-config-tab.cpp:197 appearance-config-tab.cpp:204
+#: appearance-config-tab.cpp:210 appearance-config-tab.cpp:217
+#: appearance-config-tab.cpp:224 appearance-config-tab.cpp:250
+#: appearance-config-tab.cpp:266 appearance-config-tab.cpp:273
+#, kde-format
+msgctxt "Example name"
+msgid "Ted Example"
+msgstr "Ted Example"
+
+#: appearance-config-tab.cpp:202
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "cya"
+msgstr "잘 가"
+
+#: appearance-config-tab.cpp:209
+#, kde-format
+msgctxt "Example message"
+msgid "Ted Example waves."
+msgstr "Ted Example 님이 손을 흔듭니다."
+
+#: appearance-config-tab.cpp:216
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example has left the chat."
+msgstr "Ted Example 님이 대화를 떠났습니다."
+
+#: appearance-config-tab.cpp:223
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example has joined the chat."
+msgstr "Ted Example 님이 대화를 시작했습니다."
+
+#: appearance-config-tab.cpp:231
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Hello Ted"
+msgstr "안녕 Ted"
+
+#: appearance-config-tab.cpp:239
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "What's up?"
+msgstr "잘 지내셨어요?"
+
+#: appearance-config-tab.cpp:246
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid ""
+"Check out which cool adium themes work <a href=\"http://community.kde.org/"
+"KTp/Components/Chat_Window/Themes\">here</a>!"
+msgstr ""
+"Adium 테마가 <a href=\"http://community.kde.org/KTp/Components/Chat_Window/"
+"Themes\">여기</a>에서 작동하는 것을 확인해 보세요!"
+
+#: appearance-config-tab.cpp:256
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Hello"
+msgstr "안녕하세요"
+
+#: appearance-config-tab.cpp:257
+#, kde-format
+msgctxt "Example email"
+msgid "bob@example.com"
+msgstr "bob@example.com"
+
+#: appearance-config-tab.cpp:258
+#, kde-format
+msgctxt "Example name"
+msgid "Bob Example"
+msgstr "Bob Example"
+
+#: appearance-config-tab.cpp:264
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "A different example message"
+msgstr "다른 메시지 예제"
+
+#: appearance-config-tab.cpp:272
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example is now Away."
+msgstr "Ted Example 님이 자리 비움 상태입니다."
+
+#: appearance-config.cpp:47
+#, kde-format
+msgctxt "@title:tab"
+msgid "Normal Chat"
+msgstr "일반 대화"
+
+#: appearance-config.cpp:51
+#, kde-format
+msgctxt "@title:tab"
+msgid "Group Chat"
+msgstr "그룹 대화"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: appearance-config.ui:41
+#, kde-format
+msgid "Style"
+msgstr "스타일"
+
+#. i18n: ectx: property (text), widget (QLabel, styleLabel)
+#: appearance-config.ui:52
+#, kde-format
+msgid "Message Style:"
+msgstr "메시지 스타일:"
+
+#. i18n: ectx: property (text), widget (QLabel, variantLabel)
+#: appearance-config.ui:78
+#, kde-format
+msgid "Variant:"
+msgstr "파생형:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showHeader)
+#: appearance-config.ui:113
+#, kde-format
+msgid "Show Header"
+msgstr "머리글 표시"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showPresenceCheckBox)
+#: appearance-config.ui:129
+#, kde-format
+msgid "Show status changes"
+msgstr "상태 변경 표시"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showJoinLeaveCheckBox)
+#: appearance-config.ui:142
+#, kde-format
+msgid "Show when contacts join/leave chat"
+msgstr "대화 상대가 대화에 참여하거나 떠나는 정보 보기"
+
+#. i18n: ectx: property (title), widget (QGroupBox, customFontBox)
+#: appearance-config.ui:170
+#, kde-format
+msgid "Use Custom Font Settings"
+msgstr "사용자 정의 글꼴 설정 사용"
+
+#. i18n: ectx: property (text), widget (QLabel, fontFamilyLabel)
+#: appearance-config.ui:184
+#, kde-format
+msgid "Select Font:"
+msgstr "글꼴 선택:"
+
+#. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
+#: appearance-config.ui:194
+#, kde-format
+msgid "Select Size:"
+msgstr "크기 선택:"

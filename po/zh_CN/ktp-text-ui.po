@@ -1,0 +1,336 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2022-09-20 01:56\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/ktp-text-ui/ktp-text-ui.pot\n"
+"X-Crowdin-File-ID: 5447\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "KDE 中国"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kde-china@kde.org"
+
+#: chat-window.cpp:202
+#, kde-format
+msgid "Close"
+msgstr "关闭"
+
+#: chat-window.cpp:203
+#, kde-format
+msgid "Detach Tab"
+msgstr "漂移标签"
+
+#: chat-window.cpp:204
+#, kde-format
+msgid "Move Tab Left"
+msgstr "左移标签"
+
+#: chat-window.cpp:205
+#, kde-format
+msgid "Move Tab Right"
+msgstr "右移标签"
+
+#: chat-window.cpp:839
+#, kde-format
+msgid "&Next Tab"
+msgstr "下一个标签(&N)"
+
+#: chat-window.cpp:843
+#, kde-format
+msgid "&Previous Tab"
+msgstr "上一个标签(&P)"
+
+#: chat-window.cpp:847
+#, kde-format
+msgid "&Audio Call"
+msgstr "语音(&A)"
+
+#: chat-window.cpp:848
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start an audio call with this contact"
+msgstr "向此联系人开始语音呼叫"
+
+#: chat-window.cpp:851 chat-window.cpp:1287
+#, kde-format
+msgid "&Block Contact"
+msgstr "屏蔽联系人(&B)"
+
+#: chat-window.cpp:853
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid ""
+"Blocking means that this contact will not see you online and you will not "
+"receive any messages from this contact"
+msgstr ""
+"阻止意味着此联系人无法看到您在线的状态并且您也无法收到任何这个联系人的消息"
+
+#: chat-window.cpp:856
+#, kde-format
+msgid "&Send File"
+msgstr "发送文件(&S)"
+
+#: chat-window.cpp:857
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Send a file to this contact"
+msgstr "向此联系发送文件"
+
+#: chat-window.cpp:860
+#, kde-format
+msgid "&Invite to Chat"
+msgstr "邀请聊天(&I)"
+
+#: chat-window.cpp:861
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Invite another contact to join this chat"
+msgstr "邀请另一个联系人加入聊天"
+
+#: chat-window.cpp:864
+#, kde-format
+msgid "&Video Call"
+msgstr "视频(&V)"
+
+#: chat-window.cpp:865
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start a video call with this contact"
+msgstr "向此联系人开始视频呼叫"
+
+#: chat-window.cpp:868
+#, kde-format
+msgid "Share My &Desktop"
+msgstr "共享桌面(&D)"
+
+#: chat-window.cpp:869
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Start an application that allows this contact to see your desktop"
+msgstr "启动程序从而允许此联系人观看您的桌面"
+
+#: chat-window.cpp:872
+#, kde-format
+msgid "&Collaboratively edit a document"
+msgstr "合作编辑文档(&C)"
+
+#: chat-window.cpp:875
+#, kde-format
+msgid "&Contact info"
+msgstr "联系人信息(&C)"
+
+#: chat-window.cpp:878
+#, kde-format
+msgid "&Leave room"
+msgstr "离开房间(&L)"
+
+#: chat-window.cpp:889
+#, kde-format
+msgid "Choose Spelling Language"
+msgstr "选择拼写语言"
+
+#: chat-window.cpp:891
+#, kde-format
+msgctxt "Action to open the log viewer with a specified contact"
+msgid "&Previous Conversations"
+msgstr "上一个会话(&P)"
+
+#: chat-window.cpp:894
+#, kde-format
+msgctxt "Action to open the contact list"
+msgid "Contact &List"
+msgstr "联系人列表(&L)"
+
+#: chat-window.cpp:899
+#, kde-format
+msgid "Account Icon"
+msgstr "账户图标"
+
+#: chat-window.cpp:903
+#, kde-format
+msgid "&Clear View"
+msgstr "清除视图(&C)"
+
+#: chat-window.cpp:904
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Clear all messages from current chat tab"
+msgstr "清除当前标签里的所有消息"
+
+#: chat-window.cpp:910
+#, kde-format
+msgid "Send message"
+msgstr "发送消息"
+
+#: chat-window.cpp:941
+#, kde-format
+msgid "&OTR"
+msgstr "非公开加密(&O)"
+
+#: chat-window.cpp:944 chat-window.cpp:1005
+#, kde-format
+msgid "&Start session"
+msgstr "开始新会话(&S)"
+
+#: chat-window.cpp:948
+#, kde-format
+msgid "&Stop session"
+msgstr "停止会话(&S)"
+
+#: chat-window.cpp:952
+#, kde-format
+msgid "&Authenticate contact"
+msgstr "验证联系人(&A)"
+
+#: chat-window.cpp:1003
+#, kde-format
+msgid "Not private"
+msgstr "非私人"
+
+#: chat-window.cpp:1012
+#, kde-format
+msgid "Unverified"
+msgstr "未验证"
+
+#: chat-window.cpp:1014 chat-window.cpp:1023 chat-window.cpp:1032
+#, kde-format
+msgid "&Restart session"
+msgstr "重启会话(&R)"
+
+#: chat-window.cpp:1021
+#, kde-format
+msgid "Private"
+msgstr "私人"
+
+#: chat-window.cpp:1030
+#, kde-format
+msgid "Finished"
+msgstr "已完成"
+
+#: chat-window.cpp:1091
+#, kde-format
+msgctxt "Toolbar icon tooltip"
+msgid "Edit a plain-text document with this contact in real-time"
+msgstr "与此联系人实时编辑纯文本文档"
+
+#: chat-window.cpp:1094
+#, kde-format
+msgctxt "Toolbar icon tooltip for a disabled action"
+msgid ""
+"<p>Both you and the target contact need to have the <i>kte-collaborative</i> "
+"package installed to share documents</p>"
+msgstr ""
+"<p>您和目标联系人均需要安装 <i>kte-collaborative</i> 软件包来分享文档</p>"
+
+#: chat-window.cpp:1193
+#, kde-format
+msgid "Choose files to send to %1"
+msgstr "选择要发送给 %1 的文件"
+
+#: chat-window.cpp:1280
+#, kde-format
+msgid "&Unblock Contact"
+msgstr "取消联系人屏蔽(&U)"
+
+#. i18n: ectx: Menu (conversation)
+#: chatwindow.rc:11
+#, kde-format
+msgid "&Conversation"
+msgstr "对话(&C)"
+
+#. i18n: ectx: Menu (actions)
+#: chatwindow.rc:24
+#, kde-format
+msgid "&Actions"
+msgstr "操作(&A)"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: chatwindow.rc:41
+#, kde-format
+msgid "Main Toolbar"
+msgstr "主工具栏"
+
+#. i18n: ectx: ToolBar (accountIconToolBar)
+#: chatwindow.rc:53
+#, kde-format
+msgid "Account Icon Toolbar"
+msgstr "账户图标工具栏"
+
+#. i18n: ectx: ToolBar (languageToolBar)
+#: chatwindow.rc:58
+#, kde-format
+msgid "Language Toolbar"
+msgstr "语言工具栏"
+
+#. i18n: ectx: ToolBar (emoticonsToolBar)
+#: chatwindow.rc:63
+#, kde-format
+msgid "Smiley Toolbar"
+msgstr "表情工具栏"
+
+#: emoticon-text-edit-action.cpp:51
+#, kde-format
+msgid "Add Smiley"
+msgstr "添加表情"
+
+#: invite-contact-dialog.cpp:55
+#, kde-format
+msgid "Search in Contacts..."
+msgstr "在联系人中搜索..."
+
+#: invite-contact-dialog.cpp:64
+#, kde-format
+msgid "Select Contacts to Invite to Group Chat"
+msgstr "选择联系人邀请加入群聊"
+
+#: telepathy-chat-ui.cpp:62
+#, kde-format
+msgid "Chat Application"
+msgstr "聊天程序"
+
+#: telepathy-chat-ui.cpp:63
+#, kde-format
+msgid "David Edmundson"
+msgstr "David Edmundson"
+
+#: telepathy-chat-ui.cpp:63 telepathy-chat-ui.cpp:64
+#, kde-format
+msgid "Developer"
+msgstr "开发者"
+
+#: telepathy-chat-ui.cpp:64
+#, kde-format
+msgid "Marcin Ziemiński"
+msgstr "Marcin Ziemiński"
+
+#: telepathy-chat-ui.cpp:65
+#, kde-format
+msgid "Dominik Schmidt"
+msgstr "Dominik Schmidt"
+
+#: telepathy-chat-ui.cpp:65 telepathy-chat-ui.cpp:66
+#, kde-format
+msgid "Past Developer"
+msgstr "前任开发者"
+
+#: telepathy-chat-ui.cpp:66
+#, kde-format
+msgid "Francesco Nwokeka"
+msgstr "Francesco Nwokeka"

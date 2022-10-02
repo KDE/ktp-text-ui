@@ -1,0 +1,654 @@
+# Bosnian translation for bosnianuniversetranslation
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
+# This file is distributed under the same license as the bosnianuniversetranslation package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bosnianuniversetranslation\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2014-12-18 06:28+0000\n"
+"Last-Translator: Mirza Bulbulusic <mbulbulusic@gmail.com>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-15 06:07+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Samir Ribić,Mirza Bulbulusic"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "Samir.ribic@etf.unsa.ba,mbulbulusic@gmail.com"
+
+#: adium-theme-view.cpp:119
+#, kde-format
+msgid ""
+"Failed to load a valid theme. Your installation is broken. Check your kde "
+"path. Will now crash."
+msgstr ""
+"Neuspjelo čitanje ispravne teme. Vaša instalacija je oštećena. Provjerite "
+"KDE stazu. Slijedi krah."
+
+#: adium-theme-view.cpp:210
+#, kde-format
+msgid "Missing required file Template.html - check your installation."
+msgstr "Nedostaje datoteka Template.html - provjerite instalaciju."
+
+#: adium-theme-view.cpp:648
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Conversation began %1"
+msgstr "Razgovor započeo %1"
+
+#: adium-theme-view.cpp:652
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Joined at %1"
+msgstr "Pridruženo na %1"
+
+#: authenticationwizard.cpp:49
+#, kde-format
+msgctxt "@title"
+msgid "Authenticating contact..."
+msgstr "Autentifikovanje kontakta..."
+
+#: authenticationwizard.cpp:100
+#, kde-format
+msgid "Waiting for <b>%1</b>..."
+msgstr "Čekanje za <b>%1</b>..."
+
+#: authenticationwizard.cpp:101
+#, kde-format
+msgid "Checking if answers match..."
+msgstr "Provjeravam poklapanje odgovora..."
+
+#: authenticationwizard.cpp:143
+#, kde-format
+msgctxt "@title"
+msgid "Select authentication method"
+msgstr "Izbor metoda autentifikacije"
+
+#: authenticationwizard.cpp:145
+#, kde-format
+msgid "Question and Answer"
+msgstr "Pitanje i odgovor"
+
+#: authenticationwizard.cpp:146
+#, kde-format
+msgid "Shared Secret"
+msgstr "Dijeljena tajna"
+
+#: authenticationwizard.cpp:147
+#, kde-format
+msgid "Manual fingerprint verification"
+msgstr "Ručno ovjeravanje otiska"
+
+#: authenticationwizard.cpp:178
+#, kde-format
+msgctxt "@title"
+msgid "Question and Answer"
+msgstr "Pitanje i odgovor"
+
+#: authenticationwizard.cpp:180
+#, kde-format
+msgctxt "@info"
+msgid "Enter a question that only <b>%1</b> is able to answer:"
+msgstr "Upišite pitanje koje je samo <b>%1</b> u mogućnosti da odgovori:"
+
+#: authenticationwizard.cpp:185
+#, kde-format
+msgctxt "@info"
+msgid "Enter the answer to your question:"
+msgstr "Unesite odgovor na pitanje:"
+
+#: authenticationwizard.cpp:189 authenticationwizard.cpp:223
+#, kde-format
+msgctxt "@title"
+msgid "Authentication with <b>%1</b>"
+msgstr "Autentifikacija sa<b>%1</b>"
+
+#: authenticationwizard.cpp:190
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<b>%1</b> would like to verify your authentication.Please answer the "
+#| "following question in the field below:"
+msgctxt "@info"
+msgid ""
+"<b>%1</b> would like to verify your authentication. Please answer the "
+"following question in the field below:"
+msgstr ""
+"<b>%1</b> želi da verifikuje tvoju potvrdu. Molimo odgovorite na pitanje u "
+"polje ispod:"
+
+#: authenticationwizard.cpp:219
+#, kde-format
+msgctxt "@title"
+msgid "Shared Secret"
+msgstr "Dijeljena tajna"
+
+#: authenticationwizard.cpp:221
+#, kde-format
+msgctxt "@info"
+msgid "Enter a secret passphrase known only to you and <b>%1</b>:"
+msgstr "Unesite tajnu šifru koju samo vi znate i <b>%1</b>:"
+
+#: authenticationwizard.cpp:224
+#, kde-format
+msgctxt "@info"
+msgid "Enter the secret passphrase known only to you and <b>%1</b>:"
+msgstr "Unesite tajnu šifru koju samo vi znate i <b>%1</b>:"
+
+#: authenticationwizard.cpp:238
+#, kde-format
+msgctxt "@title"
+msgid "Manual Verification"
+msgstr "Ručno ovjeravanje"
+
+#: authenticationwizard.cpp:244
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Contact <b>%1</b> via another secure channel and verify that the following "
+"fingerprint is correct:"
+msgstr ""
+"Kontakt <b>%1</b> preko drugog sigurnog kanala i potvrdite da je dati otisak "
+"prsta tačan:"
+
+#: authenticationwizard.cpp:253
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have not"
+msgstr "Nisam"
+
+#: authenticationwizard.cpp:254
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have"
+msgstr "Jesam"
+
+#: authenticationwizard.cpp:264
+#, kde-format
+msgctxt "@info:label I have..."
+msgid "verified that this is in fact the correct fingerprint for <b>%1</b>."
+msgstr "potvrdite da je ovo ustvari tačan otisak prsta za <b>%1</b>."
+
+#: authenticationwizard.cpp:380
+#, kde-format
+msgid "Authentication successful"
+msgstr "Autentifikacija uspješna"
+
+#: authenticationwizard.cpp:384 authenticationwizard.cpp:392
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has been completed successfully. The "
+"conversation is now secure."
+msgstr ""
+"Autetifikacija sa <b>%1</b> je uspješno obavljena. Sada je razgovor izvor."
+
+#: authenticationwizard.cpp:388
+#, kde-format
+msgid ""
+"<b>%1</b> has successfully authenticated you. You may want to authenticate "
+"this contact as well by asking your own question."
+msgstr ""
+"<b>%1</b> vas je uspješno autentifikovao. Možda želite da i vi "
+"autentifikujete ovaj kontakt tako što ćete postaviti sopstveno pitanje."
+
+#: authenticationwizard.cpp:396
+#, kde-format
+msgid "Authentication failed"
+msgstr "Autentikacija neuspjela"
+
+#: authenticationwizard.cpp:397
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has failed. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method. Note that the conversation is now insecure."
+msgstr ""
+"Autentifikacija sa <b>%1</b> nije uspjela. Pobrinite se da ne pričate sa "
+"varalicom, pokušajte ponovo koristeći ručnu metodu ovjere otiska prsta. "
+"Primjetite da je sada razgovor nepouzdan."
+
+#: authenticationwizard.cpp:419
+#, kde-format
+msgid "Authentication aborted"
+msgstr "Autentifikovanje obustavljeno"
+
+#: authenticationwizard.cpp:420
+#, kde-format
+msgid ""
+"<b>%1</b> has aborted the authentication process. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method."
+msgstr ""
+"<b>%1</b> je otkazao proces autentifikacije. Pobrinite se da ne pričate sa "
+"varalicom, pokušajte ponovo koristeći ručnu metodu ovjere otiska prsta. "
+"Primjetite da je sada razgovor nepouzdan."
+
+#: authenticationwizard.cpp:429
+#, kde-format
+msgid ""
+"Ask <b>%1</b> a question, the answer to which is known only to you and them. "
+"If the answer does not match, you may be talking to an imposter."
+msgstr ""
+"Pitajte <b>%1</b> pitanje , odgovor za koji znate samo vi i oni. Ako se "
+"odgovori ne poklapaju, pričate sa varalicom."
+
+#: authenticationwizard.cpp:432
+#, kde-format
+msgid ""
+"Pick a secret known only to you and <b>%1</b>. If the secret does not match, "
+"you may be talking to an imposter. Do not send the secret through the chat "
+"window, or this authentication method could be compromised with ease."
+msgstr ""
+"Odaberite tajnu koju samo vi poznajete i  <b>%1</b>. Ako se tajne ne "
+"poklapaju, pričate sa varalicom . Ne šaljite tajnu preko čet prozora, jer bi "
+"autetifikacijska procedura mogla bili lahko kompromitovana."
+
+#: authenticationwizard.cpp:436
+#, kde-format
+msgid ""
+"Verify <b>%1's</b> fingerprint manually. For example via a phone call or "
+"signed (and verified) email."
+msgstr ""
+"Potrvrdite <b>%1's</b> otisak prsta ručno. Na primjer, preko telefonskog "
+"poziva ili preko prijavljenog (i ovjerenog) email-a."
+
+#: chat-search-bar.cpp:39
+#, kde-format
+msgctxt "Next search result"
+msgid "&Next"
+msgstr "&Sljedeći"
+
+#: chat-search-bar.cpp:40
+#, kde-format
+msgctxt "Previous search result"
+msgid "&Previous"
+msgstr "&Prethodni"
+
+#: chat-search-bar.cpp:49
+#, kde-format
+msgid "Insert search text..."
+msgstr "Unesi tekst za pretragu..."
+
+#: chat-search-bar.cpp:58
+#, kde-format
+msgid "Case sensitive"
+msgstr "Razlikuj veličinu slova"
+
+#: chat-widget.cpp:159
+#, kde-format
+msgid "Open chat window"
+msgstr "Otvori prozor za ćaskanje"
+
+#: chat-widget.cpp:163
+#, kde-format
+msgid "Send file"
+msgstr "Pošaljite datoteku"
+
+#: chat-widget.cpp:167
+#, kde-format
+msgid "Show info..."
+msgstr "Prikažite informacije..."
+
+#: chat-widget.cpp:181
+#, kde-format
+msgid "Share Image"
+msgstr "Podijelite sliku"
+
+#: chat-widget.cpp:183 chat-widget.cpp:460
+#, kde-format
+msgid "Send File"
+msgstr "Pošaljite datoteku"
+
+#: chat-widget.cpp:201
+#, kde-format
+msgid ""
+"Your message cannot be sent because the account %1 is offline. Please try "
+"again when the account is connected again."
+msgstr ""
+"Vaša poruka ne može biti poslana jer je račun  %1 izvan mreže. Molimo "
+"pokušajte ponovo kada budete sigurni da je račun ponovo prijavljen."
+
+#: chat-widget.cpp:207
+#, kde-format
+msgid "Connect %1"
+msgstr "Povezivanje %1"
+
+#: chat-widget.cpp:445
+#, kde-format
+msgid "Share Image via %1"
+msgstr "Podijelite sliku preko %1"
+
+#: chat-widget.cpp:455
+#, kde-format
+msgid "Send Image via File Transfer"
+msgstr "Pošaljite sliku preko prijenosa za datoteke"
+
+#: chat-widget.cpp:690
+#, kde-format
+msgid "Attempting to start a private OTR session with %1"
+msgstr "Pokušaj da se pokrene privatna OTR sesija sa %1"
+
+#: chat-widget.cpp:693
+#, kde-format
+msgid "Attempting to restart a private OTR session with %1"
+msgstr "Pokušaj da se ponovo pokrene privatna OTR sesija sa %1"
+
+#: chat-widget.cpp:713
+#, kde-format
+msgid "Terminating OTR session"
+msgstr "Prekidanje OTR sesije"
+
+#: chat-widget.cpp:765
+#, kde-format
+msgid "The OTR session is now unverified"
+msgstr "OTR sesija sada nije verifikovana"
+
+#: chat-widget.cpp:768
+#, kde-format
+msgid "Unverified OTR session started"
+msgstr "Neverifikovana OTR sesija je pokrenuta"
+
+#: chat-widget.cpp:776
+#, kde-format
+msgid "The OTR session is now private"
+msgstr "OTR sesija je sada privatna"
+
+#: chat-widget.cpp:779
+#, kde-format
+msgid "Private OTR session started"
+msgstr "Privatna OTR sesija je pokrenuta"
+
+#: chat-widget.cpp:786
+#, kde-format
+msgid "%1 has ended the OTR session. You should do the same"
+msgstr "%1 je završio OTR sesiju. I vi biste to isto trebali uraditi"
+
+#: chat-widget.cpp:802
+#, kde-format
+msgid "Successfully refreshed private OTR session"
+msgstr "Uspješno osvježena privatna OTR sesija"
+
+#: chat-widget.cpp:803
+#, kde-format
+msgid "Successfully refreshed unverified OTR session"
+msgstr "Uspješno osvježavanje neverifikovane OTR sesije"
+
+#: chat-widget.cpp:902
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is blocked"
+msgstr "Isporuka poruke \"%1\" neuspjela jer je udaljeni kontakt blokiran"
+
+#: chat-widget.cpp:906
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is offline"
+msgstr "Isporuka poruke \"%1\" neuspjela jer je udaljeni kontakt van mreže"
+
+#: chat-widget.cpp:912
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is blocked"
+msgstr "Isporuka poruke neuspjela jer je udaljeni kontakt blokiran"
+
+#: chat-widget.cpp:915
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is offline"
+msgstr "Isporuka poruke neuspjela jer je udaljeni kontakt van mreže"
+
+#: chat-widget.cpp:922
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is not valid"
+msgstr "Isporuka poruke \"%1\" neuspjela jer je udaljeni kontakt nevažeći"
+
+#: chat-widget.cpp:926
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is not valid"
+msgstr "Isporuka poruke  neuspjela jer je udaljeni kontakt nevažeći"
+
+#: chat-widget.cpp:932
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because you do not have permission to "
+"speak in this room"
+msgstr ""
+"Isporuka poruke \"%1\" neuspjela jer nemate pravo da govorite u ovoj sobi"
+
+#: chat-widget.cpp:936
+#, kde-format
+msgid ""
+"Delivery of a message failed because you do not have permission to speak in "
+"this room"
+msgstr "Isporuka poruke  neuspjela jer nemate pravo da govorite u ovoj sobi"
+
+#: chat-widget.cpp:942
+#, kde-format
+msgid "Delivery of the message \"%1\" failed because it was too long"
+msgstr "Isporuka poruke \"%1\" neuspjela jer je preduga"
+
+#: chat-widget.cpp:946
+#, kde-format
+msgid "Delivery of a message failed because it was too long"
+msgstr "Isporuka poruke neuspjela jer je preduga"
+
+#: chat-widget.cpp:952
+#, kde-format
+msgid "Delivery of the message \"%1\" failed: %2"
+msgstr "Isporuka poruke \"%1\" neuspjela: %2"
+
+#: chat-widget.cpp:956
+#, kde-format
+msgid "Delivery of a message failed: %1"
+msgstr "Isporuka poruke neuspjela: %1"
+
+#: chat-widget.cpp:1019
+#, kde-format
+msgid ""
+"%1 has already closed his/her private connection to you. Your message was "
+"not sent. Either end your private conversation, or restart it."
+msgstr ""
+"%1 je već zatvorio svoju privatnu vezu sa vama. Vaša poruka nije poslana. "
+"Ili završite privatni razgovor, ili ga ponovo pokrenite."
+
+#: chat-widget.cpp:1060 chat-widget.cpp:1153
+#, kde-format
+msgid "%1 has left the chat"
+msgstr "%1 je napustio ćaskanje"
+
+#: chat-widget.cpp:1099
+#, kde-format
+msgctxt "Your presence status"
+msgid "You are now marked as %1"
+msgstr "Označeni ste sada kao %1"
+
+#: chat-widget.cpp:1103
+#, kde-format
+msgctxt "Your presence status with status message"
+msgid "You are now marked as %1 - %2"
+msgstr "Označeni ste sada kao %1 - %2"
+
+#: chat-widget.cpp:1109
+#, kde-format
+msgctxt "User's name, with their new presence status (i.e online/away)"
+msgid "%1 is %2"
+msgstr "%1 je %2"
+
+#: chat-widget.cpp:1111
+#, kde-format
+msgctxt ""
+"User's name, with their new presence status (i.e online/away) and a "
+"sepecified presence message"
+msgid "%1 is %2 - %3"
+msgstr "%1 je %2 - %3"
+
+#: chat-widget.cpp:1139
+#, kde-format
+msgid "You are now known as %1"
+msgstr "Sada ste poznati kao %1"
+
+#: chat-widget.cpp:1147
+#, kde-format
+msgid "%1 is now known as %2"
+msgstr "%1 je sada poznat/a kao %2"
+
+#: chat-widget.cpp:1166
+#, kde-format
+msgid "%1 is now blocked."
+msgstr "%1 je sada blokiran."
+
+#: chat-widget.cpp:1168
+#, kde-format
+msgid "%1 is now unblocked."
+msgstr "%1 je sada deblokiran."
+
+#: chat-widget.cpp:1197
+#, kde-format
+msgid "%1 has joined the chat"
+msgstr "%1 se pridružio ćaskanju"
+
+#: chat-widget.cpp:1238 chat-widget.cpp:1401
+#, kde-format
+msgid "Group Chat"
+msgstr "Grupno ćaskanje"
+
+#: chat-widget.cpp:1453
+#, kde-format
+msgid "You are now offline"
+msgstr "Sad ste van mreže"
+
+#: chat-widget.cpp:1534
+#, kde-format
+msgid "Uploading Image has Failed with Error: %1"
+msgstr "Učitavanje slike nije uspjelo. Greška %1"
+
+#: chat-window-style.cpp:352
+#, kde-format
+msgctxt "Normal style variant menu item"
+msgid "Normal"
+msgstr "Normalno"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Download"
+msgstr "Preuzimanje"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Cancel"
+msgstr "Odustani"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Play"
+msgstr "Pokreni"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Save as"
+msgstr "Snimi kao"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KeyGenDialog)
+#: keygendialog.ui:14
+#, kde-format
+msgid "Please Wait"
+msgstr "Molimo sačekajte"
+
+#. i18n: ectx: property (text), widget (QLabel, lbText)
+#: keygendialog.ui:32
+#, kde-format
+msgid "Please wait while generating the private key"
+msgstr "Sačekajte dok se lični ključ ne napravi"
+
+#. i18n: ectx: property (text), widget (QLabel, lbTime)
+#: keygendialog.ui:49
+#, kde-format
+msgid "TextLabel"
+msgstr "TextLabel"
+
+#: notify-filter.cpp:74
+#, kde-format
+msgid "%1 has sent you a message"
+msgstr "%1 vam je poslao poruku"
+
+#: notify-filter.cpp:87 otr-notifications.cpp:47
+#, kde-format
+msgid "View"
+msgstr "Pogled"
+
+#: otr-notifications.cpp:61
+#, kde-format
+msgid "Private OTR session started with %1"
+msgstr "Privatna OTR sesija započeta sa %1"
+
+#: otr-notifications.cpp:63
+#, kde-format
+msgid "Unverified OTR session started with %1"
+msgstr "Neverifikovana OTR sesija započeta sa %1"
+
+#: otr-notifications.cpp:77
+#, kde-format
+msgid "Finished OTR session with %1"
+msgstr "Zavržena OTR sesija sa %1"
+
+#: otr-notifications.cpp:89
+#, kde-format
+msgid "%1 has requested your authentication"
+msgstr "%1 zahtijeva vašu autentifikaciju"
+
+#: otr-notifications.cpp:103
+#, kde-format
+msgid "Authentication with %1 completed successfully"
+msgstr "Autentifikacija sa %1 je uspješno završena"
+
+#: otr-notifications.cpp:105 otr-notifications.cpp:132
+#, kde-format
+msgid "Authentication with %1 failed"
+msgstr "Autentifikacija sa %1 nije uspjela"
+
+#: otr-notifications.cpp:119
+#, kde-format
+msgid "Authentication with %1 was aborted"
+msgstr "Autentifikacija sa %1 je prekinuta"
+
+#: proxy-service.cpp:44
+#, kde-format
+msgid "Generating the private key for %1..."
+msgstr "Generisanje privatnog ključa za %1..."
+
+#: proxy-service.cpp:45
+#, kde-format
+msgid "This may take some time"
+msgstr "Ovo će možda potrajati"
+
+#: proxy-service.cpp:57
+#, kde-format
+msgid "Please wait"
+msgstr "Molim sačekajte"
+
+#: proxy-service.cpp:89
+#, kde-format
+msgid "Could not generate a private key for %1"
+msgstr "Nije moguće generisati privatni ključ za %1"
+
+#: proxy-service.cpp:91
+#, kde-format
+msgid "Finished generating the private key for %1"
+msgstr "Generisanje privatnog ključa se završava za %1"
+
+#~ msgctxt "@info"
+#~ msgid "Authentication with <b>%1</b>"
+#~ msgstr "Autentifikacija sa <b>%1</b>"

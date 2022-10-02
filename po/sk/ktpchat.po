@@ -1,0 +1,649 @@
+# translation of ktpchat.po to Slovak
+# Roman Paholik <wizzardsk@gmail.com>, 2012, 2013, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: ktpchat\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-05-15 16:01+0100\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Roman Paholík"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "wizzardsk@gmail.com"
+
+#: adium-theme-view.cpp:119
+#, kde-format
+msgid ""
+"Failed to load a valid theme. Your installation is broken. Check your kde "
+"path. Will now crash."
+msgstr ""
+"Zlyhalo načítanie platnej témy. Vaša inštalácia je poškodená. Skontrolujte "
+"vašu KDE cestu. Program teraz spadne."
+
+#: adium-theme-view.cpp:210
+#, kde-format
+msgid "Missing required file Template.html - check your installation."
+msgstr "Chýba potrebný súbor Template.html - skontrolujte inštaláciu."
+
+#: adium-theme-view.cpp:648
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Conversation began %1"
+msgstr "Rozhovor začal %1"
+
+#: adium-theme-view.cpp:652
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Joined at %1"
+msgstr "Pripojený na %1"
+
+#: authenticationwizard.cpp:49
+#, kde-format
+msgctxt "@title"
+msgid "Authenticating contact..."
+msgstr "Overujem kontakt..."
+
+#: authenticationwizard.cpp:100
+#, kde-format
+msgid "Waiting for <b>%1</b>..."
+msgstr "Čaká sa na <b>%1</b>..."
+
+#: authenticationwizard.cpp:101
+#, kde-format
+msgid "Checking if answers match..."
+msgstr "Kontrola správnosti odpovede..."
+
+#: authenticationwizard.cpp:143
+#, kde-format
+msgctxt "@title"
+msgid "Select authentication method"
+msgstr "Vybrať metódu overenia"
+
+#: authenticationwizard.cpp:145
+#, kde-format
+msgid "Question and Answer"
+msgstr "Otázka a odpoveď"
+
+#: authenticationwizard.cpp:146
+#, kde-format
+msgid "Shared Secret"
+msgstr "Zdieľané tajomstvo"
+
+#: authenticationwizard.cpp:147
+#, kde-format
+msgid "Manual fingerprint verification"
+msgstr "Ručné overenie odtlačku"
+
+#: authenticationwizard.cpp:178
+#, kde-format
+msgctxt "@title"
+msgid "Question and Answer"
+msgstr "Otázka a odpoveď"
+
+#: authenticationwizard.cpp:180
+#, kde-format
+msgctxt "@info"
+msgid "Enter a question that only <b>%1</b> is able to answer:"
+msgstr "Zadajte otázku, na ktorú pozná odpoveď iba <b>%1</b>:"
+
+#: authenticationwizard.cpp:185
+#, kde-format
+msgctxt "@info"
+msgid "Enter the answer to your question:"
+msgstr "Zadajte odpoveď na vašu otázku:"
+
+#: authenticationwizard.cpp:189 authenticationwizard.cpp:223
+#, kde-format
+msgctxt "@title"
+msgid "Authentication with <b>%1</b>"
+msgstr "Overenie s <b>%1</b>"
+
+#: authenticationwizard.cpp:190
+#, kde-format
+msgctxt "@info"
+msgid ""
+"<b>%1</b> would like to verify your authentication. Please answer the "
+"following question in the field below:"
+msgstr ""
+"<b>%1</b> by rád overil vaše overenie. Prosím odpovedzte na nasledovnú "
+"otázku v tomto poli:"
+
+#: authenticationwizard.cpp:219
+#, kde-format
+msgctxt "@title"
+msgid "Shared Secret"
+msgstr "Zdieľané tajomstvo"
+
+#: authenticationwizard.cpp:221
+#, kde-format
+msgctxt "@info"
+msgid "Enter a secret passphrase known only to you and <b>%1</b>:"
+msgstr "Zadajte tajné heslo, ktoré viete iba vy a <b>%1</b>:"
+
+#: authenticationwizard.cpp:224
+#, kde-format
+msgctxt "@info"
+msgid "Enter the secret passphrase known only to you and <b>%1</b>:"
+msgstr "Zadajte tajné heslo, ktoré poznáte iba vy a <b>%1</b>:"
+
+#: authenticationwizard.cpp:238
+#, kde-format
+msgctxt "@title"
+msgid "Manual Verification"
+msgstr "Ručné overenie"
+
+#: authenticationwizard.cpp:244
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Contact <b>%1</b> via another secure channel and verify that the following "
+"fingerprint is correct:"
+msgstr ""
+"Kontaktujte <b>%1</b> cez iný zabezpečený kanál a skontrolujte, že "
+"nasledovný odtlačok je správny:"
+
+#: authenticationwizard.cpp:253
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have not"
+msgstr "Nemám"
+
+#: authenticationwizard.cpp:254
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have"
+msgstr "Mám"
+
+#: authenticationwizard.cpp:264
+#, kde-format
+msgctxt "@info:label I have..."
+msgid "verified that this is in fact the correct fingerprint for <b>%1</b>."
+msgstr "overil, že toto je prakticky správny odtlačok pre <b>%1</b>."
+
+#: authenticationwizard.cpp:380
+#, kde-format
+msgid "Authentication successful"
+msgstr "Overenie úspešné"
+
+#: authenticationwizard.cpp:384 authenticationwizard.cpp:392
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has been completed successfully. The "
+"conversation is now secure."
+msgstr ""
+"Overenie s <b>%1</b> bolo úspešne ukončené. Rozhovor je teraz bezpečný."
+
+#: authenticationwizard.cpp:388
+#, kde-format
+msgid ""
+"<b>%1</b> has successfully authenticated you. You may want to authenticate "
+"this contact as well by asking your own question."
+msgstr ""
+"<b>%1</b> vás úspešne overil. Možno budete chcieť overiť aj tento kontakt "
+"položením vašej vlastnej otázky."
+
+#: authenticationwizard.cpp:396
+#, kde-format
+msgid "Authentication failed"
+msgstr "Overenie zlyhalo"
+
+#: authenticationwizard.cpp:397
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has failed. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method. Note that the conversation is now insecure."
+msgstr ""
+"Overenie s <b>%1</b> zlyhalo. Aby ste sa uistili, že sa nerozprávate s "
+"podvodníkom, skúste znova použiť metódu ručného overenia odtlačku. "
+"Nezabudnite, že rozhovor teraz nie je bezpečný."
+
+#: authenticationwizard.cpp:419
+#, kde-format
+msgid "Authentication aborted"
+msgstr "Overenie prerušené"
+
+#: authenticationwizard.cpp:420
+#, kde-format
+msgid ""
+"<b>%1</b> has aborted the authentication process. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method."
+msgstr ""
+"<b>%1</b> prerušil proces overenia. Aby ste sa uistili, že sa nerozprávate s "
+"podvodníkom, skúste znova pomocou metódy ručného overenia odtlačku."
+
+#: authenticationwizard.cpp:429
+#, kde-format
+msgid ""
+"Ask <b>%1</b> a question, the answer to which is known only to you and them. "
+"If the answer does not match, you may be talking to an imposter."
+msgstr ""
+"Opýtajte sa <b>%1</b> otázku, ktorej odpoveď poznáte iba vy a daná osoba. Ak "
+"odpoveď nie je správna, možno sa rozprávate s podvodníkom."
+
+#: authenticationwizard.cpp:432
+#, kde-format
+msgid ""
+"Pick a secret known only to you and <b>%1</b>. If the secret does not match, "
+"you may be talking to an imposter. Do not send the secret through the chat "
+"window, or this authentication method could be compromised with ease."
+msgstr ""
+"Vyberte tajomstvo známe iba vám a <b>%1</b>. Ak sa tajomstvo nezhoduje, "
+"možno sa rozprávate s podvodníkom. Neposielajte tajomstvo cez okno "
+"rozhovoru, lebo sa táto metóda overenia dá ľahko zneužiť."
+
+#: authenticationwizard.cpp:436
+#, kde-format
+msgid ""
+"Verify <b>%1's</b> fingerprint manually. For example via a phone call or "
+"signed (and verified) email."
+msgstr ""
+"Ručne overte odtlačok <b>%1</b>. Napríklad cez telefonický hovor alebo "
+"podpísaný a overený e-mail."
+
+#: chat-search-bar.cpp:39
+#, kde-format
+msgctxt "Next search result"
+msgid "&Next"
+msgstr "&Ďalší"
+
+#: chat-search-bar.cpp:40
+#, kde-format
+msgctxt "Previous search result"
+msgid "&Previous"
+msgstr "&Predošlý"
+
+#: chat-search-bar.cpp:49
+#, kde-format
+msgid "Insert search text..."
+msgstr "Vložiť hľadaný text..."
+
+#: chat-search-bar.cpp:58
+#, kde-format
+msgid "Case sensitive"
+msgstr "Rozlišovať veľkosť písmen"
+
+#: chat-widget.cpp:159
+#, kde-format
+msgid "Open chat window"
+msgstr "Otvoriť okno rozhovoru"
+
+#: chat-widget.cpp:163
+#, kde-format
+msgid "Send file"
+msgstr "Poslať súbor"
+
+#: chat-widget.cpp:167
+#, kde-format
+msgid "Show info..."
+msgstr "Zobraziť informácie..."
+
+#: chat-widget.cpp:181
+#, kde-format
+msgid "Share Image"
+msgstr "Zdieľať obrázok"
+
+#: chat-widget.cpp:183 chat-widget.cpp:460
+#, kde-format
+msgid "Send File"
+msgstr "Odoslať súbor"
+
+#: chat-widget.cpp:201
+#, kde-format
+msgid ""
+"Your message cannot be sent because the account %1 is offline. Please try "
+"again when the account is connected again."
+msgstr ""
+"Vašu správu nie je možné odoslať, pretože účet %1 je nepripojený. Prosím "
+"skúste znova, keď bude váš účet pripojený."
+
+#: chat-widget.cpp:207
+#, kde-format
+msgid "Connect %1"
+msgstr "Pripojiť %1"
+
+#: chat-widget.cpp:445
+#, kde-format
+msgid "Share Image via %1"
+msgstr "Zdieľať obrázok cez %1"
+
+#: chat-widget.cpp:455
+#, kde-format
+msgid "Send Image via File Transfer"
+msgstr "Poslať obrázok cez prenos súborov"
+
+#: chat-widget.cpp:690
+#, kde-format
+msgid "Attempting to start a private OTR session with %1"
+msgstr "Pokus o spustenie súkromného OTR sedenia s %1"
+
+#: chat-widget.cpp:693
+#, kde-format
+msgid "Attempting to restart a private OTR session with %1"
+msgstr "Pokus o reštartovanie súkromného OTR sedenia s %1"
+
+#: chat-widget.cpp:713
+#, kde-format
+msgid "Terminating OTR session"
+msgstr "Ukončujem OTR sedenie."
+
+#: chat-widget.cpp:765
+#, kde-format
+msgid "The OTR session is now unverified"
+msgstr "OTR sedenie je teraz neoverené"
+
+#: chat-widget.cpp:768
+#, kde-format
+msgid "Unverified OTR session started"
+msgstr "Neoverené OTR sedenie spustené"
+
+#: chat-widget.cpp:776
+#, kde-format
+msgid "The OTR session is now private"
+msgstr "OTR sedenie je teraz súkromné"
+
+#: chat-widget.cpp:779
+#, kde-format
+msgid "Private OTR session started"
+msgstr "Súkromné OTR sedenie spustené"
+
+#: chat-widget.cpp:786
+#, kde-format
+msgid "%1 has ended the OTR session. You should do the same"
+msgstr "%1 ukončil OTR sedenie. Mali by ste urobiť to isté."
+
+#: chat-widget.cpp:802
+#, kde-format
+msgid "Successfully refreshed private OTR session"
+msgstr "Úspešne obnovené súkromné OTR sedenie"
+
+#: chat-widget.cpp:803
+#, kde-format
+msgid "Successfully refreshed unverified OTR session"
+msgstr "Úspešne obnovené neoverené OTR sedenie"
+
+#: chat-widget.cpp:902
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is blocked"
+msgstr ""
+"Doručenie správy \"%1\" zlyhalo, pretože vzdialený kontakt je blokovaný"
+
+#: chat-widget.cpp:906
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is offline"
+msgstr "Doručenie správy \"%1\" zlyhalo, pretože vzdialený kontakt je odpojený"
+
+#: chat-widget.cpp:912
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is blocked"
+msgstr "Doručenie správy zlyhalo, pretože vzdialený kontakt je blokovaný"
+
+#: chat-widget.cpp:915
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is offline"
+msgstr "Doručenie správy zlyhalo, pretože vzdialený kontakt je odpojený"
+
+#: chat-widget.cpp:922
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is not valid"
+msgstr ""
+"Doručenie správy \"%1\" zlyhalo, pretože vzdialený kontakt nie je platný"
+
+#: chat-widget.cpp:926
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is not valid"
+msgstr "Doručenie správy zlyhalo, pretože vzdialený kontakt nie je platný"
+
+#: chat-widget.cpp:932
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because you do not have permission to "
+"speak in this room"
+msgstr ""
+"Doručenie správy \"%1\" zlyhalo, pretože nemáme oprávnenia hovoriť v tejto "
+"miestnosti"
+
+#: chat-widget.cpp:936
+#, kde-format
+msgid ""
+"Delivery of a message failed because you do not have permission to speak in "
+"this room"
+msgstr ""
+"Doručenie správy zlyhalo, pretože nemáme oprávnenia hovoriť v tejto "
+"miestnosti"
+
+#: chat-widget.cpp:942
+#, kde-format
+msgid "Delivery of the message \"%1\" failed because it was too long"
+msgstr "Doručenie správy \"%1\" zlyhalo, pretože bola príliš dlhá"
+
+#: chat-widget.cpp:946
+#, kde-format
+msgid "Delivery of a message failed because it was too long"
+msgstr "Doručenie správy zlyhalo, pretože je príliš dlhá"
+
+#: chat-widget.cpp:952
+#, kde-format
+msgid "Delivery of the message \"%1\" failed: %2"
+msgstr "Doručenie správy \"%1\" zlyhalo: %2"
+
+#: chat-widget.cpp:956
+#, kde-format
+msgid "Delivery of a message failed: %1"
+msgstr "Doručenie správy zlyhalo: %1"
+
+#: chat-widget.cpp:1019
+#, kde-format
+msgid ""
+"%1 has already closed his/her private connection to you. Your message was "
+"not sent. Either end your private conversation, or restart it."
+msgstr ""
+"%1 už zatvoril svoje súkromné prepojenie s vami. Vaša správa nebola "
+"odoslaná. Buď ukončite vašu súkromnú konverzáciu, alebo ju reštartujte."
+
+#: chat-widget.cpp:1060 chat-widget.cpp:1153
+#, kde-format
+msgid "%1 has left the chat"
+msgstr "%1 opustil rozhovor"
+
+#: chat-widget.cpp:1099
+#, kde-format
+msgctxt "Your presence status"
+msgid "You are now marked as %1"
+msgstr "Teraz ste označený ako %1"
+
+#: chat-widget.cpp:1103
+#, kde-format
+msgctxt "Your presence status with status message"
+msgid "You are now marked as %1 - %2"
+msgstr "Teraz ste označený ako %1 - %2"
+
+#: chat-widget.cpp:1109
+#, kde-format
+msgctxt "User's name, with their new presence status (i.e online/away)"
+msgid "%1 is %2"
+msgstr "%1 je %2"
+
+#: chat-widget.cpp:1111
+#, kde-format
+msgctxt ""
+"User's name, with their new presence status (i.e online/away) and a "
+"sepecified presence message"
+msgid "%1 is %2 - %3"
+msgstr "%1 je %2 - %3"
+
+#: chat-widget.cpp:1139
+#, kde-format
+msgid "You are now known as %1"
+msgstr "Teraz ste známy ako %1"
+
+#: chat-widget.cpp:1147
+#, kde-format
+msgid "%1 is now known as %2"
+msgstr "%1 je odteraz známy ako %2"
+
+#: chat-widget.cpp:1166
+#, kde-format
+msgid "%1 is now blocked."
+msgstr "%1 je teraz blokovaný."
+
+#: chat-widget.cpp:1168
+#, kde-format
+msgid "%1 is now unblocked."
+msgstr "%1 je teraz odblokovaný."
+
+#: chat-widget.cpp:1197
+#, kde-format
+msgid "%1 has joined the chat"
+msgstr "%1 sa pridal k rozhovoru"
+
+#: chat-widget.cpp:1238 chat-widget.cpp:1401
+#, kde-format
+msgid "Group Chat"
+msgstr "Skupinový rozhovor"
+
+#: chat-widget.cpp:1453
+#, kde-format
+msgid "You are now offline"
+msgstr "Teraz ste nepripojený"
+
+#: chat-widget.cpp:1534
+#, kde-format
+msgid "Uploading Image has Failed with Error: %1"
+msgstr "Nahrávanie obrázku zlyhalo s chybou: %1"
+
+#: chat-window-style.cpp:352
+#, kde-format
+msgctxt "Normal style variant menu item"
+msgid "Normal"
+msgstr "Normálne"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Download"
+msgstr "Stiahnuť"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Play"
+msgstr "Prehrať"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Save as"
+msgstr "Uložiť ako"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KeyGenDialog)
+#: keygendialog.ui:14
+#, kde-format
+msgid "Please Wait"
+msgstr "Prosím čakajte"
+
+#. i18n: ectx: property (text), widget (QLabel, lbText)
+#: keygendialog.ui:32
+#, kde-format
+msgid "Please wait while generating the private key"
+msgstr "Prosím čakajte, kým sa generuje súkromný kľúč"
+
+#. i18n: ectx: property (text), widget (QLabel, lbTime)
+#: keygendialog.ui:49
+#, kde-format
+msgid "TextLabel"
+msgstr "TextLabel"
+
+#: notify-filter.cpp:74
+#, kde-format
+msgid "%1 has sent you a message"
+msgstr "%1 vám poslal správu"
+
+#: notify-filter.cpp:87 otr-notifications.cpp:47
+#, kde-format
+msgid "View"
+msgstr "Zobraziť"
+
+#: otr-notifications.cpp:61
+#, kde-format
+msgid "Private OTR session started with %1"
+msgstr "Súkromné OTR sedenie spustené s %1"
+
+#: otr-notifications.cpp:63
+#, kde-format
+msgid "Unverified OTR session started with %1"
+msgstr "Neoverené OTR sedenie spustené s %1"
+
+#: otr-notifications.cpp:77
+#, kde-format
+msgid "Finished OTR session with %1"
+msgstr "Ukončené OTR sedenie s %1"
+
+#: otr-notifications.cpp:89
+#, kde-format
+msgid "%1 has requested your authentication"
+msgstr "%1 vyžaduje vaše overenie"
+
+#: otr-notifications.cpp:103
+#, kde-format
+msgid "Authentication with %1 completed successfully"
+msgstr "Overenie s %1 ukončené úspešne"
+
+#: otr-notifications.cpp:105 otr-notifications.cpp:132
+#, kde-format
+msgid "Authentication with %1 failed"
+msgstr "Overenie s %1 zlyhalo"
+
+#: otr-notifications.cpp:119
+#, kde-format
+msgid "Authentication with %1 was aborted"
+msgstr "Overenie s %1 bolo prerušené"
+
+#: proxy-service.cpp:44
+#, kde-format
+msgid "Generating the private key for %1..."
+msgstr "Generujem súkromný kľúč pre %1..."
+
+#: proxy-service.cpp:45
+#, kde-format
+msgid "This may take some time"
+msgstr "Toto môže trvať nejaký čas"
+
+#: proxy-service.cpp:57
+#, kde-format
+msgid "Please wait"
+msgstr "Prosím čakajte"
+
+#: proxy-service.cpp:89
+#, kde-format
+msgid "Could not generate a private key for %1"
+msgstr "Nemôžem vygenerovať súkromný kľúč pre %1"
+
+#: proxy-service.cpp:91
+#, kde-format
+msgid "Finished generating the private key for %1"
+msgstr "Ukončené generovanie súkromného kľúča pre %1"
+
+#~ msgctxt "@info"
+#~ msgid "Authentication with <b>%1</b>"
+#~ msgstr "Overenie s <b>%1</b>"

@@ -1,0 +1,101 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2011, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2012-05-01 10:01+0300\n"
+"Last-Translator: Marek Laane <bald@smail.ee>\n"
+"Language-Team: Estonian <kde-et@linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Marek Laane"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "bald@smail.ee"
+
+#: adiumxtra-protocol-handler.cpp:90 adiumxtra-protocol-handler.cpp:145
+#, kde-format
+msgid "Package type not recognized or not supported"
+msgstr "Paketitüüp ei ole tuntud või toetatud"
+
+#: adiumxtra-protocol-handler.cpp:91 adiumxtra-protocol-handler.cpp:148
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
+#: chat-style-installer.cpp:113
+#, kde-format
+msgid "Install Chatstyle %1"
+msgstr "Vestlusstiili %1 paigaldamine"
+
+#: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
+#, kde-format
+msgid "Install"
+msgstr "Paigalda"
+
+#: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
+#, kde-format
+msgid "Cancel"
+msgstr "Loobu"
+
+#: chat-style-installer.cpp:135
+#, kde-format
+msgid "Installed Chatstyle %1 successfully."
+msgstr "Vestlusstiil %1 paigaldati edukalt"
+
+#: chat-style-installer.cpp:139
+#, kde-format
+msgid "Installation of Chatstyle %1 failed."
+msgstr "Vestlusstiili %1 paigaldamine nurjus"
+
+#: emoticon-set-installer.cpp:98
+#, kde-format
+msgid "Install Emoticonset %1"
+msgstr "Emotikonikogu %1 paigaldamine"
+
+#: emoticon-set-installer.cpp:117
+#, kde-format
+msgid "Installed Emoticonset %1 successfully."
+msgstr "Emotikonikogu %1 paigaldati edukalt"
+
+#: main.cpp:34
+#, kde-format
+msgid "AdiumXtra Protocol Handler"
+msgstr "AdiumXtra protokolli käsitleja"
+
+#: main.cpp:36
+#, kde-format
+msgid "Dominik Schmidt"
+msgstr "Dominik Schmidt"
+
+#: main.cpp:36 main.cpp:37
+#, kde-format
+msgid "Developer"
+msgstr "Arendaja"
+
+#: main.cpp:37
+#, kde-format
+msgid "Daniele E. Domenichelli"
+msgstr "Daniele E. Domenichelli"
+
+#: main.cpp:44
+#, kde-format
+msgid "Adium package to install"
+msgstr "Paigaldatav Adiumi pakett"
+
+#~ msgid "Ok"
+#~ msgstr "OK"

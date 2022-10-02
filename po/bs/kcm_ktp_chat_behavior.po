@@ -1,0 +1,153 @@
+# Bosnian translation for bosnianuniversetranslation
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
+# This file is distributed under the same license as the bosnianuniversetranslation package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bosnianuniversetranslation\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-02-15 23:53+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2015-02-16 06:43+0000\n"
+"X-Generator: Launchpad (build 17341)\n"
+
+#: behavior-config.cpp:50
+#, kde-format
+msgctxt ""
+"Part of config 'show last [spin box] messages' This is the suffix to the "
+"spin box. Be sure to include leading space"
+msgid " message"
+msgid_plural " messages"
+msgstr[0] " poruka"
+msgstr[1] " poruke"
+msgstr[2] " poruka"
+
+#: behavior-config.cpp:67
+#, kde-format
+msgctxt "Placeholder for contact name in completion suffix selector"
+msgid "Nickname"
+msgstr "Nadimak"
+
+#. i18n: ectx: property (title), widget (QGroupBox, newTabGroupBox)
+#: behavior-config.ui:17
+#, kde-format
+msgid "Tabs"
+msgstr "Tabulatori"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: behavior-config.ui:23
+#, kde-format
+msgid "Open new conversations:"
+msgstr "Otvori nove konverzacije kao :"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioNew)
+#: behavior-config.ui:30
+#, kde-format
+msgid "As new windows"
+msgstr "Novi prozor"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioZero)
+#: behavior-config.ui:40
+#, kde-format
+msgid "As tabs in the same window"
+msgstr "Nova kartica u prvom prozoru"
+
+#. i18n: ectx: property (title), widget (QGroupBox, scrollbackGroupBox)
+#: behavior-config.ui:53
+#, kde-format
+msgid "Last Conversation Scrollback"
+msgstr "Klizanje na zadnju konverzaciju"
+
+#. i18n: First part of &quot;Show last %1 messages&quot; string
+#. i18n: ectx: property (text), widget (QLabel, label_p1)
+#: behavior-config.ui:59
+#, kde-format
+msgid "Show last"
+msgstr "Prikaži zadnje"
+
+#. i18n: ectx: property (title), widget (QGroupBox, typingGroupBox)
+#: behavior-config.ui:85
+#, kde-format
+msgid "User Is Typing"
+msgstr "Korisnik tipka"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxShowOthersTyping)
+#: behavior-config.ui:91
+#, kde-format
+msgid "Show me when others are typing"
+msgstr "Pokaži kada drugi tipkaju"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxShowMeTyping)
+#: behavior-config.ui:98
+#, kde-format
+msgid "Show others when I am typing"
+msgstr "Pokaži drugim kada ja tipkam"
+
+#. i18n: ectx: property (title), widget (QGroupBox, nicknameCompletionGroup)
+#: behavior-config.ui:108
+#, kde-format
+msgid "Nickname Completion"
+msgstr "Dovršavanje nadimka"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: behavior-config.ui:117
+#, kde-format
+msgid "Complete nicknames to"
+msgstr "Dovrši nadimke za"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: behavior-config.ui:137
+#, kde-format
+msgid "when I press Tab"
+msgstr "kada pritisnem Tab"
+
+#. i18n: ectx: property (title), widget (QGroupBox, kbuttongroup)
+#: behavior-config.ui:147
+#, kde-format
+msgid "Image Sharing"
+msgstr "Dijeljenje slika"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: behavior-config.ui:156
+#, kde-format
+msgid "Image Sharing Service"
+msgstr "Usliga dijeljenja slika"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: behavior-config.ui:179
+#, kde-format
+msgid "Works when dragging an image to the Chat Window"
+msgstr "Radi kada prevlačite sliku u prozor za ćaskanje"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupChatsGroup)
+#: behavior-config.ui:195
+#, kde-format
+msgid "Group Chats"
+msgstr "Grupna ćaskanja"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dontLeaveGroupChats)
+#: behavior-config.ui:207
+#, kde-format
+msgid "Stay connected to group chat even when tab is closed"
+msgstr "Ostanite povezani na grupno ćaskanje čak i kada je kartica zatvorena."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: behavior-config.ui:217
+#, kde-format
+msgid "Keyboard Layouts"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, rememberTabKeyboardLayout)
+#: behavior-config.ui:223
+#, kde-format
+msgid "Remember keyboard layout for each tab"
+msgstr ""

@@ -1,0 +1,212 @@
+# translation of telepathy-chat-window-config.po to Italian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Pino Toscano <toscano.pino@tiscali.it>, 2011, 2012, 2013, 2014, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: telepathy-chat-window-config\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-12-08 21:57+0100\n"
+"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: behavior-config.cpp:50
+#, kde-format
+msgctxt ""
+"Part of config 'show last [spin box] messages' This is the suffix to the "
+"spin box. Be sure to include leading space"
+msgid " message"
+msgid_plural " messages"
+msgstr[0] " messaggio"
+msgstr[1] " messaggi"
+
+#: behavior-config.cpp:67
+#, kde-format
+msgctxt "Placeholder for contact name in completion suffix selector"
+msgid "Nickname"
+msgstr "Nick"
+
+#. i18n: ectx: property (title), widget (QGroupBox, newTabGroupBox)
+#: behavior-config.ui:17
+#, kde-format
+msgid "Tabs"
+msgstr "Schede"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: behavior-config.ui:23
+#, kde-format
+msgid "Open new conversations:"
+msgstr "Apri nuove conversazioni:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioNew)
+#: behavior-config.ui:30
+#, kde-format
+msgid "As new windows"
+msgstr "Come nuove finestre"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioZero)
+#: behavior-config.ui:40
+#, kde-format
+msgid "As tabs in the same window"
+msgstr "Come schede nella stessa finestra"
+
+#. i18n: ectx: property (title), widget (QGroupBox, scrollbackGroupBox)
+#: behavior-config.ui:53
+#, kde-format
+msgid "Last Conversation Scrollback"
+msgstr "Scorrimento all'indietro dell'ultima conversazione"
+
+#. i18n: First part of &quot;Show last %1 messages&quot; string
+#. i18n: ectx: property (text), widget (QLabel, label_p1)
+#: behavior-config.ui:59
+#, kde-format
+msgid "Show last"
+msgstr "Mostra gli ultimi"
+
+#. i18n: ectx: property (title), widget (QGroupBox, typingGroupBox)
+#: behavior-config.ui:85
+#, kde-format
+msgid "User Is Typing"
+msgstr "L'utente sta scrivendo"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxShowOthersTyping)
+#: behavior-config.ui:91
+#, kde-format
+msgid "Show me when others are typing"
+msgstr "Mostra quando gli altri stanno scrivendo"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxShowMeTyping)
+#: behavior-config.ui:98
+#, kde-format
+msgid "Show others when I am typing"
+msgstr "Mostra agli altri quando sto scrivendo"
+
+#. i18n: ectx: property (title), widget (QGroupBox, nicknameCompletionGroup)
+#: behavior-config.ui:108
+#, kde-format
+msgid "Nickname Completion"
+msgstr "Completamento dei nick"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: behavior-config.ui:117
+#, kde-format
+msgid "Complete nicknames to"
+msgstr "Completa i nick in"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: behavior-config.ui:137
+#, kde-format
+msgid "when I press Tab"
+msgstr "quando premo Tab"
+
+#. i18n: ectx: property (title), widget (QGroupBox, kbuttongroup)
+#: behavior-config.ui:147
+#, kde-format
+msgid "Image Sharing"
+msgstr "Condivisione di immagini"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: behavior-config.ui:156
+#, kde-format
+msgid "Image Sharing Service"
+msgstr "Servizio di condivisione di immagini"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: behavior-config.ui:179
+#, kde-format
+msgid "Works when dragging an image to the Chat Window"
+msgstr "Funziona quando viene trascinata un'immagine sulla finestra di chat"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupChatsGroup)
+#: behavior-config.ui:195
+#, kde-format
+msgid "Group Chats"
+msgstr "Chat di gruppo"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dontLeaveGroupChats)
+#: behavior-config.ui:207
+#, kde-format
+msgid "Stay connected to group chat even when tab is closed"
+msgstr "Rimani connesso alla chat di gruppo anche quando la scheda è chiusa"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: behavior-config.ui:217
+#, kde-format
+msgid "Keyboard Layouts"
+msgstr "Mappature della tastiera"
+
+#. i18n: ectx: property (text), widget (QCheckBox, rememberTabKeyboardLayout)
+#: behavior-config.ui:223
+#, kde-format
+msgid "Remember keyboard layout for each tab"
+msgstr "Ricorda la mappatura della tastiera per ciascuna scheda"
+
+#~ msgid "A new tab in the last focused window"
+#~ msgstr "Una nuova scheda nell'ultima finestra con il focus"
+
+#~ msgid "A demo chat"
+#~ msgstr "Una chat demo"
+
+#~ msgid "Jabber"
+#~ msgstr "Jabber"
+
+#~ msgid "BobMarley@yahoo.com"
+#~ msgstr "BobMarley@yahoo.com"
+
+#~ msgid "Bob Marley"
+#~ msgstr "Bob Marley"
+
+#~ msgid "Bye Bye"
+#~ msgstr "Ciao ciao"
+
+#~ msgid "larry@example.com"
+#~ msgstr "mario@esempio.it"
+
+#~ msgid "Larry Demo"
+#~ msgstr "Mario Rossi"
+
+#~ msgid "cya"
+#~ msgstr "ciao"
+
+#~ msgid "ted@example.com"
+#~ msgstr "davide@esempio.it"
+
+#~ msgid "Ted Example"
+#~ msgstr "Davide Verdi"
+
+#~ msgid "Hello"
+#~ msgstr "Ciao"
+
+#~ msgid "A different example message"
+#~ msgstr "Un messaggio d'esempio differente"
+
+#~ msgid "Ted Example has left the chat."
+#~ msgstr "Davide Verdi ha lasciato la chat."
+
+#~ msgid "Use Custom Font Settings"
+#~ msgstr "Usa impostazioni personalizzate dei caratteri"
+
+#~ msgid "Select Font: "
+#~ msgstr "Scegli carattere:"
+
+#~ msgid "Select Size: "
+#~ msgstr "Scegli dimensione:"
+
+#~ msgid "Style"
+#~ msgstr "Stile"
+
+#~ msgid "Message Style:"
+#~ msgstr "Stile dei messaggi:"
+
+#~ msgid "Variant:"
+#~ msgstr "Variante:"
+
+#~ msgid "Show User Icons"
+#~ msgstr "Mostra icone degli utenti"

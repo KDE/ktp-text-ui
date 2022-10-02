@@ -1,0 +1,251 @@
+# Translation of ktp-log-viewer.po to Catalan
+# Copyright (C) 2014-2022 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2016, 2020.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: ktp-text-ui\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2020-01-16 03:16+0100\n"
+"PO-Revision-Date: 2022-09-07 18:47+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Generator: Lokalize 20.12.0\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Antoni Bella"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "antonibella5@yahoo.com"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/behavior-config.ui:17
+#, kde-format
+msgid "History"
+msgstr "Historial"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/behavior-config.ui:23
+#, kde-format
+msgid "Sort messages:"
+msgstr "Ordena els missatges:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, sortOldestOnTop)
+#: config/behavior-config.ui:30
+#, kde-format
+msgid "&Oldest on top"
+msgstr "Més an&tics a dalt"
+
+#. i18n: ectx: property (text), widget (QRadioButton, sortNewestOnTop)
+#: config/behavior-config.ui:43
+#, kde-format
+msgid "&Newest on top"
+msgstr "Més &nous a dalt"
+
+#: dates-model.cpp:336
+#, kde-format
+msgctxt "Number of existing conversations."
+msgid "%1 conversation"
+msgid_plural "%1 conversations"
+msgstr[0] "%1 conversa"
+msgstr[1] "%1 converses"
+
+#: log-viewer.cpp:101
+#, kde-format
+msgctxt "Placeholder text in line edit for filtering contacts"
+msgid "Filter contacts..."
+msgstr "Filtra els contactes..."
+
+#: log-viewer.cpp:140
+#, kde-format
+msgid "&Configure LogViewer"
+msgstr "&Configura el Visualitzador del registre"
+
+#: log-viewer.cpp:144
+#, kde-format
+msgid "Clear &account history"
+msgstr "Neteja l'historial del c&ompte"
+
+#: log-viewer.cpp:148
+#, kde-format
+msgid "Clear &contact history"
+msgstr "Neteja l'historial del &contacte"
+
+#: log-viewer.cpp:153
+#, kde-format
+msgid "&Import Kopete Logs"
+msgstr "&Importa els registres del Kopete"
+
+#: log-viewer.cpp:157
+#, kde-format
+msgid "&Previous Conversation"
+msgstr "Conversa &anterior"
+
+#: log-viewer.cpp:163
+#, kde-format
+msgid "&Next Conversation"
+msgstr "Conversa &següent"
+
+#: log-viewer.cpp:399
+#, kde-format
+msgid "Are you sure you want to remove all logs from account %1?"
+msgstr "De veres voleu suprimir tots els registres del compte %1?"
+
+#: log-viewer.cpp:400
+#, kde-format
+msgid "Clear account history"
+msgstr "Neteja l'historial del compte"
+
+#: log-viewer.cpp:423
+#, kde-format
+msgctxt "%1 is contactdisplay name"
+msgid "Are you sure you want to remove history of all conversations with %1?"
+msgstr "De veres voleu eliminar l'historial de totes les converses amb %1?"
+
+#: log-viewer.cpp:424 log-viewer.cpp:446
+#, kde-format
+msgid "Clear contact history"
+msgstr "Neteja l'historial del contacte"
+
+#: log-viewer.cpp:445
+#, kde-format
+msgctxt "%1 is contact display name, %2 is contact UID"
+msgid ""
+"Are you sure you want to remove history of all conversations with %1 (%2)?"
+msgstr ""
+"De veres voleu eliminar l'historial de totes les converses amb %1 (%2)?"
+
+#: log-viewer.cpp:488
+#, kde-format
+msgid "No Kopete logs found."
+msgstr "No s'ha trobat cap registre del Kopete."
+
+#: log-viewer.cpp:543
+#, kde-format
+msgid "There are no logs for this contact"
+msgstr "No hi ha registres per a aquest contacte"
+
+#. i18n: ectx: Menu (logs)
+#: log-viewer.rc:11
+#, kde-format
+msgid "L&ogs"
+msgstr "&Registres"
+
+#. i18n: ectx: Menu (conversation)
+#: log-viewer.rc:17
+#, kde-format
+msgid "&Conversation"
+msgstr "&Conversa"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, LogViewer)
+#: log-viewer.ui:14
+#, kde-format
+msgid "LogViewer"
+msgstr "Visualitzador del registre"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, globalSearch)
+#: log-viewer.ui:20
+#, kde-format
+msgid "Search all logs..."
+msgstr "Cerca a tots els registres..."
+
+#: logs-import-dialog.cpp:44
+#, kde-format
+msgid "Import Logs"
+msgstr "Importa els registres"
+
+#: logs-import-dialog.cpp:50
+#, kde-format
+msgid "Import Kopete Logs"
+msgstr "Importa els registres del Kopete"
+
+#: logs-import-dialog.cpp:60
+#, kde-format
+msgid ""
+"We have found Kopete logs that seem to match some of your KDE Telepathy "
+"accounts.\n"
+"\n"
+"Do you want to import these logs from Kopete to KDE Telepathy?"
+msgstr ""
+"S'han trobat registres del Kopete que semblen coincidir amb alguns dels "
+"vostres comptes al Telepathy KDE.\n"
+"\n"
+"Voleu importar aquests registres del Kopete al Telepathy KDE?"
+
+#: logs-import-dialog.cpp:140
+#, kde-format
+msgid "Done"
+msgstr "Fet"
+
+#: main.cpp:43
+#, kde-format
+msgid "KDE IM Log Viewer"
+msgstr "Visualitzador de registres de la MI del KDE"
+
+#: main.cpp:45
+#, kde-format
+msgid "David Edmundson"
+msgstr "David Edmundson"
+
+#: main.cpp:45 main.cpp:46 main.cpp:47
+#, kde-format
+msgid "Developer"
+msgstr "Desenvolupador"
+
+#: main.cpp:46
+#, kde-format
+msgid "Daniele E. Domenichelli"
+msgstr "Daniele E. Domenichelli"
+
+#: main.cpp:47
+#, kde-format
+msgid "Dan Vrátil"
+msgstr "Dan Vrátil"
+
+#: main.cpp:59
+#, kde-format
+msgid "The UID of the account to preselect"
+msgstr "La UID del compte a seleccionar prèviament"
+
+#: main.cpp:60
+#, kde-format
+msgid "The UID of the contact to preselect"
+msgstr "La UID del contacte a seleccionar prèviament"
+
+#: message-view.cpp:64
+#, kde-format
+msgid "Unknown or invalid contact"
+msgstr "Contacte desconegut o no vàlid"
+
+#: message-view.cpp:165
+#, kde-format
+msgid "Older conversation"
+msgstr "Conversa antiga"
+
+#: message-view.cpp:172
+#, kde-format
+msgid "Newer conversation"
+msgstr "Conversa nova"
+
+#: message-view.cpp:189
+#, kde-format
+msgid "There are no logs for this day"
+msgstr "No hi ha registres per a aquest dia"
+
+#: person-entity-merge-model.cpp:158
+#, kde-format
+msgid "Unsorted"
+msgstr "Sense ordenar"

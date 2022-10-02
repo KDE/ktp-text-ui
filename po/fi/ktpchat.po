@@ -1,0 +1,671 @@
+# Copyright © 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the ktp-text-ui package.
+# Tommi Nieminen <translator@legisign.org>, 2012.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014, 2015.
+#
+# KDE Finnish translation sprint participants:
+# Author: Artnay
+# Author: Lliehu
+msgid ""
+msgstr ""
+"Project-Id-Version: ktpchat\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-05-08 01:13+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2012-12-01 22:21:14+0000\n"
+"X-Generator: Lokalize 2.0\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Tommi Nieminen,Lasse Liehu"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "translator@legisign.org,lasse.liehu@gmail.com"
+
+#: adium-theme-view.cpp:119
+#, kde-format
+msgid ""
+"Failed to load a valid theme. Your installation is broken. Check your kde "
+"path. Will now crash."
+msgstr ""
+"Kelvollista teemaa ei saatu ladatuksi. Asennuksesi on rikki. Tarkista KDE-"
+"polkusi. Ohjelma kaatuu nyt."
+
+#: adium-theme-view.cpp:210
+#, kde-format
+msgid "Missing required file Template.html - check your installation."
+msgstr "Vaadittu tiedosto Template.html puuttuu – tarkista asennuksesi."
+
+#: adium-theme-view.cpp:648
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Conversation began %1"
+msgstr "Keskustelu alkoi %1"
+
+#: adium-theme-view.cpp:652
+#, kde-format
+msgctxt "Header at top of conversation view. %1 is the time format"
+msgid "Joined at %1"
+msgstr "Liittyi %1"
+
+#: authenticationwizard.cpp:49
+#, kde-format
+msgctxt "@title"
+msgid "Authenticating contact..."
+msgstr "Tunnistetaan käyttäjää…"
+
+#: authenticationwizard.cpp:100
+#, kde-format
+msgid "Waiting for <b>%1</b>..."
+msgstr "Odotetaan käyttäjää <b>%1</b>…"
+
+#: authenticationwizard.cpp:101
+#, kde-format
+msgid "Checking if answers match..."
+msgstr "Tarkistetaan täsmäävätkö vastaukset…"
+
+#: authenticationwizard.cpp:143
+#, kde-format
+msgctxt "@title"
+msgid "Select authentication method"
+msgstr "Valitse tunnistautumistapa"
+
+#: authenticationwizard.cpp:145
+#, kde-format
+msgid "Question and Answer"
+msgstr "Kysymys ja vastaus"
+
+#: authenticationwizard.cpp:146
+#, kde-format
+msgid "Shared Secret"
+msgstr "Jaettu salaisuus"
+
+#: authenticationwizard.cpp:147
+#, kde-format
+msgid "Manual fingerprint verification"
+msgstr "Sormenjälkien tarkistus käsin"
+
+#: authenticationwizard.cpp:178
+#, kde-format
+msgctxt "@title"
+msgid "Question and Answer"
+msgstr "Kysymys ja vastaus"
+
+#: authenticationwizard.cpp:180
+#, kde-format
+msgctxt "@info"
+msgid "Enter a question that only <b>%1</b> is able to answer:"
+msgstr "Kirjoita kysymys, johon vain <b>%1</b> pystyy vastaamaan:"
+
+#: authenticationwizard.cpp:185
+#, kde-format
+msgctxt "@info"
+msgid "Enter the answer to your question:"
+msgstr "Kirjoita vastaus kysymykseesi:"
+
+#: authenticationwizard.cpp:189 authenticationwizard.cpp:223
+#, kde-format
+msgctxt "@title"
+msgid "Authentication with <b>%1</b>"
+msgstr "Tunnistautuminen käyttäjän <b>%1</b> kanssa"
+
+#: authenticationwizard.cpp:190
+#, kde-format
+msgctxt "@info"
+msgid ""
+"<b>%1</b> would like to verify your authentication. Please answer the "
+"following question in the field below:"
+msgstr ""
+"<b>%1</b> pyytää sinua tunnistautumaan. Vastaa seuraavaan kysymykseen alla "
+"olevaan kenttään:"
+
+#: authenticationwizard.cpp:219
+#, kde-format
+msgctxt "@title"
+msgid "Shared Secret"
+msgstr "Jaettu salaisuus"
+
+#: authenticationwizard.cpp:221
+#, kde-format
+msgctxt "@info"
+msgid "Enter a secret passphrase known only to you and <b>%1</b>:"
+msgstr "Anna vain sinun ja käyttäjän <b>%1</b> tuntema salalause:"
+
+#: authenticationwizard.cpp:224
+#, kde-format
+msgctxt "@info"
+msgid "Enter the secret passphrase known only to you and <b>%1</b>:"
+msgstr "Anna vain sinun ja käyttäjän <b>%1</b> tuntema salalause:"
+
+#: authenticationwizard.cpp:238
+#, kde-format
+msgctxt "@title"
+msgid "Manual Verification"
+msgstr "Tarkistus käsin"
+
+#: authenticationwizard.cpp:244
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Contact <b>%1</b> via another secure channel and verify that the following "
+"fingerprint is correct:"
+msgstr ""
+"Ota yhteyttä henkilöön <b>%1</b> toisen salatun kanavan kautta ja varmista, "
+"että seuraava sormenjälki on oikein:"
+
+#: authenticationwizard.cpp:253
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have not"
+msgstr "En ole"
+
+#: authenticationwizard.cpp:254
+#, kde-format
+msgctxt "@item:inlistbox ...verified that"
+msgid "I have"
+msgstr "Olen"
+
+#: authenticationwizard.cpp:264
+#, kde-format
+msgctxt "@info:label I have..."
+msgid "verified that this is in fact the correct fingerprint for <b>%1</b>."
+msgstr ""
+"varmistanut, että tämä todella on henkilön <b>%1</b> oikea sormenjälki."
+
+#: authenticationwizard.cpp:380
+#, kde-format
+msgid "Authentication successful"
+msgstr "Tunnistautuminen onnistui"
+
+#: authenticationwizard.cpp:384 authenticationwizard.cpp:392
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has been completed successfully. The "
+"conversation is now secure."
+msgstr ""
+"Tunnistautuminen henkilön <b>%1</b> kanssa on nyt onnistuneesti tehty. "
+"Keskustelu on nyt turvallista."
+
+#: authenticationwizard.cpp:388
+#, kde-format
+msgid ""
+"<b>%1</b> has successfully authenticated you. You may want to authenticate "
+"this contact as well by asking your own question."
+msgstr ""
+"<b>%1</b> on onnistunut tunnistamaan sinut. Halunnet tunnistaa tämän "
+"henkilön kysymällä myös oman kysymyksesi."
+
+#: authenticationwizard.cpp:396
+#, kde-format
+msgid "Authentication failed"
+msgstr "Tunnistautuminen epäonnistui"
+
+#: authenticationwizard.cpp:397
+#, kde-format
+msgid ""
+"The authentication with <b>%1</b> has failed. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method. Note that the conversation is now insecure."
+msgstr ""
+"Tunnistautuminen henkilön <b>%1</b> kanssa epäonnistui. Varmistaaksesi ettet "
+"puhu huijarin kanssa, yritä sormenjälkien tarkistusta käsin uudelleen. "
+"Huomaa, että keskustelu ei nyt ole turvallista."
+
+#: authenticationwizard.cpp:419
+#, kde-format
+msgid "Authentication aborted"
+msgstr "Tunnistautuminen keskeytettiin"
+
+#: authenticationwizard.cpp:420
+#, kde-format
+msgid ""
+"<b>%1</b> has aborted the authentication process. To make sure you are not "
+"talking to an imposter, try again using the manual fingerprint verification "
+"method."
+msgstr ""
+"<b>%1</b> keskeytti tunnistautumisprosessin. Varmistaaksesi, ettet puhu "
+"huijarin kanssa, yritä sormenjälkien tarkistusta käsin uudelleen."
+
+#: authenticationwizard.cpp:429
+#, kde-format
+msgid ""
+"Ask <b>%1</b> a question, the answer to which is known only to you and them. "
+"If the answer does not match, you may be talking to an imposter."
+msgstr ""
+"Kysy henkilöltä <b>%1</b> kysymys, jonka vastauksen tunnette vain sinä ja "
+"hän. Elleivät vastaukset täsmää, saatat puhua huijarin kanssa."
+
+#: authenticationwizard.cpp:432
+#, kde-format
+msgid ""
+"Pick a secret known only to you and <b>%1</b>. If the secret does not match, "
+"you may be talking to an imposter. Do not send the secret through the chat "
+"window, or this authentication method could be compromised with ease."
+msgstr ""
+"Valitse salaisuus, jonka vain sinä ja <b>%1</b> tunnette. Elleivät "
+"salaisuudet vastaa toisiaan, saatat puhua huijarin kanssa. Älä lähetä "
+"salaisuutta keskusteluikkunassa tai tämä tunnistautumistapa voidaan helposti "
+"murtaa."
+
+#: authenticationwizard.cpp:436
+#, kde-format
+msgid ""
+"Verify <b>%1's</b> fingerprint manually. For example via a phone call or "
+"signed (and verified) email."
+msgstr ""
+"Tarkista henkilön <b>%1</b> sormenjälki itse esimerkiksi puhelimitse tai "
+"allekirjoitetulla (ja tarkistetulla) sähköpostilla."
+
+#: chat-search-bar.cpp:39
+#, kde-format
+msgctxt "Next search result"
+msgid "&Next"
+msgstr "&Seuraava"
+
+#: chat-search-bar.cpp:40
+#, kde-format
+msgctxt "Previous search result"
+msgid "&Previous"
+msgstr "&Edellinen"
+
+#: chat-search-bar.cpp:49
+#, kde-format
+msgid "Insert search text..."
+msgstr "Lisää etsittävä teksti…"
+
+#: chat-search-bar.cpp:58
+#, kde-format
+msgid "Case sensitive"
+msgstr "Erota pien- ja suuraakkoset"
+
+#: chat-widget.cpp:159
+#, kde-format
+msgid "Open chat window"
+msgstr "Avaa keskusteluikkuna"
+
+#: chat-widget.cpp:163
+#, kde-format
+msgid "Send file"
+msgstr "Lähetä tiedosto"
+
+#: chat-widget.cpp:167
+#, kde-format
+msgid "Show info..."
+msgstr "Näytä tiedot…"
+
+#: chat-widget.cpp:181
+#, kde-format
+msgid "Share Image"
+msgstr "Jaa kuva"
+
+#: chat-widget.cpp:183 chat-widget.cpp:460
+#, kde-format
+msgid "Send File"
+msgstr "Lähetä tiedosto"
+
+#: chat-widget.cpp:201
+#, kde-format
+msgid ""
+"Your message cannot be sent because the account %1 is offline. Please try "
+"again when the account is connected again."
+msgstr ""
+"Viestiäsi ei voida lähettää, koska tili %1 ei ole verkossa. Yritä uudelleen, "
+"kun tili on taas yhteydessä verkkoon."
+
+#: chat-widget.cpp:207
+#, kde-format
+msgid "Connect %1"
+msgstr "Yhdistä %1 verkkoon"
+
+#: chat-widget.cpp:445
+#, kde-format
+msgid "Share Image via %1"
+msgstr "Jaa kuva palvelulla %1"
+
+#: chat-widget.cpp:455
+#, kde-format
+msgid "Send Image via File Transfer"
+msgstr "Jaa kuva tiedostonsiirron välityksellä"
+
+#: chat-widget.cpp:690
+#, kde-format
+msgid "Attempting to start a private OTR session with %1"
+msgstr "Yritetään aloittaa yksityistä OTR-istuntoa henkilön <b>%1</b> kanssa"
+
+#: chat-widget.cpp:693
+#, kde-format
+msgid "Attempting to restart a private OTR session with %1"
+msgstr ""
+"Yritetään aloittaa uudelleen yksityistä OTR-istuntoa henkilön <b>%1</b> "
+"kanssa"
+
+#: chat-widget.cpp:713
+#, kde-format
+msgid "Terminating OTR session"
+msgstr "Päätetään OTR-istunto"
+
+#: chat-widget.cpp:765
+#, kde-format
+msgid "The OTR session is now unverified"
+msgstr "OTR-istunto on nyt tarkistamaton"
+
+#: chat-widget.cpp:768
+#, kde-format
+msgid "Unverified OTR session started"
+msgstr "Tarkistamaton OTR-istunto aloitettiin"
+
+#: chat-widget.cpp:776
+#, kde-format
+msgid "The OTR session is now private"
+msgstr "OTR-istunto on nyt yksityinen"
+
+#: chat-widget.cpp:779
+#, kde-format
+msgid "Private OTR session started"
+msgstr "Yksityinen OTR-istunto aloitettiin"
+
+#: chat-widget.cpp:786
+#, kde-format
+msgid "%1 has ended the OTR session. You should do the same"
+msgstr "<b>%1</b> on päättänyt OTR-istunnon. Sinun tulisi tehdä samoin"
+
+#: chat-widget.cpp:802
+#, kde-format
+msgid "Successfully refreshed private OTR session"
+msgstr "Yksityinen OTR-istunto päivitettiin onnistuneesti"
+
+#: chat-widget.cpp:803
+#, kde-format
+msgid "Successfully refreshed unverified OTR session"
+msgstr "Tarkistamaton OTR-istunto päivitettiin onnistuneesti"
+
+#: chat-widget.cpp:902
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is blocked"
+msgstr "Viestin ”%1” välitys epäonnistui, koska vastapuoli on estetty"
+
+#: chat-widget.cpp:906
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is offline"
+msgstr "Viestin ”%1” välitys epäonnistui, koska etäkäyttäjä ei ole verkossa"
+
+#: chat-widget.cpp:912
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is blocked"
+msgstr "Viestin välitys epäonnistui, koska vastapuoli on estetty"
+
+#: chat-widget.cpp:915
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is offline"
+msgstr "Viestin välitys epäonnistui, koska etäkäyttäjä ei ole verkossa"
+
+#: chat-widget.cpp:922
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because the remote contact is not valid"
+msgstr "Viestin ”%1” välitys epäonnistui, koska etäkäyttäjä ei ole kelvollinen"
+
+#: chat-widget.cpp:926
+#, kde-format
+msgid "Delivery of a message failed because the remote contact is not valid"
+msgstr "Viestin välitys epäonnistui, koska etäkäyttäjä ei ole kelvollinen"
+
+#: chat-widget.cpp:932
+#, kde-format
+msgid ""
+"Delivery of the message \"%1\" failed because you do not have permission to "
+"speak in this room"
+msgstr ""
+"Viestin ”%1” välitys epäonnistui, koska sinulla ei ole puheoikeuksia tässä "
+"huoneessa"
+
+#: chat-widget.cpp:936
+#, kde-format
+msgid ""
+"Delivery of a message failed because you do not have permission to speak in "
+"this room"
+msgstr ""
+"Viestin välitys epäonnistui, koska sinulla ei ole puheoikeuksia tässä "
+"huoneessa"
+
+#: chat-widget.cpp:942
+#, kde-format
+msgid "Delivery of the message \"%1\" failed because it was too long"
+msgstr "Viestin ”%1” välitys epäonnistui, koska se oli liian pitkä"
+
+#: chat-widget.cpp:946
+#, kde-format
+msgid "Delivery of a message failed because it was too long"
+msgstr "Viestin välitys epäonnistui, koska se oli liian pitkä"
+
+#: chat-widget.cpp:952
+#, kde-format
+msgid "Delivery of the message \"%1\" failed: %2"
+msgstr "Viestin ”%1” välitys epäonnistui: %2"
+
+#: chat-widget.cpp:956
+#, kde-format
+msgid "Delivery of a message failed: %1"
+msgstr "Viestin välitys epäonnistui: %1"
+
+#: chat-widget.cpp:1019
+#, kde-format
+msgid ""
+"%1 has already closed his/her private connection to you. Your message was "
+"not sent. Either end your private conversation, or restart it."
+msgstr ""
+"%1 on jo sulkenut yksityisen yhteytensä sinulle. Viestiäsi ei lähetetty. "
+"Joko päätä yksityinen keskustelu tai aloita se uudelleen."
+
+#: chat-widget.cpp:1060 chat-widget.cpp:1153
+#, kde-format
+msgid "%1 has left the chat"
+msgstr "%1 poistui keskustelusta"
+
+#: chat-widget.cpp:1099
+#, kde-format
+msgctxt "Your presence status"
+msgid "You are now marked as %1"
+msgstr "Sinut on nyt merkitty tilaan %1"
+
+#: chat-widget.cpp:1103
+#, kde-format
+msgctxt "Your presence status with status message"
+msgid "You are now marked as %1 - %2"
+msgstr "Sinut on nyt merkitty tilaan %1 – %2"
+
+#: chat-widget.cpp:1109
+#, kde-format
+msgctxt "User's name, with their new presence status (i.e online/away)"
+msgid "%1 is %2"
+msgstr "%1 on %2"
+
+#: chat-widget.cpp:1111
+#, kde-format
+msgctxt ""
+"User's name, with their new presence status (i.e online/away) and a "
+"sepecified presence message"
+msgid "%1 is %2 - %3"
+msgstr "%1 on %2 – %3"
+
+#: chat-widget.cpp:1139
+#, kde-format
+msgid "You are now known as %1"
+msgstr "Uusi nimimerkkisi on %1"
+
+#: chat-widget.cpp:1147
+#, kde-format
+msgid "%1 is now known as %2"
+msgstr "%1 vaihtoi nimimerkikseen %2"
+
+#: chat-widget.cpp:1166
+#, kde-format
+msgid "%1 is now blocked."
+msgstr "%1 on nyt estetty."
+
+#: chat-widget.cpp:1168
+#, kde-format
+msgid "%1 is now unblocked."
+msgstr "%1 on nyt poistettu estetyistä."
+
+#: chat-widget.cpp:1197
+#, kde-format
+msgid "%1 has joined the chat"
+msgstr "%1 on liittynyt keskusteluun"
+
+#: chat-widget.cpp:1238 chat-widget.cpp:1401
+#, kde-format
+msgid "Group Chat"
+msgstr "Ryhmäkeskustelu"
+
+#: chat-widget.cpp:1453
+#, kde-format
+msgid "You are now offline"
+msgstr "Olet nyt poissa"
+
+#: chat-widget.cpp:1534
+#, kde-format
+msgid "Uploading Image has Failed with Error: %1"
+msgstr "Kuvan lähettäminen epäonnistui virheellä: %1"
+
+#: chat-window-style.cpp:352
+#, kde-format
+msgctxt "Normal style variant menu item"
+msgid "Normal"
+msgstr "Tavallinen"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Download"
+msgstr "Lataa"
+
+#: chat-window-style.cpp:486
+#, kde-format
+msgid "Cancel"
+msgstr "Peru"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Play"
+msgstr "Soita"
+
+#: chat-window-style.cpp:507
+#, kde-format
+msgid "Save as"
+msgstr "Tallenna nimellä"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KeyGenDialog)
+#: keygendialog.ui:14
+#, kde-format
+msgid "Please Wait"
+msgstr "Odota hetki"
+
+#. i18n: ectx: property (text), widget (QLabel, lbText)
+#: keygendialog.ui:32
+#, kde-format
+msgid "Please wait while generating the private key"
+msgstr "Odota hetki, yksityistä avainta luodaan"
+
+#. i18n: ectx: property (text), widget (QLabel, lbTime)
+#: keygendialog.ui:49
+#, kde-format
+msgid "TextLabel"
+msgstr "Tekstiselite"
+
+#: notify-filter.cpp:74
+#, kde-format
+msgid "%1 has sent you a message"
+msgstr "%1 lähetti sinulle viestin"
+
+#: notify-filter.cpp:87 otr-notifications.cpp:47
+#, kde-format
+msgid "View"
+msgstr "Näytä"
+
+#: otr-notifications.cpp:61
+#, kde-format
+msgid "Private OTR session started with %1"
+msgstr "Yksityinen OTR-istunto aloitettiin henkilön %1 kanssa"
+
+#: otr-notifications.cpp:63
+#, kde-format
+msgid "Unverified OTR session started with %1"
+msgstr "Tarkistamaton OTR-istunto aloitettiin henkilön %1 kanssa"
+
+#: otr-notifications.cpp:77
+#, kde-format
+msgid "Finished OTR session with %1"
+msgstr "Päätettiin OTR-istunto henkilön %1 kanssa"
+
+#: otr-notifications.cpp:89
+#, kde-format
+msgid "%1 has requested your authentication"
+msgstr "%1 on pyytänyt tunnistautumistasi"
+
+#: otr-notifications.cpp:103
+#, kde-format
+msgid "Authentication with %1 completed successfully"
+msgstr "Tunnistautuminen henkilön %1 kanssa onnistui"
+
+#: otr-notifications.cpp:105 otr-notifications.cpp:132
+#, kde-format
+msgid "Authentication with %1 failed"
+msgstr "Tunnistautuminen henkilön %1 kanssa epäonnistui"
+
+#: otr-notifications.cpp:119
+#, kde-format
+msgid "Authentication with %1 was aborted"
+msgstr "Tunnistautuminen henkilön %1 kanssa keskeytettiin"
+
+#: proxy-service.cpp:44
+#, kde-format
+msgid "Generating the private key for %1..."
+msgstr "Luodaan yksityistä avainta tilille %1…"
+
+#: proxy-service.cpp:45
+#, kde-format
+msgid "This may take some time"
+msgstr "Tässä voi kestää hetki"
+
+#: proxy-service.cpp:57
+#, kde-format
+msgid "Please wait"
+msgstr "Odota hetki"
+
+#: proxy-service.cpp:89
+#, kde-format
+msgid "Could not generate a private key for %1"
+msgstr "Yksityisen avaimen luonti tilille %1 epäonnistui"
+
+#: proxy-service.cpp:91
+#, kde-format
+msgid "Finished generating the private key for %1"
+msgstr "Yksityisen avaimen luonti tilille %1 valmistui"
+
+#~ msgctxt "@info"
+#~ msgid "Authentication with <b>%1</b>"
+#~ msgstr "Tunnistautuminen käyttäjän <b>%1</b> kanssa"
+
+#~ msgid "You have sent a message"
+#~ msgstr "Olet lähettänyt viestin"
+
+#~ msgid "Show format options"
+#~ msgstr "Näytä muotoiluvalinnat"
+
+#~ msgid "Connection closed"
+#~ msgstr "Yhteys suljettu"
+
+#~ msgid "&Send"
+#~ msgstr "&Lähetä"

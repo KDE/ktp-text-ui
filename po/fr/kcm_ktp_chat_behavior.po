@@ -1,0 +1,216 @@
+# translation of telepathy-chat-window-config.po to Français
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Joëlle Cornavin <jcorn@free.fr>, 2011, 2013.
+# xavier <xavier.besnard@neuf.fr>, 2013, 2014.
+# Maxime Corteel <mcorteel@gmail.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: telepathy-chat-window-config\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-11-11 09:29+0100\n"
+"Last-Translator: Maxime Corteel <mcorteel@gmail.com>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 2.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: behavior-config.cpp:50
+#, kde-format
+msgctxt ""
+"Part of config 'show last [spin box] messages' This is the suffix to the "
+"spin box. Be sure to include leading space"
+msgid " message"
+msgid_plural " messages"
+msgstr[0] " message"
+msgstr[1] " messages"
+
+#: behavior-config.cpp:67
+#, kde-format
+msgctxt "Placeholder for contact name in completion suffix selector"
+msgid "Nickname"
+msgstr "Pseudonyme"
+
+#. i18n: ectx: property (title), widget (QGroupBox, newTabGroupBox)
+#: behavior-config.ui:17
+#, kde-format
+msgid "Tabs"
+msgstr "Onglets"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: behavior-config.ui:23
+#, kde-format
+msgid "Open new conversations:"
+msgstr "Ouvrir de nouvelles conversations :"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioNew)
+#: behavior-config.ui:30
+#, kde-format
+msgid "As new windows"
+msgstr "Comme de nouvelles fenêtres"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioZero)
+#: behavior-config.ui:40
+#, kde-format
+msgid "As tabs in the same window"
+msgstr "Comme onglets dans la même fenêtre"
+
+#. i18n: ectx: property (title), widget (QGroupBox, scrollbackGroupBox)
+#: behavior-config.ui:53
+#, kde-format
+msgid "Last Conversation Scrollback"
+msgstr "Revenir à la dernière conversation"
+
+#. i18n: First part of &quot;Show last %1 messages&quot; string
+#. i18n: ectx: property (text), widget (QLabel, label_p1)
+#: behavior-config.ui:59
+#, kde-format
+msgid "Show last"
+msgstr "Afficher la dernière"
+
+#. i18n: ectx: property (title), widget (QGroupBox, typingGroupBox)
+#: behavior-config.ui:85
+#, kde-format
+msgid "User Is Typing"
+msgstr "L'utilisateur effectue actuellement une saisie"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxShowOthersTyping)
+#: behavior-config.ui:91
+#, kde-format
+msgid "Show me when others are typing"
+msgstr "M'afficher la saisie des autres personnes"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxShowMeTyping)
+#: behavior-config.ui:98
+#, kde-format
+msgid "Show others when I am typing"
+msgstr "Afficher les autres durant ma saisie"
+
+#. i18n: ectx: property (title), widget (QGroupBox, nicknameCompletionGroup)
+#: behavior-config.ui:108
+#, kde-format
+msgid "Nickname Completion"
+msgstr "Complètement de pseudonyme"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: behavior-config.ui:117
+#, kde-format
+msgid "Complete nicknames to"
+msgstr "Compléter les pseudonymes par"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: behavior-config.ui:137
+#, kde-format
+msgid "when I press Tab"
+msgstr "quand j'appuie sur Tabulation"
+
+#. i18n: ectx: property (title), widget (QGroupBox, kbuttongroup)
+#: behavior-config.ui:147
+#, kde-format
+msgid "Image Sharing"
+msgstr "Partage d'images"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: behavior-config.ui:156
+#, kde-format
+msgid "Image Sharing Service"
+msgstr "Service de partage d'images"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: behavior-config.ui:179
+#, kde-format
+msgid "Works when dragging an image to the Chat Window"
+msgstr ""
+"Fonctionne lorsqu'une image est glissée dans la fenêtre de conversation"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupChatsGroup)
+#: behavior-config.ui:195
+#, kde-format
+msgid "Group Chats"
+msgstr "Conversation de groupe"
+
+#. i18n: ectx: property (text), widget (QCheckBox, dontLeaveGroupChats)
+#: behavior-config.ui:207
+#, kde-format
+msgid "Stay connected to group chat even when tab is closed"
+msgstr "Rester connecter aux conversations de groupe une fois l'onglet fermé"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: behavior-config.ui:217
+#, kde-format
+msgid "Keyboard Layouts"
+msgstr "Dispositions de clavier"
+
+#. i18n: ectx: property (text), widget (QCheckBox, rememberTabKeyboardLayout)
+#: behavior-config.ui:223
+#, kde-format
+msgid "Remember keyboard layout for each tab"
+msgstr "Se souvenir de la disposition de clavier pour chaque onglet"
+
+#~ msgid "A new tab in the last focused window"
+#~ msgstr "Un nouvel onglet dans la dernière fenêtre ayant eu le focus"
+
+#~ msgid "A demo chat"
+#~ msgstr "Une discussion de démonstration"
+
+#~ msgid "Jabber"
+#~ msgstr "Jabber"
+
+#~ msgid "BobMarley@yahoo.com"
+#~ msgstr "BobMarley@yahoo.com"
+
+#~ msgid "Bob Marley"
+#~ msgstr "Bob Marley"
+
+#~ msgid "larry@example.com"
+#~ msgstr "larry@exemple.com"
+
+#~ msgid "Larry Demo"
+#~ msgstr "Démonstration de Larry"
+
+#~ msgid "ted@example.com"
+#~ msgstr "ted@exemple.com"
+
+#~ msgid "Ted Example"
+#~ msgstr "Exemple de Ted"
+
+#~ msgid "Hello"
+#~ msgstr "Bonjour"
+
+#~ msgid "A different example message"
+#~ msgstr "Un message d'exemple différent"
+
+#~ msgid "Ted Example has left the chat."
+#~ msgstr "L'exemple de Ted a quitté la discussion."
+
+#~ msgid "Use Custom Font Settings"
+#~ msgstr "Utiliser des paramètres de polices personnalisés"
+
+#~ msgid "Select Font: "
+#~ msgstr "Sélectionnez une police : "
+
+#~ msgid "Select Size: "
+#~ msgstr "Sélectionnez une taille : "
+
+#~ msgid "Style"
+#~ msgstr "Style"
+
+#~ msgid "Message Style:"
+#~ msgstr "Style des messages :"
+
+#~ msgid "Variant:"
+#~ msgstr "Variante :"
+
+#~ msgid "Show User Icons"
+#~ msgstr "Afficher les icônes d'utilisateur"
+
+#~ msgid "Form"
+#~ msgstr "Formulaire"

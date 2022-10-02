@@ -1,0 +1,192 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stelios <sstavra@gmail.com>, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2017-04-22 22:50+0200\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#. i18n: ectx: property (text), widget (QPushButton, btVerify)
+#: otr-config.cpp:62 otr-config.ui:308
+#, kde-format
+msgid "Verify"
+msgstr "Επιβεβαίωση"
+
+#. i18n: ectx: property (text), widget (QPushButton, btForget)
+#: otr-config.cpp:63 otr-config.ui:286
+#, kde-format
+msgid "Forget"
+msgstr "Αγνόηση"
+
+#: otr-config.cpp:126
+#, kde-format
+msgid "yes"
+msgstr "ναι"
+
+#: otr-config.cpp:126
+#, kde-format
+msgid "no"
+msgstr "όχι"
+
+#: otr-config.cpp:127
+#, kde-format
+msgid "in use"
+msgstr "σε χρήση"
+
+#: otr-config.cpp:127 otr-config.cpp:226
+#, kde-format
+msgid "not in use"
+msgstr "όχι σε χρήση"
+
+#. i18n: ectx: property (text), widget (QLabel, tlFingerprint)
+#: otr-config.cpp:170 otr-config.ui:217
+#, kde-format
+msgid "No Fingerprint"
+msgstr "Χωρίς αποτύπωμα"
+
+#: otr-config.cpp:251
+#, kde-format
+msgid ""
+"Please contact %1 via another secure way and verify that the following "
+"fingerprint is correct:"
+msgstr ""
+"Επικοινωνήστε με %1 μέσω άλλης ασφαλούς οδού και επιβεβαιώστε ότι το "
+"ακόλουθο αποτύπωμα είναι σωστό:"
+
+#: otr-config.cpp:254
+#, kde-format
+msgid "Are you sure you want to trust this fingerprint?"
+msgstr "Είστε βέβαιοι ότι θέλετε να εμπιστευθείτε αυτό το αποτύπωμα;"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, OTRConfigUi)
+#: otr-config.ui:14
+#, kde-format
+msgid "OTR Preferences"
+msgstr "Προτιμήσεις OTR"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbPolicy)
+#: otr-config.ui:22
+#, kde-format
+msgid "OTR policy"
+msgstr "Πολιτική OTR"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbAlways)
+#: otr-config.ui:28
+#, kde-format
+msgid "Always encrypt messages"
+msgstr "Πάντα να κρυπτογραφούνται τα μηνύματα"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbAlways)
+#: otr-config.ui:31
+#, kde-format
+msgid "Always"
+msgstr "Πάντα"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbOpportunistic)
+#: otr-config.ui:44
+#, kde-format
+msgid "Automatically encrypt messages if the other side supports OTR"
+msgstr ""
+"Να γίνεται αυτόματη κρυπτογράφηση μηνυμάτων αν ή άλλη πλευρά υποστηρίζει OTR"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbOpportunistic)
+#: otr-config.ui:47
+#, kde-format
+msgid "Opportunistic"
+msgstr "Ευκαιριακά"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbManual)
+#: otr-config.ui:57
+#, kde-format
+msgid "Encrypt messages if the other side requests an OTR connection"
+msgstr ""
+"Να γίνεται κρυπτογράφηση μηνυμάτων αν η άλλη πλευρά απαιτεί σύνδεση OTR"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbManual)
+#: otr-config.ui:60
+#, kde-format
+msgid "Manual"
+msgstr "Χειροκίνητα"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbNever)
+#: otr-config.ui:73
+#, kde-format
+msgid "Never encrypt messages"
+msgstr "Να μη γίνεται ποτέ κρυπτογράφηση μηνυμάτων"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbNever)
+#: otr-config.ui:76
+#, kde-format
+msgid "Never"
+msgstr "Ποτέ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbAccountManagement)
+#: otr-config.ui:111
+#, kde-format
+msgid "Account management"
+msgstr "Διαχείριση λογαριασμού"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbPrivKey)
+#: otr-config.ui:139
+#, kde-format
+msgid "Private key"
+msgstr "Ιδιωτικό κλειδί"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: otr-config.ui:163
+#, kde-format
+msgid "Fingerprint:"
+msgstr "Αποτύπωμα:"
+
+#. i18n: ectx: property (text), widget (QPushButton, btGenFingerprint)
+#: otr-config.ui:198
+#, kde-format
+msgid "&Generate"
+msgstr "&Παραγωγή"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbFingerprints)
+#: otr-config.ui:265
+#, kde-format
+msgid "Known fingerprints"
+msgstr "Γνωστά αποτυπώματα"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:366
+#, kde-format
+msgid "Contact ID"
+msgstr "Ταυτότητα επαφής"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:371
+#, kde-format
+msgid "Fingerprint"
+msgstr "Αποτύπωμα"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:376
+#, kde-format
+msgid "Verified"
+msgstr "Επιβεβαιωμένο"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:381
+#, kde-format
+msgid "Status"
+msgstr "Κατάσταση"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: otr-config.ui:398
+#, kde-format
+msgid "Account:"
+msgstr "Λογαριασμός:"

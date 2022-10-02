@@ -1,0 +1,191 @@
+# Translation of kcm_ktp_chat_otr.po into Serbian.
+# Chusslove Illich <caslav.ilic@gmx.net>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_ktp_chat_otr\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-05-08 19:26+0200\n"
+"Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
+"Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Environment: kde\n"
+
+#. i18n: ectx: property (text), widget (QPushButton, btVerify)
+#: otr-config.cpp:62 otr-config.ui:308
+#, kde-format
+msgid "Verify"
+msgstr "Овери"
+
+#. i18n: ectx: property (text), widget (QPushButton, btForget)
+#: otr-config.cpp:63 otr-config.ui:286
+#, kde-format
+msgid "Forget"
+msgstr "Заборави"
+
+#: otr-config.cpp:126
+#, kde-format
+msgid "yes"
+msgstr "да"
+
+#: otr-config.cpp:126
+#, kde-format
+msgid "no"
+msgstr "не"
+
+#: otr-config.cpp:127
+#, kde-format
+msgid "in use"
+msgstr "користе се"
+
+#: otr-config.cpp:127 otr-config.cpp:226
+#, kde-format
+msgid "not in use"
+msgstr "не користи се"
+
+#. i18n: ectx: property (text), widget (QLabel, tlFingerprint)
+#: otr-config.cpp:170 otr-config.ui:217
+#, kde-format
+msgid "No Fingerprint"
+msgstr "Нема отиска"
+
+#: otr-config.cpp:251
+#, kde-format
+msgid ""
+"Please contact %1 via another secure way and verify that the following "
+"fingerprint is correct:"
+msgstr ""
+"Ступите у везу са %1 на неки други безбедан начин и оверите да је следећи "
+"отисак исправан:"
+
+#: otr-config.cpp:254
+#, kde-format
+msgid "Are you sure you want to trust this fingerprint?"
+msgstr "Желите ли заиста да верујете овом отиску?"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, OTRConfigUi)
+#: otr-config.ui:14
+#, kde-format
+msgid "OTR Preferences"
+msgstr "ОТР поставке"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbPolicy)
+#: otr-config.ui:22
+#, kde-format
+msgid "OTR policy"
+msgstr "ОТР смерница"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbAlways)
+#: otr-config.ui:28
+#, kde-format
+msgid "Always encrypt messages"
+msgstr "Увек шифруј поруке"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbAlways)
+#: otr-config.ui:31
+#, kde-format
+msgid "Always"
+msgstr "Увек"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbOpportunistic)
+#: otr-config.ui:44
+#, kde-format
+msgid "Automatically encrypt messages if the other side supports OTR"
+msgstr "Аутоматски шифруј поруке ако друга страна подржава ОТР"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbOpportunistic)
+#: otr-config.ui:47
+#, kde-format
+msgid "Opportunistic"
+msgstr "Опортунистички"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbManual)
+#: otr-config.ui:57
+#, kde-format
+msgid "Encrypt messages if the other side requests an OTR connection"
+msgstr "Шифруј поруке ако друга страна захтева ОТР везу"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbManual)
+#: otr-config.ui:60
+#, kde-format
+msgid "Manual"
+msgstr "Ручно"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbNever)
+#: otr-config.ui:73
+#, kde-format
+msgid "Never encrypt messages"
+msgstr "Никад не шифруј поруке"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbNever)
+#: otr-config.ui:76
+#, kde-format
+msgid "Never"
+msgstr "Никад"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbAccountManagement)
+#: otr-config.ui:111
+#, kde-format
+msgid "Account management"
+msgstr "Управљање налогом"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbPrivKey)
+#: otr-config.ui:139
+#, kde-format
+msgid "Private key"
+msgstr "Приватни кључ"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: otr-config.ui:163
+#, kde-format
+msgid "Fingerprint:"
+msgstr "Отисак:"
+
+#. i18n: ectx: property (text), widget (QPushButton, btGenFingerprint)
+#: otr-config.ui:198
+#, kde-format
+msgid "&Generate"
+msgstr "&Генериши"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbFingerprints)
+#: otr-config.ui:265
+#, kde-format
+msgid "Known fingerprints"
+msgstr "Познати отисци"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:366
+#, kde-format
+msgid "Contact ID"
+msgstr "ИД контакта"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:371
+#, kde-format
+msgid "Fingerprint"
+msgstr "отисак"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:376
+#, kde-format
+msgid "Verified"
+msgstr "оверен"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:381
+#, kde-format
+msgid "Status"
+msgstr "стање"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: otr-config.ui:398
+#, kde-format
+msgid "Account:"
+msgstr "Налог:"

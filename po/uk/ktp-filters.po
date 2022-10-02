@@ -1,0 +1,124 @@
+# Translation of ktp-filters.po to Ukrainian
+# Copyright (C) 2013-2015 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2013, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: ktp-filters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-09-29 19:08+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: emoticons/emoticon-config.cpp:194
+#, kde-format
+msgctxt "@title:window"
+msgid "Add account"
+msgstr "Додавання облікового запису"
+
+#: emoticons/emoticon-config.cpp:195
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Select account:"
+msgstr "Виберіть обліковий запис:"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, LatexConfig)
+#. i18n: ectx: property (windowTitle), widget (QWidget, EmoticonConfig)
+#: emoticons/emoticon-config.ui:14 latex/latex-config.ui:14
+#, kde-format
+msgid "LatexConfig"
+msgstr "Налаштування LaTeX"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: emoticons/emoticon-config.ui:20
+#, kde-format
+msgid "Custom emoticons per account:"
+msgstr "Нетипові емоційки для облікового запису:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: latex/latex-config.ui:20
+#, kde-format
+msgid "LaTeX header:"
+msgstr "Заголовок LaTeX:"
+
+#. i18n: ectx: property (plainText), widget (QPlainTextEdit, kcfg_LatexHeader)
+#: latex/latex-config.ui:31
+#, kde-format
+msgid ""
+"\\documentclass{minimal}\n"
+"\\usepackage{color}\n"
+"\\pagestyle{empty}\n"
+"\\color{black}\n"
+msgstr ""
+"\\documentclass{minimal}\n"
+"\\usepackage[T2A]{fontenc}\n"
+"\\usepackage[utf8x]{inputenc}\n"
+"\\usepackage[ukrainian]{babel}\n"
+"\\usepackage{color}\n"
+"\\pagestyle{empty}\n"
+"\\color{black}\n"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: latex/latex-config.ui:38
+#, kde-format
+msgid "LaTeX command line:"
+msgstr "Командний рядок LaTeX:"
+
+#. i18n: ectx: property (text), widget (QLineEdit, kcfg_LatexCmd)
+#: latex/latex-config.ui:45
+#, kde-format
+msgid "latex -interaction=batchmode -halt-on-error"
+msgstr "latex -interaction=batchmode -halt-on-error"
+
+#: otr/otr-filter.cpp:34
+#, kde-format
+msgid "<i>Encrypted message</i>"
+msgstr "<i>Зашифроване повідомлення</i>"
+
+#: texttospeech/tts-filter.cpp:56
+#, kde-format
+msgctxt "Text to Speech - text message %1 is name, %2 is message"
+msgid "%1 says %2"
+msgstr "%1 повідомлено: %2"
+
+#: texttospeech/tts-filter.cpp:59
+#, kde-format
+msgctxt "Text to Speech - text message %1 is name, %2 is message"
+msgid "%1 %2"
+msgstr "%1: %2"
+
+#~ msgid "KDE Instant Messaging"
+#~ msgstr "Миттєвий обмін повідомленнями у KDE"
+
+#~ msgid "New message. %1"
+#~ msgstr "Нове повідомлення. %1"
+
+#~ msgid "Click to view in browser"
+#~ msgstr ""
+#~ "Натисніть, щоб переглянути у програмі для перегляду сторінок інтернету"
+
+#~ msgid ""
+#~ "\\documentclass{standalone}\n"
+#~ "\\usepackage{color}\n"
+#~ "\\usepackage{amsmath,latexsym,amsfonts,amssymb,ulem}\n"
+#~ "\\usepackage{graphicx}\n"
+#~ "\\pagestyle{empty}\n"
+#~ msgstr ""
+#~ "\\documentclass{standalone}\n"
+#~ "\\usepackage{color}\n"
+#~ "\\usepackage[T2A]{fontenc}\n"
+#~ "\\usepackage[utf8x]{inputenc}\n"
+#~ "\\usepackage[ukrainian]{babel}\n"
+#~ "\\usepackage{amsmath,latexsym,amsfonts,amssymb,ulem}\n"
+#~ "\\usepackage{graphicx}\n"
+#~ "\\pagestyle{empty}\n"

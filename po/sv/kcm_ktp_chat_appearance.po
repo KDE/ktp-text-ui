@@ -1,0 +1,272 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2011, 2012, 2013, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2015-05-05 18:38+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: appearance-config-tab.cpp:44
+#, kde-format
+msgid "A demo chat"
+msgstr "En chattdemonstration"
+
+#: appearance-config-tab.cpp:45
+#, kde-format
+msgid "Jabber"
+msgstr "Jabber"
+
+#: appearance-config-tab.cpp:47 appearance-config-tab.cpp:196
+#: appearance-config-tab.cpp:203 appearance-config-tab.cpp:249
+#: appearance-config-tab.cpp:265
+#, kde-format
+msgctxt "Example email"
+msgid "ted@example.com"
+msgstr "ted@exempel.com"
+
+#: appearance-config-tab.cpp:48
+#, kde-format
+msgctxt "Example name"
+msgid "Ted"
+msgstr "Ted"
+
+#: appearance-config-tab.cpp:181
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ok!"
+msgstr "Ok!"
+
+#: appearance-config-tab.cpp:182 appearance-config-tab.cpp:189
+#: appearance-config-tab.cpp:232 appearance-config-tab.cpp:240
+#, kde-format
+msgctxt "Example email"
+msgid "larry@example.com"
+msgstr "larry@exempel.com"
+
+#: appearance-config-tab.cpp:183 appearance-config-tab.cpp:190
+#: appearance-config-tab.cpp:233 appearance-config-tab.cpp:241
+#, kde-format
+msgctxt "Example name"
+msgid "Larry Demo"
+msgstr "Larry Demo"
+
+#: appearance-config-tab.cpp:188
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Bye Bye"
+msgstr "Hej då"
+
+#: appearance-config-tab.cpp:195
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Have fun!"
+msgstr "Ha det så kul!"
+
+#: appearance-config-tab.cpp:197 appearance-config-tab.cpp:204
+#: appearance-config-tab.cpp:210 appearance-config-tab.cpp:217
+#: appearance-config-tab.cpp:224 appearance-config-tab.cpp:250
+#: appearance-config-tab.cpp:266 appearance-config-tab.cpp:273
+#, kde-format
+msgctxt "Example name"
+msgid "Ted Example"
+msgstr "Ted Exempel"
+
+#: appearance-config-tab.cpp:202
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "cya"
+msgstr "Vi ses"
+
+#: appearance-config-tab.cpp:209
+#, kde-format
+msgctxt "Example message"
+msgid "Ted Example waves."
+msgstr "Ted Exempel vinkar."
+
+#: appearance-config-tab.cpp:216
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example has left the chat."
+msgstr "Ted Exempel har lämnat chatten."
+
+#: appearance-config-tab.cpp:223
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example has joined the chat."
+msgstr "Ted Exempel har gått med i chatten."
+
+#: appearance-config-tab.cpp:231
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Hello Ted"
+msgstr "Hej Ted"
+
+#: appearance-config-tab.cpp:239
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "What's up?"
+msgstr "Hur är det?"
+
+#: appearance-config-tab.cpp:246
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid ""
+"Check out which cool adium themes work <a href=\"http://community.kde.org/"
+"KTp/Components/Chat_Window/Themes\">here</a>!"
+msgstr ""
+"Kolla vilka häftiga Adium-teman som fungerar <a href=\"http://community.kde."
+"org/KTp/Components/Chat_Window/Themes\">här</a>."
+
+#: appearance-config-tab.cpp:256
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Hello"
+msgstr "Hallå"
+
+#: appearance-config-tab.cpp:257
+#, kde-format
+msgctxt "Example email"
+msgid "bob@example.com"
+msgstr "bob@exempel.com"
+
+#: appearance-config-tab.cpp:258
+#, kde-format
+msgctxt "Example name"
+msgid "Bob Example"
+msgstr "Bob Exempel"
+
+#: appearance-config-tab.cpp:264
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "A different example message"
+msgstr "Ett annat exempelmeddelande"
+
+#: appearance-config-tab.cpp:272
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example is now Away."
+msgstr "Ted Exempel är nu frånvarande."
+
+#: appearance-config.cpp:47
+#, kde-format
+msgctxt "@title:tab"
+msgid "Normal Chat"
+msgstr "Normal chatt"
+
+#: appearance-config.cpp:51
+#, kde-format
+msgctxt "@title:tab"
+msgid "Group Chat"
+msgstr "Gruppchatt"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: appearance-config.ui:41
+#, kde-format
+msgid "Style"
+msgstr "Stil"
+
+#. i18n: ectx: property (text), widget (QLabel, styleLabel)
+#: appearance-config.ui:52
+#, kde-format
+msgid "Message Style:"
+msgstr "Meddelandestil:"
+
+#. i18n: ectx: property (text), widget (QLabel, variantLabel)
+#: appearance-config.ui:78
+#, kde-format
+msgid "Variant:"
+msgstr "Variant:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showHeader)
+#: appearance-config.ui:113
+#, kde-format
+msgid "Show Header"
+msgstr "Visa rubrik"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showPresenceCheckBox)
+#: appearance-config.ui:129
+#, kde-format
+msgid "Show status changes"
+msgstr "Visa statusändringar"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showJoinLeaveCheckBox)
+#: appearance-config.ui:142
+#, kde-format
+msgid "Show when contacts join/leave chat"
+msgstr "Visa när kontakter går med i eller lämnar chatten"
+
+#. i18n: ectx: property (title), widget (QGroupBox, customFontBox)
+#: appearance-config.ui:170
+#, kde-format
+msgid "Use Custom Font Settings"
+msgstr "Använd egen inställning av teckensnitt"
+
+#. i18n: ectx: property (text), widget (QLabel, fontFamilyLabel)
+#: appearance-config.ui:184
+#, kde-format
+msgid "Select Font:"
+msgstr "Välj teckensnitt:"
+
+#. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
+#: appearance-config.ui:194
+#, kde-format
+msgid "Select Size:"
+msgstr "Välj storlek:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "Always"
+#~ msgstr "Alltid"
+
+#~ msgid "Never in group chats"
+#~ msgstr "Aldrig i gruppchatter"
+
+#~ msgid "Never"
+#~ msgstr "Aldrig"
+
+#~ msgid "BobMarley@yahoo.com"
+#~ msgstr "BobMarley@yahoo.com"
+
+#~ msgid "Bob Marley"
+#~ msgstr "Bob Marley"
+
+#~ msgid "Tabs"
+#~ msgstr "Flikar"
+
+#~ msgid "Open new conversations in :"
+#~ msgstr "Öppna ny konversation i: "
+
+#~ msgid "A new window"
+#~ msgstr "Ett nytt fönster"
+
+#~ msgid "A new tab in the first window"
+#~ msgstr "En ny flik i det första fönstret"
+
+#~ msgid "A new tab in the last focused window"
+#~ msgstr "En ny flik i det senast fokuserade fönstret"
+
+#~ msgid "Show User Icons"
+#~ msgstr "Visa användarikoner"
+
+#~ msgid "Form"
+#~ msgstr "Formulär"
+
+#~ msgid "Telepathy Chat Window Config"
+#~ msgstr "Telepathy-chattfönsterinställning"

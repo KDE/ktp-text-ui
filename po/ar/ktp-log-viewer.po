@@ -1,0 +1,251 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Safa Alfulaij <safa1996alfulaij@gmail.com>, ٢٠١٥.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2020-01-16 03:16+0100\n"
+"PO-Revision-Date: ٢٠١٥-٠٤-٠٥ ١٨:١٨+0300\n"
+"Last-Translator: Safa Alfulaij <safa1996alfulaij@gmail.com>\n"
+"Language-Team: Arabic <doc@arabeyes.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "صفا الفليج"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "safa1996alfulaij@gmail.com"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/behavior-config.ui:17
+#, kde-format
+msgid "History"
+msgstr "التّأريخ"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/behavior-config.ui:23
+#, kde-format
+msgid "Sort messages:"
+msgstr "افرز الرّسائل:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, sortOldestOnTop)
+#: config/behavior-config.ui:30
+#, kde-format
+msgid "&Oldest on top"
+msgstr "الأ&قدم بالأعلى"
+
+#. i18n: ectx: property (text), widget (QRadioButton, sortNewestOnTop)
+#: config/behavior-config.ui:43
+#, kde-format
+msgid "&Newest on top"
+msgstr "الأ&جدد بالأعلى"
+
+#: dates-model.cpp:336
+#, kde-format
+msgctxt "Number of existing conversations."
+msgid "%1 conversation"
+msgid_plural "%1 conversations"
+msgstr[0] "لا محادثات"
+msgstr[1] "محادثة واحدة"
+msgstr[2] "محادثتان"
+msgstr[3] "%1 محادثات"
+msgstr[4] "%1 محادثةً"
+msgstr[5] "%1 محادثة"
+
+#: log-viewer.cpp:101
+#, kde-format
+msgctxt "Placeholder text in line edit for filtering contacts"
+msgid "Filter contacts..."
+msgstr "رشّح المتراسلين..."
+
+#: log-viewer.cpp:140
+#, kde-format
+msgid "&Configure LogViewer"
+msgstr "ا&ضبط عارض السّجلّات"
+
+#: log-viewer.cpp:144
+#, kde-format
+msgid "Clear &account history"
+msgstr "امحُ تأريخ الح&ساب"
+
+#: log-viewer.cpp:148
+#, kde-format
+msgid "Clear &contact history"
+msgstr "امحُ تأريخ الم&تراسل"
+
+#: log-viewer.cpp:153
+#, kde-format
+msgid "&Import Kopete Logs"
+msgstr "ا&ستورد سجلّات كوبيت"
+
+#: log-viewer.cpp:157
+#, kde-format
+msgid "&Previous Conversation"
+msgstr "المحادثة السّاب&قة"
+
+#: log-viewer.cpp:163
+#, kde-format
+msgid "&Next Conversation"
+msgstr "المحادثة ال&تّالية"
+
+#: log-viewer.cpp:399
+#, kde-format
+msgid "Are you sure you want to remove all logs from account %1?"
+msgstr "أمتأكّد من إزالة كلّ السّجلّات من الحساب %1؟"
+
+#: log-viewer.cpp:400
+#, kde-format
+msgid "Clear account history"
+msgstr "امحُ تأريخ الحساب"
+
+#: log-viewer.cpp:423
+#, kde-format
+msgctxt "%1 is contactdisplay name"
+msgid "Are you sure you want to remove history of all conversations with %1?"
+msgstr "أمتأكّد من إزالة تأريخ كلّ المحادثات مع %1؟"
+
+#: log-viewer.cpp:424 log-viewer.cpp:446
+#, kde-format
+msgid "Clear contact history"
+msgstr "امحُ تأريخ المتراسل"
+
+#: log-viewer.cpp:445
+#, kde-format
+msgctxt "%1 is contact display name, %2 is contact UID"
+msgid ""
+"Are you sure you want to remove history of all conversations with %1 (%2)?"
+msgstr "أمتأكّد من إزالة تأريخ كلّ المحادثات مع %1 (%2)؟"
+
+#: log-viewer.cpp:488
+#, fuzzy, kde-format
+#| msgid "Import Kopete Logs"
+msgid "No Kopete logs found."
+msgstr "استورد سجلّات كوبيت"
+
+#: log-viewer.cpp:543
+#, kde-format
+msgid "There are no logs for this contact"
+msgstr "لا سجلّات لهذا المتراسل"
+
+#. i18n: ectx: Menu (logs)
+#: log-viewer.rc:11
+#, kde-format
+msgid "L&ogs"
+msgstr "س&جلّات"
+
+#. i18n: ectx: Menu (conversation)
+#: log-viewer.rc:17
+#, kde-format
+msgid "&Conversation"
+msgstr "محاد&ثة"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, LogViewer)
+#: log-viewer.ui:14
+#, kde-format
+msgid "LogViewer"
+msgstr "عارض السّجلّات"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, globalSearch)
+#: log-viewer.ui:20
+#, kde-format
+msgid "Search all logs..."
+msgstr "ابحث في كلّ السّجلّات..."
+
+#: logs-import-dialog.cpp:44
+#, kde-format
+msgid "Import Logs"
+msgstr "استورد سجلّات"
+
+#: logs-import-dialog.cpp:50
+#, kde-format
+msgid "Import Kopete Logs"
+msgstr "استورد سجلّات كوبيت"
+
+#: logs-import-dialog.cpp:60
+#, kde-format
+msgid ""
+"We have found Kopete logs that seem to match some of your KDE Telepathy "
+"accounts.\n"
+"\n"
+"Do you want to import these logs from Kopete to KDE Telepathy?"
+msgstr ""
+"وجدنا سجلّات كوبيت تطابق بعض حسابات كدي تلبثي.\n"
+"\n"
+"أتريد استيرداها من كوبيت إلى كدي تلبثي؟"
+
+#: logs-import-dialog.cpp:140
+#, kde-format
+msgid "Done"
+msgstr "تمّ"
+
+#: main.cpp:43
+#, kde-format
+msgid "KDE IM Log Viewer"
+msgstr ""
+
+#: main.cpp:45
+#, kde-format
+msgid "David Edmundson"
+msgstr ""
+
+#: main.cpp:45 main.cpp:46 main.cpp:47
+#, kde-format
+msgid "Developer"
+msgstr "مطوّر"
+
+#: main.cpp:46
+#, kde-format
+msgid "Daniele E. Domenichelli"
+msgstr ""
+
+#: main.cpp:47
+#, kde-format
+msgid "Dan Vrátil"
+msgstr ""
+
+#: main.cpp:59
+#, kde-format
+msgid "The UID of the account to preselect"
+msgstr ""
+
+#: main.cpp:60
+#, kde-format
+msgid "The UID of the contact to preselect"
+msgstr ""
+
+#: message-view.cpp:64
+#, kde-format
+msgid "Unknown or invalid contact"
+msgstr "متراسل مجهول أو غير صالح"
+
+#: message-view.cpp:165
+#, kde-format
+msgid "Older conversation"
+msgstr ""
+
+#: message-view.cpp:172
+#, kde-format
+msgid "Newer conversation"
+msgstr ""
+
+#: message-view.cpp:189
+#, kde-format
+msgid "There are no logs for this day"
+msgstr "لا سجلّات لليوم"
+
+#: person-entity-merge-model.cpp:158
+#, kde-format
+msgid "Unsorted"
+msgstr ""

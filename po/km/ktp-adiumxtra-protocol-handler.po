@@ -1,0 +1,104 @@
+# translation of adiumxtra-protocol-handler.po to Khmer
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Khoem Sokhem <khoemsokhem@khmeros.info>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: adiumxtra-protocol-handler\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2011-06-28 07:42+0700\n"
+"Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
+"Language-Team: Khmer <support@khmeros.info>\n"
+"Language: km\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"X-Language: km-KH\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "ខឹម សុខែម, ម៉ន ម៉េត, សេង សុត្ថា, ចាន់ សម្បត្តិរតនៈ, សុខ សុភា"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+"khoemsokhem@khmeros.info,​​mornmet@khmeros.info,sutha@khmeros.info,"
+"ratanak@khmeros.info,sophea@khmeros.info"
+
+#: adiumxtra-protocol-handler.cpp:90 adiumxtra-protocol-handler.cpp:145
+#, kde-format
+msgid "Package type not recognized or not supported"
+msgstr "មិន​​ស្គាល់​ ឬ​មិន​​គាំទ្រ​ប្រភេទ​កញ្ចប់​"
+
+#: adiumxtra-protocol-handler.cpp:91 adiumxtra-protocol-handler.cpp:148
+#, kde-format
+msgid "OK"
+msgstr "គ្មាន​បញ្ហា"
+
+#: chat-style-installer.cpp:113
+#, kde-format
+msgid "Install Chatstyle %1"
+msgstr "ដំឡើង Chatstyle %1"
+
+#: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
+#, kde-format
+msgid "Install"
+msgstr "ដំឡើង"
+
+#: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
+#, kde-format
+msgid "Cancel"
+msgstr "បោះបង់"
+
+#: chat-style-installer.cpp:135
+#, kde-format
+msgid "Installed Chatstyle %1 successfully."
+msgstr "បាន​ដំឡើង Chatstyle %1 ដោយ​ជោគជ័យ ។"
+
+#: chat-style-installer.cpp:139
+#, kde-format
+msgid "Installation of Chatstyle %1 failed."
+msgstr "បាន​បរាជ័យ​ក្នុង​ការ​ដំឡើង Chatstyle %1 ។"
+
+#: emoticon-set-installer.cpp:98
+#, kde-format
+msgid "Install Emoticonset %1"
+msgstr "ដំឡើង​សំណុំ​សញ្ញាណ​អារម្មណ៍ %1"
+
+#: emoticon-set-installer.cpp:117
+#, kde-format
+msgid "Installed Emoticonset %1 successfully."
+msgstr "បាន​ដំឡើង​សំណុំ​សញ្ញាណ​អារម្មណ៍ %1 ដោយ​ជោគជ័យ ។"
+
+#: main.cpp:34
+#, kde-format
+msgid "AdiumXtra Protocol Handler"
+msgstr "កម្មវិធី​គ្រប់គ្រង​ពិធីការ AdiumXtra"
+
+#: main.cpp:36
+#, kde-format
+msgid "Dominik Schmidt"
+msgstr "Dominik Schmidt"
+
+#: main.cpp:36 main.cpp:37
+#, kde-format
+msgid "Developer"
+msgstr "អ្នក​អភិវឌ្ឍន៍"
+
+#: main.cpp:37
+#, kde-format
+msgid "Daniele E. Domenichelli"
+msgstr "Daniele E. Domenichelli"
+
+#: main.cpp:44
+#, kde-format
+msgid "Adium package to install"
+msgstr "កញ្ចប់ Adium ដើម្បី​ដំឡើង"
+
+#~ msgid "Ok"
+#~ msgstr "គ្មានបញ្ហា"

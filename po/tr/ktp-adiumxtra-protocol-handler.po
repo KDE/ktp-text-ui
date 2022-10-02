@@ -1,0 +1,100 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# Volkan, 2013
+msgid ""
+msgstr ""
+"Project-Id-Version: extragear-network-kde4\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2014-06-08 13:51+0000\n"
+"Last-Translator: Volkan Gezer <volkangezer@gmail.com>\n"
+"Language-Team: Turkish (http://www.transifex.com/projects/p/extragear-"
+"network-k-tr/language/tr/)\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Volkan Gezer"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "volkangezer@mail.com"
+
+#: adiumxtra-protocol-handler.cpp:90 adiumxtra-protocol-handler.cpp:145
+#, kde-format
+msgid "Package type not recognized or not supported"
+msgstr "Paket türü tanınamadı veya desteklenmiyor"
+
+#: adiumxtra-protocol-handler.cpp:91 adiumxtra-protocol-handler.cpp:148
+#, kde-format
+msgid "OK"
+msgstr "Tamam"
+
+#: chat-style-installer.cpp:113
+#, kde-format
+msgid "Install Chatstyle %1"
+msgstr "%1 Sohbet Biçemini Kur"
+
+#: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
+#, kde-format
+msgid "Install"
+msgstr "Kur"
+
+#: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
+#, kde-format
+msgid "Cancel"
+msgstr "İptal"
+
+#: chat-style-installer.cpp:135
+#, kde-format
+msgid "Installed Chatstyle %1 successfully."
+msgstr "%1 Sohbet biçemi başarılı bir şekilde kuruldu."
+
+#: chat-style-installer.cpp:139
+#, kde-format
+msgid "Installation of Chatstyle %1 failed."
+msgstr "%1 Sohbet biçemi kurulum işlemi başarısız oldu."
+
+#: emoticon-set-installer.cpp:98
+#, kde-format
+msgid "Install Emoticonset %1"
+msgstr "%1 İfade Setini Kur"
+
+#: emoticon-set-installer.cpp:117
+#, kde-format
+msgid "Installed Emoticonset %1 successfully."
+msgstr "%1 İfade seti başarıyla kuruldu."
+
+#: main.cpp:34
+#, kde-format
+msgid "AdiumXtra Protocol Handler"
+msgstr "AdiumXtra Protokol Yönetici"
+
+#: main.cpp:36
+#, kde-format
+msgid "Dominik Schmidt"
+msgstr "Dominik Schmidt"
+
+#: main.cpp:36 main.cpp:37
+#, kde-format
+msgid "Developer"
+msgstr "Geliştirici"
+
+#: main.cpp:37
+#, kde-format
+msgid "Daniele E. Domenichelli"
+msgstr "Daniele E. Domenichelli"
+
+#: main.cpp:44
+#, kde-format
+msgid "Adium package to install"
+msgstr "Kurulacak Adium paketi"

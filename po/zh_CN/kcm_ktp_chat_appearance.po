@@ -1,0 +1,225 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2022-09-20 01:56\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/ktp-text-ui/kcm_ktp_chat_appearance.pot\n"
+"X-Crowdin-File-ID: 5417\n"
+
+#: appearance-config-tab.cpp:44
+#, kde-format
+msgid "A demo chat"
+msgstr "演示聊天"
+
+#: appearance-config-tab.cpp:45
+#, kde-format
+msgid "Jabber"
+msgstr "Jabber"
+
+#: appearance-config-tab.cpp:47 appearance-config-tab.cpp:196
+#: appearance-config-tab.cpp:203 appearance-config-tab.cpp:249
+#: appearance-config-tab.cpp:265
+#, kde-format
+msgctxt "Example email"
+msgid "ted@example.com"
+msgstr "ted@example.com"
+
+#: appearance-config-tab.cpp:48
+#, kde-format
+msgctxt "Example name"
+msgid "Ted"
+msgstr "Ted"
+
+#: appearance-config-tab.cpp:181
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ok!"
+msgstr "没问题！"
+
+#: appearance-config-tab.cpp:182 appearance-config-tab.cpp:189
+#: appearance-config-tab.cpp:232 appearance-config-tab.cpp:240
+#, kde-format
+msgctxt "Example email"
+msgid "larry@example.com"
+msgstr "larry@example.com"
+
+#: appearance-config-tab.cpp:183 appearance-config-tab.cpp:190
+#: appearance-config-tab.cpp:233 appearance-config-tab.cpp:241
+#, kde-format
+msgctxt "Example name"
+msgid "Larry Demo"
+msgstr "Larry Demo"
+
+#: appearance-config-tab.cpp:188
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Bye Bye"
+msgstr "再见"
+
+#: appearance-config-tab.cpp:195
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Have fun!"
+msgstr "祝您愉快！"
+
+#: appearance-config-tab.cpp:197 appearance-config-tab.cpp:204
+#: appearance-config-tab.cpp:210 appearance-config-tab.cpp:217
+#: appearance-config-tab.cpp:224 appearance-config-tab.cpp:250
+#: appearance-config-tab.cpp:266 appearance-config-tab.cpp:273
+#, kde-format
+msgctxt "Example name"
+msgid "Ted Example"
+msgstr "Ted Example"
+
+#: appearance-config-tab.cpp:202
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "cya"
+msgstr "cya"
+
+#: appearance-config-tab.cpp:209
+#, kde-format
+msgctxt "Example message"
+msgid "Ted Example waves."
+msgstr "Ted Example 挥手。"
+
+#: appearance-config-tab.cpp:216
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example has left the chat."
+msgstr "Ted Example 离开了聊天。"
+
+#: appearance-config-tab.cpp:223
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example has joined the chat."
+msgstr "Ted Example 加入了聊天。"
+
+#: appearance-config-tab.cpp:231
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Hello Ted"
+msgstr "你好 Ted"
+
+#: appearance-config-tab.cpp:239
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "What's up?"
+msgstr "什么事？"
+
+#: appearance-config-tab.cpp:246
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid ""
+"Check out which cool adium themes work <a href=\"http://community.kde.org/"
+"KTp/Components/Chat_Window/Themes\">here</a>!"
+msgstr ""
+"来<a href=\"http://community.kde.org/KTp/Components/Chat_Window/Themes\">这里"
+"</a>看看很酷的 adium 主题吧！"
+
+#: appearance-config-tab.cpp:256
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Hello"
+msgstr "你好"
+
+#: appearance-config-tab.cpp:257
+#, kde-format
+msgctxt "Example email"
+msgid "bob@example.com"
+msgstr "bob@example.com"
+
+#: appearance-config-tab.cpp:258
+#, kde-format
+msgctxt "Example name"
+msgid "Bob Example"
+msgstr "Bod 示例"
+
+#: appearance-config-tab.cpp:264
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "A different example message"
+msgstr "不同的示例消息"
+
+#: appearance-config-tab.cpp:272
+#, kde-format
+msgctxt "Example message in preview conversation"
+msgid "Ted Example is now Away."
+msgstr "Ted Example 现在已标记为离开。"
+
+#: appearance-config.cpp:47
+#, kde-format
+msgctxt "@title:tab"
+msgid "Normal Chat"
+msgstr "通常聊天"
+
+#: appearance-config.cpp:51
+#, kde-format
+msgctxt "@title:tab"
+msgid "Group Chat"
+msgstr "群聊"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: appearance-config.ui:41
+#, kde-format
+msgid "Style"
+msgstr "样式"
+
+#. i18n: ectx: property (text), widget (QLabel, styleLabel)
+#: appearance-config.ui:52
+#, kde-format
+msgid "Message Style:"
+msgstr "消息样式："
+
+#. i18n: ectx: property (text), widget (QLabel, variantLabel)
+#: appearance-config.ui:78
+#, kde-format
+msgid "Variant:"
+msgstr "变体："
+
+#. i18n: ectx: property (text), widget (QCheckBox, showHeader)
+#: appearance-config.ui:113
+#, kde-format
+msgid "Show Header"
+msgstr "显示页眉"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showPresenceCheckBox)
+#: appearance-config.ui:129
+#, kde-format
+msgid "Show status changes"
+msgstr "显示状态变化"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showJoinLeaveCheckBox)
+#: appearance-config.ui:142
+#, kde-format
+msgid "Show when contacts join/leave chat"
+msgstr "显示联系人加入/离开聊天"
+
+#. i18n: ectx: property (title), widget (QGroupBox, customFontBox)
+#: appearance-config.ui:170
+#, kde-format
+msgid "Use Custom Font Settings"
+msgstr "使用自定义字体设置"
+
+#. i18n: ectx: property (text), widget (QLabel, fontFamilyLabel)
+#: appearance-config.ui:184
+#, kde-format
+msgid "Select Font:"
+msgstr "选择字体："
+
+#. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
+#: appearance-config.ui:194
+#, kde-format
+msgid "Select Size:"
+msgstr "选择大小："
