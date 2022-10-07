@@ -1,0 +1,189 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the ktp-text-ui package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ktp-text-ui\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:11+0200\n"
+"PO-Revision-Date: 2022-09-27 17:06+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+
+#. i18n: ectx: property (text), widget (QPushButton, btVerify)
+#: otr-config.cpp:62 otr-config.ui:308
+#, kde-format
+msgid "Verify"
+msgstr "შემოწმება"
+
+#. i18n: ectx: property (text), widget (QPushButton, btForget)
+#: otr-config.cpp:63 otr-config.ui:286
+#, kde-format
+msgid "Forget"
+msgstr "დავიწყება"
+
+#: otr-config.cpp:126
+#, kde-format
+msgid "yes"
+msgstr "yes"
+
+#: otr-config.cpp:126
+#, kde-format
+msgid "no"
+msgstr "არა"
+
+#: otr-config.cpp:127
+#, kde-format
+msgid "in use"
+msgstr "გამოიყენება"
+
+#: otr-config.cpp:127 otr-config.cpp:226
+#, kde-format
+msgid "not in use"
+msgstr "არ გამოიყენება"
+
+#. i18n: ectx: property (text), widget (QLabel, tlFingerprint)
+#: otr-config.cpp:170 otr-config.ui:217
+#, kde-format
+msgid "No Fingerprint"
+msgstr "ანაბეჭდის გარეშე"
+
+#: otr-config.cpp:251
+#, kde-format
+msgid ""
+"Please contact %1 via another secure way and verify that the following "
+"fingerprint is correct:"
+msgstr ""
+
+#: otr-config.cpp:254
+#, kde-format
+msgid "Are you sure you want to trust this fingerprint?"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, OTRConfigUi)
+#: otr-config.ui:14
+#, kde-format
+msgid "OTR Preferences"
+msgstr "OTR -ის მორგება"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbPolicy)
+#: otr-config.ui:22
+#, kde-format
+msgid "OTR policy"
+msgstr "OTR -ის პოლიტიკა"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbAlways)
+#: otr-config.ui:28
+#, kde-format
+msgid "Always encrypt messages"
+msgstr "შეტყობინებების ყოველთვის დაშიფრვა"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbAlways)
+#: otr-config.ui:31
+#, kde-format
+msgid "Always"
+msgstr "ყოველთვის"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbOpportunistic)
+#: otr-config.ui:44
+#, kde-format
+msgid "Automatically encrypt messages if the other side supports OTR"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbOpportunistic)
+#: otr-config.ui:47
+#, kde-format
+msgid "Opportunistic"
+msgstr "ოპორტუნისტული"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbManual)
+#: otr-config.ui:57
+#, kde-format
+msgid "Encrypt messages if the other side requests an OTR connection"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbManual)
+#: otr-config.ui:60
+#, kde-format
+msgid "Manual"
+msgstr "ხელით"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, rbNever)
+#: otr-config.ui:73
+#, kde-format
+msgid "Never encrypt messages"
+msgstr "არასდროს დაშიფრო შეტყობინებები"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbNever)
+#: otr-config.ui:76
+#, kde-format
+msgid "Never"
+msgstr "არასდროს"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbAccountManagement)
+#: otr-config.ui:111
+#, kde-format
+msgid "Account management"
+msgstr "ანგარიშების მართვა"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbPrivKey)
+#: otr-config.ui:139
+#, kde-format
+msgid "Private key"
+msgstr "პირადი გასაღები"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: otr-config.ui:163
+#, kde-format
+msgid "Fingerprint:"
+msgstr "ანაბეჭდი:"
+
+#. i18n: ectx: property (text), widget (QPushButton, btGenFingerprint)
+#: otr-config.ui:198
+#, kde-format
+msgid "&Generate"
+msgstr "&გენერაცია"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gbFingerprints)
+#: otr-config.ui:265
+#, kde-format
+msgid "Known fingerprints"
+msgstr "ცნობილი ანაბეჭდები"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:366
+#, kde-format
+msgid "Contact ID"
+msgstr "კონტაქტის ID"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:371
+#, kde-format
+msgid "Fingerprint"
+msgstr "თითის ანაბეჭდი"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:376
+#, kde-format
+msgid "Verified"
+msgstr "დამოწმებულია"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tbFingerprints)
+#: otr-config.ui:381
+#, kde-format
+msgid "Status"
+msgstr "სტატუსი"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: otr-config.ui:398
+#, kde-format
+msgid "Account:"
+msgstr "ანგარიში:"
