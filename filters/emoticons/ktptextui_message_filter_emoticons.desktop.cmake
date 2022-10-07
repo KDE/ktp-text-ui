@@ -18,6 +18,7 @@ Name[gl]=Emoticonas
 Name[hu]=Hangulatjelek
 Name[ia]=Emoticones
 Name[it]=Emoticon
+Name[ka]=ემოციები
 Name[kk]=Көңіл күйі белгілері
 Name[ko]=이모티콘
 Name[lt]=Jaustukai

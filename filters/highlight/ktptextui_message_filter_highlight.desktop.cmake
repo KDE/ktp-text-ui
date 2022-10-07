@@ -33,6 +33,7 @@ Name[hr]=Isticanje
 Name[hu]=Kiemelés
 Name[ia]=Evidentia
 Name[it]=Evidenziazione
+Name[ka]=მოუნიშნავის გაბუნდოვნება
 Name[kk]=Бояп белгілеген
 Name[ko]=강조
 Name[lt]=Paryškinti

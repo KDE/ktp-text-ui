@@ -17,6 +17,7 @@ Name[gl]=OTR
 Name[hu]=OTR
 Name[ia]=OTR
 Name[it]=OTR
+Name[ka]=OTR
 Name[ko]=OTR
 Name[nb]=OTR
 Name[nl]=OTR
