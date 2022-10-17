@@ -100,4 +100,4 @@ msgstr "Daniele E. Domenichelli"
 #: main.cpp:44
 #, kde-format
 msgid "Adium package to install"
-msgstr "Paquet Adium que cal instal·lar"
+msgstr "Paquet Adium que s'ha d'instal·lar"

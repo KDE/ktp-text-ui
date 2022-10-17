@@ -249,7 +249,7 @@ msgstr ""
 #: chat-window.cpp:1193
 #, kde-format
 msgid "Choose files to send to %1"
-msgstr "Seleccioneu els fitxers que s'enviaran a %1"
+msgstr "Seleccioneu els fitxers que s'han d'enviar a %1"
 
 #: chat-window.cpp:1280
 #, kde-format

@@ -282,7 +282,7 @@ msgstr "&Anterior"
 #: chat-search-bar.cpp:49
 #, kde-format
 msgid "Insert search text..."
-msgstr "Inseriu el text que cal buscar..."
+msgstr "Inseriu el text que s'ha de buscar..."
 
 #: chat-search-bar.cpp:58
 #, kde-format
