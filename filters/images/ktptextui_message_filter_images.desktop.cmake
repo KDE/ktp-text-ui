@@ -18,6 +18,7 @@ Name[gl]=Vista previa da imaxe
 Name[hu]=A kép előnézete
 Name[ia]=Vista preliminari de Imagine
 Name[it]=Anteprima di immagini
+Name[ka]=გამოსახულების მინიატურა
 Name[kk]=Кескінді қарау
 Name[ko]=그림 미리 보기
 Name[lt]=Paveikslėlio peržiūra
