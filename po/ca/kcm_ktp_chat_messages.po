@@ -35,6 +35,3 @@ msgstr "txemaq@gmail.com"
 #, kde-format
 msgid "Plugins"
 msgstr "Connectors"
-
-#~ msgid "Chat Messages"
-#~ msgstr "Missatges del xat"

@@ -151,6 +151,3 @@ msgstr "Disposicions del teclat"
 #, kde-format
 msgid "Remember keyboard layout for each tab"
 msgstr "Recorda la disposició del teclat per a cada pestanya"
-
-#~ msgid "A new tab in the last focused window"
-#~ msgstr "Una pestanya nova de la darrera finestra amb focus"

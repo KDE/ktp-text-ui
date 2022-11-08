@@ -664,19 +664,3 @@ msgstr "No s'ha pogut generar una clau privada per a %1"
 #, kde-format
 msgid "Finished generating the private key for %1"
 msgstr "Ha finalitzat la generació de la clau privada per a %1"
-
-#~ msgctxt "@info"
-#~ msgid "Authentication with <b>%1</b>"
-#~ msgstr "Autenticació amb <b>%1</b>"
-
-#~ msgid "You have sent a message"
-#~ msgstr "Heu enviat un missatge"
-
-#~ msgid "Show format options"
-#~ msgstr "Mostra les opcions de format"
-
-#~ msgid "Connection closed"
-#~ msgstr "Connexió tancada"
-
-#~ msgid "&Send"
-#~ msgstr "&Envia"

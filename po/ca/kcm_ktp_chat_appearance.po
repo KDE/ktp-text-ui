@@ -227,17 +227,3 @@ msgstr "Trieu el tipus de lletra:"
 #, kde-format
 msgid "Select Size:"
 msgstr "Trieu la mida:"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Josep M. Ferrer"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "txemaq@gmail.com"
-
-#~ msgid "BobMarley@yahoo.com"
-#~ msgstr "BobMarley@yahoo.com"
-
-#~ msgid "Bob Marley"
-#~ msgstr "Bob Marley"

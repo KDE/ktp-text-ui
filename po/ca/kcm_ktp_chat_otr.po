@@ -192,6 +192,3 @@ msgstr "Estat"
 #, kde-format
 msgid "Account:"
 msgstr "Compte:"
-
-#~ msgid "No fingerprint"
-#~ msgstr "Sense empremta digital"
