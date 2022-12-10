@@ -7,7 +7,7 @@ Dependencies:
     'frameworks/extra-cmake-modules': '@stable'
     'frameworks/karchive': '@stable'
     'frameworks/sonnet': '@stable'
-    'frameworks/kwidgetaddons': '@stable'
+    'frameworks/kwidgetsaddons': '@stable'
     'frameworks/kservice': '@stable'
     'frameworks/kemoticons': '@stable'
     'frameworks/kio': '@stable'
