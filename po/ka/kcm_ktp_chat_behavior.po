@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ktp-text-ui\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2022-09-27 17:03+0200\n"
+"PO-Revision-Date: 2022-12-14 18:35+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: behavior-config.cpp:50
 #, kde-format
@@ -123,7 +123,7 @@ msgstr "სურათების გაზიარების სერვ�
 #: behavior-config.ui:179
 #, kde-format
 msgid "Works when dragging an image to the Chat Window"
-msgstr ""
+msgstr "მუშაობს, როცა სურათს საუბრის ფანჯარაზე გადაათრევთ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupChatsGroup)
 #: behavior-config.ui:195
@@ -135,7 +135,7 @@ msgstr "ჯგუფური ჩატები"
 #: behavior-config.ui:207
 #, kde-format
 msgid "Stay connected to group chat even when tab is closed"
-msgstr ""
+msgstr "ჯგუფში დარჩენა მაშინაც კი, როცა ჩანართი დახურულია"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: behavior-config.ui:217
@@ -147,4 +147,4 @@ msgstr "კლავიატურის განლაგებები"
 #: behavior-config.ui:223
 #, kde-format
 msgid "Remember keyboard layout for each tab"
-msgstr ""
+msgstr "კლავიატურის განლაგების დამახსოვრება ყველა ჩანართისთვის"

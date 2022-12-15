@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ktp-text-ui\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2022-09-27 17:01+0200\n"
+"PO-Revision-Date: 2022-12-14 18:32+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: appearance-config-tab.cpp:44
 #, kde-format
 msgid "A demo chat"
-msgstr ""
+msgstr "საჩვენებელი ჩატი"
 
 #: appearance-config-tab.cpp:45
 #, kde-format
@@ -93,19 +93,19 @@ msgstr "ნახვამდის"
 #, kde-format
 msgctxt "Example message"
 msgid "Ted Example waves."
-msgstr ""
+msgstr "Ted Example ხელს გიქნევთ."
 
 #: appearance-config-tab.cpp:216
 #, kde-format
 msgctxt "Example message in preview conversation"
 msgid "Ted Example has left the chat."
-msgstr ""
+msgstr "Ted Example გავიდა ჩატიდან."
 
 #: appearance-config-tab.cpp:223
 #, kde-format
 msgctxt "Example message in preview conversation"
 msgid "Ted Example has joined the chat."
-msgstr ""
+msgstr "Ted Example შემოუერთდა ჩატს."
 
 #: appearance-config-tab.cpp:231
 #, kde-format
@@ -126,6 +126,8 @@ msgid ""
 "Check out which cool adium themes work <a href=\"http://community.kde.org/"
 "KTp/Components/Chat_Window/Themes\">here</a>!"
 msgstr ""
+"შეამოწმეთ adium -ის რომელი თემები მუშაობს, <a href=\"http://community.kde."
+"org/KTp/Components/Chat_Window/Themes\">აქ</a>!"
 
 #: appearance-config-tab.cpp:256
 #, kde-format
@@ -143,19 +145,19 @@ msgstr "bob@example.com"
 #, kde-format
 msgctxt "Example name"
 msgid "Bob Example"
-msgstr ""
+msgstr "Bob Example"
 
 #: appearance-config-tab.cpp:264
 #, kde-format
 msgctxt "Example message in preview conversation"
 msgid "A different example message"
-msgstr ""
+msgstr "სხვა მაგალითი შეტყობინება"
 
 #: appearance-config-tab.cpp:272
 #, kde-format
 msgctxt "Example message in preview conversation"
 msgid "Ted Example is now Away."
-msgstr ""
+msgstr "Ted Example ახლა გასულია."
 
 #: appearance-config.cpp:47
 #, kde-format
@@ -203,7 +205,7 @@ msgstr "სტატუსის ცვლილებების ჩვენ�
 #: appearance-config.ui:142
 #, kde-format
 msgid "Show when contacts join/leave chat"
-msgstr ""
+msgstr "როცა კონტაქტები შემოდიან/გავლენ ჩატიდან"
 
 #. i18n: ectx: property (title), widget (QGroupBox, customFontBox)
 #: appearance-config.ui:170
