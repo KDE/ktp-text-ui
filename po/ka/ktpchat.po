@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ktp-text-ui\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2022-12-14 21:46+0100\n"
+"PO-Revision-Date: 2022-12-16 07:08+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -34,11 +34,13 @@ msgid ""
 "Failed to load a valid theme. Your installation is broken. Check your kde "
 "path. Will now crash."
 msgstr ""
+"სწორი თემის ჩატვირთვის შეცდომა. თქვენი ფაილები დაზიანებულია. შეამოწმეთ KDE-"
+"ის საქაღალდე. ავარიული დასასრული."
 
 #: adium-theme-view.cpp:210
 #, kde-format
 msgid "Missing required file Template.html - check your installation."
-msgstr ""
+msgstr "აუცილებელი ფაილი Template.html არ არსებობს - შეამოწმეთ თქვენი ფაილები."
 
 #: adium-theme-view.cpp:648
 #, kde-format
@@ -99,7 +101,7 @@ msgstr "კითხვა და პასუხი"
 #, kde-format
 msgctxt "@info"
 msgid "Enter a question that only <b>%1</b> is able to answer:"
-msgstr ""
+msgstr "შეიყვანეთ კითხვა, რომელზეც მხოლოდ <b>%1</b>-ს შეუძლია, უპასუხოს:"
 
 #: authenticationwizard.cpp:185
 #, kde-format
@@ -310,12 +312,12 @@ msgstr "გამოსახულების ფაილის გაგზ�
 #: chat-widget.cpp:690
 #, kde-format
 msgid "Attempting to start a private OTR session with %1"
-msgstr ""
+msgstr "%1-სთან პირადი OTR სესიის დაწყების ცდა"
 
 #: chat-widget.cpp:693
 #, kde-format
 msgid "Attempting to restart a private OTR session with %1"
-msgstr ""
+msgstr "%1-სთან პირადი OTR სესიის თავიდან დაწყების ავტომატურად ცდა"
 
 #: chat-widget.cpp:713
 #, kde-format
@@ -350,7 +352,7 @@ msgstr ""
 #: chat-widget.cpp:802
 #, kde-format
 msgid "Successfully refreshed private OTR session"
-msgstr ""
+msgstr "პირადი OTR სესია წარმატებით განახლდა"
 
 #: chat-widget.cpp:803
 #, kde-format
@@ -574,7 +576,7 @@ msgstr "%1-სთან OTR სესია დასრულდა"
 #: otr-notifications.cpp:89
 #, kde-format
 msgid "%1 has requested your authentication"
-msgstr ""
+msgstr "%1-მა თქვენი ავთენტიკაცია მოითხოვა"
 
 #: otr-notifications.cpp:103
 #, kde-format
@@ -589,12 +591,12 @@ msgstr "%1-სთან ავთენტიკაცია წარუმა�
 #: otr-notifications.cpp:119
 #, kde-format
 msgid "Authentication with %1 was aborted"
-msgstr ""
+msgstr "%1-სთან ავთენტიკაცია გაუქმდა"
 
 #: proxy-service.cpp:44
 #, kde-format
 msgid "Generating the private key for %1..."
-msgstr ""
+msgstr "%1-ის პირადი გასაღების გენერაცია..."
 
 #: proxy-service.cpp:45
 #, kde-format
