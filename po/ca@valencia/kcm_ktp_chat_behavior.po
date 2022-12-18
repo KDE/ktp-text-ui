@@ -126,7 +126,7 @@ msgstr "Servei de compartició de les imatges"
 #: behavior-config.ui:179
 #, kde-format
 msgid "Works when dragging an image to the Chat Window"
-msgstr "Funciona en arrossegar una imatge a la finestra de xat"
+msgstr "Funciona en arrossegar una imatge fins a la finestra de xat"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupChatsGroup)
 #: behavior-config.ui:195
