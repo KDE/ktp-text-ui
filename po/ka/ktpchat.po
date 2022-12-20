@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ktp-text-ui\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2022-12-16 07:08+0100\n"
+"PO-Revision-Date: 2022-12-19 11:07+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -122,6 +122,8 @@ msgid ""
 "<b>%1</b> would like to verify your authentication. Please answer the "
 "following question in the field below:"
 msgstr ""
+"<b>%1</b> -ს სურს თქვენი ავთენტიკაცია გადაამოწმოს. უპასუხეთ შემდეგ კითხვას "
+"ველში ქვემოთ:"
 
 #: authenticationwizard.cpp:219
 #, kde-format
@@ -133,13 +135,13 @@ msgstr "გაზიარებული საიდუმლო ფრაზ�
 #, kde-format
 msgctxt "@info"
 msgid "Enter a secret passphrase known only to you and <b>%1</b>:"
-msgstr ""
+msgstr "შეიყვანეთ საკვანძო ფრაზა, რომელიც მხოლოდ თქვენ და <b>%1</b>-მა იცით:"
 
 #: authenticationwizard.cpp:224
 #, kde-format
 msgctxt "@info"
 msgid "Enter the secret passphrase known only to you and <b>%1</b>:"
-msgstr ""
+msgstr "შეიყვანეთ საკვანძო ფრაზა, რომელიც მხოლოდ თქვენ და <b>%1</b>-მა იცით:"
 
 #: authenticationwizard.cpp:238
 #, kde-format
@@ -154,6 +156,8 @@ msgid ""
 "Contact <b>%1</b> via another secure channel and verify that the following "
 "fingerprint is correct:"
 msgstr ""
+"<b>%1</b>-სთან უსაფრთხო არხით დაკავშირება და გადამოწმება, შემდეგი ანაბეჭდი "
+"სწორია, თუ არა:"
 
 #: authenticationwizard.cpp:253
 #, kde-format
@@ -171,7 +175,7 @@ msgstr "მაქვს"
 #, kde-format
 msgctxt "@info:label I have..."
 msgid "verified that this is in fact the correct fingerprint for <b>%1</b>."
-msgstr ""
+msgstr "გადამოწმდა, რომ ეს მართლაც <b>%1</b>-ის ანაბეჭდია."
 
 #: authenticationwizard.cpp:380
 #, kde-format
@@ -183,7 +187,7 @@ msgstr "ავთენტიკაცია წარმატებული�
 msgid ""
 "The authentication with <b>%1</b> has been completed successfully. The "
 "conversation is now secure."
-msgstr ""
+msgstr "<b>%1</b>-ით ავთენტიკაცია წარმატებულია. საუბარი ახლა უსაფრთხოა."
 
 #: authenticationwizard.cpp:388
 #, kde-format
@@ -347,7 +351,7 @@ msgstr "დაიწყო პირადი OTR სესია"
 #: chat-widget.cpp:786
 #, kde-format
 msgid "%1 has ended the OTR session. You should do the same"
-msgstr ""
+msgstr "%1-მა OTR სესია დაასრულა. თქვენც იგივე უნდა გააკეთოთ"
 
 #: chat-widget.cpp:802
 #, kde-format
@@ -357,40 +361,40 @@ msgstr "პირადი OTR სესია წარმატებით �
 #: chat-widget.cpp:803
 #, kde-format
 msgid "Successfully refreshed unverified OTR session"
-msgstr ""
+msgstr "შეუმოწმებელი OTR სესია წარამტებით განახლდა"
 
 #: chat-widget.cpp:902
 #, kde-format
 msgid ""
 "Delivery of the message \"%1\" failed because the remote contact is blocked"
-msgstr ""
+msgstr "შეტყობინების \"%1\" მიწოდების შეცდომა. დაშორებული კონტაქტი დაბლოკილია"
 
 #: chat-widget.cpp:906
 #, kde-format
 msgid ""
 "Delivery of the message \"%1\" failed because the remote contact is offline"
-msgstr ""
+msgstr "შეტყობინების \"%1\" მიწოდების შეცდომა. დაშორებული კონტაქტი გათიშულია"
 
 #: chat-widget.cpp:912
 #, kde-format
 msgid "Delivery of a message failed because the remote contact is blocked"
-msgstr ""
+msgstr "შეტყობინების მიწოდების შეცდომა. დაშორებული კონტაქტი დაბლოკილია"
 
 #: chat-widget.cpp:915
 #, kde-format
 msgid "Delivery of a message failed because the remote contact is offline"
-msgstr ""
+msgstr "შეტყობინების მიწოდების შეცდომა. დაშორებული კონტაქტი გათიშულია"
 
 #: chat-widget.cpp:922
 #, kde-format
 msgid ""
 "Delivery of the message \"%1\" failed because the remote contact is not valid"
-msgstr ""
+msgstr "შეტყობინების \"%1\" მიწოდების შეცდომა. დაშორებული კონტაქტი არასწორია"
 
 #: chat-widget.cpp:926
 #, kde-format
 msgid "Delivery of a message failed because the remote contact is not valid"
-msgstr ""
+msgstr "შეტყობინების მიწოდების შეცდომა. დაშორებული კონტაქტი არასწორია"
 
 #: chat-widget.cpp:932
 #, kde-format
@@ -398,18 +402,19 @@ msgid ""
 "Delivery of the message \"%1\" failed because you do not have permission to "
 "speak in this room"
 msgstr ""
+"შეტყობინების \"%1\" მიწოდების შეცდომა. ამ ოთახში საუბრის უფლება არ გაგაჩნიათ"
 
 #: chat-widget.cpp:936
 #, kde-format
 msgid ""
 "Delivery of a message failed because you do not have permission to speak in "
 "this room"
-msgstr ""
+msgstr "შეტყობინების მიწოდების შეცდომა. ოთახში საუბრის უფლება არ გაგაჩნიათ"
 
 #: chat-widget.cpp:942
 #, kde-format
 msgid "Delivery of the message \"%1\" failed because it was too long"
-msgstr ""
+msgstr "შეტყობინების \"%1\" მიწოდების შეცდომა. შეცდომა ძალიან გრძელია"
 
 #: chat-widget.cpp:946
 #, kde-format
@@ -540,7 +545,7 @@ msgstr "გთხოვთ, მოითმინოთ"
 #: keygendialog.ui:32
 #, kde-format
 msgid "Please wait while generating the private key"
-msgstr ""
+msgstr "მოითმინეთ, მიმდინარეობს პირადი გასაღების გენერაცია"
 
 #. i18n: ectx: property (text), widget (QLabel, lbTime)
 #: keygendialog.ui:49
@@ -561,12 +566,12 @@ msgstr "ნახვა"
 #: otr-notifications.cpp:61
 #, kde-format
 msgid "Private OTR session started with %1"
-msgstr ""
+msgstr "%1-სთან პირადი OTR სესია დაიწყო"
 
 #: otr-notifications.cpp:63
 #, kde-format
 msgid "Unverified OTR session started with %1"
-msgstr ""
+msgstr "%1-სთან გადაუმოწმებელი OTR სესია დაიწყო"
 
 #: otr-notifications.cpp:77
 #, kde-format
