@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ktp-text-ui\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2022-12-19 11:07+0100\n"
+"PO-Revision-Date: 2022-12-21 08:57+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -195,6 +195,8 @@ msgid ""
 "<b>%1</b> has successfully authenticated you. You may want to authenticate "
 "this contact as well by asking your own question."
 msgstr ""
+"<b>%1</b> -მა ავთენტიკაცია წარმატებით გაგატარათ. შეიძლება თქვენც გნებავთ "
+"მისი ავთენტიკაცია, თქვენი კითხვის დასმით.."
 
 #: authenticationwizard.cpp:396
 #, kde-format
@@ -208,6 +210,9 @@ msgid ""
 "talking to an imposter, try again using the manual fingerprint verification "
 "method. Note that the conversation is now insecure."
 msgstr ""
+"<b>%1</b>-თან ავთენტიკაცია წარუმატებელია. დარწმუნდით, რომ ცრუს არ "
+"ელაპარაკებით და კიდევ სცადეთ ანაბეჭდის ხელით მითითებით. გაითვალისწინეთ, რომ "
+"საუბარი ახალ დაცული არაა."
 
 #: authenticationwizard.cpp:419
 #, kde-format
@@ -221,6 +226,8 @@ msgid ""
 "talking to an imposter, try again using the manual fingerprint verification "
 "method."
 msgstr ""
+"<b>%1</b> -მა ავთენტიკაციის პროცესი გააუქმა. იმისათვის, რომ დარწმუნდეთ, რომ "
+"ცრუს არ ესაუბრებით, თავიდან, ანაბეჭდის ხელით მითითებით სცადეთ."
 
 #: authenticationwizard.cpp:429
 #, kde-format
