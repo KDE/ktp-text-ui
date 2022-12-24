@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ktp-text-ui\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2022-12-21 08:57+0100\n"
+"PO-Revision-Date: 2022-12-23 07:46+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -235,6 +235,8 @@ msgid ""
 "Ask <b>%1</b> a question, the answer to which is known only to you and them. "
 "If the answer does not match, you may be talking to an imposter."
 msgstr ""
+"დაუსვით <b>%1</b>-ს კითხვა, რომელზე პასუხიც მხოლოდ თქვენ ორმა იცით. თუ "
+"პასუხი არ ემთხვევა, შეიძლება თაღლითს ესაუბრებით."
 
 #: authenticationwizard.cpp:432
 #, kde-format
@@ -243,6 +245,10 @@ msgid ""
 "you may be talking to an imposter. Do not send the secret through the chat "
 "window, or this authentication method could be compromised with ease."
 msgstr ""
+"აირჩიეთ საიდუმლო, რომელიც მხოლოდ თქვენ და <b>%1</b>-მა იცით. თუ საიდუმლო არ "
+"ემთხვევა, შეიძლება თაღლითს ელაპარაკებოდეთ. არ გააგზავნოთ საიდუმლო ჩატის "
+"ფანჯრით. წინააღმდეგ შემთხვევაში ამ ავთენტიკაციის მეთოდის გვერდის ავლა "
+"უადვილესი ხდება."
 
 #: authenticationwizard.cpp:436
 #, kde-format
@@ -250,6 +256,8 @@ msgid ""
 "Verify <b>%1's</b> fingerprint manually. For example via a phone call or "
 "signed (and verified) email."
 msgstr ""
+"ხელით გადაამოწმეთ <b>%1</b>-ის ანაბეჭდი. მაგალითად დაურეკეთ ან ხელმოწერილი "
+"(და გადამოწმებული) ელფოსტით."
 
 #: chat-search-bar.cpp:39
 #, kde-format
@@ -304,6 +312,8 @@ msgid ""
 "Your message cannot be sent because the account %1 is offline. Please try "
 "again when the account is connected again."
 msgstr ""
+"თქვენი შეტყობინების გაგზავნა შეუძლებელია, რადგან %1 გათიშულია. სცადეთ "
+"თავიდან, როცა ის ხაზზე იქნება."
 
 #: chat-widget.cpp:207
 #, kde-format
@@ -444,6 +454,8 @@ msgid ""
 "%1 has already closed his/her private connection to you. Your message was "
 "not sent. Either end your private conversation, or restart it."
 msgstr ""
+"%1-მა თქვენამდე შეერთება უკვე დახურა. შეტყობინება არ გაგზავნიდა. ან "
+"დაასრულეთ ეს საუბარი, ან თავიდან დაიწყეთ ის."
 
 #: chat-widget.cpp:1060 chat-widget.cpp:1153
 #, kde-format
