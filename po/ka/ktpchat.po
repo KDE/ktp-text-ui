@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ktp-text-ui\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2022-10-06 12:20+0200\n"
+"PO-Revision-Date: 2022-12-29 11:43+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -34,29 +34,31 @@ msgid ""
 "Failed to load a valid theme. Your installation is broken. Check your kde "
 "path. Will now crash."
 msgstr ""
+"სწორი თემის ჩატვირთვის შეცდომა. თქვენი ფაილები დაზიანებულია. შეამოწმეთ KDE-"
+"ის საქაღალდე. ავარიული დასასრული."
 
 #: adium-theme-view.cpp:210
 #, kde-format
 msgid "Missing required file Template.html - check your installation."
-msgstr ""
+msgstr "აუცილებელი ფაილი Template.html არ არსებობს - შეამოწმეთ თქვენი ფაილები."
 
 #: adium-theme-view.cpp:648
 #, kde-format
 msgctxt "Header at top of conversation view. %1 is the time format"
 msgid "Conversation began %1"
-msgstr ""
+msgstr "საუბრის დაწყების დრო %1"
 
 #: adium-theme-view.cpp:652
 #, kde-format
 msgctxt "Header at top of conversation view. %1 is the time format"
 msgid "Joined at %1"
-msgstr ""
+msgstr "შესვლის დროა %1"
 
 #: authenticationwizard.cpp:49
 #, kde-format
 msgctxt "@title"
 msgid "Authenticating contact..."
-msgstr ""
+msgstr "კონტაქტის ავთენტიკაცია..."
 
 #: authenticationwizard.cpp:100
 #, kde-format
@@ -66,52 +68,52 @@ msgstr "<b>%1</b>-ის მოლოდინი..."
 #: authenticationwizard.cpp:101
 #, kde-format
 msgid "Checking if answers match..."
-msgstr ""
+msgstr "პასუხების დამთხვევის შემოწმება..."
 
 #: authenticationwizard.cpp:143
 #, kde-format
 msgctxt "@title"
 msgid "Select authentication method"
-msgstr ""
+msgstr "აირჩიეთ ავთენტიკაციის მეთოდი"
 
 #: authenticationwizard.cpp:145
 #, kde-format
 msgid "Question and Answer"
-msgstr ""
+msgstr "კითხვა და პასუხი"
 
 #: authenticationwizard.cpp:146
 #, kde-format
 msgid "Shared Secret"
-msgstr ""
+msgstr "გაზიარებული საიდუმლო ფრაზა"
 
 #: authenticationwizard.cpp:147
 #, kde-format
 msgid "Manual fingerprint verification"
-msgstr ""
+msgstr "ანაბეჭდის ხელით გადამოწმება"
 
 #: authenticationwizard.cpp:178
 #, kde-format
 msgctxt "@title"
 msgid "Question and Answer"
-msgstr ""
+msgstr "კითხვა და პასუხი"
 
 #: authenticationwizard.cpp:180
 #, kde-format
 msgctxt "@info"
 msgid "Enter a question that only <b>%1</b> is able to answer:"
-msgstr ""
+msgstr "შეიყვანეთ კითხვა, რომელზეც მხოლოდ <b>%1</b>-ს შეუძლია, უპასუხოს:"
 
 #: authenticationwizard.cpp:185
 #, kde-format
 msgctxt "@info"
 msgid "Enter the answer to your question:"
-msgstr ""
+msgstr "შეიყვანეთ პასუხი თქვენი კითხვისთვის:"
 
 #: authenticationwizard.cpp:189 authenticationwizard.cpp:223
 #, kde-format
 msgctxt "@title"
 msgid "Authentication with <b>%1</b>"
-msgstr ""
+msgstr "<b>%1</b>-სთან ავთენტიკაია"
 
 #: authenticationwizard.cpp:190
 #, kde-format
@@ -120,30 +122,32 @@ msgid ""
 "<b>%1</b> would like to verify your authentication. Please answer the "
 "following question in the field below:"
 msgstr ""
+"<b>%1</b> -ს სურს თქვენი ავთენტიკაცია გადაამოწმოს. უპასუხეთ შემდეგ კითხვას "
+"ველში ქვემოთ:"
 
 #: authenticationwizard.cpp:219
 #, kde-format
 msgctxt "@title"
 msgid "Shared Secret"
-msgstr ""
+msgstr "გაზიარებული საიდუმლო ფრაზა"
 
 #: authenticationwizard.cpp:221
 #, kde-format
 msgctxt "@info"
 msgid "Enter a secret passphrase known only to you and <b>%1</b>:"
-msgstr ""
+msgstr "შეიყვანეთ საკვანძო ფრაზა, რომელიც მხოლოდ თქვენ და <b>%1</b>-მა იცით:"
 
 #: authenticationwizard.cpp:224
 #, kde-format
 msgctxt "@info"
 msgid "Enter the secret passphrase known only to you and <b>%1</b>:"
-msgstr ""
+msgstr "შეიყვანეთ საკვანძო ფრაზა, რომელიც მხოლოდ თქვენ და <b>%1</b>-მა იცით:"
 
 #: authenticationwizard.cpp:238
 #, kde-format
 msgctxt "@title"
 msgid "Manual Verification"
-msgstr ""
+msgstr "ხელით გადამოწმება"
 
 #: authenticationwizard.cpp:244
 #, kde-format
@@ -152,24 +156,26 @@ msgid ""
 "Contact <b>%1</b> via another secure channel and verify that the following "
 "fingerprint is correct:"
 msgstr ""
+"<b>%1</b>-სთან უსაფრთხო არხით დაკავშირება და გადამოწმება, შემდეგი ანაბეჭდი "
+"სწორია, თუ არა:"
 
 #: authenticationwizard.cpp:253
 #, kde-format
 msgctxt "@item:inlistbox ...verified that"
 msgid "I have not"
-msgstr ""
+msgstr "არ მაქვს"
 
 #: authenticationwizard.cpp:254
 #, kde-format
 msgctxt "@item:inlistbox ...verified that"
 msgid "I have"
-msgstr ""
+msgstr "მაქვს"
 
 #: authenticationwizard.cpp:264
 #, kde-format
 msgctxt "@info:label I have..."
 msgid "verified that this is in fact the correct fingerprint for <b>%1</b>."
-msgstr ""
+msgstr "გადამოწმდა, რომ ეს მართლაც <b>%1</b>-ის ანაბეჭდია."
 
 #: authenticationwizard.cpp:380
 #, kde-format
@@ -181,7 +187,7 @@ msgstr "ავთენტიკაცია წარმატებული�
 msgid ""
 "The authentication with <b>%1</b> has been completed successfully. The "
 "conversation is now secure."
-msgstr ""
+msgstr "<b>%1</b>-ით ავთენტიკაცია წარმატებულია. საუბარი ახლა უსაფრთხოა."
 
 #: authenticationwizard.cpp:388
 #, kde-format
@@ -189,6 +195,8 @@ msgid ""
 "<b>%1</b> has successfully authenticated you. You may want to authenticate "
 "this contact as well by asking your own question."
 msgstr ""
+"<b>%1</b> -მა ავთენტიკაცია წარმატებით გაგატარათ. შეიძლება თქვენც გნებავთ "
+"მისი ავთენტიკაცია, თქვენი კითხვის დასმით.."
 
 #: authenticationwizard.cpp:396
 #, kde-format
@@ -202,11 +210,14 @@ msgid ""
 "talking to an imposter, try again using the manual fingerprint verification "
 "method. Note that the conversation is now insecure."
 msgstr ""
+"<b>%1</b>-თან ავთენტიკაცია წარუმატებელია. დარწმუნდით, რომ ცრუს არ "
+"ელაპარაკებით და კიდევ სცადეთ ანაბეჭდის ხელით მითითებით. გაითვალისწინეთ, რომ "
+"საუბარი ახალ დაცული არაა."
 
 #: authenticationwizard.cpp:419
 #, kde-format
 msgid "Authentication aborted"
-msgstr ""
+msgstr "ავთენტიკაცია გაუქმდა"
 
 #: authenticationwizard.cpp:420
 #, kde-format
@@ -215,6 +226,8 @@ msgid ""
 "talking to an imposter, try again using the manual fingerprint verification "
 "method."
 msgstr ""
+"<b>%1</b> -მა ავთენტიკაციის პროცესი გააუქმა. იმისათვის, რომ დარწმუნდეთ, რომ "
+"ცრუს არ ესაუბრებით, თავიდან, ანაბეჭდის ხელით მითითებით სცადეთ."
 
 #: authenticationwizard.cpp:429
 #, kde-format
@@ -222,6 +235,8 @@ msgid ""
 "Ask <b>%1</b> a question, the answer to which is known only to you and them. "
 "If the answer does not match, you may be talking to an imposter."
 msgstr ""
+"დაუსვით <b>%1</b>-ს კითხვა, რომელზე პასუხიც მხოლოდ თქვენ ორმა იცით. თუ "
+"პასუხი არ ემთხვევა, შეიძლება თაღლითს ესაუბრებით."
 
 #: authenticationwizard.cpp:432
 #, kde-format
@@ -230,6 +245,10 @@ msgid ""
 "you may be talking to an imposter. Do not send the secret through the chat "
 "window, or this authentication method could be compromised with ease."
 msgstr ""
+"აირჩიეთ საიდუმლო, რომელიც მხოლოდ თქვენ და <b>%1</b>-მა იცით. თუ საიდუმლო არ "
+"ემთხვევა, შეიძლება თაღლითს ელაპარაკებოდეთ. არ გააგზავნოთ საიდუმლო ჩატის "
+"ფანჯრით. წინააღმდეგ შემთხვევაში ამ ავთენტიკაციის მეთოდის გვერდის ავლა "
+"უადვილესი ხდება."
 
 #: authenticationwizard.cpp:436
 #, kde-format
@@ -237,6 +256,8 @@ msgid ""
 "Verify <b>%1's</b> fingerprint manually. For example via a phone call or "
 "signed (and verified) email."
 msgstr ""
+"ხელით გადაამოწმეთ <b>%1</b>-ის ანაბეჭდი. მაგალითად დაურეკეთ ან ხელმოწერილი "
+"(და გადამოწმებული) ელფოსტით."
 
 #: chat-search-bar.cpp:39
 #, kde-format
@@ -253,7 +274,7 @@ msgstr "&წინა"
 #: chat-search-bar.cpp:49
 #, kde-format
 msgid "Insert search text..."
-msgstr ""
+msgstr "შეიყვანეთ მოსაძებნი ტექსტი..."
 
 #: chat-search-bar.cpp:58
 #, kde-format
@@ -263,7 +284,7 @@ msgstr "რეგისტრზე-დამოკიდებული"
 #: chat-widget.cpp:159
 #, kde-format
 msgid "Open chat window"
-msgstr ""
+msgstr "ჩატის ფანჯრის გახსნა"
 
 #: chat-widget.cpp:163
 #, kde-format
@@ -273,7 +294,7 @@ msgstr "ფაილის გაგზავნა"
 #: chat-widget.cpp:167
 #, kde-format
 msgid "Show info..."
-msgstr ""
+msgstr "ინფორმაციის ჩვენება..."
 
 #: chat-widget.cpp:181
 #, kde-format
@@ -291,104 +312,106 @@ msgid ""
 "Your message cannot be sent because the account %1 is offline. Please try "
 "again when the account is connected again."
 msgstr ""
+"თქვენი შეტყობინების გაგზავნა შეუძლებელია, რადგან %1 გათიშულია. სცადეთ "
+"თავიდან, როცა ის ხაზზე იქნება."
 
 #: chat-widget.cpp:207
 #, kde-format
 msgid "Connect %1"
-msgstr ""
+msgstr "%1-თან დაკავშირება"
 
 #: chat-widget.cpp:445
 #, kde-format
 msgid "Share Image via %1"
-msgstr ""
+msgstr "გამოსახულების %1-ით გაზიარება"
 
 #: chat-widget.cpp:455
 #, kde-format
 msgid "Send Image via File Transfer"
-msgstr ""
+msgstr "გამოსახულების ფაილის გაგზავნა"
 
 #: chat-widget.cpp:690
 #, kde-format
 msgid "Attempting to start a private OTR session with %1"
-msgstr ""
+msgstr "%1-სთან პირადი OTR სესიის დაწყების ცდა"
 
 #: chat-widget.cpp:693
 #, kde-format
 msgid "Attempting to restart a private OTR session with %1"
-msgstr ""
+msgstr "%1-სთან პირადი OTR სესიის თავიდან დაწყების ავტომატურად ცდა"
 
 #: chat-widget.cpp:713
 #, kde-format
 msgid "Terminating OTR session"
-msgstr ""
+msgstr "OTR სესიის დასრულება"
 
 #: chat-widget.cpp:765
 #, kde-format
 msgid "The OTR session is now unverified"
-msgstr ""
+msgstr "OTR სესია ახლა გადაუმოწმებელია"
 
 #: chat-widget.cpp:768
 #, kde-format
 msgid "Unverified OTR session started"
-msgstr ""
+msgstr "დაიწყო გადაუმოწმებელი OTR სესია"
 
 #: chat-widget.cpp:776
 #, kde-format
 msgid "The OTR session is now private"
-msgstr ""
+msgstr "OTR სესია ახლა პირადია"
 
 #: chat-widget.cpp:779
 #, kde-format
 msgid "Private OTR session started"
-msgstr ""
+msgstr "დაიწყო პირადი OTR სესია"
 
 #: chat-widget.cpp:786
 #, kde-format
 msgid "%1 has ended the OTR session. You should do the same"
-msgstr ""
+msgstr "%1-მა OTR სესია დაასრულა. თქვენც იგივე უნდა გააკეთოთ"
 
 #: chat-widget.cpp:802
 #, kde-format
 msgid "Successfully refreshed private OTR session"
-msgstr ""
+msgstr "პირადი OTR სესია წარმატებით განახლდა"
 
 #: chat-widget.cpp:803
 #, kde-format
 msgid "Successfully refreshed unverified OTR session"
-msgstr ""
+msgstr "შეუმოწმებელი OTR სესია წარამტებით განახლდა"
 
 #: chat-widget.cpp:902
 #, kde-format
 msgid ""
 "Delivery of the message \"%1\" failed because the remote contact is blocked"
-msgstr ""
+msgstr "შეტყობინების \"%1\" მიწოდების შეცდომა. დაშორებული კონტაქტი დაბლოკილია"
 
 #: chat-widget.cpp:906
 #, kde-format
 msgid ""
 "Delivery of the message \"%1\" failed because the remote contact is offline"
-msgstr ""
+msgstr "შეტყობინების \"%1\" მიწოდების შეცდომა. დაშორებული კონტაქტი გათიშულია"
 
 #: chat-widget.cpp:912
 #, kde-format
 msgid "Delivery of a message failed because the remote contact is blocked"
-msgstr ""
+msgstr "შეტყობინების მიწოდების შეცდომა. დაშორებული კონტაქტი დაბლოკილია"
 
 #: chat-widget.cpp:915
 #, kde-format
 msgid "Delivery of a message failed because the remote contact is offline"
-msgstr ""
+msgstr "შეტყობინების მიწოდების შეცდომა. დაშორებული კონტაქტი გათიშულია"
 
 #: chat-widget.cpp:922
 #, kde-format
 msgid ""
 "Delivery of the message \"%1\" failed because the remote contact is not valid"
-msgstr ""
+msgstr "შეტყობინების \"%1\" მიწოდების შეცდომა. დაშორებული კონტაქტი არასწორია"
 
 #: chat-widget.cpp:926
 #, kde-format
 msgid "Delivery of a message failed because the remote contact is not valid"
-msgstr ""
+msgstr "შეტყობინების მიწოდების შეცდომა. დაშორებული კონტაქტი არასწორია"
 
 #: chat-widget.cpp:932
 #, kde-format
@@ -396,33 +419,34 @@ msgid ""
 "Delivery of the message \"%1\" failed because you do not have permission to "
 "speak in this room"
 msgstr ""
+"შეტყობინების \"%1\" მიწოდების შეცდომა. ამ ოთახში საუბრის უფლება არ გაგაჩნიათ"
 
 #: chat-widget.cpp:936
 #, kde-format
 msgid ""
 "Delivery of a message failed because you do not have permission to speak in "
 "this room"
-msgstr ""
+msgstr "შეტყობინების მიწოდების შეცდომა. ოთახში საუბრის უფლება არ გაგაჩნიათ"
 
 #: chat-widget.cpp:942
 #, kde-format
 msgid "Delivery of the message \"%1\" failed because it was too long"
-msgstr ""
+msgstr "შეტყობინების \"%1\" მიწოდების შეცდომა. შეცდომა ძალიან გრძელია"
 
 #: chat-widget.cpp:946
 #, kde-format
 msgid "Delivery of a message failed because it was too long"
-msgstr ""
+msgstr "შეტყობინების მოწოდება შეუძლებელია მისი სიგრძის სიდიდის გამო"
 
 #: chat-widget.cpp:952
 #, kde-format
 msgid "Delivery of the message \"%1\" failed: %2"
-msgstr ""
+msgstr "შეტყობინების \"%1\" მოწოდების შეცდომა: %2"
 
 #: chat-widget.cpp:956
 #, kde-format
 msgid "Delivery of a message failed: %1"
-msgstr ""
+msgstr "შეტყობინების მოწოდების შეცდომა: %1"
 
 #: chat-widget.cpp:1019
 #, kde-format
@@ -430,29 +454,31 @@ msgid ""
 "%1 has already closed his/her private connection to you. Your message was "
 "not sent. Either end your private conversation, or restart it."
 msgstr ""
+"%1-მა თქვენამდე შეერთება უკვე დახურა. შეტყობინება არ გაგზავნიდა. ან "
+"დაასრულეთ ეს საუბარი, ან თავიდან დაიწყეთ ის."
 
 #: chat-widget.cpp:1060 chat-widget.cpp:1153
 #, kde-format
 msgid "%1 has left the chat"
-msgstr ""
+msgstr "%1 გავიდა ჩატიდან"
 
 #: chat-widget.cpp:1099
 #, kde-format
 msgctxt "Your presence status"
 msgid "You are now marked as %1"
-msgstr ""
+msgstr "ახლა მონიშნული ხართ, როგორც %1"
 
 #: chat-widget.cpp:1103
 #, kde-format
 msgctxt "Your presence status with status message"
 msgid "You are now marked as %1 - %2"
-msgstr ""
+msgstr "ახლა მონიშნული ხართ, როგორც %1 - %2"
 
 #: chat-widget.cpp:1109
 #, kde-format
 msgctxt "User's name, with their new presence status (i.e online/away)"
 msgid "%1 is %2"
-msgstr ""
+msgstr "%1 -ი %2-ია"
 
 #: chat-widget.cpp:1111
 #, kde-format
@@ -460,32 +486,32 @@ msgctxt ""
 "User's name, with their new presence status (i.e online/away) and a "
 "sepecified presence message"
 msgid "%1 is %2 - %3"
-msgstr ""
+msgstr "%1 -ი %2-ია - %3"
 
 #: chat-widget.cpp:1139
 #, kde-format
 msgid "You are now known as %1"
-msgstr ""
+msgstr "ახლა ცნობილი ხართ, როგორც %1"
 
 #: chat-widget.cpp:1147
 #, kde-format
 msgid "%1 is now known as %2"
-msgstr ""
+msgstr "%1 ახლა ცნობილია, როგორც %2"
 
 #: chat-widget.cpp:1166
 #, kde-format
 msgid "%1 is now blocked."
-msgstr ""
+msgstr "%1 ახლა დაბლოკილია."
 
 #: chat-widget.cpp:1168
 #, kde-format
 msgid "%1 is now unblocked."
-msgstr ""
+msgstr "%1 ახლა განბლოკილია."
 
 #: chat-widget.cpp:1197
 #, kde-format
 msgid "%1 has joined the chat"
-msgstr ""
+msgstr "%1 შემოუერთდა ჩატს"
 
 #: chat-widget.cpp:1238 chat-widget.cpp:1401
 #, kde-format
@@ -495,12 +521,12 @@ msgstr "ჯგუფური ჩატი"
 #: chat-widget.cpp:1453
 #, kde-format
 msgid "You are now offline"
-msgstr ""
+msgstr "ხაზზე არ ბრძანდებით"
 
 #: chat-widget.cpp:1534
 #, kde-format
 msgid "Uploading Image has Failed with Error: %1"
-msgstr ""
+msgstr "გამოსახულების ატვირთვის შეცდომა: %1"
 
 #: chat-window-style.cpp:352
 #, kde-format
@@ -526,7 +552,7 @@ msgstr "დაკვრა"
 #: chat-window-style.cpp:507
 #, kde-format
 msgid "Save as"
-msgstr ""
+msgstr "შენახვა, როგორც"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KeyGenDialog)
 #: keygendialog.ui:14
@@ -538,7 +564,7 @@ msgstr "გთხოვთ, მოითმინოთ"
 #: keygendialog.ui:32
 #, kde-format
 msgid "Please wait while generating the private key"
-msgstr ""
+msgstr "მოითმინეთ, მიმდინარეობს პირადი გასაღების გენერაცია"
 
 #. i18n: ectx: property (text), widget (QLabel, lbTime)
 #: keygendialog.ui:49
@@ -549,57 +575,57 @@ msgstr "ტექსტური ჭდე"
 #: notify-filter.cpp:74
 #, kde-format
 msgid "%1 has sent you a message"
-msgstr ""
+msgstr "%1-მა შეტყობინება გამოგიგზავნათ"
 
 #: notify-filter.cpp:87 otr-notifications.cpp:47
 #, kde-format
 msgid "View"
-msgstr ""
+msgstr "ნახვა"
 
 #: otr-notifications.cpp:61
 #, kde-format
 msgid "Private OTR session started with %1"
-msgstr ""
+msgstr "%1-სთან პირადი OTR სესია დაიწყო"
 
 #: otr-notifications.cpp:63
 #, kde-format
 msgid "Unverified OTR session started with %1"
-msgstr ""
+msgstr "%1-სთან გადაუმოწმებელი OTR სესია დაიწყო"
 
 #: otr-notifications.cpp:77
 #, kde-format
 msgid "Finished OTR session with %1"
-msgstr ""
+msgstr "%1-სთან OTR სესია დასრულდა"
 
 #: otr-notifications.cpp:89
 #, kde-format
 msgid "%1 has requested your authentication"
-msgstr ""
+msgstr "%1-მა თქვენი ავთენტიკაცია მოითხოვა"
 
 #: otr-notifications.cpp:103
 #, kde-format
 msgid "Authentication with %1 completed successfully"
-msgstr ""
+msgstr "%1-სთან ავთენტიკაცია წარმატებულია"
 
 #: otr-notifications.cpp:105 otr-notifications.cpp:132
 #, kde-format
 msgid "Authentication with %1 failed"
-msgstr ""
+msgstr "%1-სთან ავთენტიკაცია წარუმატებელია"
 
 #: otr-notifications.cpp:119
 #, kde-format
 msgid "Authentication with %1 was aborted"
-msgstr ""
+msgstr "%1-სთან ავთენტიკაცია გაუქმდა"
 
 #: proxy-service.cpp:44
 #, kde-format
 msgid "Generating the private key for %1..."
-msgstr ""
+msgstr "%1-ის პირადი გასაღების გენერაცია..."
 
 #: proxy-service.cpp:45
 #, kde-format
 msgid "This may take some time"
-msgstr ""
+msgstr "ამას რაღაც დრო დასჭირდება"
 
 #: proxy-service.cpp:57
 #, kde-format
@@ -609,9 +635,9 @@ msgstr "გთხოვთ, მოითმინოთ"
 #: proxy-service.cpp:89
 #, kde-format
 msgid "Could not generate a private key for %1"
-msgstr ""
+msgstr "%1-სთვის პირადი გასაღების გენერაციის შეცდომა"
 
 #: proxy-service.cpp:91
 #, kde-format
 msgid "Finished generating the private key for %1"
-msgstr ""
+msgstr "%1-სთვის პირადი გასაღების გენერაცია წარმატებით დასრულდა"

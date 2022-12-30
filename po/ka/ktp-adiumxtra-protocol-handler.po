@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ktp-text-ui\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2022-10-06 12:20+0200\n"
+"PO-Revision-Date: 2022-12-29 11:43+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -41,7 +41,7 @@ msgstr "დიახ"
 #: chat-style-installer.cpp:113
 #, kde-format
 msgid "Install Chatstyle %1"
-msgstr ""
+msgstr "ჩატის სტილი %1 დაყენება"
 
 #: chat-style-installer.cpp:114 emoticon-set-installer.cpp:99
 #, kde-format
@@ -56,27 +56,27 @@ msgstr "შეწყვეტა"
 #: chat-style-installer.cpp:135
 #, kde-format
 msgid "Installed Chatstyle %1 successfully."
-msgstr ""
+msgstr "ჩატის ტილის %1 დაყენება წარმატებულია."
 
 #: chat-style-installer.cpp:139
 #, kde-format
 msgid "Installation of Chatstyle %1 failed."
-msgstr ""
+msgstr "ჩატის ტილის %1 დაყენება წარუმატებელია."
 
 #: emoticon-set-installer.cpp:98
 #, kde-format
 msgid "Install Emoticonset %1"
-msgstr ""
+msgstr "Emoticonset %1 დაყენება"
 
 #: emoticon-set-installer.cpp:117
 #, kde-format
 msgid "Installed Emoticonset %1 successfully."
-msgstr ""
+msgstr "Emoticonset %1 -ის დაყენება წარმატებულია."
 
 #: main.cpp:34
 #, kde-format
 msgid "AdiumXtra Protocol Handler"
-msgstr ""
+msgstr "AdiumXtra პროტოკოლის დამმუშავებელი"
 
 #: main.cpp:36
 #, kde-format
@@ -96,4 +96,4 @@ msgstr "Daniele E. Domenichelli"
 #: main.cpp:44
 #, kde-format
 msgid "Adium package to install"
-msgstr ""
+msgstr "დასაყენებელი Adium -ის პაკეტი"

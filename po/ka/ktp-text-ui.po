@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ktp-text-ui\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2022-10-06 12:23+0200\n"
+"PO-Revision-Date: 2022-12-29 11:44+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -67,7 +67,7 @@ msgstr "&აუდიო ზარი"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Start an audio call with this contact"
-msgstr ""
+msgstr "კონტაქტთან აუდიო ზარის დაწყება"
 
 #: chat-window.cpp:851 chat-window.cpp:1287
 #, kde-format
@@ -81,6 +81,8 @@ msgid ""
 "Blocking means that this contact will not see you online and you will not "
 "receive any messages from this contact"
 msgstr ""
+"დაბლოკვა ნიშნავს, რომ ეს კონტაქტი ხაზზე ვეღარ დაგინახავთ და მისგან "
+"შეტყობინებებს ვეღარ მიიღებთ"
 
 #: chat-window.cpp:856
 #, kde-format
@@ -91,7 +93,7 @@ msgstr "&ფაილის გაგზავნა"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Send a file to this contact"
-msgstr ""
+msgstr "ამ კონტაქტისთვის ფაილის გაგზავნა"
 
 #: chat-window.cpp:860
 #, kde-format
@@ -102,7 +104,7 @@ msgstr "მოიწვიე მეგობარი Chat-ოთახში"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Invite another contact to join this chat"
-msgstr ""
+msgstr "ამ ჩატში სხვა კონტაქტის მოწვევა"
 
 #: chat-window.cpp:864
 #, kde-format
@@ -113,7 +115,7 @@ msgstr "&ვიდეო ზარი"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Start a video call with this contact"
-msgstr ""
+msgstr "ამ კონტაქტთან ვიდეოზარის დაწყება"
 
 #: chat-window.cpp:868
 #, kde-format
@@ -125,11 +127,13 @@ msgstr "სამუშაო &მაგიდის გაზიარება
 msgctxt "Toolbar icon tooltip"
 msgid "Start an application that allows this contact to see your desktop"
 msgstr ""
+"აპლიკაციის გაშვება, რომელიც კონტაქტს თქვენი სამუშაო მაგიდის დანახვის "
+"საშუალებას აძლევს"
 
 #: chat-window.cpp:872
 #, kde-format
 msgid "&Collaboratively edit a document"
-msgstr ""
+msgstr "დოკუმენტის &ერთდროული ჩასწორება"
 
 #: chat-window.cpp:875
 #, kde-format
@@ -150,7 +154,7 @@ msgstr "მართლწერის შემოწმების ენი�
 #, kde-format
 msgctxt "Action to open the log viewer with a specified contact"
 msgid "&Previous Conversations"
-msgstr ""
+msgstr "&წინა საუბრები"
 
 #: chat-window.cpp:894
 #, kde-format
@@ -172,7 +176,7 @@ msgstr "ხედის &გასუფთავება"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Clear all messages from current chat tab"
-msgstr ""
+msgstr "მიმდინარე ჩატის ჩანართიდან ყველა შეტყობინების მოცილება"
 
 #: chat-window.cpp:910
 #, kde-format
@@ -202,7 +206,7 @@ msgstr "&კონტაქტის ავთენტიკაცია"
 #: chat-window.cpp:1003
 #, kde-format
 msgid "Not private"
-msgstr ""
+msgstr "არა-პირადი"
 
 #: chat-window.cpp:1012
 #, kde-format
@@ -212,7 +216,7 @@ msgstr "დაუმოწმებელი"
 #: chat-window.cpp:1014 chat-window.cpp:1023 chat-window.cpp:1032
 #, kde-format
 msgid "&Restart session"
-msgstr ""
+msgstr "&სესიის გადატვირთვა"
 
 #: chat-window.cpp:1021
 #, kde-format
@@ -228,7 +232,7 @@ msgstr "დასრულებულია"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Edit a plain-text document with this contact in real-time"
-msgstr ""
+msgstr "კონტაქტთან ერთად ტექსტური ფაილის რეალურ დროში ჩასწორება"
 
 #: chat-window.cpp:1094
 #, kde-format
@@ -237,6 +241,8 @@ msgid ""
 "<p>Both you and the target contact need to have the <i>kte-collaborative</i> "
 "package installed to share documents</p>"
 msgstr ""
+"<p>დოკუმენტების გასაზიარებად აუცილებელია, თქვენ და თქვენს კონტაქტს <i>kte-"
+"collaborative</i> გქონდეთ დაყენებული</p>"
 
 #: chat-window.cpp:1193
 #, kde-format
@@ -246,13 +252,13 @@ msgstr "აირჩიეთ %1-სთან გასაგზავნი ფ
 #: chat-window.cpp:1280
 #, kde-format
 msgid "&Unblock Contact"
-msgstr ""
+msgstr "&კონტაქტის განბლოკვა"
 
 #. i18n: ectx: Menu (conversation)
 #: chatwindow.rc:11
 #, kde-format
 msgid "&Conversation"
-msgstr ""
+msgstr "&საუბარი"
 
 #. i18n: ectx: Menu (actions)
 #: chatwindow.rc:24
@@ -270,24 +276,24 @@ msgstr "ხელსაწყოთა მთავარი ზოლი"
 #: chatwindow.rc:53
 #, kde-format
 msgid "Account Icon Toolbar"
-msgstr ""
+msgstr "ანგარიშის ხატულის პანელი"
 
 #. i18n: ectx: ToolBar (languageToolBar)
 #: chatwindow.rc:58
 #, kde-format
 msgid "Language Toolbar"
-msgstr ""
+msgstr "ენის პანელი"
 
 #. i18n: ectx: ToolBar (emoticonsToolBar)
 #: chatwindow.rc:63
 #, kde-format
 msgid "Smiley Toolbar"
-msgstr ""
+msgstr "სიცილაკების პანელი"
 
 #: emoticon-text-edit-action.cpp:51
 #, kde-format
 msgid "Add Smiley"
-msgstr ""
+msgstr "სიცილაკის დამატება"
 
 #: invite-contact-dialog.cpp:55
 #, kde-format
@@ -297,12 +303,12 @@ msgstr "კონტაქტებში ძებნა..."
 #: invite-contact-dialog.cpp:64
 #, kde-format
 msgid "Select Contacts to Invite to Group Chat"
-msgstr ""
+msgstr "აირჩიეთ ჯგუფურ ჩატში მოსაწვევი კონტაქტები"
 
 #: telepathy-chat-ui.cpp:62
 #, kde-format
 msgid "Chat Application"
-msgstr ""
+msgstr "საუბრის აპლიკაცია"
 
 #: telepathy-chat-ui.cpp:63
 #, kde-format
@@ -327,7 +333,7 @@ msgstr "Dominik Schmidt"
 #: telepathy-chat-ui.cpp:65 telepathy-chat-ui.cpp:66
 #, kde-format
 msgid "Past Developer"
-msgstr ""
+msgstr "ყოფილი დეველოპერი"
 
 #: telepathy-chat-ui.cpp:66
 #, kde-format
