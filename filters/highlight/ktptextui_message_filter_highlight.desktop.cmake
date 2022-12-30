@@ -80,6 +80,7 @@ Comment[gl]=Se algunha mensaxe entrante contén o seu alcume hanse realzar en ve
 Comment[hu]=Ha egy bejövő üzenet tartalmazza a becenevét, akkor az ki lesz emelve pirossal
 Comment[ia]=Si qualcunque messages in arrivata contine tu pseudonymo, illo essera evidentiate in rubie
 Comment[it]=Se in un messaggio ricevuto c'è scritto il tuo nick, sarà evidenziato in rosso
+Comment[ka]=თუ შემომავალი შეტყობინება თქვენს მეტსახელს შეიცავს, ის წითლად იქნება გამოკვეთილი
 Comment[kk]=Егер кіріс хабарларында бүркеншік атыңыз пайда болғанда оны бояп белгілейді
 Comment[ko]=별명이 들어 있는 메시지를 받았을 때 붉은색으로 강조하기
 Comment[lt]=Jei bet kuri gauta žinutė turi Jūsų slapyvardį, ji paryškins juos raudonai

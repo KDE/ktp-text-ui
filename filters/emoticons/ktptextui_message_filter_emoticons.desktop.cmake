@@ -67,6 +67,7 @@ Comment[gl]=Mostrar as emoticonas (as cariñas sorrintes) na conversa
 Comment[hu]=Hangulatjelek (smiley arcok) megjelenítése a csevegésen belül
 Comment[ia]=Monstra emoticones (facias surridente) intra le conversation
 Comment[it]=Mostra emoticon (faccine) nella chat
+Comment[ka]=ჩატში ემოციების (სიცილაკების) ჩვენება
 Comment[kk]=Көңіл күйі белгілерді чатта көрсету
 Comment[ko]=대화 창에서 이모티콘 표시
 Comment[lt]=Rodyti šypsenėles pokalbio viduje

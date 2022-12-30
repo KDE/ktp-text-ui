@@ -66,6 +66,7 @@ Comment[gl]=Incrustar unha miniatura de calquera dos URL de imaxes enviadas nas 
 Comment[hu]=Bélyegkép beágyazása bármely képhivatkozáshoz, amelyet a csevegésben küldenek
 Comment[ia]=Incorpora un miniatura de ulle URL de imagine inviate in un conversation
 Comment[it]=Include miniature degli URL di immagini inviati in una chat
+Comment[ka]=ჩატში გაგზავნილი გამოსახულებების მინიატურის ჩაშენება
 Comment[kk]=Чаттағы жіберілген кескін URL-інде нобайы болсын
 Comment[ko]=대화에서 주고받은 그림 URL의 축소판 표시
 Comment[lt]=Įjungti miniatiūras kiekvieno paveikslėlio URL atsiuntame pokalbyje

@@ -57,6 +57,7 @@ Comment[gl]=Se unha mensaxe é «OTR», non se mostrará.
 Comment[hu]=Ha az üzenet egy OTR üzenet, nem lesz megjelenítve
 Comment[ia]=Si un message es un message OTR, non essara monstrate
 Comment[it]=Se un messaggio è un messaggio OTR, non sarà mostrato
+Comment[ka]=თუ შეტყობინება OTR შეტყობინებაა, ის არ ნაჩვენები არ იქნება
 Comment[ko]=OTR 메시지이면 표시되지 않습니다
 Comment[nb]=Hvis en melding er en OTR-melding blir den ikke vist
 Comment[nl]=Als een bericht een OTR-bericht is, zal het niet getoond worden
