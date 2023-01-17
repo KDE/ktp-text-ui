@@ -305,7 +305,7 @@ msgstr "Busca en els contactes..."
 #: invite-contact-dialog.cpp:64
 #, kde-format
 msgid "Select Contacts to Invite to Group Chat"
-msgstr "Selecció dels contactes a invitar a un xat de grup"
+msgstr "Seleccioneu els contactes que s'han d'invitar a un xat de grup"
 
 #: telepathy-chat-ui.cpp:62
 #, kde-format

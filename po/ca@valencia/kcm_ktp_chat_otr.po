@@ -137,7 +137,7 @@ msgstr "Mai"
 #: otr-config.ui:111
 #, kde-format
 msgid "Account management"
-msgstr "Gestió dels comptes"
+msgstr "Gestioneu els comptes"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPrivKey)
 #: otr-config.ui:139
