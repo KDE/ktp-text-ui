@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ktp-text-ui\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2022-12-23 07:46+0100\n"
+"PO-Revision-Date: 2023-02-03 16:11+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -542,7 +542,7 @@ msgstr "ჩამოტვირთვა"
 #: chat-window-style.cpp:486
 #, kde-format
 msgid "Cancel"
-msgstr "_გაუქმება"
+msgstr "გაუქმება"
 
 #: chat-window-style.cpp:507
 #, kde-format
