@@ -181,9 +181,9 @@ msgid ""
 "\n"
 "Do you want to import these logs from Kopete to KDE Telepathy?"
 msgstr ""
-"وجدنا سجلّات كوبيت تطابق بعض حسابات كدي تلبثي.\n"
+"وجدنا سجلّات كوبيت تطابق بعض حسابات كِيدِي تلبثي.\n"
 "\n"
-"أتريد استيرداها من كوبيت إلى كدي تلبثي؟"
+"أتريد استيرداها من كوبيت إلى كِيدِي تلبثي؟"
 
 #: logs-import-dialog.cpp:140
 #, kde-format
