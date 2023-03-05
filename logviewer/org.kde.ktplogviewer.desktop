@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=KDE IM Log Viewer
-Name[ar]=عارض كدي لسجلّات ت‌م
+Name[ar]=عارض كِيدِي لسجلّات ت‌م
 Name[bs]=Pregledač dnevnika za KDE IM Log
 Name[ca]=Visualitzador de registres de la MI del KDE
 Name[ca@valencia]=Visor de registres de la MI de KDE
@@ -49,7 +49,7 @@ Name[x-test]=xxKDE IM Log Viewerxx
 Name[zh_CN]=KDE 即时通讯日志查看程序
 Name[zh_TW]=KDE 即時訊息紀錄檢視器
 GenericName=KDE Instant Messenger Log Viewer
-GenericName[ar]=عارض كدي لسجلّات المرسال المباشر
+GenericName[ar]=عارض كِيدِي لسجلّات المرسال المباشر
 GenericName[bs]=Pregledač dnevnika za KDE instant poruke
 GenericName[ca]=Visualitzador del registre de missatgeria instantània del KDE
 GenericName[ca@valencia]=Visor del registre de missatgeria instantània de KDE
@@ -97,7 +97,7 @@ GenericName[x-test]=xxKDE Instant Messenger Log Viewerxx
 GenericName[zh_CN]=KDE 即时通讯日志查看程序
 GenericName[zh_TW]=KDE 的即時訊息紀錄檢視器
 Comment=Displays your KDE Instant Messenger logs
-Comment[ar]=يعرض سجلّات كدي للمرسال المباشر
+Comment[ar]=يعرض سجلّات كِيدِي للمرسال المباشر
 Comment[bs]=Prikazuje Vaše KDE Instant Messenger dnevnike
 Comment[ca]=Mostra el registre de missatgeria instantània del KDE
 Comment[ca@valencia]=Mostra el registre de missatgeria instantània de KDE
