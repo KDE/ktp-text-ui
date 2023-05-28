@@ -127,8 +127,8 @@ msgid ""
 "Check out which cool adium themes work <a href=\"http://community.kde.org/"
 "KTp/Components/Chat_Window/Themes\">here</a>!"
 msgstr ""
-"Sjå kva <a href=\"http://community.kde.org/KTp/Components/Chat_Window/Themes"
-"\">kule Adium-tema</a> du kan bruka!"
+"Sjå kva <a href=\"http://community.kde.org/KTp/Components/Chat_Window/"
+"Themes\">kule Adium-tema</a> du kan bruka!"
 
 #: appearance-config-tab.cpp:256
 #, kde-format
