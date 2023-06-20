@@ -216,7 +216,7 @@ msgid ""
 "method. Note that the conversation is now insecure."
 msgstr ""
 "Fallou a autenticación de <b>%1</b>. Para garantir que non está a falar cun "
-"impostor, probe de novo a empregar o método de verificación manual da pegada "
+"impostor, probe de novo a usar o método de verificación manual da pegada "
 "dixital. Por agora a conversa non é segura."
 
 #: authenticationwizard.cpp:419
@@ -232,8 +232,8 @@ msgid ""
 "method."
 msgstr ""
 "<b>%1</b> interrompeu o proceso de autenticación. Para garantir que non está "
-"a falar cun impostor probe de novo a empregar o método de verificación "
-"manual da pegada dixital."
+"a falar cun impostor probe de novo a usar o método de verificación manual da "
+"pegada dixital."
 
 #: authenticationwizard.cpp:429
 #, kde-format
@@ -301,7 +301,7 @@ msgstr "Enviar un ficheiro"
 #: chat-widget.cpp:167
 #, kde-format
 msgid "Show info..."
-msgstr "Mostrar información…"
+msgstr "Amosar información…"
 
 #: chat-widget.cpp:181
 #, kde-format
