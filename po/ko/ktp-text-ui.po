@@ -304,7 +304,7 @@ msgstr "그룹 대화에 초대할 대화 상대 선택"
 #: telepathy-chat-ui.cpp:62
 #, kde-format
 msgid "Chat Application"
-msgstr "대화 프로그램"
+msgstr "대화 앱"
 
 #: telepathy-chat-ui.cpp:63
 #, kde-format
