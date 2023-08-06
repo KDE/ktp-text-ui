@@ -126,19 +126,19 @@ msgstr "Servizo de compartición de imaxes"
 #: behavior-config.ui:179
 #, kde-format
 msgid "Works when dragging an image to the Chat Window"
-msgstr "Funciona ao arrastrar unha imaxe á xanela de conversa."
+msgstr "Funciona ao arrastrar unha imaxe á xanela de charla."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupChatsGroup)
 #: behavior-config.ui:195
 #, kde-format
 msgid "Group Chats"
-msgstr "Conversas de grupo"
+msgstr "Charlas de grupo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dontLeaveGroupChats)
 #: behavior-config.ui:207
 #, kde-format
 msgid "Stay connected to group chat even when tab is closed"
-msgstr "Continuar conectado á conversa de grupo despois de pechar o separador"
+msgstr "Continuar conectado á charla de grupo despois de pechar o separador"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: behavior-config.ui:217

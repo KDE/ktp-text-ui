@@ -101,13 +101,13 @@ msgstr "Enviarlle un ficheiro a este contacto"
 #: chat-window.cpp:860
 #, kde-format
 msgid "&Invite to Chat"
-msgstr "C&onvidar a unha conversa"
+msgstr "C&onvidar a unha charla"
 
 #: chat-window.cpp:861
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Invite another contact to join this chat"
-msgstr "Convidar outro contacto a se unir a esta conversa"
+msgstr "Convidar outro contacto a se unir a esta charla"
 
 #: chat-window.cpp:864
 #, kde-format
@@ -178,7 +178,7 @@ msgstr "&Limpar a vista"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Clear all messages from current chat tab"
-msgstr "Limpa todas as mensaxes do separador de conversa actual"
+msgstr "Limpa todas as mensaxes do separador de charla actual"
 
 #: chat-window.cpp:910
 #, kde-format
@@ -305,12 +305,12 @@ msgstr "Buscar nos contactos…"
 #: invite-contact-dialog.cpp:64
 #, kde-format
 msgid "Select Contacts to Invite to Group Chat"
-msgstr "Escoller os contactos para convidalos a unha conversa en grupo"
+msgstr "Escoller os contactos para convidalos a unha charla en grupo"
 
 #: telepathy-chat-ui.cpp:62
 #, kde-format
 msgid "Chat Application"
-msgstr "Aplicación de conversa"
+msgstr "Aplicación de charla"
 
 #: telepathy-chat-ui.cpp:63
 #, kde-format
