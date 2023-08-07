@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 03:11+0200\n"
-"PO-Revision-Date: 2023-04-23 06:26+0200\n"
+"PO-Revision-Date: 2023-08-06 05:53+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -70,7 +70,7 @@ msgstr "Chamada de &son"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Start an audio call with this contact"
-msgstr "Iniciar unha chamada de son con este contacto"
+msgstr "Iniciar unha chamada de son con este contacto."
 
 #: chat-window.cpp:851 chat-window.cpp:1287
 #, kde-format
@@ -85,7 +85,7 @@ msgid ""
 "receive any messages from this contact"
 msgstr ""
 "Bloquear significa que este contacto non o verá en liña e que vostede non "
-"recibirá ningunha mensaxe del"
+"recibirá ningunha mensaxe del."
 
 #: chat-window.cpp:856
 #, kde-format
@@ -96,7 +96,7 @@ msgstr "&Enviar un ficheiro"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Send a file to this contact"
-msgstr "Enviarlle un ficheiro a este contacto"
+msgstr "Enviarlle un ficheiro a este contacto."
 
 #: chat-window.cpp:860
 #, kde-format
@@ -107,7 +107,7 @@ msgstr "C&onvidar a unha charla"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Invite another contact to join this chat"
-msgstr "Convidar outro contacto a se unir a esta charla"
+msgstr "Convidar outro contacto a se unir a esta charla."
 
 #: chat-window.cpp:864
 #, kde-format
@@ -118,7 +118,7 @@ msgstr "Chamada de &vídeo"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Start a video call with this contact"
-msgstr "Iniciar unha chamada de vídeo con este contacto"
+msgstr "Iniciar unha chamada de vídeo con este contacto."
 
 #: chat-window.cpp:868
 #, kde-format
@@ -130,7 +130,7 @@ msgstr "&Compartir o meu escritorio"
 msgctxt "Toolbar icon tooltip"
 msgid "Start an application that allows this contact to see your desktop"
 msgstr ""
-"Iniciar unha aplicación que permita que este contacto vexa o seu escritorio"
+"Iniciar unha aplicación que permita que este contacto vexa o seu escritorio."
 
 #: chat-window.cpp:872
 #, kde-format
@@ -178,7 +178,7 @@ msgstr "&Limpar a vista"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Clear all messages from current chat tab"
-msgstr "Limpa todas as mensaxes do separador de charla actual"
+msgstr "Limpa todas as mensaxes do separador de charla actual."
 
 #: chat-window.cpp:910
 #, kde-format
@@ -234,7 +234,7 @@ msgstr "Rematada"
 #, kde-format
 msgctxt "Toolbar icon tooltip"
 msgid "Edit a plain-text document with this contact in real-time"
-msgstr "Editar un documento de texto en tempo real con este contacto"
+msgstr "Editar un documento de texto en tempo real con este contacto."
 
 #: chat-window.cpp:1094
 #, kde-format
@@ -244,7 +244,7 @@ msgid ""
 "package installed to share documents</p>"
 msgstr ""
 "<p>Tanto vostede como o contacto deben ter o paquete <i>kte-collaborative</"
-"i> instalado para compartir documentos</p>"
+"i> instalado para compartir documentos.</p>"
 
 #: chat-window.cpp:1193
 #, kde-format
